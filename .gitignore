@@ -1,0 +1,27 @@
+node_modules
+*.swp
+*.log
+.bin
+.DS_Store
+
+*~
+
+# Eclipse stuff
+.classpath
+.settings
+.project
+.project.old
+.metadata
+
+# Other java stuff
+*.class
+dist
+build
+
+# sass
+/.sass-cache/*
+.sass-cache
+compiled
+
+# Python Artifacts
+*.pyc
