@@ -1,8 +1,9 @@
 # Mastercoin Web Wallet Design
 
-I believe we can extend the my-wallet implementation directly to make a sufficiently secure, feature-filled
-and reliable client-side encrypted implementation of a mastercoin web-wallet. Additionally, we would include
-a mastercoin block-explorer on the website, and extensions for user-currency block-exploration.
+Our goal is to provide Mastercoin users with a hassle-free encrypted web-wallet to store funds 
+in a secure manner. Our plan is to extend the My-Wallet implementation directly to create a feature-filled
+and reliable client-side encrypted implementation of a Mastercoin web-wallet. Additionally, 
+we would like to include a Mastercoin block-explorer on the website, with extensions for user-currency block-exploration.
 
 ## Features
 
