@@ -9,18 +9,34 @@
 - We would additionally like to include a Mastercoin block-explorer on the website, 
   so users can view transactions on the Masterchain with extensions for user-currency block-exploration.
 
-## Features
+## Stage 1 Features
 
-- [ ] Block-Explorer as currently possible with masterchain.info (TBD: Add detail)
+- [ ] Display blockchain as currently possible with masterchain.info (TBD: Add detail)
 - [ ] Extend Block-Explorer such that all MSC user-derived currencies can be displayed.
-- [ ] Allow users to create an account and associate bitcoin addresses with that account.
 - [ ] Allow users to check balances provided the appropriate private keys are stored on their 
 		local machine.
 - [ ] Allow users to send funds provided the appropriate private keys are stored on their 
 		local machine. (Simple send)
-- [ ] Web wallet in a box, ready to deploy MSC web wallet (via docker/heroku)
+- [ ] private key import/export
+- [ ] import bitcoin-qt wallets
 
-## Core Structure
+## Stage 2 Features
+
+- [ ] Web wallet in a box, ready to deploy MSC web wallet (via docker/heroku)
+- [ ] Heroku & Docker buildpacks for automatic deployments.  See http://blog.docker.io/2013/05/heroku-buildpacks-on-docker/#more-79
+- [ ] export wallet file
+- [ ] Client-side AES wallet encryption
+
+## Stage 3 Features
+
+- [ ] Coin control and taint analysis
+- [ ] Double encryption, encrypted serverside backups
+- [ ] Allow users to create an account and associate bitcoin addresses with that account.
+- [ ] Payment notifications
+- [ ] Paper wallets
+- [ ] Offline usability, transactions
+
+## Design Notes
 
 - [ ] JS&HTML5 offline app using My-Wallet & bitcoinjs
 - [ ] Crypto provided by https://github.com/bitcoinjs/bitcoinjs-lib
@@ -29,19 +45,9 @@
 - [ ] MSC Block-Explorer base provided by https://github.com/grazcoin/mastercoin-tools/
 - [ ] Implementation of the following 
 		minimum API https://github.com/mastercoin-MSC/spec#appendix-c---webservice-verification-api
-- [ ] Heroku & Docker buildpacks for automatic deployments.  See http://blog.docker.io/2013/05/heroku-buildpacks-on-docker/#more-79
 
 - [ ] Other resources: maran's ruby impl https://github.com/maran/mastercoin-ruby 
 		and mastercoind https://github.com/mastercoin-MSC/mastercoind
 
 ## More Specific Design (TBD)
-
-- [ ] Client-side AES wallet encryption
-- [ ] Offline usability, transactions
-- [ ] Paper wallets
-- [ ] Payment notifications
-- [ ] Coin control and taint analysis
-- [ ] Double encryption, encrypted serverside backups
-- [ ] private key import/export
-- [ ] import bitcoin-qt wallets
 
