@@ -29,7 +29,8 @@
 - [ ] MSC Block-Explorer base provided by https://github.com/grazcoin/mastercoin-tools/
 - [ ] Implementation of the following 
 		minimum API https://github.com/mastercoin-MSC/spec#appendix-c---webservice-verification-api
-- [ ] Docker Images for automatic deployments
+- [ ] Heroku & Docker buildpacks for automatic deployments.  See http://blog.docker.io/2013/05/heroku-buildpacks-on-docker/#more-79
+
 - [ ] Other resources: maran's ruby impl https://github.com/maran/mastercoin-ruby 
 		and mastercoind https://github.com/mastercoin-MSC/mastercoind
 
@@ -43,3 +44,4 @@
 - [ ] Double encryption, encrypted serverside backups
 - [ ] private key import/export
 - [ ] import bitcoin-qt wallets
+
