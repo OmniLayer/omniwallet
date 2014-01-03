@@ -2,7 +2,7 @@
 
 I believe we can extend the my-wallet implementation directly to make a sufficiently secure, feature-filled
 and reliable client-side encrypted implementation of a mastercoin web-wallet. Additionally, we would include
-a mastercoin block-explorer on the website.
+a mastercoin block-explorer on the website, and extensions for user-currency block-exploration.
 
 ## Features
 
@@ -17,12 +17,11 @@ a mastercoin block-explorer on the website.
 
 - [ ]JS&HTML5 offline app using My-Wallet & bitcoinjs
 - [ ]Crypto provided by https://github.com/bitcoinjs/bitcoinjs-lib
-- [ ]Webwallet base provided by https://github.com/blockchain/My-Wallet with API Docs @ https://blockchain.info/api
-- [ ]Block-Explorer base provided by https://github.com/grazcoin/mastercoin-tools/
-- [ ]Docker images
-- [ ]
-- [ ]
-- [ ]
+- [ ]BTC Webwallet base provided by https://github.com/blockchain/My-Wallet with API Docs @ https://blockchain.info/api
+- [ ]MSC Block-Explorer base provided by https://github.com/grazcoin/mastercoin-tools/
+- [ ]Implementation of the following minimum API https://github.com/mastercoin-MSC/spec#appendix-c---webservice-verification-api
+- [ ]Docker Images for automatic deployments
+- [ ]Other resources: maran's ruby impl https://github.com/maran/mastercoin-ruby & mastercoind https://github.com/mastercoin-MSC/mastercoind
 
 ## More Specific Design (TBD)
 
