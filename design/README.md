@@ -12,11 +12,6 @@
 ## Core Structure
 
 - [ ] html5 offline app using My-Wallet(blockchain.info) & bitcoinjs(bitcoinjs.com) as a base
-- [ ] 
-- [ ] 
-- [ ] 
-- [ ] 
-- [ ] 
 - [ ] Javascript based code on the frontend for any tasks involving private keys.
 
 ## More Specific Design (TBD)
