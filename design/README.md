@@ -11,10 +11,12 @@
 
 ## Stage 1 Features
 
-- [ ] Display blockchain as currently possible with masterchain.info (TBD: Add detail) (View support for Class A/B transactions)
-- [ ] Extend Block-Explorer such that all MSC user-derived currencies can be displayed. (Implement currency creation tx type=100)
+- [ ] Display blockchain as currently possible with masterchain.info (TBD: Add detail)
+			- Add API support for viewing transactions of different types (Class A & B )
+- [ ] Extend Block-Explorer such that all MSC user-derived currencies can be displayed.
+			- Add API support for currency creation (tx type 100)
 - [ ] Allow users to check balances provided the appropriate private keys are stored on their 
-		local machine. (Implement blockchain.info style API for parsing MSC class B transactions)
+		local machine. (Private keys shouldn't be required to check the balance of a MSC address)
 - [ ] Allow users to send funds provided the appropriate private keys are stored on their 
 		local machine. (Implement message signing and simple send tx type=0 on the client)
 - [ ] client-side private key import/export 
