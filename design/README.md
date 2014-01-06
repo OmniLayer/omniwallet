@@ -83,3 +83,34 @@ view A/B transactions on the Masterchain with extensions for user-currency block
 
 ## More Specific Design (TBD)
 
+Endpoints
+
+Mastercoin Explorer API
+
+GET /transactions 
+Get all available transaction types for this system.
+
+GET /transactions/:id
+Retrieve transaction information for transaction 'id'
+
+POST /create/:tx_type
+Create a new transaction of type 'tx_type'
+
+Wallet API
+
+/wallet/:id/send
+Simple send transaction.
+
+/wallet/:id/balance
+Get MSC balance.
+
+Common API
+
+GET /mastercoin_verify/addresses?currency_id=#currency_id#
+You supply this URL a currency_id, initially 1 or 2, and it should return an JSON array of 
+objects with two keys: address and balance.
+
+GET /mastercoin_verify/transactions/#address#?currency_id=#currency_id#
+This URL takes an address and currency_id as arguments and should return an JSON object with 
+an address and a transactions key for this given address.
+
