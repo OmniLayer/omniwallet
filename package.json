@@ -8,7 +8,7 @@
 	"dependencies": {
 		"grunt": "0.4.x",
 		"grunt-git": "0.2.x"
-},
+	},
         "scripts": {
                 "install": "grunt"
         }
