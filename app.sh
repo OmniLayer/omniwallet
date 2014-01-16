@@ -2,6 +2,9 @@
 
 APPDIR=`pwd`
 DATADIR="/tmp/msc-webwallet"
+
+python $APPDIR/www/server.py &
+
 mkdir -p $DATADIR
 cd $DATADIR
 mkdir -p tx addr general

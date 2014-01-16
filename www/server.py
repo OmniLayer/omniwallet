@@ -4,6 +4,7 @@ from os import curdir, sep
 import cgi
 
 PORT_NUMBER = 8080
+DATA_PATH = "/tmp/msc-webwallet/www"
 
 #This class will handles any incoming request from
 #the browser 
@@ -11,6 +12,7 @@ class myHandler(BaseHTTPRequestHandler):
 	
 	#Handler for the GET requests
 	def do_GET(self):
+		print self.path
 		if self.path=="/":
 			self.path="/index.html"
 
@@ -46,7 +48,12 @@ class myHandler(BaseHTTPRequestHandler):
 
 			if sendReply == True:
 				#Open the static file requested and send it
-				f = open(curdir + sep + self.path) 
+				if self.path.startswith( "/tx/" ) or self.path.startswith( "/addr/" ) or self.path.startswith( "/general/" ):
+					pathToServe = DATA_PATH + sep + self.path
+				else:
+					pathToServe = curdir + sep + self.path
+				print pathToServe
+				f = open( pathToServe ) 
 				self.send_response(200)
 				self.send_header('Content-type',mimetype)
 				self.end_headers()
