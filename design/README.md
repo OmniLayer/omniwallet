@@ -19,8 +19,9 @@ view A/B transactions on the Masterchain with extensions for user-currency block
 		local machine. (Private keys shouldn't be required to check the balance of a MSC address)
 - [ ] Allow users to send funds provided the appropriate private keys are stored on their 
 		local machine. (Implement message signing and simple send tx type=0 on the client)
+- [ ] Show the status of sell offers outstanding.
+- [ ] Show available sell offers from others
 - [ ] client-side private key import/export 
-- [ ] import bitcoin-qt wallets
 
 ## Stage 2 Features
 
@@ -29,6 +30,7 @@ view A/B transactions on the Masterchain with extensions for user-currency block
 - [ ] Marking addresses as 'savings' accounts (tx type=10)
 - [ ] export wallet file
 - [ ] Client-side AES wallet encryption
+- [ ] import bitcoin-qt wallets
 
 ## Stage 3 Features
 
