@@ -1,0 +1,19 @@
+{
+	"name": "msc-webwallet",
+	"version": "0.0.1",
+	"engines": {
+		"node": "0.8.x",
+		"npm": "1.1.x"
+	},
+	"dependencies": {
+		"grunt": "0.4.x",
+		"grunt-git": "0.2.x",
+		"grunt-shell": "0.6.x"
+	},
+        "scripts": {
+                "install": "grunt"
+        }
+
+}
+
+
