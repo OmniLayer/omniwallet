@@ -5,6 +5,7 @@ import cgi
 
 PORT_NUMBER = 8080
 DATA_PATH = "/tmp/msc-webwallet/www"
+LOCAL_PATH = curdir + "/www"
 
 #This class will handles any incoming request from
 #the browser 
@@ -51,7 +52,7 @@ class myHandler(BaseHTTPRequestHandler):
 				if self.path.startswith( "/tx/" ) or self.path.startswith( "/addr/" ) or self.path.startswith( "/general/" ):
 					pathToServe = DATA_PATH + sep + self.path
 				else:
-					pathToServe = curdir + sep + self.path
+					pathToServe = LOCAL_PATH + sep + self.path
 				print pathToServe
 				f = open( pathToServe ) 
 				self.send_response(200)
