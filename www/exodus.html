@@ -1,173 +1,196 @@
 <!doctype html>
 <html ng-app="myApp">
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="">
-    <meta name="author" content="">
-    <link rel="shortcut icon" href="ico/favicon.png">
-    <title>Exodus transaction</title>
-    <noscript>
-    Java Script has been disabled!
-    <meta http-equiv="refresh" content="0;url=javascript_required.html">
-    </noscript>
-    <!-- Bootstrap core CSS -->
-    <link href="css/bootstrap.min.css" rel="stylesheet">
-    <link href="css/bootstrap-theme.css" rel="stylesheet">
-
-    <script src="js/jquery-1.10.1.min.js"></script>
-    <script src="js/angular.js"></script>
-    <script src="btcutils.js"></script>
-    <script src="masterPage.js"></script>
-    <script src="simplesend.js"></script>
-    <script src="js/truncate.js"></script>
-    <script>
-    var myApp = angular.module('myApp', ['truncate']);
-    </script>
-    <script src="js/bootstrap.min.js"></script>
-    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
-    <!--[if lt IE 9]>
+   <head>
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="description" content="">
+      <meta name="author" content="">
+      <link rel="shortcut icon" href="ico/favicon.png">
+      <title>
+         Exodus Transaction
+      </title>
+      <noscript>
+         Java Script has been disabled!
+         <meta http-equiv="refresh" content="0;url=javascript_required.html">
+      </noscript>
+      <!-- Bootstrap core CSS -->
+      <link href="css/bootstrap.css" rel="stylesheet">
+      <link href="css/bootstrap-theme.css" rel="stylesheet">
+      <link href="css/search.css" rel="stylesheet" />
+      <script src="js/jquery-1.10.1.min.js"></script>
+      <script src="js/angular.js"></script>
+      <script src="btcutils.js"></script>
+      <script src="js/truncate.js"></script>
+      <script src="masterPage.js"></script>
+      <script src="btc01.js"></script>
+      <script src="js/bootstrap-combobox.js"></script>
+      <script>
+         var myApp = angular.module('myApp', ['truncate']);
+      </script>
+      <script src="js/bootstrap.min.js"></script>
+      <script src="simplesend.js"></script>
+      <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+      <!--[if lt IE 9]>
       <script src="js/html5shiv.js"></script>
       <script src="js/respond.min.js"></script>
-    <![endif]-->
-</head>
-<body ng-controller="TransactionController" ng-init="getTransactionData()">
-	<div id="wrap">
-    <div ng-controller="NavigationController" ng-init="getNavData()">
-      <!-- Fixed navbar -->
-      <div class="navbar navbar-default navbar-fixed-top">
-        <div class="container">
-          <div class="navbar-header">
-            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-              <span class="icon-bar"></span>
-              <span class="icon-bar"></span>
-              <span class="icon-bar"></span>
-            </button>
+      <![endif]-->
+   </head>
 
-            <a class="navbar-brand" href="/"><img src="img/logo.png" alt="mastercoin"></a>
-            <span class="navbar-brand">
-            <img class="round-corner {{transactionInformation.color}} iconPopupInit"
-				src="ico/exodus32t.png"
-				ng-init="createIconPopup()"
-				data-content="{{transactionInformation.icon_text}}" rel="popover"
-				data-placement="bottom"
-				alt="" />
-            </span>
-          </div>
-          <div class="navbar-collapse collapse">
-            <ul class="nav navbar-nav navbar-right">
-              <li><a href="/">Home</a></li>
-              <li><a href="Send.html" class="c-visible-xs">Send</a></li>
-              <li><a href="Download.html" class="c-visible-xs">Download</a></li>
-              <li><a href="API.html" class="c-visible-xs">API</a></li>
-              <li><a href="License.html">License</a></li>
-              <li><a href="About.html">About</a></li>
-            </ul>
-          </div>
-        </div>
-      </div>
+   <body ng-controller="TransactionController" ng-init="getTransactionData()">
 
-      <div class="container page-container">
-        <div class="row">
-          <div class="no-fixed col-sm-9 col-sm-push-3 col-md-10 col-md-push-2">
-            <div class="transactionContainer">
-              <div class="col-md-6">
-                    <table class="table table-striped table-hover table-condensed">
-                               <caption>Basic Information</caption>
-                               <tbody>
-                                   <tr>
+      <div id="wrap">
+         <div ng-controller="NavigationController" ng-init="getNavData()">
+            <!-- Fixed navbar -->
+            <div class="navbar navbar-default navbar-fixed-top">
+               <div class="container">
+                  <div class="navbar-header">
+                     <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                     <span class="icon-bar"></span>
+                     <span class="icon-bar"></span>
+                     <span class="icon-bar"></span>
+                     </button>
+
+                     <a class="navbar-brand" href="/"><img src="img/logo.png" alt="mastercoin"></a>
+                  </div>
+                  <div class="navbar-collapse collapse">
+                     <ul class="nav navbar-nav navbar-right">
+                        <li class="c-visible-xs"><a href="wallet.html">Wallet</a></li>
+                        <li><a href="/">Recent</a></li>
+                        <li><a href="/">Orderbook</a></li>
+                        <li><a href="About.html">Info</a></li>
+                        <li>
+                           <a class="searchLI">
+                              <div class="search">
+                                 <select class="select optional combobox customDropdown"
+                                    id="searchText" name="searchText">
+                                 </select>
+                              </div>
+                           </a>
+                        </li>
+                     </ul>
+                  </div>
+               </div>
+            </div>
+            <div class="container page-container">
+               <div class="row">
+                  <div class="no-fixed col-sm-9 col-sm-push-3 col-md-10 col-md-push-2">
+                     <div class="row">
+                        <div class="col-md-12">
+                           <table class="table table-striped table-hover table-condensed">
+                              <tr>
+                                 <td style="width:108px;"><strong>Transaction<strong></td>
+                                 <td><span class="pull-right">{{transactionInformation.tx_hash}}</span></td>
+                              </tr>
+                           </table>
+                        </div>
+                     </div>
+                     <div class="row">
+                        <div class="transactionContainer">
+                           <div class="col-md-6">
+                              <table class="table table-striped table-hover table-condensed">
+                                 <caption>Basic Information</caption>
+                                 <tbody>
+                                    <tr>
                                        <td>From</td>
                                        <td><a ng-href="Address.html?addr={{transactionInformation.from_address}}&currency={{currency}}">{{transactionInformation.from_address}}</a></td>
-                                   </tr>
-                                   <tr>
+                                    </tr>
+                                    <tr>
                                        <td>To</td>
-									  <td><a ng-href="Address.html?addr={{transactionInformation.to_address}}&currency={{currency}}">{{transactionInformation.to_address}}</a></td>
-                                   </tr>
-                                   <tr>
+                                       <td><a ng-href="Address.html?addr={{transactionInformation.to_address}}&currency={{currency}}">{{transactionInformation.to_address}}</a></td>
+                                    </tr>
+                                    <tr>
                                        <td>Currency</td>
                                        <td>{{transactionInformation.currency_str}}</td>
                                        </td>
-                                   </tr>
-                                   <tr>
+                                    </tr>
+                                    <tr>
                                        <td>Amount</td>
                                        <td>{{transactionInformation.formatted_amount}}</td>
-                                   </tr>
-                               </tbody>
-                           </table>
-		</div>
-		<div class="col-md-6">
-		    <table class="table table-condensed">
-                      <caption>Information</caption>
-                               <tbody>
-                                   <tr>
+                                    </tr>
+                                 </tbody>
+                              </table>
+                           </div>
+                           <div class="col-md-6">
+                              <table class="table table-condensed">
+                                 <caption>Information</caption>
+                                 <tbody>
+                                    <tr>
                                        <td>Transaction type</td>
                                        <td>
-                                       <img class="round-corner {{transactionInformation.color}} iconPopupInit"
-											src="ico/exodus24t.png"
-											ng-init="createIconPopup()"
-											data-content="{{transactionInformation.icon_text}}" rel="popover"
-											data-placement="bottom"
-											alt="" />
-                                       {{transactionInformation.tx_type_str}}</td>
-                                   </tr>
-                                   <tr>
-                                       <td>Transaction ID</td>
-                                       <td>{{transactionInformation.tx_hash|characters:30}}</td>
-                                   </tr>
-                                   <tr>
+                                          <img class="round-corner {{transactionInformation.color}} iconPopupInit"
+                                             src="ico/{{transactionInformation.icon}}24t.png"
+                                             ng-init="createIconPopup()"
+                                             data-content="{{transactionInformation.icon_text}}" rel="popover"
+                                             data-placement="bottom"
+                                             alt="" />
+                                          {{transactionInformation.tx_type_str}}
+                                       </td>
+                                    </tr>
+                                    <tr>
                                        <td>Included in block</td>
                                        <td>{{transactionInformation.block}}</td>
-                                   </tr>
-                                   <tr>
+                                    </tr>
+                                    <tr>
                                        <td>Index in block</td>
                                        <td>{{transactionInformation.index}}</td>
-                                   </tr>
-                                   <tr>
+                                    </tr>
+                                    <tr>
                                        <td>Block time</td>
                                        <td>{{transactionInformation.tx_time | date:'yyyy-MM-dd HH:mm:ss UTC'}}</td>
-                                   </tr>
-                                   <tr>
+                                    </tr>
+                                    <tr>
                                        <td>Transaction method</td>
                                        <td>{{transactionInformation.method}}</td>
-                                   </tr>
-                                   <tr>
+                                    </tr>
+                                    <tr>
                                        <td>Valid</td>
-                                       <td class="{{transactionInformation.invalid|truefalsesearch}}ValidState"></td>
-                                   </tr>
-                               </tbody>
-                           </table>
-		</div>
-            </div>
-          </div>
-
-          <div class="left_bar jumbotron col-sm-3 col-sm-pull-9 col-md-2 col-md-pull-10">
-            <nav>
-                <div class="navItems col-xs-6 col-sm-12 no-padding" ng-repeat="val in values">
-                  <a href="index.html?currency={{val.currency}}" class="panel-link">
-                  <div class="panel panel-default {{val.selected}}">
-                    <div class="panel-heading">
-                      <img ng-src="img/{{val.trend}}Icon.png"/> {{val.name}}
-                    </div>
-                    <div class="panel-body" ng-style="{'background': val.trend2}">
-                        <div class="col-xs-3 no-padding">{{val.currency}}</div>
-                        <div class="col-xs-9">{{val.name2}}</div>
-                    </div>
+                                       <td ng-switch on="transactionInformation.invalid|truefalsesearch" class="{{transactionInformation.invalid|truefalsesearch}}ValidStateDiv">
+                                          <div ng-switch-when="true" id="validPopup"
+                                             data-content="{{reason}}" rel="popover"
+                                             data-placement="bottom" data-original-title="Invalid"
+                                             ng-init="makePopup()">
+                                             Invalid
+                                          </div>
+                                          <div ng-switch-when="false">
+                                             Valid
+                                          </div>
+                                       </td>
+                                    </tr>
+                                 </tbody>
+                              </table>
+                           </div>
+                        </div>
+                     </div>
                   </div>
-                  </a>
-                </div>
-            </nav>
-          </div>
-        </div>
-      </div> <!-- /container -->
-    </div>
-
-        <div id="push"></div>
-    </div>
-    <div id="footer" ng-controller="RevisionController" ng-init="getData()">
-      <div class="container c-footer-container">
-        <div class="revision">Updated: {{revision.last_parsed}} rev <a href='{{revision.url}}'>{{revision.commit_hexsha|characters:6}}</a> ({{revision.commit_time}})</div>
-        <div class="muted credit">&copy; Masterchain Grazcoin Grimentz 2013.</div>
+                  <div class="left_bar jumbotron col-sm-3 col-sm-pull-9 col-md-2 col-md-pull-10">
+                     <nav>
+                        <div class="navItems col-xs-6 col-sm-12 no-padding" ng-repeat="val in values">
+                           <a href="index.html?currency={{val.currency}}" class="panel-link">
+                              <div class="panel panel-default {{val.selected}}">
+                                 <div class="panel-heading">
+                                    <img ng-src="img/{{val.trend}}Icon.png"/> {{val.name}}
+                                 </div>
+                                 <div class="panel-body" ng-style="{'background': val.trend2}">
+                                    <div class="col-xs-3 no-padding">{{val.currency}}</div>
+                                    <div class="col-xs-9">{{val.name2}}</div>
+                                 </div>
+                              </div>
+                           </a>
+                        </div>
+                     </nav>
+                  </div>
+               </div>
+            </div>
+            <!-- /container -->
+         </div>
+         <div id="push"></div>
       </div>
-    </div>
-</body>
+      <div id="footer" ng-controller="RevisionController" ng-init="getData()">
+         <div class="container c-footer-container">
+            <div class="revision">Updated: {{revision.last_parsed}} rev <a href='{{revision.url}}'>{{revision.commit_hexsha|characters:6}}</a> ({{revision.commit_time}})</div>
+            <div class="muted credit">&copy; Masterchain Grazcoin Grimentz 2013.</div>
+         </div>
+      </div>
+   </body>
 </html>
+

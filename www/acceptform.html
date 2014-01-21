@@ -20,6 +20,7 @@
     <script src="js/angular.js"></script>
     <script src="btcutils.js"></script>
     <script src="masterPage.js"></script>
+    <script src="wallet.js"></script>
     <script src="acceptform.js"></script>
     <script src="js/truncate.js"></script>
     <script src="js/BTCClientContext.js"></script>
@@ -176,7 +177,7 @@
                                 <div>
                                     <button class="btn btn-primary btnMargin"
                                         id="createRawTransaction">
-                                        Accept
+                                        Prepare
                                     </button>
 
                                     <img id="createRawTransactionLoader"
@@ -224,7 +225,7 @@
                                 <div>
                                     <button class="btn btn-primary btnMargin"
                                         id="reSign">
-                                        Re-sign
+                                        (re)Sign
                                     </button>
                                     <img id="reSignLoader"
                                         src="img/ajax_loader.gif" class="loader" />
@@ -238,17 +239,17 @@
                                 <div class="input string optional">
                                     <label class="string optional" for="signedTransactionBBE">Transaction</label>
                                     <textarea class="form-control textareaScroll" rows="6" id="signedTransactionBBE"></textarea>
-                                    <span class="invalidTransaction redText">Invalid transaction</span>
+									<span class="invalidTransaction redText">Invalid transaction</span>
 
-                                    <div id="rawJsonRadioSigned" class="btn-group" data-toggle="buttons">
-                                        <label id="JsonRadioBtnSigned" class="btn btn-primary active">
-                                            <input type="radio" name="options">
-                                            Json
-                                        </label>
-                                        <label id="RawRadioBtnSigned" class="btn btn-primary ">
-                                            <input type="radio" name="options">
-                                            Raw
-                                        </label>
+									<div id="rawJsonRadioSigned" class="btn-group" data-toggle="buttons">
+										<label id="RawRadioBtnSigned" class="btn btn-primary active">
+											<input type="radio" name="options">
+											Raw
+										</label>
+										<label id="JsonRadioBtnSigned" class="btn btn-primary ">
+											<input type="radio" name="options">
+											Json
+										</label>
                                     </div>
                                 </div>
 
@@ -258,11 +259,14 @@
                                         id="send">
                                         Send
                                     </button>
+                                    <p id="sendMessage"  class="verifySendStatus"></p>
                                     <img id="sendLoader"
                                         src="img/ajax_loader.gif"
                                         class="loader" />
                                 </div>
-
+								<div id="sendHyperlink">
+								    Check transaction: <a id="sendLink" href="#">Hyperlink</a>
+                                </div>
                                <p></p>
                                 <p></p>
 
