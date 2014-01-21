@@ -10,26 +10,23 @@ view A/B transactions on the Masterchain with extensions for user-currency block
 
 ## Stage 1 Features
 
-- High level API implementing Mastercoin specification from querying transactions to creating new currencies
-- [ ] Display blockchain as currently possible with masterchain.info (TBD: Add detail)
-			- Add API support for viewing transactions of different types (Class A & B )
-- [ ] Extend Block-Explorer such that all MSC user-derived currencies can be displayed.
-			- Add API support for currency creation (tx type 100)
-- [ ] Allow users to check balances provided the appropriate private keys are stored on their 
-		local machine. (Private keys shouldn't be required to check the balance of a MSC address)
-- [ ] Allow users to send funds provided the appropriate private keys are stored on their 
-		local machine. (Implement message signing and simple send tx type=0 on the client)
+- [ ] High level API implementing Mastercoin specification from querying transactions to creating new currencies
+- [ ] Nest existing masterchain.info website code in npm/grunt-based install & run framework.
+- [ ] Allow users to check balances.
+- [ ] Allow users to send funds provided the appropriate private keys are stored on their local machine.
 - [ ] Show the status of sell offers outstanding.
 - [ ] Show available sell offers from others
 - [ ] client-side private key import/export 
+- [ ] Client-side AES wallet encryption
 
 ## Stage 2 Features
 
 - [ ] Web wallet in a box, ready to deploy MSC web wallet (via docker/heroku)
 - [ ] Heroku & Docker buildpacks for automatic deployments.  See http://blog.docker.io/2013/05/heroku-buildpacks-on-docker/#more-79
 - [ ] Marking addresses as 'savings' accounts (tx type=10)
+- [ ] Extend Block-Explorer such that all MSC user-derived currencies can be displayed.
+			- Add API support for currency creation (tx type 100)
 - [ ] export wallet file
-- [ ] Client-side AES wallet encryption
 - [ ] import bitcoin-qt wallets
 
 ## Stage 3 Features
@@ -43,17 +40,12 @@ view A/B transactions on the Masterchain with extensions for user-currency block
 
 ## Design Notes
 
-- [ ] JS&HTML5 offline app using blockchain.info API
 - [ ] Crypto provided by https://github.com/bitcoinjs/bitcoinjs-lib
 - [ ] BTC Webwallet base provided by https://github.com/blockchain/My-Wallet with 
 		API Docs @ https://blockchain.info/api
 - [ ] MSC Block-Explorer base provided by https://github.com/grazcoin/mastercoin-tools/
-- [ ] Implementation of the following 
-		minimum API https://github.com/mastercoin-MSC/spec#appendix-c---webservice-verification-api
-- [ ] Other resources: maran's ruby impl https://github.com/maran/mastercoin-ruby 
-		and mastercoind https://github.com/mastercoin-MSC/mastercoind
 
-## More Specific Design (TBD)
+## More Specific Design (Living Document)
 
 Endpoints
 
