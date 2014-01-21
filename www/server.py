@@ -13,15 +13,18 @@ class myHandler(BaseHTTPRequestHandler):
 	
 	#Handler for the GET requests
 	def do_GET(self):
-		print self.path
+                print 'GET Request: ' + self.path
 		if self.path=="/":
 			self.path="/index.html"
-
-		try:
+                if self.path.find('?') != -1:
+                    self.query = self.path[self.path.find('?'):]
+                    self.path = self.path[:self.path.find('?')]
+                print 'PATH is: ' + self.path
+                try:
 			#Check the file extension required and
 			#set the right mime type
 
-			sendReply = False
+                        sendReply = False
 			if self.path.endswith(".html"):
 				mimetype='text/html'
 				sendReply = True
