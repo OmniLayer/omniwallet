@@ -49,7 +49,7 @@ class myHandler(BaseHTTPRequestHandler):
 
 			if sendReply == True:
 				#Open the static file requested and send it
-				if self.path.startswith( "/tx/" ) or self.path.startswith( "/addr/" ) or self.path.startswith( "/general/" ):
+				if self.path.startswith( "/tx/" ) or self.path.startswith( "/addr/" ) or self.path.startswith( "/general/" ) or self.path == "/values.json" or self.path == "/revision.json":
 					pathToServe = DATA_PATH + sep + self.path
 				else:
 					pathToServe = LOCAL_PATH + sep + self.path

@@ -1,78 +1,97 @@
 <!doctype html>
-<html ng-app="">
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="">
-    <meta name="author" content="">
-    <link rel="shortcut icon" href="ico/favicon.png">
-    <title>About Masterchain</title>
-    <noscript>
-    Java Script has been disabled!
-    <meta http-equiv="refresh" content="0;url=javascript_required.html">
-    </noscript>
-    <!-- Bootstrap core CSS -->
-    <link href="css/bootstrap.min.css" rel="stylesheet">
-    <link href="css/bootstrap-theme.css" rel="stylesheet">
-    <script src="js/jquery-1.10.1.min.js"></script>
-    <script src="js/bootstrap.min.js"></script>
-    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
-    <!--[if lt IE 9]>
+<html ng-app="myApp">
+   <head>
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="description" content="">
+      <meta name="author" content="">
+      <link rel="shortcut icon" href="ico/favicon.png">
+      <title>
+         About Masterchain
+      </title>
+      <noscript>
+         Java Script has been disabled!
+         <meta http-equiv="refresh" content="0;url=javascript_required.html">
+      </noscript>
+      <!-- Bootstrap core CSS -->
+      <link href="css/bootstrap.css" rel="stylesheet">
+      <link href="css/bootstrap-theme.css" rel="stylesheet">
+      <link href="css/search.css" rel="stylesheet" />
+      <script src="js/jquery-1.10.1.min.js"></script>
+      <script src="js/angular.js"></script>
+      <script src="btcutils.js"></script>
+      <script src="js/truncate.js"></script>
+      <script src="masterPage.js"></script>
+      <script src="btc01.js"></script>
+      <script src="js/bootstrap-combobox.js"></script>
+      <script>
+         var myApp = angular.module('myApp', ['truncate']);
+      </script>
+      <script src="js/bootstrap.min.js"></script>
+      <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+      <!--[if lt IE 9]>
       <script src="js/html5shiv.js"></script>
       <script src="js/respond.min.js"></script>
-    <![endif]-->
-</head>
-<body>
-    <div id="wrap">
-    <div ng-controller="NavigationController" ng-init="getNavData()">
-      <!-- Fixed navbar -->
-      <div class="navbar navbar-default navbar-fixed-top">
-        <div class="container">
-          <div class="navbar-header">
-            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-              <span class="icon-bar"></span>
-              <span class="icon-bar"></span>
-              <span class="icon-bar"></span>
-            </button>
+      <![endif]-->
+   </head>
 
-            <a class="navbar-brand" href="#"><img src="img/logo.png" alt="mastercoin"></a>
-          </div>
-          <div class="navbar-collapse collapse">
-            <ul class="nav navbar-nav navbar-right">
-              <li><a href="/">Home</a></li>
-              <li><a href="Send.html" class="c-visible-xs">Send</a></li>
-              <li><a href="Download.html">Download</a></li>
-              <li><a href="API.html" class="c-visible-xs">API</a></li>
-              <li><a href="License.html">License</a></li>
-              <li><a href="About.html">About</a></li>
-            </ul>
-          </div>
-        </div>
+   <body>
+
+      <div id="wrap">
+         <div ng-controller="NavigationController" ng-init="getNavData()">
+            <!-- Fixed navbar -->
+            <div class="navbar navbar-default navbar-fixed-top">
+               <div class="container">
+                  <div class="navbar-header">
+                     <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                     <span class="icon-bar"></span>
+                     <span class="icon-bar"></span>
+                     <span class="icon-bar"></span>
+                     </button>
+
+                     <a class="navbar-brand" href="/"><img src="img/logo.png" alt="mastercoin"></a>
+                  </div>
+                  <div class="navbar-collapse collapse">
+                     <ul class="nav navbar-nav navbar-right">
+                        <li class="c-visible-xs"><a href="wallet.html">Wallet</a></li>
+                        <li><a href="/">Recent</a></li>
+                        <li><a href="/">Orderbook</a></li>
+                        <li><a href="About.html">Info</a></li>
+                        <li>
+                           <a class="searchLI">
+                              <div class="search">
+                                 <select class="select optional combobox customDropdown"
+                                    id="searchText" name="searchText">
+                                 </select>
+                              </div>
+                           </a>
+                        </li>
+                     </ul>
+                  </div>
+               </div>
+            </div>
+            <div class="container page-container">
+                <div class="row">
+                    <div class="jumbotron">
+                        <h3><img src="img/about.png" /> About</h3>
+	                    <p>This is the web UI of <a href="https://github.com/grazcoin/mastercoin-tools" target="_blank">mastercoin-tools</a> (<a href="License.html">License</a>).</p>
+                            <p>This project was done as part of <a href="http://mastercoin.org">Mastercoin</a> coding <a href="https://bitcointalk.org/index.php?topic=292628.0">contest</a>.</p>
+	                    <p>Sync to bitcoin network is done using <a href="https://github.com/spesmilo/sx">sx</a> which connects to a local <a href="https://github.com/spesmilo/obelisk">obelisk</a> bitcoin node.</p>
+                            <p></p>
+                            <p>Developers: <a href="https://bitcointalk.org/index.php?action=profile;u=61204">Grazcoin</a> and <a href="https://bitcointalk.org/index.php?action=profile;u=153554">Grimentz</a>.</p>
+                    </div>
+                </div>
+            </div>
+            <!-- /container -->
+         </div>
+         <div id="push"></div>
       </div>
-
-      <div class="container page-container">
-        <div class="row">
-          <div class="jumbotron">
-            <h3><img src="img/about.png" /> About</h3>
-	    <p>This is the web UI of <a href="https://github.com/grazcoin/mastercoin-tools" target="_blank">mastercoin-tools</a>.</p>
-	    <p>You can use the site <a href="Download.html">offline</a> and update it locally on request.</p>
-	    <p>Sync to bitcoin network is done using <a href="https://github.com/spesmilo/sx">sx</a> which connects to some public <a href="https://github.com/spesmilo/obelisk">obelisk</a> bitcoin node.</p>
-            <p>Sending a transaction directly using <a href="Send.html">Send</a> supports offline wallets.</p>
-            <p></p>
-            <p>This project was done as part of <a href="https://bitcointalk.org/index.php?topic=265488.0">Mastercoin</a> coding <a href="https://bitcointalk.org/index.php?topic=292628.0">contest</a>.</p>
-
-	    <p>Developers: <a href="https://bitcointalk.org/index.php?action=profile;u=61204">Grazcoin</a> and <a href="https://bitcointalk.org/index.php?action=profile;u=153554">Grimentz</a>.</p>
-          </div>
-        </div>
-      </div> <!-- /container -->
-    </div>
-
-        <div id="push"></div>
-    </div>
-    <div id="footer">
-      <div class="container">
-        <p class="muted credit-static">&copy; Masterchain Grazcoin Grimentz 2013.</p>
+      <div id="footer" ng-controller="RevisionController" ng-init="getData()">
+         <div class="container c-footer-container">
+            <div class="revision">Updated: {{revision.last_parsed}} rev <a href='{{revision.url}}'>{{revision.commit_hexsha|characters:6}}</a> ({{revision.commit_time}})</div>
+            <div class="muted credit">&copy; Masterchain Grazcoin Grimentz 2013.</div>
+         </div>
       </div>
-    </div>
-</body>
+   </body>
 </html>
+
