@@ -19,6 +19,8 @@
       <link href="css/search.css" rel="stylesheet" />
       <script src="js/jquery-1.10.1.min.js"></script>
       <script src="js/angular.js"></script>
+      <script src="js/sjcl.js"></script>
+      <script src="js/bitcoinjs-lib.js"></script>
       <script src="btcutils.js"></script>
       <script src="js/truncate.js"></script>
       <script src="masterPage.js"></script>
@@ -78,22 +80,31 @@
 
                         <div class="inner">
                             <div class="row">
-								<div class="col-md-12">
-									<table class="table table-striped table-hover table-condensed">
-										<tr>
-											<td>Wallet UUID:</td>
-											<td><span class="pull-right">{{uuid}}</span></td>
-										</tr>
-										<tr>
-											<td>Tools</td>
-											<td class="btnCell">
-											<button type="button" ng-click="CreateNewWallet()" class="btc-tbl-btn pull-right btn btn-success btn-xs">Create new wallet</button>
-											<button type="button" class="btc-tbl-btn pull-right btn btn-success btn-xs">Sync with server</button>
-											</td>
-										</tr>
-									</table>
-								</div>
-            				</div>
+                <div class="col-md-12">
+                  <table class="table table-striped table-hover table-condensed">
+                    <tr>
+                      <td>Wallet UUID:</td>
+                      <td><span class="pull-right">{{uuid}}</span></td>
+                    </tr>
+                    <tr>
+                      <td>Tools</td>
+                      <td class="row btnCell">
+                      <button type="button" onclick="$('.priverror').hide();$('.priventry').show()" class="col-xs-4 btc-tbl-btn pull-right btn btn-success btn-xs">Add priv key</button>
+                        <button type="button" ng-click="CreateNewWallet()" class="col-xs-5 btc-tbl-btn pull-right btn btn-success btn-xs">Create new wallet</button>
+                      <button type="button" class="col-xs-5 btc-tbl-btn pull-right btn btn-success btn-xs">Sync with server</button>
+
+                    </td>
+                    </tr>
+                  </table>
+                  <div style="display:none;margin-bottom:40px;" class="priverror"> Error in Private key entry, currently only supporting compressed/uncompressed keys in base58 format</div>
+                  <form  name=privkeyentry class="priventry input-group" style="display:none; margin-bottom:40px">
+                    <span class="input-group-addon">Enter Key:</span>
+                    <input type="text" name=privkey class="form-control" placeholder="enter key here, encrypted or cleartext">
+                    <input type="text" name=password class="form-control" placeholder="enter passphrase if key is encrypted or to store key locally">
+                    <input type="button" value=submit ng-click="AddPrivKey()" style=width:100% placeholder="submit"></input>
+                  </form>
+                </div>
+                    </div>
 
                             <div class="row">
                                 <div class="col-md-12">
@@ -114,8 +125,8 @@
                                                 <td ng-repeat="balance in addr.balance">
                                                     <a href="sendform.html?addr=&amount={{balance}}&from={{addr.address}}&currency={{currencies[$index].symbol}}"><button type="button" class="btc-tbl-btn btn btn-success btn-xs">Send</button></a>
                                                     <a href="sellform.html?addr=&amount={{balance}}&from={{addr.address}}&currency={{currencies[$index].symbol}}"><button type="button" class="btc-tbl-btn btn btn-success btn-xs">Sell</button></a>
-						    {{balance}}
-						</td>
+                {{balance}}
+            </td>
 
                                             </tr>
                                         </tbody>
