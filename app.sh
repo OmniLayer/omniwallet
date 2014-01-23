@@ -2,6 +2,7 @@
 
 kill_child_processes() {
 	kill $SERVER_PID
+	rm -f $LOCK_FILE
 }
 
 # Ctrl-C trap. Catches INT signal
@@ -15,6 +16,8 @@ PARSE_LOG=$DATADIR/parsed.log
 VALIDATE_LOG=$DATADIR/validated.log
 ARCHIVE_LOG=$DATADIR/archived.log
 
+mkdir -p $DATADIR
+
 python $APPDIR/www/server.py &
 SERVER_PID=$!
 
@@ -22,39 +25,40 @@ while true
 do
 
 	# check lock (not to run multiple times)
-	[ -f $LOCK_FILE ] && exit 0
+	if [ ! -f $LOCK_FILE ]; then
 
-	# lock
-	touch $LOCK_FILE
+		# lock
+		touch $LOCK_FILE
 
-	mkdir -p $DATADIR
-	cd $DATADIR
-	mkdir -p tx addr general bids mastercoin_verify/addresses mastercoin_verify/transactions
+		mkdir -p $DATADIR
+		cd $DATADIR
+		mkdir -p tx addr general bids mastercoin_verify/addresses mastercoin_verify/transactions
 
-	# parse until full success
-	x=1 # assume failure
-	echo -n > $PARSE_LOG
-	while [ "$x" != "0" ];
-	do
-  		python $TOOLSDIR/msc_parse.py 2>&1 >> $PARSE_LOG
-  		x=$?
-	done
+		# parse until full success
+		x=1 # assume failure
+		echo -n > $PARSE_LOG
+		while [ "$x" != "0" ];
+		do
+  			python $TOOLSDIR/msc_parse.py -r $TOOLSDIR 2>&1 >> $PARSE_LOG
+  			x=$?
+		done
 
-	python $TOOLSDIR/msc_validate.py 2>&1 > $VALIDATE_LOG
-
-	# update archive
-	python $TOOLSDIR/msc_archive.py 2>&1 > $ARCHIVE_LOG
+		python $TOOLSDIR/msc_validate.py 2>&1 > $VALIDATE_LOG
 	
-	mkdir -p $DATADIR/www/tx $DATADIR/www/addr $DATADIR/www/general $DATADIR/www/bids $DATADIR/www/mastercoin_verify/addresses $DATADIR/www/mastercoin_verify/transactions
-	cp --no-clobber tx/* $DATADIR/www/tx
-	cp --no-clobber addr/* $DATADIR/www/addr
-	cp --no-clobber general/* $DATADIR/www/general
-	cp --no-clobber bids/* $DATADIR/www/bids
-	cp --no-clobber mastercoin_verify/addresses/* $DATADIR/www/mastercoin_verify/addresses
-	cp --no-clobber mastercoin_verify/transactions/* $DATADIR/www/mastercoin_verify/transactions
-
-	# unlock
-	rm -f $LOCK_FILE
+		# update archive
+		python $TOOLSDIR/msc_archive.py -r $TOOLSDIR 2>&1 > $ARCHIVE_LOG
+	
+		mkdir -p $DATADIR/www/tx $DATADIR/www/addr $DATADIR/www/general $DATADIR/www/bids $DATADIR/www/mastercoin_verify/addresses $DATADIR/www/mastercoin_verify/transactions
+		cp --no-clobber tx/* $DATADIR/www/tx
+		cp --no-clobber addr/* $DATADIR/www/addr
+		cp --no-clobber general/* $DATADIR/www/general
+		cp --no-clobber bids/* $DATADIR/www/bids
+		cp --no-clobber mastercoin_verify/addresses/* $DATADIR/www/mastercoin_verify/addresses
+		cp --no-clobber mastercoin_verify/transactions/* $DATADIR/www/mastercoin_verify/transactions
+	
+		# unlock
+		rm -f $LOCK_FILE
+	fi
 
 	# Wait a minute, and do it all again.
 	sleep 60

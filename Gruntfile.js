@@ -6,8 +6,8 @@ module.exports = function(grunt) {
 		gitclone: {
 			mastercointools: {
 				options: {
-					repository: 'https://github.com/grazcoin/mastercoin-tools.git',
-                			branch: 'master',
+					repository: 'https://github.com/curtislacy/mastercoin-tools.git',
+                			branch: 'Specify-Directory',
                 			directory: 'node_modules/mastercoin-tools'
 				},
 			}
