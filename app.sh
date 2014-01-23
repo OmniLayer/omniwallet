@@ -16,7 +16,10 @@ PARSE_LOG=$DATADIR/parsed.log
 VALIDATE_LOG=$DATADIR/validated.log
 ARCHIVE_LOG=$DATADIR/archived.log
 
-mkdir -p $DATADIR
+if [ ! -d $DATADIR ]; then
+	mkdir -p $DATADIR
+	cp -r $TOOLSDIR/www/tx-bootstrap $DATADIR/tx
+fi
 
 python $APPDIR/www/server.py &
 SERVER_PID=$!
@@ -39,7 +42,7 @@ do
 		echo -n > $PARSE_LOG
 		while [ "$x" != "0" ];
 		do
-  			python $TOOLSDIR/msc_parse.py -r $TOOLSDIR 2>&1 >> $PARSE_LOG
+			python $TOOLSDIR/msc_parse.py -r $TOOLSDIR 2>&1 >> $PARSE_LOG
   			x=$?
 		done
 
