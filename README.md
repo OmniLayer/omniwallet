@@ -34,7 +34,7 @@ service = "tcp://162.243.29.201:9091"
 ```
 Make sure you have python libraries installed.
 ```
-sudo apt-get install python-pip
+sudo apt-get install git python-simplejson python-git python-pip
 sudo pip install ecdsa
 sudo pip install pycoin
 ```
