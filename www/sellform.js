@@ -13,6 +13,7 @@ function AcceptOfferController($scope, $http) {
     $scope.blocks = 10;
     $scope.key = "";
     $scope.currency = "";
+    $scope.wallet = Wallet.GetWallet();
 
     $scope.keyChange = function () {
 
