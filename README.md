@@ -38,6 +38,17 @@ sudo apt-get install python-pip
 sudo pip install ecdsa
 sudo pip install pycoin
 ```
+Install nginx, and drop in the config included with this codebase.
+```
+sudo apt-get install uwsgi uwsgi-plugin-python
+sudo -s
+nginx=stable # use nginx=development for latest development version
+add-apt-repository ppa:nginx/$nginx
+apt-get update 
+apt-get install nginx
+exit
+sudo cp etc/nginx/sites-available/default /etc/nginx/sites-available
+```
 Run npm install
 ```
 npm install
@@ -45,13 +56,18 @@ npm install
 
 ## Running
 
-Start the server by running:
+Start nginx by running:
+```
+sudo service nginx start
+```
+Using the config included, nginx will launch an HTTP server on port 80.
+Start the blockchain parser and python services by running:
 
 ```
 app.sh
 ```
 
-This will launch the web server, create a parsing & validation work area in /tmp/msc-webwallet, and begin parsing the blockchain using the server listed in your .sx.cfg file (see above).  By default, the server runs on port 8080.
+This will create a parsing & validation work area in /tmp/msc-webwallet, and begin parsing the blockchain using the server listed in your .sx.cfg file (see above).
 
 ## Development
 

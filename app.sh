@@ -21,7 +21,8 @@ if [ ! -d $DATADIR ]; then
 	cp -r $TOOLSDIR/www/tx-bootstrap $DATADIR/tx
 fi
 
-python $APPDIR/www/server.py &
+echo "Binding port on interface $1" 
+uwsgi -s $1:1088 -M --vhost --enable-threads --plugin python --logto $DATADIR/apps.log --chdir $TOOLSDIR/apps &
 SERVER_PID=$!
 
 while true
