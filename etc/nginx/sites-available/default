@@ -21,6 +21,7 @@ server {
 	listen 80 default_server;
 	listen [::]:80 default_server ipv6only=on;
 
+	## Set this to reflect the location of the www directory within the msc-webwallet repo.
 	root /home/cmlacy/msc-webwallet/www/;
 	index index.html index.htm;
 

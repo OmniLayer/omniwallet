@@ -49,6 +49,13 @@ apt-get install nginx
 exit
 sudo cp etc/nginx/sites-available/default /etc/nginx/sites-available
 ```
+Find this section near the beginning of /etc/nginx/sites-available/default:
+```
+        ## Set this to reflect the location of the www directory within the msc-webwallet repo.
+        root /home/cmlacy/msc-webwallet/www/;
+        index index.html index.htm;
+```
+Change the ``root`` directive to reflect the location of your msc-webwallet codebase (actually the www directory within that codebase).
 Run npm install
 ```
 npm install
