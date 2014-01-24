@@ -341,12 +341,12 @@ Wallet.AddPrivKey = function() {
         var key = new Bitcoin.ECKey.decodeEncryptedFormat(priv,pass);
         var enc = key.getWalletImportFormat();
       } catch(e) {
-        console.log('error: ', e);
+        console.log('error: not an encrypted key, trying direct load');
         try {
           var key = new Bitcoin.ECKey(priv);
           var enc = key.getEncryptedFormat(pass);
         } catch(e) {
-           console.log('error: ', e);
+           console.log('error: not a private key',e);
            $('.priverror').show();
            $('.priventry').hide();
         }
@@ -355,7 +355,7 @@ Wallet.AddPrivKey = function() {
       var key = new Bitcoin.ECKey(priv);
     }
     if(enc)
-      this.StoreKey(enc);
+      this.StoreKey({address: key.getBitcoinAddress().toString(), encrypted: enc });
 
     this.AddAddress(key.getBitcoinAddress().toString());
 }
@@ -372,6 +372,13 @@ Wallet.StoreKey = function(encrypted) {
     localStorage[Wallet.StorageKey] = JSON.stringify(wallets);
     
   }
+}
+Wallet.DecryptPrivKey = function(encrypted, passphrase) {
+    console.log(encrypted,passphrase);
+		var key = new Bitcoin.ECKey.decodeEncryptedFormat(encrypted,passphrase);
+		var decrypted = key.getWalletImportFormat();
+    
+    return decrypted;
 }
 
 Wallet.supportsStorage = function () {
