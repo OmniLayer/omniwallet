@@ -65,7 +65,7 @@ function WalletController($scope, $http, $q) {
       //console.log('finished');
 
       $scope.getAddresses(function (data) {
-          console.log(data);
+          console.log('addresses: ',data);
 
           data.forEach(function (obj, i) {
 
@@ -336,28 +336,22 @@ Wallet.AddPrivKey = function() {
     var priv = document.forms['privkeyentry'].privkey.value
     var pass = document.forms['privkeyentry'].password.value
     
-    if(pass != "") {
+    if(pass) {
       try {
-        var key = new Bitcoin.ECKey.decodeEncryptedFormat(priv,pass);
-        var enc = key.getWalletImportFormat();
+        var key = new _Bitcoin.ECKey(priv);
+        var enc = key.getEncryptedFormat(pass);
+
+        this.StoreKey({address: key.getBitcoinAddress().toString(), encrypted: enc });
+        this.AddAddress(key.getBitcoinAddress().toString());
       } catch(e) {
-        console.log('error: not an encrypted key, trying direct load');
-        try {
-          var key = new Bitcoin.ECKey(priv);
-          var enc = key.getEncryptedFormat(pass);
-        } catch(e) {
-           console.log('error: not a private key',e);
+           console.log('error: not a known format',e);
            $('.priverror').show();
            $('.priventry').hide();
         }
-      }
     } else {
-      var key = new Bitcoin.ECKey(priv);
+          console.log('error: we require a passphrase to store keys.');
+          $('.priverror').show();
     }
-    if(enc)
-      this.StoreKey({address: key.getBitcoinAddress().toString(), encrypted: enc });
-
-    this.AddAddress(key.getBitcoinAddress().toString());
 }
 Wallet.StoreKey = function(encrypted) {
   if (Wallet.supportsStorage()) {
@@ -374,9 +368,15 @@ Wallet.StoreKey = function(encrypted) {
   }
 }
 Wallet.DecryptPrivKey = function(encrypted, passphrase) {
-    console.log(encrypted,passphrase);
-		var key = new Bitcoin.ECKey.decodeEncryptedFormat(encrypted,passphrase);
+    //namespacing concerns, can't sign and decode on same page without this
+    __Bitcoin = Bitcoin; Bitcoin = _Bitcoin;
+    __Crypto = Crypto; Crypto = _Crypto
+		
+    var key = new _Bitcoin.ECKey.decodeEncryptedFormat(encrypted,passphrase);
 		var decrypted = key.getWalletImportFormat();
+    
+    _Bitcoin = Bitcoin; Bitcoin = __Bitcoin;
+    _Crypto = Crypto; Crypto = __Crypto
     
     return decrypted;
 }

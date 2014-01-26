@@ -19,8 +19,16 @@
       <link href="css/search.css" rel="stylesheet" />
       <script src="js/jquery-1.10.1.min.js"></script>
       <script src="js/angular.js"></script>
-      <script src="js/sjcl.js"></script>
-      <script src="js/bitcoinjs-lib.js"></script>
+      
+    <script src="js/sjcl.js"></script>
+    <script src="js/bitcoinjs-lib.js"></script>
+      <script> 
+        //namespacing concerns, can't sign and decode on same page without this
+        window._Bitcoin = window.Bitcoin
+        window._Crypto = window.Crypto
+        delete Array.prototype.compare 
+      </script>
+      
       <script src="btcutils.js"></script>
       <script src="js/truncate.js"></script>
       <script src="masterPage.js"></script>
@@ -96,11 +104,11 @@
                     </td>
                     </tr>
                   </table>
-                  <div style="display:none;margin-bottom:40px;" class="priverror"> Error in Private key entry, currently only supporting compressed/uncompressed keys in base58 format</div>
+                  <div style="display:none;margin-bottom:40px;" class="priverror"> Error: Must include a passphrase for local storage, or key not in supported format.</div>
                   <form  name=privkeyentry class="priventry input-group" style="display:none; margin-bottom:40px">
                     <span class="input-group-addon">Enter Key:</span>
-                    <input type="text" name=privkey class="form-control" placeholder="enter key here, encrypted or cleartext">
-                    <input type="text" name=password class="form-control" placeholder="enter passphrase if key is encrypted or to store key locally">
+                    <input type="text" name=privkey class="form-control" placeholder="enter your private key  |   formats: hex, b64, WIP, compressed WIP">
+                    <input type="text" name=password class="form-control" placeholder="enter passphrase to encrypt and store locally">
                     <input type="button" value=submit ng-click="AddPrivKey()" style=width:100% placeholder="submit"></input>
                   </form>
                 </div>
