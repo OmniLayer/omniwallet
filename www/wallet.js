@@ -5,6 +5,7 @@ function WalletController($scope, $http, $q) {
   
   $scope.addressArray = [];
   $scope.uuid = '';
+  $scope.wallet = Wallet.GetWallet();
 
   $scope.DeleteAddress = function(addrIdx) {
   var newAddressArray = Wallet.DeleteIndex($scope.uuid, addrIdx);
