@@ -27,6 +27,12 @@ confident this level of security can and should be implemented by our software.
 
 ## Setup
 
+Install sx
+```
+sudo apt-get install git build-essential autoconf libtool libboost-all-dev pkg-config libcurl4-openssl-dev libleveldb-dev libzmq-dev libconfig++-dev libncurses5-dev
+wget http://sx.dyne.org/install-sx.sh
+sudo bash ./install-sx.sh
+```
 update ~/.sx.cfg with an obelisk server details.  Don't have one already set up?  Here's how to build one on Rackspace: https://gist.github.com/curtislacy/8424181
 ```
 # ~/.sx.cfg Sample file.
