@@ -27,6 +27,12 @@ confident this level of security can and should be implemented by our software.
 
 ## Setup
 
+Install sx
+```
+sudo apt-get install git build-essential autoconf libtool libboost-all-dev pkg-config libcurl4-openssl-dev libleveldb-dev libzmq-dev libconfig++-dev libncurses5-dev
+wget http://sx.dyne.org/install-sx.sh
+sudo bash ./install-sx.sh
+```
 update ~/.sx.cfg with an obelisk server details.  Don't have one already set up?  Here's how to build one on Rackspace: https://gist.github.com/curtislacy/8424181
 ```
 # ~/.sx.cfg Sample file.
@@ -34,10 +40,28 @@ service = "tcp://162.243.29.201:9091"
 ```
 Make sure you have python libraries installed.
 ```
-sudo apt-get install python-pip
+sudo apt-get install git python-simplejson python-git python-pip
 sudo pip install ecdsa
 sudo pip install pycoin
 ```
+Install nginx, and drop in the config included with this codebase.
+```
+sudo apt-get install uwsgi uwsgi-plugin-python
+sudo -s
+nginx=stable # use nginx=development for latest development version
+add-apt-repository ppa:nginx/$nginx
+apt-get update 
+apt-get install nginx
+exit
+sudo cp etc/nginx/sites-available/default /etc/nginx/sites-available
+```
+Find this section near the beginning of /etc/nginx/sites-available/default:
+```
+        ## Set this to reflect the location of the www directory within the msc-webwallet repo.
+        root /home/cmlacy/msc-webwallet/www/;
+        index index.html index.htm;
+```
+Change the ``root`` directive to reflect the location of your msc-webwallet codebase (actually the www directory within that codebase).
 Run npm install
 ```
 npm install
@@ -45,13 +69,18 @@ npm install
 
 ## Running
 
-Start the server by running:
+Start nginx by running:
+```
+sudo service nginx start
+```
+Using the config included, nginx will launch an HTTP server on port 80.
+Start the blockchain parser and python services by running:
 
 ```
 app.sh
 ```
 
-This will launch the web server, create a parsing & validation work area in /tmp/msc-webwallet, and begin parsing the blockchain using the server listed in your .sx.cfg file (see above).  By default, the server runs on port 8080.
+This will create a parsing & validation work area in /tmp/msc-webwallet, and begin parsing the blockchain using the server listed in your .sx.cfg file (see above).
 
 ## Development
 
