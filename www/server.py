@@ -56,7 +56,6 @@ class myHandler(BaseHTTPRequestHandler):
                                         pathToServe = DATA_PATH + sep + self.path
                                 else:
                                         pathToServe = LOCAL_PATH + sep + self.path
-                                print pathToServe
                                 f = open( pathToServe ) 
                                 self.send_response(200)
                                 self.send_header('Content-type',mimetype)
@@ -66,7 +65,10 @@ class myHandler(BaseHTTPRequestHandler):
                         return
 
                 except IOError:
-                        self.send_error(404,'File Not Found: %s' % self.path)
+                        if self.path.startswith( "/addr/" ):
+                            self.send_error(200, 'Address not found')
+                        else:
+                            self.send_error(404,'File Not Found: %s' % self.path)
 
         #Handler for the POST requests
         def do_POST(self):

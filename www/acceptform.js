@@ -6,6 +6,7 @@ function AcceptOfferController($scope, $http) {
     $scope.title = "TITLE";
 
     $scope.step = 3;
+    $scope.wallet = Wallet.GetWallet();
 
     $scope.key = "";
 
@@ -397,7 +398,7 @@ $(document).ready(function myfunction() {
 
 
     //disable btn at the beggining, because it needs to have a value in a privateKey
-    $('#reSign').attr('disabled', true);
+    $('#reSign').attr('disabled', false);
 
 
     $('#createRawTransaction').click(function () {

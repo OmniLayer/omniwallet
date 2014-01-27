@@ -11,8 +11,9 @@ function AcceptOfferController($scope, $http) {
     $scope.min_buyer_fee = 0.0005;
     $scope.fee = 0.0005;
     $scope.blocks = 10;
-    $scope.key = "";
+    $scope.key = "Disable";
     $scope.currency = "";
+    $scope.wallet = Wallet.GetWallet();
 
     $scope.keyChange = function () {
 
@@ -393,7 +394,7 @@ $(document).ready(function myfunction() {
 
 
     //disable btn at the beggining, because it needs to have a value in a privateKey
-    $('#reSign').attr('disabled', true);
+    $('#reSign').attr('disabled', false);
 
 
     $('#createRawTransaction').click(function () {

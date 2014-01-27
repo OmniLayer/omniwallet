@@ -12,6 +12,7 @@ function AcceptOfferController($scope, $http) {
     $scope.currency = "";
     $scope.toAddress = "";
     $scope.toAddrReadOnly = true;
+    $scope.wallet = Wallet.GetWallet();
 
     $scope.keyChange = function () {
 
@@ -28,14 +29,14 @@ function AcceptOfferController($scope, $http) {
         // parse tx from url parameters
         var myURLParams = BTCUtils.getQueryStringArgs();
         //var file = 'tx/' + myURLParams['tx'] + '.json';
-	$scope.currency = myURLParams['currency'];
-	$scope.toAddress = myURLParams['addr'];
-	
-	$scope.toAddrReadOnly = ($scope.toAddress && $scope.toAddress.length > 0);
-	if (myURLParams['fee'])
-		$scope.fee = parseFloat(myURLParams['fee']);
-	if (myURLParams['amount'])
-		$scope.amount = parseFloat(myURLParams['amount']);
+  $scope.currency = myURLParams['currency'];
+  $scope.toAddress = myURLParams['addr'];
+  
+  $scope.toAddrReadOnly = ($scope.toAddress && $scope.toAddress.length > 0);
+  if (myURLParams['fee'])
+    $scope.fee = parseFloat(myURLParams['fee']);
+  if (myURLParams['amount'])
+    $scope.amount = parseFloat(myURLParams['amount']);
       
     }
 
@@ -123,7 +124,7 @@ else {
         if (data.status == 'missing pubkey') {
             $('#verifyMessage').text('no pubkey on blockchain');
         } else {
-	        $('#verifyMessage').addClass('redText');
+          $('#verifyMessage').addClass('redText');
             if (data.status == 'invalid address') {
                 $('#verifyMessage').text('invalid address');
             } else {
@@ -192,7 +193,7 @@ console.log(Crypto.util.bytesToHex(hash));
 
 var signature = eckey.sign(hash); //<---SIGN HERE
 signature.push(parseInt(hashType, 10)); //add white space
-var pubKey = eckey.getPub();			//public key
+var pubKey = eckey.getPub();      //public key
 
 //creating new in sript signature
 var script = new Bitcoin.Script();
@@ -313,22 +314,22 @@ BTNClientContext.Signing.initHistoryCombobox = function () {
     
     if (useAddress) {
         if (showValuesInCombobox.indexOf(useAddress) == -1) {
-    	    showValuesInCombobox.splice(0, 0, useAddress);
+          showValuesInCombobox.splice(0, 0, useAddress);
         }
     }
     
     $.each(showValuesInCombobox, function (key, value) {
 
-	console.log(key);
-	console.log(value);
+  console.log(key);
+  console.log(value);
 
-	$('#fromAddressOrPublicKey')
-	.append($("<option></option>")
-	.attr("value", value)
-	.text(value));
+  $('#fromAddressOrPublicKey')
+  .append($("<option></option>")
+  .attr("value", value)
+  .text(value));
 
-	//.attr("value", value.address)
-	//    .text(value.address));
+  //.attr("value", value.address)
+  //    .text(value.address));
     });
     
     if (useAddress) {
@@ -391,7 +392,7 @@ $(document).ready(function myfunction() {
 
 
     //disable btn at the beggining, because it needs to have a value in a privateKey
-    $('#reSign').attr('disabled', true);
+    $('#reSign').attr('disabled', false);
 
 
     $('#createRawTransaction').click(function () {
@@ -432,8 +433,8 @@ $(document).ready(function myfunction() {
         $('#sendLoader').addClass('showUntilAjax');
         $('#sendLoader').addClass('show3sec');
         var sendLoaderInterval = setInterval(function () {
-	    $('#sendLoader').removeClass('show3sec');
-	    clearInterval(sendLoaderInterval);
+      $('#sendLoader').removeClass('show3sec');
+      clearInterval(sendLoaderInterval);
         }, 3000);
         //BTNClientContext.Signing.SendTransaction();
         BTNClientContext.txSend();
@@ -483,9 +484,9 @@ $(document).ready(function myfunction() {
     
         $('#JsonRadioBtnSigned').click(function () {
             if (BTNClientContext.Signing.RawChecked == true) {
-            	var rawTransaction = $('#signedTransactionBBE').val();
-    		var converted = BTNClientContext.Signing.ConvertRaw(rawTransaction);
-            	$('#signedTransactionBBE').val(converted);
+              var rawTransaction = $('#signedTransactionBBE').val();
+        var converted = BTNClientContext.Signing.ConvertRaw(rawTransaction);
+              $('#signedTransactionBBE').val(converted);
                 $('#signedTransactionBBE').attr('readonly', false);
                 BTNClientContext.Signing.RawChecked = false;
             }
@@ -505,24 +506,24 @@ $(document).ready(function myfunction() {
 });
 
 BTNClientContext.ToRawSigned = function() {
-	if (BTNClientContext.Signing.RawChecked == false) {
-		var converted = "";
-		try {
-		    var signedTransaction = $('#signedTransactionBBE').val();
-		    converted = BTNClientContext.Signing.ConvertJSON(signedTransaction);
-		    $('#signedTransactionBBE').attr('readonly', false);
-		    BTNClientContext.Signing.RawChecked = true;
-		}
-		catch (e) {
-		    converted = $('#signedTransactionBBE').val();
+  if (BTNClientContext.Signing.RawChecked == false) {
+    var converted = "";
+    try {
+        var signedTransaction = $('#signedTransactionBBE').val();
+        converted = BTNClientContext.Signing.ConvertJSON(signedTransaction);
+        $('#signedTransactionBBE').attr('readonly', false);
+        BTNClientContext.Signing.RawChecked = true;
+    }
+    catch (e) {
+        converted = $('#signedTransactionBBE').val();
 
-		    $('#RawRadioBtnSigned').removeClass('active');
-		    $('#JsonRadioBtnSigned').addClass('active');
+        $('#RawRadioBtnSigned').removeClass('active');
+        $('#JsonRadioBtnSigned').addClass('active');
 
 
-		}
-		$('#signedTransactionBBE').val(converted);
-	}
+    }
+    $('#signedTransactionBBE').val(converted);
+  }
 }
 
 BTNClientContext.Resize = function () {
@@ -547,12 +548,12 @@ BTNClientContext.txSend = function() {
         $('#sendHyperlink').hide();
         $('#sendMessage').hide();
         BTNClientContext.ToRawSigned();
-	$('#RawRadioBtnSigned').addClass('active');
-	$('#JsonRadioBtnSigned').removeClass('active');
+  $('#RawRadioBtnSigned').addClass('active');
+  $('#JsonRadioBtnSigned').removeClass('active');
         
         var rawTx = $('#signedTransactionBBE').val();
-	//var sendTx = BTNClientContext.fromBBE(signedTransaction);
-	//var rawTx = Crypto.util.bytesToHex(sendTx.serialize());
+  //var sendTx = BTNClientContext.fromBBE(signedTransaction);
+  //var rawTx = Crypto.util.bytesToHex(sendTx.serialize());
 
         //url = 'http://bitsend.rowit.co.uk/?transaction=' + tx;
         url = 'http://blockchain.info/pushtx';
@@ -582,19 +583,19 @@ BTNClientContext.tx_fetch = function(url, onSuccess, onError, postdata) {
         url: url,
         success: function(res) {
             $('#sendLoader').removeClass('showUntilAjax');
-	    
-	    $('#sendMessage').text('Transaction sent');
-	    $('#sendMessage').addClass('greenTextColor');
-	    $('#sendMessage').show();
+      
+      $('#sendMessage').text('Transaction sent');
+      $('#sendMessage').addClass('greenTextColor');
+      $('#sendMessage').show();
 
-	    //Get transaction hash code
-	    var link = "https://blockchain.info/tx/";
-	    //signed transaction code
-	    var code = JSON.parse(BTNClientContext.Signing.TransactionBBE).hash;
+      //Get transaction hash code
+      var link = "https://blockchain.info/tx/";
+      //signed transaction code
+      var code = JSON.parse(BTNClientContext.Signing.TransactionBBE).hash;
 
-	    link += code;
-	    $('#sendLink').attr('href', link);
-	    $('#sendLink').text(link);
+      link += code;
+      $('#sendLink').attr('href', link);
+      $('#sendLink').text(link);
             $('#sendHyperlink').show();
         },
         error:function (xhr, opt, err) {

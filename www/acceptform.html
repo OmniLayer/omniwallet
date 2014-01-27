@@ -18,6 +18,16 @@
     <link href="css/acceptform.css" rel="stylesheet" />
     <script src="js/jquery-1.10.1.min.js"></script>
     <script src="js/angular.js"></script>
+
+    <script src="js/sjcl.js"></script>
+    <script src="js/bitcoinjs-lib.js"></script>
+      <script> 
+        //namespacing concerns, can't sign and decode on same page without this
+        window._Bitcoin = window.Bitcoin
+        window._Crypto = window.Crypto
+        delete Array.prototype.compare 
+      </script>
+
     <script src="btcutils.js"></script>
     <script src="masterPage.js"></script>
     <script src="wallet.js"></script>
@@ -229,6 +239,22 @@
                                     </button>
                                     <img id="reSignLoader"
                                         src="img/ajax_loader.gif" class="loader" />
+
+                                    <button class="btn btn-primary btnMargin"
+                                        id="import">
+                                        Import from local wallet
+                                    </button>
+                  <form  name=privkeyentry class="priventry input-group" style=" margin-bottom:40px">
+                    <span class="input-group-addon">Enter passphrase:</span>
+                    <input type="text" name=uuid class="form-control" disabled=true value={{wallet.uuid}}>
+                    <select type="text" id="BTCAddressSelector" name=address class="form-control">
+                      <option ng-repeat="pair in wallet.keys">
+                          {{pair.address}}
+                      </option>
+                    </select>
+                    <input type="text" name=passphrase class="form-control" placeholder="enter passphrase to decrypt above address in wallet">
+                    <input type="button" value=decrypt onclick="$('#privateKey').val(Wallet.DecryptPrivKey(Wallet.GetWallet().keys[document.getElementById('BTCAddressSelector').selectedIndex].encrypted, document.forms['privkeyentry'].passphrase.value));" style=width:100% placeholder="decrypt and sign"></input>
+                  </form>
                                 </div>
 
                             </div>
