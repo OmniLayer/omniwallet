@@ -55,7 +55,7 @@ do
 		mkdir -p $DATADIR/www/tx $DATADIR/www/addr $DATADIR/www/general $DATADIR/www/bids $DATADIR/www/mastercoin_verify/addresses $DATADIR/www/mastercoin_verify/transactions
 		cp --no-clobber tx/* $DATADIR/www/tx
 		cp --no-clobber addr/* $DATADIR/www/addr
-		cp --no-clobber general/* $DATADIR/www/general
+		cp general/* $DATADIR/www/general
 		cp --no-clobber bids/* $DATADIR/www/bids
 		cp --no-clobber mastercoin_verify/addresses/* $DATADIR/www/mastercoin_verify/addresses
 		cp --no-clobber mastercoin_verify/transactions/* $DATADIR/www/mastercoin_verify/transactions
