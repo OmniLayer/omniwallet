@@ -30,6 +30,10 @@ function WalletController($scope, $http, $q) {
         function (value) {
           return callback(value.data);
         }
+      ).error( 
+        function( value ) {
+          return callback( '{ "0": {} }' );
+        }
       );
     }
 
@@ -45,12 +49,11 @@ function WalletController($scope, $http, $q) {
           var addr = obj;
 
           prom.push($scope.getAddress(addr, function (value) {
-          
+            
           }));
       });
 
       $q.all(prom).then(function (data) {
-
           callback(data);
       });
     };
@@ -63,10 +66,12 @@ function WalletController($scope, $http, $q) {
       $scope.currencies = data;
 
     }).then(function () {
+      console.log( 'About to call getAddresses!' );
       //console.log('finished');
 
       $scope.getAddresses(function (data) {
-          console.log('addresses: ',data);
+        console.log( 'Addresses data: ' );
+        console.log( data );
 
           data.forEach(function (obj, i) {
 
@@ -138,13 +143,17 @@ Wallet.GenerateUUID = function () {
 };
 
 Wallet.GetWallet = function () {
+  console.log( 'In GetWallet()' );
   if (Wallet.supportsStorage()) {
+    console.log( 'Wallet supportsStorage' );
 
     var myURLParams = BTCUtils.getQueryStringArgs();
     var uuid = myURLParams['uuid'];
 
+    console.log( 'Checking localStorage for key: ' + Wallet.StorageKey );
     if (localStorage[Wallet.StorageKey]) {
       var wallets = JSON.parse(localStorage[Wallet.StorageKey]);
+      console.log( 'Found ' + wallets.length + ' wallets.' );
 
       for (var i = 0; i < wallets.length; i++) {
           if (wallets[i].uuid == uuid) {
@@ -153,13 +162,18 @@ Wallet.GetWallet = function () {
       }
       //Returning the first wallet
       if (!uuid && wallets.length > 0)
+      {
+        console.log( 'Just returning the first wallet.' );
         return wallets[0];
+      }
     }
     // No wallets - create one
+    console.log( 'No wallets already exist, making a new one.' );
     Wallet.CreateNewWallet(uuid);
     var wallets = JSON.parse(localStorage[Wallet.StorageKey]);
     return wallets[0];
   }
+  console.log( 'Returning empty array.' );
   return new Array();
 };
 
