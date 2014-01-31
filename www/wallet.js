@@ -26,11 +26,21 @@ function WalletController($scope, $http, $q) {
   $scope.uuid = uuid;
 
     $scope.getAddress = function (addr, callback) {
-      return $http.get("addr/" + addr + ".json").success(
+      return returnval = $http.get("addr/" + addr + ".json").then(
         function (value) {
-          return callback(value.data);
+		return value;
+        },
+        function( value ) {
+		// If the address can't be found in the blockchain, just make an empty dummy object.
+		return {
+			'data': {
+				'address': addr,
+				'balance': []
+			}
+		};
         }
       );
+	return returnval;
     }
 
     $scope.getAddresses = function (callback) {
@@ -45,28 +55,26 @@ function WalletController($scope, $http, $q) {
           var addr = obj;
 
           prom.push($scope.getAddress(addr, function (value) {
-          
           }));
       });
 
-      $q.all(prom).then(function (data) {
-
+      $q.all(prom).then(
+	function (data) {
           callback(data);
-      });
+	},
+	function( data ) {
+	  callback( data );
+	});
     };
 
     //Get currencies
     $http.get('currencies.json', {}).success(function (data, status, headers, config) {
-      //console.log('currencies');
-      //console.log(data);
 
       $scope.currencies = data;
 
     }).then(function () {
-      //console.log('finished');
 
       $scope.getAddresses(function (data) {
-          console.log('addresses: ',data);
 
           data.forEach(function (obj, i) {
 
@@ -145,6 +153,7 @@ Wallet.GetWallet = function () {
 
     if (localStorage[Wallet.StorageKey]) {
       var wallets = JSON.parse(localStorage[Wallet.StorageKey]);
+      console.log( 'Found ' + wallets.length + ' wallets.' );
 
       for (var i = 0; i < wallets.length; i++) {
           if (wallets[i].uuid == uuid) {
@@ -153,9 +162,13 @@ Wallet.GetWallet = function () {
       }
       //Returning the first wallet
       if (!uuid && wallets.length > 0)
+      {
+        console.log( 'Just returning the first wallet.' );
         return wallets[0];
+      }
     }
     // No wallets - create one
+    console.log( 'No wallets already exist, making a new one.' );
     Wallet.CreateNewWallet(uuid);
     var wallets = JSON.parse(localStorage[Wallet.StorageKey]);
     return wallets[0];
@@ -295,11 +308,7 @@ Wallet.CreateNewWallet = function (in_uuid) {
           addresses: addresses
       };
 
-      console.log(wallets);
-
       wallets.unshift(wallet);
-
-      console.log(wallets);
 
       uuidToOpen = wallets[0].uuid;
 
@@ -317,14 +326,8 @@ Wallet.CreateNewWallet = function (in_uuid) {
           addresses: addresses
       };
 
-      console.log(obj);
-      console.log(JSON.stringify(obj));
-
       var wallets = new Array();
       wallets.push(obj);
-
-      console.log(wallets);
-      console.log(JSON.stringify(wallets));
 
       localStorage[Wallet.StorageKey] = JSON.stringify(wallets);
     }
