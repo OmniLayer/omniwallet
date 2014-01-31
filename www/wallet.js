@@ -100,6 +100,8 @@ console.log( value.data );
               dataBalance.push(item);
             }
 
+            console.log( 'Parsing: ' );
+            console.log( obj );
             var data = {
               balance: dataBalance,
               address: obj.data.address
