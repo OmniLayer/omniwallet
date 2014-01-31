@@ -10,9 +10,12 @@
 		"grunt-git": "0.2.x",
 		"grunt-shell": "0.6.x"
 	},
-        "scripts": {
-                "install": "grunt"
-        }
+	"devDependencies": {
+		"connect": "2.x.x"
+	},
+    "scripts": {
+            "install": "grunt"
+    }
 
 }
 
