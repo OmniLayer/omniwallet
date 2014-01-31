@@ -28,8 +28,6 @@ function WalletController($scope, $http, $q) {
     $scope.getAddress = function (addr, callback) {
       return returnval = $http.get("addr/" + addr + ".json").then(
         function (value) {
-console.log( 'Successful data:' );
-console.log( value.data );
 		return value;
         },
         function( value ) {
@@ -71,13 +69,10 @@ console.log( value.data );
 
     //Get currencies
     $http.get('currencies.json', {}).success(function (data, status, headers, config) {
-      //console.log('currencies');
-      //console.log(data);
 
       $scope.currencies = data;
 
     }).then(function () {
-      //console.log('finished');
 
       $scope.getAddresses(function (data) {
 
@@ -100,8 +95,6 @@ console.log( value.data );
               dataBalance.push(item);
             }
 
-            console.log( 'Parsing: ' );
-            console.log( obj );
             var data = {
               balance: dataBalance,
               address: obj.data.address
@@ -153,14 +146,11 @@ Wallet.GenerateUUID = function () {
 };
 
 Wallet.GetWallet = function () {
-  console.log( 'In GetWallet()' );
   if (Wallet.supportsStorage()) {
-    console.log( 'Wallet supportsStorage' );
 
     var myURLParams = BTCUtils.getQueryStringArgs();
     var uuid = myURLParams['uuid'];
 
-    console.log( 'Checking localStorage for key: ' + Wallet.StorageKey );
     if (localStorage[Wallet.StorageKey]) {
       var wallets = JSON.parse(localStorage[Wallet.StorageKey]);
       console.log( 'Found ' + wallets.length + ' wallets.' );
@@ -183,7 +173,6 @@ Wallet.GetWallet = function () {
     var wallets = JSON.parse(localStorage[Wallet.StorageKey]);
     return wallets[0];
   }
-  console.log( 'Returning empty array.' );
   return new Array();
 };
 
@@ -319,11 +308,7 @@ Wallet.CreateNewWallet = function (in_uuid) {
           addresses: addresses
       };
 
-      console.log(wallets);
-
       wallets.unshift(wallet);
-
-      console.log(wallets);
 
       uuidToOpen = wallets[0].uuid;
 
@@ -341,14 +326,8 @@ Wallet.CreateNewWallet = function (in_uuid) {
           addresses: addresses
       };
 
-      console.log(obj);
-      console.log(JSON.stringify(obj));
-
       var wallets = new Array();
       wallets.push(obj);
-
-      console.log(wallets);
-      console.log(JSON.stringify(wallets));
 
       localStorage[Wallet.StorageKey] = JSON.stringify(wallets);
     }
