@@ -28,13 +28,16 @@ function WalletController($scope, $http, $q) {
     $scope.getAddress = function (addr, callback) {
       return returnval = $http.get("addr/" + addr + ".json").then(
         function (value) {
-		return value.data;
+console.log( 'Successful data:' );
+console.log( value.data );
+		return value;
         },
         function( value ) {
 		// If the address can't be found in the blockchain, just make an empty dummy object.
 		return {
-			'0': {
-				'address': addr
+			'data': {
+				'address': addr,
+				'balance': []
 			}
 		};
         }
