@@ -26,15 +26,20 @@ function WalletController($scope, $http, $q) {
   $scope.uuid = uuid;
 
     $scope.getAddress = function (addr, callback) {
-      return $http.get("addr/" + addr + ".json").success(
+      return returnval = $http.get("addr/" + addr + ".json").then(
         function (value) {
-          return callback(value.data);
-        }
-      ).error( 
+		return value.data;
+        },
         function( value ) {
-          return callback( '{ "0": {} }' );
+		// If the address can't be found in the blockchain, just make an empty dummy object.
+		return {
+			'0': {
+				'address': addr
+			}
+		};
         }
       );
+	return returnval;
     }
 
     $scope.getAddresses = function (callback) {
@@ -49,13 +54,16 @@ function WalletController($scope, $http, $q) {
           var addr = obj;
 
           prom.push($scope.getAddress(addr, function (value) {
-            
           }));
       });
 
-      $q.all(prom).then(function (data) {
+      $q.all(prom).then(
+	function (data) {
           callback(data);
-      });
+	},
+	function( data ) {
+	  callback( data );
+	});
     };
 
     //Get currencies
@@ -66,12 +74,9 @@ function WalletController($scope, $http, $q) {
       $scope.currencies = data;
 
     }).then(function () {
-      console.log( 'About to call getAddresses!' );
       //console.log('finished');
 
       $scope.getAddresses(function (data) {
-        console.log( 'Addresses data: ' );
-        console.log( data );
 
           data.forEach(function (obj, i) {
 
