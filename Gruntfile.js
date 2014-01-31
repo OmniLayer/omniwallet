@@ -7,7 +7,7 @@ module.exports = function(grunt) {
 			mastercointools: {
 				options: {
 					repository: 'https://github.com/curtislacy/mastercoin-tools.git',
-                			branch: 'Specify-Directory',
+                			branch: 'master',
                 			directory: 'node_modules/mastercoin-tools'
 				},
 			}

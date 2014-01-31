@@ -1,6 +1,6 @@
 function SellofferController($scope, $http) {
     $scope.transactionInformation;
-    $scope.bids;
+    $scope.offers;
 
     $scope.footer = "FOOTER";
     $scope.title = "TITLE";
@@ -20,13 +20,13 @@ function SellofferController($scope, $http) {
             $scope.transactionInformation = data[0];
         });
 
-        var bidsURL = "bids/bids-";
-        bidsURL += myURLParams['tx'];
-        bidsURL += ".json";
+        var offersURL = "offers/offers-";
+        offersURL += myURLParams['tx'];
+        offersURL += ".json";
 
-          $.get(bidsURL, {}).success(function (data) {
+          $.get(offersURL, {}).success(function (data) {
               //data = $.parseJSON(data);
-              $scope.bids = data;
+              $scope.offers = data;
               $scope.$apply();
           });
       
