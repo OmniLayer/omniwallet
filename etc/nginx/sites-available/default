@@ -44,8 +44,8 @@ server {
 		alias /tmp/msc-webwallet/www/revision.json;
 	}
 
-	location ~ "^/bids/(.*)$" {
-		alias /tmp/msc-webwallet/www/bids/$1;
+	location ~ "^/offers/(.*)$" {
+		alias /tmp/msc-webwallet/www/offers/$1;
 	}
 
 	location ~ "^/general/(.*)$" {
