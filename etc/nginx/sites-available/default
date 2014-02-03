@@ -21,8 +21,8 @@ server {
 	listen 80 default_server;
 	listen [::]:80 default_server ipv6only=on;
 
-	## Set this to reflect the location of the www directory within the msc-webwallet repo.
-	root /home/cmlacy/msc-webwallet/www/;
+	## Set this to reflect the location of the www directory within the omniwallet repo.
+	root /home/cmlacy/omniwallet/www/;
 	index index.html index.htm;
 
 	# Make site accessible from http://localhost/
@@ -37,31 +37,31 @@ server {
 	}
 
 	location ~ "^/values.json$" {
-		alias /tmp/msc-webwallet/www/values.json;
+		alias /tmp/omniwallet/www/values.json;
 	}
 
 	location ~ "^/revision.json$" {
-		alias /tmp/msc-webwallet/www/revision.json;
+		alias /tmp/omniwallet/www/revision.json;
 	}
 
 	location ~ "^/offers/(.*)$" {
-		alias /tmp/msc-webwallet/www/offers/$1;
+		alias /tmp/omniwallet/www/offers/$1;
 	}
 
 	location ~ "^/general/(.*)$" {
-		alias /tmp/msc-webwallet/www/general/$1;
+		alias /tmp/omniwallet/www/general/$1;
 	}
 
 	location ~ "^/addr/(.*)$" {
-		alias /tmp/msc-webwallet/www/addr/$1;
+		alias /tmp/omniwallet/www/addr/$1;
 	}
 
 	location ~ "^/tx/(.*)$" {
-		alias /tmp/msc-webwallet/www/tx/$1;
+		alias /tmp/omniwallet/www/tx/$1;
 	}
 
 	location ~ "^/mastercoin_verify/(.*)$" {
-		alias /tmp/msc-webwallet/www/mastercoin_verify/$1;
+		alias /tmp/omniwallet/www/mastercoin_verify/$1;
 	}
 
 	include uwsgi_params;

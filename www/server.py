@@ -4,7 +4,7 @@ from os import curdir, sep
 import cgi
 
 PORT_NUMBER = 8080
-DATA_PATH = "/tmp/msc-webwallet/www"
+DATA_PATH = "/tmp/omniwallet/www"
 LOCAL_PATH = curdir + "/www"
 
 #This class will handles any incoming request from
