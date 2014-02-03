@@ -10,7 +10,7 @@ trap "kill_child_processes 1 $$; exit 0" INT
 
 APPDIR=`pwd`
 TOOLSDIR=$APPDIR/node_modules/mastercoin-tools
-DATADIR="/tmp/msc-webwallet"
+DATADIR="/tmp/omniwallet"
 LOCK_FILE=$DATADIR/msc_cron.lock
 PARSE_LOG=$DATADIR/parsed.log
 VALIDATE_LOG=$DATADIR/validated.log
