@@ -100,12 +100,13 @@ If you install the development dependencies (``npm install --development``), you
 
 ### Sending coins to an address:
 
-1. Validate the destination address:
+#### Validate the destination address:
 ```
 var dataToSend = { addr: from_addr };
 $.post('/wallet/validateaddr/', dataToSend, function (data) {}).fail( function() {} );
 ```
 ``data`` will contain one of:
+
 | Value                      | Meaning                  |
 | -------------------------- | ------------------------ |
 | ``{ "status": "OK" }``     | Address is a valid destination |
@@ -113,7 +114,7 @@ $.post('/wallet/validateaddr/', dataToSend, function (data) {}).fail( function()
 | ``{ "status": "missing pubkey" }``     | No public key exists on the blockchain for this address.  Usually this means that the address has not yet sent any coins anywhere else. |
 | ``{ "status": "invalid address" }``     | This address just isn't valid. |
 
-2. Encode and sign the transaction:
+#### Encode and sign the transaction:
 ```
 var dataToSend = { 
 	from_address: from_address, 
@@ -131,7 +132,8 @@ $.post('/wallet/send/', dataToSend, function (data) {
 
 }).fail(function () {} );
 ```
-3. Actually push up the transaction:
+
+#### Actually push up the transaction:
 ```
 var rawTx = Crypto.util.bytesToHex(sendTx.serialize());
 var dataToSend = { signedTransaction: rawTx };
