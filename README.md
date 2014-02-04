@@ -96,11 +96,11 @@ grunt build
 ```
 If you install the development dependencies (``npm install --development``), you'll also be able to use the ``serve-static.js`` script, which can save you the effort of running nginx if you're just doing development on the static HTML pages.
 
-## REST API
+## API
 
 ### Sending coins to an address:
 
-#### Validate the destination address:
+#### Validate the source address:
 ```
 var dataToSend = { addr: from_addr };
 $.post('/wallet/validateaddr/', dataToSend, function (data) {}).fail( function() {} );
@@ -109,7 +109,7 @@ $.post('/wallet/validateaddr/', dataToSend, function (data) {}).fail( function()
 
 | Value                      | Meaning                  |
 | -------------------------- | ------------------------ |
-| ``{ "status": "OK" }``     | Address is a valid destination |
+| ``{ "status": "OK" }``     | Address is a valid source |
 | ``{ "status": "invalid pubkey" }``     | Public key on the blockchain for that address is invalid. |
 | ``{ "status": "missing pubkey" }``     | No public key exists on the blockchain for this address.  Usually this means that the address has not yet sent any coins anywhere else. |
 | ``{ "status": "invalid address" }``     | This address just isn't valid. |
@@ -141,10 +141,9 @@ $.post('/wallet/pushtx/', dataToSend, function (data) {}).fail( function() {} );
 ```
 No return value in ``data``.
 
-### Make a sell offer:
+### Make a trade offer:
 
-
-#### Validate the destination address:
+#### Validate the source address:
 ```
 var dataToSend = { addr: from_addr };
 $.post('/wallet/validateaddr/', dataToSend, function (data) {}).fail( function() {} );
@@ -153,12 +152,12 @@ $.post('/wallet/validateaddr/', dataToSend, function (data) {}).fail( function()
 
 | Value                      | Meaning                  |
 | -------------------------- | ------------------------ |
-| ``{ "status": "OK" }``     | Address is a valid destination |
+| ``{ "status": "OK" }``     | Address is a valid source |
 | ``{ "status": "invalid pubkey" }``     | Public key on the blockchain for that address is invalid. |
 | ``{ "status": "missing pubkey" }``     | No public key exists on the blockchain for this address.  Usually this means that the address has not yet sent any coins anywhere else. |
 | ``{ "status": "invalid address" }``     | This address just isn't valid. |
 
-#### Encode the sell offer:
+#### Encode the trade offer:
 ```
 var dataToSend = { seller: from_address, amount: amount, price: price, min_buyer_fee: min_buyer_fee, fee: fee, blocks: blocks, currency: currency };
 $.post('/wallet/sell/', dataToSend, function (data) {
@@ -178,4 +177,35 @@ $.post('/wallet/pushtx/', dataToSend, function (data) {}).fail( function() {} );
 ```
 No return value in ``data``.
 
+### Accept a trade offer:
 
+#### Validate the "buyer" address - the address accepting the offer:
+```
+var dataToSend = { addr: buyer };
+$.post('/wallet/validateaddr/', dataToSend, function (data) {}).fail( function() {} );
+```
+``data`` will contain one of:
+
+| Value                      | Meaning                  |
+| -------------------------- | ------------------------ |
+| ``{ "status": "OK" }``     | Address is a valid buyer |
+| ``{ "status": "invalid pubkey" }``     | Public key on the blockchain for that address is invalid. |
+| ``{ "status": "missing pubkey" }``     | No public key exists on the blockchain for this address.  Usually this means that the address has not yet sent any coins anywhere else. |
+| ``{ "status": "invalid address" }``     | This address just isn't valid. |
+#### Encode the acceptance:
+```
+var dataToSend = { buyer: buyer, amount: amount, tx_hash: tx_hash };
+$.post('/wallet/accept/', dataToSend, function (data) {
+
+	//data should have fields sourceScript and transaction
+	$('#sourceScript').val(data.sourceScript);
+	$('#transactionBBE').val(data.transaction);
+
+}).fail( function () {} );
+```
+#### Actually push up the signed transaction **Note - different endpoint from the others!**:
+```
+var dataToSend = { signedTransaction: signedTransaction };
+$.post('/wallet/signed/', dataToSend, function (data) {} ).fail( function () {} );
+```
+No return value in ``data``.
