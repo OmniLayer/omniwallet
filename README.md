@@ -140,3 +140,42 @@ var dataToSend = { signedTransaction: rawTx };
 $.post('/wallet/pushtx/', dataToSend, function (data) {}).fail( function() {} );
 ```
 No return value in ``data``.
+
+### Make a sell offer:
+
+
+#### Validate the destination address:
+```
+var dataToSend = { addr: from_addr };
+$.post('/wallet/validateaddr/', dataToSend, function (data) {}).fail( function() {} );
+```
+``data`` will contain one of:
+
+| Value                      | Meaning                  |
+| -------------------------- | ------------------------ |
+| ``{ "status": "OK" }``     | Address is a valid destination |
+| ``{ "status": "invalid pubkey" }``     | Public key on the blockchain for that address is invalid. |
+| ``{ "status": "missing pubkey" }``     | No public key exists on the blockchain for this address.  Usually this means that the address has not yet sent any coins anywhere else. |
+| ``{ "status": "invalid address" }``     | This address just isn't valid. |
+
+#### Encode the sell offer:
+```
+var dataToSend = { seller: from_address, amount: amount, price: price, min_buyer_fee: min_buyer_fee, fee: fee, blocks: blocks, currency: currency };
+$.post('/wallet/sell/', dataToSend, function (data) {
+
+	//data should have fields sourceScript and transaction\
+	$('#sourceScript').val(data.sourceScript);
+	$('#transactionBBE').val(data.transaction);
+
+}).fail(function () {} );
+```
+
+#### Actually push up the transaction:
+```
+var rawTx = Crypto.util.bytesToHex(sendTx.serialize());
+var dataToSend = { signedTransaction: rawTx };
+$.post('/wallet/pushtx/', dataToSend, function (data) {}).fail( function() {} );
+```
+No return value in ``data``.
+
+
