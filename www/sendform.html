@@ -26,6 +26,11 @@
       <script src="btc02.js"></script>
       <script src="js/bootstrap-combobox.js"></script>
       <script>
+         //namespacing concerns, can't sign and decode on same page without this
+         window._Bitcoin = window.Bitcoin
+         window._Crypto = window.Crypto
+         delete Array.prototype.compare 
+
          var myApp = angular.module('myApp', ['truncate']);
       </script>
       <script src="js/bootstrap.min.js"></script>
