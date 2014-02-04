@@ -49,11 +49,25 @@
     -webkit-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
     transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
 }
+
 #btnSearch{
     margin-left:5px;
 }
 
 .searchLI{
-    padding-top: 8px !important;
-    padding-bottom: 8px !important;
+    padding-top: 10px !important;
+    padding-bottom: 5px !important;
+}
+
+#searchContainer {
+	margin-top: -1px;
+}
+
+#searchContainer .combobox-container:before, #searchContainer .combobox-container:after {
+	display: none;
+	
+}
+
+.search {
+	min-width:310px; width: auto !important; width: 310px;
 }

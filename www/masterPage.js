@@ -5,10 +5,12 @@ function NavigationController($scope, $http) {
     var myURLParams = BTCUtils.getQueryStringArgs();
     var title = myURLParams['title'].toString();
     var currency = myURLParams['currency'].toString();
+    var filter_caption = (myURLParams['filter'] && myURLParams['filter'].length > 0)? " " + myURLParams['filter'] : "";
+    var filter = myURLParams['filter'];
     $scope.title = title;
     $scope.currency = currency;
     $scope.footer = '';
-    
+    $scope.filter = filter_caption;
     $scope.getNavData = function () {
 
         $scope.values = {};
@@ -18,14 +20,18 @@ function NavigationController($scope, $http) {
 	   angular.forEach($scope.values, function(value, key) {
 	    if (value.currency==$scope.currency) {
 		$scope.values[key].selected="selected";
-		
-		var filename = location.pathname.substr(location.pathname.lastIndexOf("/")+1,location.pathname.length);
-		if (filename.indexOf("accepted") >= 0) {
-			$scope.$emit('handlePagesEmit', {message: value.accept_pages});
+		var pages = value.pages;
+		switch (filter) {
+			case "accept":
+				pages = value.accept_pages;
+				break;
+			case "sell":
+				pages = value.sell_pages;
+				break;
+			default:
+				break;
 		}
-		else {
-			$scope.$emit('handlePagesEmit', {message: value.pages});
-		}
+		$scope.$emit('handlePagesEmit', {message: pages});
 	    }
 	    else
 		$scope.values[key].selected="";
