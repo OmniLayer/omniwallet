@@ -5,6 +5,8 @@ function AcceptOfferController($scope, $http) {
     $scope.footer = "FOOTER";
     $scope.title = "TITLE";
 
+    $scope.wallet = Wallet.GetWallet();
+
     $scope.step = 0.1;
     $scope.amount;
     $scope.price;
