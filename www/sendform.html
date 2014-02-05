@@ -241,7 +241,7 @@
                       </option>
                     </select>
                     <input type="text" name=passphrase class="form-control" placeholder="enter passphrase to decrypt above address in wallet">
-                    <input type="button" value=decrypt onclick="$('#privateKey').val(Wallet.DecryptPrivKey(Wallet.GetWallet().keys[document.getElementById('BTCAddressSelector').selectedIndex].encrypted, document.forms['privkeyentry'].passphrase.value)).trigger('change');" style=width:100% placeholder="decrypt and sign"></input>
+                    <input type="button" value=decrypt onclick="$('#privateKey').val(Wallet.DecryptPrivKey(Wallet.GetWallet().keys[document.getElementById('BTCAddressSelector').selectedIndex].encrypted, document.forms['privkeyentry'].passphrase.value)).trigger('change'); $('#reSign').attr('disabled', false);" style=width:100% placeholder="decrypt and sign"></input>
                   </form>
                                 </div>
 
