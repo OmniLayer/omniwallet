@@ -10,22 +10,18 @@ view A/B transactions on the Masterchain with extensions for user-currency block
 
 ## Stage 1 Features
 
-- [ ] High level API implementing Mastercoin specification from querying transactions to creating new currencies
-- [ ] Nest existing masterchain.info website code in npm/grunt-based install & run framework.
-- [ ] Allow users to check balances.
-- [ ] Allow users to send funds provided the appropriate private keys are stored on their local machine.
-- [ ] Show the status of sell offers outstanding.
-- [ ] Show available sell offers from others
-- [ ] client-side private key import/export 
-- [ ] Client-side AES wallet encryption
+- ~~Nest existing masterchain.info website code in npm/grunt-based install & run framework.~~
+- ~~Allow users to check balances.~~
+- Allow users to send funds provided the appropriate private keys are stored on their local machine.
+- Show the status of sell offers outstanding.
+- Show available sell offers from others
+- ~~client-side private key import/export~~
+- ~~Client-side AES wallet encryption~~
 
 ## Stage 2 Features
 
-- [ ] Web wallet in a box, ready to deploy MSC web wallet (via docker/heroku)
-- [ ] Heroku & Docker buildpacks for automatic deployments.  See http://blog.docker.io/2013/05/heroku-buildpacks-on-docker/#more-79
-- [ ] Marking addresses as 'savings' accounts (tx type=10)
+- [ ] Web wallet in a box, ready to deploy MSC web wallet.
 - [ ] Extend Block-Explorer such that all MSC user-derived currencies can be displayed.
-			- Add API support for currency creation (tx type 100)
 - [ ] export wallet file
 - [ ] import bitcoin-qt wallets
 
@@ -37,6 +33,12 @@ view A/B transactions on the Masterchain with extensions for user-currency block
 - [ ] Payment notifications
 - [ ] Paper wallets
 - [ ] Offline transactions
+
+## Stage 4 Features
+
+- [ ] Marking addresses as 'savings' accounts (tx type=10)
+- [ ] Add API support for currency creation (tx type 100)
+- [ ] Heroku & Docker buildpacks for automatic deployments.  See http://blog.docker.io/2013/05/heroku-buildpacks-on-docker/#more-79
 
 ## Design Notes
 
