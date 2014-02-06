@@ -92,9 +92,31 @@
 							<td class="btnCell">
 							<button type="button" ng-click="CreateNewWallet()" class="btc-tbl-btn pull-right btn btn-success btn-xs">Create new wallet</button>
 							<button type="button" class="btc-tbl-btn pull-right btn btn-success btn-xs">Sync with server</button>
+              <button type="button" style="margin-top:5px;" onclick="$('.priverror').hide();$('.priventry').show()" class="col-xs-4 btc-tbl-btn pull-right btn btn-success btn-xs">Add priv key</button>
+              <button type="button" style="margin-top:5px;" onclick="$('.priverror').hide();$('.privdecode').show()" class="col-xs-5 btc-tbl-btn pull-right btn btn-success btn-xs">Export priv key</button>
+
 							</td>
 						</tr>
 					</table>
+          <div style="display:none;margin-bottom:40px;" class="priverror"> Error: Must include a passphrase for local storage, or key not in supported format.</div>
+          <form  name=privkeyentry class="priventry input-group" style="display:none; margin-bottom:40px">
+            <span class="input-group-addon">Enter Key:</span>
+            <input type="text" name=privkey class="form-control" placeholder="enter your private key  |   formats: hex, b64, WIP, compressed WIP">
+            <input type="text" name=password class="form-control" placeholder="enter passphrase to encrypt and store locally">
+            <input type="button" value=submit ng-click="AddPrivKey()" style=width:100% placeholder="submit"></input>
+          </form>
+
+          <form  name=privkeydecode class="privdecode input-group" style="display:none; margin-bottom:40px">
+            <span class="input-group-addon">Enter passphrase:</span>
+            <input type="text" id=privateKey name=uuid class="form-control" disabled=true value="enter passphrase to decode">
+            <select type="text" id="BTCAddressSelector" name=address class="form-control">
+            <option ng-repeat="pair in wallet.keys">
+               {{pair.address}}
+            </option>
+            </select>
+            <input type="text" name=passphrase class="form-control" placeholder="enter passphrase to decrypt above address in wallet">
+            <input type="button" value=decrypt onclick="$('#privateKey').val(Wallet.DecryptPrivKey(Wallet.GetWallet().keys[document.getElementById('BTCAddressSelector').selectedIndex].encrypted, document.forms['privkeydecode'].passphrase.value))" style=width:100% placeholder="decrypt and sign"></input>
+          </form>
 				</div>
             		    </div>
                             <div class="row">
