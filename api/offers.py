@@ -2,10 +2,11 @@ import urlparse
 import os, sys
 tools_dir = os.environ.get('TOOLSDIR')
 lib_path = os.path.abspath(tools_dir)
-print "Debug: ", tools_dir, lib_path
 sys.path.append(lib_path)
 from msc_apps import *
 import tempfile
+
+data_dir_root = os.environ.get('DATADIR')
 
 def offers_response(response_dict):
     expected_fields=['type','currencyType',]
@@ -35,7 +36,7 @@ def filterOffers(address,currencytype, offertype):
     
     #get list of all offers by address
     try:
-        datadir = '/tmp/msc-webwallet/addr'
+        datadir = data_dir_root + '/addr'
         filepath =  datadir + '/' + address + '.json'
         f=open( filepath , 'r' )
         allOffers = json.loads(f.readline())
@@ -82,7 +83,7 @@ def filterTransactionBid(transaction,validitystatus):
     
     #get transaction data
     try:
-        datadir = '/tmp/msc-webwallet/bids'
+        datadir = data_dir_root + '/bids'
         filepath =  datadir + '/bids-' + transaction + '.json'
         f=open( filepath , 'r' )
         transactionData = json.loads(f.readline())
@@ -108,7 +109,7 @@ def filterTransactionBid(transaction,validitystatus):
 def filterTransaction(transaction):
     #get transaction data
     try:
-        datadir = '/tmp/msc-webwallet/tx'
+        datadir = data_dir_root + '/tx'
         filepath =  datadir + '/' + transaction + '.json'
         f=open( filepath , 'r' )
         transactionData = json.loads(f.readline())
