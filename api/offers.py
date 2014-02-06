@@ -1,8 +1,9 @@
 import urlparse
 import os, sys
-lib_path = os.path.abspath('..')
+tools_dir = os.environ.get('TOOLSDIR')
+lib_path = os.path.abspath(tools_dir)
+print "Debug: ", tools_dir, lib_path
 sys.path.append(lib_path)
-from msc_utils_offerparsing import *
 from msc_apps import *
 import tempfile
 

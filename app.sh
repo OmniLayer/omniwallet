@@ -21,7 +21,9 @@ if [ ! -d $DATADIR ]; then
 	cp -r $TOOLSDIR/www/tx-bootstrap $DATADIR/tx
 fi
 
-cd $TOOLSDIR/apps
+# Export toolsdir for API scripts to use
+export TOOLSDIR
+cd $APPDIR/api
 uwsgi -s 127.0.0.1:1088 -M --vhost --enable-threads --plugin python --logto $DATADIR/apps.log &
 SERVER_PID=$!
 
