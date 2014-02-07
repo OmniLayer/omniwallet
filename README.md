@@ -416,6 +416,7 @@ $.post('/v1/user/wallet/sync/', postData, function (data) {}).fail( function() {
 ```
 
 Where:
+
 | Variable            | Possible Values              |
 | ------------------- | ---------------------------- |
 | type                | 'SYNCWALLET' |
