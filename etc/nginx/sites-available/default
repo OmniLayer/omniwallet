@@ -85,6 +85,11 @@ server {
             uwsgi_pass   127.0.0.1:$PORT;
         }
 
+        location /wallet/sync/ {
+            set   $app   sync_wallet;
+            uwsgi_pass   127.0.0.1:$PORT;
+        }
+
         location /wallet/accept/ {
             set   $app   accept;
             uwsgi_pass   127.0.0.1:$PORT;
