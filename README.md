@@ -209,3 +209,172 @@ var dataToSend = { signedTransaction: rawTx };
 $.post('/v1/transaction/pushtx/', dataToSend, function (data) {}).fail( function() {} );
 ```
 No return value in ``data``.
+### Show Offers and Accepts by Address:
+```
+var postData = { 
+	type: 'ADDRESS',
+	address: address, 
+	currencyType: ctype,   
+	offerType: offer,      
+};
+$.post('/v1/exchange/offers/', postData , function(data,status,headers,config) { });
+```
+Where:
+| Variable            | Possible Values              |
+| ------------------- | ---------------------------- |
+| address             | Bitcoin address |
+| ctype        | 'tmsc' or 'msc'              |
+| offerType      | 'SELL' (for Offers Made and Sold) or 'ACCEPT' (for Sales Accepted and Bought) | 
+
+Resulting ``data``:
+```
+{
+	"status": "OK",
+	"data": {
+		"offer_tx": [
+			{
+				"tx_hash": "d2caf8a19b29959e1fe34dc7a499bddb6ee40fd3fb3fa23e4cc00b827e11b818",
+				"to_address": "unknown",
+				"formatted_bitcoin_amount_desired": "0.01",
+				"color": "bgc-new",
+				"fee_required": "00c350",
+				"tx_time": "1390480514000",
+				"formatted_fee_required": "0.0005",
+				"from_address": "17rExRiMaJGgHPVuYjHL21mEhfzbRPRkui",
+				"index": "110",
+				"tx_type_str": "Sell offer",
+				"formatted_price_per_coin": "0.01",
+				"currencyId": "00000002",
+				"amount": "0000000005f5e100",
+				"invalid": false,
+				"details": "0.01",
+				"bitcoin_amount_desired": "00000000000f4240",
+				"method": "multisig",
+				"dataSequenceNum": "01",
+				"currency_str": "Test Mastercoin",
+				"formatted_block_time_limit": "10",
+				"amount_available": -52,
+				"formatted_amount": "1.0",
+				"icon": "selloffer",
+				"formatted_amount_available": "-52.0",
+				"tx_method_str": "multisig",
+				"icon_text": "Sell Offer (2639 confirms)",
+				"block_time_limit": "0a",
+				"transactionType": "00000014",
+				"baseCoin": "00",
+				"block": "282035"
+			}
+		],
+		"sold_tx": []
+	}
+}
+```
+
+### Get Detailed information about an offer
+```
+	var postData = { 
+		type: 'TRANSACTIONBID',
+		transaction: bidHash 
+		currencyType: currencyType,   
+		validityStatus: validity, 
+	};
+	$.post('/v1/exchange/offers/', postData , function(data,status,headers,config) {});
+```
+Where:
+| Variable            | Possible Values              |
+| ------------------- | ---------------------------- |
+| bidHash             | Hash code of the transaction |
+| currencytype        | 'tmsc' or 'msc'              |
+| validityStatus      | 'ANY', 'VALID', 'EXPIRED', or 'INVALID' | 
+
+Resulting ``data``:
+```
+{
+	"status": "OK",
+	"data": [
+		{
+			"tx_hash": "a24a6b5b38cec7047c14d2ce581c8576e233cf555bd318053d3bed12ebf803ce",
+			"to_address": "1EdAjiApS5cCpHdH4RKPMab1xmMVRWjLvk",
+			"from_address": "1F73UPD5xBKgTSRd8q6QhuncVmDnJAHxYV",
+			"payment_expired": false,
+			"color": "bgc-done",
+			"update_fs": true,
+			"tx_time": "1383470727000",
+			"formatted_amount_accepted": 0.9,
+			"sell_offer_txid": "e1a53bf47d64391294d07110f6cc9f94e56963e960829ad45886c9800047a6bf",
+			"index": "28",
+			"payment_txid": "Not available",
+			"tx_type_str": "Sell accept",
+			"formatted_price_per_coin": "0.000808",
+			"currencyId": "00000002",
+			"amount": "00000000055d4a80",
+			"invalid": false,
+			"details": "unknown_price",
+			"formatted_amount_bought": "0.9",
+			"formatted_amount_requested": "0.9",
+			"method": "multisig",
+			"dataSequenceNum": "01",
+			"transactionType": "00000016",
+			"status": "Closed",
+			"btc_offer_txid": "8bb6b4ec970e9bbeb4500022b284767ce30f03dd0edf5d81b23f31dd6e26891d",
+			"formatted_amount": "0.9",
+			"payment_done": true,
+			"bitcoin_required": "0.0007272",
+			"icon": "sellaccept",
+			"tx_method_str": "multisig",
+			"icon_text": "Payment done",
+			"currency_str": "Test Mastercoin",
+			"baseCoin": "00",
+			"block": "267672"
+		},
+		...
+	]
+}
+```
+
+### Get detailed transaction data
+```
+var postData = { 
+	type: 'TRANSACTION',
+	transaction: transaction, 
+	currencyType: ctype   
+};
+$.post('/v1/exchange/offers/', postData , function(data,status,headers,config) {});
+```
+Where:
+| Variable            | Possible Values              |
+| ------------------- | ---------------------------- |
+| transaction             | Bitcoin transaction hash |
+| ctype        | 'tmsc' or 'msc'              |
+
+Resulting ``data``:
+```
+{
+	"status": "OK",
+	"data": [
+		{
+			"tx_hash": "11020fe143c4a228bc093137a1cda8b7699c8ff9af78f7e4d31f3034f612f12c",
+			"index": "343",
+			"tx_type_str": "Simple send",
+			"to_address": "1E68hpSZghk2UmFP3c3JCWnB9mpKWB1gyT",
+			"from_address": "1HG3s4Ext3sTqBTHrgftyUzG3cvx5ZbPCj",
+			"tx_method_str": "multisig",
+			"color": "bgc-done",
+			"tx_time": "1391662945000",
+			"icon_text": "Simple send",
+			"invalid": false,
+			"currencyId": "00000002",
+			"amount": "0000000000989680",
+			"dataSequenceNum": "01",
+			"currency_str": "Test Mastercoin",
+			"formatted_amount": "0.1",
+			"transactionType": "00000000",
+			"icon": "simplesend",
+			"baseCoin": "00",
+			"method": "multisig",
+			"block": "284397",
+			"details": "1E68hpSZghk2UmFP3c3JCWnB9mpKWB1gyT"
+		}
+	]
+}
+```
