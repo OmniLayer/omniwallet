@@ -1,0 +1,103 @@
+<!doctype html>
+<html ng-app="myApp">
+   <head>
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="description" content="">
+      <meta name="author" content="">
+      <link rel="shortcut icon" href="ico/favicon.png">
+      <title>
+         Recent
+      </title>
+      <noscript>
+         Java Script has been disabled!
+         <meta http-equiv="refresh" content="0;url=javascript_required.html">
+      </noscript>
+      <!-- Bootstrap core CSS -->
+      <link href="../css/bootstrap.css" rel="stylesheet">
+      <link href="../css/bootstrap-theme.css" rel="stylesheet">
+      <link href="../css/bootstrap-combobox.css" rel="stylesheet"> 
+      <link href="../css/search.css" rel="stylesheet">
+      <script src="../js/jquery-1.10.1.min.js"></script>
+      <script src="../js/angular.js"></script>
+      <script src="../btcutils.js"></script>
+
+      <script src="OffersAPIDemo.js"></script>
+      <script src="../js/truncate.js"></script>
+      <script src="../masterPage.js"></script>
+      <script src="../btc02.js"></script>
+      <script src="../js/bootstrap-combobox.js"></script>
+      <script>
+         var myApp = angular.module('myApp', ['truncate']);
+      </script>
+      <script src="../js/bootstrap.min.js"></script>
+      <script src="../masterEvents.js"></script>
+      <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+      <!--[if lt IE 9]>
+      <script src="js/html5shiv.js"></script>
+      <script src="js/respond.min.js"></script>
+      <![endif]-->
+   </head>
+   <body>
+      <div id="wrap">
+            <div class="container page-container">
+               <div class="row">
+                     <div class="inner">
+                       
+                <div ng-controller="APITestController" >    
+
+                  <div class="col-sm-5"> 
+                  
+                    SHOW OFFERS AND ACCEPTS BY ADDRESS:<br>
+                  <input class="btcaddress" style="width:400px;" value="17rExRiMaJGgHPVuYjHL21mEhfzbRPRkui">
+                  <ul>
+                  </ul><ul> 
+                    <li> <input type="button" style="margin-top:5px;" ng-click="ShowSellAndPaidOffers()" value="Sell offers made and Sold"  > 
+                    <li> <input type="button" style="margin-top:5px;" ng-click="ShowAcceptAndBoughtOffers()" value="Sales accepted and Bought">
+
+                </div>
+                <pre style="overflow:auto; height: 300px;" class="col-sm-7 dataSection">Data appears here</pre>
+              </div>
+            </div>
+          </div>
+            <div class="row">
+            <!-- /container -->
+            
+          <div ng-controller="APITestController" >    
+            <div class="col-sm-5">
+              GET DETAILED INFORMATION ABOUT A OFFER:
+                     <input class="bidhash" style="width: 400px;" value="e1a53bf47d64391294d07110f6cc9f94e56963e960829ad45886c9800047a6bf">
+
+                     <br><br>   
+                    <li> <input type="button" style="margin-top:5px;" ng-click="SellingAny()" value="get any bid" >
+                     <li> <input type="button" style="margin-top:5px;" ng-click="SellingValid()" value="get valid bids"  >
+                    <li> <input type="button" style="margin-top:5px;" ng-click="SellingExpired()" value="get expired bids only"  >
+                    <li> <input type="button" style="margin-top:5px;" ng-click="SellingInvalid()" value="get invalid bids only"  >
+                    <br>
+
+                  </div>
+       
+                <pre style="overflow:auto;  height: 300px;" class="pull-right col-sm-7 dataSection2">Data appears here</pre>
+                </div>
+
+              </div>
+
+          <div ng-controller="APITestController" >    
+            <div class="col-sm-5">
+              GET INFORMATION ABOUT ANY TRANSACTION: 
+                     <input class="hash" style="width: 400px;" value="11020fe143c4a228bc093137a1cda8b7699c8ff9af78f7e4d31f3034f612f12c">
+                     <br><br>   
+                    <li> <input type="button" style="margin-top:5px;" ng-click="GetTransaction()" value=" get transaction data"  >
+                    <br>
+                  </div>
+       
+                <pre style="overflow:auto;  height: 300px;" class="pull-right col-sm-7 dataSection3">Data appears here</pre>
+                </div>
+
+              </div>
+            
+            
+    </div>
+   </body>
+</html>
+
