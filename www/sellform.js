@@ -5,15 +5,16 @@ function AcceptOfferController($scope, $http) {
     $scope.footer = "FOOTER";
     $scope.title = "TITLE";
 
+    $scope.wallet = Wallet.GetWallet();
+
     $scope.step = 0.1;
     $scope.amount;
     $scope.price;
     $scope.min_buyer_fee = 0.0005;
     $scope.fee = 0.0005;
     $scope.blocks = 10;
-    $scope.key = "Disable";
+    $scope.key = "";
     $scope.currency = "";
-    $scope.wallet = Wallet.GetWallet();
 
     $scope.keyChange = function () {
 
@@ -120,14 +121,14 @@ if (data.status == 'OK') {
 else {
     $('#verifyMessage').addClass('greenText');
     ok = false;
-    if (data.status == 'invalid pubkey') {
+    if (data.error == 'invalid pubkey') {
         $('#verifyMessage').text('invalid pubkey');
     } else {
-        if (data.status == 'missing pubkey') {
+        if (data.error == 'missing pubkey') {
             $('#verifyMessage').text('no pubkey on blockchain');
         } else {
 	        $('#verifyMessage').addClass('redText');
-            if (data.status == 'invalid address') {
+            if (data.error == 'invalid address') {
                 $('#verifyMessage').text('invalid address');
             } else {
                 $('#verifyMessage').text('invalid');
@@ -249,6 +250,13 @@ console.log(data);
 BTNClientContext.Signing.GetRawTransaction = function () {
 
 
+$('#statusMessage').removeClass('redText');
+$('#statusMessage').addClass('greenTextColor');
+$('#statusMessage').text('');
+
+
+$('#createRawResponseForm').hide();
+
 var myURLParams = BTCUtils.getQueryStringArgs();
 var from_address = $("input.select.optional.form-control.form-control30px.combobox").val();
 var amount = $('#amount').val();
@@ -270,10 +278,9 @@ BTNClientContext.Signing.GetRawTransactionResponse(data);
 
 }).fail(function () {
 
-// TODO This should be changed - Currently always fail as there is no server
-
 console.log('fail');
 var testResponse = {
+    'status': 'ping?',
     'sourceScript': 'ERROR',
     'transaction': ''
 };
@@ -284,6 +291,24 @@ BTNClientContext.Signing.GetRawTransactionResponse(testResponse);
 
 BTNClientContext.Signing.GetRawTransactionResponse = function (data) {
 
+var status = data.status;
+if (!status)
+	status = data.error;
+if (status && status != "OK" && status != "Ok" && status != "ok") {
+if (status.length > 120) {
+    //take first 117 and add ...
+    status = status.substr(0, 117);
+    status += "...";
+}
+
+$('#statusMessage').removeClass('greenTextColor');
+$('#statusMessage').addClass('redText');
+$('#statusMessage').text(status);
+
+
+$('#createRawResponseForm').hide();
+return;
+}
 
 BTNClientContext.Signing.Transaction = data.transaction;
 
@@ -379,6 +404,7 @@ BTNClientContext.Signing.addAddressToHistory = function () {
     }
 };
 $(document).ready(function myfunction() {
+
     $('#sendLoader').addClass('hideLoader');
  
     //Combbox init
@@ -394,7 +420,7 @@ $(document).ready(function myfunction() {
 
 
     //disable btn at the beggining, because it needs to have a value in a privateKey
-    $('#reSign').attr('disabled', false);
+    $('#reSign').attr('disabled', true);
 
 
     $('#createRawTransaction').click(function () {

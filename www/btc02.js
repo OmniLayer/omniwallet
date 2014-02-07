@@ -18,9 +18,18 @@ function BTCController($scope, $http) {
     
     $scope.$on('handlePagesBroadcast', function(event, args) {
         $scope.numberOfPages = Number(args.message);
+        $scope.showPages = Math.min(5, $scope.numberOfPages);
+        $scope.pages = $scope.pagesCreator($scope.currentPageStart);
     });
     
     $scope.getData = function ($i) {
+    	// parse currency from url parameters
+	var myURLParams = BTCUtils.getQueryStringArgs();
+	
+    	// Set title
+    	if (myURLParams['filter'] && myURLParams['filter'].length > 0) {
+    		document.title = "Recent " + myURLParams['filter'];
+    	}
         // Clear scope members
         $scope.currentPageStart = (1+$i-($i%$scope.showPages));
         if ($scope.currentPageStart>$i)
@@ -30,11 +39,10 @@ function BTCController($scope, $http) {
         $scope.currentPage=$i;
         $scope.transactions = {};
         $scope.caption = 'Latest Mastercoin transactions';
-	// parse currency from url parameters
-	var myURLParams = BTCUtils.getQueryStringArgs();
+	
 	var num=str_pad($i, 4, '0', 'STR_PAD_LEFT');
-	//var file =  'general/' + myURLParams['currency'] + '_'+myURLParams['page']+'.json';
-	var file =  'general/' + myURLParams['currency'] + '_' + num + '.json';
+	var filter = (myURLParams['filter'] && myURLParams['filter'].length > 0)? myURLParams['filter'] + "_" : "";
+	var file =  'general/' + myURLParams['currency'] + '_' + filter + num + '.json';
         // Make the http request and process the result
 	    $http.get(
 	   file,
@@ -78,7 +86,8 @@ $scope.initPages = function($n) {
         var startIndex = $scope.findFirstIndex(num);
      	if (startIndex == -1){
 	    var myURLParams = BTCUtils.getQueryStringArgs();
-	    var file =  'general/' + myURLParams['currency'] + '_' + num + '.json';
+	    var filter = (myURLParams['filter'] && myURLParams['filter'].length > 0)? myURLParams['filter'] + "_" : "";
+	    var file =  'general/' + myURLParams['currency'] + '_' + filter + num + '.json';
             $http.get(file).success(function (data, status, headers, config) {
                 angular.forEach(data, function(item) {
                               item.source = num;

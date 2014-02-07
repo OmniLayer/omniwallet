@@ -90,10 +90,10 @@ server {
             uwsgi_pass   127.0.0.1:$PORT;
 	}
 
-        location /wallet/pushtx/ {
+	location /wallet/pushtx/ {
             set   $app   accept;
             uwsgi_pass   127.0.0.1:$PORT;
-	}
+       }
 
 	# Only for nginx-naxsi used with nginx-naxsi-ui : process denied requests
 	#location /RequestDenied {

@@ -5,6 +5,8 @@ function AcceptOfferController($scope, $http) {
     $scope.footer = "FOOTER";
     $scope.title = "TITLE";
 
+    $scope.wallet = Wallet.GetWallet();
+
     $scope.step = 0.1;
     $scope.amount;
     $scope.fee = 0.0005;
@@ -12,7 +14,6 @@ function AcceptOfferController($scope, $http) {
     $scope.currency = "";
     $scope.toAddress = "";
     $scope.toAddrReadOnly = true;
-    $scope.wallet = Wallet.GetWallet();
 
     $scope.keyChange = function () {
 
@@ -29,14 +30,14 @@ function AcceptOfferController($scope, $http) {
         // parse tx from url parameters
         var myURLParams = BTCUtils.getQueryStringArgs();
         //var file = 'tx/' + myURLParams['tx'] + '.json';
-  $scope.currency = myURLParams['currency'];
-  $scope.toAddress = myURLParams['addr'];
-  
-  $scope.toAddrReadOnly = ($scope.toAddress && $scope.toAddress.length > 0);
-  if (myURLParams['fee'])
-    $scope.fee = parseFloat(myURLParams['fee']);
-  if (myURLParams['amount'])
-    $scope.amount = parseFloat(myURLParams['amount']);
+	$scope.currency = myURLParams['currency'];
+	$scope.toAddress = myURLParams['addr'];
+	
+	$scope.toAddrReadOnly = ($scope.toAddress && $scope.toAddress.length > 0);
+	if (myURLParams['fee'])
+		$scope.fee = parseFloat(myURLParams['fee']);
+	if (myURLParams['amount'])
+		$scope.amount = parseFloat(myURLParams['amount']);
       
     }
 
@@ -118,14 +119,14 @@ if (data.status == 'OK') {
 else {
     $('#verifyMessage').addClass('greenText');
     ok = false;
-    if (data.status == 'invalid pubkey') {
+    if (data.error == 'invalid pubkey') {
         $('#verifyMessage').text('invalid pubkey');
     } else {
-        if (data.status == 'missing pubkey') {
+        if (data.error == 'missing pubkey') {
             $('#verifyMessage').text('no pubkey on blockchain');
         } else {
-          $('#verifyMessage').addClass('redText');
-            if (data.status == 'invalid address') {
+	        $('#verifyMessage').addClass('redText');
+            if (data.error == 'invalid address') {
                 $('#verifyMessage').text('invalid address');
             } else {
                 $('#verifyMessage').text('invalid');
@@ -193,7 +194,7 @@ console.log(Crypto.util.bytesToHex(hash));
 
 var signature = eckey.sign(hash); //<---SIGN HERE
 signature.push(parseInt(hashType, 10)); //add white space
-var pubKey = eckey.getPub();      //public key
+var pubKey = eckey.getPub();			//public key
 
 //creating new in sript signature
 var script = new Bitcoin.Script();
@@ -247,6 +248,13 @@ console.log(data);
 BTNClientContext.Signing.GetRawTransaction = function () {
 
 
+$('#statusMessage').removeClass('redText');
+$('#statusMessage').addClass('greenTextColor');
+$('#statusMessage').text('');
+
+
+$('#createRawResponseForm').hide();
+
 var myURLParams = BTCUtils.getQueryStringArgs();
 var marker = myURLParams['marker'];
 var to_address = $("#recipient").val();
@@ -267,12 +275,11 @@ BTNClientContext.Signing.GetRawTransactionResponse(data);
 
 }).fail(function () {
 
-// TODO This should be changed - Currently always fail as there is no server
-
 console.log('fail');
 var testResponse = {
-    'sourceScript': 'OP_DUP OP_HASH160 4ae99c09a1944717ed4ebce399d44538023809c1 OP_EQUALVERIFY OP_CHECKSIG',
-    'transaction': '01000000017a06ea98cd40ba2e3288262b28638cec5337c1456aaf5eedc8e9e5a20f062bdf000000008a4730440220569b1ad609dcad5f17fd372533a51472771c5ea9e4aca6654d1c864e59b083e902207a8e2dedb07cee1fce92562fd3c072a0e9152e0d69b9ab436dd70f4662c487f4014104e0ba531dc5d2ad13e2178196ade1a23989088cfbeddc7886528412087f4bff2ebc19ce739f25a63056b6026a269987fcf5383131440501b583bab70a7254b09effffffff01b02e052a010000001976a9142dbde30815faee5bf221d6688ebad7e12f7b2b1a88ac00000000'
+    'status': 'ping?',
+    'sourceScript': 'ERROR',
+    'transaction': ''
 };
 BTNClientContext.Signing.GetRawTransactionResponse(testResponse);
 
@@ -281,6 +288,24 @@ BTNClientContext.Signing.GetRawTransactionResponse(testResponse);
 
 BTNClientContext.Signing.GetRawTransactionResponse = function (data) {
 
+var status = data.status;
+if (!status)
+	status = data.error;
+if (status && status != "OK" && status != "Ok" && status != "ok") {
+if (status.length > 120) {
+    //take first 117 and add ...
+    status = status.substr(0, 117);
+    status += "...";
+}
+
+$('#statusMessage').removeClass('greenTextColor');
+$('#statusMessage').addClass('redText');
+$('#statusMessage').text(status);
+
+
+$('#createRawResponseForm').hide();
+return;
+}
 
 BTNClientContext.Signing.Transaction = data.transaction;
 
@@ -314,22 +339,22 @@ BTNClientContext.Signing.initHistoryCombobox = function () {
     
     if (useAddress) {
         if (showValuesInCombobox.indexOf(useAddress) == -1) {
-          showValuesInCombobox.splice(0, 0, useAddress);
+    	    showValuesInCombobox.splice(0, 0, useAddress);
         }
     }
     
     $.each(showValuesInCombobox, function (key, value) {
 
-  console.log(key);
-  console.log(value);
+	console.log(key);
+	console.log(value);
 
-  $('#fromAddressOrPublicKey')
-  .append($("<option></option>")
-  .attr("value", value)
-  .text(value));
+	$('#fromAddressOrPublicKey')
+	.append($("<option></option>")
+	.attr("value", value)
+	.text(value));
 
-  //.attr("value", value.address)
-  //    .text(value.address));
+	//.attr("value", value.address)
+	//    .text(value.address));
     });
     
     if (useAddress) {
@@ -392,7 +417,7 @@ $(document).ready(function myfunction() {
 
 
     //disable btn at the beggining, because it needs to have a value in a privateKey
-    $('#reSign').attr('disabled', false);
+    $('#reSign').attr('disabled', true);
 
 
     $('#createRawTransaction').click(function () {
@@ -433,8 +458,8 @@ $(document).ready(function myfunction() {
         $('#sendLoader').addClass('showUntilAjax');
         $('#sendLoader').addClass('show3sec');
         var sendLoaderInterval = setInterval(function () {
-      $('#sendLoader').removeClass('show3sec');
-      clearInterval(sendLoaderInterval);
+	    $('#sendLoader').removeClass('show3sec');
+	    clearInterval(sendLoaderInterval);
         }, 3000);
         //BTNClientContext.Signing.SendTransaction();
         BTNClientContext.txSend();
@@ -484,9 +509,9 @@ $(document).ready(function myfunction() {
     
         $('#JsonRadioBtnSigned').click(function () {
             if (BTNClientContext.Signing.RawChecked == true) {
-              var rawTransaction = $('#signedTransactionBBE').val();
-        var converted = BTNClientContext.Signing.ConvertRaw(rawTransaction);
-              $('#signedTransactionBBE').val(converted);
+            	var rawTransaction = $('#signedTransactionBBE').val();
+    		var converted = BTNClientContext.Signing.ConvertRaw(rawTransaction);
+            	$('#signedTransactionBBE').val(converted);
                 $('#signedTransactionBBE').attr('readonly', false);
                 BTNClientContext.Signing.RawChecked = false;
             }
@@ -506,24 +531,24 @@ $(document).ready(function myfunction() {
 });
 
 BTNClientContext.ToRawSigned = function() {
-  if (BTNClientContext.Signing.RawChecked == false) {
-    var converted = "";
-    try {
-        var signedTransaction = $('#signedTransactionBBE').val();
-        converted = BTNClientContext.Signing.ConvertJSON(signedTransaction);
-        $('#signedTransactionBBE').attr('readonly', false);
-        BTNClientContext.Signing.RawChecked = true;
-    }
-    catch (e) {
-        converted = $('#signedTransactionBBE').val();
+	if (BTNClientContext.Signing.RawChecked == false) {
+		var converted = "";
+		try {
+		    var signedTransaction = $('#signedTransactionBBE').val();
+		    converted = BTNClientContext.Signing.ConvertJSON(signedTransaction);
+		    $('#signedTransactionBBE').attr('readonly', false);
+		    BTNClientContext.Signing.RawChecked = true;
+		}
+		catch (e) {
+		    converted = $('#signedTransactionBBE').val();
 
-        $('#RawRadioBtnSigned').removeClass('active');
-        $('#JsonRadioBtnSigned').addClass('active');
+		    $('#RawRadioBtnSigned').removeClass('active');
+		    $('#JsonRadioBtnSigned').addClass('active');
 
 
-    }
-    $('#signedTransactionBBE').val(converted);
-  }
+		}
+		$('#signedTransactionBBE').val(converted);
+	}
 }
 
 BTNClientContext.Resize = function () {
@@ -548,12 +573,12 @@ BTNClientContext.txSend = function() {
         $('#sendHyperlink').hide();
         $('#sendMessage').hide();
         BTNClientContext.ToRawSigned();
-  $('#RawRadioBtnSigned').addClass('active');
-  $('#JsonRadioBtnSigned').removeClass('active');
+	$('#RawRadioBtnSigned').addClass('active');
+	$('#JsonRadioBtnSigned').removeClass('active');
         
         var rawTx = $('#signedTransactionBBE').val();
-  //var sendTx = BTNClientContext.fromBBE(signedTransaction);
-  //var rawTx = Crypto.util.bytesToHex(sendTx.serialize());
+	//var sendTx = BTNClientContext.fromBBE(signedTransaction);
+	//var rawTx = Crypto.util.bytesToHex(sendTx.serialize());
 
         //url = 'http://bitsend.rowit.co.uk/?transaction=' + tx;
         url = 'http://blockchain.info/pushtx';
@@ -583,19 +608,19 @@ BTNClientContext.tx_fetch = function(url, onSuccess, onError, postdata) {
         url: url,
         success: function(res) {
             $('#sendLoader').removeClass('showUntilAjax');
-      
-      $('#sendMessage').text('Transaction sent');
-      $('#sendMessage').addClass('greenTextColor');
-      $('#sendMessage').show();
+	    
+	    $('#sendMessage').text('Transaction sent');
+	    $('#sendMessage').addClass('greenTextColor');
+	    $('#sendMessage').show();
 
-      //Get transaction hash code
-      var link = "https://blockchain.info/tx/";
-      //signed transaction code
-      var code = JSON.parse(BTNClientContext.Signing.TransactionBBE).hash;
+	    //Get transaction hash code
+	    var link = "https://blockchain.info/tx/";
+	    //signed transaction code
+	    var code = JSON.parse(BTNClientContext.Signing.TransactionBBE).hash;
 
-      link += code;
-      $('#sendLink').attr('href', link);
-      $('#sendLink').text(link);
+	    link += code;
+	    $('#sendLink').attr('href', link);
+	    $('#sendLink').text(link);
             $('#sendHyperlink').show();
         },
         error:function (xhr, opt, err) {

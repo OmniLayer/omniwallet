@@ -12,7 +12,7 @@
       <script src="btcutils.js"></script>
       <script src="js/truncate.js"></script>
       <script src="masterPage.js"></script>
-      <script src="btc01.js"></script>
+      <script src="btc02.js"></script>
       <script src="js/bootstrap-combobox.js"></script>
       <script>
          var myApp = angular.module('myApp', ['truncate']);
