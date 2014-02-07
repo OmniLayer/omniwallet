@@ -385,3 +385,40 @@ Resulting ``data``:
 	]
 }
 ```
+
+### User Wallet Information
+
+#### Wallet Data
+User wallet data is signed and unsigned locally in the browser. The server only keeps a copy of the public address and encrypted password
+
+Example
+
+```
+{
+  "uuid": "02ddc252-7fb0-4e7d-c28e-be94a5dc56d0",
+  "addresses": "1JwSSubhmg6iPtRjtyqhUYYH7bZg3Lfy1T",
+  "keys": [
+    {
+      "address": "1JwSSubhmg6iPtRjtyqhUYYH7bZg3Lfy1T",
+      "encrypted": "6PRQ7ivF7LhQs7m4ZYbmj8Z1U7847LENYS22YBQNDLDXiVuKWZ8XDCEhjF"
+    }
+  ]
+}
+```
+
+#### Syncing Wallet Information
+```
+var postData = {
+  type: 'SYNCWALLET',
+  masterWallets: userWallets
+};
+$.post('/v1/user/wallet/sync/', postData, function (data) {}).fail( function() {} );
+```
+
+Where:
+| Variable            | Possible Values              |
+| ------------------- | ---------------------------- |
+| type                | 'SYNCWALLET' |
+| masterWallets        | list of wallets user wants to save |
+
+Returns no data
