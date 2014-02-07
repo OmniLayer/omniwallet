@@ -11,7 +11,7 @@ data_dir_root = os.environ.get('DATADIR')
 def sync_wallet_response(request_dict):
   if not request_dict.has_key('type'):
     return (None, 'No field type in response dict '+str(request_dict))
-  print request_dict 
+
   req_type = request_dict['type'][0].upper() 
   if req_type == "SYNCWALLET":
     response_data = syncWallets(request_dict['masterWallets'][0])
@@ -24,7 +24,6 @@ def sync_wallet_response(request_dict):
 
 def syncWallets(master_wallets_json):
   master_wallets = json.loads(master_wallets_json)
-  print master_wallets
 
   for wallet in master_wallets:
     uuid = wallet['uuid']

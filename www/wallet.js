@@ -148,7 +148,7 @@ Wallet.SyncWithServer = function () {
     masterWallets: localStorage[Wallet.StorageKey]
   }
   console.log('posting', postData);
-  $.post('/wallet/sync/', postData, function(data, status, headers, config) {
+  $.post('/v1/user/wallet/sync/', postData, function(data, status, headers, config) {
     console.log(data);
   });
 };

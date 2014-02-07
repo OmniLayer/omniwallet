@@ -85,7 +85,7 @@ server {
             uwsgi_pass   127.0.0.1:$PORT;
         }
 
-        location /wallet/sync/ {
+        location /v1/user/wallet/sync/ {
             set   $app   sync_wallet;
             uwsgi_pass   127.0.0.1:$PORT;
         }
