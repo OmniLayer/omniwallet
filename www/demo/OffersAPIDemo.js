@@ -25,7 +25,7 @@ function APITestController($scope, $http) {
       };
       var div = $('.dataSection')
       console.log("POST DATA: ", postData);
-      $.post('/api/offers/', postData , function(data,status,headers,config) {
+      $.post('/v1/exchange/offers/', postData , function(data,status,headers,config) {
          div.text(JSON.stringify(data, null, '\t'));
          console.log(data);
       });
@@ -47,7 +47,7 @@ function APITestController($scope, $http) {
       };
       var div = $('.dataSection2');
       console.log("POST DATA: ", postData);
-      $.post('/api/offers/', postData , function(data,status,headers,config) {
+      $.post('/v1/exchange/offers/', postData , function(data,status,headers,config) {
          div.text(JSON.stringify(data, null, '\t'));
          console.log(data);
       });
@@ -68,7 +68,7 @@ function APITestController($scope, $http) {
       };
       var div = $('.dataSection3');
       console.log("POST DATA: ", postData);
-      $.post('/api/offers/', postData , function(data,status,headers,config) {
+      $.post('/v1/exchange/offers/', postData , function(data,status,headers,config) {
          div.text(JSON.stringify(data,null, '\t'));
          console.log(data);
       });

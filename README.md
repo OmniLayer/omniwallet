@@ -103,7 +103,7 @@ If you install the development dependencies (``npm install --development``), you
 #### Validate the source address:
 ```
 var dataToSend = { addr: from_addr };
-$.post('/wallet/validateaddr/', dataToSend, function (data) {}).fail( function() {} );
+$.post('/v1/transaction/validateaddr/', dataToSend, function (data) {}).fail( function() {} );
 ```
 ``data`` will contain one of:
 
@@ -124,7 +124,7 @@ var dataToSend = {
 	fee: fee, 
 	marker: marker
 };
-$.post('/wallet/send/', dataToSend, function (data) {
+$.post('/v1/transaction/send/', dataToSend, function (data) {
 
 	//data should have fields sourceScript and transaction
 	$('#sourceScript').val(data.sourceScript);
@@ -160,7 +160,7 @@ $.post('/wallet/validateaddr/', dataToSend, function (data) {}).fail( function()
 #### Encode the trade offer:
 ```
 var dataToSend = { seller: from_address, amount: amount, price: price, min_buyer_fee: min_buyer_fee, fee: fee, blocks: blocks, currency: currency };
-$.post('/wallet/sell/', dataToSend, function (data) {
+$.post('/v1/transaction/sell/', dataToSend, function (data) {
 
 	//data should have fields sourceScript and transaction\
 	$('#sourceScript').val(data.sourceScript);
@@ -173,7 +173,7 @@ $.post('/wallet/sell/', dataToSend, function (data) {
 ```
 var rawTx = Crypto.util.bytesToHex(sendTx.serialize());
 var dataToSend = { signedTransaction: rawTx };
-$.post('/wallet/pushtx/', dataToSend, function (data) {}).fail( function() {} );
+$.post('/v1/transaction/pushtx/', dataToSend, function (data) {}).fail( function() {} );
 ```
 No return value in ``data``.
 
@@ -182,7 +182,7 @@ No return value in ``data``.
 #### Validate the "buyer" address - the address accepting the offer:
 ```
 var dataToSend = { addr: buyer };
-$.post('/wallet/validateaddr/', dataToSend, function (data) {}).fail( function() {} );
+$.post('/v1/transaction/validateaddr/', dataToSend, function (data) {}).fail( function() {} );
 ```
 ``data`` will contain one of:
 
@@ -195,7 +195,7 @@ $.post('/wallet/validateaddr/', dataToSend, function (data) {}).fail( function()
 #### Encode the acceptance:
 ```
 var dataToSend = { buyer: buyer, amount: amount, tx_hash: tx_hash };
-$.post('/wallet/accept/', dataToSend, function (data) {
+$.post('/v1/transaction/accept/', dataToSend, function (data) {
 
 	//data should have fields sourceScript and transaction
 	$('#sourceScript').val(data.sourceScript);
@@ -206,6 +206,6 @@ $.post('/wallet/accept/', dataToSend, function (data) {
 #### Actually push up the signed transaction
 ```
 var dataToSend = { signedTransaction: rawTx };
-$.post('/wallet/pushtx/', dataToSend, function (data) {}).fail( function() {} );
+$.post('/v1/transaction/pushtx/', dataToSend, function (data) {}).fail( function() {} );
 ```
 No return value in ``data``.
