@@ -14,11 +14,11 @@ def sync_wallet_response(request_dict):
 
   req_type = request_dict['type'][0].upper() 
   if req_type == "SYNCWALLET":
-    response_data = syncWallets(request_dict['masterWallets'][0])
+    syncWallets(request_dict['masterWallets'][0])
   else:
     return (None, req_type + ' is not supported')
 
-  response = { 'status': 'OK', 'data': response_data }
+  response = { 'status': 'OK' }
   return (json.dumps(response), None)
 
 
