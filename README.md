@@ -203,9 +203,9 @@ $.post('/wallet/accept/', dataToSend, function (data) {
 
 }).fail( function () {} );
 ```
-#### Actually push up the signed transaction **Note - different endpoint from the others!**:
+#### Actually push up the signed transaction
 ```
-var dataToSend = { signedTransaction: signedTransaction };
-$.post('/wallet/signed/', dataToSend, function (data) {} ).fail( function () {} );
+var dataToSend = { signedTransaction: rawTx };
+$.post('/wallet/pushtx/', dataToSend, function (data) {}).fail( function() {} );
 ```
 No return value in ``data``.
