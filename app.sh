@@ -55,13 +55,12 @@ do
 		# update archive
 		python $TOOLSDIR/msc_archive.py -r $TOOLSDIR 2>&1 > $ARCHIVE_LOG
 	
-		mkdir -p $DATADIR/www/tx $DATADIR/www/addr $DATADIR/www/general $DATADIR/www/offers $DATADIR/www/wallets $DATADIR/www/mastercoin_verify/addresses $DATADIR/www/mastercoin_verify/transactions
+		mkdir -p $DATADIR/www/tx $DATADIR/www/addr $DATADIR/www/general $DATADIR/www/offers $DATADIR/www/mastercoin_verify/addresses $DATADIR/www/mastercoin_verify/transactions
 
         cp --no-clobber $DATADIR/tx/* $DATADIR/www/tx
 		cp --no-clobber $DATADIR/addr/* $DATADIR/www/addr
 		cp $DATADIR/general/* $DATADIR/www/general
 		cp --no-clobber $DATADIR/offers/* $DATADIR/www/offers
-		cp --no-clobber $DATADIR/wallets/* $DATADIR/www/wallets/*
 		cp --no-clobber $DATADIR/mastercoin_verify/addresses/* $DATADIR/www/mastercoin_verify/addresses
 		cp --no-clobber $DATADIR/mastercoin_verify/transactions/* $DATADIR/www/mastercoin_verify/transactions
 	
