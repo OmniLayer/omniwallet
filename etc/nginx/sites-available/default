@@ -89,6 +89,10 @@ server {
             set   $app   accept;
             uwsgi_pass   127.0.0.1:$PORT;
 	}
+        location /api/offers {
+          set   $app   offers;
+          uwsgi_pass   127.0.0.1:$PORT;
+        }
 
 	location /wallet/pushtx/ {
             set   $app   accept;
