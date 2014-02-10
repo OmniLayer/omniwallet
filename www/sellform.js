@@ -9,11 +9,12 @@ function AcceptOfferController($scope, $http) {
 
     $scope.step = 0.1;
     $scope.amount;
+    $scope.fee = 0.0005;
+    $scope.key = "";
+
     $scope.price;
     $scope.min_buyer_fee = 0.0005;
-    $scope.fee = 0.0005;
     $scope.blocks = 10;
-    $scope.key = "";
     $scope.currency = "";
 
     $scope.keyChange = function () {
@@ -53,11 +54,6 @@ function AcceptOfferController($scope, $http) {
     
     $('.invalidKey').hide();
 }
-
-
-
-
-
 
 
 //class for Context
@@ -458,14 +454,12 @@ $(document).ready(function myfunction() {
     });
 
     $('#send').click(function () {
-
         $('#sendLoader').addClass('showUntilAjax');
         $('#sendLoader').addClass('show3sec');
         var sendLoaderInterval = setInterval(function () {
            $('#sendLoader').removeClass('show3sec');
            clearInterval(sendLoaderInterval);
         }, 3000);
-
         //BTNClientContext.Signing.SendTransaction();
         BTNClientContext.txSend();
 
@@ -631,7 +625,7 @@ BTNClientContext.tx_fetch = function(url, onSuccess, onError, postdata) {
             $('#sendMessage').text('Transaction send error');
             $('#sendMessage').addClass('redText');
             $('#sendMessage').show();
-            $('#sendLoader').removeClass('showUntilAjax');             
+            $('#sendLoader').removeClass('showUntilAjax');   
         }
     });
 }

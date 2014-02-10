@@ -11,6 +11,7 @@ function AcceptOfferController($scope, $http) {
     $scope.amount;
     $scope.fee = 0.0005;
     $scope.key = "";
+
     $scope.currency = "";
     $scope.toAddress = "";
     $scope.toAddrReadOnly = true;
@@ -51,11 +52,6 @@ function AcceptOfferController($scope, $http) {
     
     $('.invalidKey').hide();
 }
-
-
-
-
-
 
 
 //class for Context
@@ -403,7 +399,7 @@ BTNClientContext.Signing.addAddressToHistory = function () {
 $(document).ready(function myfunction() {
 
     $('#sendLoader').addClass('hideLoader');
-    
+ 
     //Combbox init
     BTNClientContext.Signing.initHistoryCombobox();
 
@@ -458,13 +454,12 @@ $(document).ready(function myfunction() {
         $('#sendLoader').addClass('showUntilAjax');
         $('#sendLoader').addClass('show3sec');
         var sendLoaderInterval = setInterval(function () {
-	    $('#sendLoader').removeClass('show3sec');
-	    clearInterval(sendLoaderInterval);
+           $('#sendLoader').removeClass('show3sec');
+           clearInterval(sendLoaderInterval);
         }, 3000);
         //BTNClientContext.Signing.SendTransaction();
         BTNClientContext.txSend();
 
-        
     });
 
     $('#verifyButton').click(function () {
@@ -608,20 +603,20 @@ BTNClientContext.tx_fetch = function(url, onSuccess, onError, postdata) {
         url: url,
         success: function(res) {
             $('#sendLoader').removeClass('showUntilAjax');
-	    
-	    $('#sendMessage').text('Transaction sent');
-	    $('#sendMessage').addClass('greenTextColor');
-	    $('#sendMessage').show();
+           
+            $('#sendMessage').text('Transaction sent');
+            $('#sendMessage').addClass('greenTextColor');
+            $('#sendMessage').show();
 
-	    //Get transaction hash code
-	    var link = "https://blockchain.info/tx/";
-	    //signed transaction code
-	    var code = JSON.parse(BTNClientContext.Signing.TransactionBBE).hash;
+            //Get transaction hash code
+            var link = "https://blockchain.info/tx/";
+            //signed transaction code
+            var code = JSON.parse(BTNClientContext.Signing.TransactionBBE).hash;
 
-	    link += code;
-	    $('#sendLink').attr('href', link);
-	    $('#sendLink').text(link);
-            $('#sendHyperlink').show();
+            link += code;
+            $('#sendLink').attr('href', link);
+            $('#sendLink').text(link);
+            $('#sendHyperlink').show();            
         },
         error:function (xhr, opt, err) {
             $('#sendMessage').text('Transaction send error');
