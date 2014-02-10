@@ -46,7 +46,7 @@ function RevisionController($scope, $http) {
     $scope.getData = function () {
         
         // Revision - Make the http request and process the result
-	$http.get('revision.json', {}).success(function (data, status, headers, config) {
+	$http.get('/v1/system/revision.json', {}).success(function (data, status, headers, config) {
 	    $scope.revision=data;
         });
 
