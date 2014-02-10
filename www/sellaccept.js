@@ -23,7 +23,7 @@ function TransactionController($scope, $http, $q) {
 
         // parse tx from url parameters
         var myURLParams = BTCUtils.getQueryStringArgs();
-        var file = 'tx/' + myURLParams['tx'] + '.json';
+        var file = '/v1/transaction/tx/' + myURLParams['tx'] + '.json';
         // Make the http request and process the result
 
         $scope.tInformation = $http.get(file, {cache: false});
@@ -32,13 +32,13 @@ function TransactionController($scope, $http, $q) {
 	    $scope.transactionInformation = values[0].data[0];
 	    $scope.updateReason();
 	    
-	    var txfile = 'tx/' + values[0].data[0].sell_offer_txid + '.json';
+	    var txfile = '/v1/transaction/tx/' + values[0].data[0].sell_offer_txid + '.json';
 	    $scope.tInformation2 = $http.get(txfile, {cache: false});
 	    $q.all([$scope.tInformation2]).then(function(values) {
 	    	    $scope.sell_offer_tx = values[0].data[0];
             });
             
-            var btcpayfile = 'tx/' + values[0].data[0].tx_hash + '.json';
+            var btcpayfile = '/v1/transaction/tx/' + values[0].data[0].tx_hash + '.json';
             $scope.tInformation3 = $http.get(btcpayfile, {cache: false});
 	    $q.all([$scope.tInformation3]).then(function(values) {
 		    $scope.btc_payment = values[0].data[0];

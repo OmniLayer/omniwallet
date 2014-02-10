@@ -26,7 +26,7 @@ function AcceptOfferController($scope, $http) {
 
         // parse tx from url parameters
         var myURLParams = BTCUtils.getQueryStringArgs();
-        var file = 'tx/' + myURLParams['tx'] + '.json';
+        var file = '/v1/transaction/tx/' + myURLParams['tx'] + '.json';
 
         // Make the http request and process the result
 

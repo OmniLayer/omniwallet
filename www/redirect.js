@@ -16,7 +16,7 @@ $(document).ready(function () {
 
 
     //Ajax call so I can see transactionType from JSON
-    url = '/tx/' + tx + '.json';
+    url = '/v1/transaction/tx/' + tx + '.json';
     $.ajax({
 	url: url,
 	type: 'get',
