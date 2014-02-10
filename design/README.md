@@ -12,9 +12,9 @@ view A/B transactions on the Masterchain with extensions for user-currency block
 
 - ~~Nest existing masterchain.info website code in npm/grunt-based install & run framework.~~
 - ~~Allow users to check balances.~~
-- Allow users to send funds provided the appropriate private keys are stored on their local machine.
-- Show the status of sell offers outstanding.
-- Show available sell offers from others
+- ~~Allow users to send funds provided the appropriate private keys are stored on their local machine.~~
+- ~~Show the status of sell offers outstanding.~~
+- ~~Show available sell offers from others~~
 - ~~client-side private key import/export~~
 - ~~Client-side AES wallet encryption~~
 
