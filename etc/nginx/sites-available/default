@@ -56,15 +56,15 @@ server {
 		alias /tmp/omniwallet/www/addr/$1;
 	}
 
-	location ~ "^/transaction/tx/(.*)$" {
+	location ~ "^/v1/transaction/tx/(.*)$" {
 		alias /tmp/omniwallet/www/tx/$1;
 	}
 
-	location ~ "^/address/verify/(.*)$" {
+	location ~ "^/v1/address/verify/(.*)$" {
 		alias /tmp/omniwallet/www/mastercoin_verify/addresses/$1;
 	}
 
-	location ~ "^/transaction/verify/(.*)$" {
+	location ~ "^/v1/transaction/verify/(.*)$" {
 		alias /tmp/omniwallet/www/mastercoin_verify/transactions/$1;
 	}
 
