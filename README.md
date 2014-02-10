@@ -219,7 +219,9 @@ var postData = {
 };
 $.post('/v1/exchange/offers/', postData , function(data,status,headers,config) { });
 ```
+
 Where:
+
 | Variable            | Possible Values              |
 | ------------------- | ---------------------------- |
 | address             | Bitcoin address |
@@ -280,7 +282,9 @@ Resulting ``data``:
 	};
 	$.post('/v1/exchange/offers/', postData , function(data,status,headers,config) {});
 ```
+
 Where:
+
 | Variable            | Possible Values              |
 | ------------------- | ---------------------------- |
 | bidHash             | Hash code of the transaction |
@@ -288,6 +292,7 @@ Where:
 | validityStatus      | 'ANY', 'VALID', 'EXPIRED', or 'INVALID' | 
 
 Resulting ``data``:
+
 ```
 {
 	"status": "OK",
@@ -341,7 +346,9 @@ var postData = {
 };
 $.post('/v1/exchange/offers/', postData , function(data,status,headers,config) {});
 ```
+
 Where:
+
 | Variable            | Possible Values              |
 | ------------------- | ---------------------------- |
 | transaction             | Bitcoin transaction hash |
