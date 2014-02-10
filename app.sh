@@ -16,8 +16,7 @@ PARSE_LOG=$DATADIR/parsed.log
 VALIDATE_LOG=$DATADIR/validated.log
 ARCHIVE_LOG=$DATADIR/archived.log
 
-if [ ! -d $DATADIR ]; then
-	mkdir -p $DATADIR
+if [ ! -d $DATADIR/tx ]; then
 	cp -r $TOOLSDIR/www/tx-bootstrap $DATADIR/tx
 fi
 
