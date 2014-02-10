@@ -139,7 +139,7 @@ Returns:
 }
 ```
 
-### Get a page of transaction IDs
+### Get a page of transaction & offer information
 HTTP GET ``/v1/transaction/general/{Currency}_{4 digit page}.json``
 Returns:
 ```
@@ -255,15 +255,77 @@ Returns:
 ```
 
 ### Get detailed information about a particular offer
-HTTP Get ``/v1/exchange/offers/{offer ID}.json``
+HTTP Get ``/v1/exchange/offers/offers-{offer ID}.json``
 Returns:
 ```
+[
+	{
+		"amount": "0000000077359400", 
+		"baseCoin": "00", 
+		"bitcoin_required": "2e-05", 
+		"block": "267568", 
+		"btc_offer_txid": "unknown", 
+		"color": "bgc-expired", 
+		"currencyId": "00000002", 
+		"currency_str": "Test Mastercoin", 
+		"dataSequenceNum": "01", 
+		"details": "unknown_price", 
+		"formatted_amount": "20.0", 
+		"formatted_amount_accepted": 20.0, 
+		"formatted_amount_bought": "0.0", 
+		"formatted_amount_requested": "20.0", 
+		"formatted_price_per_coin": "0.000001", 
+		"from_address": "1EdAjiApS5cCpHdH4RKPMab1xmMVRWjLvk", 
+		"icon": "sellaccept", 
+		"icon_text": "Payment expired", 
+		"index": "274", 
+		"invalid": false, 
+		"method": "multisig", 
+		"payment_done": false, 
+		"payment_expired": true, 
+		"payment_txid": "Not available", 
+		"sell_offer_txid": "02c300afb5c776d6013ba8833f4986f093e516c7511808146287b59689346596", 
+		"status": "Expired", 
+		"to_address": "13NRX88EZbS5q81x6XFrTECzrciPREo821", 
+		"transactionType": "00000016", 
+		"tx_hash": "33644e6f24b29e1ef170d78ff04eab6f7e19368908edc6d477f9902697a71d67", 
+		"tx_method_str": "multisig", 
+		"tx_time": "1383423463000", 
+		"tx_type_str": "Sell accept", 
+		"update_fs": true
+	}
+]
 ```
 
 ### Get detailed information about a particular transaction
 HTTP GET ``/v1/transaction/tx/{transaction ID}.json``
 Returns:
 ```
+[
+	{
+		"amount": "00000000004c4b40", 
+		"baseCoin": "00", 
+		"block": "283922", 
+		"color": "bgc-new", 
+		"currencyId": "00000002", 
+		"currency_str": "Test Mastercoin", 
+		"dataSequenceNum": "01", 
+		"details": "19TRR5mBqiV1ZtmbhYmTcCfxvayk8esrfF", 
+		"formatted_amount": "0.05", 
+		"from_address": "1HG3s4Ext3sTqBTHrgftyUzG3cvx5ZbPCj", 
+		"icon": "simplesend", 
+		"icon_text": "Simple send (1 confirms)", 
+		"index": "68", 
+		"invalid": false, 
+		"method": "multisig", 
+		"to_address": "19TRR5mBqiV1ZtmbhYmTcCfxvayk8esrfF", 
+		"transactionType": "00000000", 
+		"tx_hash": "71b7f453d43ef2d56c004b21ce5bedf1f3f2e05c6ce7464ebbc1c10df421eeeb", 
+		"tx_method_str": "multisig", 
+		"tx_time": "1391417992000", 
+		"tx_type_str": "Simple send"
+	}
+]
 ```
 
 ## EDIT API (HTTP POST)
