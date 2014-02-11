@@ -96,7 +96,239 @@ grunt build
 ```
 If you install the development dependencies (``npm install --development``), you'll also be able to use the ``serve-static.js`` script, which can save you the effort of running nginx if you're just doing development on the static HTML pages.
 
-## API
+## READ API (HTTP GET)
+
+### Get currencies and page counts
+HTTP GET ``/v1/transaction/values.json``
+Returns:
+```
+[
+	{
+		"accept_pages": 0, 
+		"currency": "MSC", 
+		"name": "Mastercoin", 
+		"name2": "", 
+		"pages": 355, 
+		"sell_pages": 0, 
+		"trend": "down", 
+		"trend2": "rgb(13,157,51)"
+	}, 
+	{
+		"accept_pages": 7, 
+		"currency": "TMSC", 
+		"name": "Test MSC", 
+		"name2": "", 
+		"pages": 126, 
+		"sell_pages": 4, 
+		"trend": "up", 
+		"trend2": "rgb(212,48,48)"
+	}
+]
+```
+
+### Get system version information
+HTTP GET ``/v1/system/revision.json``
+Returns:
+```
+{
+	"commit_hexsha": "c030d61e6e7d91c2149a7af8af6bca70e7c0638f", 
+	"commit_time": "20140131", 
+	"last_block": 284634, 
+	"last_parsed": "07 Feb 2014 15:48:39 GMT", 
+	"url": "https://github.com/grazcoin/mastercoin-tools/commit/c030d61e6e7d91c2149a7af8af6bca70e7c0638f"
+}
+```
+
+### Get a page of transaction & offer information
+HTTP GET ``/v1/transaction/general/{Currency}_{4 digit page}.json``
+Returns:
+```
+[
+	{
+		"amount": "00000000004c4b40", 
+		"baseCoin": "00", 
+		"block": "284632", 
+		"color": "bgc-done", 
+		"currencyId": "00000002", 
+		"currency_str": "Test Mastercoin", 
+		"dataSequenceNum": "01", 
+		"details": "1AxWcEqfV7FQ6qkZRL1PeHZ1EDGtpuZHCH", 
+		"formatted_amount": "0.05", 
+		"from_address": "1BxtgEa8UcrMzVZaW32zVyJh4Sg4KGFzxA", 
+		"icon": "simplesend", 
+		"icon_text": "Simple send", 
+		"index": "266", 
+		"invalid": false, 
+		"method": "multisig", 
+		"to_address": "1AxWcEqfV7FQ6qkZRL1PeHZ1EDGtpuZHCH", 
+		"transactionType": "00000000", 
+		"tx_hash": "cf919a86223e27ea49af5f5ec62cd5a8971f4ceaf0bab5a97c0e9849abf21774",
+		"tx_method_str": "multisig", 
+		"tx_time": "1391784042000", 
+		"tx_type_str": "Simple send"
+	}, 
+	...
+]
+```
+
+### Get information about a particular address
+HTTP GET ``/v1/address/addr/{address}.json``
+Returns:
+```
+{
+	"0": {
+		"accept_transactions": [], 
+		"balance": "2.21965319", 
+		"bought_transactions": [], 
+		"exodus_transactions": [], 
+		"offer_transactions": [], 
+		"received_transactions": [
+			{
+				"amount": "000000000d3aec07", 
+				"baseCoin": "00", 
+				"bitcoin_amount_desired": "000000", 
+				"block": "284544", 
+				"block_time_limit": "", 
+				"color": "bgc-new", 
+				"currencyId": "00000001", 
+				"currency_str": "Mastercoin", 
+				"dataSequenceNum": "6c", 
+				"details": "1AxWcEqfV7FQ6qkZRL1PeHZ1EDGtpuZHCH",
+				"formatted_amount": "2.21965319", 
+				"from_address": "1MaStErt4XsYHPwfrN9TpgdURLhHTdMenH", 
+				"icon": "simplesend", 
+				"icon_text": "Simple send (1 confirms)",
+				"index": "449", 
+				"invalid": false, 
+				"method": "basic", 
+				"to_address": "1AxWcEqfV7FQ6qkZRL1PeHZ1EDGtpuZHCH",
+				"transactionType": "00000000", 
+				"tx_hash": "e13e3018461a297e2ce3d2681d60e3f120efababc117fa9a40785029fb2d2282", 
+				"tx_method_str": "basic", 
+				"tx_time": "1391730636000", 
+				"tx_type_str": "Simple send"
+			}
+		], 
+		"sent_transactions": [], 
+		"sold_transactions": [], 
+		"total_bought": "0.0", 
+		"total_exodus": "0.0", 
+		"total_received": "2.21965319", 
+		"total_sell_accept": "0.0", 
+		"total_sell_offer": "0.0", 
+		"total_sent": "0.0", 
+		"total_sold": "0.0"
+	}, 
+	"1": {
+		"accept_transactions": [], 
+		"balance": "0.0", 
+		"bought_transactions": [], 
+		"exodus_transactions": [], 
+		"offer_transactions": [], 
+		"received_transactions": [], 
+		"sent_transactions": [], 
+		"sold_transactions": [], 
+		"total_bought": "0.0", 
+		"total_exodus": "0.0", 
+		"total_received": "0.0", 
+		"total_sell_accept": "0.0", 
+		"total_sell_offer": "0.0", 
+		"total_sent": "0.0", 
+		"total_sold": "0.0"
+	}, 
+	"address": "1AxWcEqfV7FQ6qkZRL1PeHZ1EDGtpuZHCH", 
+	"balance": [
+		{
+			"symbol": "MSC", 
+			"value": "2.21965319"
+		}, 
+		{
+			"symbol": "TMSC", 
+			"value": "0.0"
+		}, 
+		{
+			"symbol": "BTC", 
+			"value": "0.57421089"
+		}
+	]
+}
+```
+
+### Get detailed information about a particular offer
+HTTP Get ``/v1/exchange/offers/offers-{offer ID}.json``
+Returns:
+```
+[
+	{
+		"amount": "0000000077359400", 
+		"baseCoin": "00", 
+		"bitcoin_required": "2e-05", 
+		"block": "267568", 
+		"btc_offer_txid": "unknown", 
+		"color": "bgc-expired", 
+		"currencyId": "00000002", 
+		"currency_str": "Test Mastercoin", 
+		"dataSequenceNum": "01", 
+		"details": "unknown_price", 
+		"formatted_amount": "20.0", 
+		"formatted_amount_accepted": 20.0, 
+		"formatted_amount_bought": "0.0", 
+		"formatted_amount_requested": "20.0", 
+		"formatted_price_per_coin": "0.000001", 
+		"from_address": "1EdAjiApS5cCpHdH4RKPMab1xmMVRWjLvk", 
+		"icon": "sellaccept", 
+		"icon_text": "Payment expired", 
+		"index": "274", 
+		"invalid": false, 
+		"method": "multisig", 
+		"payment_done": false, 
+		"payment_expired": true, 
+		"payment_txid": "Not available", 
+		"sell_offer_txid": "02c300afb5c776d6013ba8833f4986f093e516c7511808146287b59689346596", 
+		"status": "Expired", 
+		"to_address": "13NRX88EZbS5q81x6XFrTECzrciPREo821", 
+		"transactionType": "00000016", 
+		"tx_hash": "33644e6f24b29e1ef170d78ff04eab6f7e19368908edc6d477f9902697a71d67", 
+		"tx_method_str": "multisig", 
+		"tx_time": "1383423463000", 
+		"tx_type_str": "Sell accept", 
+		"update_fs": true
+	}
+]
+```
+
+### Get detailed information about a particular transaction
+HTTP GET ``/v1/transaction/tx/{transaction ID}.json``
+Returns:
+```
+[
+	{
+		"amount": "00000000004c4b40", 
+		"baseCoin": "00", 
+		"block": "283922", 
+		"color": "bgc-new", 
+		"currencyId": "00000002", 
+		"currency_str": "Test Mastercoin", 
+		"dataSequenceNum": "01", 
+		"details": "19TRR5mBqiV1ZtmbhYmTcCfxvayk8esrfF", 
+		"formatted_amount": "0.05", 
+		"from_address": "1HG3s4Ext3sTqBTHrgftyUzG3cvx5ZbPCj", 
+		"icon": "simplesend", 
+		"icon_text": "Simple send (1 confirms)", 
+		"index": "68", 
+		"invalid": false, 
+		"method": "multisig", 
+		"to_address": "19TRR5mBqiV1ZtmbhYmTcCfxvayk8esrfF", 
+		"transactionType": "00000000", 
+		"tx_hash": "71b7f453d43ef2d56c004b21ce5bedf1f3f2e05c6ce7464ebbc1c10df421eeeb", 
+		"tx_method_str": "multisig", 
+		"tx_time": "1391417992000", 
+		"tx_type_str": "Simple send"
+	}
+]
+```
+
+## EDIT API (HTTP POST)
 
 ### Sending coins to an address:
 

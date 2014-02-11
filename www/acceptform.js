@@ -26,7 +26,7 @@ function AcceptOfferController($scope, $http) {
 
         // parse tx from url parameters
         var myURLParams = BTCUtils.getQueryStringArgs();
-        var file = 'tx/' + myURLParams['tx'] + '.json';
+        var file = '/v1/transaction/tx/' + myURLParams['tx'] + '.json';
 
         // Make the http request and process the result
 
@@ -421,7 +421,7 @@ BTNClientContext.Signing.addAddressToHistory = function () {
 $(document).ready(function myfunction() {
 
     $('#sendLoader').addClass('hideLoader');
-    
+ 
     //Combbox init
     BTNClientContext.Signing.initHistoryCombobox();
 
@@ -482,7 +482,6 @@ $(document).ready(function myfunction() {
         //BTNClientContext.Signing.SendTransaction();
         BTNClientContext.txSend();
 
-        
     });
 
     $('#verifyButton').click(function () {
@@ -626,20 +625,20 @@ BTNClientContext.tx_fetch = function(url, onSuccess, onError, postdata) {
         url: url,
         success: function(res) {
             $('#sendLoader').removeClass('showUntilAjax');
-	    
-	    $('#sendMessage').text('Transaction sent');
-	    $('#sendMessage').addClass('greenTextColor');
-	    $('#sendMessage').show();
+           
+            $('#sendMessage').text('Transaction sent');
+            $('#sendMessage').addClass('greenTextColor');
+            $('#sendMessage').show();
 
-	    //Get transaction hash code
-	    var link = "https://blockchain.info/tx/";
-	    //signed transaction code
-	    var code = JSON.parse(BTNClientContext.Signing.TransactionBBE).hash;
+            //Get transaction hash code
+            var link = "https://blockchain.info/tx/";
+            //signed transaction code
+            var code = JSON.parse(BTNClientContext.Signing.TransactionBBE).hash;
 
-	    link += code;
-	    $('#sendLink').attr('href', link);
-	    $('#sendLink').text(link);
-            $('#sendHyperlink').show();
+            link += code;
+            $('#sendLink').attr('href', link);
+            $('#sendLink').text(link);
+            $('#sendHyperlink').show();            
         },
         error:function (xhr, opt, err) {
             $('#sendMessage').text('Transaction send error');

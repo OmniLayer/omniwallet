@@ -30,7 +30,7 @@ function WalletController($scope, $http, $q) {
     $scope.uuid = uuid;
 
     $scope.getAddress = function (addr, callback) {
-      return returnval = $http.get("addr/" + addr + ".json").then(
+      return returnval = $http.get("/v1/address/addr/" + addr + ".json").then(
         function (value) {
         return value;
       },
