@@ -90,7 +90,7 @@ function AdressController($scope, $http) {
 		height: 130,
 		text: myURLParams['addr']
 		});
-	var file = '/v1/transaction/addr/' + myURLParams['addr'] + '.json';	
+	var file = '/v1/address/addr/' + myURLParams['addr'] + '.json';	
 	var currencyName = myURLParams['currency'];
         if (currencyName == 'MSC') {
            currencyNumber = 0;
