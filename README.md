@@ -66,6 +66,11 @@ Run npm install
 ```
 npm install
 ```
+Create the parsed blockchain data directory
+```
+sudo mkdir /var/lib/omniwallet
+sudo chown {user who will run omniwallet} /var/lib/omniwallet
+```
 
 ## Running
 
