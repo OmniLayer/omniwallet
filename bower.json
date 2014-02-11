@@ -1,0 +1,13 @@
+{
+	"name": "Omniwallet",
+	"version": "0.0.0",
+	"directory": "www",
+	"dependencies": {
+		"jquery": "~1.11",
+		"bootstrap": "~3.0",
+		"angular": "~1.2",
+		"respond": "~1.4",
+		"sjcl": "~1.0",
+		"html5shiv": "~3.6"
+	}
+}
