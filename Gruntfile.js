@@ -5,7 +5,8 @@ module.exports = function(grunt) {
 	grunt.initConfig( {
 		clean: {
 			bower: ['www/bower_components', '.bowerrc'],
-			git: [ 'node_modules/mastercoin-tools' ]
+			git: [ 'node_modules/mastercoin-tools' ],
+			html: [ 'Address.html', 'index.html', simplesend.html' ]
 		},
 
 		gitclone: {
