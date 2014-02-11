@@ -39,7 +39,7 @@ do
 
 		mkdir -p $DATADIR
 		cd $DATADIR
-		mkdir -p tx addr general offers mastercoin_verify/addresses mastercoin_verify/transactions www
+		mkdir -p tx addr general offers wallets mastercoin_verify/addresses mastercoin_verify/transactions www
 
 		# parse until full success
 		x=1 # assume failure

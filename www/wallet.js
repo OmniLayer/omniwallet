@@ -2,45 +2,49 @@ function WalletController($scope, $http, $q) {
 
   $scope.footer = "FOOTER";
   $scope.title = "TITLE";
-  
+
   $scope.addressArray = [];
   $scope.uuid = '';
   $scope.wallet = Wallet.GetWallet();
 
   $scope.DeleteAddress = function(addrIdx) {
-  var newAddressArray = Wallet.DeleteIndex($scope.uuid, addrIdx);
-  $scope.addressArray.splice(addrIdx,1);
+    var newAddressArray = Wallet.DeleteIndex($scope.uuid, addrIdx);
+    $scope.addressArray.splice(addrIdx,1);
   }
-  
+
   $scope.CreateNewWallet = function() {
-  Wallet.CreateNewWallet();
+    Wallet.CreateNewWallet();
   }
-  
+
+  $scope.SyncWithServer = function() {
+    Wallet.SyncWithServer();
+  }
+
   $scope.AddPrivKey = function() {
-   Wallet.AddPrivKey();
+    Wallet.AddPrivKey();
   }
   $scope.getWalletData = function () {
-  
-  var myURLParams = BTCUtils.getQueryStringArgs();
-  var uuid = myURLParams['uuid'];
-  $scope.uuid = uuid;
+
+    var myURLParams = BTCUtils.getQueryStringArgs();
+    var uuid = myURLParams['uuid'];
+    $scope.uuid = uuid;
 
     $scope.getAddress = function (addr, callback) {
       return returnval = $http.get("addr/" + addr + ".json").then(
         function (value) {
-		return value;
-        },
-        function( value ) {
-		// If the address can't be found in the blockchain, just make an empty dummy object.
-		return {
-			'data': {
-				'address': addr,
-				'balance': []
-			}
-		};
-        }
+        return value;
+      },
+      function( value ) {
+        // If the address can't be found in the blockchain, just make an empty dummy object.
+        return {
+          'data': {
+            'address': addr,
+            'balance': []
+          }
+        };
+      }
       );
-	return returnval;
+      return returnval;
     }
 
     $scope.getAddresses = function (callback) {
@@ -52,19 +56,19 @@ function WalletController($scope, $http, $q) {
 
       var prom = [];
       addresses.forEach(function (obj, i) {
-          var addr = obj;
+        var addr = obj;
 
-          prom.push($scope.getAddress(addr, function (value) {
-          }));
+        prom.push($scope.getAddress(addr, function (value) {
+        }));
       });
 
       $q.all(prom).then(
-	function (data) {
-          callback(data);
-	},
-	function( data ) {
-	  callback( data );
-	});
+        function (data) {
+        callback(data);
+      },
+      function( data ) {
+        callback( data );
+      });
     };
 
     //Get currencies
@@ -76,41 +80,41 @@ function WalletController($scope, $http, $q) {
 
       $scope.getAddresses(function (data) {
 
-          data.forEach(function (obj, i) {
+        data.forEach(function (obj, i) {
 
-            //Sort currencies as in the table and show only needed
-          
-            var dataBalance = [];
+          //Sort currencies as in the table and show only needed
 
-            
-            for (var i = 0; i < $scope.currencies.length; i++) {
-              //For each currency in the currencies find the balance and add it to the array
-              var currency = $scope.currencies[i].symbol;
+          var dataBalance = [];
+
+
+          for (var i = 0; i < $scope.currencies.length; i++) {
+            //For each currency in the currencies find the balance and add it to the array
+            var currency = $scope.currencies[i].symbol;
             //    console.log(currency);
 
-              var item = Wallet.FindItemInArray(obj.data.balance, currency);
-              //console.log('value');
-              //console.log(item);
+            var item = Wallet.FindItemInArray(obj.data.balance, currency);
+            //console.log('value');
+            //console.log(item);
 
-              dataBalance.push(item);
-            }
+            dataBalance.push(item);
+          }
 
-            var data = {
-              balance: dataBalance,
-              address: obj.data.address
+          var data = {
+            balance: dataBalance,
+            address: obj.data.address
 
-            };
+          };
 
-            $scope.addressArray.push(data);
-          });
+          $scope.addressArray.push(data);
+        });
 
-          //console.log($scope.addressArray);
-          //alert();
+        //console.log($scope.addressArray);
+        //alert();
       });
     });
 
-    
-    
+
+
   }
 
   $scope.getWalletData();
@@ -119,22 +123,36 @@ function WalletController($scope, $http, $q) {
 Wallet = function () {
 
 };
-  Wallet.FindItemInArray = function (array, item) {
-    if (array) {
-      for (var i = 0; i < array.length; i++) {
-        if (array[i].symbol == item) {
-            return array[i].value;
-        }
+Wallet.FindItemInArray = function (array, item) {
+  if (array) {
+    for (var i = 0; i < array.length; i++) {
+      if (array[i].symbol == item) {
+        return array[i].value;
       }
-      
     }
-    return "/";
-  };
+
+  }
+  return "/";
+};
 Wallet.StorageKey = "master-wallets";
 
 Wallet.SyncWithServer = function () {
+  console.log("Syncing");
+  if (!localStorage[Wallet.StorageKey]) {
+    Wallet.CreateNewWallet();
+  }
+  var wallets = JSON.parse(localStorage[Wallet.StorageKey]);
 
+  var postData = {
+    type: 'SYNCWALLET',
+    masterWallets: localStorage[Wallet.StorageKey]
+  }
+  console.log('posting', postData);
+  $.post('/v1/user/wallet/sync/', postData, function(data, status, headers, config) {
+    console.log(data);
+  });
 };
+
 Wallet.GenerateUUID = function () {
   var d = new Date().getTime();
   var uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
@@ -156,16 +174,16 @@ Wallet.GetWallet = function () {
       console.log( 'Found ' + wallets.length + ' wallets.' );
 
       for (var i = 0; i < wallets.length; i++) {
-          if (wallets[i].uuid == uuid) {
-            return wallets[i];
-          }
+        if (wallets[i].uuid == uuid) {
+          return wallets[i];
+        }
       }
       //Returning the first wallet
       if (!uuid && wallets.length > 0)
-      {
-        console.log( 'Just returning the first wallet.' );
-        return wallets[0];
-      }
+        {
+          console.log( 'Just returning the first wallet.' );
+          return wallets[0];
+        }
     }
     // No wallets - create one
     console.log( 'No wallets already exist, making a new one.' );
@@ -180,27 +198,27 @@ Wallet.AddAddress = function (address) {
   if (Wallet.supportsStorage()) {
 
     var uuidToOpen = "";
-    
+
     if (!localStorage[Wallet.StorageKey]) 
-    {
+      {
         Wallet.CreateNewWallet();
-    }
-    var wallets = JSON.parse(localStorage[Wallet.StorageKey]);
-      
-    //Add address to the first wallet
-    wallets[0].addresses.push(address);
-    
-    uniqueArray = wallets[0].addresses.filter(function(elem, pos) {
-    return wallets[0].addresses.indexOf(elem) == pos;
-});
+      }
+      var wallets = JSON.parse(localStorage[Wallet.StorageKey]);
 
-wallets[0].addresses = uniqueArray;
+      //Add address to the first wallet
+      wallets[0].addresses.push(address);
 
-    uuidToOpen = wallets[0].uuid;
+      uniqueArray = wallets[0].addresses.filter(function(elem, pos) {
+        return wallets[0].addresses.indexOf(elem) == pos;
+      });
 
-    localStorage[Wallet.StorageKey] = JSON.stringify(wallets);
-    
-    window.location.href = "wallet.html?uuid=" + uuidToOpen;
+      wallets[0].addresses = uniqueArray;
+
+      uuidToOpen = wallets[0].uuid;
+
+      localStorage[Wallet.StorageKey] = JSON.stringify(wallets);
+
+      window.location.href = "wallet.html?uuid=" + uuidToOpen;
 
   }
 };
@@ -209,27 +227,27 @@ Wallet.AddAddress = function (address) {
   if (Wallet.supportsStorage()) {
 
     var uuidToOpen = "";
-    
+
     if (!localStorage[Wallet.StorageKey]) 
-    {
+      {
         Wallet.CreateNewWallet();
-    }
-    var wallets = JSON.parse(localStorage[Wallet.StorageKey]);
-      
-    //Add address to the first wallet
-    wallets[0].addresses.push(address);
-    
-    uniqueArray = wallets[0].addresses.filter(function(elem, pos) {
-    return wallets[0].addresses.indexOf(elem) == pos;
-    });
+      }
+      var wallets = JSON.parse(localStorage[Wallet.StorageKey]);
 
-    wallets[0].addresses = uniqueArray;
+      //Add address to the first wallet
+      wallets[0].addresses.push(address);
 
-    uuidToOpen = wallets[0].uuid;
+      uniqueArray = wallets[0].addresses.filter(function(elem, pos) {
+        return wallets[0].addresses.indexOf(elem) == pos;
+      });
 
-    localStorage[Wallet.StorageKey] = JSON.stringify(wallets);
-    
-    window.location.href = "wallet.html?uuid=" + uuidToOpen;
+      wallets[0].addresses = uniqueArray;
+
+      uuidToOpen = wallets[0].uuid;
+
+      localStorage[Wallet.StorageKey] = JSON.stringify(wallets);
+
+      window.location.href = "wallet.html?uuid=" + uuidToOpen;
 
   }
 };
@@ -239,19 +257,19 @@ Wallet.GetAddressesOfFirstWallet = function () {
   if (!Wallet.supportsStorage()) {
     return retVal;
   }
-    
+
   if (!localStorage[Wallet.StorageKey]) {
     return retVal;
   }
-  
+
   var wallets = JSON.parse(localStorage[Wallet.StorageKey]);
-  
+
   if (wallets.length <= 0 || wallets.length > 100 || !wallets[0] || !wallets[0].addresses) {
-  return retVal;
+    return retVal;
   }
-      
+
   retVal = wallets[0].addresses;
-  
+
   return retVal;
 };
 
@@ -260,34 +278,34 @@ Wallet.DeleteIndex = function (walletUuid, idx) {
   if (!Wallet.supportsStorage()) {
     return null;
   }
-    
+
   if (!localStorage[Wallet.StorageKey]) {
     return null;
   }
-  
+
   var wallets = JSON.parse(localStorage[Wallet.StorageKey]);
-  
+
   if (wallets.length < 0 || wallets.length > 100) {
-  return null;
+    return null;
   }
-  
+
   var walletIndex = -1;
   for (var i = 0; i < wallets.length; i++) {
     if (wallets[i].uuid == walletUuid) {
-  walletIndex = i;
+      walletIndex = i;
     }
   }
-  
+
   if (walletIndex < 0)
     return null;
-  
-  
+
+
   wallets[walletIndex].addresses.splice(idx,1);
-  
+
   var retVal = wallets[walletIndex].addresses;
-  
+
   localStorage[Wallet.StorageKey] = JSON.stringify(wallets);
-  
+
   return retVal;
 };
 
@@ -304,8 +322,8 @@ Wallet.CreateNewWallet = function (in_uuid) {
       //Create new wallet
       var addresses = new Array();
       var wallet = {
-          uuid: uuid,
-          addresses: addresses
+        uuid: uuid,
+        addresses: addresses
       };
 
       wallets.unshift(wallet);
@@ -322,8 +340,8 @@ Wallet.CreateNewWallet = function (in_uuid) {
       var addresses = new Array();
 
       var obj = {
-          uuid: uuid,
-          addresses: addresses
+        uuid: uuid,
+        addresses: addresses
       };
 
       var wallets = new Array();
@@ -336,53 +354,53 @@ Wallet.CreateNewWallet = function (in_uuid) {
   }
 };
 Wallet.AddPrivKey = function() {
-    var wallet = this.GetWallet();
-    var priv = document.forms['privkeyentry'].privkey.value
-    var pass = document.forms['privkeyentry'].password.value
-    
-    if(pass) {
-      try {
-        var key = new _Bitcoin.ECKey(priv);
-        var enc = key.getEncryptedFormat(pass);
+  var wallet = this.GetWallet();
+  var priv = document.forms['privkeyentry'].privkey.value
+  var pass = document.forms['privkeyentry'].password.value
 
-        this.StoreKey({address: key.getBitcoinAddress().toString(), encrypted: enc });
-        this.AddAddress(key.getBitcoinAddress().toString());
-      } catch(e) {
-           console.log('error: not a known format',e);
-           $('.priverror').show();
-           $('.priventry').hide();
-        }
-    } else {
-          console.log('error: we require a passphrase to store keys.');
-          $('.priverror').show();
+  if(pass) {
+    try {
+      var key = new _Bitcoin.ECKey(priv);
+      var enc = key.getEncryptedFormat(pass);
+
+      this.StoreKey({address: key.getBitcoinAddress().toString(), encrypted: enc });
+      this.AddAddress(key.getBitcoinAddress().toString());
+    } catch(e) {
+      console.log('error: not a known format',e);
+      $('.priverror').show();
+      $('.priventry').hide();
     }
+  } else {
+    console.log('error: we require a passphrase to store keys.');
+    $('.priverror').show();
+  }
 }
 Wallet.StoreKey = function(encrypted) {
   if (Wallet.supportsStorage()) {
 
     var wallets = JSON.parse(localStorage[Wallet.StorageKey]);
-    
+
     if( !wallets[0].keys)
       wallets[0].keys = []
     //Add address to the first wallet
     wallets[0].keys.push(encrypted);
-    
+
     localStorage[Wallet.StorageKey] = JSON.stringify(wallets);
-    
+
   }
 }
 Wallet.DecryptPrivKey = function(encrypted, passphrase) {
-    //namespacing concerns, can't sign and decode on same page without this
-    __Bitcoin = Bitcoin; Bitcoin = _Bitcoin;
-    __Crypto = Crypto; Crypto = _Crypto
-		
-    var key = new _Bitcoin.ECKey.decodeEncryptedFormat(encrypted,passphrase);
-		var decrypted = key.getWalletImportFormat();
-    
-    _Bitcoin = Bitcoin; Bitcoin = __Bitcoin;
-    _Crypto = Crypto; Crypto = __Crypto
-    
-    return decrypted;
+  //namespacing concerns, can't sign and decode on same page without this
+  __Bitcoin = Bitcoin; Bitcoin = _Bitcoin;
+  __Crypto = Crypto; Crypto = _Crypto
+
+  var key = new _Bitcoin.ECKey.decodeEncryptedFormat(encrypted,passphrase);
+  var decrypted = key.getWalletImportFormat();
+
+  _Bitcoin = Bitcoin; Bitcoin = __Bitcoin;
+  _Crypto = Crypto; Crypto = __Crypto
+
+  return decrypted;
 }
 
 Wallet.supportsStorage = function () {
@@ -397,9 +415,5 @@ Wallet.supportsStorage = function () {
 $(document).ready(function () {
   $('#createNewWallet').click(function () {
     Wallet.CreateNewWallet();
-  });
-
-  $('#syncWithServer').click(function () {
-    Wallet.SyncWithServer();
   });
 });

@@ -104,7 +104,7 @@ BTNClientContext.Signing.Verify = function () {
 var dataToSend = { addr: from_addr };
 
 var ok = true;
-$.post('/wallet/validateaddr/', dataToSend, function (data) {
+$.post('/v1/transaction/validateaddr/', dataToSend, function (data) {
 console.log('success');
 console.log(data);
 
@@ -233,7 +233,7 @@ var dataToSend = { signedTransaction: rawTx };
 console.log(dataToSend);
 
 // Ajax call to /wallet/pushtx/
-$.post('/wallet/pushtx/', dataToSend, function (data) {
+$.post('/v1/transaction/pushtx/', dataToSend, function (data) {
 console.log('success');
 console.log(data);
 
@@ -267,7 +267,7 @@ var dataToSend = { from_address: from_address, to_address: to_address, amount: a
 console.log(dataToSend);
 
 // Ajax call to /wallet/send/
-$.post('/wallet/send/', dataToSend, function (data) {
+$.post('/v1/transaction/send/', dataToSend, function (data) {
 console.log('success');
 console.log(data);
 
