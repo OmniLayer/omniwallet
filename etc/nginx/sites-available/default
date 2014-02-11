@@ -37,35 +37,35 @@ server {
 	}
 
 	location ~ "^/v1/transaction/values.json$" {
-		alias /tmp/omniwallet/www/values.json;
+		alias /var/lib/omniwallet/www/values.json;
 	}
 
 	location ~ "^/v1/system/revision.json$" {
-		alias /tmp/omniwallet/www/revision.json;
+		alias /var/lib/omniwallet/www/revision.json;
 	}
 
 	location ~ "^/v1/exchange/offers/(.*)$" {
-		alias /tmp/omniwallet/www/offers/$1;
+		alias /var/lib/omniwallet/www/offers/$1;
 	}
 
 	location ~ "^/v1/transaction/general/(.*)$" {
-		alias /tmp/omniwallet/www/general/$1;
+		alias /var/lib/omniwallet/www/general/$1;
 	}
 
 	location ~ "^/v1/address/addr/(.*)$" {
-		alias /tmp/omniwallet/www/addr/$1;
+		alias /var/lib/omniwallet/www/addr/$1;
 	}
 
 	location ~ "^/v1/transaction/tx/(.*)$" {
-		alias /tmp/omniwallet/www/tx/$1;
+		alias /var/lib/omniwallet/www/tx/$1;
 	}
 
 	location ~ "^/v1/address/verify/(.*)$" {
-		alias /tmp/omniwallet/www/mastercoin_verify/addresses/$1;
+		alias /var/lib/omniwallet/www/mastercoin_verify/addresses/$1;
 	}
 
 	location ~ "^/v1/transaction/verify/(.*)$" {
-		alias /tmp/omniwallet/www/mastercoin_verify/transactions/$1;
+		alias /var/lib/omniwallet/www/mastercoin_verify/transactions/$1;
 	}
 
 	include uwsgi_params;
