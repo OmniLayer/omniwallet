@@ -42,7 +42,7 @@ function BTCController($scope, $http) {
 	
 	var num=str_pad($i, 4, '0', 'STR_PAD_LEFT');
 	var filter = (myURLParams['filter'] && myURLParams['filter'].length > 0)? myURLParams['filter'] + "_" : "";
-	var file =  '/transaction/general/' + myURLParams['currency'] + '_' + filter + num + '.json';
+	var file =  '/v1/transaction/general/' + myURLParams['currency'] + '_' + filter + num + '.json';
         // Make the http request and process the result
 	    $http.get(
 	   file,
@@ -87,7 +87,7 @@ $scope.initPages = function($n) {
      	if (startIndex == -1){
 	    var myURLParams = BTCUtils.getQueryStringArgs();
 	    var filter = (myURLParams['filter'] && myURLParams['filter'].length > 0)? myURLParams['filter'] + "_" : "";
-	    var file =  '/transaction/general/' + myURLParams['currency'] + '_' + filter + num + '.json';
+	    var file =  '/v1/transaction/general/' + myURLParams['currency'] + '_' + filter + num + '.json';
             $http.get(file).success(function (data, status, headers, config) {
                 angular.forEach(data, function(item) {
                               item.source = num;
