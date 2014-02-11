@@ -15,7 +15,7 @@ function NavigationController($scope, $http) {
 
         $scope.values = {};
         // Nav bar selection - Make the http request and process the result
-        $http.get('/v1/transactions/values.json', {}).success(function (data, status, headers, config) {
+        $http.get('/v1/transaction/values.json', {}).success(function (data, status, headers, config) {
            $scope.values = data;
 	   angular.forEach($scope.values, function(value, key) {
 	    if (value.currency==$scope.currency) {
