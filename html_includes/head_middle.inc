@@ -4,8 +4,8 @@
          <meta http-equiv="refresh" content="0;url=javascript_required.html">
       </noscript>
       <!-- Bootstrap core CSS -->
-      <link href="bower_components/bootstrap/dist/cs/bootstrap.css" rel="stylesheet">
-      <link href="bower_components/bootstrap/dist/cs/bootstrap-theme.css" rel="stylesheet">
+      <link href="bower_components/bootstrap/dist/css/bootstrap.css" rel="stylesheet">
+      <link href="bower_components/bootstrap/dist/css/bootstrap-theme.css" rel="stylesheet">
       <link href="css/search.css" rel="stylesheet" />
       <script src="bower_components/jquery/jquery.min.js"></script>
       <script src="bower_components/angular/angular.min.js"></script>
