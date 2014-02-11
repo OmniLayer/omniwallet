@@ -1,0 +1,9 @@
+{
+	"name": "Omniwallet",
+	"version": "0.0.0",
+	"directory": "www",
+	"dependencies": {
+		"jquery": "~2.0",
+		"bootstrap": "~3.1"
+	}
+}

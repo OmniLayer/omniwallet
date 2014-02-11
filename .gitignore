@@ -25,3 +25,7 @@ compiled
 
 # Python Artifacts
 *.pyc
+
+# Bower stuff
+.bowerrc
+www/bower_components/
