@@ -20,6 +20,10 @@ function WalletController($scope, $http, $q) {
     Wallet.SyncWithServer();
   }
 
+  $scope.RestoreWallet = function() {
+    Wallet.RestoreWallet();
+  }
+
   $scope.AddPrivKey = function() {
     Wallet.AddPrivKey();
   }
@@ -149,6 +153,19 @@ Wallet.SyncWithServer = function () {
   }
   console.log('posting', postData);
   $.post('/v1/user/wallet/sync/', postData, function(data, status, headers, config) {
+    console.log(data);
+  });
+};
+
+Wallet.RestoreWallet = function () {
+  var uuid = document.forms['uuidEntry'].uuidentry.value
+  var password = document.forms['uuidEntry'].password.value
+  console.log(uuid);
+  var postData = {
+    type: 'RESTOREWALLET',
+    uuid: uuid
+  }
+  $.post('/v1/user/wallet/restore/', postData, function(data, status, headers, config) {
     console.log(data);
   });
 };
