@@ -170,6 +170,7 @@ Wallet.RestoreWallet = function () {
     var wallet = data.wallet;
 
     var wallets = JSON.parse(localStorage[Wallet.StorageKey]);
+    console.log(wallets);
     wallets.push(wallet);
     localStorage[Wallet.StorageKey] = JSON.stringify(wallets);
 
