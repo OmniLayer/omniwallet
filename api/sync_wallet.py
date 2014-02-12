@@ -12,7 +12,7 @@ def sync_wallet_response(request_dict):
   if not request_dict.has_key('type'):
     return (None, 'No field type in response dict '+str(request_dict))
 
-  req_type = request_dict['type'][0].upper() 
+  req_type = request_dict['type'][0].upper()
   if req_type == "SYNCWALLET":
     syncWallets(request_dict['masterWallets'][0])
   else:
