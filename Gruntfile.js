@@ -6,7 +6,6 @@ module.exports = function(grunt) {
 		clean: {
 			bower: ['www/bower_components', '.bowerrc'],
 			git: [ 'node_modules/mastercoin-tools' ],
-			html: [ 'Address.html', 'index.html', 'simplesend.html' ]
 		},
 
 		gitclone: {
@@ -16,12 +15,16 @@ module.exports = function(grunt) {
                 			branch: 'master',
                 			directory: 'node_modules/mastercoin-tools'
 				},
+			},
+			"bitcoinjs-lib": {
+				options: {
+					repository: "https://github.com/BitGo/bitcoinjs-lib.git",
+					branch: 'master',
+					directory: 'www/bower_components/bitcoinjs-lib'
+				}
 			}
 		},
 		shell: {
-			html: {
-				command: "./gen_www.sh"
-			},
 			bower_install_directory: {
 				options: {
 					stdout: true,
@@ -35,6 +38,26 @@ module.exports = function(grunt) {
 					stderr: true
 				},
 				command: 'bower install'
+			},
+			submodules: {
+				options: {
+					stdout: true,
+					stderr: true,
+					execOptions: {
+						cwd: "www/bower_components/bitcoinjs-lib"
+					}
+				},
+				command: "git submodule update --init"
+			},
+			"bitcoinjs-lib": {
+				options: {
+					stdout: true,
+					stderr: true,
+					execOptions: {
+						cwd: "www/bower_components/bitcoinjs-lib",
+					}
+				},
+				command: ". ./build.sh"
 			}
 		}
 	} );
@@ -44,9 +67,17 @@ module.exports = function(grunt) {
 	grunt.registerTask( 'default', function( file ) {
 		if( !grunt.file.exists( 'node_modules/mastercoin-tools' ))
 			grunt.task.run( 'gitclone:mastercointools' );
-		grunt.task.run( 'shell' );
+		grunt.task.run( [ 'shell:bower_install_directory', 'shell:bower' ]);
+
+		if( !grunt.file.exists( 'www/bower_components/bitcoinjs-lib' ))
+			grunt.task.run( 'gitclone:bitcoinjs-lib' );
+		if( !grunt.file.exists( 'www/bower_components/bitcoinjs-lib/src/crypto-js/src' ))
+		{
+			grunt.task.run( 'shell:submodules' );
+		}
+		grunt.task.run( 'shell:bitcoinjs-lib')
+
 	} );
 
-	grunt.registerTask( 'build', 'shell' );
 	grunt.registerTask( 'clean', 'clean' );
 };
