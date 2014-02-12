@@ -92,7 +92,7 @@
 							<td class="btnCell">
 							<button type="button" ng-click="CreateNewWallet()" class="btc-tbl-btn pull-right btn btn-success btn-xs">Create new wallet</button>
 							<button type="button" ng-click="SyncWithServer()" class="btc-tbl-btn pull-right btn btn-success btn-xs">Sync with server</button>
-							<button type="button" onclick="$('.uuidentry').show()" class="btc-tbl-btn pull-right btn btn-success btn-xs">Sync with server</button>
+							<button type="button" onclick="$('.uuidentry').show()" class="btc-tbl-btn pull-right btn btn-success btn-xs">Restore from server</button>
               <button type="button" style="margin-top:5px;" onclick="$('.priverror').hide();$('.priventry').show()" class="col-xs-4 btc-tbl-btn pull-right btn btn-success btn-xs">Add priv key</button>
               <button type="button" style="margin-top:5px;" onclick="$('.priverror').hide();$('.privdecode').show()" class="col-xs-5 btc-tbl-btn pull-right btn btn-success btn-xs">Export priv key</button>
 
@@ -123,7 +123,7 @@
             <span class="input-group-addon">Enter UUID:</span>
             <input type="text" name=uuidentry class="form-control" placeholder="550e8400-e29b-41d4-a716-446655440000">
             <input type="text" name=password class="form-control" placeholder="enter passphrase to decrypt wallet locally">
-            <input type="button" value=submit ng-click="AddPrivKey()" style=width:100% placeholder="submit"></input>
+            <input type="button" value=submit ng-click="RestoreWallet()" style=width:100% placeholder="submit"></input>
           </form>
 				</div>
             		    </div>

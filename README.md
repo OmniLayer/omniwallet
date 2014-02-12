@@ -633,7 +633,7 @@ Example
 ```
 {
   "uuid": "02ddc252-7fb0-4e7d-c28e-be94a5dc56d0",
-  "addresses": "1JwSSubhmg6iPtRjtyqhUYYH7bZg3Lfy1T",
+  "addresses": ["1JwSSubhmg6iPtRjtyqhUYYH7bZg3Lfy1T"],
   "keys": [
     {
       "address": "1JwSSubhmg6iPtRjtyqhUYYH7bZg3Lfy1T",
@@ -660,3 +660,41 @@ Where:
 | masterWallets        | list of wallets user wants to save |
 
 Returns no data
+
+#### Restoring Wallet Information
+```
+var postData = {
+  type: 'RESTOREWALLET',
+  uuid: uuid
+};
+$.post('/v1/user/wallet/restore/', postData, function (data) {
+  // Do something with data.wallet
+})
+```
+
+Where:
+
+| Variable            | Possible Values              |
+| ------------------- | ---------------------------- |
+| type                | 'RESTOREWALLET' |
+| uuid | UUID of wallet to retrieve |
+
+Returns status 'OK' if wallet was found. Example:
+
+
+```
+{
+  "status": "OK",
+  "wallet":
+  {
+    "uuid": "02ddc252-7fb0-4e7d-c28e-be94a5dc56d0",
+    "addresses": ["1JwSSubhmg6iPtRjtyqhUYYH7bZg3Lfy1T"],
+    "keys": [
+      {
+        "address": "1JwSSubhmg6iPtRjtyqhUYYH7bZg3Lfy1T",
+        "encrypted": "6PRQ7ivF7LhQs7m4ZYbmj8Z1U7847LENYS22YBQNDLDXiVuKWZ8XDCEhjF"
+      }
+    ]
+  }
+}
+```
