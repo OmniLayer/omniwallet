@@ -72,10 +72,10 @@ module.exports = function(grunt) {
 		if( !grunt.file.exists( 'www/bower_components/bitcoinjs-lib' ))
 			grunt.task.run( 'gitclone:bitcoinjs-lib' );
 		if( !grunt.file.exists( 'www/bower_components/bitcoinjs-lib/src/crypto-js/src' ))
-		{
 			grunt.task.run( 'shell:submodules' );
-		}
-		grunt.task.run( 'shell:bitcoinjs-lib')
+		if( !grunt.file.exists( 'www/bower_components/bitcoinjs-lib/build/bitcoinjs-lib.js' ) ||
+			!grunt.file.exists( 'www/bower_components/bitcoinjs-lib/build/bitcoinjs-lib.min.js' ))
+			grunt.task.run( 'shell:bitcoinjs-lib' );
 
 	} );
 
