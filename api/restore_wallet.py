@@ -29,10 +29,14 @@ def restore_wallet_response(request_dict):
 
 def restore_wallet(uuid):
   filename = data_dir_root + '/wallets/' + uuid + '.json'
-  print filename
+
+  if not os.path.exists(filename):
+    return (None, "Wallet does not exist")
+
   with open(filename, 'r') as f:
     wallet = json.load(f)
-  return ("OK", None)
+
+  return (wallet, None)
 
 def restore_wallet_handler(environ, start_response):
   return general_handler(environ, start_response, restore_wallet_response)
