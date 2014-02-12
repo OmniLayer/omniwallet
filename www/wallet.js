@@ -167,6 +167,13 @@ Wallet.RestoreWallet = function () {
   }
   $.post('/v1/user/wallet/restore/', postData, function(data, status, headers, config) {
     console.log(data);
+    var wallet = data.wallet;
+
+    var wallets = JSON.parse(localStorage[Wallet.StorageKey]);
+    wallets.push(wallet);
+    localStorage[Wallet.StorageKey] = JSON.stringify(wallets);
+
+    window.location.href = "wallet.html?uuid=" + uuid;
   });
 };
 
