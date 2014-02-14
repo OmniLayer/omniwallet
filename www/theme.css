@@ -5,3 +5,10 @@
 a {
    cursor: pointer;
 }
+
+.navbar-brand img {
+  max-height: 10%;
+}
+.navbar-nav > li {
+  padding-top: 5%;
+}
