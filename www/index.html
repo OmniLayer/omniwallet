@@ -2,28 +2,42 @@
 <html lang="en" ng-app>
   <head>
     <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title> Omniwallet </title>
+
+    <link rel="shortcut icon" href="ico/favicon.png">
+    
+    <noscript>
+        Java Script has been disabled!
+        <meta http-equiv="refresh" content="0;url=javascript_required.html">
+    </noscript>
+
     <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap-theme.min.css">
+    <link rel="stylesheet" href="theme.css">
+
     <script src="bower_components/jquery/jquery.min.js"></script>
     <script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
     <script src="bower_components/angular/angular.js"></script>
     <script src="js/app.js"></script>
   </head>
   <body>
-    <div class="container">
-    <div class="header" ng-controller="Ctrl">
-      <div ng-include="templates['header']"></div> 
+    <div id="wrap">
+       <div class="container">
+         <div class="header" ng-controller="Ctrl">
+           <div ng-include="templates['header']"></div> 
+         </div>
+        <div class="middle" ng-controller="Ctrl">
+          <div ng-include="templates['middle']"></div> 
+        </div>
+        <div class="sidecar" ng-controller="Ctrl">
+          <div ng-include="templates['sidecar']"></div>
+        </div>
+        <div class="footer" ng-controller="Ctrl">
+          <div ng-include="templates['footer']"></div> 
+        </div>
+      </div>
     </div>
-      <div class="row">
-      <div class="text-danger"> 1 + 2 = {{1 + 2}}</div>
-    <div class="col-xs-5">
-    <input type="text" class="form-control " placeholder="Text input">
-    </div>
-    </div>
-    <div class="header" ng-controller="Ctrl">
-      <div ng-include="templates['footer']"></div> 
-    </div>
-  </div>
   </body>
 </html>

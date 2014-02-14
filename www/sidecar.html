@@ -1,0 +1,18 @@
+<div ng-controller="SidecarController" ng-init="getInit()" >
+    <nav>
+      test
+      <div class="navItems col-xs-6 col-sm-12 no-padding" ng-repeat="val in values">
+          <a href="index.html?currency={{val.currency}}" class="panel-link">
+            <div class="panel panel-default {{val.selected}}">
+                <div class="panel-heading">
+                  <img ng-src="img/{{val.trend}}Icon.png"/> {{val.name}}
+                </div>
+                <div class="panel-body" ng-style="{'background': val.trend2}">
+                  <div class="col-xs-3 no-padding">{{val.currency}}</div>
+                  <div class="col-xs-9">{{val.name2}}</div>
+                </div>
+            </div>
+          </a>
+      </div>
+    </nav>
+</div>
