@@ -1,9 +1,33 @@
-function Ctrl($scope) {
-   $scope.templates = { 
+angular.module('omniwallet', ['ngRoute'],
+  function($routeProvider, $locationProvider) {
+    $routeProvider.when('/wallet', {
+      templateUrl: 'wallet.html',
+      controller: WalletCtrl
+    });
+    $routeProvider.when('/about', {
+       templateUrl: 'about.html',
+       controller: AboutCtrl
+    });
+    $locationProvider.html5Mode(false).hashPrefix('!');
+});
+
+function WalletCtrl() {
+}
+function AboutCtrl() {
+}
+
+function Ctrl($scope, $route, $routeParams, $location) {
+  
+  $scope.$route = $route
+  $scope.$location = $location
+  console.log($scope.$location.url())
+  $scope.templates = { 
         'header': 'header.html', 
         'footer': 'footer.html',
         'middle': 'middle.html', 
-        'sidecar': 'sidecar.html'};
+        'sidecar': 'sidecar.html'
+  };
+  
 }
 
 function NavigationController($scope, $http) {
@@ -12,6 +36,7 @@ function NavigationController($scope, $http) {
     $scope.getNavData = function() {
       console.log('init 0');
     }
+
 }
 
 function BTCController($scope, $http) {
