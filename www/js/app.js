@@ -4,30 +4,40 @@ angular.module('omniwallet', ['ngRoute'],
       templateUrl: 'wallet.html',
       controller: WalletCtrl
     });
+    $routeProvider.when('/trade', {
+       templateUrl: 'trade.html',
+       controller: TradeCtrl
+    });
+    $routeProvider.when('/explorer', {
+       templateUrl: 'explorer.html',
+       controller: ExplorerCtrl
+    });
     $routeProvider.when('/about', {
        templateUrl: 'about.html',
        controller: AboutCtrl
     });
-    $locationProvider.html5Mode(false).hashPrefix('!');
+    $locationProvider.html5Mode(true).hashPrefix('!');
 });
 
+function ExplorerCtrl() {
+}
+function TradeCtrl() {
+}
 function WalletCtrl() {
 }
-function AboutCtrl() {
+function AboutCtrl($scope, $location) {
+  console.log($scope.$location.path())
 }
 
 function Ctrl($scope, $route, $routeParams, $location) {
   
   $scope.$route = $route
   $scope.$location = $location
-  console.log($scope.$location.url())
+
   $scope.templates = { 
         'header': 'header.html', 
         'footer': 'footer.html',
-        'middle': 'middle.html', 
-        'sidecar': 'sidecar.html'
   };
-  
 }
 
 function NavigationController($scope, $http) {

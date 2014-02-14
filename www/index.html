@@ -23,7 +23,6 @@
     <script src="bower_components/angular-route/angular-route.js"></script>
     <script src="js/app.js"></script>
     
-    <base href="/index.html">
   </head>
   <body>
     <div id="wrap">
@@ -32,10 +31,8 @@
            <div ng-include="templates['header']"></div> 
          </div>
         <div class="middle">
-
             <br> {{ $location.path() }}
             init
-
             <div ng-view></div>
         </div>
         <div class="footer">
