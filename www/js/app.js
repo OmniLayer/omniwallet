@@ -52,16 +52,16 @@ function NavigationController($scope, $http) {
 function BTCController($scope, $http) {
     // Scope members
     $scope.transactions = {};
-    $scope.caption = '';
-    $scope.pages = {};
-    $scope.showPages = 5;
-    $scope.currentPageStart = 1;
-    $scope.currentPage = 1;
-    $scope.numberOfPages = 12; // this we will get somehow from the server
-    $scope.firstLoad = true;
-    $scope.prevClass='disabled';
-    $scope.nextClass='';
+    $scope.currency = 'MSC'
     
+    $scope.getData = function getData() {  
+      var file =  '/v1/transaction/general/TMSC_0001.json';
+      $http.get( file, {}).success(
+        function (data, status, headers, config) {
+          $scope.transactions = data;
+          console.log($scope.transactions);
+      });
+    }
 }
 
 

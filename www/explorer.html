@@ -1,16 +1,27 @@
-<table class="table table-striped table-hover table-condensed">
-  <caption>Latest {{currency}} transactions</caption>
-  <thead>
-      <tr>
-        <th>Transaction</th>
-        <th>Details</th>
-        <th>Amount</th>
-        <th>Block time</th>
-      </tr>
-  </thead>
-  <tbody>
-  </tbody>
+<div ng-controller="BTCController" ng-init="getData()">
+  <table class="table table-striped table-hover table-condensed">
+    <caption>Latest {{currency}} transactions</caption>
+    <thead>
+        <tr>
+          <th>Transaction</th>
+          <th>Details</th>
+          <th>Amount</th>
+          <th>Block time</th>
+        </tr>
+    </thead>
+    <tbody>
+    </tbody>
+
+  <tr ng-repeat="trans in transactions">
+   
+   <td>{{trans.tx_hash}}</td>
+   <td>{{trans.tx_type_str}}</td>
+   <td>{{trans.formatted_amount}}</td>
+    <td>{{trans.tx_time | date:'dd MMM HH:mm'}}</td>
+  </tr>
+</div>
 </table>
+
 <div class="sidecar" ng-controller="Ctrl">
-test
+sidecar test
 </div>
