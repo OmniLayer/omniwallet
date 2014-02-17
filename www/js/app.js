@@ -2,9 +2,10 @@ angular.module('omniwallet', ['ngRoute'],
   function($routeProvider, $locationProvider) {
     $routeProvider.when('/wallet/:page?', {
       templateUrl: function(route) {       
-        var availableViews = ['overview','addresses','send', 'history'];      //new views added here
-        var viewFound = availableViews.indexOf(route.page);
+        //new views added here
+        var availableViews = ['overview','addresses','send', 'history'];
         
+        var viewFound = availableViews.indexOf(route.page);
         if( viewFound == -1 ) 
           route.page = 'overview';
         
@@ -14,15 +15,45 @@ angular.module('omniwallet', ['ngRoute'],
       },
       controller: WalletCtrl
     }).otherwise({ redirectTo: '/wallet' });
-$routeProvider.when('/trade/:page?', {
-       templateUrl: 'trade.html',
+    $routeProvider.when('/trade/:page?', {
+       templateUrl: function(route) {       
+        var availableViews = ['overview','book','charts', 'alerts'];
+        
+        var viewFound = availableViews.indexOf(route.page);
+        if( viewFound == -1 ) 
+          route.page = 'overview';
+        
+        var view = '/trade_' + route.page + '.html';
+        //DEBUG console.log(view, route.page, view == '/wallet_addresses.html')
+        return view
+       },
        controller: TradeCtrl
     }).when('/explorer/:page?', {
-       templateUrl: 'explorer.html',
+       templateUrl: function(route) {       
+        var availableViews = ['overview','assets','bookmarks', 'following'];
+        
+        var viewFound = availableViews.indexOf(route.page);
+        if( viewFound == -1 ) 
+          route.page = 'overview';
+        
+        var view = '/explorer_' + route.page + '.html';
+        //DEBUG console.log(view, route.page, view == '/wallet_addresses.html')
+        return view
+       },
        controller: ExplorerCtrl
     }).otherwise({ redirectTo: '/explorer' });
-$routeProvider.when('/about/:page?', {
-       templateUrl: 'about.html',
+    $routeProvider.when('/about/:page?', {
+       templateUrl: function(route) {       
+        var availableViews = ['omniwallet','mastercoin','contact', 'help'];
+        
+        var viewFound = availableViews.indexOf(route.page);
+        if( viewFound == -1 ) //Default view
+          route.page = 'omniwallet';
+        
+        var view = '/about_' + route.page + '.html';
+        //DEBUG console.log(view, route.page, view == '/wallet_addresses.html')
+        return view
+       },
        controller: AboutCtrl
     }).when('/', {
        templateUrl: 'homepage.html',
