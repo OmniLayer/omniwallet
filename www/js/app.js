@@ -67,8 +67,12 @@ function TradeCtrl() {
 }
 function WalletController() {
   console.log('initialized wallet')
-
 }
+function WalletHistoryController() {
+  console.log('initialized wallet history')
+}
+
+
 function AboutCtrl($scope, $location) {
 }
 
