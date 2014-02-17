@@ -4,22 +4,13 @@ angular.module('omniwallet', ['ngRoute'],
       templateUrl: function(route) {       
         var availableViews = ['overview','addresses'];      //new views added here
         var viewFound = availableViews.indexOf(route.page);
+        
         if( viewFound == -1 ) 
           route.page = 'overview';
         
-        var view = 'wallet_' + route.page + '.html';
-        //DEBUG 
-        console.log(view, route.page, view == 'wallet_addresses.html')
-
+        var view = '/wallet_' + route.page + '.html';
+        //DEBUG console.log(view, route.page, view == '/wallet_addresses.html')
         return view
-                            /*
-        if(Math.random() > 0.5)
-        var thing = 'wallet_addresses.html'
-        else 
-        var thing = 'wallet_overview.html'
-
-        console.log(thing)
-        return thing    */   
       },
       controller: WalletCtrl
     }).otherwise({ redirectTo: '/wallet' });
