@@ -16,9 +16,15 @@ angular.module('omniwallet', ['ngRoute'],
        templateUrl: 'about.html',
        controller: AboutCtrl
     });
+    $routeProvider.when('/', {
+       templateUrl: 'homepage.html',
+       controller: HomeCtrl
+    });
     $locationProvider.html5Mode(true).hashPrefix('!');
 });
 
+function HomeCtrl() {
+}
 function ExplorerCtrl() {
 }
 function TradeCtrl() {
@@ -33,11 +39,13 @@ function Ctrl($scope, $route, $routeParams, $location) {
   
   $scope.$route = $route
   $scope.$location = $location
-
+     
   $scope.templates = { 
         'header': 'header.html', 
         'footer': 'footer.html',
+        'sidecar': 'sidecar.html'
   };
+
 }
 
 function NavigationController($scope, $http) {
@@ -75,8 +83,17 @@ function RevisionController($scope, $http) {
 
 function SidecarController($scope, $http) {
     $scope.values = {};
-    
-    $scope.getInit = function() {
-      console.log('init 3');
+    $scope.setView = function(viewName) {
+        $scope.view = $scope.sidecarTemplates[viewName]
+    };
+    $scope.getView = function() {
+       return $scope.view;
     }
+    $scope.sidecarTemplates = {
+          'explorer':'explorer_sc.html',
+          'about': 'about_sc.html',
+          'trade': 'trade_sc.html',
+          'wallet': 'wallet_sc.html'
+    };
+
 }

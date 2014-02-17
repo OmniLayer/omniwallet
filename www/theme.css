@@ -1,6 +1,5 @@
 .middle {
   margin-top: 125px;
-  height: 1400px; /* should remove this when we have content in the middle */
 }
 a {
    cursor: pointer;

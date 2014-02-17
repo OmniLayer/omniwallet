@@ -1,4 +1,8 @@
-<div ng-controller="BTCController" ng-init="getData()">
+<div class="sidecar col-xs-2" ng-controller="SidecarController" ng-init=setView('explorer')>
+    <div ng-include="templates['sidecar']"></div>
+</div>
+
+<div class="col-xs-10" ng-controller="BTCController" ng-init="getData()">
   <table class="table table-striped table-hover table-condensed">
     <caption>Latest {{currency}} transactions</caption>
     <thead>
@@ -22,6 +26,3 @@
 </div>
 </table>
 
-<div class="sidecar" ng-controller="Ctrl">
-sidecar test
-</div>
