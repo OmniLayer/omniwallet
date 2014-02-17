@@ -28,14 +28,6 @@ server {
 	# Make site accessible from http://localhost/
 	server_name localhost;
 
-	location / {
-		# First attempt to serve request as file, then
-		# as directory, then fall back to displaying a 404.
-		try_files $uri $uri/ /index.html;
-		# Uncomment to enable naxsi on this location
-		# include /etc/nginx/naxsi.rules
-	}
-
 	location ~ "^/v1/transaction/values.json$" {
 		alias /var/lib/omniwallet/www/values.json;
 	}
@@ -106,6 +98,11 @@ server {
 
         location /v1/user/wallet/sync/ {
             set   $app   sync_wallet;
+            uwsgi_pass   127.0.0.1:$PORT;
+        }
+
+        location /v1/user/wallet/restore/ {
+            set   $app   restore_wallet;
             uwsgi_pass   127.0.0.1:$PORT;
         }
 

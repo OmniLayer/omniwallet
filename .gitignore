@@ -3,6 +3,7 @@ node_modules
 *.log
 .bin
 .DS_Store
+*.bak
 
 *~
 
@@ -25,3 +26,7 @@ compiled
 
 # Python Artifacts
 *.pyc
+
+# Bower stuff
+.bowerrc
+www/bower_components/

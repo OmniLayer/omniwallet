@@ -8,7 +8,9 @@
 	"dependencies": {
 		"grunt": "0.4.x",
 		"grunt-git": "0.2.x",
-		"grunt-shell": "0.6.x"
+		"grunt-shell": "0.6.x",
+		"grunt-contrib-clean": "0.5.x",
+		"bower": ">=1.2.8"
 	},
 	"devDependencies": {
 		"connect": "2.x.x"
