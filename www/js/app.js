@@ -11,7 +11,7 @@ angular.module('omniwallet', ['ngRoute'],
         //DEBUG 
         console.log(view, route.page, view == 'wallet_addresses.html')
 
-       // return view
+        return view
                             /*
         if(Math.random() > 0.5)
         var thing = 'wallet_addresses.html'
