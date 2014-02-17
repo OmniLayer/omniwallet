@@ -1,18 +1,18 @@
 angular.module('omniwallet', ['ngRoute'],
   function($routeProvider, $locationProvider) {
-    $routeProvider.when('/wallet', {
+    $routeProvider.when('/wallet/:page?', {
       templateUrl: 'wallet.html',
       controller: WalletCtrl
     });
-    $routeProvider.when('/trade', {
+    $routeProvider.when('/trade/:page?', {
        templateUrl: 'trade.html',
        controller: TradeCtrl
     });
-    $routeProvider.when('/explorer', {
+    $routeProvider.when('/explorer/:page?', {
        templateUrl: 'explorer.html',
        controller: ExplorerCtrl
     });
-    $routeProvider.when('/about', {
+    $routeProvider.when('/about/:page?', {
        templateUrl: 'about.html',
        controller: AboutCtrl
     });
