@@ -12,8 +12,7 @@ angular.module('omniwallet', ['ngRoute'],
         var view = '/wallet_' + route.page + '.html';
         //DEBUG console.log(view, route.page, view == '/wallet_addresses.html')
         return view
-      },
-      controller: WalletCtrl
+      }
     }).otherwise({ redirectTo: '/wallet' });
     $routeProvider.when('/trade/:page?', {
        templateUrl: function(route) {       
@@ -26,8 +25,7 @@ angular.module('omniwallet', ['ngRoute'],
         var view = '/trade_' + route.page + '.html';
         //DEBUG console.log(view, route.page, view == '/wallet_addresses.html')
         return view
-       },
-       controller: TradeCtrl
+       }
     }).when('/explorer/:page?', {
        templateUrl: function(route) {       
         var availableViews = ['overview','assets','bookmarks', 'following'];
@@ -39,8 +37,7 @@ angular.module('omniwallet', ['ngRoute'],
         var view = '/explorer_' + route.page + '.html';
         //DEBUG console.log(view, route.page, view == '/wallet_addresses.html')
         return view
-       },
-       controller: ExplorerCtrl
+       }
     }).otherwise({ redirectTo: '/explorer' });
     $routeProvider.when('/about/:page?', {
        templateUrl: function(route) {       
@@ -53,8 +50,7 @@ angular.module('omniwallet', ['ngRoute'],
         var view = '/about_' + route.page + '.html';
         //DEBUG console.log(view, route.page, view == '/wallet_addresses.html')
         return view
-       },
-       controller: AboutCtrl
+       }
     }).when('/', {
        templateUrl: 'homepage.html',
        controller: HomeCtrl
@@ -69,7 +65,8 @@ function ExplorerCtrl() {
 }
 function TradeCtrl() {
 }
-function WalletCtrl($rootScope, $route) {
+function WalletController() {
+  console.log('initialized wallet')
 
 }
 function AboutCtrl($scope, $location) {
