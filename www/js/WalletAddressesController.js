@@ -22,9 +22,8 @@ function WalletAddressesController($scope, $http , $q) {
 		var requests = [];
 		var wallet = $scope.getWallet();
 
-		var balances = {
-
-		};
+		var balances = {};
+		var currencyInfo;
 
 		if( wallet )
 			wallet.addresses.forEach( function( addr ) {
@@ -51,9 +50,21 @@ function WalletAddressesController($scope, $http , $q) {
 					return error;
 				} ));
 			});
+		requests.push( $http.get( '/v1/transaction/values.json' ).then( 
+			function( result ) {
+				currencyInfo = result.data;
+			}
+		));
 		$q.all( requests ).then( function( responses ) {
-			console.log( 'Balances:' );
-			console.log( balances );
+			if( currencyInfo )
+			{
+				currencyInfo.forEach( function( item ) {
+					balances[ item.currency ].name = item.name;
+				});
+
+				console.log( 'Balances:' );
+				console.log( balances );
+			}
 		} );
 	}
 }
