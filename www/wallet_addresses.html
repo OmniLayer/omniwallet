@@ -1,6 +1,39 @@
-<div class="sidecar col-xs-2" ng-controller="SidecarController" ng-init=setView('wallet')>
-    <div ng-include="templates['sidecar']"></div>
-</div>
+<div class="col-xs-12">
+	<div class="sidecar col-xs-2" ng-controller="SidecarController" ng-init=setView('wallet')>
+	    <div ng-include="templates['sidecar']"></div>
+	</div>
 
-<div class="col-xs-10" ng-controller="WalletAddressesController" ng-init="getData()">
+	<div class="col-xs-10" ng-controller="WalletAddressesController" ng-init="getData()">
+		<div ng-repeat="currency in balances">
+			<div class="col-xs-10">
+				<div class="col-xs-4">
+					<span class="currency-name">{{currency.name ? currency.name : currency.symbol}}</span>
+				</div>
+				<div class="col-xs-3">
+					<span class="currency-total">{{currency.balance}} {{currency.symbol}}</span>
+				</div>
+				<div class="col-xs-3">
+					<span class="currency-value">No Exchange</span>
+				</div>
+			</div>
+			<div class="col-xs-10">
+				<table class="table table-striped table-hover table-condensed">
+					<thead>
+						<tr>
+							<th>Address</th>
+							<th>Balance</th>
+							<th>Value</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr ng-repeat="item in currency.addresses">
+							<td>{{item.address}}</td>
+							<td>{{item.value}}</td>
+							<td>No Exchange</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div> 
+	</div>
 </div>

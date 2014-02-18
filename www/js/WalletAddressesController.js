@@ -32,16 +32,19 @@ function WalletAddressesController($scope, $http , $q) {
 						result.data.balance.forEach( function( currencyItem ) {
 							if( !balances.hasOwnProperty( currencyItem.symbol )) {
 								balances[ currencyItem.symbol ] = {
+									"symbol": currencyItem.symbol,
 									"balance": parseFloat( currencyItem.value ),
 									"addresses": {}
 								};
-								balances[ currencyItem.symbol ].addresses[ result.data.address ] = currencyItem.value
 							}
 							else
 							{
 								balances[ currencyItem.symbol ].balance += parseFloat( currencyItem.value );
-								balances[ currencyItem.symbol ].addresses[ result.data.address ] = currencyItem.value								
 							}
+							balances[ currencyItem.symbol ].addresses[ result.data.address ] = {
+								"address": result.data.address,
+								"value": currencyItem.value
+							};
 						} );
 					}
 					return result;
@@ -62,8 +65,7 @@ function WalletAddressesController($scope, $http , $q) {
 					balances[ item.currency ].name = item.name;
 				});
 
-				console.log( 'Balances:' );
-				console.log( balances );
+				$scope.balances = balances;
 			}
 		} );
 	}
