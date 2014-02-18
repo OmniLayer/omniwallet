@@ -1,4 +1,4 @@
-var app = angular.module('omniwallet', ['ngRoute', 'ngCookies'],
+var app = angular.module('omniwallet', ['ngRoute'],
   function($routeProvider, $locationProvider) {
     $routeProvider.when('/wallet/:page?', {
       templateUrl: function(route) {       
@@ -87,13 +87,27 @@ function WalletHistoryController() {
 function LoginCtrl($scope, $http, userService) {
   
   $scope.open = function(login) {
-    userService.data.loggedIn = true;
-    userService.data.uuid = login.uuid;
+    // userService.data.loggedIn = true;
+    // userService.data.uuid = login.uuid;
     // $http.post("wallet API")
     // Try to decode wallet
     // If successful user is logged in
     //
-    $scope.$emit('savestate');
+    // $scope.$emit('savestate');
+
+    var postData = {
+      type: 'RESTOREWALLET',
+      uuid: login.uuid
+    }
+
+    $http.post('/v1/user/wallet/restore/', postData)
+      .success(function (data, status, headers, config) {
+        console.log(data);
+        console.log("SUCESS");
+      })
+      .error(function(data, status, headers, config) {
+        console.log("ERROR");
+      });
   }
 }
 
@@ -185,14 +199,19 @@ app.factory('userService', ['$rootScope', function ($rootScope) {
       loggedIn: false,
       username: '',
       uuid: '',
-      privateKey: ''
+      addresses: [
+        {
+          privateKey: '',
+          address: ''
+        }
+      ]
     },
 
     saveSession: function () {
-      localStorage["test"] = angular.toJson(service.data)
+      localStorage["Wallet"] = angular.toJson(service.data)
     },
     restoreSession: function() {
-      service.data = angular.fromJson(localStorage["test"]);
+      service.data = angular.fromJson(localStorage["Wallet"]);
     }
   };
 
