@@ -32,8 +32,13 @@ function WalletAddressesController($scope, $http , $q) {
 				} ));
 			});
 		$q.all( requests ).then( function( responses ) {
-			console.log( 'Got responses!' );
-			console.log( responses );
+			responses.forEach( function( doc ) {
+				if( doc.status == 200 )
+				{
+					console.log( 'Got address data back:' );
+					console.log( doc.data );
+				}
+			});
 		} );
 	}
 }
