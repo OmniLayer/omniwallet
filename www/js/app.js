@@ -59,7 +59,9 @@ angular.module('omniwallet', ['ngRoute'],
     $locationProvider.html5Mode(true).hashPrefix('!');
 });
 
-function HomeCtrl() {
+function HomeCtrl($templateCache) {
+  //DEV ONLY
+  $templateCache.removeAll()
 }
 function ExplorerCtrl() {
 }
@@ -68,10 +70,6 @@ function TradeCtrl() {
 function WalletController() {
   console.log('initialized wallet')
 }
-function WalletHistoryController() {
-  console.log('initialized wallet history')
-}
-
 
 function AboutCtrl($scope, $location) {
 }
@@ -113,13 +111,8 @@ function BTCController($scope, $http) {
     }
 }
 
-
-function RevisionController($scope, $http) {
-    $scope.revision = {};
-    
-    $scope.getData = function () {
-      console.log('init 2')
-    }
+function WalletHistoryController($scope, $http) {
+  console.log('initialized wallet history')
 }
 
 function SidecarController($scope, $http) {
