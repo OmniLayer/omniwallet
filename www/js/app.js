@@ -1,4 +1,4 @@
-angular.module('omniwallet', ['ngRoute'],
+var app = angular.module('omniwallet', ['ngRoute'],
   function($routeProvider, $locationProvider) {
     $routeProvider.when('/wallet/:page?', {
       templateUrl: function(route) {       
@@ -54,6 +54,10 @@ angular.module('omniwallet', ['ngRoute'],
     }).when('/', {
        templateUrl: 'homepage.html',
        controller: HomeCtrl
+    }).when('/login', {
+      templateUrl: 'login.html',
+    }).when('/create', {
+      templateUrl: 'create_wallet.html',
     }).otherwise({ redirectTo: '/' });
 
     $locationProvider.html5Mode(true).hashPrefix('!');
@@ -72,6 +76,18 @@ function WalletHistoryController() {
   console.log('initialized wallet history')
 }
 
+function LoginCtrl($scope, $http, userService) {
+  $scope.open = function(login) {
+    userService.loggedIn = true;
+    userService.uuid = login.uuid;
+  }
+}
+
+function CreateWalletCtrl($scope, $http, userService) {
+  $scope.createWallet = function(create) {
+    console.log(create);
+  }
+}
 
 function AboutCtrl($scope, $location) {
 }
@@ -89,13 +105,14 @@ function Ctrl($scope, $route, $routeParams, $location) {
 
 }
 
-function NavigationController($scope, $http) {
+function NavigationController($scope, $http, userService) {
     $scope.values = {};
     
     $scope.getNavData = function() {
       console.log('init 0');
     }
-
+   
+    $scope.user = userService;
 }
 
 function BTCController($scope, $http) {
@@ -138,3 +155,13 @@ function SidecarController($scope, $http) {
     };
 
 }
+
+app.factory('userService', [function () {
+  var sdo = {
+    loggedIn: false,
+    username: '',
+    uuid: ''
+  };
+
+  return sdo
+}]);
