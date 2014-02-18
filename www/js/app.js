@@ -1,4 +1,8 @@
-angular.module('omniwallet', ['ngRoute'],
+angular.module('omniwallet', [
+    'ngRoute',
+    'ui.bootstrap',
+    'ui.bootstrap.popover'
+  ],
   function($routeProvider, $locationProvider) {
     $routeProvider.when('/wallet/:page?', {
       templateUrl: function(route) {       

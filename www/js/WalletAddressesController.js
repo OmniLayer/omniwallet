@@ -1,3 +1,10 @@
+function PopoverDemoCtrl($scope) {
+  $scope.content = "Hello, World!";
+  $scope.title = "Title";
+
+  console.log( '*** PopoverDemoCtrl!' );
+};
+
 function WalletAddressesController($scope, $http , $q) {
 	$scope.getWallet = function() {
 		return {
