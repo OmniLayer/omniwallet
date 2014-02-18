@@ -2,4 +2,29 @@
     <div ng-include="templates['sidecar']"></div>
 </div>
 
-Wallet History
+<div class="col-xs-10" ng-controller="WalletHistoryController" ng-init="getData('13NRX88EZbS5q81x6XFrTECzrciPREo821')">
+  <table class="table table-striped table-hover table-condensed">
+    <caption> Wallet History for {{address}} </caption>
+    <thead>
+        <tr>
+          <th>Transaction hash</th>
+          <th>Type</th>
+          <th>Amount</th>
+          <th>Transaction time</th>
+        </tr>
+    </thead>
+    <tbody>
+    </tbody>
+
+  <tr ng-repeat="transaction in history">
+   {{transaction}}
+   <td>{{transaction.tx_hash}}</td>
+   <td>{{transaction.tx_type_str}}</td>
+   <td>{{transaction.formatted_amount}}</td>
+    <td>{{transaction.tx_time | date:'dd MMM HH:mma Z'}}</td>
+  </tr>
+
+</table>
+
+</div>
+</div>
