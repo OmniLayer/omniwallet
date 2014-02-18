@@ -1,4 +1,4 @@
-var app = angular.module('omniwallet', ['ngRoute'],
+var app = angular.module('omniwallet', ['ngRoute', 'ngCookies'],
   function($routeProvider, $locationProvider) {
     $routeProvider.when('/wallet/:page?', {
       templateUrl: function(route) {       
@@ -63,6 +63,14 @@ var app = angular.module('omniwallet', ['ngRoute'],
     $locationProvider.html5Mode(true).hashPrefix('!');
 });
 
+function SimpleSendController($scope, userService) {
+  var wallet = userService.getWallet();
+
+  MySimpleSendHelpers(wallet);
+
+
+}
+
 function HomeCtrl() {
 }
 function ExplorerCtrl() {
@@ -77,16 +85,29 @@ function WalletHistoryController() {
 }
 
 function LoginCtrl($scope, $http, userService) {
+  
   $scope.open = function(login) {
-    userService.loggedIn = true;
-    userService.uuid = login.uuid;
+    userService.data.loggedIn = true;
+    userService.data.uuid = login.uuid;
+    // $http.post("wallet API")
+    // Try to decode wallet
+    // If successful user is logged in
+    //
+    $scope.$emit('savestate');
   }
 }
 
 function CreateWalletCtrl($scope, $http, userService) {
   $scope.createWallet = function(create) {
     console.log(create);
+
+    if(create.password != create.repeatPassword) {
+      console.log("Passwords don't match")
+    }
+
+
   }
+  console.log(userService);
 }
 
 function AboutCtrl($scope, $location) {
@@ -111,8 +132,9 @@ function NavigationController($scope, $http, userService) {
     $scope.getNavData = function() {
       console.log('init 0');
     }
-   
-    $scope.user = userService;
+    console.log(userService);
+     
+    $scope.user = userService.data;
 }
 
 function BTCController($scope, $http) {
@@ -156,12 +178,30 @@ function SidecarController($scope, $http) {
 
 }
 
-app.factory('userService', [function () {
-  var sdo = {
-    loggedIn: false,
-    username: '',
-    uuid: ''
+app.factory('userService', ['$rootScope', function ($rootScope) {
+  // Rewire to use localstorage 
+  var service = {
+    data: {
+      loggedIn: false,
+      username: '',
+      uuid: '',
+      privateKey: ''
+    },
+
+    saveSession: function () {
+      localStorage["test"] = angular.toJson(service.data)
+    },
+    restoreSession: function() {
+      service.data = angular.fromJson(localStorage["test"]);
+    }
   };
 
-  return sdo
+  // $rootScope.$watch('userService.data', function(newVal, oldVal) {
+  //   console.log("watched");
+  //   $rootScope.$broadcast('savestate');
+  // }, true);
+  $rootScope.$on("savestate", service.saveSession);
+  $rootScope.$on("restorestate", service.restoreSession);
+
+  return service;
 }]);
