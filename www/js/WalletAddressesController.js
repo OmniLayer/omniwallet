@@ -22,9 +22,29 @@ function WalletAddressesController($scope, $http , $q) {
 		var requests = [];
 		var wallet = $scope.getWallet();
 
+		var balances = {
+
+		};
+
 		if( wallet )
 			wallet.addresses.forEach( function( addr ) {
 				requests.push( $http.get( '/v1/address/addr/' + addr + '.json' ).then( function( result ) {
+					if( result.status = 200 ) {
+						result.data.balance.forEach( function( currencyItem ) {
+							if( !balances.hasOwnProperty( currencyItem.symbol )) {
+								balances[ currencyItem.symbol ] = {
+									"balance": parseFloat( currencyItem.value ),
+									"addresses": {}
+								};
+								balances[ currencyItem.symbol ].addresses[ result.data.address ] = currencyItem.value
+							}
+							else
+							{
+								balances[ currencyItem.symbol ].balance += parseFloat( currencyItem.value );
+								balances[ currencyItem.symbol ].addresses[ result.data.address ] = currencyItem.value								
+							}
+						} );
+					}
 					return result;
 				},
 				function( error ) {
@@ -32,13 +52,8 @@ function WalletAddressesController($scope, $http , $q) {
 				} ));
 			});
 		$q.all( requests ).then( function( responses ) {
-			responses.forEach( function( doc ) {
-				if( doc.status == 200 )
-				{
-					console.log( 'Got address data back:' );
-					console.log( doc.data );
-				}
-			});
+			console.log( 'Balances:' );
+			console.log( balances );
 		} );
 	}
 }
