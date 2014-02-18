@@ -1,5 +1,9 @@
 var app = angular.module('omniwallet', ['ngRoute'],
-  function($routeProvider, $locationProvider) {
+  function($routeProvider, $locationProvider, $httpProvider) {
+    
+    $httpProvider.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded;charset=utf-8';
+    $httpProvider.defaults.transformRequest = [TransformRequest];
+
     $routeProvider.when('/wallet/:page?', {
       templateUrl: function(route) {       
         //new views added here
@@ -71,7 +75,8 @@ function SimpleSendController($scope, userService) {
 
 }
 
-function HomeCtrl() {
+function HomeCtrl($templateCache) {
+  $templateCache.removeAll();
 }
 function ExplorerCtrl() {
 }
@@ -84,45 +89,6 @@ function WalletHistoryController() {
   console.log('initialized wallet history')
 }
 
-function LoginCtrl($scope, $http, userService) {
-  
-  $scope.open = function(login) {
-    // userService.data.loggedIn = true;
-    // userService.data.uuid = login.uuid;
-    // $http.post("wallet API")
-    // Try to decode wallet
-    // If successful user is logged in
-    //
-    // $scope.$emit('savestate');
-
-    var postData = {
-      type: 'RESTOREWALLET',
-      uuid: login.uuid
-    }
-
-    $http.post('/v1/user/wallet/restore/', postData)
-      .success(function (data, status, headers, config) {
-        console.log(data);
-        console.log("SUCESS");
-      })
-      .error(function(data, status, headers, config) {
-        console.log("ERROR");
-      });
-  }
-}
-
-function CreateWalletCtrl($scope, $http, userService) {
-  $scope.createWallet = function(create) {
-    console.log(create);
-
-    if(create.password != create.repeatPassword) {
-      console.log("Passwords don't match")
-    }
-
-
-  }
-  console.log(userService);
-}
 
 function AboutCtrl($scope, $location) {
 }
@@ -224,3 +190,40 @@ app.factory('userService', ['$rootScope', function ($rootScope) {
 
   return service;
 }]);
+
+function TransformRequest(data) { 
+  var param = function(obj) {
+    var query = '';
+    var name, value, fullSubName, subName, subValue, innerObj, i;
+
+    for(name in obj) {
+      value = obj[name];
+
+      if(value instanceof Array) {
+        for(i=0; i<value.length; ++i) {
+          subValue = value[i];
+          fullSubName = name + '[' + i + ']';
+          innerObj = {};
+          innerObj[fullSubName] = subValue;
+          query += param(innerObj) + '&';
+        }
+      }
+      else if(value instanceof Object) {
+        for(subName in value) {
+          subValue = value[subName];
+          fullSubName = name + '[' + subName + ']';
+          innerObj = {};
+          innerObj[fullSubName] = subValue;
+          query += param(innerObj) + '&';
+        }
+      }
+      else if(value !== undefined && value !== null) {
+        query += encodeURIComponent(name) + '=' + encodeURIComponent(value) + '&';
+      }
+    }
+
+    return query.length ? query.substr(0, query.length - 1) : query;
+  };
+
+  return angular.isObject(data) && String(data) !== '[object File]' ? param(data) : data;
+}
