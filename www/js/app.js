@@ -3,7 +3,7 @@ angular.module('omniwallet', ['ngRoute'],
     $routeProvider.when('/wallet/:page?', {
       templateUrl: function(route) {       
         //new views added here
-        var availableViews = ['overview','addresses','send', 'history'];
+        var availableViews = ['overview','addresses','send', 'trade', 'history'];
         
         var viewFound = availableViews.indexOf(route.page);
         if( viewFound == -1 ) 
@@ -14,19 +14,8 @@ angular.module('omniwallet', ['ngRoute'],
         return view
       }
     }).otherwise({ redirectTo: '/wallet' });
-    $routeProvider.when('/trade/:page?', {
-       templateUrl: function(route) {       
-        var availableViews = ['overview','book','charts', 'alerts'];
-        
-        var viewFound = availableViews.indexOf(route.page);
-        if( viewFound == -1 ) 
-          route.page = 'overview';
-        
-        var view = '/trade_' + route.page + '.html';
-        //DEBUG console.log(view, route.page, view == '/wallet_addresses.html')
-        return view
-       }
-    }).when('/explorer/:page?', {
+
+    $routeProvider.when('/explorer/:page?', {
        templateUrl: function(route) {       
         var availableViews = ['overview','assets','bookmarks', 'following'];
         
@@ -39,6 +28,7 @@ angular.module('omniwallet', ['ngRoute'],
         return view
        }
     }).otherwise({ redirectTo: '/explorer' });
+    
     $routeProvider.when('/about/:page?', {
        templateUrl: function(route) {       
         var availableViews = ['omniwallet','mastercoin','contact', 'help'];
