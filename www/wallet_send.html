@@ -2,4 +2,27 @@
     <div ng-include="templates['sidecar']"></div>
 </div>
 
-Wallet Send
+<div class="col-xs-10" ng-controller="WalletSendController">
+  <div class="text-center col-xs-8" >Wallet Send</div>
+    <br>
+  <div class="row">
+    <div om-select text="Send money: " options="{{currList}}"></div>
+    <div om-select text="From address: " options="{{addrList}}"></div>
+  </div>
+    <br>
+  <div class="row">
+    <div om-input addclass="col-xs-8" text="Amount: " 
+      value="0.0" addons="Available: {{fakeData[0]}},Est: {{fakeData[1]}}"></div> 
+  </div>
+    <br>
+  <div class="row" ng-model="validAddress">
+    <div om-input addclass="col-xs-8" text="To: " placeholder="1Sochi"></div> 
+  </div>
+    <br>
+  <div class="row">
+    <div om-input addclass="fees col-xs-8" text="Fees: " placeholder="0.002BTC (Why?)" disable=1 ></div> 
+  </div>
+    <br>
+  <button class="btn btn-primary" type="submit">Send Transaction</button>
+
+</div>
