@@ -218,6 +218,7 @@ angular.module('omniwallet').directive('omSelect', function() {
 });
 
 angular.module('omniwallet').directive('omInput', function() {
+  console.log( new Error( 'Blah!' ).stack );
    return {  
       template: '<div class="input-group">   \
       <span class="input-group-addon"> {{text}} </span>  \
@@ -253,18 +254,22 @@ angular.module('omniwallet').directive('omInput', function() {
    }
 });
 
-app.factory('userService', ['$rootScope', function ($rootScope) {
+angular.module( 'omniwallet' ).factory('userService', ['$rootScope', function ($rootScope) {
   // Rewire to use localstorage 
   var service = {
     data: {
       loggedIn: false,
       username: '',
-      uuid: '',
-      addresses: [
+      "uuid":"39cd5e05-aa4a-400c-c4c4-9fe70332bd01",
+      "addresses":[ 
         {
-          privateKey: '',
-          address: ''
-        }
+          "address": "13pm7cmA5vVpKkDLJCvqh26kcp6V6PJ1Aq",
+          "privateKey": "NOPE!"
+        },
+        {
+          "address": "1KRZKBqzcqa4agQbYwN5AuHsjvG9fSo2gW",
+          "privateKey": "Still no!"
+        }       
       ]
     },
 

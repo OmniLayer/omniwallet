@@ -1,40 +1,36 @@
-function PopoverDemoCtrl($scope) {
+function PopoverDemoCtrl( $scope, $rootScope ) {
   $scope.content = "Hello, World!";
   $scope.title = "Title";
 
   console.log( '*** PopoverDemoCtrl!' );
 };
 
-function WalletAddressesController($scope, $http , $q) {
-	$scope.getWallet = function() {
-		return {
-			"uuid":"39cd5e05-aa4a-400c-c4c4-9fe70332bd01",
-			"addresses":[ 
-				"13pm7cmA5vVpKkDLJCvqh26kcp6V6PJ1Aq",
-				"1KRZKBqzcqa4agQbYwN5AuHsjvG9fSo2gW"
-			],
-			"keys":[
-				{
-					"address":"13pm7cmA5vVpKkDLJCvqh26kcp6V6PJ1Aq",
-					"encrypted":"NOPE!"
-				},
-				{
-					"address":"1KRZKBqzcqa4agQbYwN5AuHsjvG9fSo2gW",
-					"encrypted":"Still no!"
-				}
-			]
-		};
-	}
+angular.module( 'omniwallet' ).controller( 'WalletAddressesController', 
+	function($scope, $http , $q, $rootScope, $injector) {
+	$rootScope.$watch('userService.data', function(newVal, oldVal) {
+
+		var wallet = $injector.get( 'userService' ).data;
+		_.defer( function() {
+			$scope.wallet = wallet;
+			$scope.$apply();
+			console.log( '** Applied wallet: ' );
+			console.log( wallet );
+		} );
+
+   	}, true);
+
+
 	$scope.getData = function() {
-		var requests = [];
-		var wallet = $scope.getWallet();
+		console.log( '*** getData! ***' );
+		if( $scope.wallet )
+		{
+			var requests = [];
 
-		var balances = {};
-		var currencyInfo;
+			var balances = {};
+			var currencyInfo;
 
-		if( wallet )
-			wallet.addresses.forEach( function( addr ) {
-				requests.push( $http.get( '/v1/address/addr/' + addr + '.json' ).then( function( result ) {
+			$scope.wallet.addresses.forEach( function( addr ) {
+				requests.push( $http.get( '/v1/address/addr/' + addr.address + '.json' ).then( function( result ) {
 					if( result.status = 200 ) {
 						result.data.balance.forEach( function( currencyItem ) {
 							if( !balances.hasOwnProperty( currencyItem.symbol )) {
@@ -60,20 +56,31 @@ function WalletAddressesController($scope, $http , $q) {
 					return error;
 				} ));
 			});
-		requests.push( $http.get( '/v1/transaction/values.json' ).then( 
-			function( result ) {
-				currencyInfo = result.data;
-			}
-		));
-		$q.all( requests ).then( function( responses ) {
-			if( currencyInfo )
-			{
-				currencyInfo.forEach( function( item ) {
-					balances[ item.currency ].name = item.name;
-				});
+			requests.push( $http.get( '/v1/transaction/values.json' ).then( 
+				function( result ) {
+					currencyInfo = result.data;
+				}
+			));
+			$q.all( requests ).then( function( responses ) {
+				if( currencyInfo )
+				{
+					currencyInfo.forEach( function( item ) {
+						balances[ item.currency ].name = item.name;
+					});
 
-				$scope.balances = balances;
-			}
-		} );
+					$scope.balances = balances;
+				}
+			} );
+		}
+		else
+		{
+			$scope.balances = {};
+		}			
 	}
-}
+} );
+angular.module( 'omniwallet' ).directive( 'walletaddresslist', function() {
+	console.log( 'Getting directive data.' );
+	return {
+		templateUrl: '/wallet_address_list.html'
+	};
+});
