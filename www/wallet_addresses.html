@@ -2,5 +2,9 @@
 	<div class="sidecar col-xs-2" ng-controller="SidecarController" ng-init=setView('wallet')>
 	    <div ng-include="templates['sidecar']"></div>
 	</div>
-	<div walletaddressList></div>
+
+	<div ng-controller="MyCtrl">
+		<button ng-click="showContent()">Show the Content</button>
+		<div show-data template="{{template}}"></div>
+	</div>
 </div>

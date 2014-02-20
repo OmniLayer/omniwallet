@@ -47,7 +47,53 @@ var ModalInstanceCtrl = function ($scope, $modalInstance, items) {
     $modalInstance.dismiss('cancel');
   };
 };
-angular.module( 'omniwallet' ).directive( 'walletaddresslist', function( $rootScope, $injector, $http, $q, $compile ) {
+
+var count = 1;
+angular.module( 'omniwallet' )
+	.factory( 'wallet_balances_template', function () {
+		return function () {
+			return '<div><p ng-repeat="item in items">{{item}}</p></div>';
+		};
+	})
+	.factory( 'wallet_balances_data', function () {
+		return function () {
+		// obviously would be $http
+			var result = [];
+			for( var i=0; i<count; i++ )
+				result.push( i );
+			count++;
+			return result;
+		};
+	})
+	.directive( 'showData', function( $compile ) {
+		return {
+			scope: true,
+			link: function ( scope, element, attrs ) {
+		      var el;
+
+		      attrs.$observe( 'template', function ( tpl ) {
+		        if ( angular.isDefined( tpl ) ) {
+		          // compile the provided template against the current scope
+		          el = $compile( tpl )( scope );
+
+		          // stupid way of emptying the element
+		          element.html("");
+
+		          // add the template content
+		          element.append( el );
+		        }
+		      });
+		    }
+		}
+	} )
+	.controller( 'MyCtrl', function ( $scope, wallet_balances_data, wallet_balances_template ) {
+		$scope.showContent = function () {
+			$scope.items = wallet_balances_data(); 
+			$scope.template = wallet_balances_template();
+		};
+	});
+
+/*angular.module( 'omniwallet' ).directive( 'walletaddresslist', function( $rootScope, $injector, $http, $q, $compile ) {
 	return {
 		compile: function( $scope, parentElement ) {
 			console.log( '+++ Scope: ' );
@@ -132,4 +178,4 @@ angular.module( 'omniwallet' ).directive( 'walletaddresslist', function( $rootSc
 		   	}, true);
 		} 
 	};
-});
+});*/
