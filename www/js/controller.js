@@ -37,14 +37,20 @@ function NavigationController($scope, $http, userService) {
 function ExplorerController($scope, $http) {
     // Scope members
     $scope.transactions = {};
-    $scope.currency = 'MSC'
+    $scope.currencies = ['MSC','TMSC']
     
-    $scope.getData = function getData() {  
-      var file =  '/v1/transaction/general/TMSC_0001.json';
-      $http.get( file, {}).success(
-        function (data, status, headers, config) {
-          $scope.transactions = data;
-          console.log($scope.transactions);
+    $scope.getData = function getData(currency) {  
+      $http.get('/v1/transaction/values.json', {}). success(
+        function(data) {
+          for(var i = 0; i < data.length; i++) {
+            if(currency == data[i].currency) {
+              var file =  '/v1/transaction/general/' + currency + '_0001.json';
+              $http.get( file, {}).success(
+                function (data, status, headers, config) {
+                  $scope.transactions = data;
+              });
+            }
+          }
       });
     }
 }
