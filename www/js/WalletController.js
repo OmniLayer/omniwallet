@@ -3,9 +3,14 @@ function WalletController() {
   console.log('initialized wallet')
 }
 
-function WalletHistoryController($scope, $http) {
-  console.log('initialized wallet history')
-  $scope.getData = function getData(address) {
+function WalletHistoryController($scope, $http, userService) {
+  console.log('initialized wallet history', userService)
+
+  $scope.first = userService.data.addresses[0]
+  $scope.addresses = userService.data.addresses
+
+  $scope.getData = function getData(address) { console.log(address);
+
     var file = '/v1/address/addr/' + address + '.json'; 
     $http.get( file, {} ).success(
       function(data, status, headers, config) {
@@ -18,14 +23,14 @@ function WalletHistoryController($scope, $http) {
         var transaction_data = []
         angular.forEach(data[0], function(msc_tx, tx_type ) {
           if( msc_tx instanceof Array && msc_tx.length != 0 ) {
-            console.log(tx_type, msc_tx);
+            //DEBUG console.log(tx_type, msc_tx);
             transaction_data = transaction_data.concat(msc_tx);
           }
         });
         
         angular.forEach(data[1], function(tmsc_tx, tx_type) {
           if( tmsc_tx instanceof Array && tmsc_tx.length != 0 ) {
-            console.log(tx_type, tmsc_tx);
+            //DEBUG console.log(tx_type, tmsc_tx);
             transaction_data = transaction_data.concat(tmsc_tx);
           }
         });
@@ -35,10 +40,11 @@ function WalletHistoryController($scope, $http) {
             return b.tx_time - a.tx_time;
         });
         
-        //DEBUG angular.forEach(transaction_data, function(transaction, index) {
-        //DEBUG console.log(new Date(Number(transaction.tx_time)))
-        //DEBUG });
-
+        angular.forEach(transaction_data, function(transaction, index) {
+          //DEBUG console.log(new Date(Number(transaction.tx_time)))
+          transaction_data[index].tx_hash = transaction.tx_hash.substring(0,22) + '...'
+        });
+        console.log(transaction_data)
         $scope.history = transaction_data;
       });
   }

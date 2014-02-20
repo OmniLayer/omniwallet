@@ -8,7 +8,9 @@ angular.module( 'omniwallet' ).factory('userService', ['$rootScope', function ($
       username: '',
       "uuid":"39cd5e05-aa4a-400c-c4c4-9fe70332bd01",
       "addresses":[ 
-              
+              '1EXoDusjGwvnjZUyKkxZ4UHEf77z6A5S4P',
+              '1MaStErt4XsYHPwfrN9TpgdURLhHTdMenH',
+              '1GaNupdUBzfVF2B3JUAY1rZwHoXJgjyzXj'
       ]
     },
 
