@@ -36,9 +36,9 @@
           </tr>
           <tr>
             <td>
-              <div ng-controller="PopoverDemoCtrl">
-                <button popover="{{content}}" popover-title="{{title}}" class="btn btn-default">Add {{currency.symbol}} Address</button>
-              </div>
+              <button "btn btn-default" ng-click="openAddForm( currency.symbol )">
+                Add {{currency.symbol}} Address
+              </button>
             </td>
             <td></td><td></td><td></td>
           </tr>
