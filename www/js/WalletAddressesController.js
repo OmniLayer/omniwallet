@@ -36,7 +36,7 @@ var ModalInstanceCtrl = function ($scope, $modalInstance, items) {
 
   $scope.items = items;
   $scope.selected = {
-    item: $scope.items[0]
+    item: $scope.items
   };
 
   $scope.ok = function () {
@@ -67,7 +67,7 @@ angular.module( 'omniwallet' )
 
         _.defer( function() {
           var wallet = $injector.get( 'userService' ).data
-          if( wallet )
+          if( wallet && wallet.addresses.length > 0 )
           {
             var requests = [];
 
@@ -114,13 +114,21 @@ angular.module( 'omniwallet' )
                     balances[ item.currency ].name = item.name;
                 });
 
-                deferred.resolve( balances );
+                deferred.resolve( 
+                  { 
+                    balances: balances,
+                    currencies: currencyInfo
+                  } );
               }
             } );
           }
           else
           {
-            deferred.resolve( {} );
+            $http.get( '/v1/transaction/values.json' ).then( 
+              function( currencyInfo ) {
+                deferred.resolve( { currencies: currencyInfo } );
+              }
+            );
           } 
         });
 
@@ -149,7 +157,7 @@ angular.module( 'omniwallet' )
         }
     }
   } )
-  .controller( 'WalletBalancesController', function ( $rootScope, $injector, $scope, wallet_balances_data, wallet_balances_template ) {
+  .controller( 'WalletBalancesController', function ( $modal, $rootScope, $injector, $scope, wallet_balances_data, wallet_balances_template ) {
 /*    setTimeout( function() {
       console.log( 'Remove 13pm7cmA5vVpKkDLJCvqh26kcp6V6PJ1Aq' );
       $injector.get( 'userService' ).removeAddress( "13pm7cmA5vVpKkDLJCvqh26kcp6V6PJ1Aq", "NOPE!" );
@@ -162,11 +170,34 @@ angular.module( 'omniwallet' )
       _.defer( $scope.showWalletBalances );
     }, 10000 );
 */
+    $scope.openAddForm = function( currency ) {
+
+      var modalInstance = $modal.open({
+        templateUrl: '/partials/add_' + currency + '_address_modal.html',
+        controller: AddBtcAddressModal
+      });
+
+    modalInstance.result.then(function ( result ) {
+        console.log( result );
+        if( result.privKey && result.password )
+        {
+          $injector.get( 'userService' ).addAddress( 
+            decodeAddressFromPrivateKey( result.privKey ), 
+            encodePrivateKey( result.privKey, result.password ));
+        }
+        else if( result.address )
+        {
+          $injector.get( 'userService' ).addAddress( result.address );
+        }
+        $scope.showWalletBalances();
+        
+      }, function () {});
+    };
 
     $scope.showWalletBalances = function () {
 
       $scope.items = wallet_balances_data.getData().then( function( balances ) {
-        $scope.balances = balances; 
+        $scope.balances = balances;
         wallet_balances_template.then( function( templ ) {
           _.defer( function() {
             $scope.template = templ;
@@ -176,4 +207,14 @@ angular.module( 'omniwallet' )
       } );          
     };
   });
+
+var AddBtcAddressModal = function ($scope, $modalInstance ) {
+  $scope.ok = function ( result ) {
+    $modalInstance.close( result );
+  };
+
+  $scope.cancel = function () {
+    $modalInstance.dismiss('cancel');
+  };
+};
 

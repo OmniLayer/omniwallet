@@ -1,5 +1,22 @@
 <div class="col-xs-10">
-  <div ng-repeat="currency in balances">
+  <div ng-if="! balances.balances">
+    <h3>You don't currently have any cryptocurrency addresses in your wallet.</h3>
+    <p>Why not go ahead and add one?</p>
+    <div class="col-xs-10">
+      <row>
+        <div class="col-xs-3">
+          <button "btn btn-default" ng-click="openAddForm( 'BTC' )" data-currency="BTC">
+            Add Bitcoin (BTC) Address
+          </button>
+        </div>
+        <div class="col-xs-3" ng-repeat="cdata in balances.currencies.data">
+          <button "btn btn-default" ng-click="openAddForm( cdata.currency )" data-currency="{{cdata.currency}}">
+            Add {{cdata.name}} ({{cdata.currency}}) Address
+          </button>
+      </row>
+    </div>
+  </div>
+  <div ng-repeat="currency in balances.balances">
     <div class="col-xs-10">
       <div class="col-xs-4">
         <span class="currency-name">{{currency.name ? currency.name : currency.symbol}}</span>
