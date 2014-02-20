@@ -1,7 +1,7 @@
 angular.module('omniwallet', [
     'ngRoute',
     'ui.bootstrap',
-    'ui.bootstrap.popover'
+    'ui.bootstrap.modal'
   ],
   function($routeProvider, $locationProvider, $httpProvider) {
     
