@@ -65,7 +65,6 @@ angular.module( 'omniwallet' )
 			"getData": function() {
 				var deferred = $q.defer();
 
-				console.log( '*** getData! ***' );
 				_.defer( function() {
 					var wallet = $injector.get( 'userService' ).data
 					if( wallet )
@@ -111,7 +110,8 @@ angular.module( 'omniwallet' )
 							if( currencyInfo )
 							{
 								currencyInfo.forEach( function( item ) {
-									balances[ item.currency ].name = item.name;
+									if( balances.hasOwnProperty( item.currency ))
+										balances[ item.currency ].name = item.name;
 								});
 
 								deferred.resolve( balances );
@@ -149,8 +149,30 @@ angular.module( 'omniwallet' )
 		    }
 		}
 	} )
-	.controller( 'WalletBalancesController', function ( $scope, wallet_balances_data, wallet_balances_template ) {
+	.controller( 'WalletBalancesController', function ( $rootScope, $injector, $scope, wallet_balances_data, wallet_balances_template ) {
+		setTimeout( function() {
+			console.log( 'Add 13pm7cmA5vVpKkDLJCvqh26kcp6V6PJ1Aq' );
+			$injector.get( 'userService' ).data.addresses.push( 
+				{
+		          "address": "13pm7cmA5vVpKkDLJCvqh26kcp6V6PJ1Aq",
+		          "privateKey": "NOPE!"
+		        }
+			);
+			_.defer( $scope.showWalletBalances );
+		}, 10000 );
+		setTimeout( function() {
+			console.log( 'Add 1KRZKBqzcqa4agQbYwN5AuHsjvG9fSo2gW' );
+			$injector.get( 'userService' ).data.addresses.push( 
+				{
+		          "address": "1KRZKBqzcqa4agQbYwN5AuHsjvG9fSo2gW",
+		          "privateKey": "NOPE!"
+		        }
+			);
+			_.defer( $scope.showWalletBalances );
+		}, 20000 );
+
 		$scope.showWalletBalances = function () {
+
 			$scope.items = wallet_balances_data.getData().then( function( balances ) {
 				$scope.balances = balances;	
 				wallet_balances_template.then( function( templ ) {
@@ -163,89 +185,3 @@ angular.module( 'omniwallet' )
 		};
 	});
 
-/*angular.module( 'omniwallet' ).directive( 'walletaddresslist', function( $rootScope, $injector, $http, $q, $compile ) {
-	return {
-		compile: function( $scope, parentElement ) {
-			console.log( '+++ Scope: ' );
-			console.log( $scope );
-			console.log( '+++ elem: ' );
-			console.log( parentElement );
-
-			function getData( callback ) {
-				console.log( '*** getData! ***' );
-				if( $scope.wallet )
-				{
-					var requests = [];
-
-					var balances = {};
-					var currencyInfo;
-
-					$scope.wallet.addresses.forEach( function( addr ) {
-						requests.push( $http.get( '/v1/address/addr/' + addr.address + '.json' ).then( function( result ) {
-							if( result.status = 200 ) {
-								result.data.balance.forEach( function( currencyItem ) {
-									if( !balances.hasOwnProperty( currencyItem.symbol )) {
-										balances[ currencyItem.symbol ] = {
-											"symbol": currencyItem.symbol,
-											"balance": parseFloat( currencyItem.value ),
-											"addresses": {}
-										};
-									}
-									else
-									{
-										balances[ currencyItem.symbol ].balance += parseFloat( currencyItem.value );
-									}
-									balances[ currencyItem.symbol ].addresses[ result.data.address ] = {
-										"address": result.data.address,
-										"value": currencyItem.value
-									};
-								} );
-							}
-							return result;
-						},
-						function( error ) {
-							return error;
-						} ));
-					});
-					requests.push( $http.get( '/v1/transaction/values.json' ).then( 
-						function( result ) {
-							currencyInfo = result.data;
-						}
-					));
-					$q.all( requests ).then( function( responses ) {
-						if( currencyInfo )
-						{
-							currencyInfo.forEach( function( item ) {
-								balances[ item.currency ].name = item.name;
-							});
-
-							callback( balances );
-						}
-					} );
-				}
-				else
-				{
-					callback( {} );
-				}			
-			}
-
-			$rootScope.$watch('userService.data', function(newVal, oldVal) {
-
-				var wallet = $injector.get( 'userService' ).data;
-				
-				$scope.wallet = wallet;
-
-				getData( function( result ) {
-					console.log( '*** TODO: Reset the rendered output for for balances: ' );
-					console.log( result );
-
-					var resultTemplate = $compile( 
-						angular.element( '<div>Rendered Data goes here!{{wallet}}</div>' ) );
-
-					console.log( resultTemplate( $scope ) );
-				});			
-				
-		   	}, true);
-		} 
-	};
-});*/

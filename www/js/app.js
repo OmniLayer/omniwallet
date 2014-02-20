@@ -262,14 +262,7 @@ angular.module( 'omniwallet' ).factory('userService', ['$rootScope', function ($
       username: '',
       "uuid":"39cd5e05-aa4a-400c-c4c4-9fe70332bd01",
       "addresses":[ 
-        {
-          "address": "13pm7cmA5vVpKkDLJCvqh26kcp6V6PJ1Aq",
-          "privateKey": "NOPE!"
-        },
-        {
-          "address": "1KRZKBqzcqa4agQbYwN5AuHsjvG9fSo2gW",
-          "privateKey": "Still no!"
-        }       
+              
       ]
     },
 
