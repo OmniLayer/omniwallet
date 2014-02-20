@@ -1,4 +1,5 @@
 function CreateWalletController($scope, $http, userService) {
+  alert('test')
   $scope.createWallet = function(create) {
     console.log(create);
 
