@@ -5,7 +5,7 @@ angular.module('omniwallet').directive('omSelect', function() {
       template: '<div class="form-inline"> \
         {{text}}    \
         <select class="form-control">  \
-          <option ng-repeat="option in options"> {{option}} </option>   \
+          <option ng-repeat="option in options track by $index"> {{option}} </option>   \
         </select>   \
       </div> ',
       scope: { 

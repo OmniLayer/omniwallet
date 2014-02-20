@@ -6,7 +6,7 @@ function WalletController() {
 function WalletHistoryController($scope, $http, userService) {
   console.log('initialized wallet history', userService)
 
-  $scope.first = userService.data.addresses[0]
+  $scope.first = userService.data.addresses[0].address
   $scope.addresses = userService.data.addresses
 
   $scope.getData = function getData(address) {
@@ -54,6 +54,6 @@ function WalletSendController($scope, userService) {
   console.log('initialized wallet')
 
   $scope.currList = ['MSC', 'TMSC', 'BTC']
-  $scope.addrList = userService.data.addresses
+  $scope.addrList = userService.data.addresses.map(function(e,i,a) { return e.address; })
   $scope.fakeData = ['23200','232113$USD']
 }

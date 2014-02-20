@@ -12,7 +12,7 @@ var ModalDemoCtrl = function ($scope, $modal, $log) {
   $scope.open = function () {
 
     var modalInstance = $modal.open({
-      templateUrl: '/delete_address_modal.html',
+      templateUrl: '/partials/delete_address_modal.html',
       controller: ModalInstanceCtrl,
       resolve: {
         items: function () {
@@ -50,138 +50,138 @@ var ModalInstanceCtrl = function ($scope, $modalInstance, items) {
 
 
 angular.module( 'omniwallet' )
-	.factory( 'wallet_balances_template', function ( $q, $http ) {
-		var deferred = $q.defer();
+  .factory( 'wallet_balances_template', function ( $q, $http ) {
+    var deferred = $q.defer();
 
-		$http.get( '/wallet_address_list.html' ).then( function( result ) {
-			deferred.resolve( result.data );
-		} );
+    $http.get( '/partials/wallet_address_list.html' ).then( function( result ) {
+      deferred.resolve( result.data );
+    } );
 
-		return deferred.promise;
-	})
-	.factory( 'wallet_balances_data', function ( $http, $q, $timeout, $injector ) {
-		var count = 1;
-		return {
-			"getData": function() {
-				var deferred = $q.defer();
+    return deferred.promise;
+  })
+  .factory( 'wallet_balances_data', function ( $http, $q, $timeout, $injector ) {
+    var count = 1;
+    return {
+      "getData": function() {
+        var deferred = $q.defer();
 
-				_.defer( function() {
-					var wallet = $injector.get( 'userService' ).data
-					if( wallet )
-					{
-						var requests = [];
+        _.defer( function() {
+          var wallet = $injector.get( 'userService' ).data
+          if( wallet )
+          {
+            var requests = [];
 
-						var balances = {};
-						var currencyInfo;
+            var balances = {};
+            var currencyInfo;
 
-						wallet.addresses.forEach( function( addr ) {
-							requests.push( $http.get( '/v1/address/addr/' + addr.address + '.json' ).then( function( result ) {
-								if( result.status = 200 ) {
-									result.data.balance.forEach( function( currencyItem ) {
-										if( !balances.hasOwnProperty( currencyItem.symbol )) {
-											balances[ currencyItem.symbol ] = {
-												"symbol": currencyItem.symbol,
-												"balance": parseFloat( currencyItem.value ),
-												"addresses": {}
-											};
-										}
-										else
-										{
-											balances[ currencyItem.symbol ].balance += parseFloat( currencyItem.value );
-										}
-										balances[ currencyItem.symbol ].addresses[ result.data.address ] = {
-											"address": result.data.address,
-											"value": currencyItem.value
-										};
-									} );
-								}
-								return result;
-							},
-							function( error ) {
-								return error;
-							} ));
-						});
-						requests.push( $http.get( '/v1/transaction/values.json' ).then( 
-							function( result ) {
-								currencyInfo = result.data;
-							}
-						));
-						$q.all( requests ).then( function( responses ) {
-							if( currencyInfo )
-							{
-								currencyInfo.forEach( function( item ) {
-									if( balances.hasOwnProperty( item.currency ))
-										balances[ item.currency ].name = item.name;
-								});
+            wallet.addresses.forEach( function( addr ) {
+              requests.push( $http.get( '/v1/address/addr/' + addr.address + '.json' ).then( function( result ) {
+                if( result.status = 200 ) {
+                  result.data.balance.forEach( function( currencyItem ) {
+                    if( !balances.hasOwnProperty( currencyItem.symbol )) {
+                      balances[ currencyItem.symbol ] = {
+                        "symbol": currencyItem.symbol,
+                        "balance": parseFloat( currencyItem.value ),
+                        "addresses": {}
+                      };
+                    }
+                    else
+                    {
+                      balances[ currencyItem.symbol ].balance += parseFloat( currencyItem.value );
+                    }
+                    balances[ currencyItem.symbol ].addresses[ result.data.address ] = {
+                      "address": result.data.address,
+                      "value": currencyItem.value
+                    };
+                  } );
+                }
+                return result;
+              },
+              function( error ) {
+                return error;
+              } ));
+            });
+            requests.push( $http.get( '/v1/transaction/values.json' ).then( 
+              function( result ) {
+                currencyInfo = result.data;
+              }
+            ));
+            $q.all( requests ).then( function( responses ) {
+              if( currencyInfo )
+              {
+                currencyInfo.forEach( function( item ) {
+                  if( balances.hasOwnProperty( item.currency ))
+                    balances[ item.currency ].name = item.name;
+                });
 
-								deferred.resolve( balances );
-							}
-						} );
-					}
-					else
-					{
-						deferred.resolve( {} );
-					}	
-				});
+                deferred.resolve( balances );
+              }
+            } );
+          }
+          else
+          {
+            deferred.resolve( {} );
+          } 
+        });
 
-				return deferred.promise;
-			} 
-		};
-	})
-	.directive( 'showWalletBalances', function( $compile ) {
-		return {
-			scope: true,
-			link: function ( scope, element, attrs ) {
-		      var el;
+        return deferred.promise;
+      } 
+    };
+  })
+  .directive( 'showWalletBalances', function( $compile ) {
+    return {
+      scope: true,
+      link: function ( scope, element, attrs ) {
+          var el;
 
-		      attrs.$observe( 'template', function ( tpl ) {
-		        if ( angular.isDefined( tpl ) ) {
-		          // compile the provided template against the current scope
-		          el = $compile( tpl )( scope );
+          attrs.$observe( 'template', function ( tpl ) {
+            if ( angular.isDefined( tpl ) ) {
+              // compile the provided template against the current scope
+              el = $compile( tpl )( scope );
 
-		          // stupid way of emptying the element
-		          element.html("");
+              // stupid way of emptying the element
+              element.html("");
 
-		          // add the template content
-		          element.append( el );
-		        }
-		      });
-		    }
-		}
-	} )
-	.controller( 'WalletBalancesController', function ( $rootScope, $injector, $scope, wallet_balances_data, wallet_balances_template ) {
-		setTimeout( function() {
-			console.log( 'Add 13pm7cmA5vVpKkDLJCvqh26kcp6V6PJ1Aq' );
-			$injector.get( 'userService' ).data.addresses.push( 
-				{
-		          "address": "13pm7cmA5vVpKkDLJCvqh26kcp6V6PJ1Aq",
-		          "privateKey": "NOPE!"
-		        }
-			);
-			_.defer( $scope.showWalletBalances );
-		}, 10000 );
-		setTimeout( function() {
-			console.log( 'Add 1KRZKBqzcqa4agQbYwN5AuHsjvG9fSo2gW' );
-			$injector.get( 'userService' ).data.addresses.push( 
-				{
-		          "address": "1KRZKBqzcqa4agQbYwN5AuHsjvG9fSo2gW",
-		          "privateKey": "NOPE!"
-		        }
-			);
-			_.defer( $scope.showWalletBalances );
-		}, 20000 );
+              // add the template content
+              element.append( el );
+            }
+          });
+        }
+    }
+  } )
+  .controller( 'WalletBalancesController', function ( $rootScope, $injector, $scope, wallet_balances_data, wallet_balances_template ) {
+    setTimeout( function() {
+      console.log( 'Add 13pm7cmA5vVpKkDLJCvqh26kcp6V6PJ1Aq' );
+      $injector.get( 'userService' ).data.addresses.push( 
+        {
+              "address": "13pm7cmA5vVpKkDLJCvqh26kcp6V6PJ1Aq",
+              "privateKey": "NOPE!"
+            }
+      );
+      _.defer( $scope.showWalletBalances );
+    }, 10000 );
+    setTimeout( function() {
+      console.log( 'Add 1KRZKBqzcqa4agQbYwN5AuHsjvG9fSo2gW' );
+      $injector.get( 'userService' ).data.addresses.push( 
+        {
+              "address": "1KRZKBqzcqa4agQbYwN5AuHsjvG9fSo2gW",
+              "privateKey": "NOPE!"
+            }
+      );
+      _.defer( $scope.showWalletBalances );
+    }, 20000 );
 
-		$scope.showWalletBalances = function () {
+    $scope.showWalletBalances = function () {
 
-			$scope.items = wallet_balances_data.getData().then( function( balances ) {
-				$scope.balances = balances;	
-				wallet_balances_template.then( function( templ ) {
-					_.defer( function() {
-						$scope.template = templ;
-						$scope.$apply();
-					});
-				}); 
-			} );					
-		};
-	});
+      $scope.items = wallet_balances_data.getData().then( function( balances ) {
+        $scope.balances = balances; 
+        wallet_balances_template.then( function( templ ) {
+          _.defer( function() {
+            $scope.template = templ;
+            $scope.$apply();
+          });
+        }); 
+      } );          
+    };
+  });
 
