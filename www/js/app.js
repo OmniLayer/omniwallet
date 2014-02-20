@@ -17,7 +17,7 @@ angular.module('omniwallet', [
         if( viewFound == -1 ) 
           route.page = 'overview';
         
-        var view = '/wallet_' + route.page + '.html';
+        var view = '/partials/wallet_' + route.page + '.html';
         //DEBUG console.log(view, route.page, view == '/wallet_addresses.html')
         return view
       }
@@ -31,7 +31,7 @@ angular.module('omniwallet', [
         if( viewFound == -1 ) 
           route.page = 'overview';
         
-        var view = '/explorer_' + route.page + '.html';
+        var view = '/partials/explorer_' + route.page + '.html';
         //DEBUG console.log(view, route.page, view == '/wallet_addresses.html')
         return view
        }
@@ -45,7 +45,7 @@ angular.module('omniwallet', [
         if( viewFound == -1 ) //Default view
           route.page = 'omniwallet';
         
-        var view = '/about_' + route.page + '.html';
+        var view = '/partials/about_' + route.page + '.html';
         //DEBUG console.log(view, route.page, view == '/wallet_addresses.html')
         return view
        }
@@ -53,9 +53,9 @@ angular.module('omniwallet', [
        templateUrl: 'homepage.html',
        controller: HomeCtrl
     }).when('/login', {
-      templateUrl: 'login.html',
+      templateUrl: '/partials/login.html',
     }).when('/create', {
-      templateUrl: 'create_wallet.html',
+      templateUrl: '/partials/create_wallet.html',
     }).otherwise({ redirectTo: '/' });
 
     $locationProvider.html5Mode(true).hashPrefix('!');
@@ -91,7 +91,7 @@ function Ctrl($scope, $route, $routeParams, $location) {
   $scope.templates = { 
         'header': 'header.html', 
         'footer': 'footer.html',
-        'sidecar': 'sidecar.html'
+        'sidecar': '/partials/sidecar.html'
   };
 
 }
@@ -180,10 +180,10 @@ function SidecarController($scope, $http) {
        return $scope.view;
     }
     $scope.sidecarTemplates = {
-          'explorer':'explorer_sc.html',
-          'about': 'about_sc.html',
-          'trade': 'trade_sc.html',
-          'wallet': 'wallet_sc.html'
+          'explorer':'/partials/explorer_sc.html',
+          'about': '/partials/about_sc.html',
+          'trade': '/partials/trade_sc.html',
+          'wallet': '/partials/wallet_sc.html'
     };
 
 }
