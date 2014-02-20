@@ -27,10 +27,7 @@
             <td>{{item.value}}</td>
             <td>No Exchange</td>
             <td>
-              <div ng-controller="ModalDemoCtrl">
-
-                  <button class="btn btn-default" ng-click="open()">X</button>
-                  <div ng-show="selected">Selection from a modal: {{ selected }}</div>
+                  <button class="btn btn-default" ng-click="openDeleteConfirmForm( item.address )">X</button>
               </div>
             </td>
           </tr>

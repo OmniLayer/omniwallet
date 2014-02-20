@@ -1,15 +1,14 @@
 <div class="modal-header">
-    <h3>I'm a modal!</h3>
+    <h3>Remove {{address}} from your wallet?</h3>
 </div>
 <div class="modal-body">
-    <ul>
-        <li ng-repeat="item in items">
-            <a ng-click="selected.item = item">{{ item }}</a>
-        </li>
-    </ul>
-    Selected: <b>{{ selected.item }}</b>
+	<h3>Really?</h3>
+	<p>
+		Removing this address from your wallet won't destroy any funds kept in it, but if this is the only place you have your private key stored, you WILL lose the ability to move or cash them in!
+	</p>
+	<h3>Be VERY sure you mean to do this!</h3>
 </div>
 <div class="modal-footer">
-    <button class="btn btn-primary" ng-click="ok()">OK</button>
+    <button class="btn btn-primary" ng-click="ok()">Yes, Remove Address</button>
     <button class="btn btn-warning" ng-click="cancel()">Cancel</button>
 </div>

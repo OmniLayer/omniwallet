@@ -1,53 +1,3 @@
-function PopoverDemoCtrl( $scope, $rootScope ) {
-  $scope.content = "Hello, World!";
-  $scope.title = "Title";
-
-  console.log( '*** PopoverDemoCtrl!' );
-};
-
-var ModalDemoCtrl = function ($scope, $modal, $log) {
-
-  $scope.items = ['item1', 'item2', 'item3'];
-
-  $scope.open = function () {
-
-    var modalInstance = $modal.open({
-      templateUrl: '/partials/delete_address_modal.html',
-      controller: ModalInstanceCtrl,
-      resolve: {
-        items: function () {
-          return $scope.items;
-        }
-      }
-    });
-
-    modalInstance.result.then(function (selectedItem) {
-      $scope.selected = selectedItem;
-    }, function () {
-      $log.info('Modal dismissed at: ' + new Date());
-    });
-  };
-};
-
-// Please note that $modalInstance represents a modal window (instance) dependency.
-// It is not the same as the $modal service used above.
-
-var ModalInstanceCtrl = function ($scope, $modalInstance, items) {
-
-  $scope.items = items;
-  $scope.selected = {
-    item: $scope.items
-  };
-
-  $scope.ok = function () {
-    $modalInstance.close($scope.selected.item);
-  };
-
-  $scope.cancel = function () {
-    $modalInstance.dismiss('cancel');
-  };
-};
-
 
 angular.module( 'omniwallet' )
   .factory( 'wallet_balances_template', function ( $q, $http ) {
@@ -153,18 +103,24 @@ angular.module( 'omniwallet' )
     }
   } )
   .controller( 'WalletBalancesController', function ( $modal, $rootScope, $injector, $scope, wallet_balances_data, wallet_balances_template ) {
-/*    setTimeout( function() {
-      console.log( 'Remove 13pm7cmA5vVpKkDLJCvqh26kcp6V6PJ1Aq' );
-      $injector.get( 'userService' ).removeAddress( "13pm7cmA5vVpKkDLJCvqh26kcp6V6PJ1Aq", "NOPE!" );
-      _.defer( $scope.showWalletBalances );
-    }, 5000 );
 
-    setTimeout( function() {
-      console.log( 'Remove 1KRZKBqzcqa4agQbYwN5AuHsjvG9fSo2gW' );
-      $injector.get( 'userService' ).removeAddress( "1KRZKBqzcqa4agQbYwN5AuHsjvG9fSo2gW", "NOPE!" );
-      _.defer( $scope.showWalletBalances );
-    }, 10000 );
-*/
+   $scope.openDeleteConfirmForm = function( address ) {
+      var modalInstance = $modal.open( {
+        templateUrl: '/partials/delete_address_modal.html',
+        controller: DeleteBtcAddressModal,
+        resolve: {
+          address: function() {
+            return address;
+          }
+        }
+      });
+
+      modalInstance.result.then( function() {
+        $injector.get( 'userService' ).removeAddress( address );
+        $scope.showWalletBalances();
+      }, function() {} );
+    };
+
     $scope.openAddForm = function( currency ) {
 
       var modalInstance = $modal.open({
@@ -173,7 +129,7 @@ angular.module( 'omniwallet' )
       });
 
     modalInstance.result.then(function ( result ) {
-        console.log( result );
+
         if( result.privKey && result.password )
         {
           $injector.get( 'userService' ).addAddress( 
@@ -202,6 +158,20 @@ angular.module( 'omniwallet' )
       } );          
     };
   });
+
+
+var DeleteBtcAddressModal = function ($scope, $modalInstance, address ) {
+  $scope.address = address;
+
+  $scope.ok = function () {
+    $modalInstance.close();
+  };
+
+  $scope.cancel = function () {
+    $modalInstance.dismiss('cancel');
+  };
+};
+
 
 var AddBtcAddressModal = function ($scope, $modalInstance ) {
   $scope.ok = function ( result ) {
