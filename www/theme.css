@@ -11,3 +11,8 @@ a {
 .navbar-nav > li {
   padding-top: 5%;
 }
+
+.currency-name, .currency-total, .currency-value {
+	font-weight: bold;
+	font-size: large;
+}
