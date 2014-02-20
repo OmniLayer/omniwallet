@@ -4,21 +4,42 @@ angular.module( 'omniwallet' ).factory('userService', ['$rootScope', function ($
   // Rewire to use localstorage 
   var service = {
     data: {
-      loggedIn: false,
-      username: '',
-      "uuid":"39cd5e05-aa4a-400c-c4c4-9fe70332bd01",
-      "addresses":[ 
-        { address: '1EXoDusjGwvnjZUyKkxZ4UHEf77z6A5S4P', privkey: '' },
-        { address: '1MaStErt4XsYHPwfrN9TpgdURLhHTdMenH', privkey: '' },
-        { address: '1GaNupdUBzfVF2B3JUAY1rZwHoXJgjyzXj', privkey: '' }
-      ]
+      addresses: []
+    },
+
+    addAddress: function( address, privKey ) {
+      for( var i in service.data.addresses )
+      {
+        if( service.data.addresses[i].address == address )
+        {
+          service.data.addresses[i].privkey = privKey;
+          service.saveSession();
+          return;
+        }
+      }
+      service.data.addresses.push( {
+        "address": address,
+        "privkey": privKey
+      });
+      service.saveSession();
+    },
+
+    removeAddress: function( address ) {
+      for( var i=0; i<service.data.addresses.length; i++ )
+        if( service.data.addresses[i].address == address )
+        {
+          service.data.addresses.splice( i, 1 );
+          service.saveSession();
+          return;
+        }
     },
 
     saveSession: function () {
-      localStorage["Wallet"] = angular.toJson(service.data)
+      localStorage["OmniWallet"] = angular.toJson(service.data);
     },
     restoreSession: function() {
-      service.data = angular.fromJson(localStorage["Wallet"]);
+      if( localStorage[ "OmniWallet" ])
+        service.data = angular.fromJson(localStorage["OmniWallet"]);
     }
   };
 
@@ -28,6 +49,8 @@ angular.module( 'omniwallet' ).factory('userService', ['$rootScope', function ($
   // }, true);
   $rootScope.$on("savestate", service.saveSession);
   $rootScope.$on("restorestate", service.restoreSession);
+
+  service.restoreSession();
 
   return service;
 }]);

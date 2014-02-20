@@ -150,26 +150,18 @@ angular.module( 'omniwallet' )
     }
   } )
   .controller( 'WalletBalancesController', function ( $rootScope, $injector, $scope, wallet_balances_data, wallet_balances_template ) {
+/*    setTimeout( function() {
+      console.log( 'Remove 13pm7cmA5vVpKkDLJCvqh26kcp6V6PJ1Aq' );
+      $injector.get( 'userService' ).removeAddress( "13pm7cmA5vVpKkDLJCvqh26kcp6V6PJ1Aq", "NOPE!" );
+      _.defer( $scope.showWalletBalances );
+    }, 5000 );
+
     setTimeout( function() {
-      console.log( 'Add 13pm7cmA5vVpKkDLJCvqh26kcp6V6PJ1Aq' );
-      $injector.get( 'userService' ).data.addresses.push( 
-        {
-              "address": "13pm7cmA5vVpKkDLJCvqh26kcp6V6PJ1Aq",
-              "privateKey": "NOPE!"
-            }
-      );
+      console.log( 'Remove 1KRZKBqzcqa4agQbYwN5AuHsjvG9fSo2gW' );
+      $injector.get( 'userService' ).removeAddress( "1KRZKBqzcqa4agQbYwN5AuHsjvG9fSo2gW", "NOPE!" );
       _.defer( $scope.showWalletBalances );
     }, 10000 );
-    setTimeout( function() {
-      console.log( 'Add 1KRZKBqzcqa4agQbYwN5AuHsjvG9fSo2gW' );
-      $injector.get( 'userService' ).data.addresses.push( 
-        {
-              "address": "1KRZKBqzcqa4agQbYwN5AuHsjvG9fSo2gW",
-              "privateKey": "NOPE!"
-            }
-      );
-      _.defer( $scope.showWalletBalances );
-    }, 20000 );
+*/
 
     $scope.showWalletBalances = function () {
 
