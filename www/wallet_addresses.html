@@ -1,5 +1,8 @@
-<div class="sidecar col-xs-2" ng-controller="SidecarController" ng-init=setView('wallet')>
-    <div ng-include="templates['sidecar']"></div>
-</div>
+<div class="col-xs-12">
+	<div class="sidecar col-xs-2" ng-controller="SidecarController" ng-init=setView('wallet')>
+	    <div ng-include="templates['sidecar']"></div>
+	</div>
 
-Wallet Addresses
+	<div ng-controller="WalletBalancesController" ng-init="showWalletBalances()" show-wallet-balances template="{{template}}">
+	</div>
+</div>

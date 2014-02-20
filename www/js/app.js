@@ -1,4 +1,8 @@
-var app = angular.module('omniwallet', ['ngRoute'],
+angular.module('omniwallet', [
+    'ngRoute',
+    'ui.bootstrap',
+    'ui.bootstrap.modal'
+  ],
   function($routeProvider, $locationProvider, $httpProvider) {
     
     $httpProvider.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded;charset=utf-8';
@@ -239,18 +243,15 @@ angular.module('omniwallet').directive('omInput', function() {
    }
 });
 
-app.factory('userService', ['$rootScope', function ($rootScope) {
+angular.module( 'omniwallet' ).factory('userService', ['$rootScope', function ($rootScope) {
   // Rewire to use localstorage 
   var service = {
     data: {
       loggedIn: false,
       username: '',
-      uuid: '',
-      addresses: [
-        {
-          privateKey: '',
-          address: ''
-        }
+      "uuid":"39cd5e05-aa4a-400c-c4c4-9fe70332bd01",
+      "addresses":[ 
+              
       ]
     },
 
