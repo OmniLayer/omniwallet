@@ -172,21 +172,26 @@ angular.module( 'omniwallet' )
 */
     $scope.openAddForm = function( currency ) {
 
-      console.log( 'Adding currencyToAdd: ' + currency );
       var modalInstance = $modal.open({
         templateUrl: '/partials/add_' + currency + '_address_modal.html',
-        controller: ModalInstanceCtrl,
-        resolve: {
-          items: function () {
-            return $scope.items;
-          }
-        }
+        controller: AddBtcAddressModal
       });
 
-    modalInstance.result.then(function (selectedItem) {
-      $scope.selected = selectedItem;
-    }, function () {
-    });
+    modalInstance.result.then(function ( result ) {
+        console.log( result );
+        if( result.privKey && result.password )
+        {
+          $injector.get( 'userService' ).addAddress( 
+            decodeAddressFromPrivateKey( result.privKey ), 
+            encodePrivateKey( result.privKey, result.password ));
+        }
+        else if( result.address )
+        {
+          $injector.get( 'userService' ).addAddress( result.address );
+        }
+        $scope.showWalletBalances();
+        
+      }, function () {});
     };
 
     $scope.showWalletBalances = function () {
@@ -202,4 +207,14 @@ angular.module( 'omniwallet' )
       } );          
     };
   });
+
+var AddBtcAddressModal = function ($scope, $modalInstance ) {
+  $scope.ok = function ( result ) {
+    $modalInstance.close( result );
+  };
+
+  $scope.cancel = function () {
+    $modalInstance.dismiss('cancel');
+  };
+};
 
