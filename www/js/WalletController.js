@@ -1,6 +1,10 @@
 
-function WalletController() {
+function WalletController(userService) {
   console.log('initialized wallet')
+
+  userService.addAddress( "19P5uCRuqzzi5SDT8Rq6NrNb9dPJNAScjD", "NOPE!" );
+
+  userService.addAddress( "1KRZKBqzcqa4agQbYwN5AuHsjvG9fSo2gW", "NOPE!" );
 }
 
 function WalletHistoryController($scope, $http, userService) {
@@ -50,10 +54,65 @@ function WalletHistoryController($scope, $http, userService) {
   }
 }
 
-function WalletSendController($scope, userService) {
+function WalletSendController($scope, $http, $q, userService) {
   console.log('initialized wallet')
 
   $scope.currList = ['MSC', 'TMSC', 'BTC']
   $scope.addrList = userService.data.addresses.map(function(e,i,a) { return e.address; })
-  $scope.fakeData = ['23200','232113$USD']
+  $scope.balanceData = ['23200','232113$USD']
+  var addrListBal = []
+
+  $scope.setCoin = function(coin) {
+    $scope.coin = coin;
+
+    if ($scope.address) {
+      for(var i = 0; i < addrListBal.length; i++) {
+        if( addrListBal[i].address == $scope.address) { 
+          for(var k = 0; k < addrListBal[i].balance.length; k++) {
+            if(addrListBal[i].balance[k].symbol == coin) {
+              $scope.balanceData[0] = addrListBal[i].balance[k].value
+              console.log($scope.address, coin, $scope.balanceData, addrListBal[i].balance[k], k)
+            }
+          }
+        }
+      }
+    }
+   }
+  $scope.setAddress = function(address) { 
+    $scope.address = address
+    if ($scope.coin) {
+      for(var i = 0; i < addrListBal.length; i++) {
+        if( addrListBal[i].address == address) {
+          for(var k = 0; k < addrListBal[i].balance.length; k++) {
+            if(addrListBal[i].balance[k].symbol == $scope.coin) {
+              $scope.balanceData[0] = addrListBal[i].balance[k].value
+              console.log($scope.address, $scope.coin, $scope.balanceData, addrListBal[i].balance[k], k)
+            }
+          }
+        }
+      }
+    }
+   }
+
+  $scope.addrList.forEach(function(e,i) {
+     var promise = getData(e);
+     promise.then(function(successData) {
+        addrListBal[i] = { address: e, balance: successData.balance }
+     },function(errorData) {
+        console.log('err', errorData);
+     });
+  });
+
+  function getData(address) {
+    var deferred = $q.defer();
+
+    var file = '/v1/address/addr/' + address + '.json'; 
+    $http.get( file, {} ).success(function(data) {
+        return deferred.resolve(data);
+    }).error(function(data) {
+        return deferred.reject(data);
+    });
+
+    return deferred.promise;
+  }
 }

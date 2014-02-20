@@ -6,16 +6,16 @@
   <div class="text-center col-xs-8" >Wallet Send</div>
     <br>
   <div class="row">
-    <div om-select addclass="col-xs-10" text="Send money: " options="{{currList}}"></div>
+    <div om-select addclass="col-xs-10" type="coin" text="Send money: " expr="setCoin"  options="{{currList}}"></div>
   </div>
     <br>
   <div class="row">
-    <div om-select addclass="col-xs-10" text="From address: " options="{{addrList}}"></div>
+    <div om-select addclass="col-xs-10" type="address" text="From address: " expr="setAddress" options="{{addrList}}"></div>
   </div>
     <br>
   <div class="row">
-    <div om-input addclass="col-xs-8" text="Amount: " 
-      value="0.0" addons="Available: {{fakeData[0]}},Est: {{fakeData[1]}}"></div> 
+    <div om-input addclass="col-xs-8" ng-model="balanceData" text="Amount: " 
+      value="0.0" data="balanceData" addons="Available: ,Est: "></div> 
   </div>
     <br>
   <div class="row" ng-model="validAddress">
