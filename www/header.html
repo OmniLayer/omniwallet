@@ -11,10 +11,13 @@
         </div>
         <div class="navbar-collapse collapse">
             <ul class="nav navbar-nav navbar-right">
-              <li class="c-visible-xs">
+              <li class="c-visible-xs" ng-show="user.loggedIn">
               <a href="/wallet">Your Wallet</a></li>
-              <li><a href="/trade">Trade</a></li>
-              <li><a href="/explorer">Explorer</a></li>
+              <li ng-show="user.loggedIn"><a href="/trade">Trade</a></li>
+              <li ng-hide="user.loggedIn"><a href="/create">Create Wallet</a></li>
+              <li ng-hide="user.loggedIn"><a href="/login">Login</a></li>
+              <li ng-hide="user.loggedIn"><a href="/wallet">My Wallet</a></li>
+              <li ng-hide="user.loggedIn"><a href="/explore">Explorer</a></li>
               <li><a href="/about">About</a></li>
             </ul>
         </div>

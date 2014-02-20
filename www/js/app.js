@@ -1,5 +1,13 @@
-angular.module('omniwallet', ['ngRoute'],
-  function($routeProvider, $locationProvider) {
+angular.module('omniwallet', [
+    'ngRoute',
+    'ui.bootstrap',
+    'ui.bootstrap.modal'
+  ],
+  function($routeProvider, $locationProvider, $httpProvider) {
+    
+    $httpProvider.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded;charset=utf-8';
+    $httpProvider.defaults.transformRequest = [TransformRequest];
+
     $routeProvider.when('/wallet/:page?', {
       templateUrl: function(route) {       
         //new views added here
@@ -54,14 +62,25 @@ angular.module('omniwallet', ['ngRoute'],
     }).when('/', {
        templateUrl: 'homepage.html',
        controller: HomeCtrl
+    }).when('/login', {
+      templateUrl: 'login.html',
+    }).when('/create', {
+      templateUrl: 'create_wallet.html',
     }).otherwise({ redirectTo: '/' });
 
     $locationProvider.html5Mode(true).hashPrefix('!');
 });
 
+function SimpleSendController($scope, userService) {
+  var wallet = userService.getWallet();
+
+  MySimpleSendHelpers(wallet);
+
+
+}
+
 function HomeCtrl($templateCache) {
-  //DEV ONLY
-  $templateCache.removeAll()
+  $templateCache.removeAll();
 }
 function ExplorerCtrl() {
 }
@@ -87,13 +106,15 @@ function Ctrl($scope, $route, $routeParams, $location) {
 
 }
 
-function NavigationController($scope, $http) {
+function NavigationController($scope, $http, userService) {
     $scope.values = {};
     
     $scope.getNavData = function() {
       console.log('init 0');
     }
-
+    console.log(userService);
+     
+    $scope.user = userService.data;
 }
 
 function BTCController($scope, $http) {
@@ -197,6 +218,7 @@ angular.module('omniwallet').directive('omSelect', function() {
 });
 
 angular.module('omniwallet').directive('omInput', function() {
+  console.log( new Error( 'Blah!' ).stack );
    return {  
       template: '<div class="input-group">   \
       <span class="input-group-addon"> {{text}} </span>  \
@@ -231,3 +253,70 @@ angular.module('omniwallet').directive('omInput', function() {
       }
    }
 });
+
+angular.module( 'omniwallet' ).factory('userService', ['$rootScope', function ($rootScope) {
+  // Rewire to use localstorage 
+  var service = {
+    data: {
+      loggedIn: false,
+      username: '',
+      "uuid":"39cd5e05-aa4a-400c-c4c4-9fe70332bd01",
+      "addresses":[ 
+              
+      ]
+    },
+
+    saveSession: function () {
+      localStorage["Wallet"] = angular.toJson(service.data)
+    },
+    restoreSession: function() {
+      service.data = angular.fromJson(localStorage["Wallet"]);
+    }
+  };
+
+  // $rootScope.$watch('userService.data', function(newVal, oldVal) {
+  //   console.log("watched");
+  //   $rootScope.$broadcast('savestate');
+  // }, true);
+  $rootScope.$on("savestate", service.saveSession);
+  $rootScope.$on("restorestate", service.restoreSession);
+
+  return service;
+}]);
+
+function TransformRequest(data) { 
+  var param = function(obj) {
+    var query = '';
+    var name, value, fullSubName, subName, subValue, innerObj, i;
+
+    for(name in obj) {
+      value = obj[name];
+
+      if(value instanceof Array) {
+        for(i=0; i<value.length; ++i) {
+          subValue = value[i];
+          fullSubName = name + '[' + i + ']';
+          innerObj = {};
+          innerObj[fullSubName] = subValue;
+          query += param(innerObj) + '&';
+        }
+      }
+      else if(value instanceof Object) {
+        for(subName in value) {
+          subValue = value[subName];
+          fullSubName = name + '[' + subName + ']';
+          innerObj = {};
+          innerObj[fullSubName] = subValue;
+          query += param(innerObj) + '&';
+        }
+      }
+      else if(value !== undefined && value !== null) {
+        query += encodeURIComponent(name) + '=' + encodeURIComponent(value) + '&';
+      }
+    }
+
+    return query.length ? query.substr(0, query.length - 1) : query;
+  };
+
+  return angular.isObject(data) && String(data) !== '[object File]' ? param(data) : data;
+}
