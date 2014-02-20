@@ -2,7 +2,7 @@
 
 angular.module('omniwallet').directive('omSelect', function() {
    return {  
-      template: '<div class="form-inline col-xs-4"> \
+      template: '<div class="form-inline"> \
         {{text}}    \
         <select class="form-control">  \
           <option ng-repeat="option in options"> {{option}} </option>   \
@@ -13,8 +13,10 @@ angular.module('omniwallet').directive('omSelect', function() {
       },
       link: function link(scope, iElement, iAttrs) {
         //DEBUG console.log(typeof iAttrs.options, scope)
-        scope.options = JSON.parse(scope.localOptions)
         scope.text = iAttrs.text
+        scope.options = JSON.parse(scope.localOptions)
+
+        iElement.find('.form-inline').addClass(iAttrs.addclass)
       }
    }
 });

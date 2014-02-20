@@ -4,9 +4,10 @@
 
 <div class="col-xs-10" ng-controller="WalletHistoryController" ng-init="getData(first)">
   <table class="table table-striped table-hover table-condensed">
-    <caption> Wallet History for 
+    <caption> Wallet History for {{selectedAddress}}
       <select ng-model="selectedAddress" ng-options="addr as addr for addr in addresses" 
         ng-change="getData(selectedAddress)">
+      <option value="">-- choose address --</option>
       </select> 
     </caption>
     <thead>

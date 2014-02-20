@@ -9,7 +9,7 @@ function WalletHistoryController($scope, $http, userService) {
   $scope.first = userService.data.addresses[0]
   $scope.addresses = userService.data.addresses
 
-  $scope.getData = function getData(address) { console.log(address);
+  $scope.getData = function getData(address) {
 
     var file = '/v1/address/addr/' + address + '.json'; 
     $http.get( file, {} ).success(
@@ -44,16 +44,16 @@ function WalletHistoryController($scope, $http, userService) {
           //DEBUG console.log(new Date(Number(transaction.tx_time)))
           transaction_data[index].tx_hash = transaction.tx_hash.substring(0,22) + '...'
         });
-        console.log(transaction_data)
+        
         $scope.history = transaction_data;
       });
   }
 }
 
-function WalletSendController($scope) {
+function WalletSendController($scope, userService) {
   console.log('initialized wallet')
 
   $scope.currList = ['MSC', 'TMSC', 'BTC']
-  $scope.addrList = ['1Sochi', '1Enjoy', '1Balding']
+  $scope.addrList = userService.data.addresses
   $scope.fakeData = ['23200','232113$USD']
 }
