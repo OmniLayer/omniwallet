@@ -55,18 +55,27 @@ angular.module( 'omniwallet' )
 			return '<div><p ng-repeat="item in items">{{item}}</p></div>';
 		};
 	})
-	.factory( 'wallet_balances_data', function () {
+	.factory( 'wallet_balances_data', function ( $q, $timeout ) {
 		var count = 1;
-		return function () {
-		// obviously would be $http
-			var result = [];
-			for( var i=0; i<count; i++ )
-				result.push( i );
-			count++;
-			return result;
+		return {
+			"getData": function() {
+				var deferred = $q.defer();
+
+				$timeout( function() {
+					var result = [];
+					for( var i=0; i<count; i++ )
+						result.push( i );
+					count++;
+
+					deferred.resolve( result );
+				}, 1000 );
+
+				return deferred.promise;
+
+			} 
 		};
 	})
-	.directive( 'showData', function( $compile ) {
+	.directive( 'showWalletBalances', function( $compile ) {
 		return {
 			scope: true,
 			link: function ( scope, element, attrs ) {
@@ -90,13 +99,15 @@ angular.module( 'omniwallet' )
 	.controller( 'WalletBalancesController', function ( $scope, wallet_balances_data, wallet_balances_template ) {
 		$scope.showContent = function () {
 			function updateContent() {
-				_.defer( function() {
-					$scope.items = wallet_balances_data(); 
-					$scope.template = wallet_balances_template();
-					$scope.$apply();
-					setTimeout( function() {
-						updateContent();
-					}, 1000 );				
+				$scope.items = wallet_balances_data.getData().then( function( items ) {
+					_.defer( function() {
+						$scope.items = items;	
+						$scope.template = wallet_balances_template();
+						$scope.$apply();
+						setTimeout( function() {
+							updateContent();
+						}, 1000 );				
+					}); 
 				} );					
 			}
 			updateContent();
