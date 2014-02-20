@@ -62,6 +62,11 @@ Find this section near the beginning of /etc/nginx/sites-available/default:
         index index.html index.htm;
 ```
 Change the ``root`` directive to reflect the location of your omniwallet codebase (actually the www directory within that codebase).
+
+Make sure you have uglifyjs (Note that there are a couple flavors of this available - you need the ``uglifyjs`` executable, which is included in the ``uglify-js`` NPM module - NOT the ``uglifyjs`` module!
+```
+sudo npm install -g uglify-js
+```
 Run npm install
 ```
 npm install
