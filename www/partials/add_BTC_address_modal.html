@@ -1,13 +1,8 @@
 <div class="modal-header">
-    <h3>I'm a modal!</h3>
+    <h3>Add a new bitcoin address</h3>
 </div>
 <div class="modal-body">
-    <ul>
-        <li ng-repeat="item in items">
-            <a ng-click="selected.item = item">{{ item }}</a>
-        </li>
-    </ul>
-    Selected: <b>{{ selected.item }}</b>
+    Don't have a bitcoin address already?  You can generate one (and its associated private key) over at <a href="https://www.bitaddress.org" target="_blank">bitaddress.org</a>.
 </div>
 <div class="modal-footer">
     <button class="btn btn-primary" ng-click="ok()">OK</button>

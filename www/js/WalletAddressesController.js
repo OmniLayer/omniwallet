@@ -172,9 +172,9 @@ angular.module( 'omniwallet' )
 */
     $scope.openAddForm = function( currency ) {
 
-      $scope.currencyToAdd = currency;
+      console.log( 'Adding currencyToAdd: ' + currency );
       var modalInstance = $modal.open({
-        templateUrl: '/partials/add_address_modal.html',
+        templateUrl: '/partials/add_' + currency + '_address_modal.html',
         controller: ModalInstanceCtrl,
         resolve: {
           items: function () {
