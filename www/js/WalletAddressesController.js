@@ -73,33 +73,28 @@ angular.module( 'omniwallet' )
 
             var balances = {};
             var currencyInfo;
+            var emptyAddresses = [];
 
             wallet.addresses.forEach( function( addr ) {
-              requests.push( $http.get( '/v1/address/addr/' + addr.address + '.json' ).then( function( result ) {
-                if( result.status = 200 ) {
-                  result.data.balance.forEach( function( currencyItem ) {
-                    if( !balances.hasOwnProperty( currencyItem.symbol )) {
-                      balances[ currencyItem.symbol ] = {
-                        "symbol": currencyItem.symbol,
-                        "balance": parseFloat( currencyItem.value ),
-                        "addresses": {}
-                      };
-                    }
-                    else
-                    {
-                      balances[ currencyItem.symbol ].balance += parseFloat( currencyItem.value );
-                    }
-                    balances[ currencyItem.symbol ].addresses[ result.data.address ] = {
-                      "address": result.data.address,
-                      "value": currencyItem.value
+              requests.push( addressRequest( $http, $q, addr ).then( function( result ) {
+                result.data.balance.forEach( function( currencyItem ) {
+                  if( !balances.hasOwnProperty( currencyItem.symbol )) {
+                    balances[ currencyItem.symbol ] = {
+                      "symbol": currencyItem.symbol,
+                      "balance": parseFloat( currencyItem.value ),
+                      "addresses": {}
                     };
-                  } );
-                }
-                return result;
-              },
-              function( error ) {
-                return error;
-              } ));
+                  }
+                  else
+                  {
+                    balances[ currencyItem.symbol ].balance += parseFloat( currencyItem.value );
+                  }
+                  balances[ currencyItem.symbol ].addresses[ result.data.address ] = {
+                    "address": result.data.address,
+                    "value": currencyItem.value
+                  };
+                } );
+              }));
             });
             requests.push( $http.get( '/v1/transaction/values.json' ).then( 
               function( result ) {
@@ -190,7 +185,7 @@ angular.module( 'omniwallet' )
           $injector.get( 'userService' ).addAddress( result.address );
         }
         $scope.showWalletBalances();
-        
+
       }, function () {});
     };
 
@@ -218,3 +213,25 @@ var AddBtcAddressModal = function ($scope, $modalInstance ) {
   };
 };
 
+function addressRequest( $http, $q, addr ) {
+  var deferred = $q.defer();
+
+  $http.get( '/v1/address/addr/' + addr.address + '.json' ).then( 
+    function( result ) {
+      deferred.resolve( result );
+    },
+    function( error ) {
+      deferred.resolve( {
+        data: { 
+          address: addr.address,
+          balance: 
+           [ { symbol: 'MSC', value: '0.0' },
+             { symbol: 'TMSC', value: '0.0' },
+             { symbol: 'BTC', value: '0.0' } ] 
+           }
+      });
+    }
+  );
+
+  return deferred.promise;
+}
