@@ -48,7 +48,7 @@ var ModalInstanceCtrl = function ($scope, $modalInstance, items) {
   };
 };
 
-var count = 1;
+
 angular.module( 'omniwallet' )
 	.factory( 'wallet_balances_template', function () {
 		return function () {
@@ -56,6 +56,7 @@ angular.module( 'omniwallet' )
 		};
 	})
 	.factory( 'wallet_balances_data', function () {
+		var count = 1;
 		return function () {
 		// obviously would be $http
 			var result = [];
@@ -86,10 +87,19 @@ angular.module( 'omniwallet' )
 		    }
 		}
 	} )
-	.controller( 'MyCtrl', function ( $scope, wallet_balances_data, wallet_balances_template ) {
+	.controller( 'WalletBalancesController', function ( $scope, wallet_balances_data, wallet_balances_template ) {
 		$scope.showContent = function () {
-			$scope.items = wallet_balances_data(); 
-			$scope.template = wallet_balances_template();
+			function updateContent() {
+				_.defer( function() {
+					$scope.items = wallet_balances_data(); 
+					$scope.template = wallet_balances_template();
+					$scope.$apply();
+					setTimeout( function() {
+						updateContent();
+					}, 1000 );				
+				} );					
+			}
+			updateContent();
 		};
 	});
 
