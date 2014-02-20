@@ -2,12 +2,18 @@
     <div ng-include="templates['sidecar']"></div>
 </div>
 
-<div class="col-xs-10" ng-controller="WalletHistoryController" ng-init="getData('13NRX88EZbS5q81x6XFrTECzrciPREo821')">
+<div class="col-xs-10" ng-controller="WalletHistoryController" ng-init="getData(first)">
   <table class="table table-striped table-hover table-condensed">
-    <caption> Wallet History for {{address}} </caption>
+    <caption> Wallet History for {{selectedAddress}}
+      <select ng-model="selectedAddress" ng-options="addrObject.address as addrObject.address for addrObject in addresses" 
+        ng-change="getData(selectedAddress)">
+      <option value="">-- choose address --</option>
+      </select> 
+    </caption>
     <thead>
         <tr>
           <th>Transaction hash</th>
+          <th>Currency</th>
           <th>Type</th>
           <th>Amount</th>
           <th>Transaction time</th>
@@ -19,6 +25,7 @@
   <tr ng-repeat="transaction in history">
    {{transaction}}
    <td>{{transaction.tx_hash}}</td>
+   <td>{{transaction.currency_str}}</td>
    <td>{{transaction.tx_type_str}}</td>
    <td>{{transaction.formatted_amount}}</td>
     <td>{{transaction.tx_time | date:'dd MMM HH:mma Z'}}</td>
