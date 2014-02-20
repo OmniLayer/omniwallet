@@ -3,8 +3,6 @@
 	    <div ng-include="templates['sidecar']"></div>
 	</div>
 
-	<div ng-controller="WalletBalancesController">
-		<button ng-click="showContent()">Start Showing the Content</button>
-		<div show-wallet-balances template="{{template}}"></div>
+	<div ng-controller="WalletBalancesController" ng-init="showWalletBalances()" show-wallet-balances template="{{template}}">
 	</div>
 </div>

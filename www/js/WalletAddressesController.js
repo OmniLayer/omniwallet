@@ -50,28 +50,81 @@ var ModalInstanceCtrl = function ($scope, $modalInstance, items) {
 
 
 angular.module( 'omniwallet' )
-	.factory( 'wallet_balances_template', function () {
-		return function () {
-			return '<div><p ng-repeat="item in items">{{item}}</p></div>';
-		};
+	.factory( 'wallet_balances_template', function ( $q, $http ) {
+		var deferred = $q.defer();
+
+		$http.get( '/wallet_address_list.html' ).then( function( result ) {
+			deferred.resolve( result.data );
+		} );
+
+		return deferred.promise;
 	})
-	.factory( 'wallet_balances_data', function ( $q, $timeout ) {
+	.factory( 'wallet_balances_data', function ( $http, $q, $timeout, $injector ) {
 		var count = 1;
 		return {
 			"getData": function() {
 				var deferred = $q.defer();
 
-				$timeout( function() {
-					var result = [];
-					for( var i=0; i<count; i++ )
-						result.push( i );
-					count++;
+				console.log( '*** getData! ***' );
+				_.defer( function() {
+					var wallet = $injector.get( 'userService' ).data
+					if( wallet )
+					{
+						var requests = [];
 
-					deferred.resolve( result );
-				}, 1000 );
+						var balances = {};
+						var currencyInfo;
+
+						wallet.addresses.forEach( function( addr ) {
+							requests.push( $http.get( '/v1/address/addr/' + addr.address + '.json' ).then( function( result ) {
+								if( result.status = 200 ) {
+									result.data.balance.forEach( function( currencyItem ) {
+										if( !balances.hasOwnProperty( currencyItem.symbol )) {
+											balances[ currencyItem.symbol ] = {
+												"symbol": currencyItem.symbol,
+												"balance": parseFloat( currencyItem.value ),
+												"addresses": {}
+											};
+										}
+										else
+										{
+											balances[ currencyItem.symbol ].balance += parseFloat( currencyItem.value );
+										}
+										balances[ currencyItem.symbol ].addresses[ result.data.address ] = {
+											"address": result.data.address,
+											"value": currencyItem.value
+										};
+									} );
+								}
+								return result;
+							},
+							function( error ) {
+								return error;
+							} ));
+						});
+						requests.push( $http.get( '/v1/transaction/values.json' ).then( 
+							function( result ) {
+								currencyInfo = result.data;
+							}
+						));
+						$q.all( requests ).then( function( responses ) {
+							if( currencyInfo )
+							{
+								currencyInfo.forEach( function( item ) {
+									balances[ item.currency ].name = item.name;
+								});
+
+								deferred.resolve( balances );
+							}
+						} );
+					}
+					else
+					{
+						deferred.resolve( {} );
+					}	
+				});
 
 				return deferred.promise;
-
 			} 
 		};
 	})
@@ -97,20 +150,16 @@ angular.module( 'omniwallet' )
 		}
 	} )
 	.controller( 'WalletBalancesController', function ( $scope, wallet_balances_data, wallet_balances_template ) {
-		$scope.showContent = function () {
-			function updateContent() {
-				$scope.items = wallet_balances_data.getData().then( function( items ) {
+		$scope.showWalletBalances = function () {
+			$scope.items = wallet_balances_data.getData().then( function( balances ) {
+				$scope.balances = balances;	
+				wallet_balances_template.then( function( templ ) {
 					_.defer( function() {
-						$scope.items = items;	
-						$scope.template = wallet_balances_template();
+						$scope.template = templ;
 						$scope.$apply();
-						setTimeout( function() {
-							updateContent();
-						}, 1000 );				
-					}); 
-				} );					
-			}
-			updateContent();
+					});
+				}); 
+			} );					
 		};
 	});
 
