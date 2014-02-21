@@ -58,7 +58,6 @@ angular.module('omniwallet').directive('d3PieChart', function() {
 angular.module('omniwallet').directive('omSelect', function() {
    return {  
       template: '<div class="form-inline"> \
-        {{text}}    \
         <select class="form-control" ng-model="selectedOption" \
           ng-options="option for option in options" \
           ng-change="expr(selectedOption)">  \

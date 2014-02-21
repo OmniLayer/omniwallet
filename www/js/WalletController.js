@@ -134,7 +134,7 @@ function WalletSendController($scope, $http, $q, userService) {
 
   $scope.currList = ['MSC', 'TMSC', 'BTC']
   $scope.addrList = userService.data.addresses.map(function(e,i,a) { return e.address; })
-  $scope.balanceData = ['-- Select Coin/Address -- ','--- USD']
+  $scope.balanceData = ['   --  -- ']
   var addrListBal = []
 
   $scope.setCoin = function(coin) {
