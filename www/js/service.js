@@ -5,7 +5,14 @@ angular.module( 'omniwallet' ).factory('userService', ['$rootScope', function ($
   var service = {
     data: {
       addresses: [],
+      uuid: '',
       loggedIn: false
+    },
+
+    login: function(uuid) {
+      service.data.uuid = uuid;
+      service.data.loggedIn = true;
+      service.saveSession();
     },
 
     addAddress: function( address, privKey ) {
@@ -22,6 +29,7 @@ angular.module( 'omniwallet' ).factory('userService', ['$rootScope', function ($
         "address": address,
         "privkey": privKey
       });
+      service.data.loggedIn = true;
       service.saveSession();
     },
 
@@ -33,6 +41,12 @@ angular.module( 'omniwallet' ).factory('userService', ['$rootScope', function ($
           service.saveSession();
           return;
         }
+
+      if(service.data.addresses.length == 0) {
+        //Consider this a log out as well?
+        service.data.loggedIn = false;
+        service.saveSession();
+      }
     },
 
     saveSession: function () {
