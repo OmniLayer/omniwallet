@@ -43,7 +43,7 @@ function WalletController($scope, $q, $http, userService) {
 }
 
 function WalletHistoryController($scope, $http, userService) {
-  console.log('initialized wallet history', userService)
+  console.log('initialized wallet history')
 
   $scope.first = userService.data.addresses[0].address
   $scope.addresses = userService.data.addresses
@@ -91,10 +91,45 @@ function WalletHistoryController($scope, $http, userService) {
 
 function WalletSendController($scope, $http, $q, userService) {
   console.log('initialized wallet')
+  $('#fee-tooltip').tooltip({ title: 'Broadcast Fee: 0.0001 BTC + Dust Fees: 0.00006*4 = 0.00024 Total: 0.00034', placement: 'left' });
+  $scope.toAddress = ''
+  $scope.isValid = ''
+  $scope.addToScope = function(prop) { }
+  $scope.validateForm = function() {
+    var required = [$scope.coin,$scope.address,$scope.sendAmount,$scope.sendTo].map(
+      function(val) {
+        return angular.isDefined(val);
+      });
+    
+    var error = ''
+    if( required.indexOf(false) != -1) {
+       error += 'please fill out all the required fields, '
+    }
+    if(( (+$scope.sendAmount + 0.00034) < +$scope.balanceData[0]) == false) {
+       error += 'make sure your send amount+fees isn\'t more than you own, '
+    }
+    if( $scope.validAddress($scope.sendTo) == false) {
+       error += 'make sure you are sending to a valid MSC/BTC address, '
+    }
+    if( error.length == 0) {
+      console.log('everything looks ok')
+    } else {
+      error += 'and try again'
+      console.log(error);
+    }
+  }
+  $scope.validAddress = function(addr) {
+    try{
+      var checkValid = new Bitcoin.Address(addr);
+      return true
+    } catch(e) { 
+      return false
+    }
+  }
 
   $scope.currList = ['MSC', 'TMSC', 'BTC']
   $scope.addrList = userService.data.addresses.map(function(e,i,a) { return e.address; })
-  $scope.balanceData = ['23200','232113$USD']
+  $scope.balanceData = ['   --  -- ']
   var addrListBal = []
 
   $scope.setCoin = function(coin) {
