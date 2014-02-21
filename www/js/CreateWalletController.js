@@ -8,12 +8,43 @@ function CreateWalletController($scope, $http, userService) {
     } else {
       var uuid = generateUUID();
       var password = create.password;
+      var ecKey = new Bitcoin.ECKey();
+      var address = ecKey.getBitcoinAddress().toString();
+      var privateKey = Crypto.util.bytesToHex(ecKey.getPrivateKeyByteArray());
+      var encryptedPrivateKey = ecKey.getEncryptedFormat(password);
 
-      //Generate new wallet here
-      //Sync to server, if OK store in User Service
+      var wallet = {
+        uuid: uuid,
+        addresses: [address],
+        keys: [{
+          address: address,
+          encrypted: encryptedPrivateKey
+        }]
+      };
+
+      // Strange serialization effects, stringifying wallet initially
+      var postData = {
+        type: 'SYNCWALLET',
+        wallet: JSON.stringify(wallet)
+      }
+      $http({
+        url: '/v1/user/wallet/sync/',
+        method: 'POST',
+        data: postData,
+        headers: {'Content-Type': 'application/json'}
+      })
+      .success(function(data, status, headers, config) {
+        console.log("Success");
+        console.log(data);
+        userService.login(uuid);
+        userService.addAddress(address, privateKey);
+      })
+      .error(function(data, status, headers, config) {
+        console.log("Error on login");
+        $scope.serverError = true;
+      });
     }
   }
-  //Check User Service before overwriting it with new UUID/Wallet info
 
   function generateUUID() {
     var d = new Date().getTime();
