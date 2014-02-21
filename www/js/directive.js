@@ -99,7 +99,7 @@ angular.module('omniwallet').directive('omInput', function() {
           scope.addons = tAttrs.addons.split(',');
 
           for( var i = scope.addons.length-1; i >= 0; i--) {
-            var templateString = '<span class="input-group-addon">' + scope.addons[i] + ' {{data['+i+']}} </span>'
+            var templateString = '<span class="input-group-addon"> {{data['+i+']}} &nbsp' + scope.addons[i] + '  </span>'
             tElement.find('.form-control').after(templateString);
           }
         }

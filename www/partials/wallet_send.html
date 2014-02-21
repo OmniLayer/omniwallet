@@ -19,7 +19,7 @@
     <br>
   <div class="row">
     <div om-input addclass="col-xs-8" text="Amount: " 
-      placeholder="0.0" model="sendAmount" change="addToScope" data="balanceData" addons="Available: "></div> 
+      placeholder="0.0" model="sendAmount" change="addToScope" data="balanceData" addons="  Available"></div> 
   </div>
     <br>
   <div class="row">
@@ -32,6 +32,7 @@
     </div>
   </div>
     <br>
-  <button class="btn btn-primary btn-lg col-xs-8" ng-click="validateForm()" type="submit">Send Transaction</button>
+    <div class="col-xs-2"></div>
+  <button class="btn btn-primary btn-lg col-xs-4" ng-click="validateForm()" type="submit">Send Transaction</button>
 
 </div>
