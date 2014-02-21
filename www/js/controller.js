@@ -28,7 +28,10 @@ function NavigationController($scope, $http, userService) {
     
     $scope.getNavData = function() {
       console.log('init 0');
-    console.log(userService);
+    }
+
+    $scope.logout = function() {
+      userService.logout();
     }
      
     $scope.user = userService.data;

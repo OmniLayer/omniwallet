@@ -15,6 +15,14 @@ angular.module( 'omniwallet' ).factory('userService', ['$rootScope', function ($
       service.saveSession();
     },
 
+    logout: function() {
+      //Pain point as this grows
+      service.data.uuid = '',
+      service.data.loggedIn = false;
+      service.data.addresses = [];
+      localStorage.clear();
+    },
+
     addAddress: function( address, privKey ) {
       for( var i in service.data.addresses )
       {
