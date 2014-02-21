@@ -1,5 +1,5 @@
 function LoginController($scope, $http, userService) {
-  
+
   $scope.open = function(login) {
 
     var postData = {
