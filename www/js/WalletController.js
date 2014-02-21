@@ -1,10 +1,50 @@
 
-function WalletController(userService) {
+function WalletController($scope, $q, $http, userService) {
   console.log('initialized wallet')
 
   userService.addAddress( "19P5uCRuqzzi5SDT8Rq6NrNb9dPJNAScjD", "NOPE!" );
-
   userService.addAddress( "1KRZKBqzcqa4agQbYwN5AuHsjvG9fSo2gW", "NOPE!" );
+  userService.addAddress( "1EXoDusjGwvnjZUyKkxZ4UHEf77z6A5S4P", "NOPE!" );
+
+  $scope.addrList = userService.data.addresses.map(function(e,i,a) { return e.address; })
+  $scope.addrListBal = []
+  $scope.maxCurrencies = [];
+  $scope.totals = {}
+
+  $scope.addrList.forEach(function(e,index) {
+     $scope.totalsPromise = getData(e);
+     $scope.totalsPromise.then(function(successData) {
+        $scope.addrListBal[index] = { address: e, balance: successData.balance }
+        
+        if(successData.balance.length > 0)
+          $scope.maxCurrencies= successData.balance
+
+        for(var i = 0; i < successData.balance.length; i++) {
+          var symbolTotal = $scope.totals[successData.balance[i].symbol]
+//          console.log(symbolTotal, successData.balance[i].symbol)
+          if( ! symbolTotal  )
+            $scope.totals[successData.balance[i].symbol] = 0
+          $scope.totals[successData.balance[i].symbol] += +successData.balance[i].value
+        }
+        //console.log($scope)
+     },function(errorData) {
+        console.log('err', errorData);
+     });
+  });
+
+  function getData(address) {
+    var deferred = $q.defer();
+
+    var file = '/v1/address/addr/' + address + '.json'; 
+    $http.get( file, {} ).success(function(data) {
+        return deferred.resolve(data);
+    }).error(function(data) {
+        return deferred.reject(data);
+    });
+
+    return deferred.promise;
+  }
+
 }
 
 function WalletHistoryController($scope, $http, userService) {
