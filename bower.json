@@ -12,6 +12,7 @@
 		"sjcl": "~1.0",
 		"html5shiv": "~3.6",
 		"angular-bootstrap": "~0.10.0",
-		"angular-ui-bootstrap": "~0.10.0"
+		"angular-ui-bootstrap": "~0.10.0",
+		"d3": "~3.4.2"
 	}
 }
