@@ -14,7 +14,7 @@ def sync_wallet_response(request_dict):
 
   req_type = request_dict['type'][0].upper()
   if req_type == "SYNCWALLET":
-    syncWallets(request_dict['masterWallets'][0])
+    syncWallets(request_dict['wallet'][0])
   else:
     return (None, req_type + ' is not supported')
 
@@ -22,14 +22,12 @@ def sync_wallet_response(request_dict):
   return (json.dumps(response), None)
 
 
-def syncWallets(master_wallets_json):
-  master_wallets = json.loads(master_wallets_json)
-
-  for wallet in master_wallets:
-    uuid = wallet['uuid']
-    filename = data_dir_root + '/wallets/' + uuid + '.json'
-    with open(filename, 'w') as f:
-      json.dump(wallet, f)
+def syncWallets(wallet_json):
+  wallet = json.loads(wallet_json)
+  uuid = wallet['uuid']
+  filename = data_dir_root + '/wallets/' + uuid + '.json'
+  with open(filename, 'w') as f:
+    json.dump(wallet, f)
 
   return "OK"
 

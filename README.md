@@ -652,7 +652,7 @@ Example
 ```
 var postData = {
   type: 'SYNCWALLET',
-  masterWallets: userWallets
+  wallet: walletData
 };
 $.post('/v1/user/wallet/sync/', postData, function (data) {}).fail( function() {} );
 ```
@@ -662,7 +662,7 @@ Where:
 | Variable            | Possible Values              |
 | ------------------- | ---------------------------- |
 | type                | 'SYNCWALLET' |
-| masterWallets        | list of wallets user wants to save |
+| wallet        | The wallet the user wants to save |
 
 Returns no data
 
