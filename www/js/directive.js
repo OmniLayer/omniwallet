@@ -49,7 +49,7 @@ angular.module('omniwallet').directive('d3PieChart', function() {
                })
             .attr("dy", ".35em")
             .style("text-anchor", "middle")
-            .text(function(d) { console.log(d); return d.data.name; });
+            .text(function(d) { return d.data.name; });
       });
     }
   }
@@ -85,11 +85,13 @@ angular.module('omniwallet').directive('omInput', function() {
    return {  
       template: '<div class="input-group">   \
       <span class="input-group-addon"> {{text}} </span>  \
-      <input type="text" class="form-control">  \
+      <input type="text" class="form-control"> \
       </div>',
       scope: {
         addons: '@',
-        data: '='
+        data: '=',
+        model: '=',
+        change: '='
       },
       compile: function compile(tElement, tAttrs) {
         var scope = {}
@@ -102,6 +104,10 @@ angular.module('omniwallet').directive('omInput', function() {
             tElement.find('.form-control').after(templateString);
           }
         }
+        if( tAttrs.model ) {
+          tElement.find('.form-control').attr('ng-model', 'model').attr('ng-change','change(model)')
+         // tElement.after('<span style="color:red;">{{isValid}}</span>')
+        }
 
        return {
          post: function(scope, iElement, iAttrs) {
@@ -113,7 +119,7 @@ angular.module('omniwallet').directive('omInput', function() {
               iElement.find('.form-control').attr('value',iAttrs.value)
             else
               iElement.find('.form-control').attr('placeholder',iAttrs.placeholder)
-
+            
             if( iAttrs.disable ) {
               iElement.find('.form-control').attr('disabled','')
             }

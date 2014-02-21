@@ -14,18 +14,20 @@
   </div>
     <br>
   <div class="row">
-    <div om-input addclass="col-xs-8" ng-model="balanceData" text="Amount: " 
-      value="0.0" data="balanceData" addons="Available: ,Est: "></div> 
-  </div>
-    <br>
-  <div class="row" ng-model="validAddress">
-    <div om-input addclass="col-xs-8" text="To: " placeholder="1Sochi"></div> 
+    <div om-input addclass="col-xs-8" text="Amount: " 
+      placeholder="0.0" model="sendAmount" change="addToScope" data="balanceData" addons="Available: ,Est: "></div> 
   </div>
     <br>
   <div class="row">
-    <div om-input addclass="fees col-xs-8" text="Fees: " placeholder="0.002BTC (Why?)" disable=1 ></div> 
+    <div om-input model="sendTo" change="addToScope" addclass="col-xs-8" text="To: " placeholder="{{addrList[0]}}"></div> 
   </div>
     <br>
-  <button class="btn btn-primary" type="submit">Send Transaction</button>
+  <div class="row">
+    <div id="fee-tooltip">
+    <div om-input addclass="fees col-xs-8" text="Fees: " placeholder="0.00034BTC (Hover over me for more)" disable=1 ></div> 
+    </div>
+  </div>
+    <br>
+  <button class="btn btn-primary" ng-click="validateForm()" type="submit">Send Transaction</button>
 
 </div>
