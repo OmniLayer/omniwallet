@@ -1,6 +1,9 @@
 .middle {
   margin-top: 125px;
 }
+.arc path {
+  stroke: #fff;
+}
 a {
    cursor: pointer;
 }

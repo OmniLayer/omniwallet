@@ -3,5 +3,38 @@
 </div>
 
 <div class="col-xs-10" ng-controller="WalletController">
-Wallet Overview
+  <div class="row">
+    <div class="col-xs-5 text-center"> Chart Summary 
+      <div d3-pie-chart></div>
+    </div>
+    <div class="col-xs-5 text-center"> 
+      <table class="table table-striped table-hover table-condensed">
+        <caption> Totals</caption>
+          <br><br><br>
+        <thead>
+            <tr>
+              <th class="text-center" ng-repeat="type in maxCurrencies">{{type.symbol}}</th>
+            </tr>
+        </thead>
+        <td ng-repeat="total in totals">{{total}}</td>
+      </table>
+    </div>
+  </div>
+  <table class="table table-striped table-hover table-condensed">
+    <caption>Wallet Overview</caption>
+    <thead>
+        <tr>
+          <th>Address</th>
+          <th ng-repeat="type in maxCurrencies">{{type.symbol}}</th>
+          <th>Performance</th>
+        </tr>
+    </thead>
+  <tr ng-repeat="address in addrListBal">
+   <td>{{address.address}}</td>
+   <td ng-repeat="bal in address.balance">{{bal.value}}</td>
+   <td>+0.15% </td>
+  </tr>
+
+</table>
+
 </div
