@@ -1,10 +1,5 @@
 
 function WalletController($scope, $q, $http, userService) {
-  console.log('initialized wallet')
-
-  userService.addAddress( "19P5uCRuqzzi5SDT8Rq6NrNb9dPJNAScjD", "NOPE!" );
-  userService.addAddress( "1KRZKBqzcqa4agQbYwN5AuHsjvG9fSo2gW", "NOPE!" );
-  userService.addAddress( "1EXoDusjGwvnjZUyKkxZ4UHEf77z6A5S4P", "NOPE!" );
 
   $scope.addrList = userService.data.addresses.map(function(e,i,a) { return e.address; })
   $scope.addrListBal = []
