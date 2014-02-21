@@ -49,7 +49,7 @@ angular.module('omniwallet').directive('d3PieChart', function() {
                })
             .attr("dy", ".35em")
             .style("text-anchor", "middle")
-            .text(function(d) { console.log(d); return d.data.name; });
+            .text(function(d) { return d.data.name; });
       });
     }
   }
@@ -58,7 +58,6 @@ angular.module('omniwallet').directive('d3PieChart', function() {
 angular.module('omniwallet').directive('omSelect', function() {
    return {  
       template: '<div class="form-inline"> \
-        {{text}}    \
         <select class="form-control" ng-model="selectedOption" \
           ng-options="option for option in options" \
           ng-change="expr(selectedOption)">  \
@@ -85,11 +84,13 @@ angular.module('omniwallet').directive('omInput', function() {
    return {  
       template: '<div class="input-group">   \
       <span class="input-group-addon"> {{text}} </span>  \
-      <input type="text" class="form-control">  \
+      <input type="text" class="form-control"> \
       </div>',
       scope: {
         addons: '@',
-        data: '='
+        data: '=',
+        model: '=',
+        change: '='
       },
       compile: function compile(tElement, tAttrs) {
         var scope = {}
@@ -98,9 +99,13 @@ angular.module('omniwallet').directive('omInput', function() {
           scope.addons = tAttrs.addons.split(',');
 
           for( var i = scope.addons.length-1; i >= 0; i--) {
-            var templateString = '<span class="input-group-addon">' + scope.addons[i] + ' {{data['+i+']}} </span>'
+            var templateString = '<span class="input-group-addon"> {{data['+i+']}} &nbsp' + scope.addons[i] + '  </span>'
             tElement.find('.form-control').after(templateString);
           }
+        }
+        if( tAttrs.model ) {
+          tElement.find('.form-control').attr('ng-model', 'model').attr('ng-change','change(model)')
+         // tElement.after('<span style="color:red;">{{isValid}}</span>')
         }
 
        return {
@@ -113,7 +118,7 @@ angular.module('omniwallet').directive('omInput', function() {
               iElement.find('.form-control').attr('value',iAttrs.value)
             else
               iElement.find('.form-control').attr('placeholder',iAttrs.placeholder)
-
+            
             if( iAttrs.disable ) {
               iElement.find('.form-control').attr('disabled','')
             }

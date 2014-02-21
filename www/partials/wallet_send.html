@@ -3,29 +3,36 @@
 </div>
 
 <div class="col-xs-10" ng-controller="WalletSendController">
-  <div class="text-center col-xs-8" >Wallet Send</div>
-    <br>
   <div class="row">
-    <div om-select addclass="col-xs-10" type="coin" text="Send money: " expr="setCoin"  options="{{currList}}"></div>
+    <h3 class="text-center col-xs-2 pull-left" >Wallet Send</h3>
   </div>
     <br>
   <div class="row">
-    <div om-select addclass="col-xs-10" type="address" text="From address: " expr="setAddress" options="{{addrList}}"></div>
+    <h4 class="col-xs-2 pull-left" >Send money:</h4>
+    <div om-select addclass="col-xs-8" type="coin" text="Send money: " expr="setCoin"  options="{{currList}}"></div>
   </div>
     <br>
   <div class="row">
-    <div om-input addclass="col-xs-8" ng-model="balanceData" text="Amount: " 
-      value="0.0" data="balanceData" addons="Available: ,Est: "></div> 
-  </div>
-    <br>
-  <div class="row" ng-model="validAddress">
-    <div om-input addclass="col-xs-8" text="To: " placeholder="1Sochi"></div> 
+    <h4 class=" col-xs-2 pull-left" >From address:</h4>
+    <div om-select addclass="col-xs-8" type="address" text="From address: " expr="setAddress" options="{{addrList}}"></div>
   </div>
     <br>
   <div class="row">
-    <div om-input addclass="fees col-xs-8" text="Fees: " placeholder="0.002BTC (Why?)" disable=1 ></div> 
+    <div om-input addclass="col-xs-8" text="Amount: " 
+      placeholder="0.0" model="sendAmount" change="addToScope" data="balanceData" addons="  Available"></div> 
   </div>
     <br>
-  <button class="btn btn-primary" type="submit">Send Transaction</button>
+  <div class="row">
+    <div om-input model="sendTo" change="addToScope" addclass="col-xs-8" text="To: " placeholder="{{addrList[0]}}"></div> 
+  </div>
+    <br>
+  <div class="row">
+    <div id="fee-tooltip">
+    <div om-input addclass="fees col-xs-8" text="Fees: " placeholder="0.00034BTC (Hover over me for more)" disable=1 ></div> 
+    </div>
+  </div>
+    <br>
+    <div class="col-xs-2"></div>
+  <button class="btn btn-primary btn-lg col-xs-4" ng-click="validateForm()" type="submit">Send Transaction</button>
 
 </div>
