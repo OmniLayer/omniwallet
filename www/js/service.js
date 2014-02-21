@@ -4,7 +4,8 @@ angular.module( 'omniwallet' ).factory('userService', ['$rootScope', function ($
   // Rewire to use localstorage 
   var service = {
     data: {
-      addresses: []
+      addresses: [],
+      loggedIn: false
     },
 
     addAddress: function( address, privKey ) {

@@ -28,8 +28,8 @@ function NavigationController($scope, $http, userService) {
     
     $scope.getNavData = function() {
       console.log('init 0');
-    }
     console.log(userService);
+    }
      
     $scope.user = userService.data;
 }
