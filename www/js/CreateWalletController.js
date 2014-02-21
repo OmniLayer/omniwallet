@@ -1,4 +1,4 @@
-function CreateWalletController($scope, $http, userService) {
+function CreateWalletController($scope, $http, $location, userService) {
   $scope.createWallet = function(create) {
     console.log(create);
 
@@ -35,9 +35,9 @@ function CreateWalletController($scope, $http, userService) {
       })
       .success(function(data, status, headers, config) {
         console.log("Success");
-        console.log(data);
         userService.login(uuid);
         userService.addAddress(address, privateKey);
+        $location.path("/wallet");
       })
       .error(function(data, status, headers, config) {
         console.log("Error on login");
