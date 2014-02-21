@@ -1,4 +1,4 @@
-function LoginController($scope, $http, userService) {
+function LoginController($scope, $http, $location, userService) {
 
   $scope.open = function(login) {
 
@@ -13,14 +13,25 @@ function LoginController($scope, $http, userService) {
         headers: {'Content-Type': 'application/json'}
     })
     .success(function (data, status, headers, config) {
-      if(data.status == "ERROR") {
+      if(data.status == "MISSING") {
         $scope.missingUUID = true;
       } else {
-        console.log("SUCCESS");
-        // Add Wallet Decryption here
-        userService.data.loggedIn = true;
-        userService.data.uuid = login.uuid;
-        $scope.$emit('savestate');
+        var encrypted = data.wallet.keys[0].encrypted //Assumes we're decoding first key
+        // TODO: Handle multiple addresses
+
+        try {
+          var key = new Bitcoin.ECKey.decodeEncryptedFormat(encrypted, login.password);
+          var address = key.getBitcoinAddress().toString();
+          var privateKey = Crypto.util.bytesToHex(key.getPrivateKeyByteArray());
+          userService.login(login.uuid);
+          userService.addAddress(address, privateKey);
+          console.log("Success.");
+          $location.path('/wallet');
+        } catch (err) {
+          console.log(err);
+          console.log("Bad password");
+          $scope.badPassword = true;
+        }
       }
     })
     .error(function(data, status, headers, config) {
