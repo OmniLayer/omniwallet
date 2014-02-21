@@ -28,5 +28,4 @@ compiled
 *.pyc
 
 # Bower stuff
-.bowerrc
 www/bower_components/
