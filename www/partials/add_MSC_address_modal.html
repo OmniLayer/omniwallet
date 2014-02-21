@@ -1,0 +1,40 @@
+<div class="modal-header">
+    <h3>Add a new Mastercoin (MSC) address.</h3>
+</div>
+<div class="modal-body">
+    <p>This is probably just a bitcoin address, but it's VERY important that you not use an address from a managed wallet service like Coinbase - they do interesting things with the bitcoin addresses, and you're all but guaranteed to lose any Mastercoins you send to them!</p>
+    <p> Don't have a compatible address?  You can generate one (and its associated private key) over at <a href="https://www.bitaddress.org" target="_blank">bitaddress.org</a>.</p>
+
+
+	<form name=privkeyentry 
+		class="priventry input-group" 
+		style="margin-bottom:20px, margin-top:20px">
+		<span class="input-group-addon">Enter Key (Send/Receive):</span>
+		<input type="text" 
+			name=privkey 
+			class="form-control" 
+			placeholder="enter your private key  |   formats: hex, b64, WIP, compressed WIP"
+			ng-model="newAddressData.privKey">
+		<input type="text" 
+			name=password 
+			class="form-control" 
+			placeholder="enter passphrase to encrypt and store locally"
+			ng-model="newAddressData.password">
+	</form>
+
+	<center>OR</center>
+
+	<form name="addressentry" class="addressentry input-group" style="margin-bottom:20px, margin-top:20px">
+		<span class="input-group-addon">Enter Address (Watch Only):</span>
+		<input type="text" 
+			name="address" 
+			class="form-control" 
+			placeholder="Enter your bitcoin address"
+			ng-model="newAddressData.address">
+	</form>
+
+</div>
+<div class="modal-footer">
+    <button class="btn btn-primary" ng-click="ok( newAddressData )">OK</button>
+    <button class="btn btn-warning" ng-click="cancel()">Cancel</button>
+</div>
