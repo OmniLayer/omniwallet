@@ -31,7 +31,7 @@ def restore_wallet(uuid):
   filename = data_dir_root + '/wallets/' + uuid + '.json'
 
   if not os.path.exists(filename):
-    return (None, "Wallet does not exist")
+    return (None, "MISSING")
 
   with open(filename, 'r') as f:
     wallet = json.load(f)

@@ -703,3 +703,5 @@ Returns status 'OK' if wallet was found. Example:
   }
 }
 ```
+
+Returns status 'MISSING' if the wallet was not found.
