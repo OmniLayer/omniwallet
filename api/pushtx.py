@@ -24,7 +24,9 @@ def pushtx_response(response_dict):
 
 def pushtx(signed_tx):
     info(signed_tx)
-    f = tempfile.NamedTemporaryFile(prefix='signedtx-', delete=True)
+
+    #f = tempfile.NamedTemporaryFile(mode='r+b',prefix='signedtx-', delete=False, dir='/var/lib/omniwallet/tmptx')
+    f = open('/var/lib/omniwallet/transactions', 'r+')
     f.write(signed_tx)
 
     # validate tx first
@@ -32,7 +34,7 @@ def pushtx(signed_tx):
     if ret != None:
         f.close()
         return ret
-
+    
     # broadcast
     ret=broadcast_tx(f.name)
     f.close()
