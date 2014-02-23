@@ -41,6 +41,14 @@ angular.module( 'omniwallet' ).factory('userService', ['$rootScope', function ($
       service.saveSession();
     },
 
+    getAddress: function(address) {
+      for(var i in service.data.addresses) {
+        if(service.data.addresses[i].address == address) {
+          return service.data.addresses[i];
+        }
+      }
+    },
+
     removeAddress: function( address ) {
       for( var i=0; i<service.data.addresses.length; i++ )
         if( service.data.addresses[i].address == address )
