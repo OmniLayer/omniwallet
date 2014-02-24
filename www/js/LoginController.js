@@ -1,4 +1,4 @@
-function LoginController($scope, $http, $location, userService) {
+function LoginController($scope, $http, $location, $modalInstance, userService) {
 
   $scope.open = function(login) {
 
@@ -25,17 +25,15 @@ function LoginController($scope, $http, $location, userService) {
           var privateKey = Crypto.util.bytesToHex(key.getPrivateKeyByteArray());
           userService.login(login.uuid);
           userService.addAddress(address, privateKey);
-          console.log("Success.");
+          $modalInstance.close();
           $location.path('/wallet');
         } catch (err) {
           console.log(err);
-          console.log("Bad password");
           $scope.badPassword = true;
         }
       }
     })
     .error(function(data, status, headers, config) {
-      console.log("ERROR");
       $scope.serverError = true;
     });
   }

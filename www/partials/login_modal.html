@@ -1,7 +1,8 @@
-<script src="js/LoginController.js"></script>
-<div class="col-xs-10" ng-controller="LoginController">
-  <h1>Login</h1>
-  <form novalidate class="form-horizontal">
+<div class="modal-header">
+  <h3>Login</h3>
+</div>
+<form novalidate class="form-horizontal">
+  <div class="modal-body">
     <div class="control-group">
       <label class="control-label" for="inputUUID">UUID</label>
       <div class="controls">
@@ -14,14 +15,15 @@
         <input type="password" ng-model="login.password" id="inputPassword">
       </div>
     </div>
-    <br />
+  </div>
+  <div class="modal-footer">
     <div class="control-group">
       <div class="controls">
         <button type="submit" class="btn" ng-click="open(login)">Open Wallet</button>
       </div>
     </div>
-  </form>
-  <div ng-show="missingUUID" class="bg-danger">UUID Doesn't Exist</div>
-  <div ng-show="badPassword" class="bg-danger">Password is Incorrect</div>
-  <div ng-show="serverError" class="bg-danger">Server error, please try again</div>
-</div>
+    <div ng-show="missingUUID" class="bg-danger">UUID Doesn't Exist</div>
+    <div ng-show="badPassword" class="bg-danger">Password is Incorrect</div>
+    <div ng-show="serverError" class="bg-danger">Server error, please try again</div>
+  </div>
+</form>

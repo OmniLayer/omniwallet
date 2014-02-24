@@ -24,7 +24,6 @@ function Ctrl($scope, $route, $routeParams, $location) {
 }
 
 function NavigationController($scope, $http, $modal, userService) {
-    $scope.values = {};
     
     $scope.getNavData = function() {
       console.log('init 0');
@@ -40,7 +39,14 @@ function NavigationController($scope, $http, $modal, userService) {
     $scope.openImportModal = function() {
       $modal.open({
         templateUrl: 'partials/wallet_import_modal.html',
-        controller: ImportWalletController
+        controller: WalletController
+      });
+    }
+
+    $scope.openLoginModal = function() {
+      $modal.open({
+        templateUrl: 'partials/login_modal.html',
+        controller: LoginController 
       });
     }
 
