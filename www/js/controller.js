@@ -23,11 +23,25 @@ function Ctrl($scope, $route, $routeParams, $location) {
 
 }
 
-function NavigationController($scope, $http, userService) {
+function NavigationController($scope, $http, $modal, userService) {
     $scope.values = {};
     
     $scope.getNavData = function() {
       console.log('init 0');
+    }
+
+    $scope.openCreateModal = function() {
+      $modal.open({
+        templateUrl: 'partials/wallet_create_modal.html',
+        controller: CreateWalletController
+      });
+    }
+
+    $scope.openImportModal = function() {
+      $modal.open({
+        templateUrl: 'partials/wallet_import_modal.html',
+        controller: ImportWalletController
+      });
     }
 
     $scope.logout = function() {
