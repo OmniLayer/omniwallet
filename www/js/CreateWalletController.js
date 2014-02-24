@@ -19,15 +19,15 @@ function CreateWalletController($scope, $http, $location, $modalInstance, userSe
         }]
       };
 
-      syncWallet($scope, $http, $location, $modalInstance, userService, wallet, address, encryptedPrivateKey);
+      createWallet($scope, $http, $location, $modalInstance, userService, wallet, address, encryptedPrivateKey);
     }
   }
 }
 
-function syncWallet($scope, $http, $location, $modalInstance, userService, wallet) {
+function createWallet($scope, $http, $location, $modalInstance, userService, wallet) {
   // Strange serialization effects, stringifying wallet initially
   var postData = {
-    type: 'SYNCWALLET',
+    type: 'CREATEWALLET',
     wallet: JSON.stringify(wallet)
   };
   $http({
@@ -37,10 +37,14 @@ function syncWallet($scope, $http, $location, $modalInstance, userService, walle
     headers: {'Content-Type': 'application/json'}
   })
   .success(function(data, status, headers, config) {
-    console.log("Success");
-    userService.login(wallet);
-    $modalInstance.close();
-    $location.path("/wallet");
+    if(data.status == "EXISTS") {
+      console.log(data);
+      $scope.walletExists = true;
+    } else {
+      userService.login(wallet);
+      $modalInstance.close();
+      $location.path("/wallet");
+    }
   })
   .error(function(data, status, headers, config) {
     console.log("Error on login");
