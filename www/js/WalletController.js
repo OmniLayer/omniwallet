@@ -226,6 +226,8 @@ function WalletSendController($modal, $scope, $http, $q, userService) {
         }
       }
     );
+    if( addresses.length == 0)
+      addresses = ['Could not find any addresses with attached private keys!'] 
     return addresses
   }
 
@@ -268,7 +270,7 @@ function WalletSendController($modal, $scope, $http, $q, userService) {
      promise.then(function(successData) {
         addrListBal[i] = { address: e, balance: successData.balance }
      },function(errorData) {
-        console.log('err', errorData);
+        console.log('Error: not a valid address or address not found, ', e);
      });
   });
 
