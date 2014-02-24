@@ -22,9 +22,8 @@ function LoginController($scope, $http, $location, $modalInstance, userService) 
         try {
           var key = new Bitcoin.ECKey.decodeEncryptedFormat(encrypted, login.password);
           var address = key.getBitcoinAddress().toString();
-          var privateKey = Crypto.util.bytesToHex(key.getPrivateKeyByteArray());
           userService.login(login.uuid);
-          userService.addAddress(address, privateKey);
+          userService.addAddress(address, encrypted);
           $modalInstance.close();
           $location.path('/wallet');
         } catch (err) {
