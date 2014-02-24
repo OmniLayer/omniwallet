@@ -1,23 +1,23 @@
 //global services go here
 
-angular.module( 'omniwallet' ).factory('userService', ['$rootScope', function ($rootScope) {
-  // Rewire to use localstorage 
+angular.module( 'omniwallet' ).factory('userService', ['$rootScope', '$http', function ($rootScope, $http) {
   var service = {
     data: {
       addresses: [],
-      uuid: '',
+      email: '',
       loggedIn: false
     },
 
-    login: function(uuid) {
-      service.data.uuid = uuid;
+    login: function(wallet) {
+      service.data.addresses = wallet.addresses;
+      service.data.email = wallet.email;
       service.data.loggedIn = true;
       service.saveSession();
     },
 
     logout: function() {
       //Pain point as this grows
-      service.data.uuid = '',
+      service.data.email = '',
       service.data.loggedIn = false;
       service.data.addresses = [];
       localStorage.clear();
@@ -65,8 +65,27 @@ angular.module( 'omniwallet' ).factory('userService', ['$rootScope', function ($
       }
     },
 
+    syncWallet: function() {
+      var wallet = {
+        email: service.data.email,
+        addresses: service.data.addresses
+      };
+      // Strange serialization effects, stringifying wallet initially
+      var postData = {
+        type: 'SYNCWALLET',
+        wallet: JSON.stringify(wallet)
+      };
+      return $http({
+        url: '/v1/user/wallet/sync/',
+        method: 'POST',
+        data: postData,
+        headers: {'Content-Type': 'application/json'}
+      })
+    },
+
     saveSession: function () {
       localStorage["OmniWallet"] = angular.toJson(service.data);
+      service.syncWallet().success(function() { console.log("Success saving"); });
     },
     restoreSession: function() {
       if( localStorage[ "OmniWallet" ])
