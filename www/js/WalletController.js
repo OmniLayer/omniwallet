@@ -139,14 +139,13 @@ function WalletSendController($modal, $scope, $http, $q, userService) {
       // open modal
       var modalInstance = $modal.open({
         template: '\
-          <div class="modal-header">\
-              <h3> Confirm send </h3>\
-          </div>\
           <div class="modal-body">\
+              <h3 class="text-center"> Confirm send </h3>\
               <h3>You\'re about to send ' + (+$scope.sendAmount).toFixed(4) + ' ' +  
               $scope.coin + ' plus fees to ' + $scope.address + '</h3>\
-            <p>\
+            <p><br>\
             If the above is correct, please input your passphrase below and press Send Funds.\
+            If you encounter an error, feel free to click away from the dialog and try again.\
             </p>\
           <input type="password" name=privkey ng-model="privKeyPass.pass" class="form-control"\
             placeholder="enter your private key passphrase">\
@@ -307,13 +306,21 @@ function WalletSendController($modal, $scope, $http, $q, userService) {
         var signedSuccess = transaction.signWithKey(privKey)
 
         var finalTransaction = Bitcoin.Util.bytesToHex(transaction.serialize())
-        var transactionHash = Bitcoin.Util.bytesToHex(transaction.getHash().reverse())
+        
+        //Showing the user the transaction hash doesn't work right now
+        //var transactionHash = Bitcoin.Util.bytesToHex(transaction.getHash().reverse())
 
         sendSignedTransaction(finalTransaction).then(function(successData) {
-          $modalScope.waiting = false
-          $modalScope.sendSuccess = true
-          $modalScope.url = 'http://blockchain.info/tx/' + transactionHash;
-          console.log('server success: ',successData);
+          if( successData.pushed.match(/submitted|success/gi) != null ) {
+            $modalScope.waiting = false
+            $modalScope.sendSuccess = true
+            $modalScope.url = 'http://blockchain.info/address/' + from + '?sort=0';
+          } else {
+            $modalScope.waiting = false
+            $modalScope.sendError = true
+            $modalScope.error = successData.pushed  //Unspecified error, show user
+          }
+          console.log('server response: ',successData);
         },function(errorData) {
           $modalScope.waiting = false
           $modalScope.sendError = true
