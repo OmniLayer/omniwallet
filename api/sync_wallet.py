@@ -24,8 +24,8 @@ def sync_wallet_response(request_dict):
 
 def syncWallets(wallet_json):
   wallet = json.loads(wallet_json)
-  uuid = wallet['uuid']
-  filename = data_dir_root + '/wallets/' + uuid + '.json'
+  email = wallet['email']
+  filename = data_dir_root + '/wallets/' + email + '.json'
   with open(filename, 'w') as f:
     json.dump(wallet, f)
 

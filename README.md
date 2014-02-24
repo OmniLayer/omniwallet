@@ -670,7 +670,7 @@ Returns no data
 ```
 var postData = {
   type: 'RESTOREWALLET',
-  uuid: uuid
+  email: email
 };
 $.post('/v1/user/wallet/restore/', postData, function (data) {
   // Do something with data.wallet
@@ -682,7 +682,7 @@ Where:
 | Variable            | Possible Values              |
 | ------------------- | ---------------------------- |
 | type                | 'RESTOREWALLET' |
-| uuid | UUID of wallet to retrieve |
+| email | Email of wallet to retrieve |
 
 Returns status 'OK' if wallet was found. Example:
 
