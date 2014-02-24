@@ -54,3 +54,31 @@ angular.module( 'omniwallet' ).factory('userService', ['$rootScope', function ($
 
   return service;
 }]);
+
+angular.module( 'omniwallet' ).factory( 'appraiser', ['$rootScope', function ($rootScope) {
+
+  // Rewire to use localstorage 
+  function AppraiserService() {
+    this.conversions = {};
+  };
+  AppraiserService.prototype.getValue = function( amount, symbol ) {
+    if( symbol == 'TMSC' )
+      return 0;
+    else if( symbol = 'BTC' )
+    {
+      if( this.conversions.BTC )
+        return this.conversions.BTC * amount;
+      else
+        return 'BTC Value Unavailable';
+    }
+    else
+    {
+      if( this.conversions.MSC )
+        return this.getValue( this.conversions.MSC * amount, 'BTC' );
+      else
+        return 'MSC Value Unavailable';
+    }
+  };
+
+  return new AppraiserService();
+}]);

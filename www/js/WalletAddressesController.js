@@ -25,6 +25,8 @@ angular.module( 'omniwallet' )
             var currencyInfo;
             var emptyAddresses = [];
 
+            var appraiser = $injector.get( 'appraiser' );
+
             wallet.addresses.forEach( function( addr ) {
               requests.push( addressRequest( $http, $q, addr ).then( function( result ) {
                 result.data.balance.forEach( function( currencyItem ) {
@@ -41,7 +43,8 @@ angular.module( 'omniwallet' )
                   }
                   balances[ currencyItem.symbol ].addresses[ result.data.address ] = {
                     "address": result.data.address,
-                    "value": currencyItem.value
+                    "balance": currencyItem.value,
+                    "value": appraiser.getValue( currencyItem.value, currencyItem.symbol )
                   };
                 } );
               }));
@@ -81,7 +84,7 @@ angular.module( 'omniwallet' )
       } 
     };
   })
-  .directive( 'showWalletBalances', function( $compile ) {
+  .directive( 'showWalletBalances', function( $compile, $injector ) {
     return {
       scope: true,
       link: function ( scope, element, attrs ) {
