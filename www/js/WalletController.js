@@ -1,7 +1,5 @@
 
 function WalletController($scope, $q, $http, userService) {
-  console.log('initialized wallet')
-
   userService.addAddress( "19P5uCRuqzzi5SDT8Rq6NrNb9dPJNAScjD", "NOPE!" );
   userService.addAddress( "1KRZKBqzcqa4agQbYwN5AuHsjvG9fSo2gW", "NOPE!" );
   userService.addAddress( "1EXoDusjGwvnjZUyKkxZ4UHEf77z6A5S4P", "NOPE!" );
@@ -48,8 +46,6 @@ function WalletController($scope, $q, $http, userService) {
 }
 
 function WalletHistoryController($scope, $http, userService) {
-  console.log('initialized wallet history')
-
   $scope.first = userService.data.addresses[0].address
   $scope.addresses = userService.data.addresses
 
@@ -95,7 +91,6 @@ function WalletHistoryController($scope, $http, userService) {
 }
 
 function WalletSendController($modal, $scope, $http, $q, userService) {
-  console.log('initialized wallet')
   //fee tooltip
   $('#fee-tooltip').tooltip({ 
     title: 'Broadcast Fee: 0.0001 BTC + Dust Fees: 0.00006*4 = 0.00024 Total: 0.00034', 
@@ -199,7 +194,6 @@ function WalletSendController($modal, $scope, $http, $q, userService) {
     } else {
       error += 'and try again.'
       $scope.error = error
-      console.log($scope);
       $scope.showErrors = true
     }
   }
@@ -302,7 +296,7 @@ function WalletSendController($modal, $scope, $http, $q, userService) {
         
         transaction.ins[0].script = script
         
-        console.log('before',transaction, Bitcoin.Util.bytesToHex(transaction.serialize()))
+        //DEBUG console.log('before',transaction, Bitcoin.Util.bytesToHex(transaction.serialize()))
         var signedSuccess = transaction.signWithKey(privKey)
 
         var finalTransaction = Bitcoin.Util.bytesToHex(transaction.serialize())
@@ -328,7 +322,7 @@ function WalletSendController($modal, $scope, $http, $q, userService) {
           console.log('server error: ',errorData);
         });
 
-        console.log(addressData, privKey, bytes, transaction, script, signedSuccess, finalTransaction );
+        //DEBUG console.log(addressData, privKey, bytes, transaction, script, signedSuccess, finalTransaction );
         function parseScript (script) {
               var newScript = new Bitcoin.Script();
               var s = script.split(" ");
