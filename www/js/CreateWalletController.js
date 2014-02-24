@@ -1,4 +1,4 @@
-function CreateWalletController($scope, $http, $location, userService) {
+function CreateWalletController($scope, $http, $location, $modalInstance, userService) {
   $scope.createWallet = function(create) {
     if(create.password != create.repeatPassword) {
       console.log("Passwords don't match")
@@ -20,12 +20,12 @@ function CreateWalletController($scope, $http, $location, userService) {
         }]
       };
 
-      syncWallet($scope, $http, $location, userService, wallet, address, privateKey);
+      syncWallet($scope, $http, $location, $modalInstance, userService, wallet, address, privateKey);
     }
   }
 }
 
-function ImportWalletController($scope, $http, $location, userService) {
+function ImportWalletController($scope, $http, $location, $modalInstance, userService) {
   $scope.importWallet = function (importData) {
     if(importData.password != importData.repeatPassword) {
       console.log("Passwords don't match")
@@ -47,12 +47,12 @@ function ImportWalletController($scope, $http, $location, userService) {
         }]
       };
 
-      syncWallet($scope, $http, $location, userService, wallet, address, privateKey);
+      syncWallet($scope, $http, $location, $modalInstance, userService, wallet, address, privateKey);
     }
   }
 }
 
-function syncWallet($scope, $http, $location, userService, wallet, address, privateKey) {
+function syncWallet($scope, $http, $location, $modalInstance, userService, wallet, address, privateKey) {
   // Strange serialization effects, stringifying wallet initially
   var postData = {
     type: 'SYNCWALLET',
@@ -68,6 +68,7 @@ function syncWallet($scope, $http, $location, userService, wallet, address, priv
     console.log("Success");
     userService.login(wallet.uuid);
     userService.addAddress(address, privateKey);
+    $modalInstance.close();
     $location.path("/wallet");
   })
   .error(function(data, status, headers, config) {
