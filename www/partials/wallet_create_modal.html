@@ -1,7 +1,8 @@
-<script src="js/CreateWalletController.js"></script>
-<div class="col-xs-10" ng-controller="CreateWalletController">
-  <h1>Create a new Wallet</h1>
-  <form novalidate class="form-horizontal">
+<div class="modal-header">
+  <h3>Create a new Wallet</h3>
+</div>
+<form novalidate class="form-horizontal">
+  <div class="modal-body">
     <div class="control-group">
       <label class="control-label" for="inputEmail">Email</label>
       <div class="controls">
@@ -20,13 +21,14 @@
         <input type="password" ng-model="create.repeatPassword" id="inputRepeatPassword">
       </div>
     </div>
-    <br />
+  </div>
+  <div class="modal-footer">
     <div class="control-group">
       <div class="controls">
         <button type="submit" class="btn" ng-click="createWallet(create)">Create Wallet</button>
       </div>
     </div>
-  </form>
-  <div class="help-block" ng-show="passwordCompare">Passwords do not match.</div>
-  <div class="help-block" ng-show="serverError">Server Error, try again later</div>
-</div
+    <div class="help-block" ng-show="passwordCompare">Passwords do not match.</div>
+    <div class="help-block" ng-show="serverError">Server Error, try again later</div>
+  </div>
+</form>
