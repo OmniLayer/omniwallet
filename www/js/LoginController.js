@@ -16,14 +16,13 @@ function LoginController($scope, $http, $location, $modalInstance, userService) 
       if(data.status == "MISSING") {
         $scope.missingEmail = true;
       } else {
-        var encrypted = data.wallet.keys[0].privkey //Assumes we're decoding first key
-        // TODO: Handle multiple addresses
+        var encrypted = data.wallet.addresses[0].privkey //Assumes we're decoding first key
+        // TODO: Handle default address
 
         try {
           var key = new Bitcoin.ECKey.decodeEncryptedFormat(encrypted, login.password);
           var address = key.getBitcoinAddress().toString();
-          userService.login(login.email);
-          userService.addAddress(address, encrypted);
+          userService.login(data.wallet);
           $modalInstance.close();
           $location.path('/wallet');
         } catch (err) {

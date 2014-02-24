@@ -638,11 +638,11 @@ Example
 ```
 {
   "uuid": "02ddc252-7fb0-4e7d-c28e-be94a5dc56d0",
-  "addresses": ["1JwSSubhmg6iPtRjtyqhUYYH7bZg3Lfy1T"],
-  "keys": [
+  "email": "user@email.com",
+  "addresses": [
     {
       "address": "1JwSSubhmg6iPtRjtyqhUYYH7bZg3Lfy1T",
-      "encrypted": "6PRQ7ivF7LhQs7m4ZYbmj8Z1U7847LENYS22YBQNDLDXiVuKWZ8XDCEhjF"
+      "privkey": "6PRQ7ivF7LhQs7m4ZYbmj8Z1U7847LENYS22YBQNDLDXiVuKWZ8XDCEhjF"
     }
   ]
 }
@@ -694,10 +694,11 @@ Returns status 'OK' if wallet was found. Example:
   {
     "uuid": "02ddc252-7fb0-4e7d-c28e-be94a5dc56d0",
     "addresses": ["1JwSSubhmg6iPtRjtyqhUYYH7bZg3Lfy1T"],
-    "keys": [
+    "email": "user@email.com",
+    "addresses": [
       {
         "address": "1JwSSubhmg6iPtRjtyqhUYYH7bZg3Lfy1T",
-        "encrypted": "6PRQ7ivF7LhQs7m4ZYbmj8Z1U7847LENYS22YBQNDLDXiVuKWZ8XDCEhjF"
+        "privkey": "6PRQ7ivF7LhQs7m4ZYbmj8Z1U7847LENYS22YBQNDLDXiVuKWZ8XDCEhjF"
       }
     ]
   }

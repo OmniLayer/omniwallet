@@ -8,51 +8,23 @@ function CreateWalletController($scope, $http, $location, $modalInstance, userSe
       var password = create.password;
       var ecKey = new Bitcoin.ECKey();
       var address = ecKey.getBitcoinAddress().toString();
-      var privateKey = Crypto.util.bytesToHex(ecKey.getPrivateKeyByteArray());
       var encryptedPrivateKey = ecKey.getEncryptedFormat(password);
 
       var wallet = {
+        email: create.email,
         uuid: uuid,
-        addresses: [address],
-        keys: [{
+        addresses: [{
           address: address,
-          encrypted: encryptedPrivateKey
+          privkey: encryptedPrivateKey
         }]
       };
 
-      syncWallet($scope, $http, $location, $modalInstance, userService, wallet, address, privateKey);
+      syncWallet($scope, $http, $location, $modalInstance, userService, wallet, address, encryptedPrivateKey);
     }
   }
 }
 
-function ImportWalletController($scope, $http, $location, $modalInstance, userService) {
-  $scope.importWallet = function (importData) {
-    if(importData.password != importData.repeatPassword) {
-      console.log("Passwords don't match")
-      $scope.passwordCompare = true;
-    } else {
-      var uuid = generateUUID();
-      var password = importData.password;
-      var privateKey = importData.privkey;
-      var ecKey = new Bitcoin.ECKey(privateKey);
-      var address = ecKey.getBitcoinAddress().toString();
-      var encryptedPrivateKey = ecKey.getEncryptedFormat(password);
-
-      var wallet = {
-        uuid: uuid,
-        addresses: [address],
-        keys: [{
-          address: address,
-          encrypted: encryptedPrivateKey
-        }]
-      };
-
-      syncWallet($scope, $http, $location, $modalInstance, userService, wallet, address, privateKey);
-    }
-  }
-}
-
-function syncWallet($scope, $http, $location, $modalInstance, userService, wallet, address, privateKey) {
+function syncWallet($scope, $http, $location, $modalInstance, userService, wallet) {
   // Strange serialization effects, stringifying wallet initially
   var postData = {
     type: 'SYNCWALLET',
@@ -66,8 +38,7 @@ function syncWallet($scope, $http, $location, $modalInstance, userService, walle
   })
   .success(function(data, status, headers, config) {
     console.log("Success");
-    userService.login(wallet.uuid);
-    userService.addAddress(address, privateKey);
+    userService.login(wallet);
     $modalInstance.close();
     $location.path("/wallet");
   })
