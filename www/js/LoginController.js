@@ -1,10 +1,9 @@
 function LoginController($scope, $http, $location, $modalInstance, userService) {
 
   $scope.open = function(login) {
-
     var postData = {
       type: 'RESTOREWALLET',
-      uuid: login.uuid
+      email: login.email
     }
     $http({
         url: '/v1/user/wallet/restore/',
@@ -13,16 +12,17 @@ function LoginController($scope, $http, $location, $modalInstance, userService) 
         headers: {'Content-Type': 'application/json'}
     })
     .success(function (data, status, headers, config) {
+      console.log(data);
       if(data.status == "MISSING") {
-        $scope.missingUUID = true;
+        $scope.missingEmail = true;
       } else {
-        var encrypted = data.wallet.keys[0].encrypted //Assumes we're decoding first key
+        var encrypted = data.wallet.keys[0].privkey //Assumes we're decoding first key
         // TODO: Handle multiple addresses
 
         try {
           var key = new Bitcoin.ECKey.decodeEncryptedFormat(encrypted, login.password);
           var address = key.getBitcoinAddress().toString();
-          userService.login(login.uuid);
+          userService.login(login.email);
           userService.addAddress(address, encrypted);
           $modalInstance.close();
           $location.path('/wallet');
