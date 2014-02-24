@@ -107,6 +107,11 @@ angular.module( 'omniwallet' )
   } )
   .controller( 'WalletBalancesController', function ( $modal, $rootScope, $injector, $scope, wallet_balances_data, wallet_balances_template ) {
 
+  var appraiser = $injector.get( 'appraiser' );
+  $rootScope.$on( 'APPRAISER_VALUE_CHANGED', function() {
+    $scope.showWalletBalances();
+  });
+
    $scope.openDeleteConfirmForm = function( address ) {
       var modalInstance = $modal.open( {
         templateUrl: '/partials/delete_address_modal.html',
