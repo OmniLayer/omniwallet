@@ -661,10 +661,10 @@ Where:
 
 | Variable            | Possible Values              |
 | ------------------- | ---------------------------- |
-| type                | 'SYNCWALLET' |
+| type                | 'CREATEWALLET', 'SYNCWALLET' |
 | wallet        | The wallet the user wants to save |
 
-Returns no data
+Returns status "EXISTS" if wallet already exists and type was "CREATEWALLET"
 
 #### Restoring Wallet Information
 ```
