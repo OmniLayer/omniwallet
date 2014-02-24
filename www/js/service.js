@@ -59,7 +59,6 @@ angular.module( 'omniwallet' ).factory( 'appraiser', ['$rootScope', '$http', fun
 
   // Rewire to use localstorage 
   function AppraiserService() {
-    console.log( 'Making appraiserService' );
     this.conversions = {};
     var self = this;
     function BtcUpdateLoop() {
