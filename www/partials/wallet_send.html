@@ -13,13 +13,14 @@
   </div>
     <br>
   <div class="row">
-    <h4 class=" col-xs-2 pull-left" >From address:</h4>
+    <h4 class="col-xs-2 pull-left" >From address:</h4>
     <div om-select addclass="col-xs-8" type="address" text="From address: " expr="setAddress" options="{{addrList}}"></div>
+    <h6 class="col-xs-8"> Please note we allow you to only send from addresses with a valid private key. </h6>
   </div>
     <br>
   <div class="row">
     <div om-input addclass="col-xs-8" text="Amount: " 
-      placeholder="0.0" model="sendAmount" change="addToScope" data="balanceData" addons="  Available"></div> 
+      placeholder="0.01" model="sendAmount" change="addToScope" data="balanceData" addons="  Available"></div> 
   </div>
     <br>
   <div class="row">
@@ -32,7 +33,6 @@
     </div>
   </div>
     <br>
-    <div class="col-xs-2"></div>
   <button class="btn btn-primary btn-lg col-xs-4" ng-click="validateForm()" type="submit">Send Transaction</button>
-
+  <div ng-show="showErrors" style="margin-left: 10px;" class="alert alert-danger col-xs-4">{{error}}</div> 
 </div>

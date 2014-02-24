@@ -87,7 +87,7 @@ server {
 	}
 
 	location /v1/transaction/pushtx/ {
-            set   $app   accept;
+            set   $app   pushtx;
             uwsgi_pass   127.0.0.1:$PORT;
 	}
 
