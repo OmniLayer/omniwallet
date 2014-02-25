@@ -152,7 +152,7 @@ function WalletSendController($modal, $scope, $http, $q, userService) {
           <div class="modal-body">\
               <h3 class="text-center"> Confirm send </h3>\
               <h3>You\'re about to send ' + (+$scope.sendAmount).toFixed(4) + ' ' +  
-              $scope.coin + ' plus fees to ' + $scope.address + '</h3>\
+              $scope.coin + ' plus fees to ' + $scope.sendTo + '</h3>\
             <p><br>\
             If the above is correct, please input your passphrase below and press Send Funds.\
             If you encounter an error, feel free to click away from the dialog and try again.\
