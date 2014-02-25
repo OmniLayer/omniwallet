@@ -26,7 +26,22 @@ function WalletController($scope, $q, $http, userService) {
         }
         //console.log($scope)
      },function(errorData) {
-        console.log('err', errorData);
+        console.log('Error, no balance data found for ' + e + ' setting defaults...');
+        var balances = [ 
+          { symbol: 'MSC', value: '0.0' },
+          { symbol: 'TMSC', value: '0.0' },
+          { symbol: 'BTC', value: '0.0' } ];
+        $scope.currentView = "overview.html";
+        $scope.addrListBal[index] = { address: e, balance: balances }
+
+        for(var i = 0; i < balances.length; i++) {
+          var symbolTotal = $scope.totals[balances[i].symbol]
+//          console.log(symbolTotal, successData.balance[i].symbol)
+          if( ! symbolTotal  )
+            $scope.totals[balances[i].symbol] = 0
+          $scope.totals[balances[i].symbol] += +balances[i].value
+        }
+
      });
   });
 
@@ -263,7 +278,12 @@ function WalletSendController($modal, $scope, $http, $q, userService) {
      promise.then(function(successData) {
         addrListBal[i] = { address: e, balance: successData.balance }
      },function(errorData) {
-        console.log('Error: not a valid address or address not found, ', e);
+       console.log('Error, no balance data found for ' + e + ' setting defaults...');
+       var balances = [ 
+          { symbol: 'MSC', value: '0.0' },
+          { symbol: 'TMSC', value: '0.0' },
+          { symbol: 'BTC', value: '0.0' } ]
+       addrListBal[i] = { address: e, balance: balances }
      });
   });
 
