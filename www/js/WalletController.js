@@ -214,7 +214,7 @@ function WalletSendController($modal, $scope, $http, $q, userService) {
     var addresses = []
     userService.data.addresses.map(
       function(e,i,a) { 
-        if(e.privkey.length == 58) {
+        if(e.privkey && e.privkey.length == 58) {
           addresses.push(e.address);
         }
       }
