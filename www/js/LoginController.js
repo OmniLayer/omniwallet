@@ -1,10 +1,9 @@
-function LoginController($scope, $http, userService) {
-  
-  $scope.open = function(login) {
+function LoginController($scope, $http, $location, $modalInstance, userService) {
 
+  $scope.open = function(login) {
     var postData = {
       type: 'RESTOREWALLET',
-      uuid: login.uuid
+      email: login.email
     }
     $http({
         url: '/v1/user/wallet/restore/',
@@ -13,18 +12,26 @@ function LoginController($scope, $http, userService) {
         headers: {'Content-Type': 'application/json'}
     })
     .success(function (data, status, headers, config) {
-      if(data.status == "ERROR") {
-        $scope.missingUUID = true;
+      console.log(data);
+      if(data.status == "MISSING") {
+        $scope.missingEmail = true;
       } else {
-        console.log("SUCCESS");
-        // Add Wallet Decryption here
-        userService.data.loggedIn = true;
-        userService.data.uuid = login.uuid;
-        $scope.$emit('savestate');
+        var encrypted = data.wallet.addresses[0].privkey //Assumes we're decoding first key
+        // TODO: Handle default address
+
+        try {
+          var key = new Bitcoin.ECKey.decodeEncryptedFormat(encrypted, login.password);
+          var address = key.getBitcoinAddress().toString();
+          userService.login(data.wallet);
+          $modalInstance.close();
+          $location.path('/wallet');
+        } catch (err) {
+          console.log(err);
+          $scope.badPassword = true;
+        }
       }
     })
     .error(function(data, status, headers, config) {
-      console.log("ERROR");
       $scope.serverError = true;
     });
   }

@@ -11,9 +11,12 @@
         </div>
         <div class="navbar-collapse collapse">
             <ul class="nav navbar-nav navbar-right">
-              <li><a href="/wallet">Your Wallet</a></li>
-              <li><a href="/explorer">Explorer</a></li>
+              <li ng-hide="user.loggedIn"><a href="/" ng-click="openCreateModal()">Create Wallet</a></li>
+              <li ng-hide="user.loggedIn"><a href="/" ng-click="openLoginModal()">Login</a></li>
+              <li ng-show="user.loggedIn"><a href="/wallet">Your Wallet</a></li>
+              <li ng-show="user.loggedIn"><a href="/explorer">Explorer</a></li>
               <li><a href="/about">About</a></li>
+              <li ng-show="user.loggedIn"><a href="/" ng-click="logout()">Logout</a></li>
             </ul>
         </div>
       </div>

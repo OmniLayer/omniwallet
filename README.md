@@ -638,11 +638,11 @@ Example
 ```
 {
   "uuid": "02ddc252-7fb0-4e7d-c28e-be94a5dc56d0",
-  "addresses": ["1JwSSubhmg6iPtRjtyqhUYYH7bZg3Lfy1T"],
-  "keys": [
+  "email": "user@email.com",
+  "addresses": [
     {
       "address": "1JwSSubhmg6iPtRjtyqhUYYH7bZg3Lfy1T",
-      "encrypted": "6PRQ7ivF7LhQs7m4ZYbmj8Z1U7847LENYS22YBQNDLDXiVuKWZ8XDCEhjF"
+      "privkey": "6PRQ7ivF7LhQs7m4ZYbmj8Z1U7847LENYS22YBQNDLDXiVuKWZ8XDCEhjF"
     }
   ]
 }
@@ -652,7 +652,7 @@ Example
 ```
 var postData = {
   type: 'SYNCWALLET',
-  masterWallets: userWallets
+  wallet: walletData
 };
 $.post('/v1/user/wallet/sync/', postData, function (data) {}).fail( function() {} );
 ```
@@ -661,16 +661,16 @@ Where:
 
 | Variable            | Possible Values              |
 | ------------------- | ---------------------------- |
-| type                | 'SYNCWALLET' |
-| masterWallets        | list of wallets user wants to save |
+| type                | 'CREATEWALLET', 'SYNCWALLET' |
+| wallet        | The wallet the user wants to save |
 
-Returns no data
+Returns status "EXISTS" if wallet already exists and type was "CREATEWALLET"
 
 #### Restoring Wallet Information
 ```
 var postData = {
   type: 'RESTOREWALLET',
-  uuid: uuid
+  email: email
 };
 $.post('/v1/user/wallet/restore/', postData, function (data) {
   // Do something with data.wallet
@@ -682,7 +682,7 @@ Where:
 | Variable            | Possible Values              |
 | ------------------- | ---------------------------- |
 | type                | 'RESTOREWALLET' |
-| uuid | UUID of wallet to retrieve |
+| email | Email of wallet to retrieve |
 
 Returns status 'OK' if wallet was found. Example:
 
@@ -694,12 +694,15 @@ Returns status 'OK' if wallet was found. Example:
   {
     "uuid": "02ddc252-7fb0-4e7d-c28e-be94a5dc56d0",
     "addresses": ["1JwSSubhmg6iPtRjtyqhUYYH7bZg3Lfy1T"],
-    "keys": [
+    "email": "user@email.com",
+    "addresses": [
       {
         "address": "1JwSSubhmg6iPtRjtyqhUYYH7bZg3Lfy1T",
-        "encrypted": "6PRQ7ivF7LhQs7m4ZYbmj8Z1U7847LENYS22YBQNDLDXiVuKWZ8XDCEhjF"
+        "privkey": "6PRQ7ivF7LhQs7m4ZYbmj8Z1U7847LENYS22YBQNDLDXiVuKWZ8XDCEhjF"
       }
     ]
   }
 }
 ```
+
+Returns status 'MISSING' if the wallet was not found.

@@ -13,8 +13,17 @@ def sync_wallet_response(request_dict):
     return (None, 'No field type in response dict '+str(request_dict))
 
   req_type = request_dict['type'][0].upper()
-  if req_type == "SYNCWALLET":
-    syncWallets(request_dict['masterWallets'][0])
+  wallet = json.loads(request_dict['wallet'][0])
+  print req_type
+  if req_type == "CREATEWALLET":
+    if(exists(wallet)):
+      print 'exists'
+      response = { 'status': 'EXISTS' }
+      return (json.dumps(response), None)
+    else:
+      sync_wallets(wallet)
+  elif req_type == "SYNCWALLET":
+    sync_wallets(wallet)
   else:
     return (None, req_type + ' is not supported')
 
@@ -22,16 +31,18 @@ def sync_wallet_response(request_dict):
   return (json.dumps(response), None)
 
 
-def syncWallets(master_wallets_json):
-  master_wallets = json.loads(master_wallets_json)
+def sync_wallets(wallet):
+  email = wallet['email']
+  filename = data_dir_root + '/wallets/' + email + '.json'
+  with open(filename, 'w') as f:
+    json.dump(wallet, f)
 
-  for wallet in master_wallets:
-    uuid = wallet['uuid']
-    filename = data_dir_root + '/wallets/' + uuid + '.json'
-    with open(filename, 'w') as f:
-      json.dump(wallet, f)
+def exists(wallet):
+  email = wallet['email']
+  filename = data_dir_root + '/wallets/' + email + '.json'
+  print filename
+  return os.path.exists(filename)
 
-  return "OK"
 
 def sync_wallet_handler(environ, start_response):
   return general_handler(environ, start_response, sync_wallet_response)
