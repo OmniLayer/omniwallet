@@ -12,13 +12,15 @@
 			name=privkey 
 			class="form-control" 
 			placeholder="enter your private key  |   formats: hex, b64, WIP, compressed WIP"
-			ng-model="newAddressData.privKey">
+			ng-model="newAddressData.privKey"
+      ng-required="!newAddressData.address">
 		<input type="text" 
 			name=password 
 			class="form-control" 
 			placeholder="enter passphrase to encrypt and store locally"
-			ng-model="newAddressData.password">
-	</form>
+			ng-model="newAddressData.password"
+      ng-required="!newAddressData.address">
+</form>
 
 	<center>OR</center>
 
@@ -28,11 +30,11 @@
 			name="address" 
 			class="form-control" 
 			placeholder="Enter your bitcoin address"
-			ng-model="newAddressData.address">
+			ng-model="newAddressData.address"
+      ng-required="!newAddressData.privKey">
 	</form>
 
 </div>
 <div class="modal-footer">
-    <button class="btn btn-primary" ng-click="ok( newAddressData )">OK</button>
-    <button class="btn btn-warning" ng-click="cancel()">Cancel</button>
+    <button class="btn btn-primary" ng-click="ok( newAddressData )" ng-disabled="(privkeyentry.$error.required || addressentry.$error.required)">Add Address</button>
 </div>

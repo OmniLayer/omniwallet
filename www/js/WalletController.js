@@ -46,8 +46,6 @@ function WalletController($scope, $q, $http, userService) {
 }
 
 function WalletHistoryController($scope, $http, userService) {
-  console.log('initialized wallet history')
-
   $scope.first = userService.data.addresses[0].address
   $scope.addresses = userService.data.addresses
 
@@ -93,7 +91,6 @@ function WalletHistoryController($scope, $http, userService) {
 }
 
 function WalletSendController($modal, $scope, $http, $q, userService) {
-  console.log('initialized wallet')
   //fee tooltip
   $('#fee-tooltip').tooltip({ 
     title: 'Broadcast Fee: 0.0001 BTC + Dust Fees: 0.00006*4 = 0.00024 Total: 0.00034', 
@@ -137,14 +134,13 @@ function WalletSendController($modal, $scope, $http, $q, userService) {
       // open modal
       var modalInstance = $modal.open({
         template: '\
-          <div class="modal-header">\
-              <h3> Confirm send </h3>\
-          </div>\
           <div class="modal-body">\
+              <h3 class="text-center"> Confirm send </h3>\
               <h3>You\'re about to send ' + (+$scope.sendAmount).toFixed(4) + ' ' +  
               $scope.coin + ' plus fees to ' + $scope.address + '</h3>\
-            <p>\
+            <p><br>\
             If the above is correct, please input your passphrase below and press Send Funds.\
+            If you encounter an error, feel free to click away from the dialog and try again.\
             </p>\
           <input type="password" name=privkey ng-model="privKeyPass.pass" class="form-control"\
             placeholder="enter your private key passphrase">\
@@ -198,7 +194,6 @@ function WalletSendController($modal, $scope, $http, $q, userService) {
     } else {
       error += 'and try again.'
       $scope.error = error
-      console.log($scope);
       $scope.showErrors = true
     }
   }
@@ -219,7 +214,7 @@ function WalletSendController($modal, $scope, $http, $q, userService) {
     var addresses = []
     userService.data.addresses.map(
       function(e,i,a) { 
-        if(e.privkey.length == 58) {
+        if(e.privkey && e.privkey.length == 58) {
           addresses.push(e.address);
         }
       }
@@ -301,17 +296,25 @@ function WalletSendController($modal, $scope, $http, $q, userService) {
         
         transaction.ins[0].script = script
         
-        console.log('before',transaction, Bitcoin.Util.bytesToHex(transaction.serialize()))
+        //DEBUG console.log('before',transaction, Bitcoin.Util.bytesToHex(transaction.serialize()))
         var signedSuccess = transaction.signWithKey(privKey)
 
         var finalTransaction = Bitcoin.Util.bytesToHex(transaction.serialize())
-        var transactionHash = Bitcoin.Util.bytesToHex(transaction.getHash().reverse())
+        
+        //Showing the user the transaction hash doesn't work right now
+        //var transactionHash = Bitcoin.Util.bytesToHex(transaction.getHash().reverse())
 
         sendSignedTransaction(finalTransaction).then(function(successData) {
-          $modalScope.waiting = false
-          $modalScope.sendSuccess = true
-          $modalScope.url = 'http://blockchain.info/tx/' + transactionHash;
-          console.log('server success: ',successData);
+          if( successData.pushed.match(/submitted|success/gi) != null ) {
+            $modalScope.waiting = false
+            $modalScope.sendSuccess = true
+            $modalScope.url = 'http://blockchain.info/address/' + from + '?sort=0';
+          } else {
+            $modalScope.waiting = false
+            $modalScope.sendError = true
+            $modalScope.error = successData.pushed  //Unspecified error, show user
+          }
+          console.log('server response: ',successData);
         },function(errorData) {
           $modalScope.waiting = false
           $modalScope.sendError = true
@@ -319,7 +322,7 @@ function WalletSendController($modal, $scope, $http, $q, userService) {
           console.log('server error: ',errorData);
         });
 
-        console.log(addressData, privKey, bytes, transaction, script, signedSuccess, finalTransaction );
+        //DEBUG console.log(addressData, privKey, bytes, transaction, script, signedSuccess, finalTransaction );
         function parseScript (script) {
               var newScript = new Bitcoin.Script();
               var s = script.split(" ");
