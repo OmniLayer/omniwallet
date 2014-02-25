@@ -58,6 +58,8 @@ angular.module('omniwallet', [
       templateUrl: '/partials/login.html',
     }).when('/create', {
       templateUrl: '/partials/create_wallet.html',
+    }).when('/import', {
+      templateUrl: '/partials/wallet_import.html',
     }).otherwise({ redirectTo: '/' });
 
     $locationProvider.html5Mode(true).hashPrefix('!');

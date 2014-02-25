@@ -25,6 +25,8 @@ angular.module( 'omniwallet' )
             var currencyInfo;
             var emptyAddresses = [];
 
+            var appraiser = $injector.get( 'appraiser' );
+
             wallet.addresses.forEach( function( addr ) {
               requests.push( addressRequest( $http, $q, addr ).then( function( result ) {
                 result.data.balance.forEach( function( currencyItem ) {
@@ -32,16 +34,19 @@ angular.module( 'omniwallet' )
                     balances[ currencyItem.symbol ] = {
                       "symbol": currencyItem.symbol,
                       "balance": parseFloat( currencyItem.value ),
+                      "value": appraiser.getValue( currencyItem.value, currencyItem.symbol ),
                       "addresses": {}
                     };
                   }
                   else
                   {
                     balances[ currencyItem.symbol ].balance += parseFloat( currencyItem.value );
+                    balances[ currencyItem.symbol ].value += appraiser.getValue( currencyItem.value, currencyItem.symbol );
                   }
                   balances[ currencyItem.symbol ].addresses[ result.data.address ] = {
                     "address": result.data.address,
-                    "value": currencyItem.value
+                    "balance": currencyItem.value,
+                    "value": appraiser.getValue( currencyItem.value, currencyItem.symbol )
                   };
                 } );
               }));
@@ -81,7 +86,7 @@ angular.module( 'omniwallet' )
       } 
     };
   })
-  .directive( 'showWalletBalances', function( $compile ) {
+  .directive( 'showWalletBalances', function( $compile, $injector ) {
     return {
       scope: true,
       link: function ( scope, element, attrs ) {
@@ -103,6 +108,11 @@ angular.module( 'omniwallet' )
     }
   } )
   .controller( 'WalletBalancesController', function ( $modal, $rootScope, $injector, $scope, wallet_balances_data, wallet_balances_template ) {
+
+  var appraiser = $injector.get( 'appraiser' );
+  $rootScope.$on( 'APPRAISER_VALUE_CHANGED', function() {
+    $scope.showWalletBalances();
+  });
 
    $scope.openDeleteConfirmForm = function( address ) {
       var modalInstance = $modal.open( {
