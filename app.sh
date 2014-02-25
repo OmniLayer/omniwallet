@@ -56,12 +56,12 @@ do
 	
 		mkdir -p $DATADIR/www/tx $DATADIR/www/addr $DATADIR/www/general $DATADIR/www/offers $DATADIR/www/mastercoin_verify/addresses $DATADIR/www/mastercoin_verify/transactions
 
-        cp --no-clobber $DATADIR/tx/* $DATADIR/www/tx
-		cp --no-clobber $DATADIR/addr/* $DATADIR/www/addr
+        cp $DATADIR/tx/* $DATADIR/www/tx
+		cp $DATADIR/addr/* $DATADIR/www/addr
 		cp $DATADIR/general/* $DATADIR/www/general
-		cp --no-clobber $DATADIR/offers/* $DATADIR/www/offers
-		cp --no-clobber $DATADIR/mastercoin_verify/addresses/* $DATADIR/www/mastercoin_verify/addresses
-		cp --no-clobber $DATADIR/mastercoin_verify/transactions/* $DATADIR/www/mastercoin_verify/transactions
+		cp $DATADIR/offers/* $DATADIR/www/offers
+		cp $DATADIR/mastercoin_verify/addresses/* $DATADIR/www/mastercoin_verify/addresses
+		cp $DATADIR/mastercoin_verify/transactions/* $DATADIR/www/mastercoin_verify/transactions
 	
 		# unlock
 		rm -f $LOCK_FILE
