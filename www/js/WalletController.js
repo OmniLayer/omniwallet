@@ -1,8 +1,8 @@
 
 function WalletController($scope, $q, $http, userService) {
+  console.log(userService.getAllAddresses());
 
-  $scope.addrList = userService.data.addresses.map(function(e,i,a) { return e.address; })
-  $scope.defaultAddress = $scope.addrList[0]
+  $scope.addrList = userService.getAllAddresses().map(function(e,i,a) { return e.address; })
   $scope.addrListBal = []
   $scope.maxCurrencies = [];
   $scope.totals = {}
@@ -61,8 +61,8 @@ function WalletController($scope, $q, $http, userService) {
 }
 
 function WalletHistoryController($scope, $http, userService) {
-  $scope.first = userService.data.addresses[0].address
-  $scope.addresses = userService.data.addresses
+  $scope.first = userService.getWallet().addresses[0].address
+  $scope.addresses = userService.getAllAddresses();
 
   $scope.getData = function getData(address) {
 
@@ -178,7 +178,7 @@ function WalletSendController($modal, $scope, $http, $q, userService) {
               </div>\
           </div>\
         ',
-        controller: function($scope,$rootScope, userService,data, sendTransaction, getUnsignedTransaction){
+        controller: function($scope,$rootScope, userService, data, sendTransaction, getUnsignedTransaction){
           $scope.sendSuccess = false, $scope.sendError = false, $scope.waiting = false, $scope.privKeyPass = {};
           $scope.ok = function() {
             $scope.clicked = true;
@@ -227,7 +227,7 @@ function WalletSendController($modal, $scope, $http, $q, userService) {
 
   function getAddressesWithPrivkey() {
     var addresses = []
-    userService.data.addresses.map(
+    userService.getAllAddresses().map(
       function(e,i,a) { 
         if(e.privkey && e.privkey.length == 58) {
           addresses.push(e.address);
@@ -306,7 +306,7 @@ function WalletSendController($modal, $scope, $http, $q, userService) {
       var sourceScript = successData.sourceScript;
       var unsignedTransaction = successData.transaction
 
-      var addressData; userService.data.addresses.forEach(function(e,i) { if(e.address == from) addressData = e; });
+      var addressData; userService.getAllAddresses().forEach(function(e,i) { if(e.address == from) addressData = e; });
       try {
         var privKey = new Bitcoin.ECKey.decodeEncryptedFormat(addressData.privkey,privkeyphrase.pass)
 
