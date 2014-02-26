@@ -22,16 +22,13 @@
     <tbody>
     </tbody>
 
-  <tr ng-repeat="transaction in history">
-   {{transaction}}
-   <td>{{transaction.tx_hash}}</td>
-   <td>{{transaction.currency_str}}</td>
-   <td>{{transaction.tx_type_str}}</td>
-   <td>{{transaction.formatted_amount}}</td>
-    <td>{{transaction.tx_time | date:'dd MMM HH:mma Z'}}</td>
-  </tr>
-
-</table>
-
-</div>
+    <tr ng-repeat="transaction in history">
+      {{transaction}}
+      <td>{{transaction.tx_hash}}</td>
+      <td>{{transaction.currency_str}}</td>
+      <td>{{transaction.tx_type_str}}</td>
+      <td>{{transaction.formatted_amount}}</td>
+        <td>{{transaction.tx_time | date:'dd MMM HH:mma Z'}}</td>
+    </tr>
+  </table>
 </div>
