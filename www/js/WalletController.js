@@ -61,7 +61,7 @@ function WalletController($scope, $q, $http, userService) {
 }
 
 function WalletHistoryController($scope, $http, userService) {
-  $scope.first = userService.data.addresses[0].address
+  $scope.selectedAddress = userService.data.addresses[0].address
   $scope.addresses = userService.data.addresses
 
   $scope.getData = function getData(address) {
@@ -404,6 +404,27 @@ function WalletSendController($modal, $scope, $http, $q, userService) {
 
 
 function WalletTradeController($scope, $http, $q, userService) {
+
+  $scope.tradeView = "";
+  $scope.history = '/partials/wallet_history.html';
+
+  $scope.setView = function(view) {
+    $scope.tradeView = $scope.tradeTemplates[view]
+  }
+
+  $scope.tradeTemplates = {
+        'simpleSend':'/partials/wallet_send.html',
+        'buyOffer': '/partials/wallet_buy.html',
+        'saleOffer': '/partials/wallet_sale.html'
+  };
+
+
+}
+
+
+
+
+function WalletTrade2Controller($scope, $http, $q, userService) {
   $scope.selectedAddress = userService.data.addresses[0].address
   $scope.addresses = userService.data.addresses
   $scope.pairs = getPairs()

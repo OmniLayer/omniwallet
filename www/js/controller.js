@@ -89,7 +89,6 @@ function SidecarController($scope, $http) {
     $scope.sidecarTemplates = {
           'explorer':'/partials/explorer_sc.html',
           'about': '/partials/about_sc.html',
-          'trade': '/partials/trade_sc.html',
           'wallet': '/partials/wallet_sc.html'
     };
 

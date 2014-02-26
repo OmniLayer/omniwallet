@@ -2,38 +2,26 @@
     <div ng-include="templates['sidecar']"></div>
 </div>
 
-<div class="col-xs-10" ng-controller="WalletTradeController" ng-init="getData(selectedAddress)">
-  <table class="table table-striped table-hover table-condensed">
-    <caption> Wallet Trade: 
-      <select ng-model="currPair" ng-options="pairObject as pairObject for pairObject in pairs"
-        ng-change="getData(selectedAddress)">
-      <option value="">-- choose currency pair --</option>
-      </select> 
-       for
-      <select ng-model="selectedAddress" ng-options="addrObject.address as addrObject.address for addrObject in addresses" 
-        ng-change="getData(selectedAddress)">
-      <option value="">-- choose address --</option>
-      </select> 
-    </caption>
-    <thead>
-        <tr>
-          <th>Transaction hash</th>
-          <th>Type</th>
-          <th>Status</th>
-          <th>Amount</th>
-          <th>Transaction time</th>
-        </tr>
-    </thead>
-    <tbody>
-    </tbody>
+<div class="col-xs-10" ng-controller="WalletTradeController">
 
-    <tr ng-repeat="transaction in orderbook">
-      {{transaction}}
-      <td>{{transaction.tx_hash}}</td>
-      <td>{{transaction.tx_type_str}}</td>
-      <td>{{transaction.status}}</td>
-      <td>{{transaction.formatted_amount}}</td>
-        <td>{{transaction.tx_time | date:'dd MMM yyyy HH:mma Z'}}</td>
-    </tr>
-  </table>
+  <div class="row">
+    <h3 class="col-xs-3 center-block"> Choose an action: </h3>
+    <div class="col-xs-9">
+      <button class="btn btn-primary btn-lg" ng-click="setView('simpleSend')" type="submit">Start new send transaction</button>
+      <button class="btn btn-primary btn-lg" ng-click="setView('saleOffer')" type="submit">Start new sale offer</button>
+      <button class="btn btn-primary btn-lg" ng-click="setView('buyOffer')" type="submit">Start new buy offer</button>
+    </div>
+  </div>
+
+  <div class="row">
+    <div ng-include="tradeView"></div>
+  </div>
+
+  <br><br>
+  
+  <div class="row">
+    <div ng-include="history"></div>
+  </div>
 </div>
+
+
