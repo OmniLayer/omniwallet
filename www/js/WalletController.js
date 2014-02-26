@@ -48,8 +48,8 @@ function WalletController($scope, $q, $http, userService) {
   function getData(address) {
     var deferred = $q.defer();
 
-    var file = '/v1/address/addr/' + address + '.json'; 
-    $http.get( file, {} ).success(function(data) {
+    $http.post( '/v1/address/addr/', { 'addr': address } )
+    .success( function( data ) {
         return deferred.resolve(data);
     }).error(function(data) {
         return deferred.reject(data);
@@ -66,9 +66,8 @@ function WalletHistoryController($scope, $http, userService) {
 
   $scope.getData = function getData(address) {
 
-    var file = '/v1/address/addr/' + address + '.json'; 
-    $http.get( file, {} ).success(
-      function(data, status, headers, config) {
+    $http.post( '/v1/address/addr/', { 'addr': address } )
+      .success( function(data, status, headers, config) {
 
         $scope.address = data.address;
 
@@ -290,10 +289,10 @@ function WalletSendController($modal, $scope, $http, $q, userService) {
   function getData(address) {
     var deferred = $q.defer();
 
-    var file = '/v1/address/addr/' + address + '.json'; 
-    $http.get( file, {} ).success(function(data) {
+    $http.post( '/v1/address/addr/', { 'addr': addr.address },
+    function( data ) {
         return deferred.resolve(data);
-    }).error(function(data) {
+    }).fail(function(data) {
         return deferred.reject(data);
     });
 

@@ -29,6 +29,7 @@ angular.module( 'omniwallet' )
 
             wallet.addresses.forEach( function( addr ) {
               requests.push( addressRequest( $http, $q, addr ).then( function( result ) {
+                console.log( result );
                 result.data.balance.forEach( function( currencyItem ) {
                   if( !balances.hasOwnProperty( currencyItem.symbol )) {
                     balances[ currencyItem.symbol ] = {
@@ -213,10 +214,11 @@ var AddBtcAddressModal = function ($scope, $modalInstance ) {
 function addressRequest( $http, $q, addr ) {
   var deferred = $q.defer();
 
-  $http.get( '/v1/address/addr/' + addr.address + '.json' ).then( 
-    function( result ) {
-      deferred.resolve( result );
-    },
+
+  $http.post( '/v1/address/addr/', { 'addr': addr.address } )
+    .success( function( result ) {
+      deferred.resolve( { data: result } );
+    } ).error(
     function( error ) {
       deferred.resolve( {
         data: { 
