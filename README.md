@@ -8,22 +8,25 @@ easy to understand implementation which allows for analysis and its rapid develo
 
 ## What is this Web-Wallet?
 
-We anticipate most users will not want to understand the technical details of running a standalone wallet.
-To counter user dissatisfaction and garner a strong following, Mastercoin will require an easy
-to use wallet not requiring user installation. Web-wallets are the typical manifestation of this
-requirement, but we recognize the concern for security is not typically heeded. The concern for
-security is another motivation in this regard, and a section will be written regarding those 
-concerns.
+### Best in class security
 
-### Risks 
+1. Private keys are never sent to the server except in an encrypted form.
+2. Private keys are always backed up (encrypted), so even if the server goes offline or is compromised, you can always migrate to another wallet
+3. Everything is open source from the ground up!
+4. You can deploy the Omniwallet on your own server and host your own instance, or use one of the service providers that will host it for you – your money, your choice.
 
-Web wallet security
-Traditionally, web wallets are designed with the security implication of handling user data. 
-In our case, user data includes bitcoin private keys. Since this is a appealing target for
-criminals, our aim in this project will be to minimize the risk of the user in using our 
-service, by developing software to run without the handling of user private keys. This has been
-attempted with success by the web wallet and blockchain query service blockchain.info. We are 
-confident this level of security can and should be implemented by our software.
+### Baked in usability
+
+1. No software to download or install, no blockchain to synchronize and verify – it just works, lightning fast.
+2. Carefully planned layout, with common operations emphasized
+3. Beautiful and intuitive User Interface
+4. Special care is taken to smooth out operational edge cases to prevent mistakes and ensure a painless experience for the user
+
+### Multi-currency support
+
+1. Omniwallet comes with a pre-built support for Bitcoin, Mastercoin and Test Mastercoins
+2. Native support for Smart Property and User-Generated Currencies
+3. Alt-coin support – the Omniwallet will support coins that go outside of the usual Mastercoin ecosystem, such as Litecoin, Peercoin and more.
 
 ## Setup
 
