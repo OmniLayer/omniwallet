@@ -21,7 +21,6 @@ def get_msc_balances( addr ):
     # Once the data's been loaded, remove the BTC entry since we're going to 
     #    use sx's BTC balances directly.
     balance_data = address_data[ 'balance' ]
-    print balance_data
     for i in xrange(0,len( balance_data )):
       if balance_data[ i ][ 'symbol' ] == 'BTC':
         balance_data.pop( i )
@@ -38,7 +37,11 @@ def get_msc_balances( addr ):
 def get_btc_balances( addr ):
   balances = {}
   balances[ 'symbol' ] = 'BTC'
-  balances[ 'value' ] = 0.0
+  out, err = run_command( 'sx balance -j ' + addr )
+  if err != None:
+    return None, err
+  else:
+    balances[ 'value' ] = float( json.loads( out )[0][ 'paid' ])/100000000
 
   return ( [ balances ], None )
 
@@ -55,7 +58,6 @@ def get_balance_response(request_dict):
 
   address_data, err = get_msc_balances( addr )
   if err != None:
-    print err
     address_data = {}
     address_data[ 'address' ] = addr
     address_data[ 'balance' ] = []
