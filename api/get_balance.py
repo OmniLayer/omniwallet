@@ -8,6 +8,8 @@ from msc_apps import *
 
 data_dir_root = os.environ.get('DATADIR')
 
+# Get the Mastercoin balances.  Not that this is also creating the default balance
+# object, and should run before all the other currency checks.
 def get_msc_balances( addr ):
   filename = data_dir_root + '/www/addr/' + addr + '.json'
 
@@ -19,13 +21,20 @@ def get_msc_balances( addr ):
     # Once the data's been loaded, remove the BTC entry since we're going to 
     #    use sx's BTC balances directly.
     balance_data = address_data[ 'balance' ]
-    for i in (0,len( balance_data )-1):
+    for i in xrange(0,len( balance_data )):
       if balance_data[ i ][ 'symbol' ] == 'BTC':
         balance_data.pop( i )
         break
 
   return ( address_data, None )
-  
+
+# Get the Bitcoin balances - this is a different format from the MSC one above.
+def get_btc_balances( addr ):
+  balances = {}
+  balances[ 'symbol' ] = 'BTC'
+  balances[ 'value' ] = 0.0
+
+  return ( [ balances ], None )
 
 def get_balance_response(request_dict):
   try:
@@ -42,6 +51,12 @@ def get_balance_response(request_dict):
     address_data = {}
     address_data[ 'address' ] = addr
     address_data[ 'balance' ] = []
+
+  bitcoin_balances, err = get_btc_balances( addr )
+
+  if err == None:
+    for i in xrange(0,len( bitcoin_balances )):
+      address_data[ 'balance' ].append( bitcoin_balances[i] )
 
   return (json.dumps( address_data ), None)
 
