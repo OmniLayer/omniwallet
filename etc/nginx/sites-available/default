@@ -66,45 +66,50 @@ server {
         uwsgi_param UWSGI_CALLABLE   "${app}_handler";
 
 	set $PORT 1088;
-	location /v1/transaction/validateaddr/ {
-            set   $app   validateaddr;
-            uwsgi_pass   127.0.0.1:$PORT;
-        }
+    location /v1/address/addr/ {
+        set   $app   get_balance;
+        uwsgi_pass   127.0.0.1:$PORT;
+    }
 
-        location /v1/transaction/send/ {
-            set   $app   send;
-            uwsgi_pass   127.0.0.1:$PORT;
-        }
+    location /v1/transaction/validateaddr/ {
+        set   $app   validateaddr;
+        uwsgi_pass   127.0.0.1:$PORT;
+    }
 
-        location /v1/exchange/sell/ {
-            set   $app   sell;
-            uwsgi_pass   127.0.0.1:$PORT;
-        }
+    location /v1/transaction/send/ {
+        set   $app   send;
+        uwsgi_pass   127.0.0.1:$PORT;
+    }
 
-        location /v1/exchange/accept/ {
-            set   $app   accept;
-            uwsgi_pass   127.0.0.1:$PORT;
+    location /v1/exchange/sell/ {
+        set   $app   sell;
+        uwsgi_pass   127.0.0.1:$PORT;
+    }
+
+    location /v1/exchange/accept/ {
+        set   $app   accept;
+        uwsgi_pass   127.0.0.1:$PORT;
 	}
 
 	location /v1/transaction/pushtx/ {
-            set   $app   pushtx;
-            uwsgi_pass   127.0.0.1:$PORT;
+        set   $app   pushtx;
+        uwsgi_pass   127.0.0.1:$PORT;
 	}
 
-        location /v1/exchange/offers {
-          set   $app   offers;
-          uwsgi_pass   127.0.0.1:$PORT;
-        }
+    location /v1/exchange/offers {
+        set   $app   offers;
+        uwsgi_pass   127.0.0.1:$PORT;
+    }
 
-        location /v1/user/wallet/sync/ {
-            set   $app   sync_wallet;
-            uwsgi_pass   127.0.0.1:$PORT;
-        }
+    location /v1/user/wallet/sync/ {
+        set   $app   sync_wallet;
+        uwsgi_pass   127.0.0.1:$PORT;
+    }
 
-        location /v1/user/wallet/restore/ {
-            set   $app   restore_wallet;
-            uwsgi_pass   127.0.0.1:$PORT;
-        }
+    location /v1/user/wallet/restore/ {
+        set   $app   restore_wallet;
+        uwsgi_pass   127.0.0.1:$PORT;
+    }
 
 	# Only for nginx-naxsi used with nginx-naxsi-ui : process denied requests
 	#location /RequestDenied {
