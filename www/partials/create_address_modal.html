@@ -1,0 +1,30 @@
+<div class="modal-header">
+  <p> Enter a password to protect this address </p>
+</div>
+<form name="createAddressForm" novalidate class="form-horizontal">
+  <div class="modal-body">
+    <div class="control-group">
+      <label class="control-label" for="inputPassword">Password</label>
+      <div class="controls">
+        <input name="password" type="password" ng-model="create.password" id="inputPassword" ng-minlength="8" required>
+        <span class="bg-warning" ng-show="createAddressForm.password.$error.required && createAddressForm.password.$dirty">Required</span>
+        <span class="bg-warning" ng-show="createAddressForm.password.$dirty && createAddressForm.password.$error.minlength">Password must be at least 8 characters long</span>
+      </div>
+    </div>
+    <div class="control-group">
+      <label class="control-label" for="inputRepeatPassword">Repeat Password</label>
+      <div class="controls">
+        <input name="repeatPassword" type="password" ng-model="create.repeatPassword" id="inputRepeatPassword" required>
+        <span class="bg-warning" ng-show="createAddressForm.repeatPassword.$error.required && createAddressForm.repeatPassword.$dirty">Required</span>
+        <span class="bg-warning" ng-show="create.password != create.repeatPassword">Passwords do not match</span>
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <div class="control-group">
+      <div class="controls">
+        <button type="submit" class="btn" ng-click="createAddress(create)">Create Address</button>
+      </div>
+    </div>
+  </div>
+</form>

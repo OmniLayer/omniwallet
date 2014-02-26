@@ -41,8 +41,9 @@
   <script type="text/ng-template" id="welcome.html">
     <h3>Welcome to Omniwallet</h3>
     <p>We have set up a brand new wallet for you</p>
-    <p>You can import existing addresses by clicking Add Address</p>
-    <p>Or we can create an address for you</p>
+    <p>You can import existing addresses in <a href="/wallet/addresses">My Address</a></p>
+    <p>Or we can create a new address for you:</p>
+    <button class="btn btn-default" ng-click="openCreateAddressModal()">Create New Address</button>
 
   </script>
 

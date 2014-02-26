@@ -1,5 +1,5 @@
 
-function WalletController($scope, $q, $http, userService) {
+function WalletController($scope, $q, $http, $modal, userService) {
   console.log(userService.getAllAddresses());
 
   $scope.addrList = userService.getAllAddresses().map(function(e,i,a) { return e.address; })
@@ -45,6 +45,13 @@ function WalletController($scope, $q, $http, userService) {
      });
   });
 
+  $scope.openCreateAddressModal = function() {
+    $modal.open({
+      templateUrl: 'partials/create_address_modal.html',
+      controller: CreateAddressController
+    });
+  }
+
   function getData(address) {
     var deferred = $q.defer();
 
@@ -58,6 +65,17 @@ function WalletController($scope, $q, $http, userService) {
     return deferred.promise;
   }
 
+}
+
+function CreateAddressController($scope, $location, $modalInstance, userService) {
+  $scope.createAddress = function(create) {
+    var ecKey = new Bitcoin.ECKey();
+    var address = ecKey.getBitcoinAddress().toString();
+    var encryptedPrivateKey = ecKey.getEncryptedFormat(create.password);
+    userService.addAddress(address, encryptedPrivateKey);
+    $modalInstance.close();
+    $location.path('/wallet/overview');
+  }
 }
 
 function WalletHistoryController($scope, $http, userService) {
