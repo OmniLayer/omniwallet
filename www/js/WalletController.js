@@ -405,14 +405,19 @@ function WalletSendController($modal, $scope, $http, $q, userService) {
 
 function WalletTradeController($scope, $http, $q, userService) {
 
-  $scope.tradeView = "";
+  $scope.onTradeView = true
   $scope.history = '/partials/wallet_history.html';
 
   $scope.setView = function(view) {
+    if( view != 'tradeInfo')
+      $scope.onTradeView = false
+    else
+      $scope.onTradeView = true
     $scope.tradeView = $scope.tradeTemplates[view]
   }
 
   $scope.tradeTemplates = {
+        'tradeInfo': '/partials/wallet_info.html',
         'simpleSend':'/partials/wallet_send.html',
         'buyOffer': '/partials/wallet_buy.html',
         'saleOffer': '/partials/wallet_sale.html'
