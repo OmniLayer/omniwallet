@@ -26,11 +26,8 @@ function WalletController($scope, $q, $http, userService) {
         }
         //console.log($scope)
      },function(errorData) {
-        console.log('Error, no balance data found for ' + e + ' setting defaults...');
-        var balances = [ 
-          { symbol: 'MSC', value: '0.0' },
-          { symbol: 'TMSC', value: '0.0' },
-          { symbol: 'BTC', value: '0.0' } ];
+        console.log('Error, no balance data found for ' + e + ' using dummy object....');
+        var balances = [ ];
         $scope.currentView = "overview.html";
         $scope.addrListBal[index] = { address: e, balance: balances }
 

@@ -14,17 +14,23 @@ def get_msc_balances( addr ):
   filename = data_dir_root + '/www/addr/' + addr + '.json'
 
   if not os.path.exists(filename):
-    return ( None, '{ "status": "NOT FOUND: ' + filename + '" }' );
+    return ( None, '{ "status": "NOT FOUND: ' + filename + '" }' )
 
   with open(filename, 'r') as f:
     address_data = json.load(f)
     # Once the data's been loaded, remove the BTC entry since we're going to 
     #    use sx's BTC balances directly.
     balance_data = address_data[ 'balance' ]
+    print balance_data
     for i in xrange(0,len( balance_data )):
       if balance_data[ i ][ 'symbol' ] == 'BTC':
         balance_data.pop( i )
         break
+    
+    for i in xrange( 0, len( balance_data )):
+      if balance_data[ i ][ 'symbol' ] == 'TMSC':
+        if balance_data[ i ][ 'value' ] == '0.0':
+          balance_data.pop( i )
 
   return ( address_data, None )
 
@@ -37,6 +43,7 @@ def get_btc_balances( addr ):
   return ( [ balances ], None )
 
 def get_balance_response(request_dict):
+
   try:
       addrs_list=request_dict['addr']
   except KeyError:
@@ -48,6 +55,7 @@ def get_balance_response(request_dict):
 
   address_data, err = get_msc_balances( addr )
   if err != None:
+    print err
     address_data = {}
     address_data[ 'address' ] = addr
     address_data[ 'balance' ] = []

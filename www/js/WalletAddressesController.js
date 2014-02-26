@@ -223,10 +223,7 @@ function addressRequest( $http, $q, addr ) {
       deferred.resolve( {
         data: { 
           address: addr.address,
-          balance: 
-           [ { symbol: 'MSC', value: '0.0' },
-             { symbol: 'TMSC', value: '0.0' },
-             { symbol: 'BTC', value: '0.0' } ] 
+          balance: []
            }
       });
     }
