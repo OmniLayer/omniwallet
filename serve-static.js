@@ -1,5 +1,5 @@
 var connect = require('connect'),
-	connectRoute = require( 'connect-route' ),
+    express = require( 'express' ),
     http = require('http'),
     url = require( 'url' ),
     qs = require( 'qs' ),
@@ -11,15 +11,18 @@ var postPaths = [
 	'/v1/address/addr/'
 ];
 
-connect(
-		connectRoute( function( app ) {
-			postPaths.forEach( function( path ){
-				app.post( path, processPost );
-			} );
-		})
-	)
-    .use(connect.static('www'))
-    .listen(3000);
+var app = express();
+
+app.configure( function() {
+    app.use(connect.static('www'))
+
+} );
+
+postPaths.forEach( function( path ){
+	app.post( path, processPost );
+} );
+
+app.listen(3000);
 
 function processPost( req, res ) {
 	var body = '';
@@ -30,20 +33,20 @@ function processPost( req, res ) {
 
             var POST = qs.parse(body);
             // use POST
-            console.log( 'POST Data: ' );
-
-            if( req.route.indexOf( 'address/addr' ) >= 0 )
+            if( req.route.path.indexOf( 'address/addr' ) >= 0 )
             {
             	console.log( 'Addr request, address: ' + POST.addr );
             }
-            else if ( req.route.indexOf( 'wallet/restore' ) >= 0 )
+            else if ( req.route.path.indexOf( 'wallet/restore' ) >= 0 )
             {
-            	var file = "www" + req.route + POST.email;
+            	var file = "www" + req.route.path + POST.email;
             	console.log( 'Restore wallet from ' + file );
             	fs.readFile( file, function (err, data) {
+                    console.log( data.toString( 'utf8' ) );
 				  if (err) throw err;
-				  res.write( data );
-				  res.end();
+                  
+                  var obj = JSON.parse( data.toString( 'utf8' ));
+                  res.json( obj );
 				});
             }
             else
@@ -52,5 +55,4 @@ function processPost( req, res ) {
             	console.log( POST );
             }
         });
-	res.end();
 }

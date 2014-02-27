@@ -14,7 +14,7 @@
 	},
 	"devDependencies": {
 		"connect": "2.x.x",
-		"connect-route": "~0.1.4",
+		"express": "~3.4.8",
 		"qs": "~0.6.6"
 	},
     "scripts": {
