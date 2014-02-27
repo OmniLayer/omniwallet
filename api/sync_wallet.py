@@ -14,7 +14,6 @@ def sync_wallet_response(request_dict):
 
   req_type = request_dict['type'][0].upper()
   wallet = json.loads(request_dict['wallet'][0])
-  print req_type
   if req_type == "CREATEWALLET":
     if(exists(wallet)):
       print 'exists'

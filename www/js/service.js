@@ -3,37 +3,33 @@
 angular.module( 'omniwallet' ).factory('userService', ['$rootScope', '$http', function ($rootScope, $http) {
   var service = {
     data: {
-      addresses: [],
-      email: '',
+      wallet : {},
       loggedIn: false
     },
 
     login: function(wallet) {
-      service.data.addresses = wallet.addresses;
-      service.data.email = wallet.email;
+      service.data.wallet = wallet;
       service.data.loggedIn = true;
       service.saveSession();
     },
 
     logout: function() {
-      //Pain point as this grows
-      service.data.email = '',
       service.data.loggedIn = false;
-      service.data.addresses = [];
+      service.data.wallet = {}
       localStorage.clear();
     },
 
     addAddress: function( address, privKey ) {
-      for( var i in service.data.addresses )
+      for( var i in service.data.wallet.addresses )
       {
-        if( service.data.addresses[i].address == address )
+        if( service.data.wallet.addresses[i].address == address )
         {
-          service.data.addresses[i].privkey = privKey;
+          service.data.wallet.addresses[i].privkey = privKey;
           service.saveSession();
           return;
         }
       }
-      service.data.addresses.push( {
+      service.data.wallet.addresses.push( {
         "address": address,
         "privkey": privKey
       });
@@ -42,38 +38,36 @@ angular.module( 'omniwallet' ).factory('userService', ['$rootScope', '$http', fu
     },
 
     getAddress: function(address) {
-      for(var i in service.data.addresses) {
-        if(service.data.addresses[i].address == address) {
-          return service.data.addresses[i];
+      for(var i in service.data.wallet.addresses) {
+        if(service.data.wallet.addresses[i].address == address) {
+          return service.data.wallet.addresses[i];
         }
       }
+    },
+
+    getAllAddresses: function () {
+      return service.data.wallet.addresses;
+    },
+
+    getWallet: function() {
+      return service.data.wallet;
     },
 
     removeAddress: function( address ) {
-      for( var i=0; i<service.data.addresses.length; i++ )
-        if( service.data.addresses[i].address == address )
+      for( var i=0; i<service.data.wallet.addresses.length; i++ )
+        if( service.data.wallet.addresses[i].address == address )
         {
-          service.data.addresses.splice( i, 1 );
+          service.data.wallet.addresses.splice( i, 1 );
           service.saveSession();
           return;
         }
-
-      if(service.data.addresses.length == 0) {
-        //Consider this a log out as well?
-        service.data.loggedIn = false;
-        service.saveSession();
-      }
     },
 
     syncWallet: function() {
-      var wallet = {
-        email: service.data.email,
-        addresses: service.data.addresses
-      };
       // Strange serialization effects, stringifying wallet initially
       var postData = {
         type: 'SYNCWALLET',
-        wallet: JSON.stringify(wallet)
+        wallet: JSON.stringify(service.data.wallet)
       };
       return $http({
         url: '/v1/user/wallet/sync/',

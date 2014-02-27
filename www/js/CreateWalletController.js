@@ -1,26 +1,25 @@
 function CreateWalletController($scope, $http, $location, $modalInstance, userService) {
   $scope.createWallet = function(create) {
-    if(create.password != create.repeatPassword) {
-      console.log("Passwords don't match")
-      $scope.passwordCompare = true;
-    } else {
-      var uuid = generateUUID();
-      var password = create.password;
-      var ecKey = new Bitcoin.ECKey();
-      var address = ecKey.getBitcoinAddress().toString();
-      var encryptedPrivateKey = ecKey.getEncryptedFormat(password);
+    var uuid = generateUUID();
+    var salt = Crypto.util.bytesToBase64(Crypto.util.randomBytes(32)).substr(0,32)
+    var password = create.password + salt;
+    // var ecKey = new Bitcoin.ECKey();
+    // var address = ecKey.getBitcoinAddress().toString();
+    // var encryptedPrivateKey = ecKey.getEncryptedFormat(password);
 
-      var wallet = {
-        email: create.email,
-        uuid: uuid,
-        addresses: [{
-          address: address,
-          privkey: encryptedPrivateKey
-        }]
-      };
+    var wallet = {
+      email: create.email,
+      uuid: uuid,
+      passwordHash: Crypto.SHA256(password),
+      salt: salt,
+      addresses: []
+      // [{
+      //   address: address,
+      //   privkey: encryptedPrivateKey
+      // }]
+    };
 
-      createWallet($scope, $http, $location, $modalInstance, userService, wallet, address, encryptedPrivateKey);
-    }
+    createWallet($scope, $http, $location, $modalInstance, userService, wallet);
   }
 }
 
