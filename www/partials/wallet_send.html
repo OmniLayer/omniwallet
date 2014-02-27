@@ -1,34 +1,35 @@
-<div class="col-xs-10" ng-controller="WalletSendController">
+<div class="col-xs-12" ng-controller="WalletSendController">
   <div class="row">
-    <h3 class="text-center col-xs-2 pull-left" >Wallet Send</h3>
+    <div ng-show="showErrors" class="alert alert-danger">{{error}}</div> 
+    <h3 class="text-center" >New Transaction Send</h3>
   </div>
-    <br>
   <div class="row">
-    <h4 class="col-xs-2 pull-left" >Send money:</h4>
+    <h4 class="text-justify" >Send money:</h4>
     <div om-select addclass="col-xs-8" type="coin" text="Send money: " expr="setCoin"  options="{{currList}}"></div>
   </div>
     <br>
   <div class="row">
-    <h4 class="col-xs-2 pull-left" >From address:</h4>
+    <h4 class="text-justify" >From address:</h4>
     <div om-select addclass="col-xs-8" type="address" text="From address: " expr="setAddress" options="{{addrList}}"></div>
-    <h6 class="col-xs-8"> Please note we allow you to only send from addresses with a valid private key. </h6>
+    <h6 class="col-xs-8"> Please make sure this is the address you are sending from.<br> 
+    Note that we allow you to only send from addresses with a valid private key. </h6>
   </div>
     <br>
   <div class="row">
-    <div om-input addclass="col-xs-8" text="Amount: " 
+    <div om-input addclass="" text="Amount: " 
       placeholder="0.01" model="sendAmount" change="addToScope" data="balanceData" addons="  Available"></div> 
   </div>
     <br>
   <div class="row">
-    <div om-input model="sendTo" change="addToScope" addclass="col-xs-8" text="To: " placeholder="{{addrList[0]}}"></div> 
+    <div om-input model="sendTo" change="addToScope" text="To: " placeholder="{{addrList[0]}}"></div> 
   </div>
     <br>
   <div class="row">
     <div id="fee-tooltip">
-    <div om-input addclass="fees col-xs-8" text="Fees: " placeholder="0.00034BTC (Hover over me for more)" disable=1 ></div> 
+    <div om-input addclass="fees" text="Fees: " placeholder="0.00034BTC (Hover over me for more)" disable=1 ></div> 
     </div>
   </div>
     <br>
-  <button class="btn btn-primary btn-lg col-xs-4" ng-click="validateForm()" type="submit">Send Transaction</button>
-  <div ng-show="showErrors" style="margin-left: 10px;" class="alert alert-danger col-xs-4">{{error}}</div> 
+  <button class="btn btn-primary btn-lg col-xs-push-3 col-xs-6" ng-click="validateForm()" type="submit">Send Transaction</button>
+
 </div>

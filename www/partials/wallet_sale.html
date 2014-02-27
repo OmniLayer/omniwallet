@@ -1,1 +1,35 @@
-todo
+<div class="col-xs-12" ng-controller="WalletSendController">
+  <div class="row">
+    <div ng-show="showErrors" class="alert alert-danger">{{error}}</div> 
+    <h3 class="text-center" >New Sale Offer</h3>
+  </div>
+  <div class="row">
+    <h4 class="text-justify" >Send money:</h4>
+    <div om-select addclass="col-xs-8" type="coin" text="Send money: " expr="setCoin"  options="{{currList}}"></div>
+  </div>
+    <br>
+  <div class="row">
+    <h4 class="text-justify" >From address:</h4>
+    <div om-select addclass="col-xs-8" type="address" text="From address: " expr="setAddress" options="{{addrList}}"></div>
+    <h6 class="col-xs-8"> Please make sure this is the address you are sending from.<br> 
+    Note that we allow you to only send from addresses with a valid private key. </h6>
+  </div>
+    <br>
+  <div class="row">
+    <div om-input addclass="" text="Amount: " 
+      placeholder="0.01" model="sendAmount" change="addToScope" data="balanceData" addons="  Available"></div> 
+  </div>
+    <br>
+  <div class="row">
+    <div om-input model="sendTo" change="addToScope" text="To: " placeholder="{{addrList[0]}}"></div> 
+  </div>
+    <br>
+  <div class="row">
+    <div id="fee-tooltip">
+    <div om-input addclass="fees" text="Fees: " placeholder="0.00034BTC (Hover over me for more)" disable=1 ></div> 
+    </div>
+  </div>
+    <br>
+  <button class="btn btn-primary btn-lg col-xs-push-3 col-xs-6" ng-click="validateForm()" type="submit">Send Transaction</button>
+
+</div>

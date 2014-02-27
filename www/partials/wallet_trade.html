@@ -5,7 +5,7 @@
 <div class="col-xs-10" ng-controller="WalletTradeController" ng-init="setView('tradeInfo')">
 
   <h4 ng-hide="onTradeView" class="row">
-    <a ng-click="setView('tradeInfo')">< Go back </a>
+    <a ng-click="setView('tradeInfo')"> <strong> < Go back </strong> </a>
   </h4>
 
   <div class="row">
@@ -13,12 +13,18 @@
   </div>
 
   <div ng-show="onTradeView" class="row">
-    <h3 class="col-xs-3 center-block"> Choose an action: </h3>
-    <div class="col-xs-9">
-      <button class="btn btn-primary btn-lg" ng-click="setView('simpleSend')" type="submit">Start new send transaction</button>
-      <button class="btn btn-primary btn-lg" ng-click="setView('saleOffer')" type="submit">Start new sale offer</button>
-      <button class="btn btn-primary btn-lg" ng-click="setView('buyOffer')" type="submit">Start new buy offer</button>
-    </div>
+    <h3> Choose an action: </h3>
+      <div class="btn-group btn-group-justified">
+        <div class="btn-group">
+        <button class="btn btn-primary btn-lg" ng-click="setView('simpleSend')" type="submit">Start new send transaction</button>
+        </div>
+        <div class="btn-group">
+        <button class="btn btn-primary btn-lg" ng-click="setView('saleOffer')" type="submit">Start new sale offer</button>
+        </div>
+        <div class="btn-group">
+        <button class="btn btn-primary btn-lg" ng-click="setView('buyOffer')" type="submit">Start new buy offer</button>
+        </div>
+      </div>
   </div>
 
 </div>
