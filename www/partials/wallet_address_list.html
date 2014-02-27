@@ -1,7 +1,13 @@
 <div class="col-xs-10">
-
+  <div class="panel panel-default">
+    <h3 class="text-center panel-body"> My Addresses </h3>
+  </div>
+  <div class="alert alert-info alert-dismissable">
+    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+      This is where you can go to manage existing addresses, add addresses, or remove addresses.
+  </div>
   <div ng-if="balances.balances" ng-repeat="currency in balances.balances">
-    <div class="col-xs-10">
+    <div class="row">
       <div class="col-xs-4">
         <span class="currency-name">{{currency.name ? currency.name : currency.symbol}}</span>
       </div>
@@ -12,7 +18,7 @@
         <span class="currency-value">{{currency.value | currency}}</span>
       </div>
     </div>
-    <div class="col-xs-10">
+    <div class="row">
       <table class="table table-striped table-hover table-condensed">
         <thead>
           <tr>
@@ -47,7 +53,7 @@
   <div ng-if="! balances.balances">
     <h3>You don't currently have any cryptocurrency addresses in your wallet.</h3>
     <p>Why not go ahead and add one?</p>
-    <div class="col-xs-10">
+    <div class="col-xs-12">
       <row>
         <div class="col-xs-3">
           <button "btn btn-default" ng-click="openAddForm( 'BTC' )" data-currency="BTC">
