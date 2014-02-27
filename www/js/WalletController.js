@@ -426,10 +426,7 @@ function WalletTradeController($scope, $http, $q, userService) {
 
 }
 
-
-
-
-function WalletTrade2Controller($scope, $http, $q, userService) {
+function WalletTradeHistoryController($scope, $http, $q, userService) {
   $scope.selectedAddress = userService.data.addresses[0].address
   $scope.addresses = userService.data.addresses
   $scope.pairs = getPairs()
