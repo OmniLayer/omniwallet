@@ -35,24 +35,37 @@ function processPost( req, res ) {
             // use POST
             if( req.route.path.indexOf( 'address/addr' ) >= 0 )
             {
-            	console.log( 'Addr request, address: ' + POST.addr );
+                var file = "www" + req.route.path + POST.addr + '.json';
+                console.log( 'Get file: ' + file );
+                returnPath( file, res );
             }
             else if ( req.route.path.indexOf( 'wallet/restore' ) >= 0 )
             {
             	var file = "www" + req.route.path + POST.email;
-            	console.log( 'Restore wallet from ' + file );
-            	fs.readFile( file, function (err, data) {
-                    console.log( data.toString( 'utf8' ) );
-				  if (err) throw err;
-                  
-                  var obj = JSON.parse( data.toString( 'utf8' ));
-                  res.json( obj );
-				});
+                returnPath( file, res );
             }
             else
             {
-            	console.log( 'Unknown submission, data: ' );
-            	console.log( POST );
+                console.log( 'Unknown request: ' + req.route.path );
+                console.log( POST );
             }
         });
+}
+
+function returnPath( file, res ) {
+    fs.readFile( file, function (err, data) {
+        if (err || !data) 
+        {
+            res.status( 500 );
+            res.end();
+        }
+        else
+        {
+
+            var obj = JSON.parse( data.toString( 'utf8' ));
+            res.json( obj );
+
+        }
+    });
+
 }
