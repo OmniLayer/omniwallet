@@ -26,11 +26,8 @@ function WalletController($scope, $q, $http, $modal, userService) {
         }
         //console.log($scope)
      },function(errorData) {
-        console.log('Error, no balance data found for ' + e + ' setting defaults...');
-        var balances = [ 
-          { symbol: 'MSC', value: '0.0' },
-          { symbol: 'TMSC', value: '0.0' },
-          { symbol: 'BTC', value: '0.0' } ];
+        console.log('Error, no balance data found for ' + e + ' using dummy object....');
+        var balances = [ ];
         $scope.currentView = "overview.html";
         $scope.addrListBal[index] = { address: e, balance: balances }
 
@@ -64,8 +61,8 @@ function WalletController($scope, $q, $http, $modal, userService) {
   function getData(address) {
     var deferred = $q.defer();
 
-    var file = '/v1/address/addr/' + address + '.json'; 
-    $http.get( file, {} ).success(function(data) {
+    $http.post( '/v1/address/addr/', { 'addr': address } )
+    .success( function( data ) {
         return deferred.resolve(data);
     }).error(function(data) {
         return deferred.reject(data);
@@ -93,9 +90,8 @@ function WalletHistoryController($scope, $http, userService) {
 
   $scope.getData = function getData(address) {
 
-    var file = '/v1/address/addr/' + address + '.json'; 
-    $http.get( file, {} ).success(
-      function(data, status, headers, config) {
+    $http.post( '/v1/address/addr/', { 'addr': address } )
+      .success( function(data, status, headers, config) {
 
         $scope.address = data.address;
 
@@ -317,10 +313,10 @@ function WalletSendController($modal, $scope, $http, $q, userService) {
   function getData(address) {
     var deferred = $q.defer();
 
-    var file = '/v1/address/addr/' + address + '.json'; 
-    $http.get( file, {} ).success(function(data) {
+    $http.post( '/v1/address/addr/', { 'addr': addr.address },
+    function( data ) {
         return deferred.resolve(data);
-    }).error(function(data) {
+    }).fail(function(data) {
         return deferred.reject(data);
     });
 
