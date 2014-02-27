@@ -2,36 +2,86 @@
     <div ng-include="templates['sidecar']"></div>
 </div>
 
-<div class="col-xs-10" ng-controller="WalletHistoryController" ng-init="getData(first)">
-  <table class="table table-striped table-hover table-condensed">
-    <caption> Wallet History for {{selectedAddress}}
+<div class="col-xs-10">
+  <div class="panel panel-default">
+    <h3 class="text-center panel-body"> Your Wallet's History </h3>
+  </div>
+  <div class="alert alert-info alert-dismissable">
+    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+    This page contains your wallet history. You can click on transactions to view them too, later.
+  </div>
+  <div ng-controller="WalletTradeHistoryController" ng-init="getData(selectedAddress)">
+  
+    <h4> Wallet Offers History: 
+      <select ng-model="currPair" ng-options="pairObject as pairObject for pairObject in pairs"
+        ng-change="getData(selectedAddress)">
+      <option value="">-- choose currency pair --</option>
+      </select> 
+        for
       <select ng-model="selectedAddress" ng-options="addrObject.address as addrObject.address for addrObject in addresses" 
         ng-change="getData(selectedAddress)">
       <option value="">-- choose address --</option>
       </select> 
-    </caption>
-    <thead>
-        <tr>
-          <th>Transaction hash</th>
-          <th>Currency</th>
-          <th>Type</th>
-          <th>Amount</th>
-          <th>Transaction time</th>
-        </tr>
-    </thead>
-    <tbody>
-    </tbody>
+    </h4>
+  
+    <table class="table table-striped table-hover table-condensed">
+      <thead>
+          <tr>
+            <th>Transaction hash</th>
+            <th>Type</th>
+            <th>Status</th>
+            <th>Amount</th>
+            <th>Transaction time</th>
+          </tr>
+      </thead>
+      <tbody>
+      </tbody>
 
-  <tr ng-repeat="transaction in history">
-   {{transaction}}
-   <td>{{transaction.tx_hash}}</td>
-   <td>{{transaction.currency_str}}</td>
-   <td>{{transaction.tx_type_str}}</td>
-   <td>{{transaction.formatted_amount}}</td>
-    <td>{{transaction.tx_time | date:'dd MMM HH:mma Z'}}</td>
-  </tr>
+      <tr ng-repeat="transaction in orderbook">
+        {{transaction}}
+        <td> <a href="">{{transaction.tx_hash}}</a></td>
+        <td>{{transaction.tx_type_str}}</td>
+        <td>{{transaction.status}}</td>
+        <td>{{transaction.formatted_amount}}</td>
+          <td>{{transaction.tx_time | date:'dd MMM yyyy HH:mma Z'}}</td>
+      </tr>
+    </table>
+  </div>
 
-</table>
 
-</div>
+
+  <div ng-controller="WalletHistoryController" ng-init="getData(selectedAddress)">
+    
+      <h4> Full Wallet History for
+        <select ng-model="selectedAddress" ng-options="addrObject.address as addrObject.address for addrObject in addresses" 
+          ng-change="getData(selectedAddress)">
+        <option value="">-- choose address --</option>
+        </select> 
+      </h4>
+    
+    <table class="table table-striped table-hover table-condensed">
+      <thead>
+          <tr>
+            <th>Transaction hash</th>
+            <th>Currency</th>
+            <th>Type</th>
+            <th>Amount</th>
+            <th>Transaction time</th>
+          </tr>
+      </thead>
+      <tbody>
+      </tbody>
+
+      <tr ng-repeat="transaction in history track by $index">
+        {{transaction}}
+        <td><a href="">{{transaction.tx_hash}} </a></td>
+        <td>{{transaction.currency_str}}</td>
+        <td>{{transaction.tx_type_str}}</td>
+        <td>{{transaction.formatted_amount}}</td>
+          <td>{{transaction.tx_time | date:'dd MMM HH:mma Z'}}</td>
+      </tr>
+    </table>
+  </div>
+
+
 </div>

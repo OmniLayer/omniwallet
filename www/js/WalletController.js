@@ -85,8 +85,8 @@ function CreateAddressController($scope, $location, $modalInstance, userService)
 }
 
 function WalletHistoryController($scope, $http, userService) {
-  $scope.first = userService.getWallet().addresses[0].address
-  $scope.addresses = userService.getAllAddresses();
+  $scope.selectedAddress = userService.getAllAddresses()[0].address
+  $scope.addresses = userService.getAllAddresses()
 
   $scope.getData = function getData(address) {
 
@@ -423,4 +423,66 @@ function WalletSendController($modal, $scope, $http, $q, userService) {
 
     return deferred.promise;
   }
+}
+
+
+function WalletTradeController($scope, $http, $q, userService) {
+
+  $scope.onTradeView = true
+  $scope.history = '/partials/wallet_history.html';
+
+  $scope.setView = function(view) {
+    if( view != 'tradeInfo')
+      $scope.onTradeView = false
+    else
+      $scope.onTradeView = true
+    $scope.tradeView = $scope.tradeTemplates[view]
+  }
+
+  $scope.tradeTemplates = {
+        'tradeInfo': '/partials/wallet_info.html',
+        'simpleSend':'/partials/wallet_send.html',
+        'buyOffer': '/partials/wallet_buy.html',
+        'saleOffer': '/partials/wallet_sale.html'
+  };
+
+
+}
+
+function WalletTradeHistoryController($scope, $http, $q, userService) {
+  $scope.selectedAddress = userService.getAllAddresses()[0].address;
+  $scope.addresses = userService.getAllAddresses();
+  $scope.pairs = getPairs()
+  $scope.currPair = $scope.pairs[0] //TMSC-to-BTC
+
+  function getPairs() {
+    return ['TMSC/BTC', 'MSC/BTC'] 
+  }
+
+  $scope.getData = function getData(address) {
+    var postData = { 
+      type: 'ADDRESS',
+      address: address, 
+      currencyType: $scope.currPair.split('/')[0],   
+      offerType: 'BOTH'      
+    };
+    $http.post('/v1/exchange/offers', postData).success(
+      function(offerSuccess) {
+        var type_offer = Object.keys(offerSuccess.data);
+        var transaction_data = []
+
+        angular.forEach(type_offer, function(offerType) {
+         //DEBUG console.log(offerType, offerSuccess.data[offerType])
+         angular.forEach(offerSuccess.data[offerType], function(offer) {
+          transaction_data.push(offer)
+         })
+        })
+
+        if(transaction_data.length == 0)
+          transaction_data.push({ tx_hash: 'No offers/bids found for this pair/address, why not make one?' })
+        $scope.orderbook = transaction_data;
+      }
+    );
+  }
+
 }
