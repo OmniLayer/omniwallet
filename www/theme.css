@@ -17,9 +17,17 @@ a {
 
 .currency-name, .currency-total, .currency-value {
 	font-weight: bold;
-	font-size: large;
+	font-size: 1.5em;
 }
 
 .currency {
 	text-align: right;
+}
+
+.asset-table {
+	padding-top: 50px;
+}
+
+.asset-item {
+	font-size: 1.2em;
 }
