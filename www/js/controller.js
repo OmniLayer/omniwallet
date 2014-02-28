@@ -92,4 +92,21 @@ function SidecarController($scope, $http, userService) {
           'wallet': '/partials/wallet_sc.html'
     };
     $scope.hasAddresses = userService.getAllAddresses().length != 0 ? true : false;
+    $scope.hasAddressesWithPrivkey = getAddressesWithPrivkey()
+  
+    function getAddressesWithPrivkey() {
+      var addresses = []
+      userService.getAllAddresses().map(
+        function(e,i,a) { 
+          if(e.privkey && e.privkey.length == 58) {
+            addresses.push(e.address);
+          }
+        }
+      );
+      if( addresses.length == 0)
+        addresses = false
+      else
+        addresses = true 
+      return addresses
+    }
 }

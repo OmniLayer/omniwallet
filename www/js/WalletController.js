@@ -313,7 +313,7 @@ function WalletSendController($modal, $scope, $http, $q, userService) {
   function getData(address) {
     var deferred = $q.defer();
 
-    $http.post( '/v1/address/addr/', { 'addr': addr.address },
+    $http.post( '/v1/address/addr/', { 'addr': address },
     function( data ) {
         return deferred.resolve(data);
     }).fail(function(data) {
