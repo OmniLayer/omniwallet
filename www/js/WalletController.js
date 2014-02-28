@@ -298,8 +298,8 @@ function WalletSendController($modal, $scope, $http, $q, userService) {
 
   $scope.addrList.forEach(function(e,i) {
      var promise = getData(e);
-     promise.then(function(successData) {
-        addrListBal[i] = { address: e, balance: successData.balance }
+     promise.then(function(successData) { console.log(successData.data);
+        addrListBal[i] = { address: e, balance: successData.data.balance }
      },function(errorData) {
        console.log('Error, no balance data found for ' + e + ' setting defaults...');
        var balances = [ 
@@ -311,16 +311,8 @@ function WalletSendController($modal, $scope, $http, $q, userService) {
   });
 
   function getData(address) {
-    var deferred = $q.defer();
-
-    $http.post( '/v1/address/addr/', { 'addr': address },
-    function( data ) {
-        return deferred.resolve(data);
-    }).error(function(data) {
-        return deferred.reject(data);
-    });
-
-    return deferred.promise;
+    var promise = $http.post( '/v1/address/addr/', { 'addr': address });
+    return promise;
   }
 
   function sendTransaction(to, from, amt, currency, fee, privkeyphrase, $modalScope) {
