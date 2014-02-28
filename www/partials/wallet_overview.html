@@ -14,11 +14,9 @@
     <div class="row">
       <button ng-click="backupWallet()">Backup Wallet</button>
     </div>
-    <div class="row">
-      <div class="col-md-6 col-sm-12 text-center"> Chart Summary 
-        <div d3-pie-chart></div>
-      </div>
-      <div class="col-md-6 col-sm-12" ng-controller="AssetTypesController" ng-init="showAssetTypes()" show-asset-types template="{{template}}">
+
+    <div class="row" >
+      <div ng-controller="AssetTypesController" ng-init="showAssetTypes()" show-asset-types template="{{template}}">
       </div>
     </div>
 

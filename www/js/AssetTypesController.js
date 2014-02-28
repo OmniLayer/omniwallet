@@ -13,6 +13,7 @@ angular.module( 'omniwallet' )
     var count = 1;
     return {
       "getData": function() {
+        console.log( '**** getData was run! ****' );
         var deferred = $q.defer();
 
         _.defer( function() {
@@ -101,7 +102,7 @@ angular.module( 'omniwallet' )
         }
     }
   } )
-  .controller( 'AssetTypesController', function ( $modal, $rootScope, $injector, $scope, asset_types_data, asset_types_template ) {
+  .controller( 'AssetTypesController', function ( $modal, $rootScope, $injector, $scope, $element, asset_types_data, asset_types_template ) {
 
   var appraiser = $injector.get( 'appraiser' );
   $rootScope.$on( 'APPRAISER_VALUE_CHANGED', function() {
@@ -131,6 +132,78 @@ angular.module( 'omniwallet' )
       }, function () {});
     };
 
+    function updateGraph() {
+      $scope.chart = {
+          width : 300,
+          height : 300
+      }
+      $scope.radius = Math.min($scope.chart.width, $scope.chart.height) / 2
+      
+      $element.find('#all-assets-graph').attr('height', $scope.chart.height).attr('width', $scope.chart.width);
+
+      var color = d3.scale.category20()
+
+      var arc = d3.svg.arc()
+          .outerRadius($scope.radius - 10)
+          .innerRadius(0);
+
+      var pie = d3.layout.pie()
+          .sort(null)
+          .value(function(d) {  return d.value; });
+
+      var svg = d3.select("#all-assets-graph")
+      
+      $scope.totalsPromise.then(function(successData) {
+
+        var appraiser = $injector.get( 'appraiser' );
+        var data = [], keys = Object.keys($scope.totals);
+        keys.forEach(function(e,i) {
+          var value = appraiser.getValue( $scope.totals[e], keys[i] );
+          if( typeof value == 'number' && value > 0 )
+          {
+            data.push( { 
+              value : value,
+              name: keys[i], 
+              color: data.length
+            });
+          }
+          else
+          {
+            console.log( 'Not adding appraised value: ' + value + ' because it is not a number greater than 0.' );
+          }
+        });
+
+        console.log( 'Graph data: ' );
+        console.log( data );
+        if( data.length > 0 )
+        {
+          var g = svg.selectAll(".arc")
+              .data(pie(data))
+            .enter().append("g")
+              .attr("class", "arc");
+
+          g.append("path")
+              .attr("d", arc)
+              .style("fill", function(d) {  return color(d.data.color); })
+              .attr('transform', 'translate(150,150)');
+
+          g.append("text")
+              .attr("transform", function(d) { 
+                  var c = arc.centroid(d);
+                      return "translate(" + (150+ c[0]) + "," + (150 + c[1]) + ")";
+                 })
+              .attr("dy", ".35em")
+              .style("text-anchor", "middle")
+              .text(function(d) { return d.data.name; });
+
+        }
+        else
+        {
+          console.log( 'No market values are known, yet.' );
+        }
+      });
+    }
+
     $scope.showAssetTypes = function () {
 
       $scope.items = asset_types_data.getData().then( function( balances ) {
@@ -148,7 +221,7 @@ angular.module( 'omniwallet' )
         asset_types_template.then( function( templ ) {
           _.defer( function() {
             $scope.template = templ;
-            $scope.$apply();
+            $scope.$apply( updateGraph() );
           });
         }); 
       } );          
@@ -178,7 +251,7 @@ function addressRequest( $http, $q, addr ) {
         data: { 
           address: addr.address,
           balance: []
-           }
+         }
       });
     }
   );
