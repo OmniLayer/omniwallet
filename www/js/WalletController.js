@@ -6,12 +6,11 @@ function WalletController($scope, $q, $http, $modal, userService) {
   $scope.addrListBal = []
   $scope.maxCurrencies = [];
   $scope.totals = {}
-  $scope.currentView = "welcome.html";
+  $scope.currentView = userService.getAllAddresses().length == 0 ? "welcome.html" : "overview.html";
 
   $scope.addrList.forEach(function(e,index) {
      $scope.totalsPromise = getData(e);
      $scope.totalsPromise.then(function(successData) {
-        $scope.currentView = "overview.html";
         $scope.addrListBal[index] = { address: e, balance: successData.balance }
         
         if(successData.balance.length > 0)
@@ -44,7 +43,7 @@ function WalletController($scope, $q, $http, $modal, userService) {
 
   $scope.openCreateAddressModal = function() {
     $modal.open({
-      templateUrl: 'partials/create_address_modal.html',
+      templateUrl: '/partials/create_address_modal.html',
       controller: CreateAddressController
     });
   }
@@ -85,8 +84,8 @@ function CreateAddressController($scope, $location, $modalInstance, userService)
 }
 
 function WalletHistoryController($scope, $http, userService) {
-  $scope.first = userService.getWallet().addresses[0].address
-  $scope.addresses = userService.getAllAddresses();
+  $scope.selectedAddress = userService.getAllAddresses()[0].address
+  $scope.addresses = userService.getAllAddresses()
 
   $scope.getData = function getData(address) {
 
@@ -298,8 +297,8 @@ function WalletSendController($modal, $scope, $http, $q, userService) {
 
   $scope.addrList.forEach(function(e,i) {
      var promise = getData(e);
-     promise.then(function(successData) {
-        addrListBal[i] = { address: e, balance: successData.balance }
+     promise.then(function(successData) { console.log(successData.data);
+        addrListBal[i] = { address: e, balance: successData.data.balance }
      },function(errorData) {
        console.log('Error, no balance data found for ' + e + ' setting defaults...');
        var balances = [ 
@@ -311,16 +310,8 @@ function WalletSendController($modal, $scope, $http, $q, userService) {
   });
 
   function getData(address) {
-    var deferred = $q.defer();
-
-    $http.post( '/v1/address/addr/', { 'addr': addr.address },
-    function( data ) {
-        return deferred.resolve(data);
-    }).fail(function(data) {
-        return deferred.reject(data);
-    });
-
-    return deferred.promise;
+    var promise = $http.post( '/v1/address/addr/', { 'addr': address });
+    return promise;
   }
 
   function sendTransaction(to, from, amt, currency, fee, privkeyphrase, $modalScope) {
@@ -450,8 +441,8 @@ function WalletTradeController($scope, $http, $q, userService) {
 }
 
 function WalletTradeHistoryController($scope, $http, $q, userService) {
-  $scope.selectedAddress = userService.data.addresses[0].address
-  $scope.addresses = userService.data.addresses
+  $scope.selectedAddress = userService.getAllAddresses()[0].address;
+  $scope.addresses = userService.getAllAddresses();
   $scope.pairs = getPairs()
   $scope.currPair = $scope.pairs[0] //TMSC-to-BTC
 
@@ -460,6 +451,7 @@ function WalletTradeHistoryController($scope, $http, $q, userService) {
   }
 
   $scope.getData = function getData(address) {
+    var transaction_data = []
     var postData = { 
       type: 'ADDRESS',
       address: address, 
@@ -468,8 +460,8 @@ function WalletTradeHistoryController($scope, $http, $q, userService) {
     };
     $http.post('/v1/exchange/offers', postData).success(
       function(offerSuccess) {
+        if(offerSuccess.data != "ADDRESS_NOT_FOUND") {
         var type_offer = Object.keys(offerSuccess.data);
-        var transaction_data = []
 
         angular.forEach(type_offer, function(offerType) {
          //DEBUG console.log(offerType, offerSuccess.data[offerType])
@@ -477,10 +469,8 @@ function WalletTradeHistoryController($scope, $http, $q, userService) {
           transaction_data.push(offer)
          })
         })
-
-        if(transaction_data.length == 0)
-          transaction_data.push({ tx_hash: 'No offers/bids found for this pair/address, why not make one?' })
-        $scope.orderbook = transaction_data;
+      } else transaction_data.push({ tx_hash: 'No offers/bids found for this pair/address, why not make one?' })
+      $scope.orderbook = transaction_data;
       }
     );
   }
