@@ -1,0 +1,57 @@
+<div class="row" >
+  <div class="col-md-6 col-sm-12 text-center">Portfolio Composition 
+    <svg id="all-assets-graph"></svg>
+  </div>
+  <div class="col-md-6 col-sm-12">
+    <div ng-if="balances.balances">
+      <row>
+        <div class="currency-name col-xs-8 text-left">
+          Estimated Total Value
+        </div>
+        <div class="currency-value col-xs-4 text-right">
+          {{total | currency}}
+        </div>
+      </row>
+      <div class="asset-table">
+        <div ng-repeat="currency in balances.balances">
+          <row class="col-xs-12" ng-click="openCurrencyDetail( currency.symbol )">
+            <div class="container-fluid">
+              <div class="asset-item col-xs-4 text-left">
+                <span>{{currency.name ? currency.name : currency.symbol}}</span>
+              </div>
+              <div class="asset-item col-xs-4 text-right">
+                <span>{{currency.balance}}</span>
+              </div>
+              <div class="asset-item col-xs-4 text-right">
+                <span>{{currency.value | currency}}</span>
+              </div>
+            </div>
+          </row> 
+        </div>
+        <row class="col-xs-12 text-center"> 
+          <h6>Click on assets for more detailed breakdown</h6>
+        </row>
+
+      </div>
+    </div>
+    <div ng-if="! balances.balances">
+      <h3>You don't currently have any cryptocurrency addresses in your wallet.</h3>
+      <p>Why not go ahead and add one?</p>
+      <div class="col-xs-12">
+        <row>
+          <div class="col-xs-3">
+            <button "btn btn-default" ng-click="openAddForm( 'BTC' )" data-currency="BTC">
+              Add Bitcoin (BTC) Address
+            </button>
+          </div>
+          <div class="col-xs-3" ng-repeat="cdata in balances.currencies.data">
+            <button "btn btn-default" ng-click="openAddForm( cdata.currency )" data-currency="{{cdata.currency}}">
+              Add {{cdata.name}} ({{cdata.currency}}) Address
+            </button>
+        </row>
+      </div>
+    </div>  
+  </div>
+</div>
+
+

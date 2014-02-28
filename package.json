@@ -13,7 +13,9 @@
 		"bower": "git://github.com/neoziro/bower.git#v1.2.8-patched"
 	},
 	"devDependencies": {
-		"connect": "2.x.x"
+		"connect": "2.x.x",
+		"express": "~3.4.8",
+		"qs": "~0.6.6"
 	},
     "scripts": {
             "install": "grunt"

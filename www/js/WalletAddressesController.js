@@ -29,7 +29,6 @@ angular.module( 'omniwallet' )
 
             wallet.addresses.forEach( function( addr ) {
               requests.push( addressRequest( $http, $q, addr ).then( function( result ) {
-                console.log( result );
                 result.data.balance.forEach( function( currencyItem ) {
                   if( !balances.hasOwnProperty( currencyItem.symbol )) {
                     balances[ currencyItem.symbol ] = {
