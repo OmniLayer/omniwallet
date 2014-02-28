@@ -16,7 +16,7 @@ angular.module( 'omniwallet' )
         var deferred = $q.defer();
 
         _.defer( function() {
-          var wallet = $injector.get( 'userService' ).data
+          var wallet = $injector.get( 'userService' ).getWallet();
           if( wallet && wallet.addresses.length > 0 )
           {
             var requests = [];

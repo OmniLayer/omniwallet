@@ -5,6 +5,7 @@
 <div class="col-xs-10" ng-controller="WalletController">
   <script type="text/ng-template" id="overview.html">
     <div class="row">
+      <button ng-click="backupWallet()">Backup Wallet</button>
       <div class="col-xs-5 text-center"> Chart Summary 
         <div d3-pie-chart></div>
       </div>
@@ -41,12 +42,10 @@
   <script type="text/ng-template" id="welcome.html">
     <h3>Welcome to Omniwallet</h3>
     <p>We have set up a brand new wallet for you</p>
-    <p>it is advised first to replanish your wallet with bitcoins. you can send as much as you want, but a minimum of 0.0000002 is recomended</p>
-    <p>is advised to be able to make transactions and trades probably all year round</p>
+    <p>You can import existing addresses in <a href="/wallet/addresses">My Address</a></p>
+    <p>Or we can create a new address for you:</p>
+    <button class="btn btn-default" ng-click="openCreateAddressModal()">Create New Address</button>
 
-    <div id="fund-address">
-      <p>Fund this address {{ defaultAddress }}</p>
-    </div>
   </script>
 
   <div ng-include="currentView"></div>

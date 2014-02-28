@@ -1,24 +1,30 @@
 <div class="modal-header">
   <h3>Create a new Wallet</h3>
 </div>
-<form novalidate class="form-horizontal">
+<form name="createForm" novalidate class="form-horizontal">
   <div class="modal-body">
     <div class="control-group">
       <label class="control-label" for="inputEmail">Email</label>
       <div class="controls">
-        <input type="text" ng-model="create.email" id="inputEmail">
+        <input name="email" type="email" ng-model="create.email" id="inputEmail" required>
+        <span class="bg-warning" ng-show="createForm.email.$error.required && createForm.email.$dirty">Required</span>
+        <span class="bg-warning" ng-show="createForm.email.$error.email">Invalid Email</span>
       </div>
     </div>
     <div class="control-group">
       <label class="control-label" for="inputPassword">Password</label>
       <div class="controls">
-        <input type="password" ng-model="create.password" id="inputPassword">
+        <input name="password" type="password" ng-model="create.password" id="inputPassword" ng-minlength="8" required>
+        <span class="bg-warning" ng-show="createForm.password.$error.required && createForm.password.$dirty">Required</span>
+        <span class="bg-warning" ng-show="createForm.password.$dirty && createForm.password.$error.minlength">Password must be at least 8 characters long</span>
       </div>
     </div>
     <div class="control-group">
       <label class="control-label" for="inputRepeatPassword">Repeat Password</label>
       <div class="controls">
-        <input type="password" ng-model="create.repeatPassword" id="inputRepeatPassword">
+        <input name="repeatPassword" type="password" ng-model="create.repeatPassword" id="inputRepeatPassword" required>
+        <span class="bg-warning" ng-show="createForm.repeatPassword.$error.required && createForm.repeatPassword.$dirty">Required</span>
+        <span class="bg-warning" ng-show="create.password != create.repeatPassword">Passwords do not match</span>
       </div>
     </div>
   </div>
@@ -28,7 +34,6 @@
         <button type="submit" class="btn" ng-click="createWallet(create)">Create Wallet</button>
       </div>
     </div>
-    <div class="help-block" ng-show="passwordCompare">Passwords do not match.</div>
     <div class="help-block" ng-show="walletExists">This email is already in use</div>
     <div class="help-block" ng-show="serverError">Server Error, try again later</div>
   </div>
