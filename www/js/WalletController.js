@@ -6,12 +6,11 @@ function WalletController($scope, $q, $http, $modal, userService) {
   $scope.addrListBal = []
   $scope.maxCurrencies = [];
   $scope.totals = {}
-  $scope.currentView = "welcome.html";
+  $scope.currentView = userService.getAllAddresses().length == 0 ? "welcome.html" : "overview.html";
 
   $scope.addrList.forEach(function(e,index) {
      $scope.totalsPromise = getData(e);
      $scope.totalsPromise.then(function(successData) {
-        $scope.currentView = "overview.html";
         $scope.addrListBal[index] = { address: e, balance: successData.balance }
         
         if(successData.balance.length > 0)
