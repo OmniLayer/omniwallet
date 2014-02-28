@@ -216,14 +216,8 @@ angular.module( 'omniwallet' )
               color: data.length
             });
           }
-          else
-          {
-            console.log( 'Not adding appraised value: ' + value + ' because it is not a number greater than 0.' );
-          }
         });
 
-        console.log( 'Graph data: ' );
-        console.log( data );
         if( data.length > 0 )
         {
           var g = svg.selectAll(".arc")
@@ -246,10 +240,6 @@ angular.module( 'omniwallet' )
               .text(function(d) { return d.data.name; });
 
         }
-        else
-        {
-          console.log( 'No market values are known, yet.' );
-        }
       });
     }
 
@@ -261,7 +251,6 @@ angular.module( 'omniwallet' )
         var total = 0;
         for( var k in balances.balances )
         {
-          console.log( balances.balances[k] );
           if( typeof balances.balances[k].value == 'number' )
             total += balances.balances[k].value;
         }
