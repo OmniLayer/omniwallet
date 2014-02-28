@@ -65,7 +65,6 @@ angular.module('omniwallet', [
     $locationProvider.html5Mode(true).hashPrefix('!');
 });
 
-
 //app helpers
 function TransformRequest(data) { 
   var param = function(obj) {

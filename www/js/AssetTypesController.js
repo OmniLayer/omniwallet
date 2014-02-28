@@ -1,4 +1,3 @@
-
 angular.module( 'omniwallet' )
   .factory( 'asset_types_template', function ( $q, $http ) {
     var deferred = $q.defer();
@@ -13,7 +12,6 @@ angular.module( 'omniwallet' )
     var count = 1;
     return {
       "getData": function() {
-        console.log( '**** getData was run! ****' );
         var deferred = $q.defer();
 
         _.defer( function() {
@@ -102,7 +100,7 @@ angular.module( 'omniwallet' )
         }
     }
   } )
-  .controller( 'AssetTypesController', function ( $modal, $rootScope, $injector, $scope, $element, asset_types_data, asset_types_template ) {
+  .controller( 'AssetTypesController', function ( $q, $http, $modal, $rootScope, $injector, $scope, $element, asset_types_data, asset_types_template ) {
 
   var appraiser = $injector.get( 'appraiser' );
   $rootScope.$on( 'APPRAISER_VALUE_CHANGED', function() {
@@ -130,6 +128,57 @@ angular.module( 'omniwallet' )
         $scope.showAssetTypes();
 
       }, function () {});
+    };
+
+    function getAssetBalances( currencySymbol ) {
+      var deferred = $q.defer();
+      var wallet = $injector.get( 'userService' ).getWallet();
+      if( wallet && wallet.addresses.length > 0 )
+      {
+        var requests = [];
+        var balances = [];
+        var appraiser = $injector.get( 'appraiser' );
+        wallet.addresses.forEach( function( addr ) {
+          requests.push( addressRequest( $http, $q, addr )
+            .then( function( result ) {
+              var resultBalances = result.data.balance;
+              for( var i in resultBalances )
+              {
+                var item = resultBalances[i];
+                if( item.symbol == currencySymbol )
+                {
+                  balances.push( {
+                    "address": addr,
+                    "balance": parseFloat( item.value ),
+                    "value": appraiser.getValue( item.value, currencySymbol )
+                  } );
+
+                }
+              }
+            } )
+          );
+        } );
+        $q.all( requests ).then( function( responses ) {
+          deferred.resolve( balances );
+        });
+      }
+      return deferred.promise;
+    }
+
+    $scope.openCurrencyDetail = function( currencySymbol ) {
+      $scope.currencySymbol = currencySymbol;
+      var modalInstance = $modal.open({
+        resolve: {
+          currencySymbol: function() {
+            return currencySymbol;
+          },
+          balances: function() {
+            return getAssetBalances( currencySymbol );
+          }
+        },
+        templateUrl: '/partials/currency_detail_modal.html',
+        controller: CurrencyDetailModal
+      });
     };
 
     function updateGraph() {
@@ -227,6 +276,11 @@ angular.module( 'omniwallet' )
       } );          
     };
   });
+
+var CurrencyDetailModal = function( $scope, currencySymbol, balances ) {
+  $scope.currencySymbol = currencySymbol;
+  $scope.balances = balances;
+}
 
 var AddBtcAddressModal = function ($scope, $modalInstance ) {
   $scope.ok = function ( result ) {

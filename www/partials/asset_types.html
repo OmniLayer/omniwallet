@@ -14,7 +14,7 @@
       </row>
       <div class="asset-table">
         <div ng-repeat="currency in balances.balances">
-          <row class="col-xs-12">
+          <row class="col-xs-12" ng-click="openCurrencyDetail( currency.symbol )">
             <div class="container-fluid">
               <div class="asset-item col-xs-4 text-left">
                 <span>{{currency.name ? currency.name : currency.symbol}}</span>
@@ -28,6 +28,10 @@
             </div>
           </row> 
         </div>
+        <row class="col-xs-12 text-center"> 
+          <h6>Click on assets for more detailed breakdown</h6>
+        </row>
+
       </div>
     </div>
     <div ng-if="! balances.balances">
