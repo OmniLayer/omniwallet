@@ -43,7 +43,7 @@ function WalletController($scope, $q, $http, $modal, userService) {
 
   $scope.openCreateAddressModal = function() {
     $modal.open({
-      templateUrl: 'partials/create_address_modal.html',
+      templateUrl: '/partials/create_address_modal.html',
       controller: CreateAddressController
     });
   }
