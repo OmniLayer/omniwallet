@@ -27,7 +27,3 @@ class StatsBackend:
 
   def get(self, val):
     return self.engine.get(val)
-
-
-stats = StatsBackend()
-stats.increment("amount_of_transactions")
