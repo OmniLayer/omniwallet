@@ -44,10 +44,6 @@ server {
 		alias /var/lib/omniwallet/www/general/$1;
 	}
 
-	location ~ "^/v1/address/addr/(.*)$" {
-		alias /var/lib/omniwallet/www/addr/$1;
-	}
-
 	location ~ "^/v1/transaction/tx/(.*)$" {
 		alias /var/lib/omniwallet/www/tx/$1;
 	}
