@@ -12,7 +12,7 @@ angular.module( 'omniwallet' )
     var count = 1;
     return {
       "getData": function() {
-        console.log( '*** getData!' );
+        //console.log( '*** getData!' );
         var deferred = $q.defer();
 
         _.defer( function() {
@@ -183,7 +183,7 @@ angular.module( 'omniwallet' )
     };
 
     function updateGraph() {
-      console.log( '*** updateGraph!' );
+      //console.log( '*** updateGraph!' );
       $scope.chart = {
           width : 300,
           height : 300
@@ -220,8 +220,8 @@ angular.module( 'omniwallet' )
           }
         });
 
-        console.log( '*** updateGraph, data.length: ' + data.length );
-        console.log( data );
+        //console.log( '*** updateGraph, data.length: ' + data.length );
+        //console.log( data );
         if( data.length > 0 )
         {
           var g = svg.selectAll(".arc")
