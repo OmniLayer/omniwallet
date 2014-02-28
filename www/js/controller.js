@@ -9,7 +9,9 @@ function HomeCtrl($templateCache) {
   //DEV ONLY
   $templateCache.removeAll()
 }
-
+function StatsCtrl($scope, $route, $routeParams){
+  $scope.stats = {"amount_of_wallets": "1", "amount_of_transactions": 4, "amount_of_addresses_managed", 12} 
+}
 function Ctrl($scope, $route, $routeParams, $location) {
   
   $scope.$route = $route

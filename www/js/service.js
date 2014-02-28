@@ -1,5 +1,4 @@
 //global services go here
-
 angular.module( 'omniwallet' ).factory('userService', ['$rootScope', '$http', function ($rootScope, $http) {
   var service = {
     data: {
