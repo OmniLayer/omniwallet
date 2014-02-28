@@ -316,7 +316,7 @@ function WalletSendController($modal, $scope, $http, $q, userService) {
     $http.post( '/v1/address/addr/', { 'addr': address },
     function( data ) {
         return deferred.resolve(data);
-    }).fail(function(data) {
+    }).error(function(data) {
         return deferred.reject(data);
     });
 
