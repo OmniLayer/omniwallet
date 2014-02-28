@@ -7,6 +7,7 @@ function SimpleSendController($scope, userService) {
 }
 function HomeCtrl($templateCache) {
   //DEV ONLY
+  console.log('cleared cache')
   $templateCache.removeAll()
 }
 
