@@ -32,7 +32,7 @@ server {
 		alias /var/lib/omniwallet/www/values.json;
 	}
 
-	location ~ "^/v1/stats.json$" {
+	location ~ "^/v1/system/stats.json$" {
 		alias /var/lib/omniwallet/www/stats.json;
 	}
 

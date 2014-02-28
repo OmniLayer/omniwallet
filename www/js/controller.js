@@ -10,7 +10,7 @@ function HomeCtrl($templateCache) {
   $templateCache.removeAll()
 }
 function StatsCtrl($scope, $route, $routeParams, $http){
-  $http.get('/v1/stats.json', {}).success(function(data) {
+  $http.get('/v1/system/stats.json', {}).success(function(data) {
     $scope.stats = data
   })
 }
