@@ -152,6 +152,17 @@ Returns:
 }
 ```
 
+### Get hosted wallet statistics
+HTTP GET ``/v1/system/stats.json``
+Returns:
+```
+{
+	"amount_of_addresses_managed": 22,
+	"amount_of_transactions": 131, 
+	"amount_of_wallets": 29
+}
+```
+
 ### Get a page of transaction & offer information
 HTTP GET ``/v1/transaction/general/{Currency}_{4 digit page}.json``
 Returns:

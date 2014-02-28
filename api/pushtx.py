@@ -7,6 +7,9 @@ from msc_utils_parsing import *
 from msc_apps import *
 import tempfile
 
+sys.path.append(os.path.abspath("../lib"))
+from stats_backend import StatsBackend
+
 def pushtx_response(response_dict):
     expected_fields=['signedTransaction']
     for field in expected_fields:
@@ -40,6 +43,8 @@ def pushtx(signed_tx):
     if ret != None:
         return ret
     else:
+        stats = StatsBackend()
+        stats.increment("amount_of_transactions")
         return 'success'
 
 def pushtx_handler(environ, start_response):

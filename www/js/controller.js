@@ -10,7 +10,11 @@ function HomeCtrl($templateCache) {
   console.log('cleared cache')
   $templateCache.removeAll()
 }
-
+function StatsCtrl($scope, $route, $routeParams, $http){
+  $http.get('/v1/system/stats.json', {}).success(function(data) {
+    $scope.stats = data
+  })
+}
 function Ctrl($scope, $route, $routeParams, $location) {
   
   $scope.$route = $route
