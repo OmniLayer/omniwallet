@@ -22,7 +22,7 @@ function WalletTradeAssetsController($modal, $scope, $http, $q, userService) {
 
   function getAddressesWithPrivkey() {
     var addresses = []
-    userService.data.addresses.map(
+    userService.getAllAddresses().map(
       function(e,i,a) { 
         if(e.privkey && e.privkey.length == 58) {
           addresses.push(e.address);
@@ -62,6 +62,7 @@ function WalletTradeAssetsController($modal, $scope, $http, $q, userService) {
   $scope.addressList.forEach(function(e,i) {
      var promise = getAddressData(e);
      promise.then(function(successData) {
+        var successData = successData.data
         addrListBal[i] = { address: e, balance: successData.balance }
         $scope.setBalance()
      },function(errorData) {
@@ -93,8 +94,8 @@ function WalletTradeAssetsController($modal, $scope, $http, $q, userService) {
 
   function pushSignedTransaction(signedTransaction) {
     var url = '/v1/transaction/pushtx/'; 
-    var promise = $http.post( url, { signedTransaction: signedTransaction } );
-
+    var data = { signedTransaction: signedTransaction }
+    var promise = $http.post( url, data );
     return promise;
   }
 
@@ -120,6 +121,7 @@ function WalletTradeAssetsController($modal, $scope, $http, $q, userService) {
   function prepareBuyTransaction(buyer, amt, hash, privkeyphrase, $modalScope) {
     $scope.sendTxPromise = getUnsignedBuyTransaction( buyer, amt, hash);
     $scope.sendTxPromise.then(function(successData) {
+      var successData = successData.data
       var sourceScript = successData.sourceScript;
       var unsignedTransaction = successData.transaction;
 
@@ -142,6 +144,7 @@ function WalletTradeAssetsController($modal, $scope, $http, $q, userService) {
         //var transactionHash = Bitcoin.Util.bytesToHex(transaction.getHash().reverse())
 
         pushSignedTransaction(finalTransaction).then(function(successData) {
+          var successData = successData.data
           if( successData.pushed.match(/submitted|success/gi) != null ) {
             $modalScope.waiting = false
             $modalScope.sendSuccess = true
@@ -194,7 +197,6 @@ function WalletTradeAssetsController($modal, $scope, $http, $q, userService) {
     var btcbalance = +$scope.balanceData[1]
 
     var required = [coin,address,buyAmount,dexFees,balance, btcbalance, $scope.buyForm.$valid ]
-    console.log(required)
 
     var error = 'Please '
     if( $scope.buyForm.$valid == false) {
@@ -309,6 +311,7 @@ function WalletTradeAssetsController($modal, $scope, $http, $q, userService) {
   function prepareSaleTransaction(seller, amt, price, buyerfee, fee, blocks, currency, privkeyphrase, $modalScope) {
     $scope.sendTxPromise = getUnsignedSaleTransaction(seller, amt, price, buyerfee, fee, blocks, currency);
     $scope.sendTxPromise.then(function(successData) {
+      var successData = successData.data
       var sourceScript = successData.sourceScript;
       var unsignedTransaction = successData.transaction
 
@@ -331,6 +334,7 @@ function WalletTradeAssetsController($modal, $scope, $http, $q, userService) {
         //var transactionHash = Bitcoin.Util.bytesToHex(transaction.getHash().reverse())
 
         pushSignedTransaction(finalTransaction).then(function(successData) {
+          var successData = successData.data
           if( successData.pushed.match(/submitted|success/gi) != null ) {
             $modalScope.waiting = false
             $modalScope.sendSuccess = true
@@ -385,7 +389,6 @@ function WalletTradeAssetsController($modal, $scope, $http, $q, userService) {
     var btcbalance = +$scope.balanceData[1]
 
     var required = [coin,address,saleAmount, salePricePerCoin, dexFees,buyersFee, balance, btcbalance, $scope.saleForm.$valid ]
-    console.log(required)
 
     var error = 'Please '
     if( $scope.saleForm.$valid == false) {
@@ -503,6 +506,7 @@ function WalletTradeAssetsController($modal, $scope, $http, $q, userService) {
   function prepareSendTransaction(to, from, amt, currency, fee, privkeyphrase, $modalScope) {
     $scope.sendTxPromise = getUnsignedSendTransaction(to, from, amt, currency, fee);
     $scope.sendTxPromise.then(function(successData) {
+      var successData = successData.data
       var sourceScript = successData.sourceScript;
       var unsignedTransaction = successData.transaction
 
@@ -525,6 +529,7 @@ function WalletTradeAssetsController($modal, $scope, $http, $q, userService) {
         //var transactionHash = Bitcoin.Util.bytesToHex(transaction.getHash().reverse())
 
         pushSignedTransaction(finalTransaction).then(function(successData) {
+          var successData = successData.data
           if( successData.pushed.match(/submitted|success/gi) != null ) {
             $modalScope.waiting = false
             $modalScope.sendSuccess = true
@@ -577,7 +582,6 @@ function WalletTradeAssetsController($modal, $scope, $http, $q, userService) {
     var btcbalance = +$scope.balanceData[1]
 
     var required = [coin,address,$scope.sendAmount,sendTo, dexFees,balance, btcbalance, $scope.sendForm.$valid ]
-    console.log(required)
 
     var error = 'Please '
     if( $scope.sendForm.$valid == false) {
@@ -650,10 +654,10 @@ function WalletTradeAssetsController($modal, $scope, $http, $q, userService) {
         resolve: {
           data:function(){ 
             return {  
-              sendTo: $scope.sendTo, 
-              sendFrom: $scope.address, 
-              amt: $scope.sendAmount,
-              coin: $scope.coin, 
+              sendTo: sendTo, 
+              sendFrom: address, 
+              amt: sendAmount,
+              coin: coin, 
               fee: 0.00034 } 
           },
           prepareSendTransaction: function() { 
