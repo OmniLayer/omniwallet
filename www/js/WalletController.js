@@ -313,10 +313,10 @@ function WalletSendController($modal, $scope, $http, $q, userService) {
   function getData(address) {
     var deferred = $q.defer();
 
-    $http.post( '/v1/address/addr/', { 'addr': addr.address },
+    $http.post( '/v1/address/addr/', { 'addr': address }).success(
     function( data ) {
         return deferred.resolve(data);
-    }).fail(function(data) {
+    }).error(function(data) {
         return deferred.reject(data);
     });
 
@@ -460,6 +460,7 @@ function WalletTradeHistoryController($scope, $http, $q, userService) {
   }
 
   $scope.getData = function getData(address) {
+    var transaction_data = []
     var postData = { 
       type: 'ADDRESS',
       address: address, 
@@ -468,8 +469,8 @@ function WalletTradeHistoryController($scope, $http, $q, userService) {
     };
     $http.post('/v1/exchange/offers', postData).success(
       function(offerSuccess) {
+        if(offerSuccess.data != "ADDRESS_NOT_FOUND") {
         var type_offer = Object.keys(offerSuccess.data);
-        var transaction_data = []
 
         angular.forEach(type_offer, function(offerType) {
          //DEBUG console.log(offerType, offerSuccess.data[offerType])
@@ -477,10 +478,8 @@ function WalletTradeHistoryController($scope, $http, $q, userService) {
           transaction_data.push(offer)
          })
         })
-
-        if(transaction_data.length == 0)
-          transaction_data.push({ tx_hash: 'No offers/bids found for this pair/address, why not make one?' })
-        $scope.orderbook = transaction_data;
+      } else transaction_data.push({ tx_hash: 'No offers/bids found for this pair/address, why not make one?' })
+      $scope.orderbook = transaction_data;
       }
     );
   }
