@@ -7,10 +7,9 @@
 <br>
 <li><a class="" href="/wallet/addresses"> My Addresses </a>
 <br>
+<br ng-show="hasAddressesWithPrivkey">
+<li ng-show="hasAddressesWithPrivkey"><a class="" href="/wallet/trade"> Trade Assets </a></li>
 <br>
-<li><a class="" href="/wallet/trade"> Trade Assets </a>
-<br>
-<br>
-<li><a class="" href="/wallet/history"> Trade History </a>
+<li ng-show="hasAddresses"><a class="" href="/wallet/history"> Trade History </a></li>
 </ul>
 
