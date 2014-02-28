@@ -78,7 +78,7 @@ function ExplorerController($scope, $http) {
     }
 }
 
-function SidecarController($scope, $http) {
+function SidecarController($scope, $http, userService) {
     $scope.values = {};
     $scope.setView = function(viewName) {
         $scope.view = $scope.sidecarTemplates[viewName]
@@ -91,5 +91,5 @@ function SidecarController($scope, $http) {
           'about': '/partials/about_sc.html',
           'wallet': '/partials/wallet_sc.html'
     };
-
+    $scope.hasAddresses = userService.getAllAddresses().length != 0 ? true : false;
 }
