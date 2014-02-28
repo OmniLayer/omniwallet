@@ -12,6 +12,7 @@ angular.module( 'omniwallet' )
     var count = 1;
     return {
       "getData": function() {
+        console.log( '*** getData!' );
         var deferred = $q.defer();
 
         _.defer( function() {
@@ -182,12 +183,13 @@ angular.module( 'omniwallet' )
     };
 
     function updateGraph() {
+      console.log( '*** updateGraph!' );
       $scope.chart = {
           width : 300,
           height : 300
       }
       $scope.radius = Math.min($scope.chart.width, $scope.chart.height) / 2
-      
+
       $element.find('#all-assets-graph').attr('height', $scope.chart.height).attr('width', $scope.chart.width);
 
       var color = d3.scale.category20()
@@ -218,6 +220,8 @@ angular.module( 'omniwallet' )
           }
         });
 
+        console.log( '*** updateGraph, data.length: ' + data.length );
+        console.log( data );
         if( data.length > 0 )
         {
           var g = svg.selectAll(".arc")
@@ -259,7 +263,9 @@ angular.module( 'omniwallet' )
         asset_types_template.then( function( templ ) {
           _.defer( function() {
             $scope.template = templ;
-            $scope.$apply( updateGraph() );
+            $scope.$apply( new function() {
+                _.defer( updateGraph );
+              } );
           });
         }); 
       } );          
