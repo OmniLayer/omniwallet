@@ -1,36 +1,81 @@
-<div class="col-xs-12" ng-controller="WalletSendController">
+<div class="col-xs-12" ng-controller="WalletTradeAssetsController">
   <div class="row">
-    <h3 class="text-center" >New Buy Transaction</h3>
+    <h3 class="text-center" >New Buy Offer</h3>
     <br>
     <div ng-show="showErrors" class="alert alert-danger">{{error}}</div> 
   </div>
-  <div class="row">
-    <h4 class="text-justify" >Send money:</h4>
-    <div om-select addclass="" type="coin" text="Send money: " expr="setCoin"  options="{{currList}}"></div>
-    <h6 class="text-justify"> Please make sure this is the currency you intend to trade with.</h6> 
-  </div>
-  <div class="row">
-    <h4 class="text-justify" >From address:</h4>
-    <div om-select addclass="" type="address" text="From address: " expr="setAddress" options="{{addrList}}"></div>
-    <h6 class="text-justify"> Please make sure this is the address you are sending from.<br> 
-    Note that we allow you to only send from addresses with a valid private key. </h6>
-  </div>
-    <br>
-  <div class="row">
-    <div om-input addclass="" text="Amount: " 
-      placeholder="0.01" model="sendAmount" change="addToScope" data="balanceData" addons="  Available"></div> 
-  </div>
-    <br>
-  <div class="row">
-    <div om-input model="sendTo" change="addToScope" text="To: " placeholder="{{addrList[0]}}"></div> 
-  </div>
-    <br>
-  <div class="row">
-    <div id="fee-tooltip">
-    <div om-input addclass="fees" text="Fees: " placeholder="0.00034BTC (Hover over me for more)" disable=1 ></div> 
+  <form name="buyForm">
+    <div class="row">
+      <h4 class="text-justify" >Buy type of coin:</h4>
+      <div class="form-inline">
+          <select class="form-control" ng-model="selectedCoin"
+            ng-options="currency for currency in currencyList"
+            ng-change="setBalance()" ng-init="setBalance()">
+            <option value=""> -- Choose Coin -- </option>
+          </select>
+        </div> 
+      <h6 class="text-justify"> Please make sure this is the currency you intend to trade with.</h6> 
     </div>
-  </div>
+    <div class="row">
+      <h4 class="text-justify" >Buy from address:</h4>
+      <div class="form-inline">
+          <select class="form-control" ng-model="selectedAddress"
+            ng-options="address for address in addressList"
+            ng-change="setBalance()" ng-init="setBalance()">
+            <option value=""> -- Choose Address -- </option>
+          </select>
+        </div> 
+      <h6 class="text-justify"> Please make sure this is the address you are sending from.<br> 
+      Note that we allow you to only send from addresses with a valid private key. </h6>
+    </div>
+      <br>
+    <div class="row">
+      <div class="input-group">
+        <span class="input-group-addon">Sale to buy from (ID or hash): </span>
+        <input name="buyhash" type="text" ng-model="buySaleID" class="form-control" placeholder="hash goes here" required>
+      </div>
+    </div>
     <br>
-  <button class="btn btn-primary btn-lg col-xs-push-3 col-xs-6" ng-click="validateForm()" type="submit">Send Transaction</button>
+    <div class="row">
+      <div class="input-group">
+        <span class="input-group-addon"> Amount to buy: </span>
+          <input name="amount" type="number" ng-model="buyAmount" class="form-control" placeholder="1.00" required>
+        <span class="input-group-addon" > Available {{selectedCoin}}: {{balanceData[0]}} </span>
+      </div>
+    </div>
+      <br>
+    <!--<div class="row">
+      <div class="input-group">
+        <span class="input-group-addon">Price per coin (grab): </span>
+        <input name="ppc" type="number" ng-model="buyPricePerCoin" class="form-control" placeholder="0.01 Bitcoin" required>
+      </div>
+    </div>
+      <br>
+    <div class="row">
+      <div class="input-group">
+        <span class="input-group-addon">Seller's address (grab): </span>
+        <input name="selleraddress" type="number" ng-model="sellerAddress" class="form-control" placeholder="{{addrList[0]}}" required>
+      </div>
+    </div>
+      <br>
+    <div class="row">
+      <div class="input-group">
+        <span class="input-group-addon"> Sale fee (grab): </span>
+        <input name="buyerfee" type="number" ng-model="buyersFee" class="form-control" 
+        placeholder="0.0001BTC" required>
+      </div>
+    </div>
+      <br>-->
+    <div class="row">
+      <div id="fee-tooltip" class="input-group">
+        <span class="input-group-addon"> Distributed Exchange fees: </span>
+        <input name="fees" type="number" ng-model="dexFees" class="form-control" 
+        placeholder="0.00034BTC (Hover over me for why)" required>
+        <span class="input-group-addon" > Available Bitcoin: {{balanceData[1]}} </span>
+      </div>
+    </div>
+  </form>
+    <br>
+  <button class="btn btn-primary btn-lg col-xs-push-3 col-xs-6" ng-click="validateBuyForm()" type="submit">Buy</button>
 
 </div>

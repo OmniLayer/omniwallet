@@ -8,6 +8,8 @@ from msc_utils_parsing import *
 from msc_apps import *
 import random
 
+data_dir_root = os.environ.get('DATADIR')
+
 def accept_form_response(response_dict):
     expected_fields=['buyer', 'amount', 'tx_hash']
     for field in expected_fields:
@@ -74,7 +76,7 @@ def prepare_accept_tx_for_signing(buyer, amount, tx_hash, min_btc_fee=0.0005):
     satoshi_amount=to_satoshi(amount)
 
     # read json of orig tx to get tx details
-    sell_offer_tx_dict_list=load_dict_from_file('../tx/'+tx_hash+'.json', all_list=True)
+    sell_offer_tx_dict_list=load_dict_from_file(data_dir_root + '/tx/'+tx_hash+'.json', all_list=True)
     sell_offer_tx_dict=sell_offer_tx_dict_list[0]
     # sanity check
     try:
