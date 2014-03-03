@@ -120,7 +120,8 @@ angular.module( 'omniwallet' ).factory( 'appraiser', ['$rootScope', '$http', fun
   AppraiserService.prototype.updateBtcValue = function( callback ) {
     var self = this;
     $http.get( 'https://api.bitcoinaverage.com/all' ).then( function( result ) {
-      self.conversions.BTC = result.data.USD.averages.last;
+      // Store these things internally as the value of a satoshi.
+      self.conversions.BTC = result.data.USD.averages.last / 100000000;
       $rootScope.$emit( 'APPRAISER_VALUE_CHANGED', 'BTC' );
       callback();
     }, function( error ) {
