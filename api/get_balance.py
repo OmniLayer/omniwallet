@@ -25,6 +25,8 @@ def get_msc_balances( addr ):
       if balance_data[ i ][ 'symbol' ] == 'BTC':
         balance_data.pop( i )
         break
+      else:
+        balance.data[ i ][ 'value' ] = int( round( float( balance.data[ i ][ 'value' ]) * 100000000 ))
     
     for i in xrange( 0, len( balance_data )):
       if balance_data[ i ][ 'symbol' ] == 'TMSC':
@@ -41,7 +43,7 @@ def get_btc_balances( addr ):
   if err != None:
     return None, err
   else:
-    balances[ 'value' ] = float( json.loads( out )[0][ 'paid' ])/100000000
+    balances[ 'value' ] = int( json.loads( out )[0][ 'paid' ])
 
   return ( [ balances ], None )
 
