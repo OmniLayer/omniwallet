@@ -6,6 +6,18 @@
     <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
       This is where you can go to manage existing addresses, add addresses, or remove addresses.
   </div>
+  <div ng-if="balances.invalidAddresses.length" class="alert alert-danger">
+     <h3>Invalid Addresses in Your Wallet</h3>
+     <table class="table table-striped table-hover table-condensed">
+        <tr ng-repeat="address in balances.invalidAddresses">
+          <td>{{address}}</td>
+          <td><button class="btn btn-default" ng-click="openDeleteConfirmForm( address )">X</button></td>
+       </tr>
+    </table>
+    <p>Maybe you should try <a href='' ng-click="openAddForm( 'BTC' )">adding it again?</a></p>
+  </div>
+
+  </div>
   <div ng-if="balances.balances" ng-repeat="currency in balances.balances">
     <div class="row">
       <div class="col-xs-4">
