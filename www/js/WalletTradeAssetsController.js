@@ -1,7 +1,5 @@
 function WalletTradeAssetsController($modal, $scope, $http, $q, userService) {
   //fee tooltip
-  $scope.dexTooltip = 'Transaction/Miner Fee: 0.0001 + \n Exodus Output: 0.0000546 + \n Reciever Output: 0.0000546 +\n\
-      Multisig Output: 0.0001092  \n (+ Change Output: 0.0000546) \n DeX Minimum Fee: 0.0003184 BTC';
 
   $('#time-blocks').tooltip({ 
     title: 'Time in blocks the buyer has to complete his purchase (1 block approx. 10 minutes)', 
