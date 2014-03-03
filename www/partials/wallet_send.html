@@ -44,13 +44,21 @@
       </div>
     </div>
       <br>
-    <div class="row">
+    <div ng-show="selectedCoin != 'BTC'" class="row">
       <div class="input-group">
         <span class="input-group-addon"> Distributed Exchange fees: 
           <span om-tooltip text="{{dexTooltip}}"></span>
         </span>
         <input name="fees" type="number" ng-model="dexFees" class="form-control" 
         placeholder="0.0003184" required>
+        <span class="input-group-addon" > Available Bitcoin: {{balanceData[1]}} </span>
+      </div>
+    </div>
+    <div ng-show="selectedCoin == 'BTC'" class="row">
+      <div class="input-group">
+        <span class="input-group-addon"> Transaction/Miner fees: </span>
+        <input name="fees" type="number" ng-model="dexFees" class="form-control" 
+        placeholder="0.0001" required>
         <span class="input-group-addon" > Available Bitcoin: {{balanceData[1]}} </span>
       </div>
     </div>
