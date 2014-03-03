@@ -30,6 +30,10 @@ server {
 	    try_files $uri $uri/ /index.html =404;
 	}
 
+	location ~ "^/wallet/$" {
+	    return 301 /wallet/overview;
+	}
+
 	# Make site accessible from http://localhost/
 	server_name localhost;
 
