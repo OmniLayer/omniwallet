@@ -1,8 +1,7 @@
 function WalletTradeAssetsController($modal, $scope, $http, $q, userService) {
   //fee tooltip
-  $('#fee-tooltip').tooltip({ 
-    title: 'Broadcast Fee: 0.0001 BTC + Dust Fees: 0.00006*4 = 0.00024 DeX Minimum Fee: 0.00034', 
-    placement: 'left' });
+  $scope.dexTooltip = 'Transaction/Miner Fee: 0.0001 + \n Exodus Output: 0.0000546 + \n Reciever Output: 0.0000546 +\n\
+      Multisig Output: 0.0001092  \n (+ Change Output: 0.0000546) \n DeX Minimum Fee: 0.0003184 BTC';
 
   $('#time-blocks').tooltip({ 
     title: 'Time in blocks the buyer has to complete his purchase (1 block approx. 10 minutes)', 
