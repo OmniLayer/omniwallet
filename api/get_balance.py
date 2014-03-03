@@ -26,7 +26,7 @@ def get_msc_balances( addr ):
         balance_data.pop( i )
         break
       else:
-        balance.data[ i ][ 'value' ] = int( round( float( balance.data[ i ][ 'value' ]) * 100000000 ))
+        balance_data[ i ][ 'value' ] = int( round( float( balance_data[ i ][ 'value' ]) * 100000000 ))
     
     for i in xrange( 0, len( balance_data )):
       if balance_data[ i ][ 'symbol' ] == 'TMSC':
