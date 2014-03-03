@@ -53,5 +53,12 @@ angular.module('omniwallet').directive('d3PieChart', function() {
       });
     }
   }
+}).directive('omTooltip', function() {
+  return {
+    template: '<small><strong>(?)<strong></small>',
+    link: function(scope, iElement, iAttrs, controller) {
+      if( iAttrs.text)
+        iElement.tooltip({ title: iAttrs.text, placement: 'down', container: 'body'});
+    }
+  }
 });
-

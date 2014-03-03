@@ -1,8 +1,5 @@
 function WalletTradeAssetsController($modal, $scope, $http, $q, userService) {
   //fee tooltip
-  $('#fee-tooltip').tooltip({ 
-    title: 'Broadcast Fee: 0.0001 BTC + Dust Fees: 0.00006*4 = 0.00024 DeX Minimum Fee: 0.00034', 
-    placement: 'left' });
 
   $('#time-blocks').tooltip({ 
     title: 'Time in blocks the buyer has to complete his purchase (1 block approx. 10 minutes)', 
