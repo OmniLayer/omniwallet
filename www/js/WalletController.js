@@ -1,3 +1,16 @@
+angular.module( 'omniwallet' )
+  .filter( 'cryptocurrency', [
+    function() {
+      return function( item ) {
+        if( item.symbol == 'BTC' )
+          return ( item.balance / 100000 ) + ' mBTC';
+        else if( item.symbol == 'MSC' || item.symbol == 'TMSC' )
+          return ( item.balance / 100000000 ) + ' ' + item.symbol;
+        else
+          return item.balance + ' ' + item.symbol;
+      }
+    }
+] );
 
 function WalletController($scope, $q, $http, $modal, userService) {
   console.log(userService.getAllAddresses());

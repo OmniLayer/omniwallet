@@ -12,7 +12,7 @@
         <span class="currency-name">{{currency.name ? currency.name : currency.symbol}}</span>
       </div>
       <div class="col-xs-3">
-        <span class="currency-total">{{currency.balance}} {{currency.symbol}}</span>
+        <span class="currency-total">{{{ balance: currency.balance, symbol: currency.symbol } | cryptocurrency}}</span>
       </div>
       <div class="col-xs-3">
         <span class="currency-value">{{currency.value | currency}}</span>
@@ -23,14 +23,14 @@
         <thead>
           <tr>
             <th>Address</th>
-            <th>Balance</th>
-            <th>Value</th>
+            <th class="text-center">Balance</th>
+            <th class="text-center">Value</th>
           </tr>
         </thead>
         <tbody>
           <tr ng-repeat="item in currency.addresses">
             <td>{{item.address}}</td>
-            <td>{{item.balance}}</td>
+            <td class="currency">{{ { balance: item.balance, symbol: currency.symbol } | cryptocurrency }}</td>
             <td class="currency">{{item.value | currency}}</td>
             <td>
                   <button class="btn btn-default" ng-click="openDeleteConfirmForm( item.address )">X</button>

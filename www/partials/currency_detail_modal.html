@@ -14,7 +14,7 @@
 		<tbody>
 		  <tr ng-repeat="item in balances">
 		    <td>{{item.address.address}}</td>
-		    <td>{{item.balance}}</td>
+		    <td class="currency">{{{ balance: item.balance, symbol: currencySymbol } | cryptocurrency}}</td>
 		    <td class="currency">{{item.value | currency}}</td>
 		  </tr>
 		</tbody>
