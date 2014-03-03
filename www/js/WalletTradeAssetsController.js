@@ -68,9 +68,9 @@ function WalletTradeAssetsController($modal, $scope, $http, $q, userService) {
      },function(errorData) {
        console.log('Error, no balance data found for ' + e + ' setting defaults...');
        var balances = [ 
-          { symbol: 'MSC', value: '0.0' },
-          { symbol: 'TMSC', value: '0.0' },
-          { symbol: 'BTC', value: '0.0' } ]
+          { symbol: 'MSC', value: '0' },
+          { symbol: 'TMSC', value: '0' },
+          { symbol: 'BTC', value: '0' } ]
        addrListBal[i] = { address: e, balance: balances }
      });
   });

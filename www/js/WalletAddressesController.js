@@ -33,14 +33,14 @@ angular.module( 'omniwallet' )
                   if( !balances.hasOwnProperty( currencyItem.symbol )) {
                     balances[ currencyItem.symbol ] = {
                       "symbol": currencyItem.symbol,
-                      "balance": parseFloat( currencyItem.value ),
+                      "balance": parseInt( currencyItem.value ),
                       "value": appraiser.getValue( currencyItem.value, currencyItem.symbol ),
                       "addresses": {}
                     };
                   }
                   else
                   {
-                    balances[ currencyItem.symbol ].balance += parseFloat( currencyItem.value );
+                    balances[ currencyItem.symbol ].balance += parseInt( currencyItem.value );
                     balances[ currencyItem.symbol ].value += appraiser.getValue( currencyItem.value, currencyItem.symbol );
                   }
                   balances[ currencyItem.symbol ].addresses[ result.data.address ] = {
