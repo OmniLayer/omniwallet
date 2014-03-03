@@ -42,8 +42,10 @@ def get_btc_balances( addr ):
   out, err = run_command( 'sx balance -j ' + addr )
   if err != None:
     return None, err
+  elif out == '':
+    return None, 'No bitcoin balance available.  Invalid address?: ' + addr
   else:
-    balances[ 'value' ] = int( json.loads( out )[0][ 'paid' ])
+      balances[ 'value' ] = int( json.loads( out )[0][ 'paid' ])
 
   return ( [ balances ], None )
 
