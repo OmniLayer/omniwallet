@@ -21,8 +21,8 @@ function Ctrl($scope, $route, $routeParams, $location) {
   $scope.$location = $location
      
   $scope.templates = { 
-        'header': 'header.html', 
-        'footer': 'footer.html',
+        'header': '/header.html', 
+        'footer': '/footer.html',
         'sidecar': '/partials/sidecar.html'
   };
 
@@ -36,21 +36,21 @@ function NavigationController($scope, $http, $modal, userService) {
 
     $scope.openCreateModal = function() {
       $modal.open({
-        templateUrl: 'partials/wallet_create_modal.html',
+        templateUrl: '/partials/wallet_create_modal.html',
         controller: CreateWalletController
       });
     }
 
     $scope.openImportModal = function() {
       $modal.open({
-        templateUrl: 'partials/wallet_import_modal.html',
+        templateUrl: '/partials/wallet_import_modal.html',
         controller: WalletController
       });
     }
 
     $scope.openLoginModal = function() {
       $modal.open({
-        templateUrl: 'partials/login_modal.html',
+        templateUrl: '/partials/login_modal.html',
         controller: LoginController 
       });
     }
