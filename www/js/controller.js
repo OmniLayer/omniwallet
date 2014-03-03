@@ -66,8 +66,10 @@ function ExplorerController($scope, $http) {
     // Scope members
     $scope.transactions = {};
     $scope.currencies = ['MSC','TMSC']
-    
-    $scope.getData = function getData(currency) {  
+    $scope.currency = 'MSC'
+
+    $scope.getData = function getData(){ 
+      var currency = $scope.currency; console.log('did', currency)
       $http.get('/v1/transaction/values.json', {}). success(
         function(data) {
           for(var i = 0; i < data.length; i++) {
