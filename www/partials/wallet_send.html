@@ -45,10 +45,10 @@
     </div>
       <br>
     <div class="row">
-      <div id="fee-tooltip" class="input-group">
-        <span class="input-group-addon"> Distributed Exchange fees: </span>
+      <div class="input-group">
+        <span class="input-group-addon"> Transaction/Miner fees: </span>
         <input name="fees" type="number" ng-model="dexFees" class="form-control" 
-        placeholder="0.34 mBTC (Hover over me for why)" required>
+        placeholder="0.1 mBTC (Hover over me for why)" required>
         <span class="input-group-addon" > Available: {{{ balance: balanceData[1], symbol: 'BTC' } | cryptocurrency }} </span>
       </div>
     </div>
