@@ -43,8 +43,8 @@ def sell_form_response(response_dict):
         else:
             return (None, 'Invalid currency')
 
-    satoshi_price=to_satoshi(price)
-    bitcoin_amount_desired=int(round(satoshi_price*float(amount)))
+    satoshi_price=int( price )
+    bitcoin_amount_desired=int( amount )
 
     pubkey='unknown'
     tx_to_sign_dict={'transaction':'','sourceScript':''}
@@ -84,9 +84,9 @@ def prepare_sell_tx_for_signing(seller, amount, bitcoin_amount_desired, btc_min_
     change_address_pub=seller_pub
     changeAddress=seller
 
-    satoshi_amount=to_satoshi(amount)
-    fee=to_satoshi(btc_fee)
-    min_buyer_fee=to_satoshi(btc_min_buyer_fee)
+    satoshi_amount=int( amount )
+    fee=int( btc_fee )
+    min_buyer_fee=int( btc_min_buyer_fee )
 
     required_value=3*dust_limit
 
