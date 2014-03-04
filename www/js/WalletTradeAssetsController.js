@@ -102,6 +102,9 @@ function WalletTradeAssetsController($modal, $scope, $http, $q, userService) {
   // [ Buy Form Helpers ]
 
   function getUnsignedBuyTransaction(buyerAddress, buyAmount, saleTransactionHash) {
+    console.log( 'getUnsignedBuyTransaction.' );
+    console.log( '   buyAmount: ' + buyAmount );
+
     var deferred = $q.defer();
 
     var url = '/v1/exchange/accept/'; 
@@ -288,6 +291,12 @@ function WalletTradeAssetsController($modal, $scope, $http, $q, userService) {
   // [ Sale Form Helpers ]
 
   function getUnsignedSaleTransaction(sellerAddress,saleAmount, salePrice, buyersFee, dexFee, saleBlocks, currency) {
+    console.log( 'getUnsignedSaleTransaction.' );
+    console.log( '   saleAmount: ' + saleAmount );
+    console.log( '   salePrice: ' + salePrice );
+    console.log( '   buyersFee: ' + buyersFee );
+    console.log( '   dexFee: ' + dexFee );
+
     var deferred = $q.defer();
 
     var url = '/v1/exchange/sell/'; 
@@ -381,7 +390,8 @@ function WalletTradeAssetsController($modal, $scope, $http, $q, userService) {
     var coin = $scope.selectedCoin;
     var address = $scope.selectedAddress
     var saleAmount = convertToFundamentalUnit( +$scope.saleAmount, coin );
-    var salePricePerCoin = +$scope.salePricePerCoin / 1000;
+    // The price in satoshis of (for example) 1 MSC.
+    var salePricePerCoin = +$scope.salePricePerCoin * getConversionFactor( 'BTC' );
     var saleBlocks = +$scope.saleBlocks
     var buyersFee = convertToFundamentalUnit( +$scope.buyersFee, 'BTC' );
     var dexFees = convertToFundamentalUnit( +$scope.dexFees, 'BTC' );
@@ -417,12 +427,15 @@ function WalletTradeAssetsController($modal, $scope, $http, $q, userService) {
       $scope.showErrors = false
       
       // open modal
+      console.log( '****' );
+      console.log( 'saleAmount: ' + saleAmount );
+      console.log( 'salePricePerCoin: ' + salePricePerCoin );
       var modalInstance = $modal.open({
         template: '\
           <div class="modal-body">\
               <h3 class="text-center"> Confirm sale order </h3>\
               <h3>You\'re about to put ' + formatCurrencyInFundamentalUnit( saleAmount, $scope.selectedCoin ) +  
-              ' on sale at a total price of ' + formatCurrencyInFundamentalUnit( saleAmount * salePricePerCoin, 'BTC' ) + ', plus charge ' + formatCurrencyInFundamentalUnit( buyersFee, 'BTC' ) + ' in fees over ' +
+              ' on sale at a total price of ' + formatCurrencyInFundamentalUnit( saleAmount / getConversionFactor( $scope.selectedCoin ) * salePricePerCoin, 'BTC' ) + ', plus charge ' + formatCurrencyInFundamentalUnit( buyersFee, 'BTC' ) + ' in fees over ' +
               $scope.saleBlocks + ' blocks.</h3>\
             <p><br>\
             If the above is correct, please input your passphrase below and press Send Funds.\
@@ -465,7 +478,7 @@ function WalletTradeAssetsController($modal, $scope, $http, $q, userService) {
               seller: address,
               amt: saleAmount,
               price: salePricePerCoin,
-              buyerfee: dexFees,
+              buyerfee: buyersFee,
               fee: dexFees,
               blocks: saleBlocks, 
               currency: coin } 
@@ -491,6 +504,10 @@ function WalletTradeAssetsController($modal, $scope, $http, $q, userService) {
   // [ Send Form Helpers ]
 
   function getUnsignedSendTransaction(toAddress,fromAddress, amount, currency, fee) {
+    console.log( 'getUnsignedSendTransaction.' );
+    console.log( '   amount: ' + amount );
+    console.log( '   fee: ' + fee );
+
     var url = '/v1/transaction/send/'; 
     var promise = $http.post( url, { 
       from_address: fromAddress, 
@@ -616,7 +633,7 @@ function WalletTradeAssetsController($modal, $scope, $http, $q, userService) {
           <div class="modal-body">\
               <h3 class="text-center"> Confirm send </h3>\
               <h3>You\'re about to send ' + formatCurrencyInFundamentalUnit( sendAmount, $scope.selectedCoin) + ' ' +  
-              ' plus ' + formatCurrencyInFundamentalUnit( dexFees, $scope.selectedCoin ) + ' in fees to ' + $scope.sendTo + '</h3>\
+              ' plus ' + formatCurrencyInFundamentalUnit( dexFees, 'BTC' ) + ' in fees to ' + $scope.sendTo + '</h3>\
             <p><br>\
             If the above is correct, please input your passphrase below and press Send Funds.\
             If you encounter an error, feel free to click away from the dialog and try again.\
@@ -657,7 +674,7 @@ function WalletTradeAssetsController($modal, $scope, $http, $q, userService) {
               sendFrom: address, 
               amt: sendAmount,
               coin: coin, 
-              fee: 0.00034 } 
+              fee: dexFees } 
           },
           prepareSendTransaction: function() { 
             return prepareSendTransaction; 
