@@ -190,9 +190,9 @@ function WalletTradeAssetsController($modal, $scope, $http, $q, userService) {
   $scope.validateBuyForm = function() {
     var coin = $scope.selectedCoin;
     var address = $scope.selectedAddress
-    var buyAmount = +$scope.buyAmount
+    var buyAmount = convertToFundamentalUnit( +$scope.buyAmount, coin );
     var saleHash = $scope.buySaleID
-    var dexFees = +$scope.dexFees
+    var dexFees = convertToFundamentalUnit( +$scope.dexFees, 'BTC' );
     var balance = +$scope.balanceData[0]
     var btcbalance = +$scope.balanceData[1]
 
@@ -212,8 +212,8 @@ function WalletTradeAssetsController($modal, $scope, $http, $q, userService) {
     if( ( (coin == 'MSC') || (coin == 'TMSC') ) ) {
        if( buyAmount < 0.00000001 )
         error += 'make sure your send amount is non-zero, '
-       if( dexFees < 0.00034 )
-        error += 'make sure your fee entry is at least 0.00034, '
+       if( dexFees < 34000 )
+        error += 'make sure your fee entry is at least 0.34 mBTC, '
        if( ( dexFees <= btcbalance ) ==  false ) 
         error += 'make sure you have enough Bitcoin to cover your fees, '
     }
@@ -225,8 +225,8 @@ function WalletTradeAssetsController($modal, $scope, $http, $q, userService) {
         template: '\
           <div class="modal-body">\
               <h3 class="text-center"> Confirm send </h3>\
-              <h3>You\'re about to make an offer to buy ' + (+$scope.buyAmount).toFixed(8) + ' ' +  
-              $scope.selectedCoin + ' with ' + $scope.dexFees + ' in fees </h3>\
+              <h3>You\'re about to make an offer to buy ' + formatCurrencyInFundamentalUnit( buyAmount, $scope.selectedCoin ) +   
+              ' with ' + formatCurrencyInFundamentalUnit( dexFees, 'BTC' ) + ' in fees </h3>\
             <p><br>\
             If the above is correct, please input your passphrase below and press Send Funds.\
             If you encounter an error, feel free to click away from the dialog and try again.\
@@ -380,11 +380,11 @@ function WalletTradeAssetsController($modal, $scope, $http, $q, userService) {
   $scope.validateSaleForm = function() {
     var coin = $scope.selectedCoin;
     var address = $scope.selectedAddress
-    var saleAmount = +$scope.saleAmount
-    var salePricePerCoin = +$scope.salePricePerCoin
+    var saleAmount = convertToFundamentalUnit( +$scope.saleAmount, coin );
+    var salePricePerCoin = +$scope.salePricePerCoin / 1000;
     var saleBlocks = +$scope.saleBlocks
-    var buyersFee = +$scope.buyersFee
-    var dexFees = +$scope.dexFees
+    var buyersFee = convertToFundamentalUnit( +$scope.buyersFee, 'BTC' );
+    var dexFees = convertToFundamentalUnit( +$scope.dexFees, 'BTC' );
     var balance = +$scope.balanceData[0]
     var btcbalance = +$scope.balanceData[1]
 
@@ -400,10 +400,10 @@ function WalletTradeAssetsController($modal, $scope, $http, $q, userService) {
     if( ( (coin == 'MSC') || (coin == 'TMSC') ) ) {
        if( saleAmount < 0.00000001 )
         error += 'make sure your send amount is non-zero, '
-       if( buyersFee < 0.0001 )
-        error += 'make sure your buyers fee entry is at least 0.0001, '
-       if( dexFees < 0.00034 )
-        error += 'make sure your DeX fee entry is at least 0.00034, '
+       if( buyersFee < 10000 )
+        error += 'make sure your buyers fee entry is at least 0.1 mBTC, '
+       if( dexFees < 34000 )
+        error += 'make sure your fee entry is at least 0.34 mBTC, '
 
        if( ( saleAmount <= balance ) == false ) 
         error += 'make sure you aren\'t putting more coins up for sale than you own, '
@@ -421,8 +421,8 @@ function WalletTradeAssetsController($modal, $scope, $http, $q, userService) {
         template: '\
           <div class="modal-body">\
               <h3 class="text-center"> Confirm sale order </h3>\
-              <h3>You\'re about to put ' + (+$scope.saledAmount).toFixed(8) + ' ' +  
-              $scope.selectedCoin + 'on sale, plus charge ' + $scope.buyersFee + ' in fees over ' +
+              <h3>You\'re about to put ' + formatCurrencyInFundamentalUnit( saleAmount, $scope.selectedCoin ) +  
+              ' on sale at a total price of ' + formatCurrencyInFundamentalUnit( saleAmount * salePricePerCoin, 'BTC' ) + ', plus charge ' + formatCurrencyInFundamentalUnit( buyersFee, 'BTC' ) + ' in fees over ' +
               $scope.saleBlocks + ' blocks.</h3>\
             <p><br>\
             If the above is correct, please input your passphrase below and press Send Funds.\
@@ -576,11 +576,10 @@ function WalletTradeAssetsController($modal, $scope, $http, $q, userService) {
     var coin = $scope.selectedCoin;
     var address = $scope.selectedAddress
     var sendTo = $scope.sendTo
-    var sendAmount = +$scope.sendAmount
-    var dexFees = +$scope.dexFees
+    var sendAmount = convertToFundamentalUnit( +$scope.sendAmount, coin );
+    var dexFees = convertToFundamentalUnit( +$scope.dexFees, 'BTC' );
     var balance = +$scope.balanceData[0]
     var btcbalance = +$scope.balanceData[1]
-
     var required = [coin,address,$scope.sendAmount,sendTo, dexFees,balance, btcbalance, $scope.sendForm.$valid ]
 
     var error = 'Please '
@@ -597,16 +596,16 @@ function WalletTradeAssetsController($modal, $scope, $http, $q, userService) {
        error += 'make sure you are sending to a valid MSC/BTC address, '
     }
     if(coin == 'BTC') {
-       if( sendAmount < 0.0000543 )
-        error += 'make sure your send amount is at least 0.00006 (54.3 uBTC minimum) if sending BTC, '
-       if( dexFees < 0.0001 )
-        error += 'make sure your fee entry is at least 0.0001 to cover miner costs, '
+       if( sendAmount < 5430 )
+        error += 'make sure your send amount is at least 0.0543 mBTC if sending BTC, '
+       if( dexFees < 10000 )
+        error += 'make sure your fee entry is at least 0.0001 mBTC to cover miner costs, '
     }
     if( ( (coin == 'MSC') || (coin == 'TMSC') ) ) {
        if( sendAmount < 0.00000001 )
         error += 'make sure your send amount is non-zero, '
-       if( dexFees < 0.00034 )
-        error += 'make sure your fee entry is at least 0.00034, '
+       if( dexFees < 34000 )
+        error += 'make sure your fee entry is at least 0.34 mBTC, '
     }
     if( error.length < 8) {
       $scope.showErrors = false
@@ -616,8 +615,8 @@ function WalletTradeAssetsController($modal, $scope, $http, $q, userService) {
         template: '\
           <div class="modal-body">\
               <h3 class="text-center"> Confirm send </h3>\
-              <h3>You\'re about to send ' + (+$scope.sendAmount).toFixed(8) + ' ' +  
-              $scope.selectedCoin + ' plus ' + $scope.dexFees + ' in fees to ' + $scope.sendTo + '</h3>\
+              <h3>You\'re about to send ' + formatCurrencyInFundamentalUnit( sendAmount, $scope.selectedCoin) + ' ' +  
+              ' plus ' + formatCurrencyInFundamentalUnit( dexFees, $scope.selectedCoin ) + ' in fees to ' + $scope.sendTo + '</h3>\
             <p><br>\
             If the above is correct, please input your passphrase below and press Send Funds.\
             If you encounter an error, feel free to click away from the dialog and try again.\
