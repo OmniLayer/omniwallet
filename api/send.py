@@ -83,7 +83,10 @@ def send_form_response(response_dict):
 
 
 # simple send and bitcoin send (with or without marker)
-def prepare_send_tx_for_signing(from_address, to_address, marker_address, currency_id, amount, btc_fee=0.0005):
+def prepare_send_tx_for_signing(from_address, to_address, marker_address, currency_id, amount, btc_fee=500000):
+    print '*** send tx for signing, amount: ' + amount
+    print '    btc_fee: ' + btc_fee
+
     # consider a more general func that covers also sell offer and sell accept
 
     # check if address or pubkey was given as from address
@@ -98,8 +101,8 @@ def prepare_send_tx_for_signing(from_address, to_address, marker_address, curren
     change_address_pub=from_address_pub
     changeAddress=from_address
   
-    satoshi_amount=to_satoshi(amount)
-    fee=to_satoshi(btc_fee)
+    satoshi_amount=int( amount )
+    fee=int( btc_fee )
 
     # differ bitcoin send and other currencies
     if currency_id == 0: # bitcoin
@@ -114,6 +117,8 @@ def prepare_send_tx_for_signing(from_address, to_address, marker_address, curren
  
     # get utxo required for the tx
     utxo_all=get_utxo(from_address, required_value+fee)
+    print '*** utxo_all' + str( utxo_all )
+
     utxo_split=utxo_all.split()
     inputs_number=len(utxo_split)/12
     inputs=[]

@@ -73,7 +73,7 @@ def prepare_accept_tx_for_signing(buyer, amount, tx_hash, min_btc_fee=0.0005):
     changeAddress=buyer
 
     # get the amount in satoshi
-    satoshi_amount=to_satoshi(amount)
+    satoshi_amount=int( amount )
 
     # read json of orig tx to get tx details
     sell_offer_tx_dict_list=load_dict_from_file(data_dir_root + '/tx/'+tx_hash+'.json', all_list=True)
@@ -98,8 +98,8 @@ def prepare_accept_tx_for_signing(buyer, amount, tx_hash, min_btc_fee=0.0005):
     #formatted_block_time_limit=sell_offer_tx_dict['formatted_block_time_limit']
 
     # fee is max between min_btc_fee and required_fee
-    required_fee=to_satoshi(formatted_fee_required)
-    satoshi_min_fee=to_satoshi(min_btc_fee)
+    required_fee=int( formatted_fee_required )
+    satoshi_min_fee=int( min_btc_fee )
     fee=max(satoshi_min_fee,required_fee)
 
     required_value=4*dust_limit

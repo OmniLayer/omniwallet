@@ -33,14 +33,14 @@
       <div class="input-group">
         <span class="input-group-addon"> Number of coin to sell: </span>
           <input name="amount" type="number" ng-model="saleAmount" class="form-control" placeholder="1.00" required>
-        <span class="input-group-addon" > Available {{selectedCoin}}: {{balanceData[0]}} </span>
+        <span class="input-group-addon" > Available: {{{ balance: balanceData[0], symbol: selectedCoin } | cryptocurrency}}</span>
       </div>
     </div>
       <br>
     <div class="row">
       <div class="input-group">
         <span class="input-group-addon">Price per coin: </span>
-        <input name="ppc" type="number" ng-model="salePricePerCoin" class="form-control" placeholder="0.10 Bitcoin" required>
+        <input name="ppc" type="number" ng-model="salePricePerCoin" class="form-control" placeholder="100 mBTC" required>
       </div>
     </div>
       <br>
@@ -53,9 +53,9 @@
       <br>
     <div class="row">
       <div class="input-group">
-        <span class="input-group-addon"> Buyers fee: </span>
+        <span class="input-group-addon"> Buyer's fee: </span>
         <input name="buyerfee" type="number" ng-model="buyersFee" class="form-control" 
-        placeholder="0.0001BTC minimum" required>
+        placeholder="1 mBTC minimum" required>
       </div>
     </div>
       <br>
@@ -63,8 +63,8 @@
       <div id="fee-tooltip" class="input-group">
         <span class="input-group-addon"> Distributed Exchange fees: </span>
         <input name="fees" type="number" ng-model="dexFees" class="form-control" 
-        placeholder="0.00034BTC (Hover over me for why)" required>
-        <span class="input-group-addon" > Available Bitcoin: {{balanceData[1]}} </span>
+        placeholder="0.34 mBTC (Hover over me for why)" required>
+        <span class="input-group-addon" > Available: {{{ balance: balanceData[1], symbol: 'BTC' } | cryptocurrency }} </span>
       </div>
     </div>
   </form>
