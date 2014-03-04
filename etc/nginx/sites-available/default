@@ -23,7 +23,16 @@ server {
 
 	## Set this to reflect the location of the www directory within the omniwallet repo.
 	root /home/cmlacy/omniwallet/www/;
-	index index.html index.htm;
+	index index.htm;
+
+	#Re-route nested routed through index
+	location / {
+	    try_files $uri $uri/ /index.html =404;
+	}
+
+	location ~ "^/wallet/$" {
+	    return 301 /wallet/overview;
+	}
 
 	# Make site accessible from http://localhost/
 	server_name localhost;
