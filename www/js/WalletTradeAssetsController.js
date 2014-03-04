@@ -158,8 +158,13 @@ function WalletTradeAssetsController($modal, $scope, $http, $q, userService) {
         },function(errorData) {
           $modalScope.waiting = false
           $modalScope.sendError = true
-          $modalScope.error = 'Could not communicate with server, try again'
-          console.log('server error: ',errorData);
+          if( errorData.message )
+            $modalScope.error = 'Server error: ' + errorData.message;
+          else if( errorData.data )
+              $modalScope.error = 'Server error: ' + errorData.data;
+          else
+            $modalScope.error = 'Unknown Server Error';
+          console.log('server error: ', errorData);
         });
 
         //DEBUG console.log(addressData, privKey, bytes, transaction, script, signedSuccess, finalTransaction );
@@ -177,12 +182,22 @@ function WalletTradeAssetsController($modal, $scope, $http, $q, userService) {
         }
       } catch(e) {
         $modalScope.sendError = true
-        $modalScope.error = 'Private key was incorrect'
-        console.log('wrong private key',e)
+        if( e.message )
+          $modalScope.error = 'Error sending transaction: ' + e.message;
+        else if( e.data )
+          $modalScope.error = 'Error sending transaction: ' + e.data;
+        else
+          $modalScope.error = 'Unknown error sending transaction';
+        console.log('Error sending transaction',e );          
       }
     },function(errorData) {
       $modalScope.sendError = true
-      $modalScope.error = 'Could not communicate with server, try again'
+      if( errorData.message )
+        $modalScope.error = 'Server error: ' + errorData.message;
+      else if( errorData.data )
+          $modalScope.error = 'Server error: ' + errorData.data;
+      else
+        $modalScope.error = 'Unknown Server Error';
       console.log('server error: ', errorData);
     });
   }
@@ -288,12 +303,6 @@ function WalletTradeAssetsController($modal, $scope, $http, $q, userService) {
   // [ Sale Form Helpers ]
 
   function getUnsignedSaleTransaction(sellerAddress,saleAmount, salePrice, buyersFee, dexFee, saleBlocks, currency) {
-    console.log( 'getUnsignedSaleTransaction.' );
-    console.log( '   saleAmount: ' + saleAmount );
-    console.log( '   salePrice: ' + salePrice );
-    console.log( '   buyersFee: ' + buyersFee );
-    console.log( '   dexFee: ' + dexFee );
-
     var deferred = $q.defer();
 
     var url = '/v1/exchange/sell/'; 
@@ -354,8 +363,13 @@ function WalletTradeAssetsController($modal, $scope, $http, $q, userService) {
         },function(errorData) {
           $modalScope.waiting = false
           $modalScope.sendError = true
-          $modalScope.error = 'Could not communicate with server, try again'
-          console.log('server error: ',errorData);
+          if( errorData.message )
+            $modalScope.error = 'Server error: ' + errorData.message;
+          else if( errorData.data )
+              $modalScope.error = 'Server error: ' + errorData.data;
+          else
+            $modalScope.error = 'Unknown Server Error';
+          console.log('server error: ', errorData);
         });
 
         //DEBUG console.log(addressData, privKey, bytes, transaction, script, signedSuccess, finalTransaction );
@@ -373,12 +387,22 @@ function WalletTradeAssetsController($modal, $scope, $http, $q, userService) {
         }
       } catch(e) {
         $modalScope.sendError = true
-        $modalScope.error = 'Private key was incorrect'
-        console.log('wrong private key',e)
+        if( e.message )
+          $modalScope.error = 'Error sending transaction: ' + e.message;
+        else if( e.data )
+          $modalScope.error = 'Error sending transaction: ' + e.data;
+        else
+          $modalScope.error = 'Unknown error sending transaction';
+        console.log('Error sending transaction',e );          
       }
     },function(errorData) {
       $modalScope.sendError = true
-      $modalScope.error = 'Could not communicate with server, try again'
+      if( errorData.message )
+        $modalScope.error = 'Server error: ' + errorData.message;
+      else if( errorData.data )
+          $modalScope.error = 'Server error: ' + errorData.data;
+      else
+        $modalScope.error = 'Unknown Server Error';
       console.log('server error: ', errorData);
     });
   }
@@ -557,8 +581,13 @@ function WalletTradeAssetsController($modal, $scope, $http, $q, userService) {
         },function(errorData) {
           $modalScope.waiting = false
           $modalScope.sendError = true
-          $modalScope.error = 'Could not communicate with server, try again'
-          console.log('server error: ',errorData);
+          if( errorData.message )
+            $modalScope.error = 'Server error: ' + errorData.message;
+          else if( errorData.data )
+              $modalScope.error = 'Server error: ' + errorData.data;
+          else
+            $modalScope.error = 'Unknown Server Error';
+          console.log('server error: ', errorData);
         });
 
         //DEBUG console.log(addressData, privKey, bytes, transaction, script, signedSuccess, finalTransaction );
@@ -576,12 +605,22 @@ function WalletTradeAssetsController($modal, $scope, $http, $q, userService) {
         }
       } catch(e) {
         $modalScope.sendError = true
-        $modalScope.error = 'Private key was incorrect'
-        console.log('wrong private key',e)
+        if( e.message )
+          $modalScope.error = 'Error sending transaction: ' + e.message;
+        else if( e.data )
+          $modalScope.error = 'Error sending transaction: ' + e.data;
+        else
+          $modalScope.error = 'Unknown error sending transaction';
+        console.log('Error sending transaction',e );          
       }
     },function(errorData) {
       $modalScope.sendError = true
-      $modalScope.error = 'Could not communicate with server, try again'
+      if( errorData.message )
+        $modalScope.error = 'Server error: ' + errorData.message;
+      else if( errorData.data )
+          $modalScope.error = 'Server error: ' + errorData.data;
+      else
+        $modalScope.error = 'Unknown Server Error';
       console.log('server error: ', errorData);
     });
   }
