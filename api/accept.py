@@ -22,7 +22,7 @@ def accept_form_response(response_dict):
         return (None, 'Buyer is neither bitcoin address nor pubkey')
 
     amount=response_dict['amount'][0]
-    if float(amount)<0 or float(amount)>max_currency_value:
+    if float(amount)<0 or float( from_satoshi( amount ))>max_currency_value:
         return (None, 'Invalid amount')
 
     tx_hash=response_dict['tx_hash'][0]

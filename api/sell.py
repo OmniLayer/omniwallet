@@ -20,16 +20,16 @@ def sell_form_response(response_dict):
     if not is_valid_bitcoin_address_or_pubkey(seller):
         return (None, 'Buyer is neither bitcoin address nor pubkey')
     amount=response_dict['amount'][0]
-    if float(amount)<0 or float(amount)>max_currency_value:
+    if float(amount)<0 or float( from_satoshi( amount ))>max_currency_value:
         return (None, 'Invalid amount')
     price=response_dict['price'][0]
-    if float(price)<0 or float(price)>max_currency_value:
+    if float(price)<0 or float( from_satoshi( price ))>max_currency_value:
         return (None, 'Invalid price')
     min_buyer_fee=response_dict['min_buyer_fee'][0]
-    if float(min_buyer_fee)<0 or float(min_buyer_fee)>max_currency_value:
+    if float(min_buyer_fee)<0 or float( from_satoshi( min_buyer_fee ))>max_currency_value:
         return (None, 'Invalid minimal buyer fee')
     fee=response_dict['fee'][0]
-    if float(fee)<0 or float(fee)>max_currency_value:
+    if float(fee)<0 or float( from_satoshi( fee ))>max_currency_value:
         return (None, 'Invalid fee')
     blocks=int(response_dict['blocks'][0])
     if blocks<1 or blocks>max_payment_timeframe:
