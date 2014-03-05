@@ -556,8 +556,10 @@ function WalletTradeAssetsController($modal, $scope, $http, $q, userService) {
         var transaction = Bitcoin.Transaction.deserialize(bytes)
         var script = parseScript(successData.sourceScript)
         
-        transaction.ins[0].script = script
-        
+        transaction.ins.forEach( function( input ) {
+          input.script = script;
+        } );
+
         //DEBUG console.log('before',transaction, Bitcoin.Util.bytesToHex(transaction.serialize()))
         var signedSuccess = transaction.signWithKey(privKey)
 
