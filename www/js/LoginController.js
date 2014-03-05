@@ -3,7 +3,7 @@ function LoginController($scope, $http, $location, $modalInstance, userService) 
   $scope.open = function(login) {
     var postData = {
       type: 'RESTOREWALLET',
-      email: login.email
+      uuid: login.uuid
     }
     $http({
         url: '/v1/user/wallet/restore/',
@@ -14,7 +14,7 @@ function LoginController($scope, $http, $location, $modalInstance, userService) 
     .success(function (data, status, headers, config) {
       console.log(data);
       if(data.status == "MISSING") {
-        $scope.missingEmail = true;
+        $scope.missingUUID = true;
       } else {
         var passwordHash = data.wallet.passwordHash;
         var salt = data.wallet.salt;

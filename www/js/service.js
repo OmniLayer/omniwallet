@@ -52,6 +52,10 @@ angular.module( 'omniwallet' ).factory('userService', ['$rootScope', '$http', fu
       return service.data.wallet;
     },
 
+    getUUID: function() {
+      return service.data.wallet.uuid;
+    },
+
     removeAddress: function( address ) {
       for( var i=0; i<service.data.wallet.addresses.length; i++ )
         if( service.data.wallet.addresses[i].address == address )
