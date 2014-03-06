@@ -8,8 +8,6 @@ from msc_apps import *
 import random
 
 def send_form_response(response_dict):
-    print "Send endpoint called!"
-
     expected_fields=['from_address', 'to_address', 'amount', 'currency', 'fee']
     # if marker is True, send dust to marker (for payments of sells)
     for field in expected_fields:
@@ -62,7 +60,6 @@ def send_form_response(response_dict):
         pass
 
     if pubkey == None:
-        print "*** Doing pubkey part"
         tx_to_sign_dict={'transaction':'','sourceScript':''}
         l=len(from_addr)
         if l == 66 or l == 130: # probably pubkey
@@ -90,7 +87,6 @@ def send_form_response(response_dict):
 
     response='{"status":"'+response_status+'", "transaction":"'+tx_to_sign_dict['transaction']+'", "sourceScript":"'+tx_to_sign_dict['sourceScript']+'"}'
 
-    print "*** Returning response."
     return (response, None)
 
 
@@ -105,7 +101,6 @@ def prepare_send_tx_for_signing(from_address, to_address, marker_address, curren
     if from_address.startswith('0'): # a pubkey was given
         from_address_pub=from_address
         from_address=get_addr_from_key(from_address)
-        print '*** from_address derived from pubkey: ' + str( from_address )
     else: # address was given
         from_address_pub=addrPub=get_pubkey(from_address)
         from_address_pub=from_address_pub.strip()

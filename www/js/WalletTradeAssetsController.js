@@ -99,15 +99,13 @@ function WalletTradeAssetsController($modal, $scope, $http, $q, userService) {
 
   // [ Buy Form Helpers ]
 
-  function getUnsignedBuyTransaction(buyerAddress, buyAmount, saleTransactionHash) {
-    console.log( 'getUnsignedBuyTransaction.' );
-    console.log( '   buyAmount: ' + buyAmount );
-
+  function getUnsignedBuyTransaction(buyerAddress, pubKey, buyAmount, saleTransactionHash) {
     var deferred = $q.defer();
 
     var url = '/v1/exchange/accept/'; 
     $http.post( url, { 
       buyer: buyerAddress, 
+      pubKey: pubKey,
       amount: buyAmount, 
       tx_hash: saleTransactionHash
     }).success(function(data) {
@@ -120,7 +118,11 @@ function WalletTradeAssetsController($modal, $scope, $http, $q, userService) {
   }
 
   function prepareBuyTransaction(buyer, amt, hash, privkeyphrase, $modalScope) {
-    $scope.sendTxPromise = getUnsignedBuyTransaction( buyer, amt, hash);
+    var addressData; userService.data.addresses.forEach(function(e,i) { if(e.address == buyer) addressData = e; });
+    var privKey = new Bitcoin.ECKey.decodeEncryptedFormat(addressData.privkey,privkeyphrase.pass);
+    var pubKey = privKey.getPubKeyHex();
+
+    $scope.sendTxPromise = getUnsignedBuyTransaction( buyer, pubKey, amt, hash);
     $scope.sendTxPromise.then(function(successData) {
       if( successData.data.error )
       {
@@ -134,9 +136,7 @@ function WalletTradeAssetsController($modal, $scope, $http, $q, userService) {
         var sourceScript = successData.sourceScript;
         var unsignedTransaction = successData.transaction;
 
-        var addressData; userService.data.addresses.forEach(function(e,i) { if(e.address == buyer) addressData = e; });
         try {
-          var privKey = new Bitcoin.ECKey.decodeEncryptedFormat(addressData.privkey,privkeyphrase.pass)
 
           var bytes = Bitcoin.Util.hexToBytes(unsignedTransaction)
           var transaction = Bitcoin.Transaction.deserialize(bytes)
@@ -312,12 +312,13 @@ function WalletTradeAssetsController($modal, $scope, $http, $q, userService) {
 
   // [ Sale Form Helpers ]
 
-  function getUnsignedSaleTransaction(sellerAddress,saleAmount, salePrice, buyersFee, dexFee, saleBlocks, currency) {
+  function getUnsignedSaleTransaction(sellerAddress, pubKey, saleAmount, salePrice, buyersFee, dexFee, saleBlocks, currency) {
     var deferred = $q.defer();
 
     var url = '/v1/exchange/sell/'; 
     $http.post( url, { 
       seller: sellerAddress, 
+      pubKey: pubKey,
       amount: saleAmount, 
       price: salePrice, 
       min_buyer_fee: buyersFee, 
@@ -334,7 +335,11 @@ function WalletTradeAssetsController($modal, $scope, $http, $q, userService) {
   }
 
   function prepareSaleTransaction(seller, amt, price, buyerfee, fee, blocks, currency, privkeyphrase, $modalScope) {
-    $scope.sendTxPromise = getUnsignedSaleTransaction(seller, amt, price, buyerfee, fee, blocks, currency);
+    var addressData; userService.data.addresses.forEach(function(e,i) { if(e.address == seller) addressData = e; });
+    var privKey = new Bitcoin.ECKey.decodeEncryptedFormat(addressData.privkey,privkeyphrase.pass);
+    var pubKey = privKey.getPubKeyHex();
+
+    $scope.sendTxPromise = getUnsignedSaleTransaction(seller, pubkey, amt, price, buyerfee, fee, blocks, currency);
     $scope.sendTxPromise.then(function(successData) {
       if( successData.data.error )
       {
@@ -348,9 +353,7 @@ function WalletTradeAssetsController($modal, $scope, $http, $q, userService) {
         var sourceScript = successData.sourceScript;
         var unsignedTransaction = successData.transaction
 
-        var addressData; userService.data.addresses.forEach(function(e,i) { if(e.address == seller) addressData = e; });
         try {
-          var privKey = new Bitcoin.ECKey.decodeEncryptedFormat(addressData.privkey,privkeyphrase.pass)
 
           var bytes = Bitcoin.Util.hexToBytes(unsignedTransaction)
           var transaction = Bitcoin.Transaction.deserialize(bytes)
@@ -544,9 +547,6 @@ function WalletTradeAssetsController($modal, $scope, $http, $q, userService) {
   // [ Send Form Helpers ]
 
   function getUnsignedSendTransaction(toAddress, pubKey, fromAddress, amount, currency, fee) {
-    console.log( 'getUnsignedSendTransaction.' );
-    console.log( '   pubKey: ' + pubKey );
-
     var url = '/v1/transaction/send/'; 
     var promise = $http.post( url, { 
       from_address: fromAddress, 
