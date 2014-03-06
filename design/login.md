@@ -9,6 +9,7 @@ This is the proposed login protocol for the Omniwallet project. The Omniwallet i
 
 1. This protocol assumes an underlying session management system, the details of which are left unspecified. The choice of session management system should be modular enough to replace if needed.
 2. Whenever a server creates a value and sends it to the client, the server should never read that value back from the client. It should always store that value in the session storage and read it back later, in order to prevent a client from forging that value.
+3. The proof of work (pow_challenge) stuff is optional, it can be coded in later.
 
 ## Salt Creation ##
 Let ``SERVER_SECRET`` be a secret that all servers know and share (same secret for all servers), but is never sent anywhere else (usually this is done by injecting an environment variable. Dev note: do not commit the secret to the code).
@@ -25,11 +26,12 @@ Let ``ACCOUNT_CREATION_DIFFICULTY`` be 0x04000 (arbitrary choice, may need to ch
 2. If the UUID exists, the server returns an EXISTING_UUID error.
 3. The server creates a salt (see Salt Creation above)
 4. The server creates pow_challenge as a random string and stores it in the session.
-5. The client iterates nonce values ``(nonce ← 0; nonce < inf; ++nonce)`` and calculates HASH(CONCAT(pow_challenge, nonce)), and when it reaches a hash that ends in LOGIN_DIFFICULTY, proceeds.
-6. The client generates a private/public key pair from CONCAT(password, salt).
-7. The client sends (nonce, public key) is sent to the server.
-8. The server validates that HASH(CONCAT(nonce, pow_challenge)) ends in ``ACCOUNT_CREATION_DIFFICULTY``, rejects it if not.
-9. The server forgets the nonce, stores the public key in association with the UUID.
+5. The server sends (salt, pow_challenge) to the server.
+6. The client iterates nonce values ``(nonce ← 0; nonce < inf; ++nonce)`` and calculates HASH(CONCAT(pow_challenge, nonce)), and when it reaches a hash that ends in LOGIN_DIFFICULTY, proceeds.
+7. The client generates a private/public key pair from CONCAT(password, salt).
+8. The client sends (nonce, public key) is sent to the server.
+9. The server validates that HASH(CONCAT(nonce, pow_challenge)) ends in ``ACCOUNT_CREATION_DIFFICULTY``, rejects it if not.
+10. The server forgets the nonce, stores the public key in association with the UUID.
 
 ## Login Flow
 
