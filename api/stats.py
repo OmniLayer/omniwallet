@@ -3,7 +3,8 @@ import os
 import platform
 import sys
 
-sys.path.append(os.path.abspath("../lib"))
+path = os.path.dirname(os.path.abspath(os.path.realpath(__file__))) + "/../lib/"
+sys.path.append(path)
 from stats_backend import StatsBackend
 
 def generate_stats():
