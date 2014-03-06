@@ -14,7 +14,7 @@ This is the proposed login protocol for the Omniwallet project. The Omniwallet i
 ## Salt Creation ##
 Let ``SERVER_SECRET`` be a secret that all servers know and share (same secret for all servers), but is never sent anywhere else (usually this is done by injecting an environment variable. Dev note: do not commit the secret to the code).
 
-The server creates a slat per UUID in a deterministic way, by running ``hash(CONCAT(SERVER_SECRET, UUID)).
+The server creates a slat per UUID in a deterministic way, by running ``hash(CONCAT(SERVER_SECRET, UUID))``.
 
 ## Random string creation ##
 To create a random string, do CONCAT(current timestamp, rand()), where rand() is a strong random primitive.
