@@ -1,0 +1,4 @@
+ecdsa==0.10
+pycoin==0.25
+flask==0.10
+bcrypt==1.0.2
