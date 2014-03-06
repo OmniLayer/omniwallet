@@ -54,7 +54,7 @@ angular.module('omniwallet', [
     }).when('/', {
        templateUrl: '/homepage.html',
        controller: HomeCtrl
-    }).when('/login/:uuid?', {
+    }).when('/login/:uuid', {
        template: '<div ng-controller="HiddenLoginController" ng-init="open()"></div>',
        controller: HiddenLoginController
     }).when('/import', {
