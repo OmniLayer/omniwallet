@@ -1,4 +1,4 @@
-This is the proposed login protocol for the Omniwallet project. The Omniwallet is a blockchain.info style wallet.
+This is the proposed login protocol for the Omniwallet project. The Omniwallet is a blockchain.info style wallet that never sends passwords to the server, and supports multiple currencies.
 
 ## Protocol requirements
 
