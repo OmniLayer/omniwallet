@@ -14,7 +14,7 @@ This is the proposed login protocol for the Omniwallet project. The Omniwallet i
 3. Swap out the email address as primary identifier in favor of a UUID
 4. Make sure the UUID is displayed in the title bar, when we’re logged in.
 5. When the UUID is first shown to the user, add a text blurb next to it “write this down, it’s what you’ll use to get to log in and get to your wallet later.”  (My frustration with this system on blockchain.info stems mostly from not realizing that was the thing I wanted to write down, as opposed to my email address.)
-6. Encrypt the wallet files stored on the server with the user’s private client-side key (created in step 4 below), and send them undecrypted when the client requests them.
+6. Encrypt the wallet files stored on the server with the user’s private client-side key (created in step 4 below), and send them in the original encrypted form when the client requests them.
 7. Make the passphrase on private keys in the browser optional.  If we’re using them, then the system should ask for them on each transaction.  But if the user doesn’t give one, we can just perform the transaction without having to decrypt the key.
 8. Automatic logout after a period of inactivity - make sure this deletes the data in application memory (perhaps by just forcing a page redirect)
 
