@@ -1,14 +1,16 @@
 <ul class="list-unstyled">
 <br>
 <br>
-<li><a class="" href="/wallet/overview"> Wallet Overview </a>
+<li><a class="" href="/wallet/overview"> Overview </a>
 <br>
 <br>
 <li><a class="" href="/wallet/addresses"> My Addresses </a>
 <br>
 <br ng-show="hasAddressesWithPrivkey">
-<li ng-show="hasAddressesWithPrivkey"><a class="" href="/wallet/trade"> Trade Assets </a></li>
+<li ng-show="hasAddressesWithPrivkey"><a class="" href="/wallet/send"> Send </a></li>
+<br ng-show="hasAddressesWithPrivkey">
+<li ng-show="hasAddressesWithPrivkey"><a class="" href="/wallet/trade"> Trade </a></li>
 <br>
-<li ng-show="hasAddresses"><a class="" href="/wallet/history"> Trade History </a></li>
+<li ng-show="hasAddresses"><a class="" href="/wallet/history"> History </a></li>
 </ul>
 

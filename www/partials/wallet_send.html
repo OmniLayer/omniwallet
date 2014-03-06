@@ -1,4 +1,8 @@
-<div class="col-xs-12" ng-controller="WalletTradeAssetsController">
+<div class="sidecar col-xs-2" ng-controller="SidecarController" ng-init=setView('wallet')>
+    <div ng-include="templates['sidecar']"></div>
+</div>
+
+<div class="col-xs-10" ng-controller="WalletTradeAssetsController">
   <div class="row">
     <h3 class="text-center" >New Transaction Send</h3>
     <br>
