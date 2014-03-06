@@ -14,7 +14,7 @@ def restore_wallet_response(request_dict):
 
   req_type = request_dict['type'][0].upper()
   if req_type == "RESTOREWALLET":
-    wallet, error = restore_wallet(request_dict['email'][0])
+    wallet, error = restore_wallet(request_dict['uuid'][0])
   else:
     return (None, req_type + ' is not supported')
 
@@ -27,8 +27,8 @@ def restore_wallet_response(request_dict):
   return (json.dumps(response), None)
 
 
-def restore_wallet(email):
-  filename = data_dir_root + '/wallets/' + email + '.json'
+def restore_wallet(uuid):
+  filename = data_dir_root + '/wallets/' + uuid + '.json'
 
   if not os.path.exists(filename):
     return (None, "MISSING")

@@ -31,14 +31,14 @@ def sync_wallet_response(request_dict):
 
 
 def sync_wallets(wallet):
-  email = wallet['email']
-  filename = data_dir_root + '/wallets/' + email + '.json'
+  uuid = wallet['uuid']
+  filename = data_dir_root + '/wallets/' + uuid + '.json'
   with open(filename, 'w') as f:
     json.dump(wallet, f)
 
 def exists(wallet):
-  email = wallet['email']
-  filename = data_dir_root + '/wallets/' + email + '.json'
+  uuid = wallet['uuid']
+  filename = data_dir_root + '/wallets/' + uuid + '.json'
   print filename
   return os.path.exists(filename)
 

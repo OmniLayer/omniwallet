@@ -30,6 +30,7 @@ function convertToFundamentalUnit( value, symbol ) {
 }
 
 function WalletController($scope, $q, $http, $modal, userService) {
+  $scope.uuid = userService.getUUID();
   console.log(userService.getAllAddresses());
 
   $scope.addrList = userService.getAllAddresses().map(function(e,i,a) { return e.address; })
