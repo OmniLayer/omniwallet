@@ -44,8 +44,7 @@ service = "tcp://162.243.29.201:9091"
 Make sure you have python libraries installed - note that we use ``apt-get`` to install python-git.  Pip installs an older, stable version, and we need things that start in beta version 0.3.2.
 ```
 sudo apt-get install git python-simplejson python-git python-pip
-sudo pip install ecdsa
-sudo pip install pycoin
+sudo pip install -r requirements.txt
 ```
 Install nginx, and drop in the config included with this codebase.
 ```
