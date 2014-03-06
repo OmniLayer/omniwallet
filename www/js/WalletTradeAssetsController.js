@@ -227,8 +227,8 @@ function WalletTradeAssetsController($modal, $scope, $http, $q, userService) {
     if( ( (coin == 'MSC') || (coin == 'TMSC') ) ) {
        if( buyAmount < 0.00000001 )
         error += 'make sure your send amount is non-zero, '
-       if( dexFees < 34000 )
-        error += 'make sure your fee entry is at least 0.34 mBTC, '
+       if( dexFees < 10000 )
+        error += 'make sure your fee entry is at least 0.1 mBTC, '
        if( ( dexFees <= btcbalance ) ==  false ) 
         error += 'make sure you have enough Bitcoin to cover your fees, '
     }
@@ -433,8 +433,8 @@ function WalletTradeAssetsController($modal, $scope, $http, $q, userService) {
         error += 'make sure your send amount is non-zero, '
        if( buyersFee < 10000 )
         error += 'make sure your buyers fee entry is at least 0.1 mBTC, '
-       if( dexFees < 34000 )
-        error += 'make sure your fee entry is at least 0.34 mBTC, '
+       if( dexFees < 10000 )
+        error += 'make sure your fee entry is at least 0.1 mBTC, '
 
        if( ( saleAmount <= balance ) == false ) 
         error += 'make sure you aren\'t putting more coins up for sale than you own, '
@@ -652,13 +652,13 @@ function WalletTradeAssetsController($modal, $scope, $http, $q, userService) {
        if( sendAmount < 5430 )
         error += 'make sure your send amount is at least 0.0543 mBTC if sending BTC, '
        if( dexFees < 10000 )
-        error += 'make sure your fee entry is at least 0.0001 mBTC to cover miner costs, '
+        error += 'make sure your fee entry is at least 0.1 mBTC to cover miner costs, '
     }
     if( ( (coin == 'MSC') || (coin == 'TMSC') ) ) {
        if( sendAmount < 0.00000001 )
         error += 'make sure your send amount is non-zero, '
-       if( dexFees < 34000 )
-        error += 'make sure your fee entry is at least 0.34 mBTC, '
+       if( dexFees < 10000 )
+        error += 'make sure your fee entry is at least 0.1 mBTC, '
     }
     if( error.length < 8) {
       $scope.showErrors = false
