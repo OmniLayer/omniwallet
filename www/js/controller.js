@@ -28,6 +28,23 @@ function Ctrl($scope, $route, $routeParams, $location) {
 
 }
 
+
+function HiddenLoginController($scope, $modal, $location) {
+  $scope.open = function () {
+     $scope.uuid = $location.path().replace("/login/", "");
+
+    $modal.open({
+      templateUrl: '/partials/login_modal.html',
+      controller: LoginControllerUUID,
+      resolve: {
+        uuid: function () {
+          return $scope.uuid;
+        }
+      }
+    });
+  }
+}
+
 function NavigationController($scope, $http, $modal, userService) {
     
     $scope.getNavData = function() {
