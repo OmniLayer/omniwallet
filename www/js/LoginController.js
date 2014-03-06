@@ -1,5 +1,17 @@
-function LoginController($scope, $http, $location, $modalInstance, userService) {
+function LoginControllerUUID($scope, $http, $location, $modalInstance, userService, uuid) {
+  $scope.login = {
+    uuid: uuid
+  }
 
+  Login($scope, $http, $location, $modalInstance, userService);
+}
+
+function LoginController($scope, $http, $location, $modalInstance, userService) {
+  Login($scope, $http, $location, $modalInstance, userService);
+}
+
+// Helper (Not sure if this can be fixed with providers)
+function Login($scope, $http, $location, $modalInstance, userService) {
   $scope.open = function(login) {
     var postData = {
       type: 'RESTOREWALLET',
