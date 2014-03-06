@@ -543,10 +543,9 @@ function WalletTradeAssetsController($modal, $scope, $http, $q, userService) {
 
   // [ Send Form Helpers ]
 
-  function getUnsignedSendTransaction(toAddress,fromAddress, amount, currency, fee) {
+  function getUnsignedSendTransaction(toAddress, pubKey, fromAddress, amount, currency, fee) {
     console.log( 'getUnsignedSendTransaction.' );
-    console.log( '   amount: ' + amount );
-    console.log( '   fee: ' + fee );
+    console.log( '   pubKey: ' + pubKey );
 
     var url = '/v1/transaction/send/'; 
     var promise = $http.post( url, { 
@@ -554,14 +553,19 @@ function WalletTradeAssetsController($modal, $scope, $http, $q, userService) {
       to_address: toAddress, 
       amount: amount, 
       currency: currency, 
-      fee: fee 
+      fee: fee,
+      pubKey: pubKey
     } )
 
     return promise;
   }
 
   function prepareSendTransaction(to, from, amt, currency, fee, privkeyphrase, $modalScope) {
-    $scope.sendTxPromise = getUnsignedSendTransaction(to, from, amt, currency, fee);
+    var addressData; userService.getAllAddresses().forEach(function(e,i) { if(e.address == from) addressData = e; });
+    var privKey = new Bitcoin.ECKey.decodeEncryptedFormat(addressData.privkey,privkeyphrase.pass)
+    var pubKey = privKey.getPubKeyHex();
+
+    $scope.sendTxPromise = getUnsignedSendTransaction(to, pubKey, from, amt, currency, fee);
     $scope.sendTxPromise.then(function(successData) {
 
       if( successData.data.error )
@@ -576,10 +580,7 @@ function WalletTradeAssetsController($modal, $scope, $http, $q, userService) {
         var sourceScript = successData.sourceScript;
         var unsignedTransaction = successData.transaction
 
-        var addressData; userService.getAllAddresses().forEach(function(e,i) { if(e.address == from) addressData = e; });
         try {
-          var privKey = new Bitcoin.ECKey.decodeEncryptedFormat(addressData.privkey,privkeyphrase.pass)
-
           var bytes = Bitcoin.Util.hexToBytes(unsignedTransaction)
           var transaction = Bitcoin.Transaction.deserialize(bytes)
           var script = parseScript(successData.sourceScript)
