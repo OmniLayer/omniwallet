@@ -33,10 +33,11 @@ function WalletTradeAssetsController($modal, $scope, $http, $q, userService) {
 
   // [ Retrieve Balances ]
 
-  $scope.balanceData = ['  -- ']
-  var addrListBal = []
+  $scope.balanceData = [ 0 ];
+  var addrListBal = [];
 
   $scope.setBalance = function() {
+    $scope.balanceData = [ 0 ];
     var coin = $scope.selectedCoin;
     var address = $scope.selectedAddress
     if (address || coin) {
