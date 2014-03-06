@@ -120,6 +120,17 @@ server {
         uwsgi_pass   127.0.0.1:$PORT;
     }
 
+    location = /flask { rewrite ^ /flask/; }
+    location /flask { try_files $uri @flask; }
+    location @flask {
+      include uwsgi_params;
+      uwsgi_param SCRIPT_NAME /flask;
+      uwsgi_param UWSGI_MODULE user_service;
+      uwsgi_param UWSGI_CALLABLE app;
+      uwsgi_modifier1 30;
+      uwsgi_pass 127.0.0.1:$PORT;
+    }
+
 	# Only for nginx-naxsi used with nginx-naxsi-ui : process denied requests
 	#location /RequestDenied {
 	#	proxy_pass http://127.0.0.1:8080;    
@@ -195,3 +206,4 @@ server {
 #		try_files $uri $uri/ =404;
 #	}
 #}
+#
