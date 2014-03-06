@@ -21,7 +21,7 @@ This is the proposed login protocol for the Omniwallet project. The Omniwallet i
 
 ## Account Creation Flow
 
-Let ``DIFFICULTY`` be 04000.
+Let ``DIFFICULTY`` be 04000 (arbitrary choice, this may need to change).
 
 1. When an account is created, the user sends their desired name to the server.
 2. the server creates a salt. ``hash(CONCAT(SERVER_SECRET, UUID))`` to create the salt.  Get ``SERVER_SECRET`` from an environment variable and sends to the user.
