@@ -15,10 +15,39 @@ var CryptUtil = {
 		}
 		return null;
 	},
-	generateKeyPair: function( password, salt ) {
+	// Returns a structure that includes a PEM-encoded public key for transmission to 
+	//    the server, and an RSAKey object 
+	//    (http://kjur.github.io/jsrsasign/api/symbols/RSAKey.html)
+	//    representing the private key.
+	generateAsymmetricPair: function() {
+		var keyObj = KEYUTIL.generateKeypair( 'RSA', 1024 );
 
+		return {
+			pubPem: KEYUTIL.getPEM( keyObj.pubKeyObj ),
+			privKey: keyObj.prvKeyObj
+		}
 	},
-	createSignedObject: function( data ) {
-
+	// Returns a symmetric key which can be used to encrypt/decrypt wallets for storage on the server.
+	generateSymmetricKey: function( password, hexSalt ) {
+		var h = sjcl.codec.hex;
+		var key = h.fromBits( sjcl.misc.pbkdf2( password, h.toBits( hexSalt ), 2048 ) ) ;
+		return key;
+	},
+	// Returns a string that consists of the JSON representation of the given object, 
+	//  encrypted using the given key.
+	encryptObject: function( o, key ) {
+		// TODO: Actually encrypt.
+		return JSON.stringify( o );
+	},
+	// Returns a JSON object, given the provided encrypted JSON string.
+	decryptObject: function( string, key ) {
+		// TODO: Actually decrypt.
+		return JSON.parse( string );
+	},
+	createSignedObject: function( data, privKey ) {
+		return {
+			data: data,
+			signature: 'TODO: Signature goes here!'
+		}
 	}
 };
