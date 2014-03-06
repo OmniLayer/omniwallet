@@ -21,9 +21,11 @@ This is the proposed login protocol for the Omniwallet project. The Omniwallet i
 
 ## Account Creation Flow
 
+Let ``DIFFICULTY`` be 04000.
+
 1. When an account is created, the user sends their desired name to the server.
 2. the server creates a salt. ``hash(CONCAT(SERVER_SECRET, UUID))`` to create the salt.  Get ``SERVER_SECRET`` from an environment variable and sends to the user.
-3. The client creates a private/public key pair from (password, salt, nonce).  The client iterates nonce values ``(nonce ← 0; nonce < inf; ++nonce)`` and regenerates candidate keys until it finds one where the public key ends in ``040000``.  Only public keys that end with ``04000`` will be accepted by the server (this prevents an attacker from trivially creating huge numbers of accounts).
+3. The client creates a private/public key pair from (password, salt, nonce).  The client iterates nonce values ``(nonce ← 0; nonce < inf; ++nonce)`` and regenerates candidate keys until it finds one where the public key ends in ``DIFFICULTY``.  Only public keys that end with ``DIFFICULTY`` will be accepted by the server (this prevents an attacker from trivially creating huge numbers of accounts).
 4. The public key is sent to the server.
 
 ## Login Flow
