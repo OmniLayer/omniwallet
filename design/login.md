@@ -7,7 +7,7 @@ This is the proposed login protocol for the Omniwallet project. The Omniwallet i
 
 ## General notes and assumptions
 
-1. This protocol assumes an underlying session management system, the details of which are left unspecified. The choice of session management system should be modular enough to replcae if needed.
+1. This protocol assumes an underlying session management system, the details of which are left unspecified. The choice of session management system should be modular enough to replace if needed.
 2. Whenever a server creates a value and sends it to the client, the server should never read that value back from the client. It should always store that value in the session storage and read it back later, in order to prevent a client from forging that value.
 
 ## Salt Creation ##
