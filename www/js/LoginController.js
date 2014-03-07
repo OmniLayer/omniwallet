@@ -1,9 +1,21 @@
-function LoginController($scope, $http, $location, $modalInstance, userService) {
+function LoginControllerUUID($scope, $http, $location, $modalInstance, userService, uuid) {
+  $scope.login = {
+    uuid: uuid
+  }
 
+  Login($scope, $http, $location, $modalInstance, userService);
+}
+
+function LoginController($scope, $http, $location, $modalInstance, userService) {
+  Login($scope, $http, $location, $modalInstance, userService);
+}
+
+// Helper (Not sure if this can be fixed with providers)
+function Login($scope, $http, $location, $modalInstance, userService) {
   $scope.open = function(login) {
     var postData = {
       type: 'RESTOREWALLET',
-      email: login.email
+      uuid: login.uuid
     }
     $http({
         url: '/v1/user/wallet/restore/',
@@ -14,7 +26,7 @@ function LoginController($scope, $http, $location, $modalInstance, userService) 
     .success(function (data, status, headers, config) {
       console.log(data);
       if(data.status == "MISSING") {
-        $scope.missingEmail = true;
+        $scope.missingUUID = true;
       } else {
         var passwordHash = data.wallet.passwordHash;
         var salt = data.wallet.salt;

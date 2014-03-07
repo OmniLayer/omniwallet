@@ -4,14 +4,6 @@
 <form name="createForm" novalidate class="form-horizontal">
   <div class="modal-body">
     <div class="control-group">
-      <label class="control-label" for="inputEmail">Email</label>
-      <div class="controls">
-        <input name="email" type="email" ng-model="create.email" id="inputEmail" required>
-        <span class="bg-warning" ng-show="createForm.email.$error.required && createForm.email.$dirty">Required</span>
-        <span class="bg-warning" ng-show="createForm.email.$error.email">Invalid Email</span>
-      </div>
-    </div>
-    <div class="control-group">
       <label class="control-label" for="inputPassword">Password</label>
       <div class="controls">
         <input name="password" type="password" ng-model="create.password" id="inputPassword" ng-minlength="8" required>
@@ -34,7 +26,7 @@
         <button type="submit" class="btn" ng-click="createWallet(create)">Create Wallet</button>
       </div>
     </div>
-    <div class="help-block" ng-show="walletExists">This email is already in use</div>
+    <div class="help-block" ng-show="walletExists">This UUID is already in use</div>
     <div class="help-block" ng-show="serverError">Server Error, try again later</div>
   </div>
 </form>

@@ -4,9 +4,9 @@
 <form novalidate class="form-horizontal">
   <div class="modal-body">
     <div class="control-group">
-      <label class="control-label" for="inputEmail">Email</label>
+      <label class="control-label" for="inputUUID">UUID</label>
       <div class="controls">
-        <input type="text" ng-model="login.email" id="inputEmail">
+        <input type="text" ng-model="login.uuid" id="inputUUID" value="{{ uuid }}">
       </div>
     </div>
     <div class="control-group">
@@ -22,7 +22,7 @@
         <button type="submit" class="btn" ng-click="open(login)">Open Wallet</button>
       </div>
     </div>
-    <div ng-show="missingEmail" class="bg-danger">Account Doesn't Exist</div>
+    <div ng-show="missingUUID" class="bg-danger">Account Doesn't Exist</div>
     <div ng-show="badPassword" class="bg-danger">Password is Incorrect</div>
     <div ng-show="serverError" class="bg-danger">Server error, please try again</div>
   </div>
