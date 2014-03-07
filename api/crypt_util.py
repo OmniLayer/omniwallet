@@ -29,5 +29,5 @@ def validate_nonce( nonce, challenge ):
 
   return m.hexdigest().endswith( '0400' )
 
-def check_signature( signedJson ):
+def check_signature( signedJson, pubkey ):
   return True
