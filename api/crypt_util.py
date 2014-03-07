@@ -24,7 +24,10 @@ def generate_challenge():
   return str( unix_time( datetime.datetime.now() )) + str( random.random() )
 
 def validate_nonce( nonce, challenge ):
-  return True
+  m = hashlib.sha256()
+  m.update( str( nonce ) + str( challenge) )
+
+  return m.hexdigest().endswith( '0400' )
 
 def check_signature( signedJson ):
   return True
