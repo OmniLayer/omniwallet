@@ -42,6 +42,16 @@ module.exports = function(grunt) {
 				},
 				command: 'bower install'
 			},
+			forge: {
+				options: {
+					stdout: true,
+					stderr: true,
+					execOptions: {
+						cwd: "www/bower_components/forge"
+					}
+				},
+				command: 'npm install ; npm run minify'
+			},
 			submodules: {
 				options: {
 					stdout: true,
@@ -71,14 +81,16 @@ module.exports = function(grunt) {
 		if( !grunt.file.exists( 'node_modules/mastercoin-tools' ))
 			grunt.task.run( 'gitclone:mastercointools' );
 		grunt.task.run( 'shell:bower' );
+		if( !grunt.file.exists( 'www/bower_components/bitcoinjs-lib' ))
+			grunt.task.run( 'gitclone:bitcoinjs-lib' );
+		if( !grunt.file.exists( 'www/bower_components/bitcoinjs-lib/src/crypto-js/src' ))
+			grunt.task.run( 'shell:submodules' );
+		if( !grunt.file.exists( 'www/bower_components/bitcoinjs-lib/build/bitcoinjs-lib.js' ) ||
+			!grunt.file.exists( 'www/bower_components/bitcoinjs-lib/build/bitcoinjs-lib.min.js' ))
+			grunt.task.run( 'shell:bitcoinjs-lib' );
+		if( !grunt.file.exists( 'www/bower_components/forge/js/forge.min.js' ))
+			grunt.task.run( 'shell:forge' );
 	} );
 
-	if( !grunt.file.exists( 'www/bower_components/bitcoinjs-lib' ))
-		grunt.task.run( 'gitclone:bitcoinjs-lib' );
-	if( !grunt.file.exists( 'www/bower_components/bitcoinjs-lib/src/crypto-js/src' ))
-		grunt.task.run( 'shell:submodules' );
-	if( !grunt.file.exists( 'www/bower_components/bitcoinjs-lib/build/bitcoinjs-lib.js' ) ||
-		!grunt.file.exists( 'www/bower_components/bitcoinjs-lib/build/bitcoinjs-lib.min.js' ))
-		grunt.task.run( 'shell:bitcoinjs-lib' );
 
 };
