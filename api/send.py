@@ -17,7 +17,14 @@ def send_form_response(response_dict):
         if len(response_dict[field]) != 1:
             info('Multiple values for field '+field)
             return (None, 'Multiple values for field '+field)
-           
+          
+    if response_dict.has_key( 'pubKey' ) and is_pubkey_valid( response_dict['pubKey'][0]):
+        pubkey = response_dict['pubKey'][0]
+        response_status='OK'
+    else:
+        response_status='invalid pubkey'
+        pubkey=None
+      
     from_addr=response_dict['from_address'][0]
     if not is_valid_bitcoin_address_or_pubkey(from_addr):
         return (None, 'From address is neither bitcoin address nor pubkey')
@@ -25,11 +32,11 @@ def send_form_response(response_dict):
     if not is_valid_bitcoin_address(to_addr):
         return (None, 'To address is not a bitcoin address')
     amount=response_dict['amount'][0]
-    if float(amount)<0 or float(amount)>max_currency_value:
-        return (None, 'Invalid amount')
+    if float(amount)<0 or float( from_satoshi(amount))>max_currency_value:
+        return (None, 'Invalid amount: ' + str( from_satoshi( amount )) + ', max: ' + str( max_currency_value ))
     btc_fee=response_dict['fee'][0]
-    if float(btc_fee)<0 or float(btc_fee)>max_currency_value:
-        return (None, 'Invalid fee')
+    if float(btc_fee)<0 or float( from_satoshi(btc_fee))>max_currency_value:
+        return (None, 'Invalid fee: ' + str( from_satoshi( amount )) + ', max: ' + str( max_currency_value ))
     currency=response_dict['currency'][0]
     if currency=='MSC':
         currency_id=1
@@ -52,33 +59,34 @@ def send_form_response(response_dict):
         # if no marker, marker_addr stays None
         pass
 
-    pubkey='unknown'
-    tx_to_sign_dict={'transaction':'','sourceScript':''}
-    l=len(from_addr)
-    if l == 66 or l == 130: # probably pubkey
-        if is_pubkey_valid(from_addr):
-            pubkey=from_addr
-            response_status='OK'
-        else:
-            response_status='invalid pubkey'
-    else:   
-        if not is_valid_bitcoin_address(from_addr):
-            response_status='invalid address'
-        else:
-            from_pubkey=get_pubkey(from_addr)
-            if not is_pubkey_valid(from_pubkey):
-                response_status='missing pubkey'
-            else:
-                pubkey=from_pubkey
+    if pubkey == None:
+        tx_to_sign_dict={'transaction':'','sourceScript':''}
+        l=len(from_addr)
+        if l == 66 or l == 130: # probably pubkey
+            if is_pubkey_valid(from_addr):
+                pubkey=from_addr
                 response_status='OK'
+            else:
+                response_status='invalid pubkey'
+        else:   
+            if not is_valid_bitcoin_address(from_addr):
+                response_status='invalid address'
+            else:
+                from_pubkey=get_pubkey(from_addr)
+                if not is_pubkey_valid(from_pubkey):
+                    response_status='missing pubkey'
+                else:
+                    pubkey=from_pubkey
+                    response_status='OK'
 
     if pubkey != None:
-        tx_to_sign_dict=prepare_send_tx_for_signing(from_addr, to_addr, marker_addr, currency_id, amount, btc_fee)
+        tx_to_sign_dict=prepare_send_tx_for_signing( pubkey, to_addr, marker_addr, currency_id, amount, btc_fee)
     else:
         # hack to show error on page
         tx_to_sign_dict['sourceScript']=response_status
 
     response='{"status":"'+response_status+'", "transaction":"'+tx_to_sign_dict['transaction']+'", "sourceScript":"'+tx_to_sign_dict['sourceScript']+'"}'
+
     return (response, None)
 
 
@@ -117,7 +125,6 @@ def prepare_send_tx_for_signing(from_address, to_address, marker_address, curren
  
     # get utxo required for the tx
     utxo_all=get_utxo(from_address, required_value+fee)
-    print '*** utxo_all' + str( utxo_all )
 
     utxo_split=utxo_all.split()
     inputs_number=len(utxo_split)/12
@@ -168,7 +175,7 @@ def prepare_send_tx_for_signing(from_address, to_address, marker_address, curren
         dataAddress = hash_160_to_bc_address(dataBytes[1:21])
 
         # create the BIP11 magic 
-        change_address_compressed_pub=get_compressed_pubkey_format(get_pubkey(changeAddress))
+        change_address_compressed_pub=get_compressed_pubkey_format( change_address_pub )
         obfus_str=get_sha256(from_address)[:62]
         padded_dataHex=dataHex[2:]+''.zfill(len(change_address_compressed_pub)-len(dataHex))[2:]
         dataHex_obfuscated=get_string_xor(padded_dataHex,obfus_str).zfill(62)
