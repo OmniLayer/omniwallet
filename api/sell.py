@@ -8,7 +8,6 @@ from msc_apps import *
 import random
 
 def sell_form_response(response_dict):
-    info(response_dict)
     expected_fields=['seller', 'amount', 'price', 'min_buyer_fee', 'fee', 'blocks', 'currency']
     for field in expected_fields:
         if not response_dict.has_key(field):
@@ -16,20 +15,27 @@ def sell_form_response(response_dict):
         if len(response_dict[field]) != 1:
             return (None, 'Multiple values for field '+field)
             
+    if response_dict.has_key( 'pubKey' ) and is_pubkey_valid( response_dict['pubKey'][0]):
+        pubkey = response_dict['pubKey'][0]
+        response_status='OK'
+    else:
+        response_status='invalid pubkey'
+        pubkey=None
+      
     seller=response_dict['seller'][0]
     if not is_valid_bitcoin_address_or_pubkey(seller):
         return (None, 'Buyer is neither bitcoin address nor pubkey')
     amount=response_dict['amount'][0]
-    if float(amount)<0 or float(amount)>max_currency_value:
+    if float(amount)<0 or float( from_satoshi( amount ))>max_currency_value:
         return (None, 'Invalid amount')
     price=response_dict['price'][0]
-    if float(price)<0 or float(price)>max_currency_value:
+    if float(price)<0 or float( from_satoshi( price ))>max_currency_value:
         return (None, 'Invalid price')
     min_buyer_fee=response_dict['min_buyer_fee'][0]
-    if float(min_buyer_fee)<0 or float(min_buyer_fee)>max_currency_value:
+    if float(min_buyer_fee)<0 or float( from_satoshi( min_buyer_fee ))>max_currency_value:
         return (None, 'Invalid minimal buyer fee')
     fee=response_dict['fee'][0]
-    if float(fee)<0 or float(fee)>max_currency_value:
+    if float(fee)<0 or float( from_satoshi( fee ))>max_currency_value:
         return (None, 'Invalid fee')
     blocks=int(response_dict['blocks'][0])
     if blocks<1 or blocks>max_payment_timeframe:
@@ -46,26 +52,26 @@ def sell_form_response(response_dict):
     satoshi_price=int( price )
     bitcoin_amount_desired=int( amount )
 
-    pubkey='unknown'
-    tx_to_sign_dict={'transaction':'','sourceScript':''}
-    l=len(seller)
-    if l == 66: # probably pubkey
-        if is_pubkey_valid(seller):
-            pubkey=seller
-            response_status='OK'
-        else:
-            response_status='invalid pubkey'
-    else:
-        if not is_valid_bitcoin_address(seller):
-            response_status='invalid address'
-        else:
-            seller_pubkey=get_pubkey(seller)
-            if not is_pubkey_valid(seller_pubkey):
-                response_status='missing pubkey'
-            else:
-                pubkey=seller_pubkey
+    if pubkey == None:
+        tx_to_sign_dict={'transaction':'','sourceScript':''}
+        l=len(seller)
+        if l == 66: # probably pubkey
+            if is_pubkey_valid(seller):
+                pubkey=seller
                 response_status='OK'
-                tx_to_sign_dict=prepare_sell_tx_for_signing(seller, amount, bitcoin_amount_desired, min_buyer_fee, fee, blocks, currency_id)
+            else:
+                response_status='invalid pubkey'
+        else:
+            if not is_valid_bitcoin_address(seller):
+                response_status='invalid address'
+            else:
+                seller_pubkey=get_pubkey(seller)
+                if not is_pubkey_valid(seller_pubkey):
+                    response_status='missing pubkey'
+                else:
+                    pubkey=seller_pubkey
+                    response_status='OK'
+                    tx_to_sign_dict=prepare_sell_tx_for_signing( pubkey, amount, bitcoin_amount_desired, min_buyer_fee, fee, blocks, currency_id)
 
     response='{"status":"'+response_status+'", "transaction":"'+tx_to_sign_dict['transaction']+'", "sourceScript":"'+tx_to_sign_dict['sourceScript']+'"}'
     return (response, None)
@@ -132,7 +138,7 @@ def prepare_sell_tx_for_signing(seller, amount, bitcoin_amount_desired, btc_min_
 
     # create the BIP11 magic
     valid_dataHex_obfuscated_list=[]
-    change_address_compressed_pub=get_compressed_pubkey_format(get_pubkey(changeAddress))
+    change_address_compressed_pub=get_compressed_pubkey_format( change_address_pub )
     obfus_str_list=get_obfus_str_list(seller,2)
     list_length=len(dataHex_list)
     for i in range(list_length):

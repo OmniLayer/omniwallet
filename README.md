@@ -381,6 +381,7 @@ $.post('/v1/transaction/validateaddr/', dataToSend, function (data) {}).fail( fu
 ```
 var dataToSend = { 
 	from_address: from_address, 
+	pubKey: pubKey,
 	to_address: to_address, 
 	amount: amount, 
 	currency: currency, 
@@ -422,7 +423,7 @@ $.post('/wallet/validateaddr/', dataToSend, function (data) {}).fail( function()
 
 #### Encode the trade offer:
 ```
-var dataToSend = { seller: from_address, amount: amount, price: price, min_buyer_fee: min_buyer_fee, fee: fee, blocks: blocks, currency: currency };
+var dataToSend = { seller: from_address, pubKey: pubKey, amount: amount, price: price, min_buyer_fee: min_buyer_fee, fee: fee, blocks: blocks, currency: currency };
 $.post('/v1/transaction/sell/', dataToSend, function (data) {
 
 	//data should have fields sourceScript and transaction\
@@ -457,7 +458,7 @@ $.post('/v1/transaction/validateaddr/', dataToSend, function (data) {}).fail( fu
 | ``{ "status": "invalid address" }``     | This address just isn't valid. |
 #### Encode the acceptance:
 ```
-var dataToSend = { buyer: buyer, amount: amount, tx_hash: tx_hash };
+var dataToSend = { buyer: buyer, pubKey: pubKey, amount: amount, tx_hash: tx_hash };
 $.post('/v1/transaction/accept/', dataToSend, function (data) {
 
 	//data should have fields sourceScript and transaction
