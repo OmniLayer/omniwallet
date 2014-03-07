@@ -1,5 +1,5 @@
 import werkzeug.security as ws
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, abort
 app = Flask(__name__)
 app.debug = True
 
@@ -21,4 +21,18 @@ def challenge():
 @app.route('/create', methods=['POST'])
 def create():
   print request.form
+  uuid = request.form['uuid']
+  key = request.form['key']
+  nonce = request.form['nonce']
+  pow_challenge = request.form['pow_challenge']
+
+  challenge_response = ws.hashlib.sha256(nonce + pow_challenge).hexdigest()
+
+  if challenge_response[-len(LOGIN_DIFFICULTY):] != LOGIN_DIFFICULTY:
+    print 'Aborting: Challenge was not met'
+    abort(403)
+
+
+
+  return ""
 
