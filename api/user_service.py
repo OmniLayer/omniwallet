@@ -1,18 +1,24 @@
-import bcrypt
+import werkzeug.security as ws
 from flask import Flask, request, jsonify
 app = Flask(__name__)
 app.debug = True
 
+LOGIN_DIFFICULTY = '0400'
+
 @app.route('/salt')
 def challenge():
   uuid = request.args.get('uuid', '')
-  salt = bcrypt.hashpw(uuid.encode('UTF-8'), bcrypt.gensalt())
-  random_str = bcrypt.hashpw(bcrypt.gensalt(), bcrypt.gensalt())[7:]
+  salt = ws.gen_salt(32)
+  pow_challenge = ws.gen_salt(32)
 
   response = {
       'salt': salt,
-      'random_str': random_str
+      'pow_challenge': pow_challenge
   }
   return jsonify(response)
 
+
+@app.route('/create', methods=['POST'])
+def create():
+  print request.form
 
