@@ -1,4 +1,5 @@
-<br>
+<div class="row alert alert-info alert-dismissable">
+  <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
   <h4>
     <strong>Disclaimer:</strong>
     The current alpha wallet is available for initial testing – be advised that this 
@@ -10,3 +11,99 @@
     look at the code, and report bugs. The server that this wallet is hosted on currently 
     is a temporary testing server and should not receive any actual BTC/MSC deposits!
   </h4>
+  This is the trading page, where you can start submitting orders or send money to others.
+</div>
+
+  <h1 class="row" style="color:lightgray"> Trade </h1>
+
+  <ul class="row nav nav-pills" ng-init="setActiveCurrencyPair()">
+      <li ng-repeat="currencyPair in currPairs" ng-class="isActiveCurrencyPair(currencyPair)">
+        <a href="" ng-click="setActiveCurrencyPair(currencyPair)"> {{currencyPair[0]}} / {{currencyPair[1]}} </a>
+      </li>
+      <li><a href=""> +Add </a></li>
+  </ul>
+
+  <div class="row" ng-show="onTradeView">
+    <h3> Bitcoin / Mastercoin </h3>
+    <button type="button" class="btn btn-primary">
+      <span class="glyphicon glyphicon-signal"></span>
+    </button>
+    <div class="btn-group">
+    <button type="button" class="btn btn-default">last</button>
+    <button type="button" class="btn btn-default">high</button>
+    <button type="button" class="btn btn-default">low</button>
+    <button type="button" class="btn btn-default">avg</button>
+    <button type="button" class="btn btn-default">vol</button>
+    <div class="btn-group">
+          <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+            time
+            <span class="caret"></span>
+          </button>
+          <ul class="dropdown-menu">
+            <li><a href="#">Dropdown link</a></li>
+            <li><a href="#">Dropdown link</a></li>
+          </ul>
+        </div>
+      </div>
+  </div>
+
+  <div class="row" ng-controller="WalletTradeOverviewController" ng-init="getShit()">
+    <div class="row" >
+      <div class="col-xs-9">
+        <div class="row">
+          <h3 class="col-xs-10"> Buy Mastercoin
+          <!--  <select ng-model="currPair" ng-options="pairObject as pairObject for pairObject in pairs"
+              ng-change="getData(selectedAddress)">
+            <option value="">-- choose currency pair --</option>
+            </select> 
+              for
+            <select ng-model="selectedAddress" ng-options="addrObject.address as addrObject.address for addrObject in addresses" 
+              ng-change="getData(selectedAddress)">
+            <option value="">-- choose address --</option>
+            </select> -->
+          </h3><h3 class="col-xs-2"> filter </h3>
+       </div>
+        <h1 class="col-xs-9"> depth chart goes here </h1> 
+      </div>
+      <div class="col-xs-3"> 
+        <h3> Sell Mastercoin </h3>
+          <div class="btn-group btn-group-justified">
+            <div class="btn-group">
+            <button class="btn btn-primary" ng-click="setView('saleOffer')" type="submit">Start new sale offer</button>
+            <br><br>
+            </div>
+          </div>
+      </div>
+    </div>
+      
+    <table class="table table-striped table-hover table-condensed">
+      <thead>
+          <tr>
+            <th>Transaction hash</th>
+            <th>Type</th>
+            <th>Status</th>
+            <th>Amount</th>
+            <th>Transaction time</th>
+            <th> Buy </th>
+          </tr>
+      </thead>
+      <tbody>
+      </tbody>
+      <!--
+      <tr ng-repeat="transaction in orderbook">
+        {{transaction}}
+        <td> <a href="">{{transaction.tx_hash}}</a></td>
+        <td>{{transaction.tx_type_str}}</td>
+        <td>{{transaction.status}}</td>
+        <td>{{transaction.formatted_amount}}</td>
+        <td>{{transaction.tx_time | date:'dd MMM yyyy HH:mma Z'}}</td>
+        <td ng-show="(transaction.tx_hash.length == 64) && transaction.status == null && 
+            !(transaction.from_address == selectedAddress)">
+        <button class="btn btn-primary btn-sm" ng-click="setView('buyOffer')" type="submit">Aquire Booty (Pirate)</button>
+        
+        <td ng-show="transaction.from_address == selectedAddress"> Your offer/purchase </td>
+      </td>
+      </tr>-->
+    </table>  
+    
+  </div>
