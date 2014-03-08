@@ -148,7 +148,48 @@ function WalletTradeController($scope, $http, $q, userService) {
         'saleOffer': '/partials/wallet_sale.html'
   };
 
+  //initialize the data used in the template
+  $scope.currAcronyms = { 'BTC': 'Bitcoin', 'MSC': 'Mastercoin', 'TMSC': 'Test Mastercoin' }
+  $scope.currPairs = [ ['BTC', 'MSC'] , ['BTC' , 'TMSC'] ];
+  
+  //Get the active currency pair
+  $scope.activeCurrencyPair = []
+  
+  $scope.setActiveCurrencyPair = function(currencyPair) {
+    console.log(currencyPair);
+    if(!currencyPair)
+      $scope.activeCurrencyPair = $scope.currPairs[0]
+    else
+      $scope.activeCurrencyPair = currencyPair
+  }
+  $scope.isActiveCurrencyPair = function(currencyPair) {
+    if( angular.equals(currencyPair, $scope.activeCurrencyPair) ) 
+      return { 'active': 1 }
+    else
+      return { 'active': 0 }
+  }
+}
 
+function WalletTradeOverviewController($scope, $http, $q, userService) {
+  //$scope.selectedAddress = userService.getAllAddresses()[ userService.getAllAddresses().length-1 ].address;
+  $scope.orderbook = []
+  $scope.getData = function() {
+    var transaction_data = []
+    var postData = { 
+      type: 'TIME',
+      currencyType: 'TMSC',
+      time: 2419200
+    };
+    $http.post('/v1/exchange/offers', postData).success(
+      function(offerSuccess) {
+        if(offerSuccess.data != "[]") {
+          transaction_data = offerSuccess.data
+          transaction_data.forEach(function(e) { console.log(e.from_address); });
+        } else transaction_data.push({ tx_hash: 'No offers/bids found for this timeframe' })
+      $scope.orderbook = transaction_data;
+      }
+    );
+  }
 }
 
 function WalletTradeHistoryController($scope, $http, $q, userService) {
@@ -172,15 +213,18 @@ function WalletTradeHistoryController($scope, $http, $q, userService) {
     $http.post('/v1/exchange/offers', postData).success(
       function(offerSuccess) {
         if(offerSuccess.data != "ADDRESS_NOT_FOUND") {
-        var type_offer = Object.keys(offerSuccess.data);
+          var dataLength = 0; Object.keys(offerSuccess.data).forEach(function(e,i,a) { dataLength += offerSuccess.data[e].length; })
+          if(dataLength != 0) {
+            var type_offer = Object.keys(offerSuccess.data);
 
-        angular.forEach(type_offer, function(offerType) {
-         //DEBUG console.log(offerType, offerSuccess.data[offerType])
-         angular.forEach(offerSuccess.data[offerType], function(offer) {
-          transaction_data.push(offer)
-         })
-        })
-      } else transaction_data.push({ tx_hash: 'No offers/bids found for this pair/address, why not make one?' })
+            angular.forEach(type_offer, function(offerType) {
+              //DEBUG console.log(offerType, offerSuccess.data[offerType])
+              angular.forEach(offerSuccess.data[offerType], function(offer) {
+                transaction_data.push(offer)
+              });
+            })
+          }  else transaction_data.push({ tx_hash: 'No offers/bids found for this pair/address, why not make one?' })
+        } else transaction_data.push({ tx_hash: 'No offers/bids found for this pair/address, why not make one?' })
       $scope.orderbook = transaction_data;
       }
     );
