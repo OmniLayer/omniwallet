@@ -9,6 +9,7 @@ data_dir_root = os.environ.get('DATADIR')
 
 store_dir = data_dir_root + '/sessions/'
 session_store = FilesystemStore(store_dir) # TODO: Need to roll this into a SessionInterface so multiple services can hit it easily
+SESSION_SECRET = 'SuperSecretSessionStuff'
 
 app = Flask(__name__)
 app.debug = True
@@ -16,13 +17,14 @@ app.debug = True
 @app.route('/salt')
 def challenge():
   uuid = request.args.get('uuid', '')
-  if uuid in session_store:
+  session_id = ws.hashlib.sha256(SESSION_SECRET + uuid).hexdigest()
+  if session_id in session_store:
     abort(403)
 
   salt = ws.hashlib.sha256(SERVER_SECRET + uuid).hexdigest()
   pow_challenge = ws.gen_salt(32)
 
-  session_store.put(uuid, pow_challenge)
+  session_store.put(session_id, pow_challenge)
   response = {
       'salt': salt,
       'pow_challenge': pow_challenge
@@ -33,13 +35,14 @@ def challenge():
 @app.route('/create', methods=['POST'])
 def create():
   uuid = request.form['uuid']
-  if uuid not in session_store:
+  session_id = ws.hashlib.sha256(SESSION_SECRET + uuid).hexdigest()
+  if session_id not in session_store:
     print 'UUID not in session'
     abort(403)
 
   key = request.form['key']
   nonce = request.form['nonce']
-  pow_challenge = session_store.get(uuid)
+  pow_challenge = session_store.get(session_id)
   #wallet_data = request.form['wallet_data']
   wallet_data = "Walletstuff"
 
@@ -55,7 +58,7 @@ def create():
 
   wallet_file = { 'key': key, 'wallet': wallet_data }
   write_wallet(uuid, wallet_file)
-  session_store.delete(uuid)
+  session_store.delete(session_id)
 
   return ""
 
