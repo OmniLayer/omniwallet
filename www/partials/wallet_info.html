@@ -53,7 +53,7 @@
     <div class="row" >
       <div class="col-xs-9">
         <div class="row">
-          <h3 class="col-xs-10"> <strong> Buy {{ currAcronyms[ activeCurrencyPair[1] ] }} </strong>
+          <h3 class="col-xs-7"> <strong> Buy {{ currAcronyms[ activeCurrencyPair[1] ] }} </strong>
           <!--  <select ng-model="currPair" ng-options="pairObject as pairObject for pairObject in pairs"
               ng-change="getData(selectedAddress)">
             <option value="">-- choose currency pair --</option>
@@ -63,7 +63,22 @@
               ng-change="getData(selectedAddress)">
             <option value="">-- choose address --</option>
             </select> -->
-          </h3><h3 class="col-xs-2"> <small> <a href=""> filter </a> </small></h3>
+          </h3>
+          <h3 class="col-xs-5"> 
+            <small>
+              <select ng-model="selectedTimeframe"  
+                ng-change="getData(selectedTimeframe)">
+              <option value="">-- choose timeframe --</option>
+              <option value="86400"> 24 Hours </option>
+              <option value="604800"> 1 week </option>
+              <option value="2419200"> 1 month </option>
+              <option value="7257600"> 3 months </option>
+              </select>
+            </small>
+            <!--
+               <a href=""> filter </a> 
+             -->
+          </h3>
        </div>
         <h1 class="col-xs-9"> |depth chart| </h1> 
       </div>

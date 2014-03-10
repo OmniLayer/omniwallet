@@ -172,19 +172,20 @@ function WalletTradeController($scope, $http, $q, userService) {
 
 function WalletTradeOverviewController($scope, $http, $q, userService) {
   //$scope.selectedAddress = userService.getAllAddresses()[ userService.getAllAddresses().length-1 ].address;
-  $scope.orderbook = []
-  $scope.getData = function() {
+
+  $scope.getData = function(time) {
+    $scope.orderbook = []
     var transaction_data = []
     var postData = { 
       type: 'TIME',
       currencyType: 'TMSC',
-      time: 2419200
+      time: time || 2419200
     };
     $http.post('/v1/exchange/offers', postData).success(
       function(offerSuccess) {
-        if(offerSuccess.data != "[]") {
+        if(offerSuccess.data.length > 0) {
           transaction_data = offerSuccess.data
-          transaction_data.forEach(function(e) { console.log(e.from_address); });
+          //DEBUG transaction_data.forEach(function(e) { console.log(e.from_address); });
         } else transaction_data.push({ tx_hash: 'No offers/bids found for this timeframe' })
       $scope.orderbook = transaction_data;
       }
