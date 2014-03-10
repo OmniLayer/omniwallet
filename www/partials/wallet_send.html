@@ -43,8 +43,8 @@
     <div class="row">
       <div class="input-group">
         <span class="input-group-addon"> {{Amount}} to send: </span>
-          <input name="amount" type="number" ng-model="sendAmount" class="form-control" placeholder="0.001" required>
-        <span class="input-group-addon" > Available: {{{ balance: balanceData[0], symbol: selectedCoin } | cryptocurrency}}</span>
+          <input name="amount" type="number" ng-model="sendAmount" class="form-control" placeholder="10 mBTC" required>
+        <span class="input-group-addon" > Available m{{selectedCoin}}: {{balanceData[0]}}</span>
       </div>
     </div>
       <br>
@@ -52,8 +52,8 @@
       <div class="input-group">
         <span class="input-group-addon"> Transaction/Miner fees: </span>
         <input name="fees" type="number" ng-model="dexFees" class="form-control" 
-        placeholder="0.1 mBTC (Hover over me for why)" required>
-        <span class="input-group-addon" > Available: {{{ balance: balanceData[1], symbol: 'BTC' } | cryptocurrency }} </span>
+        placeholder="0.1 mBTC" required>
+        <span class="input-group-addon" > Available mBTC: {{balanceData[1]}}</span>
       </div>
     </div>
   </form>
