@@ -1,23 +1,28 @@
 import os
 import werkzeug.security as ws
 from flask import Flask, request, jsonify, abort, json
-app = Flask(__name__)
-app.debug = True
+from simplekv.fs import FilesystemStore
 
 LOGIN_DIFFICULTY = '0400'
 SERVER_SECRET = 'SoSecret!'
 data_dir_root = os.environ.get('DATADIR')
 
+store_dir = data_dir_root + '/sessions/'
+session_store = FilesystemStore(store_dir) # TODO: Need to roll this into a SessionInterface so multiple services can hit it easily
+
+app = Flask(__name__)
+app.debug = True
+
 @app.route('/salt')
 def challenge():
   uuid = request.args.get('uuid', '')
-
-  if exists(uuid):
+  if uuid in session_store:
     abort(403)
 
   salt = ws.hashlib.sha256(SERVER_SECRET + uuid).hexdigest()
   pow_challenge = ws.gen_salt(32)
 
+  session_store.put(uuid, pow_challenge)
   response = {
       'salt': salt,
       'pow_challenge': pow_challenge
@@ -28,23 +33,29 @@ def challenge():
 @app.route('/create', methods=['POST'])
 def create():
   uuid = request.form['uuid']
+  if uuid not in session_store:
+    print 'UUID not in session'
+    abort(403)
+
   key = request.form['key']
   nonce = request.form['nonce']
-  pow_challenge = request.form['pow_challenge']
+  pow_challenge = session_store.get(uuid)
   #wallet_data = request.form['wallet_data']
   wallet_data = "Walletstuff"
 
-  challenge_response = ws.hashlib.sha256(nonce + pow_challenge).hexdigest()
+  challenge_response = ws.hashlib.sha256(pow_challenge + nonce).hexdigest()
 
   if challenge_response[-len(LOGIN_DIFFICULTY):] != LOGIN_DIFFICULTY:
     print 'Aborting: Challenge was not met'
     abort(403)
 
   if exists(uuid):
+    print 'UUID already exists'
     abort(403)
 
   wallet_file = { 'key': key, 'wallet': wallet_data }
   write_wallet(uuid, wallet_file)
+  session_store.delete(uuid)
 
   return ""
 
