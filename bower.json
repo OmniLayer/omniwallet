@@ -14,6 +14,7 @@
 		"angular-bootstrap": "~0.10.0",
 		"angular-ui-bootstrap": "~0.10.0",
 		"d3": "~3.4.2",
-    "FileSaver": null
+		"jsrsasign": "~4.2.1",
+    	"FileSaver": null
 	}
 }
