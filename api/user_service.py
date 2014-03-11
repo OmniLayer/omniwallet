@@ -16,18 +16,20 @@ app.debug = True
 
 @app.route('/salt')
 def challenge():
-  uuid = request.args.get('uuid', '')
+  uuid = request.args.get('uuid')
   session_id = ws.hashlib.sha256(SESSION_SECRET + uuid).hexdigest()
   if session_id in session_store:
     abort(403)
 
   salt = ws.hashlib.sha256(SERVER_SECRET + uuid).hexdigest()
   pow_challenge = ws.gen_salt(32)
+  challenge = ws.gen_salt(32)
 
   session_store.put(session_id, pow_challenge)
   response = {
       'salt': salt,
-      'pow_challenge': pow_challenge
+      'pow_challenge': pow_challenge,
+      'challenge': challenge
   }
   return jsonify(response)
 
@@ -60,6 +62,10 @@ def create():
   write_wallet(uuid, wallet_file)
   session_store.delete(session_id)
 
+  return ""
+
+@app.route('/login'):
+  uuid = request.args.get('uuid')
   return ""
 
 
