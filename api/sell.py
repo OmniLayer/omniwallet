@@ -50,9 +50,12 @@ def sell_form_response(response_dict):
             return (None, 'Invalid currency')
 
     satoshi_price=int( price )
-    bitcoin_amount_desired=int( amount )
+    bitcoin_amount_desired=int( satoshi_price * int(amount) )
 
-    if pubkey == None:
+    #DEBUG info(['early days', seller, amount, satoshi_price, bitcoin_amount_desired, min_buyer_fee, fee, blocks, currency])
+    if pubkey != None:
+        tx_to_sign_dict=prepare_sell_tx_for_signing( pubkey, amount, bitcoin_amount_desired, min_buyer_fee, fee, blocks, currency_id)
+    else:
         tx_to_sign_dict={'transaction':'','sourceScript':''}
         l=len(seller)
         if l == 66: # probably pubkey
@@ -135,7 +138,7 @@ def prepare_sell_tx_for_signing(seller, amount, bitcoin_amount_desired, btc_min_
             '{:02x}'.format(blocks) + '{:06x}'.format(0))
     dataHex_list.append('{:02x}'.format(0) + '{:02x}'.format(dataSequenceNum) + \
             '{:06x}'.format(min_buyer_fee))
-
+    #DEBUG info(['later on', dataSequenceNum, tx_type, currency_id, satoshi_amount, bitcoin_amount_desired, blocks, min_buyer_fee])
     # create the BIP11 magic
     valid_dataHex_obfuscated_list=[]
     change_address_compressed_pub=get_compressed_pubkey_format( change_address_pub )

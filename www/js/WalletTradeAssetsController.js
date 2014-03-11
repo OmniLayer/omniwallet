@@ -32,7 +32,7 @@ function WalletTradeAssetsController($modal, $scope, $http, $q, userService) {
   }
 
   // [ Retrieve Balances ]
-
+  $scope.currencyUnit = 'stom' // satoshi to millibitt
   $scope.balanceData = [ 0 ];
   var addrListBal = [];
 
@@ -99,14 +99,15 @@ function WalletTradeAssetsController($modal, $scope, $http, $q, userService) {
 
   // [ Buy Form Helpers ]
 
-  function getUnsignedBuyTransaction(buyerAddress, pubKey, buyAmount, saleTransactionHash) {
+  function getUnsignedBuyTransaction(buyerAddress, pubKey, buyAmount, fee, saleTransactionHash) {
     var deferred = $q.defer();
 
     var url = '/v1/exchange/accept/'; 
     $http.post( url, { 
       buyer: buyerAddress, 
       pubKey: pubKey,
-      amount: buyAmount, 
+      amount: buyAmount,
+      fee: fee, 
       tx_hash: saleTransactionHash
     }).success(function(data) {
         return deferred.resolve(data);
@@ -117,14 +118,14 @@ function WalletTradeAssetsController($modal, $scope, $http, $q, userService) {
     return deferred.promise;
   }
 
-  function prepareBuyTransaction(buyer, amt, hash, privkeyphrase, $modalScope) {
-    var addressData; userService.data.addresses.forEach(function(e,i) { if(e.address == buyer) addressData = e; });
+  function prepareBuyTransaction(buyer, amt, hash, fee, privkeyphrase, $modalScope) {
+    var addressData; userService.getAllAddresses().forEach(function(e,i) { if(e.address == buyer) addressData = e; });
     var privKey = new Bitcoin.ECKey.decodeEncryptedFormat(addressData.privkey,privkeyphrase.pass);
     var pubKey = privKey.getPubKeyHex();
 
-    $scope.sendTxPromise = getUnsignedBuyTransaction( buyer, pubKey, amt, hash);
+    $scope.sendTxPromise = getUnsignedBuyTransaction( buyer, pubKey, amt, fee, hash);
     $scope.sendTxPromise.then(function(successData) {
-      if( successData.data.error )
+      if( successData.status != 'OK' )
       {
         $modalScope.waiting = false
         $modalScope.sendError = true
@@ -132,7 +133,7 @@ function WalletTradeAssetsController($modal, $scope, $http, $q, userService) {
       }
       else
       {
-        var successData = successData.data
+        //var successData = successData.data ??
         var sourceScript = successData.sourceScript;
         var unsignedTransaction = successData.transaction;
 
@@ -212,17 +213,26 @@ function WalletTradeAssetsController($modal, $scope, $http, $q, userService) {
     });
   }
 
-  $scope.validateBuyForm = function() {
+  $scope.validateBuyForm = function(currencyUnit) {
+    var dustValue = 5430; 
+    var minerMinimum = 10000; 
+    var nonZeroValue = 1; 
+
     var coin = $scope.selectedCoin;
     var address = $scope.selectedAddress
-    var buyAmount = convertToFundamentalUnit( +$scope.buyAmount, coin );
     var saleHash = $scope.buySaleID
-    var dexFees = convertToFundamentalUnit( +$scope.dexFees, 'BTC' );
+
+    var buyAmount = Math.ceil( formatCurrencyInFundamentalUnit( +$scope.buyAmount , currencyUnit[3]+'tos'  ) );
+    var minerFees = Math.ceil( formatCurrencyInFundamentalUnit( +$scope.minerFees , currencyUnit[3] +'tos' ) );
+
+    var buyAmountMillis = formatCurrencyInFundamentalUnit( buyAmount , 'stom'  ) ;
+    var minerFeesMillis = formatCurrencyInFundamentalUnit( minerFees , 'stom' ) ;
+    
     var balance = +$scope.balanceData[0]
     var btcbalance = +$scope.balanceData[1]
 
-    var required = [coin,address,buyAmount,dexFees,balance, btcbalance, $scope.buyForm.$valid ]
-
+    var required = [coin,address,buyAmount,minerFees,balance, btcbalance, $scope.buyForm.$valid ]
+      console.log(required)
     var error = 'Please '
     if( $scope.buyForm.$valid == false) {
         error += 'make sure all fields are completely filled, '
@@ -235,11 +245,11 @@ function WalletTradeAssetsController($modal, $scope, $http, $q, userService) {
         error += 'make sure your sale is for MSC or TMSC, '
     }
     if( ( (coin == 'MSC') || (coin == 'TMSC') ) ) {
-       if( buyAmount < 0.00000001 )
+       if( buyAmount < nonZeroValue )
         error += 'make sure your send amount is non-zero, '
-       if( dexFees < 10000 )
+       if( minerFees < minerMinimum )
         error += 'make sure your fee entry is at least 0.1 mBTC, '
-       if( ( dexFees <= btcbalance ) ==  false ) 
+       if( ( minerFees <= btcbalance ) ==  false ) 
         error += 'make sure you have enough Bitcoin to cover your fees, '
     }
     if( error.length < 8) {
@@ -250,8 +260,8 @@ function WalletTradeAssetsController($modal, $scope, $http, $q, userService) {
         template: '\
           <div class="modal-body">\
               <h3 class="text-center"> Confirm send </h3>\
-              <h3>You\'re about to make an offer to buy ' + formatCurrencyInFundamentalUnit( buyAmount, $scope.selectedCoin ) +   
-              ' with ' + formatCurrencyInFundamentalUnit( dexFees, 'BTC' ) + ' in fees </h3>\
+              <h3>You\'re about to make an offer to buy ' + buyAmountMillis + ' m' + $scope.selectedCoin +   
+              ' with ' + minerFeesMillis + ' in fees </h3>\
             <p><br>\
             If the above is correct, please input your passphrase below and press Send Funds.\
             If you encounter an error, feel free to click away from the dialog and try again.\
@@ -282,7 +292,7 @@ function WalletTradeAssetsController($modal, $scope, $http, $q, userService) {
           $scope.ok = function() {
             $scope.clicked = true;
             $scope.waiting = true;
-            prepareBuyTransaction(data.buyer, data.amt, data.hash, $scope.privKeyPass, $scope);
+            prepareBuyTransaction(data.buyer, data.amt, data.hash, data.fee, $scope.privKeyPass, $scope);
           }
         },
         resolve: {
@@ -290,7 +300,8 @@ function WalletTradeAssetsController($modal, $scope, $http, $q, userService) {
             return {  
               buyer: address, 
               amt: buyAmount,
-              hash: saleHash }
+              hash: saleHash,
+              fee: minerFees }
           },
           prepareBuyTransaction: function() { 
             return prepareBuyTransaction; 
@@ -312,7 +323,7 @@ function WalletTradeAssetsController($modal, $scope, $http, $q, userService) {
 
   // [ Sale Form Helpers ]
 
-  function getUnsignedSaleTransaction(sellerAddress, pubKey, saleAmount, salePrice, buyersFee, dexFee, saleBlocks, currency) {
+  function getUnsignedSaleTransaction(sellerAddress, pubKey, saleAmount, salePrice, buyersFee, fee, saleBlocks, currency) {
     var deferred = $q.defer();
 
     var url = '/v1/exchange/sell/'; 
@@ -322,7 +333,7 @@ function WalletTradeAssetsController($modal, $scope, $http, $q, userService) {
       amount: saleAmount, 
       price: salePrice, 
       min_buyer_fee: buyersFee, 
-      fee: dexFee,
+      fee: fee,
       blocks: saleBlocks,
       currency: currency
     }).success(function(data) {
@@ -335,21 +346,21 @@ function WalletTradeAssetsController($modal, $scope, $http, $q, userService) {
   }
 
   function prepareSaleTransaction(seller, amt, price, buyerfee, fee, blocks, currency, privkeyphrase, $modalScope) {
-    var addressData; userService.data.addresses.forEach(function(e,i) { if(e.address == seller) addressData = e; });
+    var addressData; userService.getAllAddresses().forEach(function(e,i) { if(e.address == seller) addressData = e; });
     var privKey = new Bitcoin.ECKey.decodeEncryptedFormat(addressData.privkey,privkeyphrase.pass);
     var pubKey = privKey.getPubKeyHex();
 
-    $scope.sendTxPromise = getUnsignedSaleTransaction(seller, pubkey, amt, price, buyerfee, fee, blocks, currency);
+    $scope.sendTxPromise = getUnsignedSaleTransaction(seller, pubKey, amt, price, buyerfee, fee, blocks, currency);
     $scope.sendTxPromise.then(function(successData) {
-      if( successData.data.error )
+      if( successData.status != 'OK' )
       {
         $modalScope.waiting = false
         $modalScope.sendError = true
-        $modalScope.error = 'Error preparing sell transaction: ' + successData.data.error;
+        $modalScope.error = 'Error preparing sell transaction: ' + successData;
       }
       else
       {
-        var successData = successData.data
+        //var successData = successData.data ???
         var sourceScript = successData.sourceScript;
         var unsignedTransaction = successData.transaction
 
@@ -429,20 +440,30 @@ function WalletTradeAssetsController($modal, $scope, $http, $q, userService) {
     });
   }
 
-  $scope.validateSaleForm = function() {
+  $scope.validateSaleForm = function(currencyUnit) {
+    var dustValue = 5430; 
+    var minerMinimum = 10000; 
+    var nonZeroValue = 1; 
+
+    var salePricePerCoin = Math.ceil( formatCurrencyInFundamentalUnit( +$scope.salePricePerCoin , currencyUnit[3]+'tos'  ) );
+    var buyersFee = Math.ceil( formatCurrencyInFundamentalUnit( +$scope.buyersFee , currencyUnit[3] +'tos' ) );
+    var minerFees = Math.ceil( formatCurrencyInFundamentalUnit( +$scope.minerFees , currencyUnit[3] +'tos' ) );
+    var saleAmount = Math.ceil( formatCurrencyInFundamentalUnit( +$scope.saleAmount , currencyUnit[3]+'tos'  ) );
+
+    var salePricePerCoinMillis = formatCurrencyInFundamentalUnit( salePricePerCoin , 'stom' ) ;
+    var buyersFeeMillis = formatCurrencyInFundamentalUnit( buyersFee , 'stom'  ) ;
+    var minerFeesMillis = formatCurrencyInFundamentalUnit( minerFees , 'stom' ) ;
+    var saleAmountMillis = formatCurrencyInFundamentalUnit( saleAmount , 'stom'  ) ;
+
     var coin = $scope.selectedCoin;
     var address = $scope.selectedAddress
-    var saleAmount = convertToFundamentalUnit( +$scope.saleAmount, coin );
-    // The price in satoshis of (for example) 1 MSC.
-    var salePricePerCoin = +$scope.salePricePerCoin * getConversionFactor( 'BTC' );
     var saleBlocks = +$scope.saleBlocks
-    var buyersFee = convertToFundamentalUnit( +$scope.buyersFee, 'BTC' );
-    var dexFees = convertToFundamentalUnit( +$scope.dexFees, 'BTC' );
+    
     var balance = +$scope.balanceData[0]
     var btcbalance = +$scope.balanceData[1]
 
-    var required = [coin,address,saleAmount, salePricePerCoin, dexFees,buyersFee, balance, btcbalance, $scope.saleForm.$valid ]
-
+    var required = [coin,address,saleAmount, salePricePerCoin, minerFees,buyersFee, balance, btcbalance, $scope.saleForm.$valid ]
+                              console.log(required)
     var error = 'Please '
     if( $scope.saleForm.$valid == false) {
         error += 'make sure all fields are completely filled, '
@@ -451,16 +472,15 @@ function WalletTradeAssetsController($modal, $scope, $http, $q, userService) {
         error += 'make sure your sale is for MSC or TMSC, '
     }
     if( ( (coin == 'MSC') || (coin == 'TMSC') ) ) {
-       if( saleAmount < 0.00000001 )
+       if( saleAmount < nonZeroValue )
         error += 'make sure your send amount is non-zero, '
-       if( buyersFee < 10000 )
+       if( buyersFee < minerMinimum )
         error += 'make sure your buyers fee entry is at least 0.1 mBTC, '
-       if( dexFees < 10000 )
+       if( minerFees < minerMinimum )
         error += 'make sure your fee entry is at least 0.1 mBTC, '
-
        if( ( saleAmount <= balance ) == false ) 
         error += 'make sure you aren\'t putting more coins up for sale than you own, '
-       if( ( dexFees <= btcbalance ) ==  false )
+       if( ( minerFees <= btcbalance ) ==  false )
         error += 'make sure you have enough Bitcoin to cover your fees, '
        
        if( saleBlocks < 1) 
@@ -470,15 +490,13 @@ function WalletTradeAssetsController($modal, $scope, $http, $q, userService) {
       $scope.showErrors = false
       
       // open modal
-      console.log( '****' );
-      console.log( 'saleAmount: ' + saleAmount );
-      console.log( 'salePricePerCoin: ' + salePricePerCoin );
       var modalInstance = $modal.open({
         template: '\
           <div class="modal-body">\
               <h3 class="text-center"> Confirm sale order </h3>\
-              <h3>You\'re about to put ' + formatCurrencyInFundamentalUnit( saleAmount, $scope.selectedCoin ) +  
-              ' on sale at a total price of ' + formatCurrencyInFundamentalUnit( saleAmount / getConversionFactor( $scope.selectedCoin ) * salePricePerCoin, 'BTC' ) + ', plus charge ' + formatCurrencyInFundamentalUnit( buyersFee, 'BTC' ) + ' in fees over ' +
+              <h3>You\'re about to put ' + saleAmountMillis + 'm' + $scope.selectedCoin  +  
+              ' on sale at a price of ' +  salePricePerCoinMillis + 'mBTC per coin' +
+              ', plus charge ' + buyersFeeMillis  + ' in fees over ' +
               $scope.saleBlocks + ' blocks.</h3>\
             <p><br>\
             If the above is correct, please input your passphrase below and press Send Funds.\
@@ -522,7 +540,7 @@ function WalletTradeAssetsController($modal, $scope, $http, $q, userService) {
               amt: saleAmount,
               price: salePricePerCoin,
               buyerfee: buyersFee,
-              fee: dexFees,
+              fee: minerFees,
               blocks: saleBlocks, 
               currency: coin } 
           },
@@ -656,15 +674,23 @@ function WalletTradeAssetsController($modal, $scope, $http, $q, userService) {
     });
   }
 
-  $scope.validateSendForm = function() {
+  $scope.validateSendForm = function(currencyUnit) {
+    var dustValue = 5430; 
+    var minerMinimum = 10000; 
+    var nonZeroValue = 1; 
+
+    var minerFees = Math.ceil( formatCurrencyInFundamentalUnit( +$scope.minerFees , currencyUnit[3] +'tos' ) );
+    var sendAmount = Math.ceil( formatCurrencyInFundamentalUnit( +$scope.sendAmount , currencyUnit[3]+'tos'  ) );
+    var minerFeesMillis = formatCurrencyInFundamentalUnit( minerFees , 'stom' ) ;
+    var sendAmountMillis = formatCurrencyInFundamentalUnit( sendAmount , 'stom'  ) ;
+
+    var balance = +$scope.balanceData[0]  
+    var btcbalance = +$scope.balanceData[1]
+    
     var coin = $scope.selectedCoin;
     var address = $scope.selectedAddress
     var sendTo = $scope.sendTo
-    var sendAmount = convertToFundamentalUnit( +$scope.sendAmount, coin );
-    var dexFees = convertToFundamentalUnit( +$scope.dexFees, 'BTC' );
-    var balance = +$scope.balanceData[0]
-    var btcbalance = +$scope.balanceData[1]
-    var required = [coin,address,$scope.sendAmount,sendTo, dexFees,balance, btcbalance, $scope.sendForm.$valid ]
+    var required = [coin,address,sendAmount,sendTo, minerFees,balance, btcbalance, $scope.sendForm.$valid ];
 
     var error = 'Please '
     if( $scope.sendForm.$valid == false) {
@@ -673,34 +699,33 @@ function WalletTradeAssetsController($modal, $scope, $http, $q, userService) {
     if( ( sendAmount <= balance ) == false ) {
         error += 'make sure you aren\'t sending more coins than you own, '
     }
-    if( ( dexFees <= btcbalance ) ==  false ) {
+    if( ( minerFees <= btcbalance ) ==  false ) {
         error += 'make sure you have enough Bitcoin to cover your fees, '
     }
     if( validAddress(sendTo) == false) {
        error += 'make sure you are sending to a valid MSC/BTC address, '
     }
     if(coin == 'BTC') {
-       if( sendAmount < 5430 )
-        error += 'make sure your send amount is at least 0.0543 mBTC if sending BTC, '
-       if( dexFees < 10000 )
+       if( sendAmount < dustValue )
+        error += 'make sure your send amount is at least 0.05430 mBTC if sending BTC, '
+       if( minerFees < minerMinimum )
         error += 'make sure your fee entry is at least 0.1 mBTC to cover miner costs, '
     }
     if( ( (coin == 'MSC') || (coin == 'TMSC') ) ) {
-       if( sendAmount < 0.00000001 )
+       if( sendAmount < nonZeroValue )
         error += 'make sure your send amount is non-zero, '
-       if( dexFees < 10000 )
+       if( minerFees < minerMinimum )
         error += 'make sure your fee entry is at least 0.1 mBTC, '
     }
     if( error.length < 8) {
       $scope.showErrors = false
-      
       // open modal
       var modalInstance = $modal.open({
         template: '\
           <div class="modal-body">\
               <h3 class="text-center"> Confirm send </h3>\
-              <h3>You\'re about to send ' + formatCurrencyInFundamentalUnit( sendAmount, $scope.selectedCoin) + ' ' +  
-              ' plus ' + formatCurrencyInFundamentalUnit( dexFees, 'BTC' ) + ' in fees to ' + $scope.sendTo + '</h3>\
+              <h3>You\'re about to send ' + sendAmountMillis + ' m' + $scope.selectedCoin +   
+              ' plus ' + minerFeesMillis + ' mBTC in fees to ' + $scope.sendTo + '</h3>\
             <p><br>\
             If the above is correct, please input your passphrase below and press Send Funds.\
             If you encounter an error, feel free to click away from the dialog and try again.\
@@ -731,7 +756,7 @@ function WalletTradeAssetsController($modal, $scope, $http, $q, userService) {
           $scope.ok = function() {
             $scope.clicked = true;
             $scope.waiting = true;
-            prepareSendTransaction(data.sendTo, data.sendFrom, data.amt, data.coin,data.fee, $scope.privKeyPass, $scope);
+            prepareSendTransaction(data.sendTo, data.sendFrom, data.amt, data.coin, data.fee, $scope.privKeyPass, $scope);
           }
         },
         resolve: {
@@ -741,7 +766,7 @@ function WalletTradeAssetsController($modal, $scope, $http, $q, userService) {
               sendFrom: address, 
               amt: sendAmount,
               coin: coin, 
-              fee: dexFees } 
+              fee: minerFees } 
           },
           prepareSendTransaction: function() { 
             return prepareSendTransaction; 
