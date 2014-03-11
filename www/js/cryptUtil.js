@@ -7,7 +7,7 @@ var CryptUtil = {
 		var nonce = 0;
 		while( ++ nonce < CRYPT_LOOP_MAX )
 		{
-			var hashBits = sjcl.hash.sha256.hash( nonce + challengeString );
+			var hashBits = sjcl.hash.sha256.hash( challengeString + nonce );
 			var hashString = sjcl.codec.hex.fromBits( hashBits );
 
 			if( hashString.indexOf( LOGIN_DIFFICULTY, hashString.length - LOGIN_DIFFICULTY.length) !== -1 )
