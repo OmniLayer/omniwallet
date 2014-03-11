@@ -9,7 +9,8 @@
     <div ng-show="showErrors" class="alert alert-danger"> <strong> {{error}} </strong> </div> 
   </div>
   <form name="sendForm">
-    <div class="row">
+  <div class="row">
+    <div class="col-xs-6">
       <h4 class="text-justify" >Send type of coin:</h4>
       <div class="form-inline">
           <select name="coin" class="form-control" ng-model="selectedCoin"
@@ -19,8 +20,6 @@
           </select>
         </div> 
       <h6 class="text-justify"> Please make sure this is the currency you intend to trade with.</h6> 
-    </div>
-    <div class="row">
       <h4 class="text-justify" >Send from address:</h4>
       <div class="form-inline">
           <select name="sender" class="form-control" ng-model="selectedAddress"
@@ -32,32 +31,44 @@
       <h6 class="text-justify"> Please make sure this is the address you are sending from.<br> 
       Note that we allow you to only send from addresses with a valid private key. </h6>
     </div>
-      <br>
-    <div class="row">
+    <div class="col-xs-6"> 
+      <br><br><br><br><br><br><br><br><br>
+      <button class="btn btn-primary btn-md" 
+      ng-click="currencyUnit = 'stom'" type="button">Convert to mBTC </button>
+      <button class="btn btn-primary btn-md" 
+      ng-click="currencyUnit = 'stow'" type="button">Convert to whole BTC </button>
+    </div>
+  </div>
+    <br>
+  <div class="row">
+    <div class="col-xs-12">
       <div class="input-group">
         <span class="input-group-addon"> Send funds to: </span>
         <input name="reciever" type="text" ng-model="sendTo" class="form-control" placeholder="{{selectedAddress}}" required>
       </div>
-    </div>
       <br>
-    <div class="row">
       <div class="input-group">
-        <span class="input-group-addon">Amount to send: </span>
-          <input name="amount" type="number" ng-model="sendAmount" class="form-control" placeholder="10 mBTC" required>
-        <span class="input-group-addon" > Available m{{selectedCoin}}: {{balanceData[0]}}</span>
+        <span class="input-group-addon"> Amount to send (in {{currencyUnit[currencyUnit.length-1]}}{{selectedCoin}}): </span>
+          <input name="amount" type="number" ng-model="sendAmount" class="form-control" 
+          placeholder="{{{ balance: 100000, symbol: currencyUnit} | cryptocurrency}}" required>
+        <span class="input-group-addon" > 
+          Available: {{{ balance: balanceData[0], symbol: currencyUnit } | cryptocurrency}} 
+          {{currencyUnit[currencyUnit.length-1]}}{{selectedCoin}}</span>
+      </div>
+      <br>
+      <div class="input-group">
+        <span class="input-group-addon"> Transaction/Miner fees (in {{currencyUnit[currencyUnit.length-1]}}BTC): </span>
+        <input name="fees" type="number" ng-model="minerFees" class="form-control" 
+        placeholder="{{{ balance: 10000, symbol: currencyUnit } | cryptocurrency}} minimum" required>
+        <span class="input-group-addon" > 
+          Available Bitcoin: {{ { balance: balanceData[1], symbol: currencyUnit } | cryptocurrency}}
+          {{currencyUnit[currencyUnit.length-1]}}{{selectedCoin}}
+          </span>
       </div>
     </div>
-      <br>
-    <div class="row">
-      <div class="input-group">
-        <span class="input-group-addon"> Transaction/Miner fees: </span>
-        <input name="fees" type="number" ng-model="dexFees" class="form-control" 
-        placeholder="0.1 mBTC" required>
-        <span class="input-group-addon" > Available mBTC: {{balanceData[1]}}</span>
-      </div>
-    </div>
+  </div>
   </form>
     <br>
-  <button class="btn btn-primary btn-lg col-xs-push-3 col-xs-6" ng-click="validateSendForm()" type="submit">Send Transaction</button>
+  <button class="btn btn-primary btn-lg col-xs-push-3 col-xs-6" ng-click="validateSendForm(currencyUnit)" type="submit">Send Transaction</button>
 
 </div>
