@@ -99,14 +99,15 @@ function WalletTradeAssetsController($modal, $scope, $http, $q, userService) {
 
   // [ Buy Form Helpers ]
 
-  function getUnsignedBuyTransaction(buyerAddress, pubKey, buyAmount, saleTransactionHash) {
+  function getUnsignedBuyTransaction(buyerAddress, pubKey, buyAmount, fee, saleTransactionHash) {
     var deferred = $q.defer();
 
     var url = '/v1/exchange/accept/'; 
     $http.post( url, { 
       buyer: buyerAddress, 
       pubKey: pubKey,
-      amount: buyAmount, 
+      amount: buyAmount,
+      fee: fee, 
       tx_hash: saleTransactionHash
     }).success(function(data) {
         return deferred.resolve(data);
@@ -117,14 +118,14 @@ function WalletTradeAssetsController($modal, $scope, $http, $q, userService) {
     return deferred.promise;
   }
 
-  function prepareBuyTransaction(buyer, amt, hash, privkeyphrase, $modalScope) {
-    var addressData; userService.data.addresses.forEach(function(e,i) { if(e.address == buyer) addressData = e; });
+  function prepareBuyTransaction(buyer, amt, hash, fee, privkeyphrase, $modalScope) {
+    var addressData; userService.getAllAddresses().forEach(function(e,i) { if(e.address == buyer) addressData = e; });
     var privKey = new Bitcoin.ECKey.decodeEncryptedFormat(addressData.privkey,privkeyphrase.pass);
     var pubKey = privKey.getPubKeyHex();
 
-    $scope.sendTxPromise = getUnsignedBuyTransaction( buyer, pubKey, amt, hash);
+    $scope.sendTxPromise = getUnsignedBuyTransaction( buyer, pubKey, amt, fee, hash);
     $scope.sendTxPromise.then(function(successData) {
-      if( successData.data.error )
+      if( successData.status != 'OK' )
       {
         $modalScope.waiting = false
         $modalScope.sendError = true
@@ -132,7 +133,7 @@ function WalletTradeAssetsController($modal, $scope, $http, $q, userService) {
       }
       else
       {
-        var successData = successData.data
+        //var successData = successData.data ??
         var sourceScript = successData.sourceScript;
         var unsignedTransaction = successData.transaction;
 
@@ -212,21 +213,26 @@ function WalletTradeAssetsController($modal, $scope, $http, $q, userService) {
     });
   }
 
-  $scope.validateBuyForm = function() {
+  $scope.validateBuyForm = function(currencyUnit) {
     var dustValue = 5430; 
     var minerMinimum = 10000; 
     var nonZeroValue = 1; 
 
     var coin = $scope.selectedCoin;
     var address = $scope.selectedAddress
-    var buyAmount = convertToFundamentalUnit( +$scope.buyAmount, coin );
     var saleHash = $scope.buySaleID
-    var dexFees = convertToFundamentalUnit( +$scope.dexFees, 'BTC' );
+
+    var buyAmount = Math.ceil( formatCurrencyInFundamentalUnit( +$scope.buyAmount , currencyUnit[3]+'tos'  ) );
+    var minerFees = Math.ceil( formatCurrencyInFundamentalUnit( +$scope.minerFees , currencyUnit[3] +'tos' ) );
+
+    var buyAmountMillis = formatCurrencyInFundamentalUnit( buyAmount , 'stom'  ) ;
+    var minerFeesMillis = formatCurrencyInFundamentalUnit( minerFees , 'stom' ) ;
+    
     var balance = +$scope.balanceData[0]
     var btcbalance = +$scope.balanceData[1]
 
-    var required = [coin,address,buyAmount,dexFees,balance, btcbalance, $scope.buyForm.$valid ]
-
+    var required = [coin,address,buyAmount,minerFees,balance, btcbalance, $scope.buyForm.$valid ]
+      console.log(required)
     var error = 'Please '
     if( $scope.buyForm.$valid == false) {
         error += 'make sure all fields are completely filled, '
@@ -239,11 +245,11 @@ function WalletTradeAssetsController($modal, $scope, $http, $q, userService) {
         error += 'make sure your sale is for MSC or TMSC, '
     }
     if( ( (coin == 'MSC') || (coin == 'TMSC') ) ) {
-       if( buyAmount < 0.00000001 )
+       if( buyAmount < nonZeroValue )
         error += 'make sure your send amount is non-zero, '
-       if( dexFees < 10000 )
+       if( minerFees < minerMinimum )
         error += 'make sure your fee entry is at least 0.1 mBTC, '
-       if( ( dexFees <= btcbalance ) ==  false ) 
+       if( ( minerFees <= btcbalance ) ==  false ) 
         error += 'make sure you have enough Bitcoin to cover your fees, '
     }
     if( error.length < 8) {
@@ -254,8 +260,8 @@ function WalletTradeAssetsController($modal, $scope, $http, $q, userService) {
         template: '\
           <div class="modal-body">\
               <h3 class="text-center"> Confirm send </h3>\
-              <h3>You\'re about to make an offer to buy ' + formatCurrencyInFundamentalUnit( buyAmount, $scope.selectedCoin ) +   
-              ' with ' + formatCurrencyInFundamentalUnit( dexFees, 'BTC' ) + ' in fees </h3>\
+              <h3>You\'re about to make an offer to buy ' + buyAmountMillis + ' m' + $scope.selectedCoin +   
+              ' with ' + minerFeesMillis + ' in fees </h3>\
             <p><br>\
             If the above is correct, please input your passphrase below and press Send Funds.\
             If you encounter an error, feel free to click away from the dialog and try again.\
@@ -286,7 +292,7 @@ function WalletTradeAssetsController($modal, $scope, $http, $q, userService) {
           $scope.ok = function() {
             $scope.clicked = true;
             $scope.waiting = true;
-            prepareBuyTransaction(data.buyer, data.amt, data.hash, $scope.privKeyPass, $scope);
+            prepareBuyTransaction(data.buyer, data.amt, data.hash, data.fee, $scope.privKeyPass, $scope);
           }
         },
         resolve: {
@@ -294,7 +300,8 @@ function WalletTradeAssetsController($modal, $scope, $http, $q, userService) {
             return {  
               buyer: address, 
               amt: buyAmount,
-              hash: saleHash }
+              hash: saleHash,
+              fee: minerFees }
           },
           prepareBuyTransaction: function() { 
             return prepareBuyTransaction; 
@@ -316,7 +323,7 @@ function WalletTradeAssetsController($modal, $scope, $http, $q, userService) {
 
   // [ Sale Form Helpers ]
 
-  function getUnsignedSaleTransaction(sellerAddress, pubKey, saleAmount, salePrice, buyersFee, dexFee, saleBlocks, currency) {
+  function getUnsignedSaleTransaction(sellerAddress, pubKey, saleAmount, salePrice, buyersFee, fee, saleBlocks, currency) {
     var deferred = $q.defer();
 
     var url = '/v1/exchange/sell/'; 
@@ -326,7 +333,7 @@ function WalletTradeAssetsController($modal, $scope, $http, $q, userService) {
       amount: saleAmount, 
       price: salePrice, 
       min_buyer_fee: buyersFee, 
-      fee: dexFee,
+      fee: fee,
       blocks: saleBlocks,
       currency: currency
     }).success(function(data) {
