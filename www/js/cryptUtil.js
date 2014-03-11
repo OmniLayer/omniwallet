@@ -29,20 +29,26 @@ var CryptUtil = {
 	},
 	// Returns a symmetric key which can be used to encrypt/decrypt wallets for storage on the server.
 	generateSymmetricKey: function( password, hexSalt ) {
-		var h = sjcl.codec.hex;
-		var key = h.fromBits( sjcl.misc.pbkdf2( password, h.toBits( hexSalt ), 2048 ) ) ;
-		return key;
+		return forge.pkcs5.pbkdf2( password, hexSalt, 2048, 16);
 	},
 	// Returns a string that consists of the JSON representation of the given object, 
 	//  encrypted using the given key.
 	encryptObject: function( o, key ) {
-		// TODO: Actually encrypt.
-		return JSON.stringify( o );
+		var inputBytes = forge.util.createBuffer( JSON.stringify( o ) );
+		var encipher = forge.aes.createEncryptionCipher( key, 'CBC' );
+		encipher.start( key );
+		encipher.update( inputBytes );
+		encipher.finish();
+		return encipher.output.toHex();
 	},
 	// Returns a JSON object, given the provided encrypted JSON string.
 	decryptObject: function( string, key ) {
-		// TODO: Actually decrypt.
-		return JSON.parse( string );
+		var inputBytes = forge.util.createBuffer( forge.util.hexToBytes( string ));
+		var decipher = forge.aes.createDecryptionCipher( key, 'CBC' );
+		decipher.start( key );
+		decipher.update( inputBytes );
+		decipher.finish();
+		return JSON.parse( forge.util.decodeUtf8( decipher.output ));
 	},
 	createSignedObject: function( data, privKey ) {
 		return {

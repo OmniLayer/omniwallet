@@ -87,6 +87,11 @@ Start nginx by running:
 sudo service nginx start
 ```
 Using the config included, nginx will launch an HTTP server on port 80.
+
+Set an environment variable containing a secret passphrase - this is used to generate salts for indivdual user IDs, and it needs to be both secret AND not change.
+```
+export OMNIWALLET_SECRET="DontTellAnyoneThis"
+```
 Start the blockchain parser and python services by running:
 
 ```
