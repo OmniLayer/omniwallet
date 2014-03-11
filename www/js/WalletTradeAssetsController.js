@@ -213,6 +213,10 @@ function WalletTradeAssetsController($modal, $scope, $http, $q, userService) {
   }
 
   $scope.validateBuyForm = function() {
+    var dustValue = 5430; 
+    var minerMinimum = 10000; 
+    var nonZeroValue = 1; 
+
     var coin = $scope.selectedCoin;
     var address = $scope.selectedAddress
     var buyAmount = convertToFundamentalUnit( +$scope.buyAmount, coin );
@@ -335,21 +339,21 @@ function WalletTradeAssetsController($modal, $scope, $http, $q, userService) {
   }
 
   function prepareSaleTransaction(seller, amt, price, buyerfee, fee, blocks, currency, privkeyphrase, $modalScope) {
-    var addressData; userService.data.addresses.forEach(function(e,i) { if(e.address == seller) addressData = e; });
+    var addressData; userService.getAllAddresses().forEach(function(e,i) { if(e.address == seller) addressData = e; });
     var privKey = new Bitcoin.ECKey.decodeEncryptedFormat(addressData.privkey,privkeyphrase.pass);
     var pubKey = privKey.getPubKeyHex();
 
-    $scope.sendTxPromise = getUnsignedSaleTransaction(seller, pubkey, amt, price, buyerfee, fee, blocks, currency);
+    $scope.sendTxPromise = getUnsignedSaleTransaction(seller, pubKey, amt, price, buyerfee, fee, blocks, currency);
     $scope.sendTxPromise.then(function(successData) {
-      if( successData.data.error )
+      if( successData.status != 'OK' )
       {
         $modalScope.waiting = false
         $modalScope.sendError = true
-        $modalScope.error = 'Error preparing sell transaction: ' + successData.data.error;
+        $modalScope.error = 'Error preparing sell transaction: ' + successData;
       }
       else
       {
-        var successData = successData.data
+        //var successData = successData.data ???
         var sourceScript = successData.sourceScript;
         var unsignedTransaction = successData.transaction
 
@@ -429,19 +433,29 @@ function WalletTradeAssetsController($modal, $scope, $http, $q, userService) {
     });
   }
 
-  $scope.validateSaleForm = function() {
+  $scope.validateSaleForm = function(currencyUnit) {
+    var dustValue = 5430; 
+    var minerMinimum = 10000; 
+    var nonZeroValue = 1; 
+
+    var salePricePerCoin = Math.ceil( formatCurrencyInFundamentalUnit( +$scope.salePricePerCoin , currencyUnit[3]+'tos'  ) );
+    var buyersFee = Math.ceil( formatCurrencyInFundamentalUnit( +$scope.buyersFee , currencyUnit[3] +'tos' ) );
+    var minerFees = Math.ceil( formatCurrencyInFundamentalUnit( +$scope.minerFees , currencyUnit[3] +'tos' ) );
+    var saleAmount = Math.ceil( formatCurrencyInFundamentalUnit( +$scope.saleAmount , currencyUnit[3]+'tos'  ) );
+
+    var salePricePerCoinMillis = formatCurrencyInFundamentalUnit( salePricePerCoin , 'stom' ) ;
+    var buyersFeeMillis = formatCurrencyInFundamentalUnit( buyersFee , 'stom'  ) ;
+    var minerFeesMillis = formatCurrencyInFundamentalUnit( minerFees , 'stom' ) ;
+    var saleAmountMillis = formatCurrencyInFundamentalUnit( saleAmount , 'stom'  ) ;
+
     var coin = $scope.selectedCoin;
     var address = $scope.selectedAddress
-    var saleAmount = +$scope.saleAmount;
-    // The price in satoshis of (for example) 1 MSC.
-    var salePricePerCoin = +$scope.salePricePerCoin ;
     var saleBlocks = +$scope.saleBlocks
-    var buyersFee = +$scope.buyersFee;
-    var dexFees =  +$scope.dexFees;
+    
     var balance = +$scope.balanceData[0]
     var btcbalance = +$scope.balanceData[1]
 
-    var required = [coin,address,saleAmount, salePricePerCoin, dexFees,buyersFee, balance, btcbalance, $scope.saleForm.$valid ]
+    var required = [coin,address,saleAmount, salePricePerCoin, minerFees,buyersFee, balance, btcbalance, $scope.saleForm.$valid ]
                               console.log(required)
     var error = 'Please '
     if( $scope.saleForm.$valid == false) {
@@ -451,15 +465,15 @@ function WalletTradeAssetsController($modal, $scope, $http, $q, userService) {
         error += 'make sure your sale is for MSC or TMSC, '
     }
     if( ( (coin == 'MSC') || (coin == 'TMSC') ) ) {
-       if( saleAmount < 0.00000001 )
+       if( saleAmount < nonZeroValue )
         error += 'make sure your send amount is non-zero, '
-       if( buyersFee < 10000 )
+       if( buyersFee < minerMinimum )
         error += 'make sure your buyers fee entry is at least 0.1 mBTC, '
-       if( dexFees < 10000 )
+       if( minerFees < minerMinimum )
         error += 'make sure your fee entry is at least 0.1 mBTC, '
        if( ( saleAmount <= balance ) == false ) 
         error += 'make sure you aren\'t putting more coins up for sale than you own, '
-       if( ( dexFees <= btcbalance ) ==  false )
+       if( ( minerFees <= btcbalance ) ==  false )
         error += 'make sure you have enough Bitcoin to cover your fees, '
        
        if( saleBlocks < 1) 
@@ -473,8 +487,9 @@ function WalletTradeAssetsController($modal, $scope, $http, $q, userService) {
         template: '\
           <div class="modal-body">\
               <h3 class="text-center"> Confirm sale order </h3>\
-              <h3>You\'re about to put ' + formatCurrencyInFundamentalUnit( saleAmount, $scope.selectedCoin ) +  
-              ' on sale at a total price of ' + formatCurrencyInFundamentalUnit( saleAmount / getConversionFactor( $scope.selectedCoin ) * salePricePerCoin, 'BTC' ) + ', plus charge ' + formatCurrencyInFundamentalUnit( buyersFee, 'BTC' ) + ' in fees over ' +
+              <h3>You\'re about to put ' + saleAmountMillis + 'm' + $scope.selectedCoin  +  
+              ' on sale at a price of ' +  salePricePerCoinMillis + 'mBTC per coin' +
+              ', plus charge ' + buyersFeeMillis  + ' in fees over ' +
               $scope.saleBlocks + ' blocks.</h3>\
             <p><br>\
             If the above is correct, please input your passphrase below and press Send Funds.\
@@ -518,7 +533,7 @@ function WalletTradeAssetsController($modal, $scope, $http, $q, userService) {
               amt: saleAmount,
               price: salePricePerCoin,
               buyerfee: buyersFee,
-              fee: dexFees,
+              fee: minerFees,
               blocks: saleBlocks, 
               currency: coin } 
           },
