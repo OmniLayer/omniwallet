@@ -32,7 +32,7 @@ function WalletTradeAssetsController($modal, $scope, $http, $q, userService) {
   }
 
   // [ Retrieve Balances ]
-
+  $scope.currencyUnit = 'stom' // satoshi to millibitt
   $scope.balanceData = [ 0 ];
   var addrListBal = [];
 
@@ -432,17 +432,17 @@ function WalletTradeAssetsController($modal, $scope, $http, $q, userService) {
   $scope.validateSaleForm = function() {
     var coin = $scope.selectedCoin;
     var address = $scope.selectedAddress
-    var saleAmount = convertToFundamentalUnit( +$scope.saleAmount, coin );
+    var saleAmount = +$scope.saleAmount;
     // The price in satoshis of (for example) 1 MSC.
-    var salePricePerCoin = +$scope.salePricePerCoin * getConversionFactor( 'BTC' );
+    var salePricePerCoin = +$scope.salePricePerCoin ;
     var saleBlocks = +$scope.saleBlocks
-    var buyersFee = convertToFundamentalUnit( +$scope.buyersFee, 'BTC' );
-    var dexFees = convertToFundamentalUnit( +$scope.dexFees, 'BTC' );
+    var buyersFee = +$scope.buyersFee;
+    var dexFees =  +$scope.dexFees;
     var balance = +$scope.balanceData[0]
     var btcbalance = +$scope.balanceData[1]
 
     var required = [coin,address,saleAmount, salePricePerCoin, dexFees,buyersFee, balance, btcbalance, $scope.saleForm.$valid ]
-
+                              console.log(required)
     var error = 'Please '
     if( $scope.saleForm.$valid == false) {
         error += 'make sure all fields are completely filled, '
@@ -457,7 +457,6 @@ function WalletTradeAssetsController($modal, $scope, $http, $q, userService) {
         error += 'make sure your buyers fee entry is at least 0.1 mBTC, '
        if( dexFees < 10000 )
         error += 'make sure your fee entry is at least 0.1 mBTC, '
-
        if( ( saleAmount <= balance ) == false ) 
         error += 'make sure you aren\'t putting more coins up for sale than you own, '
        if( ( dexFees <= btcbalance ) ==  false )
@@ -470,9 +469,6 @@ function WalletTradeAssetsController($modal, $scope, $http, $q, userService) {
       $scope.showErrors = false
       
       // open modal
-      console.log( '****' );
-      console.log( 'saleAmount: ' + saleAmount );
-      console.log( 'salePricePerCoin: ' + salePricePerCoin );
       var modalInstance = $modal.open({
         template: '\
           <div class="modal-body">\
@@ -656,15 +652,23 @@ function WalletTradeAssetsController($modal, $scope, $http, $q, userService) {
     });
   }
 
-  $scope.validateSendForm = function() {
+  $scope.validateSendForm = function(currencyUnit) {
+    var dustValue = 5430; 
+    var minerMinimum = 10000; 
+    var nonZeroValue = 1; 
+
+    var minerFees = Math.ceil( formatCurrencyInFundamentalUnit( +$scope.minerFees , currencyUnit[3] +'tos' ) );
+    var sendAmount = Math.ceil( formatCurrencyInFundamentalUnit( +$scope.sendAmount , currencyUnit[3]+'tos'  ) );
+    var minerFeesMillis = formatCurrencyInFundamentalUnit( minerFees , 'stom' ) ;
+    var sendAmountMillis = formatCurrencyInFundamentalUnit( sendAmount , 'stom'  ) ;
+
+    var balance = +$scope.balanceData[0]  
+    var btcbalance = +$scope.balanceData[1]
+    
     var coin = $scope.selectedCoin;
     var address = $scope.selectedAddress
     var sendTo = $scope.sendTo
-    var sendAmount = convertToFundamentalUnit( +$scope.sendAmount, coin );
-    var dexFees = convertToFundamentalUnit( +$scope.dexFees, 'BTC' );
-    var balance = +$scope.balanceData[0]
-    var btcbalance = +$scope.balanceData[1]
-    var required = [coin,address,$scope.sendAmount,sendTo, dexFees,balance, btcbalance, $scope.sendForm.$valid ]
+    var required = [coin,address,sendAmount,sendTo, minerFees,balance, btcbalance, $scope.sendForm.$valid ];
 
     var error = 'Please '
     if( $scope.sendForm.$valid == false) {
@@ -673,34 +677,33 @@ function WalletTradeAssetsController($modal, $scope, $http, $q, userService) {
     if( ( sendAmount <= balance ) == false ) {
         error += 'make sure you aren\'t sending more coins than you own, '
     }
-    if( ( dexFees <= btcbalance ) ==  false ) {
+    if( ( minerFees <= btcbalance ) ==  false ) {
         error += 'make sure you have enough Bitcoin to cover your fees, '
     }
     if( validAddress(sendTo) == false) {
        error += 'make sure you are sending to a valid MSC/BTC address, '
     }
     if(coin == 'BTC') {
-       if( sendAmount < 5430 )
-        error += 'make sure your send amount is at least 0.0543 mBTC if sending BTC, '
-       if( dexFees < 10000 )
+       if( sendAmount < dustValue )
+        error += 'make sure your send amount is at least 0.05430 mBTC if sending BTC, '
+       if( minerFees < minerMinimum )
         error += 'make sure your fee entry is at least 0.1 mBTC to cover miner costs, '
     }
     if( ( (coin == 'MSC') || (coin == 'TMSC') ) ) {
-       if( sendAmount < 0.00000001 )
+       if( sendAmount < nonZeroValue )
         error += 'make sure your send amount is non-zero, '
-       if( dexFees < 10000 )
+       if( minerFees < minerMinimum )
         error += 'make sure your fee entry is at least 0.1 mBTC, '
     }
     if( error.length < 8) {
       $scope.showErrors = false
-      
       // open modal
       var modalInstance = $modal.open({
         template: '\
           <div class="modal-body">\
               <h3 class="text-center"> Confirm send </h3>\
-              <h3>You\'re about to send ' + formatCurrencyInFundamentalUnit( sendAmount, $scope.selectedCoin) + ' ' +  
-              ' plus ' + formatCurrencyInFundamentalUnit( dexFees, 'BTC' ) + ' in fees to ' + $scope.sendTo + '</h3>\
+              <h3>You\'re about to send ' + sendAmountMillis + ' m' + $scope.selectedCoin +   
+              ' plus ' + minerFeesMillis + ' mBTC in fees to ' + $scope.sendTo + '</h3>\
             <p><br>\
             If the above is correct, please input your passphrase below and press Send Funds.\
             If you encounter an error, feel free to click away from the dialog and try again.\
@@ -731,7 +734,7 @@ function WalletTradeAssetsController($modal, $scope, $http, $q, userService) {
           $scope.ok = function() {
             $scope.clicked = true;
             $scope.waiting = true;
-            prepareSendTransaction(data.sendTo, data.sendFrom, data.amt, data.coin,data.fee, $scope.privKeyPass, $scope);
+            prepareSendTransaction(data.sendTo, data.sendFrom, data.amt, data.coin, data.fee, $scope.privKeyPass, $scope);
           }
         },
         resolve: {
@@ -741,7 +744,7 @@ function WalletTradeAssetsController($modal, $scope, $http, $q, userService) {
               sendFrom: address, 
               amt: sendAmount,
               coin: coin, 
-              fee: dexFees } 
+              fee: minerFees } 
           },
           prepareSendTransaction: function() { 
             return prepareSendTransaction; 
