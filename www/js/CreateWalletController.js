@@ -8,15 +8,10 @@ function CreateWalletController($scope, $http, $location, $modalInstance, userSe
     // var encryptedPrivateKey = ecKey.getEncryptedFormat(password);
 
     var wallet = {
-      email: create.email,
       uuid: uuid,
       passwordHash: Crypto.SHA256(password),
       salt: salt,
       addresses: []
-      // [{
-      //   address: address,
-      //   privkey: encryptedPrivateKey
-      // }]
     };
 
     createWallet($scope, $http, $location, $modalInstance, userService, wallet);
