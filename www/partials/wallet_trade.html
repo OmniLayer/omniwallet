@@ -4,44 +4,11 @@
 
 <div class="col-xs-10" ng-controller="WalletTradeController" ng-init="setView('tradeInfo')">
 
-  <h4 ng-hide="onTradeView" class="row">
+  <h4 ng-hide="onTradeView">
     <a ng-click="setView('tradeInfo')"> <strong> < Go back </strong> </a>
   </h4>
 
-  <div ng-show="onTradeView" class="row">
-    <div class="panel panel-default">
-      <h3 class="text-center panel-body"> Trade Assets </h3>
-    </div>
-    <div class="alert alert-info alert-dismissable">
-      <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-        This is the trading page, where you can start submitting orders or send money to others.
-    </div>
-  </div>
+  <div ng-include="tradeView"></div>
 
-  <div ng-show="onTradeView" class="row">
-    <h3> Choose an action: </h3>
-      <div class="btn-group btn-group-justified">
-        <div class="btn-group">
-        <button class="btn btn-primary btn-lg" ng-click="setView('simpleSend')" type="submit">Start new send transaction</button>
-        <br><br>
-        <h6 class="text-center"> New transactions allow you to send funds directly to someone you know. </h6>
-        </div>
-        <div class="btn-group">
-        <button class="btn btn-primary btn-lg" ng-click="setView('saleOffer')" type="submit">Start new sale offer</button>
-        <br><br>
-        <h6 class="text-center"> If you're trying to sell currencies or exchange them for another type, you'll start here. </h6>
-        </div>
-        <div class="btn-group">
-        <button class="btn btn-primary btn-lg" ng-click="setView('buyOffer')" type="submit">Start new buy offer</button>
-        <br><br>
-        <h6 class="text-center"> If you're a buyer looking to purchase an amount of currency, you'll set up a purchase here. </h6>
-        </div>
-      </div>
-  </div>
-
-
-  <div class="row">
-    <div ng-include="tradeView"></div>
-  </div>
-
+  &nbsp;
 </div>
