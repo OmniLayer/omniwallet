@@ -42,7 +42,6 @@ def create():
     print 'UUID not in session'
     abort(403)
 
-  key = request.form['key']
   nonce = request.form['nonce']
   pow_challenge = session_store.get(session_id)
   #wallet_data = request.form['wallet_data']
