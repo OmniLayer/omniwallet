@@ -5,7 +5,8 @@
     <div ng-show="showErrors" class="alert alert-danger">{{error}}</div> 
   </div>
   <form name="saleForm">
-    <div class="row">
+  <div class="row">
+    <div class="col-xs-6">
       <h4 class="text-justify" >Sell type of coin:</h4>
       <div class="form-inline">
           <select class="form-control" ng-model="selectedCoin"
@@ -15,8 +16,6 @@
           </select>
         </div> 
       <h6 class="text-justify"> Please make sure this is the currency you intend to trade with.</h6> 
-    </div>
-    <div class="row">
       <h4 class="text-justify" >Sell from address:</h4>
       <div class="form-inline">
           <select class="form-control" ng-model="selectedAddress"
@@ -28,46 +27,55 @@
       <h6 class="text-justify"> Please make sure this is the address you are sending from.<br> 
       Note that we allow you to only send from addresses with a valid private key. </h6>
     </div>
-      <br>
-    <div class="row">
-      <div class="input-group">
-        <span class="input-group-addon"> Number of coin to sell: </span>
-          <input name="amount" type="number" ng-model="saleAmount" class="form-control" placeholder="10 mBTC" required>
-        <span class="input-group-addon" > Available m{{selectedCoin}}: {{balanceData[0]}}</span>
-      </div>
+    <div class="col-xs-6"> 
+      <br><br><br><br><br><br><br><br><br>
+      <button class="btn btn-primary btn-md" 
+      ng-click="currencyUnit = 'stom'" type="button">Convert to mBTC </button>
+      <button class="btn btn-primary btn-md" 
+      ng-click="currencyUnit = 'stow'" type="button">Convert to whole BTC </button>
     </div>
+  </div>
+  <div class="row">
+    <div class="col-xs-12">
       <br>
-    <div class="row">
       <div class="input-group">
-        <span class="input-group-addon">Price per coin: </span>
-        <input name="ppc" type="number" ng-model="salePricePerCoin" class="form-control" placeholder="100 mBTC" required>
+        <span class="input-group-addon"> Number of coin to sell (in {{currencyUnit[currencyUnit.length-1]}}{{selectedCoin}}): </span>
+          <input name="amount" type="number" ng-model="saleAmount" class="form-control" 
+          placeholder="{{{ balance: 100000, symbol: currencyUnit} | cryptocurrency}}" required>
+        <span class="input-group-addon" > 
+          Available: {{{ balance: balanceData[0], symbol: currencyUnit } | cryptocurrency}} 
+          {{currencyUnit[currencyUnit.length-1]}}{{selectedCoin}}</span>
       </div>
-    </div>
       <br>
-    <div class="row">
+      <div class="input-group">
+        <span class="input-group-addon"> Price per coin (in {{currencyUnit[currencyUnit.length-1]}}BTC): </span>
+        <input name="ppc" type="number" ng-model="salePricePerCoin" class="form-control" 
+          placeholder="{{{ balance: 1000000, symbol: currencyUnit} | cryptocurrency}}" required>
+      </div>
+      <br>
       <div id="time-blocks" class="input-group">
         <span class="input-group-addon">Time given to buyer to pay: </span>
         <input name="blocks" type="number" ng-model="saleBlocks" class="form-control" placeholder="100 blocks" required>
       </div>
-    </div>
       <br>
-    <div class="row">
       <div class="input-group">
-        <span class="input-group-addon"> Buyer's fee: </span>
+        <span class="input-group-addon"> Buyer's fee (in {{currencyUnit[currencyUnit.length-1]}}{{selectedCoin}}): </span>
         <input name="buyerfee" type="number" ng-model="buyersFee" class="form-control" 
-        placeholder="0.1 mBTC minimum" required>
+        placeholder="{{{ balance: 10000, symbol: currencyUnit } | cryptocurrency}} minimum" required>
       </div>
-    </div>
       <br>
-    <div class="row">
       <div class="input-group">
-        <span class="input-group-addon"> Transaction/Miner fees: </span>
-        <input name="fees" type="number" ng-model="dexFees" class="form-control" 
-        placeholder="0.1 mBTC" required>
-        <span class="input-group-addon" > Available mBTC: {{balanceData[1]}}</span>
+        <span class="input-group-addon"> Transaction/Miner fees (in {{currencyUnit[currencyUnit.length-1]}}BTC): </span>
+        <input name="fees" type="number" ng-model="minerFees" class="form-control" 
+        placeholder="{{{ balance: 10000, symbol: currencyUnit } | cryptocurrency}} minimum" required>
+        <span class="input-group-addon" > 
+          Available Bitcoin: {{ { balance: balanceData[1], symbol: currencyUnit } | cryptocurrency}}
+          {{currencyUnit[currencyUnit.length-1]}}{{selectedCoin}}
+          </span>
       </div>
     </div>
+  </div>
   </form>
     <br>
-  <button class="btn btn-primary btn-lg col-xs-push-3 col-xs-6" ng-click="validateSaleForm()" type="submit">Create Sale</button>
+  <button class="btn btn-primary btn-lg col-xs-push-3 col-xs-6" ng-click="validateSaleForm(currencyUnit)" type="submit">Create Sale</button>
 </div>
