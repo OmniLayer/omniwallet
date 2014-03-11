@@ -54,6 +54,8 @@ def sell_form_response(response_dict):
 
     #DEBUG info(['early days', seller, amount, satoshi_price, bitcoin_amount_desired, min_buyer_fee, fee, blocks, currency])
     if pubkey != None:
+        tx_to_sign_dict=prepare_sell_tx_for_signing( pubkey, amount, bitcoin_amount_desired, min_buyer_fee, fee, blocks, currency_id)
+    else:
         tx_to_sign_dict={'transaction':'','sourceScript':''}
         l=len(seller)
         if l == 66: # probably pubkey

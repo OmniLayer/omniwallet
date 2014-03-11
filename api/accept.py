@@ -11,7 +11,7 @@ import random
 data_dir_root = os.environ.get('DATADIR')
 
 def accept_form_response(response_dict):
-    expected_fields=['buyer', 'amount', 'tx_hash']
+    expected_fields=['buyer', 'amount', 'tx_hash', 'fee']
     for field in expected_fields:
         if not response_dict.has_key(field):
             return (None, 'No field '+field+' in response dict '+str(response_dict))
@@ -37,6 +37,10 @@ def accept_form_response(response_dict):
     if not is_valid_hash(tx_hash):
         return (None, 'Invalid tx hash')
 
+    fee=response_dict['fee'][0]
+    if float(fee)<0 or float( from_satoshi( fee ))>max_currency_value:
+        return (None, 'Invalid fee')
+
     if pubkey == None:
         tx_to_sign_dict={'transaction':'','sourceScript':''}
         l=len(buyer)
@@ -57,8 +61,9 @@ def accept_form_response(response_dict):
                     pubkey=buyer_pubkey
                     response_status='OK'
 
+    #DEBUG info(['early days', buyer, amount, tx_hash, fee])
     if pubkey != None:
-        tx_to_sign_dict=prepare_accept_tx_for_signing( pubkey, amount, tx_hash )
+        tx_to_sign_dict=prepare_accept_tx_for_signing( pubkey, amount, tx_hash, fee )
     else:
         # minor hack to show error on page
         tx_to_sign_dict['sourceScript']=response_status
@@ -66,7 +71,7 @@ def accept_form_response(response_dict):
     response='{"status":"'+response_status+'", "transaction":"'+tx_to_sign_dict['transaction']+'", "sourceScript":"'+tx_to_sign_dict['sourceScript']+'"}'
     return (response, None)
 
-def prepare_accept_tx_for_signing(buyer, amount, tx_hash, min_btc_fee=0.0005):
+def prepare_accept_tx_for_signing(buyer, amount, tx_hash, min_btc_fee=10000):
 
     # check if address or pubkey was given as buyer
     if buyer.startswith('0'): # a pubkey was given
@@ -97,7 +102,7 @@ def prepare_accept_tx_for_signing(buyer, amount, tx_hash, min_btc_fee=0.0005):
         seller=sell_offer_tx_dict['from_address']
         formatted_amount_available=sell_offer_tx_dict['formatted_amount_available']
         formatted_bitcoin_amount_desired=sell_offer_tx_dict['formatted_bitcoin_amount_desired']
-        formatted_fee_required=sell_offer_tx_dict['formatted_fee_required']
+        formatted_fee_required=to_satoshi(sell_offer_tx_dict['formatted_fee_required'])
         currency_id=sell_offer_tx_dict['currencyId']
     except KeyError:
         error('missing field on tx '+tx_hash)
@@ -151,6 +156,7 @@ def prepare_accept_tx_for_signing(buyer, amount, tx_hash, min_btc_fee=0.0005):
     dataBytes = dataHex.decode('hex_codec')
     dataAddress = hash_160_to_bc_address(dataBytes[1:21])
 
+    #DEBUG info(['later on', dataSequenceNum, tx_type, currency_id, satoshi_amount])
     # create the BIP11 magic
     
     change_address_compressed_pub=get_compressed_pubkey_format( change_address_pub )
