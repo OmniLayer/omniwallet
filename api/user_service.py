@@ -19,21 +19,24 @@ app.debug = True
 @app.route('/challenge')
 def challenge():
   uuid = request.args.get('uuid')
-  session_id = ws.hashlib.sha256(SESSION_SECRET + uuid).hexdigest()
-  session_id_challenge = session_id + "_challenge"
-  session_id_pow_challenge = session_id + "_pow_challenge"
+  session = ws.hashlib.sha256(SESSION_SECRET + uuid).hexdigest()
+  session_challenge = session + "_challenge"
+  session_pow_challenge = session + "_pow_challenge"
 
-  if session_id_pow_challenge in session_store:
+  if session_pow_challenge in session_store:
+    print 'pow_challenge already in session_store'
     abort(403)
-  if session_id_challenge in session_store:
-    abort(403)
+  if session_challenge in session_store:
+    print 'challenge already in session_store'
+    session_store.delete(session_challenge)
 
   salt = ws.hashlib.sha256(SERVER_SECRET + uuid).hexdigest()
   pow_challenge = ws.gen_salt(32)
   challenge = ws.gen_salt(32)
 
-  session_store.put(session_id_pow_challenge, pow_challenge)
-  session_store.put(session_id_challenge, challenge)
+  session_store.put(session_pow_challenge, pow_challenge)
+  session_store.put(session_challenge, challenge)
+  print session_challenge
   response = {
       'salt': salt,
       'pow_challenge': pow_challenge,
@@ -45,16 +48,16 @@ def challenge():
 @app.route('/create', methods=['POST'])
 def create():
   uuid = request.form['uuid']
-  session_id = ws.hashlib.sha256(SESSION_SECRET + uuid).hexdigest()
-  session_id_pow_challenge = session_id + "_pow_challenge"
+  session = ws.hashlib.sha256(SESSION_SECRET + uuid).hexdigest()
+  session_pow_challenge = session + "_pow_challenge"
 
-  if session_id_pow_challenge not in session_store:
+  if session_pow_challenge not in session_store:
     print 'UUID not in session'
     abort(403)
 
   nonce = request.form['nonce']
   public_key = request.form['public_key']
-  pow_challenge = session_store.get(session_id_pow_challenge)
+  pow_challenge = session_store.get(session_pow_challenge)
   wallet = request.form['wallet']
 
   challenge_response = ws.hashlib.sha256(pow_challenge + nonce).hexdigest()
@@ -68,28 +71,31 @@ def create():
     abort(403)
 
   write_wallet(uuid, wallet)
-  session_store.delete(session_id_pow_challenge)
+  session_store.delete(session_pow_challenge)
 
   return ""
 
 @app.route('/update', methods=['POST'])
 def update():
   uuid = request.form['uuid']
-  session_id = ws.hashlib.sha256(SESSION_SECRET + uuid).hexdigest()
-  session_id_challenge = session_id + "_challenge"
+  session = ws.hashlib.sha256(SESSION_SECRET + uuid).hexdigest()
+  session_challenge = session + "_challenge"
+  print session_challenge
 
-  if session_id_challenge in session_store:
+  if session_challenge not in session_store:
+    print 'Challenge not in session'
     abort(403)
 
   challenge = request.form['challenge']
   signature = request.form['signature']
   wallet = request.form['wallet']
 
-  if challenge != session_store.get(session_id_challenge):
+  if challenge != session_store.get(session_challenge):
+    print 'Challenge not met'
     abort(403)
 
   write_wallet(uuid, wallet)
-  session_store.delete(session_id_challenge)
+  session_store.delete(session_challenge)
 
   return ""
 
@@ -97,13 +103,6 @@ def update():
 def login():
   uuid = request.args.get('uuid')
   return ""
-
-def session_get(session_id):
-  raw = session_store.get(session_id)
-  return json.loads(raw)
-
-def session_put(session_id, data_dict):
-  session_store.put(json.dumps(data_dict))
 
 def write_wallet(uuid, wallet):
   filename = data_dir_root + '/wallets/' + uuid + '.json'
