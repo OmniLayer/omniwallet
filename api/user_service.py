@@ -26,11 +26,9 @@ def challenge():
   session_pow_challenge = session + "_pow_challenge"
 
   if session_pow_challenge in session_store:
-    print 'pow_challenge already in session_store'
     session_store.delete(session_pow_challenge)
 
   if session_challenge in session_store:
-    print 'challenge already in session_store'
     session_store.delete(session_challenge)
 
   salt = ws.hashlib.sha256(SERVER_SECRET + uuid).hexdigest()
@@ -59,7 +57,7 @@ def create():
     abort(403)
 
   nonce = request.form['nonce']
-  public_key = b64decode(request.form['public_key'].encode('UTF-8'))
+  public_key = request.form['public_key'].encode('UTF-8')
   wallet = request.form['wallet']
 
   pow_challenge = session_store.get(session_pow_challenge)
@@ -107,7 +105,7 @@ def update():
 @app.route('/login')
 def login():
   uuid = request.args.get('uuid')
-  public_key = request.args.get('public_key').encode('UTF-8')
+  public_key = base64.b64decode(request.args.get('public_key').encode('UTF-8'))
   nonce = request.args.get('nonce')
 
   session = ws.hashlib.sha256(SESSION_SECRET + uuid).hexdigest()
