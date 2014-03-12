@@ -133,4 +133,6 @@ function SidecarController($scope, $http, userService) {
         addresses = true 
       return addresses
     }
+
+    $scope.hasPendingOrders = true
 }

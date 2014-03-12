@@ -11,6 +11,8 @@
 <li ng-show="hasAddressesWithPrivkey"><a class="" href="/wallet/send"> Send </a></li>
 <br ng-show="hasAddressesWithPrivkey">
 <li ng-show="hasAddressesWithPrivkey"><a class="" href="/wallet/trade"> Trade </a></li>
+<br ng-show="hasPendingOrders">
+<li ng-show="hasPendingOrders"><a class="" href="/wallet/pending"> Pending </a> </li>
 <br>
 <li ng-show="hasAddresses"><a class="" href="/wallet/history"> History </a></li>
 </ul>
