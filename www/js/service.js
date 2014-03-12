@@ -18,7 +18,6 @@ angular.module( 'omniwallet' ).factory('userService', ['$rootScope', '$http', fu
     logout: function() {
       service.data.loggedIn = false;
       service.data.wallet = {}
-      localStorage.clear();
     },
 
     addAddress: function( address, privKey ) {
@@ -102,24 +101,9 @@ angular.module( 'omniwallet' ).factory('userService', ['$rootScope', '$http', fu
     },
 
     saveSession: function () {
-      localStorage["OmniWallet"] = angular.toJson(service.data);
-      // service.syncWallet().success(function() { console.log("Success saving"); });
       service.updateWallet().then(function() { console.log("Success saving") });
-    },
-    restoreSession: function() {
-      if( localStorage[ "OmniWallet" ])
-        service.data = angular.fromJson(localStorage["OmniWallet"]);
     }
   };
-
-  // $rootScope.$watch('userService.data', function(newVal, oldVal) {
-  //   console.log("watched");
-  //   $rootScope.$broadcast('savestate');
-  // }, true);
-  $rootScope.$on("savestate", service.saveSession);
-  $rootScope.$on("restorestate", service.restoreSession);
-
-  service.restoreSession();
 
   return service;
 }]);
