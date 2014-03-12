@@ -2,14 +2,15 @@
 angular.module( 'omniwallet' ).factory('userService', ['$rootScope', '$http', function ($rootScope, $http) {
   var service = {
     data: {
+      walletKey: '',
       wallet : {},
       loggedIn: false
     },
 
-    login: function(wallet) {
+    login: function(wallet, walletKey) {
+      service.data.walletKey = walletKey;
       service.data.wallet = wallet;
       service.data.loggedIn = true;
-      service.saveSession();
     },
 
     logout: function() {
@@ -81,12 +82,11 @@ angular.module( 'omniwallet' ).factory('userService', ['$rootScope', '$http', fu
     },
 
     updateWallet: function() {
-      return;
-      $http.get('/flask/challenge?uuid='+uuid)
+      var uuid = service.getUUID();
+      return $http.get('/flask/challenge?uuid='+uuid)
         .then(function(result) {
           var data = result.data;
-          key = CryptUtil.generateSymmetricKey(create.password, data.salt);
-          var encryptedWallet = CryptUtil.encryptObject(service.data.wallet, key);
+          var encryptedWallet = CryptUtil.encryptObject(service.data.wallet, service.data.walletKey);
           var challenge = data.challenge;
           var signature = ""
           console.log(encryptedWallet);
@@ -102,7 +102,7 @@ angular.module( 'omniwallet' ).factory('userService', ['$rootScope', '$http', fu
     saveSession: function () {
       localStorage["OmniWallet"] = angular.toJson(service.data);
       // service.syncWallet().success(function() { console.log("Success saving"); });
-      service.updateWallet();
+      service.updateWallet().then(function() { console.log("Success saving") });
     },
     restoreSession: function() {
       if( localStorage[ "OmniWallet" ])
@@ -124,7 +124,7 @@ angular.module( 'omniwallet' ).factory('userService', ['$rootScope', '$http', fu
 
 angular.module( 'omniwallet' ).factory( 'appraiser', ['$rootScope', '$http', function ( $rootScope, $http ) {
 
-  // Rewire to use localstorage 
+  // Rewire to use localstorage
   function AppraiserService() {
     this.conversions = {};
     var self = this;
