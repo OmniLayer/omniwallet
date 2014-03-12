@@ -6,18 +6,19 @@ function CreateWalletController($scope, $http, $location, $modalInstance, userSe
       addresses: []
     };
 
-    $http.get('/flask/salt?uuid='+uuid)
+    $http.get('/flask/challenge?uuid='+uuid)
       .then(function(result) {
         var data = result.data;
         nonce = CryptUtil.generateNonceForDifficulty(data.pow_challenge);
         key = CryptUtil.generateSymmetricKey(create.password, data.salt);
-        var encryptedWallet = CryptUtil.encryptObject(wallet);
+        var encryptedWallet = CryptUtil.encryptObject(wallet, key);
+        var public_key = ""
         console.log(encryptedWallet);
 
         return $http({
           url: '/flask/create',
           method: 'POST',
-          data: { nonce: nonce, public_key: key, uuid: uuid, wallet: encryptedWallet }
+          data: { nonce: nonce, public_key: public_key, uuid: uuid, wallet: encryptedWallet }
         });
       }, function (result) {
         console.log('error getting salt');
