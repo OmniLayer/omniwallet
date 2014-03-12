@@ -17,7 +17,7 @@ function Login($scope, $http, $location, $modalInstance, userService) {
     var asymKey = {};
     var walletKey = '';
 
-    $http.get('/flask/challenge?uuid='+uuid)
+    $http.get('/v1/user/wallet/challenge?uuid='+uuid)
       .then(function(result) {
         var data = result.data;
         var nonce = CryptUtil.generateNonceForDifficulty(data.pow_challenge);
@@ -26,7 +26,7 @@ function Login($scope, $http, $location, $modalInstance, userService) {
         encodedPub = window.btoa(asymKey.pubPem);
 
         return $http({
-          url: '/flask/login',
+          url: '/v1/user/wallet/login',
           method: 'GET',
           params: { nonce: nonce, public_key: encodedPub, uuid: uuid }
         });

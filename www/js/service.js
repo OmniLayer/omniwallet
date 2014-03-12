@@ -68,23 +68,9 @@ angular.module( 'omniwallet' ).factory('userService', ['$rootScope', '$http', fu
         }
     },
 
-    syncWallet: function() {
-      // Strange serialization effects, stringifying wallet initially
-      var postData = {
-        type: 'SYNCWALLET',
-        wallet: JSON.stringify(service.data.wallet)
-      };
-      return $http({
-        url: '/v1/user/wallet/sync/',
-        method: 'POST',
-        data: postData,
-        headers: {'Content-Type': 'application/json'}
-      })
-    },
-
     updateWallet: function() {
       var uuid = service.getUUID();
-      return $http.get('/flask/challenge?uuid='+uuid)
+      return $http.get('/v1/user/wallet/challenge?uuid='+uuid)
         .then(function(result) {
           var data = result.data;
           var encryptedWallet = CryptUtil.encryptObject(service.data.wallet, service.data.walletKey);
@@ -93,7 +79,7 @@ angular.module( 'omniwallet' ).factory('userService', ['$rootScope', '$http', fu
           console.log(encryptedWallet);
 
           return $http({
-            url: '/flask/update',
+            url: '/v1/user/wallet/update',
             method: 'POST',
             data: { uuid: uuid, wallet: encryptedWallet, challenge: challenge, signature: signature }
           });

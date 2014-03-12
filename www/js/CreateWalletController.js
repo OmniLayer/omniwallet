@@ -8,7 +8,7 @@ function CreateWalletController($scope, $http, $location, $modalInstance, userSe
     var walletKey = ''
     var asymKey = {}
 
-    $http.get('/flask/challenge?uuid='+uuid)
+    $http.get('/v1/user/wallet/challenge?uuid='+uuid)
       .then(function(result) {
         var data = result.data;
         var nonce = CryptUtil.generateNonceForDifficulty(data.pow_challenge);
@@ -16,7 +16,7 @@ function CreateWalletController($scope, $http, $location, $modalInstance, userSe
         var encryptedWallet = CryptUtil.encryptObject(wallet, walletKey);
         asymKey = CryptUtil.generateAsymmetricPair();
         return $http({
-          url: '/flask/create',
+          url: '/v1/user/wallet/create',
           method: 'POST',
           data: { nonce: nonce, public_key: asymKey.pubPem, uuid: uuid, wallet: encryptedWallet }
         });
