@@ -4,7 +4,7 @@ from flask import Flask, request, jsonify, abort, json
 from simplekv.fs import FilesystemStore
 
 ACCOUNT_CREATION_DIFFICULTY = '0400'
-ACCOUNT_CREATION_DIFFICULTY = '0400'
+LOGIN_DIFFICULTY = '0400'
 
 SERVER_SECRET = 'SoSecret!'
 SESSION_SECRET = 'SuperSecretSessionStuff'
@@ -16,6 +16,7 @@ session_store = FilesystemStore(store_dir) # TODO: Need to roll this into a Sess
 app = Flask(__name__)
 app.debug = True
 
+
 @app.route('/challenge')
 def challenge():
   uuid = request.args.get('uuid')
@@ -25,7 +26,8 @@ def challenge():
 
   if session_pow_challenge in session_store:
     print 'pow_challenge already in session_store'
-    abort(403)
+    session_store.delete(session_pow_challenge)
+
   if session_challenge in session_store:
     print 'challenge already in session_store'
     session_store.delete(session_challenge)
@@ -56,13 +58,11 @@ def create():
     abort(403)
 
   nonce = request.form['nonce']
-  public_key = request.form['public_key']
-  pow_challenge = session_store.get(session_pow_challenge)
+  public_key = request.form['public_key'].encode('UTF-8')
   wallet = request.form['wallet']
 
-  challenge_response = ws.hashlib.sha256(pow_challenge + nonce).hexdigest()
-
-  if challenge_response[-len(ACCOUNT_CREATION_DIFFICULTY):] != ACCOUNT_CREATION_DIFFICULTY:
+  pow_challenge = session_store.get(session_pow_challenge)
+  if failed_challenge(pow_challenge, nonce, ACCOUNT_CREATION_DIFFICULTY):
     print 'Aborting: Challenge was not met'
     abort(403)
 
@@ -72,8 +72,11 @@ def create():
 
   write_wallet(uuid, wallet)
   session_store.delete(session_pow_challenge)
+  session_public_key = session + "_public_key"
+  session_store.put(session_public_key, public_key)
 
   return ""
+
 
 @app.route('/update', methods=['POST'])
 def update():
@@ -99,15 +102,53 @@ def update():
 
   return ""
 
+
 @app.route('/login')
 def login():
   uuid = request.args.get('uuid')
-  return ""
+  public_key = request.args.get('public_key').encode('UTF-8')
+  nonce = request.args.get('nonce')
+
+  session = ws.hashlib.sha256(SESSION_SECRET + uuid).hexdigest()
+  session_pow_challenge = session + "_pow_challenge"
+
+  if session_pow_challenge not in session_store:
+    print 'UUID not in session'
+    abort(403)
+
+  pow_challenge = session_store.get(session_pow_challenge)
+  if failed_challenge(pow_challenge, nonce, LOGIN_DIFFICULTY):
+    print 'Failed login challenge'
+    abort(403)
+
+  if not exists(uuid):
+    print 'Wallet not found'
+    abort(404)
+
+  wallet_data = read_wallet(uuid)
+  session_store.delete(session_pow_challenge)
+  session_public_key = session + "_public_key"
+  session_store.put(session_public_key, public_key)
+
+  return wallet_data
+
+
+
+
+# Utility Functions
+def failed_challenge(pow_challenge, nonce, difficulty):
+  pow_challenge_response = ws.hashlib.sha256(pow_challenge + nonce).hexdigest()
+  return pow_challenge_response[-len(difficulty):] != difficulty
 
 def write_wallet(uuid, wallet):
   filename = data_dir_root + '/wallets/' + uuid + '.json'
   with open(filename, 'w') as f:
     f.write(wallet)
+
+def read_wallet(uuid):
+  filename = data_dir_root + '/wallets/' + uuid + '.json'
+  with open(filename, 'r') as f:
+    return f.read()
 
 def exists(uuid):
   filename = data_dir_root + '/wallets/' + uuid + '.json'
