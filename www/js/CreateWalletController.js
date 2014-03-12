@@ -5,15 +5,15 @@ function CreateWalletController($scope, $http, $location, $modalInstance, userSe
       uuid: uuid,
       addresses: []
     };
+    var walletKey = ''
 
     $http.get('/flask/challenge?uuid='+uuid)
       .then(function(result) {
         var data = result.data;
-        nonce = CryptUtil.generateNonceForDifficulty(data.pow_challenge);
-        key = CryptUtil.generateSymmetricKey(create.password, data.salt);
-        var encryptedWallet = CryptUtil.encryptObject(wallet, key);
+        var nonce = CryptUtil.generateNonceForDifficulty(data.pow_challenge);
+        walletKey = CryptUtil.generateSymmetricKey(create.password, data.salt);
+        var encryptedWallet = CryptUtil.encryptObject(wallet, walletKey);
         var public_key = ""
-        console.log(encryptedWallet);
 
         return $http({
           url: '/flask/create',
@@ -24,7 +24,7 @@ function CreateWalletController($scope, $http, $location, $modalInstance, userSe
         console.log('error getting salt');
       })
       .then(function(result) {
-        userService.login(wallet);
+        userService.login(wallet, walletKey);
         $modalInstance.close()
         $location.path('/wallet');
       }, function(result) {
