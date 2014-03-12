@@ -43,9 +43,9 @@ def create():
     abort(403)
 
   nonce = request.form['nonce']
+  public_key = request.form['public_key']
   pow_challenge = session_store.get(session_id)
-  #wallet_data = request.form['wallet_data']
-  wallet_data = "Walletstuff"
+  wallet = request.form['wallet']
 
   challenge_response = ws.hashlib.sha256(pow_challenge + nonce).hexdigest()
 
@@ -57,21 +57,21 @@ def create():
     print 'UUID already exists'
     abort(403)
 
-  wallet_file = { 'key': key, 'wallet': wallet_data }
-  write_wallet(uuid, wallet_file)
+  write_wallet(uuid, wallet)
   session_store.delete(session_id)
 
   return ""
 
-@app.route('/login'):
+@app.route('/login')
+def login():
   uuid = request.args.get('uuid')
   return ""
 
 
-def write_wallet(uuid, wallet_file):
+def write_wallet(uuid, wallet):
   filename = data_dir_root + '/wallets/' + uuid + '.json'
   with open(filename, 'w') as f:
-    json.dump(wallet_file, f)
+    f.write(wallet)
 
 def exists(uuid):
   filename = data_dir_root + '/wallets/' + uuid + '.json'
