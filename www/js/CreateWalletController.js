@@ -6,6 +6,7 @@ function CreateWalletController($scope, $http, $location, $modalInstance, userSe
       addresses: []
     };
     var walletKey = ''
+    var asymKey = {}
 
     $http.get('/flask/challenge?uuid='+uuid)
       .then(function(result) {
@@ -13,52 +14,24 @@ function CreateWalletController($scope, $http, $location, $modalInstance, userSe
         var nonce = CryptUtil.generateNonceForDifficulty(data.pow_challenge);
         walletKey = CryptUtil.generateSymmetricKey(create.password, data.salt);
         var encryptedWallet = CryptUtil.encryptObject(wallet, walletKey);
-        var public_key = ""
+        asymKey = CryptUtil.generateAsymmetricKey();
 
         return $http({
           url: '/flask/create',
           method: 'POST',
-          data: { nonce: nonce, public_key: public_key, uuid: uuid, wallet: encryptedWallet }
+          data: { nonce: nonce, public_key: asymKey.pubPem, uuid: uuid, wallet: encryptedWallet }
         });
       }, function (result) {
         console.log('error getting salt');
       })
       .then(function(result) {
-        userService.login(wallet, walletKey);
+        userService.login(wallet, walletKey, asymKey);
         $modalInstance.close()
         $location.path('/wallet');
       }, function(result) {
         $scope.serverError = true;
       });
   }
-}
-
-function createWallet($scope, $http, $location, $modalInstance, userService, wallet) {
-  // Strange serialization effects, stringifying wallet initially
-  var postData = {
-    type: 'CREATEWALLET',
-    wallet: JSON.stringify(wallet)
-  };
-  $http({
-    url: '/v1/user/wallet/sync/',
-    method: 'POST',
-    data: postData,
-    headers: {'Content-Type': 'application/json'}
-  })
-  .success(function(data, status, headers, config) {
-    if(data.status == "EXISTS") {
-      console.log(data);
-      $scope.walletExists = true;
-    } else {
-      userService.login(wallet);
-      $modalInstance.close();
-      $location.path("/wallet");
-    }
-  })
-  .error(function(data, status, headers, config) {
-    console.log("Error on login");
-    $scope.serverError = true;
-  });
 }
 
 function generateUUID() {
