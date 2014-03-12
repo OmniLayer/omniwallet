@@ -80,9 +80,29 @@ angular.module( 'omniwallet' ).factory('userService', ['$rootScope', '$http', fu
       })
     },
 
+    updateWallet: function() {
+      return;
+      $http.get('/flask/challenge?uuid='+uuid)
+        .then(function(result) {
+          var data = result.data;
+          key = CryptUtil.generateSymmetricKey(create.password, data.salt);
+          var encryptedWallet = CryptUtil.encryptObject(service.data.wallet, key);
+          var challenge = data.challenge;
+          var signature = ""
+          console.log(encryptedWallet);
+
+          return $http({
+            url: '/flask/update',
+            method: 'POST',
+            data: { uuid: uuid, wallet: encryptedWallet, challenge: challenge, signature: signature }
+          });
+        })
+    },
+
     saveSession: function () {
       localStorage["OmniWallet"] = angular.toJson(service.data);
-      service.syncWallet().success(function() { console.log("Success saving"); });
+      // service.syncWallet().success(function() { console.log("Success saving"); });
+      service.updateWallet();
     },
     restoreSession: function() {
       if( localStorage[ "OmniWallet" ])
