@@ -30,8 +30,6 @@ function Login($scope, $http, $location, $modalInstance, userService) {
           method: 'GET',
           params: { nonce: nonce, public_key: encodedPub, uuid: uuid }
         });
-      }, function (result) {
-        console.log('error getting salt');
       })
       .then(function(result) {
         var data = result.data;

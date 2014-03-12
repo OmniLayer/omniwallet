@@ -43,6 +43,7 @@ def challenge():
       'pow_challenge': pow_challenge,
       'challenge': challenge
   }
+
   return jsonify(response)
 
 

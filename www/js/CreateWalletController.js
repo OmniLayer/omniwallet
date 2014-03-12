@@ -15,14 +15,11 @@ function CreateWalletController($scope, $http, $location, $modalInstance, userSe
         walletKey = CryptUtil.generateSymmetricKey(create.password, data.salt);
         var encryptedWallet = CryptUtil.encryptObject(wallet, walletKey);
         asymKey = CryptUtil.generateAsymmetricPair();
-
         return $http({
           url: '/flask/create',
           method: 'POST',
           data: { nonce: nonce, public_key: asymKey.pubPem, uuid: uuid, wallet: encryptedWallet }
         });
-      }, function (result) {
-        console.log('error getting salt');
       })
       .then(function(result) {
         userService.login(wallet, walletKey, asymKey);
