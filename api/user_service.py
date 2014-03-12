@@ -1,4 +1,5 @@
 import os
+import base64
 import werkzeug.security as ws
 from flask import Flask, request, jsonify, abort, json
 from simplekv.fs import FilesystemStore
@@ -58,7 +59,7 @@ def create():
     abort(403)
 
   nonce = request.form['nonce']
-  public_key = request.form['public_key'].encode('UTF-8')
+  public_key = b64decode(request.form['public_key'].encode('UTF-8'))
   wallet = request.form['wallet']
 
   pow_challenge = session_store.get(session_pow_challenge)

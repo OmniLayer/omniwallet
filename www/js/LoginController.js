@@ -23,11 +23,12 @@ function Login($scope, $http, $location, $modalInstance, userService) {
         var nonce = CryptUtil.generateNonceForDifficulty(data.pow_challenge);
         walletKey = CryptUtil.generateSymmetricKey(login.password, data.salt);
         asymKey = CryptUtil.generateAsymmetricPair();
+        encodedPub = window.btoa(asymKey.pubPem);
 
         return $http({
           url: '/flask/login',
           method: 'GET',
-          params: { nonce: nonce, public_key: asymKey.pubPem, uuid: uuid }
+          params: { nonce: nonce, public_key: encodedPub, uuid: uuid }
         });
       }, function (result) {
         console.log('error getting salt');
