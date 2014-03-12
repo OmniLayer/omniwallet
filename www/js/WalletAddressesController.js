@@ -159,6 +159,14 @@ angular.module( 'omniwallet' )
 
       return enc;
     };
+
+    $scope.openCreateAddressModal = function() {
+      $modal.open({
+        templateUrl: '/partials/create_address_modal.html',
+        controller: CreateAddressController
+      });
+    }
+
     $scope.openAddForm = function( currency ) {
 
       var modalInstance = $modal.open({
