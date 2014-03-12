@@ -14,7 +14,7 @@ function CreateWalletController($scope, $http, $location, $modalInstance, userSe
         var nonce = CryptUtil.generateNonceForDifficulty(data.pow_challenge);
         walletKey = CryptUtil.generateSymmetricKey(create.password, data.salt);
         var encryptedWallet = CryptUtil.encryptObject(wallet, walletKey);
-        asymKey = CryptUtil.generateAsymmetricKey();
+        asymKey = CryptUtil.generateAsymmetricPair();
 
         return $http({
           url: '/flask/create',
