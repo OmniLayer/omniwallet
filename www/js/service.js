@@ -3,12 +3,14 @@ angular.module( 'omniwallet' ).factory('userService', ['$rootScope', '$http', fu
   var service = {
     data: {
       walletKey: '',
+      asymKey: {},
       wallet : {},
       loggedIn: false
     },
 
-    login: function(wallet, walletKey) {
+    login: function(wallet, walletKey, asymKey) {
       service.data.walletKey = walletKey;
+      service.data.asymKey = asymKey;
       service.data.wallet = wallet;
       service.data.loggedIn = true;
     },
