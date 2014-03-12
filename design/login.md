@@ -51,15 +51,12 @@ Let ```LOGIN_DIFFICULTY`` be 0x04000 (arbitrary choice, may need to change).
 
 ## Updating data
 
-TBD: specify in more detail.
-
 (Happens when the account is first created, and whenever data is updated - e.g. when a new address is generated, a label is set, etc.)
 
 To update data on the server:
 1. The client gets a challenge string from the server (to prevent replay attacks).  The server stores this challenge in the session.  (note that this challenge will change on every request to update data)
 2. The client encrypts the wallet data file with the user's symmetric key.
 3. The client signs the challenge with the user's private key
-the client sends back the encrypted data, and the signed challnege
 4. The client sends back to the server an object containing the encrypted data and the signed challenge string.
 5. The server validates the request by making sure that the challenge sent matches what was in the session, and that the signature is valid.  If so, the encrypted wallet data is stored, keyed off the UUID.
 
