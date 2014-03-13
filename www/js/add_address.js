@@ -44,7 +44,7 @@ angular.module( 'omniwallet' )
         {
           $injector.get( 'userService' ).addAddress( result.address );
         }
-        $scope.showWalletBalances();
+        $scope.refresh();
 
       }, function () {});
     };
@@ -72,7 +72,7 @@ angular.module( 'omniwallet' )
         var address = ecKey.getBitcoinAddress().toString();
         var encryptedPrivateKey = ecKey.getEncryptedFormat( result.password );
         $injector.get( 'userService' ).addAddress(address, encryptedPrivateKey);
-        $scope.showWalletBalances();
+        $scope.refresh();
       }, function() {} );
     };
 

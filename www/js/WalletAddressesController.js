@@ -122,7 +122,7 @@ angular.module( 'omniwallet' )
 
   var appraiser = $injector.get( 'appraiser' );
   $rootScope.$on( 'APPRAISER_VALUE_CHANGED', function() {
-    $scope.showWalletBalances();
+    $scope.refresh();
   });
 
    $scope.openDeleteConfirmForm = function( address ) {
@@ -138,7 +138,7 @@ angular.module( 'omniwallet' )
 
       modalInstance.result.then( function() {
         $injector.get( 'userService' ).removeAddress( address );
-        $scope.showWalletBalances();
+        $scope.refresh();
       }, function() {} );
     };
 
@@ -160,7 +160,7 @@ angular.module( 'omniwallet' )
       return enc;
     };
 
-    $scope.showWalletBalances = function () {
+    $scope.refresh = function () {
 
       $scope.items = wallet_balances_data.getData().then( function( balances ) {
         $scope.balances = balances;

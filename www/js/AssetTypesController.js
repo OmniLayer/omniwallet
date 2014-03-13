@@ -103,10 +103,35 @@ angular.module( 'omniwallet' )
   } )
   .controller( 'AssetTypesController', function ( $q, $http, $modal, $rootScope, $injector, $scope, $element, asset_types_data, asset_types_template ) {
 
-  var appraiser = $injector.get( 'appraiser' );
-  $rootScope.$on( 'APPRAISER_VALUE_CHANGED', function() {
-    $scope.showAssetTypes();
-  });
+    var appraiser = $injector.get( 'appraiser' );
+    $rootScope.$on( 'APPRAISER_VALUE_CHANGED', function() {
+      $scope.refresh();
+    });
+
+    $scope.refresh = function () {
+
+      $scope.items = asset_types_data.getData().then( function( balances ) {
+        $scope.balances = balances;
+
+        var total = 0;
+        for( var k in balances.balances )
+        {
+          if( typeof balances.balances[k].value == 'number' )
+            total += balances.balances[k].value;
+        }
+        $scope.total = total;
+
+        asset_types_template.then( function( templ ) {
+          _.defer( function() {
+            $scope.template = templ;
+            $scope.$apply( new function() {
+                _.defer( updateGraph );
+              } );
+          });
+        }); 
+      } );          
+    }
+
 
     function getAssetBalances( currencySymbol ) {
       var deferred = $q.defer();
@@ -222,31 +247,9 @@ angular.module( 'omniwallet' )
 
         }
       });
-    }
 
-    $scope.showAssetTypes = function () {
-
-      $scope.items = asset_types_data.getData().then( function( balances ) {
-        $scope.balances = balances;
-
-        var total = 0;
-        for( var k in balances.balances )
-        {
-          if( typeof balances.balances[k].value == 'number' )
-            total += balances.balances[k].value;
-        }
-        $scope.total = total;
-
-        asset_types_template.then( function( templ ) {
-          _.defer( function() {
-            $scope.template = templ;
-            $scope.$apply( new function() {
-                _.defer( updateGraph );
-              } );
-          });
-        }); 
-      } );          
     };
+
   });
 
 var CurrencyDetailModal = function( $scope, currencySymbol, balances ) {
