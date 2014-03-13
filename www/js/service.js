@@ -2,20 +2,22 @@
 angular.module( 'omniwallet' ).factory('userService', ['$rootScope', '$http', function ($rootScope, $http) {
   var service = {
     data: {
+      walletKey: '',
+      asymKey: {},
       wallet : {},
       loggedIn: false
     },
 
-    login: function(wallet) {
+    login: function(wallet, walletKey, asymKey) {
+      service.data.walletKey = walletKey;
+      service.data.asymKey = asymKey;
       service.data.wallet = wallet;
       service.data.loggedIn = true;
-      service.saveSession();
     },
 
     logout: function() {
       service.data.loggedIn = false;
       service.data.wallet = {}
-      localStorage.clear();
     },
 
     addAddress: function( address, privKey ) {
@@ -66,45 +68,33 @@ angular.module( 'omniwallet' ).factory('userService', ['$rootScope', '$http', fu
         }
     },
 
-    syncWallet: function() {
-      // Strange serialization effects, stringifying wallet initially
-      var postData = {
-        type: 'SYNCWALLET',
-        wallet: JSON.stringify(service.data.wallet)
-      };
-      return $http({
-        url: '/v1/user/wallet/sync/',
-        method: 'POST',
-        data: postData,
-        headers: {'Content-Type': 'application/json'}
-      })
+    updateWallet: function() {
+      var uuid = service.getUUID();
+      return $http.get('/v1/user/wallet/challenge?uuid='+uuid)
+        .then(function(result) {
+          var data = result.data;
+          var encryptedWallet = CryptUtil.encryptObject(service.data.wallet, service.data.walletKey);
+          var challenge = data.challenge;
+          var signature = ""
+
+          return $http({
+            url: '/v1/user/wallet/update',
+            method: 'POST',
+            data: { uuid: uuid, wallet: encryptedWallet, challenge: challenge, signature: signature }
+          });
+        })
     },
 
     saveSession: function () {
-      localStorage["OmniWallet"] = angular.toJson(service.data);
-      service.syncWallet().success(function() { console.log("Success saving"); });
-    },
-    restoreSession: function() {
-      if( localStorage[ "OmniWallet" ])
-        service.data = angular.fromJson(localStorage["OmniWallet"]);
+      service.updateWallet().then(function() { console.log("Success saving") });
     }
   };
-
-  // $rootScope.$watch('userService.data', function(newVal, oldVal) {
-  //   console.log("watched");
-  //   $rootScope.$broadcast('savestate');
-  // }, true);
-  $rootScope.$on("savestate", service.saveSession);
-  $rootScope.$on("restorestate", service.restoreSession);
-
-  service.restoreSession();
 
   return service;
 }]);
 
 angular.module( 'omniwallet' ).factory( 'appraiser', ['$rootScope', '$http', function ( $rootScope, $http ) {
 
-  // Rewire to use localstorage 
   function AppraiserService() {
     this.conversions = {};
     var self = this;
