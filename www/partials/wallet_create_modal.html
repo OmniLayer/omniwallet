@@ -9,6 +9,9 @@
         <input name="password" type="password" ng-model="create.password" id="inputPassword" ng-minlength="8" required>
         <span class="bg-warning" ng-show="createForm.password.$error.required && createForm.password.$dirty">Required</span>
         <span class="bg-warning" ng-show="createForm.password.$dirty && createForm.password.$error.minlength">Password must be at least 8 characters long</span>
+        <div id="pass-strength" >
+          Strength: {{ create.password | passwordPercent }}
+        </div>
       </div>
     </div>
     <div class="control-group">
