@@ -205,7 +205,7 @@ function WalletTradeOverviewController($scope, $http, $q, userService) {
 
           transaction_data.forEach(function(tx) { 
             transaction_data_keys = ['formatted_amount','formatted_amount_available',
-              'formatted_bitcoin_amount_desired','formatted_fee_required','formatted_price_per_coin', 'bitcoin_required'];
+              'formatted_bitcoin_amount_desired','formatted_fee_required','formatted_price_per_coin'];
             transaction_data_keys.forEach(function(key) { 
                   tx[key] = formatCurrencyInFundamentalUnit( tx[key], 'wtos')
               }); 
@@ -289,7 +289,6 @@ function WalletTradePendingController($scope, $http, $q, userService) {
           });
           //DEBUG transaction_data.forEach(function(e) { console.log(e.from_address); });
         } else transaction_data.push({ tx_hash: 'No offers/bids found for this timeframe' })
-console.log(transaction_data)
       $scope.orderbook = transaction_data;
       }
     );
