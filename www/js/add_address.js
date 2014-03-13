@@ -9,80 +9,16 @@ angular.module( 'omniwallet' )
           var wallet = $injector.get( 'userService' ).getWallet();
           if( wallet && wallet.addresses.length > 0 )
           {
-            var requests = [];
 
-            var balances = {};
-            var invalidAddresses = [];
-            var currencyInfo;
-            var emptyAddresses = [];
-
-            var appraiser = $injector.get( 'appraiser' );
-
-            wallet.addresses.forEach( function( addr ) {
-              requests.push( addressRequest( $http, $q, addr ).then( function( result ) {
-                console.log( result.data );
-                if( result.data.balance.length == 0 )
-                {
-                  console.log( 'No balances for ' + addr.address + ', invalid address?' );
-                  invalidAddresses.push( addr.address );
-                }
-                else
-                {
-                result.data.balance.forEach( function( currencyItem ) {
-                  if( !balances.hasOwnProperty( currencyItem.symbol )) {
-                    balances[ currencyItem.symbol ] = {
-                      "symbol": currencyItem.symbol,
-                      "balance": parseInt( currencyItem.value ),
-                      "value": appraiser.getValue( currencyItem.value, currencyItem.symbol ),
-                      "addresses": {}
-                    };
-                  }
-                  else
-                  {
-                    balances[ currencyItem.symbol ].balance += parseInt( currencyItem.value );
-                    balances[ currencyItem.symbol ].value += appraiser.getValue( currencyItem.value, currencyItem.symbol );
-                  }
-                  balances[ currencyItem.symbol ].addresses[ result.data.address ] = {
-                    "address": result.data.address,
-                    "balance": currencyItem.value,
-                    "value": appraiser.getValue( currencyItem.value, currencyItem.symbol )
-                  };
-                } );
-              }
-              }));
-            });
-            requests.push( $http.get( '/v1/transaction/values.json' ).then( 
-              function( result ) {
-                currencyInfo = result.data;
-              }
-            ));
-            $q.all( requests ).then( function( responses ) {
-              if( currencyInfo )
-              {
-                currencyInfo.forEach( function( item ) {
-                  if( balances.hasOwnProperty( item.currency ))
-                    balances[ item.currency ].name = item.name;
-                });
-
-                deferred.resolve( 
-                  { 
-                    invalidAddresses: invalidAddresses,
-                    balances: balances,
-                    currencies: currencyInfo
-                  } );
-              }
+            deferred.resolve( { 
+              addresses: wallet.addresses
             } );
           }
           else
           {
-            $http.get( '/v1/transaction/values.json' ).then( 
-              function( currencyInfo ) {
-                deferred.resolve( { currencies: currencyInfo } );
-              }
-            );
-          } 
-        });
-
+            deferred.resolve( { addresses: [] } );
+          }
+        } );
         return deferred.promise;
       } 
     };
@@ -121,8 +57,8 @@ angular.module( 'omniwallet' )
 
     $scope.enumerateAddresses = function () {
 
-      $scope.items = enumerated_addresses.getData().then( function( balances ) {
-        $scope.balances = balances;
+      $scope.items = enumerated_addresses.getData().then( function( result ) {
+        $scope.addresses = result.addresses;
       } );          
     };
 
