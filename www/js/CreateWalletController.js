@@ -1,49 +1,34 @@
 function CreateWalletController($scope, $http, $location, $modalInstance, userService) {
   $scope.createWallet = function(create) {
     var uuid = generateUUID();
-    var salt = Crypto.util.bytesToBase64(Crypto.util.randomBytes(32)).substr(0,32)
-    var password = create.password + salt;
-    // var ecKey = new Bitcoin.ECKey();
-    // var address = ecKey.getBitcoinAddress().toString();
-    // var encryptedPrivateKey = ecKey.getEncryptedFormat(password);
-
     var wallet = {
       uuid: uuid,
-      passwordHash: Crypto.SHA256(password),
-      salt: salt,
       addresses: []
     };
+    var walletKey = ''
+    var asymKey = {}
 
-    createWallet($scope, $http, $location, $modalInstance, userService, wallet);
+    $http.get('/v1/user/wallet/challenge?uuid='+uuid)
+      .then(function(result) {
+        var data = result.data;
+        var nonce = CryptUtil.generateNonceForDifficulty(data.pow_challenge);
+        walletKey = CryptUtil.generateSymmetricKey(create.password, data.salt);
+        var encryptedWallet = CryptUtil.encryptObject(wallet, walletKey);
+        asymKey = CryptUtil.generateAsymmetricPair();
+        return $http({
+          url: '/v1/user/wallet/create',
+          method: 'POST',
+          data: { nonce: nonce, public_key: asymKey.pubPem, uuid: uuid, wallet: encryptedWallet }
+        });
+      })
+      .then(function(result) {
+        userService.login(wallet, walletKey, asymKey);
+        $modalInstance.close()
+        $location.path('/wallet');
+      }, function(result) {
+        $scope.serverError = true;
+      });
   }
-}
-
-function createWallet($scope, $http, $location, $modalInstance, userService, wallet) {
-  // Strange serialization effects, stringifying wallet initially
-  var postData = {
-    type: 'CREATEWALLET',
-    wallet: JSON.stringify(wallet)
-  };
-  $http({
-    url: '/v1/user/wallet/sync/',
-    method: 'POST',
-    data: postData,
-    headers: {'Content-Type': 'application/json'}
-  })
-  .success(function(data, status, headers, config) {
-    if(data.status == "EXISTS") {
-      console.log(data);
-      $scope.walletExists = true;
-    } else {
-      userService.login(wallet);
-      $modalInstance.close();
-      $location.path("/wallet");
-    }
-  })
-  .error(function(data, status, headers, config) {
-    console.log("Error on login");
-    $scope.serverError = true;
-  });
 }
 
 function generateUUID() {

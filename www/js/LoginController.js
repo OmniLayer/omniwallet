@@ -13,37 +13,32 @@ function LoginController($scope, $http, $location, $modalInstance, userService) 
 // Helper (Not sure if this can be fixed with providers)
 function Login($scope, $http, $location, $modalInstance, userService) {
   $scope.open = function(login) {
-    var postData = {
-      type: 'RESTOREWALLET',
-      uuid: login.uuid
-    }
-    $http({
-        url: '/v1/user/wallet/restore/',
-        method: 'POST',
-        data: postData,
-        headers: {'Content-Type': 'application/json'}
-    })
-    .success(function (data, status, headers, config) {
-      console.log(data);
-      if(data.status == "MISSING") {
-        $scope.missingUUID = true;
-      } else {
-        var passwordHash = data.wallet.passwordHash;
-        var salt = data.wallet.salt;
-        var loginHash = Crypto.SHA256(login.password + salt);
+    var uuid = login.uuid;
+    var asymKey = {};
+    var walletKey = '';
 
-        if(loginHash == passwordHash) {
-          console.log(data.wallet);
-          userService.login(data.wallet);
-          $modalInstance.close();
-          $location.path('/wallet');
-        } else {
-          $scope.badPassword = true;
-        }
-      }
-    })
-    .error(function(data, status, headers, config) {
-      $scope.serverError = true;
-    });
+    $http.get('/v1/user/wallet/challenge?uuid='+uuid)
+      .then(function(result) {
+        var data = result.data;
+        var nonce = CryptUtil.generateNonceForDifficulty(data.pow_challenge);
+        walletKey = CryptUtil.generateSymmetricKey(login.password, data.salt);
+        asymKey = CryptUtil.generateAsymmetricPair();
+        encodedPub = window.btoa(asymKey.pubPem);
+
+        return $http({
+          url: '/v1/user/wallet/login',
+          method: 'GET',
+          params: { nonce: nonce, public_key: encodedPub, uuid: uuid }
+        });
+      })
+      .then(function(result) {
+        var data = result.data;
+        var wallet = CryptUtil.decryptObject(data, walletKey);
+        userService.login(wallet, walletKey, asymKey);
+        $modalInstance.close()
+        $location.path('/wallet');
+      }, function(result) {
+        $scope.serverError = true;
+      });
   }
 }

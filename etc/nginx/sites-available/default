@@ -110,14 +110,15 @@ server {
         uwsgi_pass   127.0.0.1:$PORT;
     }
 
-    location /v1/user/wallet/sync/ {
-        set   $app   sync_wallet;
-        uwsgi_pass   127.0.0.1:$PORT;
-    }
-
-    location /v1/user/wallet/restore/ {
-        set   $app   restore_wallet;
-        uwsgi_pass   127.0.0.1:$PORT;
+    location = /v1/user/wallet { rewrite ^ /v1/user/wallet/; }
+    location /v1/user/wallet { try_files $uri @flask_user_service; }
+    location @flask_user_service {
+      include uwsgi_params;
+      uwsgi_param SCRIPT_NAME /v1/user/wallet;
+      uwsgi_param UWSGI_MODULE user_service;
+      uwsgi_param UWSGI_CALLABLE app;
+      uwsgi_modifier1 30;
+      uwsgi_pass 127.0.0.1:$PORT;
     }
 
 	# Only for nginx-naxsi used with nginx-naxsi-ui : process denied requests
@@ -195,3 +196,4 @@ server {
 #		try_files $uri $uri/ =404;
 #	}
 #}
+#
