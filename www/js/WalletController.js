@@ -299,9 +299,10 @@ function WalletTradePendingController($scope, $http, $q, userService) {
                 }
               });
           });
+          transaction_data = filtered_transaction_data
           //DEBUG console.log(filtered_transaction_data)
         } else transaction_data.push({ tx_hash: 'No offers/bids found for this timeframe' })
-      $scope.orderbook = filtered_transaction_data;
+      $scope.orderbook = transaction_data;
       }
     );
   }
