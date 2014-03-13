@@ -11,6 +11,9 @@
       <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
         <strong>Hey!</strong> This is the overview page, where you can get a broad look at your owned assets.
     </div>
+
+    <div ng-include="templates['add_address']"></div>
+    
     <div class="row">
       <button ng-click="backupWallet()">Backup Wallet</button>
     </div>
@@ -19,6 +22,7 @@
       <div ng-controller="AssetTypesController" ng-init="showAssetTypes()" show-asset-types template="{{template}}">
       </div>
     </div>
+  
 
   </script>
 
@@ -31,9 +35,9 @@
         <strong>Welcome!</strong> We have set up a brand new wallet for you. Please save your login <a style="color:black;" href="/login/{{uuid}}">link</a> so you can come back here easily! 
     </div>
 
+  <div ng-include="templates['add_address']"></div>
 
   </script>
-  <div ng-include="templates['add_address']"></div>
 
   <div ng-include="currentView"></div>
 </div>
