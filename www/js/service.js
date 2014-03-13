@@ -76,7 +76,6 @@ angular.module( 'omniwallet' ).factory('userService', ['$rootScope', '$http', fu
           var encryptedWallet = CryptUtil.encryptObject(service.data.wallet, service.data.walletKey);
           var challenge = data.challenge;
           var signature = ""
-          console.log(encryptedWallet);
 
           return $http({
             url: '/v1/user/wallet/update',
@@ -96,7 +95,6 @@ angular.module( 'omniwallet' ).factory('userService', ['$rootScope', '$http', fu
 
 angular.module( 'omniwallet' ).factory( 'appraiser', ['$rootScope', '$http', function ( $rootScope, $http ) {
 
-  // Rewire to use localstorage
   function AppraiserService() {
     this.conversions = {};
     var self = this;

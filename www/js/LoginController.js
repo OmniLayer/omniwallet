@@ -33,9 +33,6 @@ function Login($scope, $http, $location, $modalInstance, userService) {
       })
       .then(function(result) {
         var data = result.data;
-        console.log(result)
-        console.log(data);
-
         var wallet = CryptUtil.decryptObject(data, walletKey);
         userService.login(wallet, walletKey, asymKey);
         $modalInstance.close()
