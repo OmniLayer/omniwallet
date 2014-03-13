@@ -25,20 +25,14 @@ angular.module( 'omniwallet' )
   })
   .controller( 'AddAddressController', function( $modal, $injector, $scope, enumerated_addresses ) {
 
-    $scope.openCreateAddressModal = function() {
-      $modal.open({
-        templateUrl: '/partials/create_address_modal.html',
-        controller: CreateAddressController
-      });
-    }
-
+    // Begine Add Form Code
     $scope.openAddForm = function( currency ) {
       var modalInstance = $modal.open({
         templateUrl: '/partials/add_' + currency + '_address_modal.html',
         controller: AddBtcAddressModal
       });
 
-    modalInstance.result.then(function ( result ) {
+      modalInstance.result.then(function ( result ) {
 
         if( result.privKey && result.password )
         {
@@ -55,13 +49,6 @@ angular.module( 'omniwallet' )
       }, function () {});
     };
 
-    $scope.enumerateAddresses = function () {
-
-      $scope.items = enumerated_addresses.getData().then( function( result ) {
-        $scope.addresses = result.addresses;
-      } );          
-    };
-
     var AddBtcAddressModal = function ($scope, $modalInstance ) {
       $scope.ok = function ( result ) {
         $modalInstance.close( result );
@@ -71,16 +58,44 @@ angular.module( 'omniwallet' )
         $modalInstance.dismiss('cancel');
       };
     };
+    // Done Add Form Code.
 
-    var CreateAddressController = function($scope, $modalInstance, userService) {
-      $scope.createAddress = function(create) {
+    // Begine Create Form Code.
+    $scope.openCreateAddressModal = function() {
+      var modalInstance = $modal.open({
+        templateUrl: '/partials/create_address_modal.html',
+        controller: CreateAddressModal
+      });
+
+      modalInstance.result.then( function( result ) {
         var ecKey = new Bitcoin.ECKey();
         var address = ecKey.getBitcoinAddress().toString();
-        var encryptedPrivateKey = ecKey.getEncryptedFormat(create.password);
-        userService.addAddress(address, encryptedPrivateKey);
-        $modalInstance.close();
-      }
+        var encryptedPrivateKey = ecKey.getEncryptedFormat( result.password );
+        $injector.get( 'userService' ).addAddress(address, encryptedPrivateKey);
+        $scope.showWalletBalances();
+      }, function() {} );
     };
+
+    var CreateAddressModal = function ($scope, $modalInstance ) {
+      $scope.ok = function ( result ) {
+        $modalInstance.close( result );
+      };
+
+      $scope.cancel = function () {
+        $modalInstance.dismiss('cancel');
+      };
+    };
+    // Done Create Form Code.
+
+
+    $scope.enumerateAddresses = function () {
+
+      $scope.items = enumerated_addresses.getData().then( function( result ) {
+        $scope.addresses = result.addresses;
+      } );          
+    };
+
+
   } );
 
 
