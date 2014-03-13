@@ -30,13 +30,10 @@
       <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
         <strong>Welcome!</strong> We have set up a brand new wallet for you. Please save your login <a style="color:black;" href="/login/{{uuid}}">link</a> so you can come back here easily! 
     </div>
-    <div class="row">
-      <p>You can import existing addresses in <a href="/wallet/addresses">My Address</a></p>
-      <p>Or we can create a new address for you:</p>
-      <button class="btn btn-default" ng-click="openCreateAddressModal()">Create New Address</button>
-    </div>
+
 
   </script>
+  <div ng-include="templates['add_address']"></div>
 
   <div ng-include="currentView"></div>
 </div>

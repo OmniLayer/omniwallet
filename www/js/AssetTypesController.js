@@ -107,29 +107,6 @@ angular.module( 'omniwallet' )
   $rootScope.$on( 'APPRAISER_VALUE_CHANGED', function() {
     $scope.showAssetTypes();
   });
-    $scope.openAddForm = function( currency ) {
-
-      var modalInstance = $modal.open({
-        templateUrl: '/partials/add_' + currency + '_address_modal.html',
-        controller: AddBtcAddressModal
-      });
-
-    modalInstance.result.then(function ( result ) {
-
-        if( result.privKey && result.password )
-        {
-          $injector.get( 'userService' ).addAddress( 
-            decodeAddressFromPrivateKey( result.privKey ), 
-            encodePrivateKey( result.privKey, result.password ));
-        }
-        else if( result.address )
-        {
-          $injector.get( 'userService' ).addAddress( result.address );
-        }
-        $scope.showAssetTypes();
-
-      }, function () {});
-    };
 
     function getAssetBalances( currencySymbol ) {
       var deferred = $q.defer();
@@ -276,16 +253,6 @@ var CurrencyDetailModal = function( $scope, currencySymbol, balances ) {
   $scope.currencySymbol = currencySymbol;
   $scope.balances = balances;
 }
-
-var AddBtcAddressModal = function ($scope, $modalInstance ) {
-  $scope.ok = function ( result ) {
-    $modalInstance.close( result );
-  };
-
-  $scope.cancel = function () {
-    $modalInstance.dismiss('cancel');
-  };
-};
 
 function addressRequest( $http, $q, addr ) {
   var deferred = $q.defer();
