@@ -1,0 +1,133 @@
+<div class="sidecar col-xs-2" ng-controller="SidecarController" ng-init=setView('wallet')>
+    <div ng-include="templates['sidecar']"></div>
+</div>
+
+  <div class="col-xs-10" ng-controller="WalletTradePendingController" ng-init="getData(selectedTimeframe)">
+  <div ng-show="pendingThinking">
+      <h1> Pending Offers </h1>
+      <div class="col-xs-9">
+          <select ng-model="selectedTimeframe"  
+            ng-change="getData(selectedTimeframe)">
+          <option value="">-- choose timeframe --</option>
+          <option value="86400"> 24 Hours </option>
+          <option value="604800"> 1 week </option>
+          <option value="2419200"> 1 month </option>
+          <option value="7257600"> 3 months </option>
+          </select>
+        <!--
+            <a href=""> filter </a> 
+          -->
+      <button class="btn btn-primary btn-sm" 
+      ng-click="currencyUnit = 'stom'" type="button">Convert to mBTC </button>
+      <button class="btn btn-primary btn-sm" 
+      ng-click="currencyUnit = 'stow'" type="button">Convert to whole BTC </button>
+    </div>
+
+    <h3 ng-show="orderbook.length == 0" class="text-center">Loading orders...<img src="/assets/img/34-1.gif"></h3>
+    <table ng-hide="orderbook.length == 0" class="table table-striped table-hover table-condensed">
+      <thead>
+          <tr>
+            <th>Transaction hash</th>
+            <th>Price per Coin </th>
+            <th>Amount</th>
+            <th>Total Cost</th>
+            <th> Buy </th>
+          </tr>
+      </thead>
+      <tbody>
+      </tbody>
+
+      <tr ng-repeat="transaction in orderbook">
+        <td> <a href="">{{transaction.tx_hash}}</a></td>
+        <td>{{{ balance: transaction.formatted_price_per_coin, symbol: currencyUnit } | cryptocurrency }}</td> 
+        <td>{{{ balance: transaction.formatted_amount, symbol: currencyUnit } | cryptocurrency}}</td> 
+        <td>{{ ({ balance: transaction.bitcoin_required, symbol: currencyUnit } | cryptocurrency) }}</td> 
+        <td ng-show="(transaction.tx_hash.length == 64 && transaction.payment_expired == false)">
+        <button class="btn btn-primary btn-sm" ng-click="purchaseCoin(transaction)" type="submit">Purchase coin</button>
+      </td>
+        
+        <td ng-show="(transaction.payment_expired == true)"> Offer Expired
+      </td>
+      </tr>
+
+    </table>
+  </div>
+  <div class="row" ng-hide="pendingThinking">
+    <h4 ng-hide="pendingThinking">
+      <a ng-click="pendingThinking = true"> <strong> < Go back </strong> </a>
+    </h4>
+
+    <div ng-controller="WalletTradeAssetsController" ng-init="selectedCoin = 'BTC'">
+      <div class="row">
+        <h3 class="text-center" >Send payment offer</h3>
+        <br>
+        <div ng-show="showErrors" class="alert alert-danger"> <strong> {{error}} </strong> </div> 
+      </div>
+      <form name="sendForm">
+      <div class="row">
+        <div class="col-xs-6">
+          <h4 class="text-justify" >Send type of coin:</h4>
+          <div class="form-inline">
+              <select name="coin" class="form-control" ng-model="selectedCoin"
+                ng-options="currency for currency in currencyList"
+                ng-change="setBalance()" ng-init="setBalance()" disabled>
+                <option value=""> -- Choose Coin -- </option>
+              </select>
+            </div> 
+          <h6 class="text-justify"> To complete a pending offer, you must make purchases in Bitcoin.</h6> 
+          <h4 class="text-justify" >Send from address:</h4>
+          <div class="form-inline">
+              <select name="sender" class="form-control" ng-model="selectedAddress"
+                ng-options="address for address in addressList"
+                ng-change="setBalance()" ng-init="setBalance()" required>
+                <option value=""> -- Choose Address -- </option>
+              </select>
+            </div> 
+          <h6 class="text-justify"> Please make sure this is the same address you sent the accept offer from.<br> 
+          Note that we allow you to only send from addresses with a valid private key. </h6>
+        </div>
+        <div class="col-xs-6"> 
+          <br><br><br><br><br><br><br><br><br>
+          <button class="btn btn-primary btn-md" 
+          ng-click="currencyUnit = 'stom'" type="button">Convert to mBTC </button>
+          <button class="btn btn-primary btn-md" 
+          ng-click="currencyUnit = 'stow'" type="button">Convert to whole BTC </button>
+        </div>
+      </div>
+        <br>
+      <div class="row">
+        <div class="col-xs-12">
+          <div class="input-group">
+            <span class="input-group-addon"> Send funds to:</span>
+            <input name="reciever" type="text" ng-model="sendTo" class="form-control" disabled>
+
+          </div>
+          <br>
+          <div class="input-group">
+            <span class="input-group-addon"> Amount to send (in {{currencyUnit[currencyUnit.length-1]}}{{selectedCoin}}): </span>
+              <input name="amount" type="number" ng-model="sendAmount" class="form-control" 
+              placeholder="{{{ balance: sendAmountPlaceholder, symbol: currencyUnit} | cryptocurrency}}" required>
+            <span class="input-group-addon" > 
+              Available: {{{ balance: balanceData[0], symbol: currencyUnit } | cryptocurrency}} 
+              {{currencyUnit[currencyUnit.length-1]}}{{selectedCoin}}</span>
+          </div>
+          <br>
+          <div class="input-group">
+            <span class="input-group-addon"> Transaction/Miner fees (in {{currencyUnit[currencyUnit.length-1]}}BTC): </span>
+            <input name="fees" type="number" ng-model="minerFees" class="form-control" 
+            placeholder="{{{ balance: 10000, symbol: currencyUnit } | cryptocurrency}} minimum" required>
+            <span class="input-group-addon" > 
+              Available Bitcoin: {{ { balance: balanceData[1], symbol: currencyUnit } | cryptocurrency}}
+              {{currencyUnit[currencyUnit.length-1]}}{{selectedCoin}}
+              </span>
+          </div>
+          <input ng-model="marked" ng-hide="true" ng-init="marked = true" type="checkbox"> 
+        </div>
+      </div>
+      </form>
+        <br>
+      <button class="btn btn-primary btn-lg col-xs-push-3 col-xs-6" ng-click="validateSendForm(currencyUnit)" type="submit">Send Transaction</button>
+
+    </div>
+  </div>
+</div>
