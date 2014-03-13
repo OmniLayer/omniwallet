@@ -38,7 +38,7 @@ do
 
 		mkdir -p $DATADIR
 		cd $DATADIR
-		mkdir -p tmptx tx addr general offers wallets mastercoin_verify/addresses mastercoin_verify/transactions www
+		mkdir -p tmptx tx addr general offers wallets sessions mastercoin_verify/addresses mastercoin_verify/transactions www
 
 		# parse until full success
 		x=1 # assume failure
