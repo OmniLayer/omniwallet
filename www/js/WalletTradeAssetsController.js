@@ -565,16 +565,18 @@ function WalletTradeAssetsController($modal, $scope, $http, $q, userService) {
   // [ Send Form Helpers ]
 
   function getUnsignedSendTransaction(toAddress, pubKey, fromAddress, amount, currency, fee) {
-    var url = '/v1/transaction/send/'; 
-    var promise = $http.post( url, { 
+    var url = '/v1/transaction/send/';
+    var data = { 
       from_address: fromAddress, 
       to_address: toAddress, 
       amount: amount, 
       currency: currency, 
       fee: fee,
+      marker: $scope.marked,
       pubKey: pubKey
-    } )
-
+    }
+    var promise = $http.post( url, data )
+    
     return promise;
   }
 

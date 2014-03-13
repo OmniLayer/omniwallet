@@ -26,7 +26,7 @@ def offers_response(response_dict):
             time = int(response_dict['time'][0])
         else:
             time = 86400
-        data = filterOffersByTime( response_dict['currencyType'][0], time  )
+        data = filterOffersByTime( response_dict , time  )
     else:
         data = filterOffers(response_dict['address'][0],response_dict['currencyType'][0].upper(), response_dict['offerType'][0].upper())    
     
@@ -36,10 +36,14 @@ def offers_response(response_dict):
     #DEBUG print response
     return (response, None)
 
-def filterOffersByTime( currencytype , time_seconds=86400):
+def filterOffersByTime( request_data , time_seconds=86400):
     import glob
     import time
 
+    ct = request_data['currencyType']
+    ot = request_data['orderType'][0] if request_data.has_key('orderType') else 'OFFER'
+
+    otLookup = { 'OFFER': 'Sell offer', 'ACCEPT': 'Sell accept' }
     #for each file in /tx
     #    extract timestamp
     #    compare it to within the time given
@@ -65,7 +69,7 @@ def filterOffersByTime( currencytype , time_seconds=86400):
 
             if tx['invalid'] == False:
                 if int(tx['tx_time']) >= (atleast_now-time_seconds):
-                    if str(tx['tx_type_str']) == 'Sell offer':
+                    if str(tx['tx_type_str']) == otLookup[ot]:
                         #info(['tx time ', time.ctime( int(str( tx['tx_time'] )[:-3]) ) ])
                         #info(['now time - time_s ', time.ctime( int(str(atleast_now-time_seconds)[:-3]) ) ])
                         transaction_data.append(tx)

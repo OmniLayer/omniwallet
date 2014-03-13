@@ -49,7 +49,7 @@
         </div>
   </div>
 
-  <div class="row" ng-controller="WalletTradeOverviewController" ng-init="getData()">
+  <div class="row" ng-controller="WalletTradeOverviewController" ng-init="getData(selectedTimeframe)">
     <div class="row" >
       <div class="col-xs-9">
         <div class="row">
@@ -64,22 +64,7 @@
             <option value="">-- choose address --</option>
             </select> -->
           </h3>
-          <h3 class="col-xs-5"> 
-            <small>
-              <select ng-model="selectedTimeframe"  
-                ng-change="getData(selectedTimeframe)">
-              <option value="">-- choose timeframe --</option>
-              <option value="86400"> 24 Hours </option>
-              <option value="604800"> 1 week </option>
-              <option value="2419200"> 1 month </option>
-              <option value="7257600"> 3 months </option>
-              </select>
-            </small>
-            <!--
-               <a href=""> filter </a> 
-             -->
-          </h3>
-       </div>
+      </div>
         <h1 class="col-xs-9"> |depth chart| </h1> 
       </div>
       <div class="col-xs-3"> 
@@ -91,6 +76,22 @@
             </div>
           </div>
       </div>
+
+    </div>
+
+    <div class="col-xs-9">
+      <select ng-model="selectedTimeframe"  
+          ng-change="getData(selectedTimeframe)">
+        <option value="">-- choose timeframe --</option>
+        <option value="86400"> 24 Hours </option>
+        <option value="604800"> 1 week </option>
+        <option value="2419200"> 1 month </option>
+        <option value="7257600"> 3 months </option>
+      </select> <!-- <a href=""> filter </a> -->
+      <button class="btn btn-primary btn-sm" 
+      ng-click="currencyUnit = 'stom'" type="button">Convert to mBTC </button>
+      <button class="btn btn-primary btn-sm" 
+      ng-click="currencyUnit = 'stow'" type="button">Convert to whole BTC </button>
     </div>
 
     <h3 ng-show="orderbook.length == 0" class="text-center">Loading orders...<img src="/assets/img/34-1.gif"></h3>
@@ -111,13 +112,13 @@
       <tr ng-repeat="transaction in orderbook">
         {{transaction}}
         <td> <a href="">{{transaction.tx_hash}}</a></td>
-        <td>{{transaction.formatted_price_per_coin}}</td>
-        <td> {{transaction.formatted_amount}}</td>
-        <td>{{transaction.formatted_fee_required}}</td>
-        <td>{{transaction.formatted_amount * transaction.formatted_price_per_coin}}</td>
+        <td>{{{ balance: transaction.formatted_price_per_coin, symbol: currencyUnit } | cryptocurrency }}</td> 
+        <td>{{{ balance: transaction.formatted_amount, symbol: currencyUnit } | cryptocurrency}}</td> 
+        <td>{{{ balance: transaction.formatted_fee_required, symbol: currencyUnit } | cryptocurrency}}</td> 
+        <td>{{ ({ balance: transaction.formatted_bitcoin_amount_desired, symbol: currencyUnit } | cryptocurrency) }}</td> 
         <td ng-show="(transaction.tx_hash.length == 64) && transaction.status == null && 
             !(transaction.from_address == selectedAddress)">
-        <button class="btn btn-primary btn-sm" ng-click="setView('buyOffer')" type="submit">Buy coin</button>
+        <button class="btn btn-primary btn-sm" ng-click="setView('buyOffer', transaction)" type="submit">Buy coin</button>
         
         <td ng-show="transaction.from_address == selectedAddress"> Your offer/purchase </td>
       </td>

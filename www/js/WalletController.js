@@ -131,15 +131,20 @@ function WalletHistoryController($scope, $http, userService) {
 
 function WalletTradeController($scope, $http, $q, userService) {
 
+  //use global to pass data around
+  $scope.global = {}
+
   $scope.onTradeView = true
   $scope.history = '/partials/wallet_history.html';
 
-  $scope.setView = function(view) {
+  $scope.setView = function(view, data) {
     if( view != 'tradeInfo')
       $scope.onTradeView = false
     else
       $scope.onTradeView = true
     $scope.tradeView = $scope.tradeTemplates[view]
+
+    $scope.global[view] = data;
   }
 
   $scope.tradeTemplates = {
@@ -173,20 +178,40 @@ function WalletTradeController($scope, $http, $q, userService) {
 
 function WalletTradeOverviewController($scope, $http, $q, userService) {
   //$scope.selectedAddress = userService.getAllAddresses()[ userService.getAllAddresses().length-1 ].address;
-
+  $scope.currencyUnit = 'stom'
+  $scope.selectedTimeframe = "604800"
   $scope.getData = function(time) {
     $scope.orderbook = []
     var transaction_data = []
     var postData = { 
       type: 'TIME',
       currencyType: 'TMSC',
-      time: time || 2419200
+      time: time 
     };
     $http.post('/v1/exchange/offers', postData).success(
       function(offerSuccess) {
         if(offerSuccess.data.length > 0) {
           transaction_data = offerSuccess.data
-          //DEBUG transaction_data.forEach(function(e) { console.log(e.from_address); });
+          //DEBUG console.log(transaction_data)
+          //turn everything to number value
+          transaction_data.forEach(function(tx) { 
+            transaction_data_keys = Object.keys(tx); 
+            transaction_data_keys.forEach(function(key) { 
+              if( (typeof tx[key] === 'string') && (tx[key].search(/[a-zA-Z]/g) === -1) ) {
+                 tx[key] = +tx[key]
+              } 
+            });
+          });
+
+          transaction_data.forEach(function(tx) { 
+            transaction_data_keys = ['formatted_amount','formatted_amount_available',
+              'formatted_bitcoin_amount_desired','formatted_fee_required','formatted_price_per_coin'];
+            transaction_data_keys.forEach(function(key) { 
+                  tx[key] = formatCurrencyInFundamentalUnit( tx[key], 'wtos')
+              }); 
+          });
+
+          //DEBUG console.log(transaction_data)
         } else transaction_data.push({ tx_hash: 'No offers/bids found for this timeframe' })
       $scope.orderbook = transaction_data;
       }
@@ -233,3 +258,46 @@ function WalletTradeHistoryController($scope, $http, $q, userService) {
   }
 
 }
+
+
+function WalletTradePendingController($scope, $http, $q, userService) {
+  //$scope.selectedAddress = userService.getAllAddresses()[ userService.getAllAddresses().length-1 ].address;
+  $scope.currencyUnit = 'stom'
+  $scope.pendingThinking = true
+  $scope.selectedCoin = 'BTC'
+  $scope.selectedTimeframe="604800"
+  $scope.getData = function(time) {
+    $scope.orderbook = []
+    var transaction_data = []
+    var postData = { 
+      type: 'TIME',
+      currencyType: 'TMSC',
+      orderType: 'ACCEPT',
+      time: time || 2419200
+    };
+    $http.post('/v1/exchange/offers', postData).success(
+      function(offerSuccess) {
+        if(offerSuccess.data.length > 0) {
+          transaction_data = offerSuccess.data
+
+          transaction_data.forEach(function(tx) { 
+            transaction_data_keys = ['formatted_amount','formatted_amount_available',
+              'formatted_bitcoin_amount_desired','formatted_fee_required','formatted_price_per_coin', 'bitcoin_required'];
+            transaction_data_keys.forEach(function(key) { 
+                  tx[key] = formatCurrencyInFundamentalUnit( tx[key], 'wtos')
+              }); 
+          });
+          //DEBUG transaction_data.forEach(function(e) { console.log(e.from_address); });
+        } else transaction_data.push({ tx_hash: 'No offers/bids found for this timeframe' })
+      $scope.orderbook = transaction_data;
+      }
+    );
+  }
+  $scope.purchaseCoin = function(tx) { console.log('s')
+    $scope.pendingThinking = false;
+    $scope.buyTransaction = tx
+    $scope.sendTo = tx.to_address
+    $scope.sendAmountPlaceholder = tx.bitcoin_required
+  }
+}
+

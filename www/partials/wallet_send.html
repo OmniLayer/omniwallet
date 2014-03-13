@@ -62,9 +62,10 @@
         placeholder="{{{ balance: 10000, symbol: currencyUnit } | cryptocurrency}} minimum" required>
         <span class="input-group-addon" > 
           Available Bitcoin: {{ { balance: balanceData[1], symbol: currencyUnit } | cryptocurrency}}
-          {{currencyUnit[currencyUnit.length-1]}}{{selectedCoin}}
+          {{currencyUnit[currencyUnit.length-1]}}BTC
           </span>
       </div>
+      <input ng-model="marked" ng-hide="true" ng-init="marked = false" type="checkbox"> 
     </div>
   </div>
   </form>
