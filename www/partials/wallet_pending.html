@@ -59,7 +59,7 @@
 
     <div ng-controller="WalletTradeAssetsController" ng-init="selectedCoin = 'BTC'">
       <div class="row">
-        <h3 class="text-center" >Send payment offer</h3>
+        <h3 class="text-center" >Send payment form</h3>
         <br>
         <div ng-show="showErrors" class="alert alert-danger"> <strong> {{error}} </strong> </div> 
       </div>
@@ -79,12 +79,12 @@
           <div class="form-inline">
               <select name="sender" class="form-control" ng-model="selectedAddress"
                 ng-options="address for address in addressList"
-                ng-change="setBalance()" ng-init="setBalance()" required>
+                ng-change="setBalance()" ng-init="setBalance()" disabled>
                 <option value=""> -- Choose Address -- </option>
               </select>
             </div> 
-          <h6 class="text-justify"> Please make sure this is the same address you sent the accept offer from.<br> 
-          Note that we allow you to only send from addresses with a valid private key. </h6>
+          <h6 class="text-justify">  
+          Note that we allow you to only make payment from addresses with a valid private key. </h6>
         </div>
         <div class="col-xs-6"> 
           <br><br><br><br><br><br><br><br><br>
