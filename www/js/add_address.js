@@ -72,4 +72,15 @@ angular.module( 'omniwallet' )
       };
     };
 
+    var CreateAddressController = function($scope, $modalInstance, userService) {
+      $scope.createAddress = function(create) {
+        var ecKey = new Bitcoin.ECKey();
+        var address = ecKey.getBitcoinAddress().toString();
+        var encryptedPrivateKey = ecKey.getEncryptedFormat(create.password);
+        userService.addAddress(address, encryptedPrivateKey);
+        $modalInstance.close();
+      }
+    };
   } );
+
+
