@@ -23,7 +23,9 @@ function Ctrl($scope, $route, $routeParams, $location) {
   $scope.templates = { 
         'header': '/header.html', 
         'footer': '/footer.html',
-        'sidecar': '/partials/sidecar.html'
+        'sidecar': '/partials/sidecar.html',
+        'add_address': '/partials/add_address.html',
+        'disclaimer': '/partials/disclaimer.html'
   };
 
 }
@@ -116,7 +118,7 @@ function SidecarController($scope, $http, userService) {
           'wallet': '/partials/wallet_sc.html'
     };
     $scope.hasAddresses = userService.getAllAddresses().length != 0 ? true : false;
-    $scope.hasAddressesWithPrivkey = getAddressesWithPrivkey()
+    $scope.hasAddressesWithPrivkey = getAddressesWithPrivkey().length != 0 ? true : false;
   
     function getAddressesWithPrivkey() {
       var addresses = []
@@ -127,12 +129,7 @@ function SidecarController($scope, $http, userService) {
           }
         }
       );
-      if( addresses.length == 0)
-        addresses = false
-      else
-        addresses = true 
       return addresses
     }
 
-    $scope.hasPendingOrders = true
 }

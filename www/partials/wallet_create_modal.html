@@ -9,6 +9,9 @@
         <input name="password" type="password" ng-model="create.password" id="inputPassword" ng-minlength="8" required>
         <span class="bg-warning" ng-show="createForm.password.$error.required && createForm.password.$dirty">Required</span>
         <span class="bg-warning" ng-show="createForm.password.$dirty && createForm.password.$error.minlength">Password must be at least 8 characters long</span>
+        <div id="pass-strength" >
+          Strength: {{ create.password | passwordPercent }}
+        </div>
       </div>
     </div>
     <div class="control-group">
@@ -23,7 +26,7 @@
   <div class="modal-footer">
     <div class="control-group">
       <div class="controls">
-        <button type="submit" class="btn" ng-click="createWallet(create)">Create Wallet</button>
+        <button type="submit" class="btn" ng-click="createWallet(create)" ng-show="create.password.length > 0 && create.password == create.repeatPassword">Create Wallet</button>
       </div>
     </div>
     <div class="help-block" ng-show="walletExists">This UUID is already in use</div>

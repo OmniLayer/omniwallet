@@ -1,0 +1,9 @@
+<div ng-controller="AddAddressController" ng-init="enumerateAddresses()">
+  <div ng-if="addresses.length == 0" class="alert alert-warning alert-dismissable">
+    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+    You don't currently have any cryptocurrency addresses in your wallet.  Why not import one, or create a new one?
+  </div>
+
+  <button class="btn btn-default" ng-click="openAddForm( 'BTC' )">Import BTC/MSC Address</button>
+  <button class="btn btn-default" ng-click="openCreateAddressModal()">Create New BTC Address</button>
+</div>

@@ -1,16 +1,5 @@
 <div class="row alert alert-info alert-dismissable">
   <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-  <h4>
-    <strong>Disclaimer:</strong>
-    The current alpha wallet is available for initial testing – be advised that this 
-    is changing very rapidly by a daily basis, and so the live product is still very 
-    different from the vision – our job over the next weeks and months is ramping up this vision.
-  </h4>
-  <h4>
-    Please don’t send any real money to this wallet yet, but just get a sense of the UI, 
-    look at the code, and report bugs. The server that this wallet is hosted on currently 
-    is a temporary testing server and should not receive any actual BTC/MSC deposits!
-  </h4>
   This is the trading page, where you can start submitting orders or send money to others.
 </div>
 
@@ -101,8 +90,8 @@
             <th>Transaction hash</th>
             <th>Price per {{ activeCurrencyPair[1] }} </th>
             <th>Amount</th>
-            <th>Required Fee</th>
             <th>Total Cost</th>
+            <th>Required Fee</th>
             <th> Buy </th>
           </tr>
       </thead>
@@ -114,8 +103,8 @@
         <td> <a href="">{{transaction.tx_hash}}</a></td>
         <td>{{{ balance: transaction.formatted_price_per_coin, symbol: currencyUnit } | cryptocurrency }}</td> 
         <td>{{{ balance: transaction.formatted_amount, symbol: currencyUnit } | cryptocurrency}}</td> 
-        <td>{{{ balance: transaction.formatted_fee_required, symbol: currencyUnit } | cryptocurrency}}</td> 
         <td>{{ ({ balance: transaction.formatted_bitcoin_amount_desired, symbol: currencyUnit } | cryptocurrency) }}</td> 
+        <td>{{{ balance: transaction.formatted_fee_required, symbol: currencyUnit } | cryptocurrency}}</td> 
         <td ng-show="(transaction.tx_hash.length == 64) && transaction.status == null && 
             !(transaction.from_address == selectedAddress)">
         <button class="btn btn-primary btn-sm" ng-click="setView('buyOffer', transaction)" type="submit">Buy coin</button>
