@@ -44,11 +44,48 @@ angular.module( 'omniwallet' )
     };
 
 
-    // Begin Add Form Code
-    $scope.openAddForm = function( currency ) {
+    // Begin Import watch only Form Code
+    $scope.openImportWatchOnlyForm = function() {
       var modalInstance = $modal.open({
-        templateUrl: '/partials/add_' + currency + '_address_modal.html',
+        templateUrl: '/partials/import_watch_only.html',
         controller: AddBtcAddressModal
+      });
+
+      modalInstance.result.then(function ( result ) {
+
+        if( result.address )
+        {
+          $injector.get( 'userService' ).addAddress( result.address );
+        }
+        $scope.refresh();
+
+      }, function () {});
+    };
+
+    var AddBtcAddressModal = function ($scope, $modalInstance ) {
+      $scope.validate = function( address ) {
+        console.log( 'Validate: ' + address );
+        return Bitcoin.Address.validate( address );
+      };
+
+      $scope.ok = function ( result ) {
+        if( Bitcoin.Address.validate( result.address ))
+          $modalInstance.close( result );
+        else
+          console.log( '*** Invalid address: ' + result.address );
+      };
+
+      $scope.cancel = function () {
+        $modalInstance.dismiss('cancel');
+      };
+    };
+    // Done Import Watch Only Form Code.
+
+    // Begin Import Private Key Form Code
+    $scope.openImportPrivateKeyForm = function() {
+      var modalInstance = $modal.open({
+        templateUrl: '/partials/import_private.html',
+        controller: AddPrivateKeyModal
       });
 
       modalInstance.result.then(function ( result ) {
@@ -59,16 +96,12 @@ angular.module( 'omniwallet' )
             decodeAddressFromPrivateKey( result.privKey ), 
             encodePrivateKey( result.privKey, result.password ));
         }
-        else if( result.address )
-        {
-          $injector.get( 'userService' ).addAddress( result.address );
-        }
         $scope.refresh();
 
       }, function () {});
     };
 
-    var AddBtcAddressModal = function ($scope, $modalInstance ) {
+    var AddPrivateKeyModal = function ($scope, $modalInstance ) {
       $scope.ok = function ( result ) {
         $modalInstance.close( result );
       };
@@ -77,7 +110,37 @@ angular.module( 'omniwallet' )
         $modalInstance.dismiss('cancel');
       };
     };
-    // Done Add Form Code.
+    // Done Import Private Key Form Code.
+    // Begin Import Encrypted Key Form Code
+    $scope.openImportEncryptedKeyForm = function() {
+      var modalInstance = $modal.open({
+        templateUrl: '/partials/import_encrypted_private.html',
+        controller: AddEncryptedPrivateModal
+      });
+
+      modalInstance.result.then(function ( result ) {
+
+        if( result.privKey && result.password )
+        {
+          $injector.get( 'userService' ).addAddress( 
+            decodeAddressFromPrivateKey( result.privKey ), 
+            encodePrivateKey( result.privKey, result.password ));
+        }
+        $scope.refresh();
+
+      }, function () {});
+    };
+
+    var AddEncryptedPrivateModal = function ($scope, $modalInstance ) {
+      $scope.ok = function ( result ) {
+        $modalInstance.close( result );
+      };
+
+      $scope.cancel = function () {
+        $modalInstance.dismiss('cancel');
+      };
+    };
+    // Done Import Encrypted Private Key Code.
 
     // Begine Create Form Code.
     $scope.openCreateAddressModal = function() {
