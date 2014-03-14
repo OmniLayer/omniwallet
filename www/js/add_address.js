@@ -44,22 +44,16 @@ angular.module( 'omniwallet' )
     };
 
 
-    // Begin Add Form Code
-    $scope.openAddForm = function( currency ) {
+    // Begin Import watch only Form Code
+    $scope.openImportWatchOnlyForm = function() {
       var modalInstance = $modal.open({
-        templateUrl: '/partials/add_' + currency + '_address_modal.html',
+        templateUrl: '/partials/import_watch_only.html',
         controller: AddBtcAddressModal
       });
 
       modalInstance.result.then(function ( result ) {
 
-        if( result.privKey && result.password )
-        {
-          $injector.get( 'userService' ).addAddress( 
-            decodeAddressFromPrivateKey( result.privKey ), 
-            encodePrivateKey( result.privKey, result.password ));
-        }
-        else if( result.address )
+        if( result.address )
         {
           $injector.get( 'userService' ).addAddress( result.address );
         }
@@ -77,7 +71,68 @@ angular.module( 'omniwallet' )
         $modalInstance.dismiss('cancel');
       };
     };
-    // Done Add Form Code.
+    // Done Import Watch Only Form Code.
+
+    // Begin Import Private Key Form Code
+    $scope.openImportPrivateKeyForm = function() {
+      var modalInstance = $modal.open({
+        templateUrl: '/partials/import_private.html',
+        controller: AddBtcAddressModal
+      });
+
+      modalInstance.result.then(function ( result ) {
+
+        if( result.privKey && result.password )
+        {
+          $injector.get( 'userService' ).addAddress( 
+            decodeAddressFromPrivateKey( result.privKey ), 
+            encodePrivateKey( result.privKey, result.password ));
+        }
+        $scope.refresh();
+
+      }, function () {});
+    };
+
+    var AddBtcAddressModal = function ($scope, $modalInstance ) {
+      $scope.ok = function ( result ) {
+        $modalInstance.close( result );
+      };
+
+      $scope.cancel = function () {
+        $modalInstance.dismiss('cancel');
+      };
+    };
+    // Done Import Private Key Form Code.
+    // Begin Import Encrypted Key Form Code
+    $scope.openImportEncryptedKeyForm = function() {
+      var modalInstance = $modal.open({
+        templateUrl: '/partials/import_encrypted_private.html',
+        controller: AddBtcAddressModal
+      });
+
+      modalInstance.result.then(function ( result ) {
+
+        if( result.privKey && result.password )
+        {
+          $injector.get( 'userService' ).addAddress( 
+            decodeAddressFromPrivateKey( result.privKey ), 
+            encodePrivateKey( result.privKey, result.password ));
+        }
+        $scope.refresh();
+
+      }, function () {});
+    };
+
+    var AddBtcAddressModal = function ($scope, $modalInstance ) {
+      $scope.ok = function ( result ) {
+        $modalInstance.close( result );
+      };
+
+      $scope.cancel = function () {
+        $modalInstance.dismiss('cancel');
+      };
+    };
+    // Done Import Encrypted Private Key Code.
 
     // Begine Create Form Code.
     $scope.openCreateAddressModal = function() {

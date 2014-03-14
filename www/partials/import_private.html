@@ -1,5 +1,5 @@
 <div class="modal-header">
-    <h3>Import a BTC/MSC Address</h3>
+    <h3>Import a BTC/MSC Private Key</h3>
 </div>
 <div class="modal-body">
 
@@ -16,21 +16,9 @@
 		<input type="password" 
 			name=password 
 			class="form-control" 
-			placeholder="enter passphrase to encrypt and store locally"
+			placeholder="If desired, enter passphrase to encrypt this key"
 			ng-model="newAddressData.password"
       ng-required="!newAddressData.address">
-	</form>
-
-	<center>OR</center>
-
-	<form name="addressentry" class="addressentry input-group" style="margin-bottom:20px, margin-top:20px">
-		<span class="input-group-addon">Enter Address (Watch Only):</span>
-		<input type="text" 
-      name="address" 
-			class="form-control" 
-			placeholder="Enter your bitcoin address"
-			ng-model="newAddressData.address"
-      ng-required="!newAddressData.privKey">
 	</form>
 
 </div>
