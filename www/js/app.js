@@ -3,7 +3,8 @@
 angular.module('omniwallet', [
     'ngRoute',
     'ui.bootstrap',
-    'ui.bootstrap.modal'
+    'ui.bootstrap.modal',
+    'vr.filters.passwordStrength'
   ],
   function($routeProvider, $locationProvider, $httpProvider) {
     
