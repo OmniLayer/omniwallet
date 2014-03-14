@@ -5,10 +5,17 @@ function SimpleSendController($scope, userService) {
   MySimpleSendHelpers(wallet);
 
 }
-function HomeCtrl($templateCache) {
-  //DEV ONLY
-  console.log('cleared cache')
-  $templateCache.removeAll()
+function HomeCtrl( $templateCache, $injector, $location ) {
+  if(  $injector.get( 'userService' ).getUUID() )
+  {
+    $location.url( '/wallet/overview' );
+  }
+  else
+  {
+    //DEV ONLY
+    console.log('cleared cache')
+    $templateCache.removeAll()
+  }
 }
 function StatsCtrl($scope, $route, $routeParams, $http){
   $http.get('/v1/system/stats.json', {}).success(function(data) {
