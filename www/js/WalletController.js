@@ -1,7 +1,8 @@
 
 
-function WalletController($scope, $q, $http, $modal, userService) {
+function WalletController($scope, $q, $http, $modal, $location, userService) {
   $scope.uuid = userService.getUUID();
+  $scope.loginLink = $location.protocol() + "://" + $location.host() + "/login/"+ $scope.uuid;
   console.log(userService.getAllAddresses());
 
   $scope.addrList = userService.getAllAddresses().map(function(e,i,a) { return e.address; })
