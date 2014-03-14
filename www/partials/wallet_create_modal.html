@@ -26,7 +26,7 @@
   <div class="modal-footer">
     <div class="control-group">
       <div class="controls">
-        <button type="submit" class="btn" ng-click="createWallet(create)">Create Wallet</button>
+        <button type="submit" class="btn" ng-click="createWallet(create)" ng-show="create.password.length > 0 && create.password == create.repeatPassword">Create Wallet</button>
       </div>
     </div>
     <div class="help-block" ng-show="walletExists">This UUID is already in use</div>
