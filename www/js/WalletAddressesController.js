@@ -122,7 +122,7 @@ angular.module( 'omniwallet' )
 
   var appraiser = $injector.get( 'appraiser' );
   $rootScope.$on( 'APPRAISER_VALUE_CHANGED', function() {
-    $scope.showWalletBalances();
+    $scope.refresh();
   });
 
    $scope.openDeleteConfirmForm = function( address ) {
@@ -138,7 +138,7 @@ angular.module( 'omniwallet' )
 
       modalInstance.result.then( function() {
         $injector.get( 'userService' ).removeAddress( address );
-        $scope.showWalletBalances();
+        $scope.refresh();
       }, function() {} );
     };
 
@@ -160,38 +160,7 @@ angular.module( 'omniwallet' )
       return enc;
     };
 
-    $scope.openCreateAddressModal = function() {
-      $modal.open({
-        templateUrl: '/partials/create_address_modal.html',
-        controller: CreateAddressController
-      });
-    }
-
-    $scope.openAddForm = function( currency ) {
-
-      var modalInstance = $modal.open({
-        templateUrl: '/partials/add_' + currency + '_address_modal.html',
-        controller: AddBtcAddressModal
-      });
-
-    modalInstance.result.then(function ( result ) {
-
-        if( result.privKey && result.password )
-        {
-          $injector.get( 'userService' ).addAddress( 
-            decodeAddressFromPrivateKey( result.privKey ), 
-            encodePrivateKey( result.privKey, result.password ));
-        }
-        else if( result.address )
-        {
-          $injector.get( 'userService' ).addAddress( result.address );
-        }
-        $scope.showWalletBalances();
-
-      }, function () {});
-    };
-
-    $scope.showWalletBalances = function () {
+    $scope.refresh = function () {
 
       $scope.items = wallet_balances_data.getData().then( function( balances ) {
         $scope.balances = balances;
@@ -211,17 +180,6 @@ var DeleteBtcAddressModal = function ($scope, $modalInstance, address ) {
 
   $scope.ok = function () {
     $modalInstance.close();
-  };
-
-  $scope.cancel = function () {
-    $modalInstance.dismiss('cancel');
-  };
-};
-
-
-var AddBtcAddressModal = function ($scope, $modalInstance ) {
-  $scope.ok = function ( result ) {
-    $modalInstance.close( result );
   };
 
   $scope.cancel = function () {

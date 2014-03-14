@@ -23,7 +23,9 @@ function Ctrl($scope, $route, $routeParams, $location) {
   $scope.templates = { 
         'header': '/header.html', 
         'footer': '/footer.html',
-        'sidecar': '/partials/sidecar.html'
+        'sidecar': '/partials/sidecar.html',
+        'add_address': '/partials/add_address.html',
+        'disclaimer': '/partials/disclaimer.html'
   };
 
 }
