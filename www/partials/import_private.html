@@ -1,0 +1,24 @@
+<div class="modal-header">
+    <h3>Import a BTC/MSC Private Key</h3>
+</div>
+<div class="modal-body">
+
+	<form name=privkeyentry 
+		class="priventry input-group" 
+		style="margin-bottom:20px, margin-top:20px">
+		<span class="input-group-addon">Enter Key (Send/Receive):</span>
+		<input type="text" 
+			name=privkey 
+			class="form-control" 
+			placeholder="enter your private key, formats: hex, b64, WIP, compressed WIP"
+			ng-model="newAddressData.privKey"
+      ng-required="!newAddressData.address">
+    <input name="password" type="password" class="form-control" ng-model="newAddressData.password" id="inputPassword" placeholder="If desired, enter passphrase to encrypt this key">
+    <input name="repeatPassword" type="password" class="form-control" ng-model="newAddressData.repeatPassword" id="inputRepeatPassword" placeholder="If you entered a passphrase, repeat it here">
+    <span class="bg-warning" ng-show="newAddressData.password != newAddressData.repeatPassword">Passwords do not match</span>
+	</form>
+
+</div>
+<div class="modal-footer">
+    <button class="btn btn-primary" ng-click="ok( newAddressData )" ng-disabled="(privkeyentry.$error.required || newAddressData.password !== newAddressData.repeatPassword)">Add Address</button>
+</div>
