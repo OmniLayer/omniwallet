@@ -17,5 +17,5 @@
 
 </div>
 <div class="modal-footer">
-    <button class="btn btn-primary" ng-click="ok( newAddressData )" ng-disabled="(privkeyentry.$error.required || addressentry.$error.required)">Add Address</button>
+    <button class="btn btn-primary" ng-click="ok( newAddressData )" ng-disabled="(privkeyentry.$error.required || !validate( newAddressData.privKey ))">Add Address</button>
 </div>
