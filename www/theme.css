@@ -31,3 +31,8 @@ a {
 .asset-item {
 	font-size: 1.2em;
 }
+
+.landing-thumbnail {
+	padding-top: 20px;
+	border: 0;
+}
