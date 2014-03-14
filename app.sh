@@ -16,13 +16,16 @@ PARSE_LOG=$DATADIR/parsed.log
 VALIDATE_LOG=$DATADIR/validated.log
 ARCHIVE_LOG=$DATADIR/archived.log
 
-if [ ! -d $DATADIR/tx ]; then
-	cp -r $TOOLSDIR/www/tx-bootstrap $DATADIR/tx
-fi
-
 # Export directories for API scripts to use
 export TOOLSDIR
 export DATADIR
+
+if [ ! -d $DATADIR/tx ]; then
+	cp -r $TOOLSDIR/www/tx $DATADIR/tx
+	cd $DATADIR
+	python $TOOLSDIR/msc_validate.py 2>&1 > $VALIDATE_LOG
+fi
+
 cd $APPDIR/api
 uwsgi -s 127.0.0.1:1088 -p 8 -M --vhost --enable-threads --plugin python --logto $DATADIR/apps.log &
 SERVER_PID=$!
