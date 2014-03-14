@@ -42,7 +42,7 @@
         <td> <a href="">{{transaction.tx_hash}}</a></td>
         <td ng-if="transaction.formatted_price_per_coin">{{{ balance: transaction.formatted_price_per_coin, symbol: currencyUnit } | cryptocurrency }}</td> 
         <td ng-if="transaction.formatted_amount">{{{ balance: transaction.formatted_amount, symbol: currencyUnit } | cryptocurrency}}</td> 
-        <td ng-if="transaction.formatted_bitcoin_required">{{ ({ balance: transaction.bitcoin_required, symbol: currencyUnit } | cryptocurrency) }}</td> 
+        <td ng-if="transaction.bitcoin_required">{{ ({ balance: transaction.bitcoin_required, symbol: currencyUnit } | cryptocurrency) }}</td> 
         <td ng-show="(transaction.tx_hash.length == 64 && transaction.payment_expired == false)">
         <button class="btn btn-primary btn-sm" ng-click="purchaseCoin(transaction)" type="submit">Purchase coin</button>
       </td>
