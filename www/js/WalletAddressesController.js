@@ -142,24 +142,6 @@ angular.module( 'omniwallet' )
       }, function() {} );
     };
 
-    function decodeAddressFromPrivateKey( key ) {
-
-      // TODO: Return the address decoded from the private key.
-      var eckey = new Bitcoin.ECKey( key );
-      var addr = eckey.getBitcoinAddress().toString();
-
-      return addr;
-    };
-
-    function encodePrivateKey( key, passphrase ) {
-
-      // TODO: Return encoded key.  Forget the passphrase forever.
-      var eckey = new Bitcoin.ECKey( key );
-      var enc = eckey.getEncryptedFormat( passphrase );
-
-      return enc;
-    };
-
     $scope.refresh = function () {
 
       $scope.items = wallet_balances_data.getData().then( function( balances ) {
