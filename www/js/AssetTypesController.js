@@ -103,33 +103,35 @@ angular.module( 'omniwallet' )
   } )
   .controller( 'AssetTypesController', function ( $q, $http, $modal, $rootScope, $injector, $scope, $element, asset_types_data, asset_types_template ) {
 
-  var appraiser = $injector.get( 'appraiser' );
-  $rootScope.$on( 'APPRAISER_VALUE_CHANGED', function() {
-    $scope.showAssetTypes();
-  });
-    $scope.openAddForm = function( currency ) {
+    var appraiser = $injector.get( 'appraiser' );
+    $rootScope.$on( 'APPRAISER_VALUE_CHANGED', function() {
+      $scope.refresh();
+    });
 
-      var modalInstance = $modal.open({
-        templateUrl: '/partials/add_' + currency + '_address_modal.html',
-        controller: AddBtcAddressModal
-      });
+    $scope.refresh = function () {
 
-    modalInstance.result.then(function ( result ) {
+      $scope.items = asset_types_data.getData().then( function( balances ) {
+        $scope.balances = balances;
 
-        if( result.privKey && result.password )
+        var total = 0;
+        for( var k in balances.balances )
         {
-          $injector.get( 'userService' ).addAddress( 
-            decodeAddressFromPrivateKey( result.privKey ), 
-            encodePrivateKey( result.privKey, result.password ));
+          if( typeof balances.balances[k].value == 'number' )
+            total += balances.balances[k].value;
         }
-        else if( result.address )
-        {
-          $injector.get( 'userService' ).addAddress( result.address );
-        }
-        $scope.showAssetTypes();
+        $scope.total = total;
 
-      }, function () {});
-    };
+        asset_types_template.then( function( templ ) {
+          _.defer( function() {
+            $scope.template = templ;
+            $scope.$apply( new function() {
+                _.defer( updateGraph );
+              } );
+          });
+        }); 
+      } );          
+    }
+
 
     function getAssetBalances( currencySymbol ) {
       var deferred = $q.defer();
@@ -245,47 +247,15 @@ angular.module( 'omniwallet' )
 
         }
       });
-    }
 
-    $scope.showAssetTypes = function () {
-
-      $scope.items = asset_types_data.getData().then( function( balances ) {
-        $scope.balances = balances;
-
-        var total = 0;
-        for( var k in balances.balances )
-        {
-          if( typeof balances.balances[k].value == 'number' )
-            total += balances.balances[k].value;
-        }
-        $scope.total = total;
-
-        asset_types_template.then( function( templ ) {
-          _.defer( function() {
-            $scope.template = templ;
-            $scope.$apply( new function() {
-                _.defer( updateGraph );
-              } );
-          });
-        }); 
-      } );          
     };
+
   });
 
 var CurrencyDetailModal = function( $scope, currencySymbol, balances ) {
   $scope.currencySymbol = currencySymbol;
   $scope.balances = balances;
 }
-
-var AddBtcAddressModal = function ($scope, $modalInstance ) {
-  $scope.ok = function ( result ) {
-    $modalInstance.close( result );
-  };
-
-  $scope.cancel = function () {
-    $modalInstance.dismiss('cancel');
-  };
-};
 
 function addressRequest( $http, $q, addr ) {
   var deferred = $q.defer();
