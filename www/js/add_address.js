@@ -25,7 +25,26 @@ angular.module( 'omniwallet' )
   })
   .controller( 'AddAddressController', function( $modal, $injector, $scope, enumerated_addresses ) {
 
-    // Begine Add Form Code
+    function decodeAddressFromPrivateKey( key ) {
+
+      //  Return the address decoded from the private key.
+      var eckey = new Bitcoin.ECKey( key );
+      var addr = eckey.getBitcoinAddress().toString();
+
+      return addr;
+    };
+
+    function encodePrivateKey( key, passphrase ) {
+
+      //  Return encoded key.  Forget the passphrase forever.
+      var eckey = new Bitcoin.ECKey( key );
+      var enc = eckey.getEncryptedFormat( passphrase );
+
+      return enc;
+    };
+
+
+    // Begin Add Form Code
     $scope.openAddForm = function( currency ) {
       var modalInstance = $modal.open({
         templateUrl: '/partials/add_' + currency + '_address_modal.html',
