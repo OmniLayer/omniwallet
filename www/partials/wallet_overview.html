@@ -34,10 +34,14 @@
     </div>
     <div class="alert alert-info alert-dismissable">
       <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-        <strong>Welcome!</strong> We have set up a brand new wallet for you. Please save your login <a style="color:black;" href="/login/{{uuid}}">link</a> so you can come back here easily! 
+        <strong>Welcome!</strong> We have set up a brand new wallet for you. You can use the links below to get started
+    </div>
+    <div class="alert alert-danger alert-dismissable">
+      <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+        <strong>Warning:</strong> You must <strong>save your login link: <a style="color:black; text-decoration:underline" href="{{loginLink}}">{{loginLink}}</a></strong> to return to your wallet.
     </div>
 
-  <div ng-include="templates['add_address']"></div>
+    <div ng-include="templates['add_address']"></div>
 
   </script>
 
