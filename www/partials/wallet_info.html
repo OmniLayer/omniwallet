@@ -90,8 +90,8 @@
             <th>Transaction hash</th>
             <th>Price per {{ activeCurrencyPair[1] }} </th>
             <th>Amount</th>
-            <th>Required Fee</th>
             <th>Total Cost</th>
+            <th>Required Fee</th>
             <th> Buy </th>
           </tr>
       </thead>
@@ -103,8 +103,8 @@
         <td> <a href="">{{transaction.tx_hash}}</a></td>
         <td>{{{ balance: transaction.formatted_price_per_coin, symbol: currencyUnit } | cryptocurrency }}</td> 
         <td>{{{ balance: transaction.formatted_amount, symbol: currencyUnit } | cryptocurrency}}</td> 
-        <td>{{{ balance: transaction.formatted_fee_required, symbol: currencyUnit } | cryptocurrency}}</td> 
         <td>{{ ({ balance: transaction.formatted_bitcoin_amount_desired, symbol: currencyUnit } | cryptocurrency) }}</td> 
+        <td>{{{ balance: transaction.formatted_fee_required, symbol: currencyUnit } | cryptocurrency}}</td> 
         <td ng-show="(transaction.tx_hash.length == 64) && transaction.status == null && 
             !(transaction.from_address == selectedAddress)">
         <button class="btn btn-primary btn-sm" ng-click="setView('buyOffer', transaction)" type="submit">Buy coin</button>
