@@ -28,12 +28,18 @@
     </div>
     <div class="alert alert-info alert-dismissable">
       <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-        <strong>Welcome!</strong> We have set up a brand new wallet for you. Please save your login <a style="color:black;" href="/login/{{uuid}}">link</a> so you can come back here easily! 
+        <strong>Welcome!</strong> We have set up a brand new wallet for you. You can use the links below to get started
+    </div>
+    <div class="alert alert-danger alert-dismissable">
+      <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+        <strong>Warning:</strong> You must <strong><a style="color:black; text-decoration:underline" href="/login/{{uuid}}">SAVE YOUR LOGIN LINK</a></strong> to return to your wallet.
     </div>
     <div class="row">
-      <p>You can import existing addresses in <a href="/wallet/addresses">My Address</a></p>
-      <p>Or we can create a new address for you:</p>
-      <button class="btn btn-default" ng-click="openCreateAddressModal()">Create New Address</button>
+      <div class="col-xs-10">
+        <p>You can import existing addresses in <a href="/wallet/addresses">My Address</a></p>
+        <p>Or we can create a new address for you:</p>
+        <button class="btn btn-default" ng-click="openCreateAddressModal()">Create New Address</button>
+      </div>
     </div>
 
   </script>
