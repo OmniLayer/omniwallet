@@ -13,15 +13,12 @@
 			placeholder="enter your private key, formats: hex, b64, WIP, compressed WIP"
 			ng-model="newAddressData.privKey"
       ng-required="!newAddressData.address">
-		<input type="password" 
-			name=password 
-			class="form-control" 
-			placeholder="If desired, enter passphrase to encrypt this key"
-			ng-model="newAddressData.password"
-      ng-required="!newAddressData.address">
+    <input name="password" type="password" class="form-control" ng-model="newAddressData.password" id="inputPassword" placeholder="If desired, enter passphrase to encrypt this key">
+    <input name="repeatPassword" type="password" class="form-control" ng-model="newAddressData.repeatPassword" id="inputRepeatPassword" placeholder="If you entered a passphrase, repeat it here">
+    <span class="bg-warning" ng-show="newAddressData.password != newAddressData.repeatPassword">Passwords do not match</span>
 	</form>
 
 </div>
 <div class="modal-footer">
-    <button class="btn btn-primary" ng-click="ok( newAddressData )" ng-disabled="(privkeyentry.$error.required || addressentry.$error.required)">Add Address</button>
+    <button class="btn btn-primary" ng-click="ok( newAddressData )" ng-disabled="(privkeyentry.$error.required || newAddressData.password !== newAddressData.repeatPassword)">Add Address</button>
 </div>
