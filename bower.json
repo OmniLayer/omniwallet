@@ -17,6 +17,6 @@
     "jsrsasign": "~4.2.1",
     "FileSaver": null,
     "forge": "https://github.com/digitalbazaar/forge.git#0.2.30",
-    "angular-password-strength": "~0.0.4"
+    "angular-password-strength": "https://github.com/curtislacy/angular-password-strength.git#Caret-Operator"
   }
 }
