@@ -264,6 +264,8 @@ function WalletTradePendingController($scope, $http, $q, userService) {
   //$scope.selectedAddress = userService.getAllAddresses()[ userService.getAllAddresses().length-1 ].address;
   $scope.currencyUnit = 'stom'
   $scope.pendingThinking = true
+  $scope.hasAddressesWithPrivkey = getAddressesWithPrivkey()
+  
   $scope.selectedCoin = 'BTC'
   $scope.selectedTimeframe="604800"
   $scope.getData = function(time) {
@@ -287,17 +289,42 @@ function WalletTradePendingController($scope, $http, $q, userService) {
                   tx[key] = formatCurrencyInFundamentalUnit( tx[key], 'wtos')
               }); 
           });
-          //DEBUG transaction_data.forEach(function(e) { console.log(e.from_address); });
+
+          filtered_transaction_data = []
+          $scope.hasAddressesWithPrivkey.forEach(function(addr) { 
+             transaction_data.forEach(function(elem) {
+                if(addr == elem.from_address) {
+                   //DEBUG console.log(addr, elem.from_address)
+                   filtered_transaction_data.push(elem)
+                }
+              });
+          });
+          transaction_data = filtered_transaction_data
+          //DEBUG console.log(filtered_transaction_data)
         } else transaction_data.push({ tx_hash: 'No offers/bids found for this timeframe' })
       $scope.orderbook = transaction_data;
       }
     );
   }
-  $scope.purchaseCoin = function(tx) { console.log('s')
+  $scope.purchaseCoin = function(tx) { 
     $scope.pendingThinking = false;
     $scope.buyTransaction = tx
     $scope.sendTo = tx.to_address
     $scope.sendAmountPlaceholder = tx.bitcoin_required
+    $scope.selectedAddress = tx.from_address
+  }
+
+
+  function getAddressesWithPrivkey() {
+    var addresses = []
+    userService.getAllAddresses().map(
+      function(e,i,a) { 
+        if(e.privkey && e.privkey.length == 58) {
+          addresses.push(e.address);
+        }
+      }
+    );
+    return addresses
   }
 }
 
