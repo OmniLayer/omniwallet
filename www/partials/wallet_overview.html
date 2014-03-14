@@ -3,6 +3,8 @@
 </div>
 
 <div class="col-xs-10" ng-controller="WalletController">
+  <div ng-include="templates['disclaimer']"></div>
+
   <script type="text/ng-template" id="overview.html">
     <div class="panel panel-default">
       <h3 class="text-center panel-body">Your Wallet Overview <small>{{ uuid }}</small></h3>
