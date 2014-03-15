@@ -6,7 +6,13 @@ running on top of bitcoin like HTTP runs on top of TCP/IP. Its purpose is to bui
 core Bitcoin protocol and add new advanced features, with a focus on a straight-forward and 
 easy to understand implementation which allows for analysis and its rapid development. 
 
-## What is this Web-Wallet?
+## What is Omniwallet?
+
+Omniwallet is a new type of web wallet, that combines security, ease of use, multi-currency support, and is completely open source from the ground up (up to the deplomeny scripts!)
+
+It currently supports Bitcoin and Mastercoin, and will support Mastercoin-derived currency in the future. In addition, support for other blockchains is a high priority for us - you will be able to store Litecoins, Peercoins, and other alts on the same highly secure web wallet.
+
+You can checkout the test builds at [test.omniwallet.org](https://test.omniwallet.org/) (please note that this is not production ready, only use small amounts of BTC and MSC!)
 
 ### Best in class security
 
