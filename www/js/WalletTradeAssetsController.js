@@ -33,6 +33,7 @@ function WalletTradeAssetsController($modal, $scope, $http, $q, userService) {
 
   // [ Retrieve Balances ]
   $scope.currencyUnit = 'stom' // satoshi to millibitt
+  $scope.amountUnit = 'mtow'
   $scope.balanceData = [ 0 ];
   var addrListBal = [];
 
@@ -445,12 +446,13 @@ function WalletTradeAssetsController($modal, $scope, $http, $q, userService) {
     var minerMinimum = 10000; 
     var nonZeroValue = 1; 
 
-    var salePricePerCoin = Math.ceil( formatCurrencyInFundamentalUnit( +$scope.salePricePerCoin , currencyUnit[3]+'tos'  ) );
+    // var salePricePerCoin = Math.ceil( formatCurrencyInFundamentalUnit( +$scope.salePricePerCoin , currencyUnit[3]+'tos'  ) );
+    var salePricePerCoin = +$scope.salePricePerCoin
     var buyersFee = Math.ceil( formatCurrencyInFundamentalUnit( +$scope.buyersFee , currencyUnit[3] +'tos' ) );
     var minerFees = Math.ceil( formatCurrencyInFundamentalUnit( +$scope.minerFees , currencyUnit[3] +'tos' ) );
     var saleAmount = Math.ceil( formatCurrencyInFundamentalUnit( +$scope.saleAmount , currencyUnit[3]+'tos'  ) );
 
-    var salePricePerCoinMillis = formatCurrencyInFundamentalUnit( salePricePerCoin , 'stom' ) ;
+    // var salePricePerCoinMillis = formatCurrencyInFundamentalUnit( salePricePerCoin , 'stom' ) ;
     var buyersFeeMillis = formatCurrencyInFundamentalUnit( buyersFee , 'stom'  ) ;
     var minerFeesMillis = formatCurrencyInFundamentalUnit( minerFees , 'stom' ) ;
     var saleAmountMillis = formatCurrencyInFundamentalUnit( saleAmount , 'stom'  ) ;
@@ -495,7 +497,7 @@ function WalletTradeAssetsController($modal, $scope, $http, $q, userService) {
           <div class="modal-body">\
               <h3 class="text-center"> Confirm sale order </h3>\
               <h3>You\'re about to put ' + saleAmountMillis + 'm' + $scope.selectedCoin  +  
-              ' on sale at a price of ' +  salePricePerCoinMillis + 'mBTC per coin' +
+              ' on sale at a price of ' +  salePricePerCoin + ' BTC per ' + $scope.selectedCoin +
               ', plus charge ' + buyersFeeMillis  + ' in fees over ' +
               $scope.saleBlocks + ' blocks.</h3>\
             <p><br>\
