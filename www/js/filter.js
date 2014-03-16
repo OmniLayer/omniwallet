@@ -17,7 +17,10 @@ var conversionFactor = {
   //These are original values and are not consistent
   'BTC':  100000,
   'MSC':  100000000,
-  'TMSC': 100000000
+  'TMSC': 100000000,
+
+  'mtow': 1000,
+  'wtow': 1
 };
 function getConversionFactor( symbol ) {
   return conversionFactor[ symbol ];

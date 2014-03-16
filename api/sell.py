@@ -28,8 +28,8 @@ def sell_form_response(response_dict):
     amount=response_dict['amount'][0]
     if float(amount)<0 or float( from_satoshi( amount ))>max_currency_value:
         return (None, 'Invalid amount')
-    price=response_dict['price'][0]
-    if float(price)<0 or float( from_satoshi( price ))>max_currency_value:
+    price=float(response_dict['price'][0])
+    if price < 0:
         return (None, 'Invalid price')
     min_buyer_fee=response_dict['min_buyer_fee'][0]
     if float(min_buyer_fee)<0 or float( from_satoshi( min_buyer_fee ))>max_currency_value:
@@ -49,8 +49,8 @@ def sell_form_response(response_dict):
         else:
             return (None, 'Invalid currency')
 
-    satoshi_price=int( price )
-    bitcoin_amount_desired=int( satoshi_price * int(amount) )
+    #satoshi_price=int( price )
+    bitcoin_amount_desired=int( price * int(amount) )
 
     #DEBUG info(['early days', seller, amount, satoshi_price, bitcoin_amount_desired, min_buyer_fee, fee, blocks, currency])
     if pubkey != None:
