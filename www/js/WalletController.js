@@ -113,8 +113,10 @@ function WalletHistoryController($scope, $http, userService) {
 
 function WalletTradeController($scope, $http, $q, userService) {
 
-  //use global to pass data around
-  $scope.global = {}
+  //init and use global to pass data around
+  $scope.global = {
+    getData: function() {}
+  }
 
   $scope.onTradeView = true
   $scope.history = '/partials/wallet_history.html';
@@ -144,11 +146,13 @@ function WalletTradeController($scope, $http, $q, userService) {
   $scope.activeCurrencyPair = []
   
   $scope.setActiveCurrencyPair = function(currencyPair) {
-    console.log(currencyPair);
+    //DEBUG console.log(currencyPair);
     if(!currencyPair)
       $scope.activeCurrencyPair = $scope.currPairs[0]
     else
       $scope.activeCurrencyPair = currencyPair
+  
+    $scope.global.getData();
   }
   $scope.isActiveCurrencyPair = function(currencyPair) {
     if( angular.equals(currencyPair, $scope.activeCurrencyPair) ) 
@@ -159,16 +163,15 @@ function WalletTradeController($scope, $http, $q, userService) {
 }
 
 function WalletTradeOverviewController($scope, $http, $q, userService) {
-  //$scope.selectedAddress = userService.getAllAddresses()[ userService.getAllAddresses().length-1 ].address;
   $scope.currencyUnit = 'stom'
   $scope.selectedTimeframe = "604800"
-  $scope.getData = function(time) {
+  $scope.global.getData = function(time, currency) {
     $scope.orderbook = []
     var transaction_data = []
     var postData = { 
       type: 'TIME',
-      currencyType: 'TMSC',
-      time: time 
+      currencyType: currency || $scope.activeCurrencyPair[1],
+      time: time || $scope.selectedTimeframe 
     };
     $http.post('/v1/exchange/offers', postData).success(
       function(offerSuccess) {

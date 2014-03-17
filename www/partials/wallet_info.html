@@ -9,7 +9,7 @@
       <li ng-repeat="currencyPair in currPairs" ng-class="isActiveCurrencyPair(currencyPair)">
         <a href="" ng-click="setActiveCurrencyPair(currencyPair)"> {{currencyPair[0]}} / {{currencyPair[1]}} </a>
       </li>
-      <li><a href=""> +Add </a></li>
+      <li ng-hide="true" ><a href=""> +Add </a></li> <!-- hidden until user currencies are born -->
   </ul>
 
   <div class="row" ng-show="onTradeView">
@@ -37,8 +37,7 @@
           </div>
         </div>
   </div>
-
-  <div class="row" ng-controller="WalletTradeOverviewController" ng-init="getData(selectedTimeframe)">
+  <div class="row" ng-controller="WalletTradeOverviewController" ng-init="global.getData()">
     <div class="row" >
       <div class="col-xs-9">
         <div class="row">
@@ -70,7 +69,7 @@
 
     <div class="col-xs-9">
       <select ng-model="selectedTimeframe"  
-          ng-change="getData(selectedTimeframe)">
+          ng-change="global.getData(selectedTimeframe)">
         <option value="">-- choose timeframe --</option>
         <option value="86400"> 24 Hours </option>
         <option value="604800"> 1 week </option>
