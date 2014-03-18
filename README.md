@@ -119,6 +119,13 @@ grunt build
 ```
 If you install the development dependencies (``npm install --development``), you'll also be able to use the ``serve-static.js`` script, which can save you the effort of running nginx if you're just doing development on the static HTML pages.
 
+## Signing with your PGP key
+
+Signing your commits with a PGP key is always appreciated.
+1. Generate a key: http://stackoverflow.com/a/16725717/364485
+2. Sign your commit: ``git commit -S`` (Works for merges too, don't need to sign every commit, just the last one before you push something up.
+3. Check the signature on your commit: https://github.com/mastercoin-MSC/omniwallet/commit/d05dd949acb7234843d0e32b50c12a3556b8444b
+
 ## READ API (HTTP GET)
 
 ### Get currencies and page counts
