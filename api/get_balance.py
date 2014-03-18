@@ -50,7 +50,7 @@ def get_btc_balances( addr ):
   return ( [ balances ], None )
 
 def get_balance_response(request_dict):
-
+  import re
   try:
       addrs_list=request_dict['addr']
   except KeyError:
@@ -59,6 +59,8 @@ def get_balance_response(request_dict):
   if len(addrs_list)!=1:
       return response(none, 'no single address')
   addr=addrs_list[0]
+
+  addr = re.sub(r'\W+', '', addr) #check alphanumeric
 
   address_data, err = get_msc_balances( addr )
   if err != None:
