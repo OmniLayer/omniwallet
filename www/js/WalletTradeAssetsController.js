@@ -11,7 +11,7 @@ function WalletTradeAssetsController($modal, $scope, $http, $q, userService) {
 
   // [ Template Initialization ]
 
-  $scope.currencyList = ['MSC', 'TMSC', 'BTC']
+  $scope.currencyList = ['BTC', 'MSC', 'TMSC']
   $scope.selectedCoin = $scope.currencyList[1] 
 
   $scope.addressList = getAddressesWithPrivkey()

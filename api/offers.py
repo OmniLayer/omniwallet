@@ -40,7 +40,7 @@ def filterOffersByTime( request_data , time_seconds=86400):
     import glob
     import time
 
-    ct = request_data['currencyType']
+    ct = request_data['currencyType'][0]
     ot = request_data['orderType'][0] if request_data.has_key('orderType') else 'OFFER'
 
     otLookup = { 'OFFER': 'Sell offer', 'ACCEPT': 'Sell accept' }
@@ -52,11 +52,11 @@ def filterOffersByTime( request_data , time_seconds=86400):
     #    pass back array
 
     #filter by currency
-    #if currencytype != 'MSC':
-    #    currency = '0'
-    #else:
-    #    currency = '1'
-    #del allOffers[currency]
+    #data is from /tx so using 'currencyId' key to identify
+    if ct == 'MSC':
+        currency = '00000001'
+    else:
+        currency = '00000002'
 
     atleast_now = int( str( int(time.time() - time_seconds) ) + '000'  )
     transactions = glob.glob(data_dir_root + '/www/tx/*')
@@ -66,13 +66,18 @@ def filterOffersByTime( request_data , time_seconds=86400):
         if transaction[-5:] == '.json':
           with open( transaction , 'r' ) as f:
             tx = json.loads(f.readline())[0]
-
-            if tx['invalid'] == False:
-                if int(tx['tx_time']) >= (atleast_now-time_seconds):
-                    if str(tx['tx_type_str']) == otLookup[ot]:
-                        #info(['tx time ', time.ctime( int(str( tx['tx_time'] )[:-3]) ) ])
-                        #info(['now time - time_s ', time.ctime( int(str(atleast_now-time_seconds)[:-3]) ) ])
-                        transaction_data.append(tx)
+            
+            #filtering begins here
+            if tx['invalid'] == False and tx.has_key('currencyId'):
+                if int(tx['tx_time']) >= (atleast_now-time_seconds) and \
+                   str(tx['currencyId']) == currency and \
+                   str(tx['tx_type_str']) == otLookup[ot]:
+                    #DEBUG info(['test', tx['currencyId'], currency])
+                    #DEBUG info([tx['tx_type_str'], otLookup[ot]])
+                    #DEBUG info(['tx time ', time.ctime( int(str( tx['tx_time'] )[:-3]) ) ])
+                    #DEBUG info(['now time - time_s ', time.ctime( int(str(atleast_now-time_seconds)[:-3]) ) ])
+                    transaction_data.append(tx)
+    
     return transaction_data
 
 def filterOffers(address,currencytype, offertype):
