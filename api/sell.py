@@ -58,7 +58,7 @@ def sell_form_response(response_dict):
     else:
         tx_to_sign_dict={'transaction':'','sourceScript':''}
         l=len(seller)
-        if l == 66: # probably pubkey
+        if l == 66 or l == 130: # probably pubkey
             if is_pubkey_valid(seller):
                 pubkey=seller
                 response_status='OK'
