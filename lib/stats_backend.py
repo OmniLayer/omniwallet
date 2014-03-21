@@ -16,17 +16,17 @@ class StatsBackend(object):
                 options = {"db_path": "/var/lib/omniwallet/www/stats.json"}
         self.engine = StatsFileBackend(options)
 
-  def put(self, key, val):
-    self.engine.put(key, val)
+    def put(self, key, val):
+        self.engine.put(key, val)
 
-  def increment(self, key):
-    val = self.engine.get(key) 
+    def increment(self, key):
+        val = self.engine.get(key)
 
-    if val == None:
-      val = 0
+        if val is None:
+            val = 0
 
-    val += 1
-    self.engine.put(key, val)
+        val += 1
+        self.engine.put(key, val)
 
-  def get(self, val):
-    return self.engine.get(val)
+    def get(self, val):
+        return self.engine.get(val)
