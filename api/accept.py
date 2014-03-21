@@ -1,14 +1,16 @@
+import os
+import sys
+import random
 import urlparse
-import os, sys
 
 tools_dir = os.environ.get('TOOLSDIR')
 lib_path = os.path.abspath(tools_dir)
 sys.path.append(lib_path)
 from msc_utils_parsing import *
 from msc_apps import *
-import random
 
 data_dir_root = os.environ.get('DATADIR')
+
 
 def accept_form_response(response_dict):
     expected_fields=['buyer', 'amount', 'tx_hash', 'fee']
