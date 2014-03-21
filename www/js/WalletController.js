@@ -43,15 +43,6 @@ function WalletController($scope, $q, $http, $modal, $location, userService) {
      });
   });
 
-  $scope.backupWallet = function() {
-    console.log(userService.data.wallet);
-    var blob = {
-      addresses: userService.data.wallet.addresses
-    };
-    var exportBlob = new Blob([JSON.stringify(blob)], {type: 'application/json;charset=utf-8'});
-    saveAs(exportBlob, "wallet.json");
-  }
-
   function getData(address) {
     var deferred = $q.defer();
 
