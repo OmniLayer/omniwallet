@@ -23,7 +23,7 @@ angular.module( 'omniwallet' )
       } 
     };
   })
-  .controller( 'AddAddressController', function( $modal, $injector, $scope, enumerated_addresses ) {
+  .controller( 'AddAddressController', function( $modal, $injector, $scope, userService, enumerated_addresses ) {
 
     function decodeAddressFromPrivateKey( key ) {
 
@@ -43,6 +43,14 @@ angular.module( 'omniwallet' )
       return enc;
     };
 
+    $scope.backupWallet = function() {
+      console.log(userService.data.wallet);
+      var blob = {
+        addresses: userService.data.wallet.addresses
+      };
+      var exportBlob = new Blob([JSON.stringify(blob)], {type: 'application/json;charset=utf-8'});
+      saveAs(exportBlob, "wallet.json");
+    }
 
     // Begin Import watch only Form Code
     $scope.openImportWatchOnlyForm = function() {
@@ -120,11 +128,13 @@ angular.module( 'omniwallet' )
 
       modalInstance.result.then(function ( result ) {
 
-        if( result.privKey && result.password )
+        if( result.encryptedPrivKey && result.password )
         {
+          var key = Bitcoin.ECKey.decodeEncryptedFormat( result.encryptedPrivKey, result.password);
+          var privkey = Bitcoin.Util.bytesToHex(key.getPrivateKeyByteArray());
           $injector.get( 'userService' ).addAddress( 
-            decodeAddressFromPrivateKey( result.privKey ), 
-            encodePrivateKey( result.privKey, result.password ));
+            decodeAddressFromPrivateKey( privkey ), 
+            encodePrivateKey( privkey, result.password ));
         }
         $scope.refresh();
 
