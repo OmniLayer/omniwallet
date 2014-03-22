@@ -10,7 +10,7 @@ easy to understand implementation which allows for analysis and its rapid develo
 
 Omniwallet is a new type of web wallet, that combines security, ease of use, multi-currency support, and is completely open source from the ground up (up to the deplomeny scripts!)
 
-It currently supports Bitcoin and Mastercoin, and will support Mastercoin-derived currency in the future. In addition, support for other blockchains is a high priority for us - you will be able to store Litecoins, Peercoins, and other alts on the same highly secure web wallet (See [running bounty for Peercoin integration](https://github.com/mastercoin-MSC/omniwallet)).
+It currently supports Bitcoin and Mastercoin, and will support Mastercoin-derived currency in the future. In addition, support for other blockchains is a high priority for us - you will be able to store Litecoins, Peercoins, and other alts on the same highly secure web wallet (See [running bounty for Peercoin integration](http://peer4commit.com/projects/17)).
 
 You can checkout the test builds at [test.omniwallet.org](https://test.omniwallet.org/) (please note that this is not production ready, only use small amounts of BTC and MSC!)
 
