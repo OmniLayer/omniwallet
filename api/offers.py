@@ -1,10 +1,9 @@
 import urlparse
-import os, sys
+import os, sys, tempfile, json
 tools_dir = os.environ.get('TOOLSDIR')
 lib_path = os.path.abspath(tools_dir)
 sys.path.append(lib_path)
 from msc_apps import *
-import tempfile
 
 data_dir_root = os.environ.get('DATADIR')
 
@@ -16,7 +15,7 @@ def offers_response(response_dict):
         if len(response_dict[field]) != 1:
             return (None, 'Multiple values for field '+field)
     
-    #DEBUG print response_dict        
+    #DEBUG     info(['dict',response_dict])        
     if response_dict['type'][0].upper() == "TRANSACTIONBID":
         data = filterTransactionBid(response_dict['transaction'][0], response_dict['validityStatus'][0].upper() )
     elif response_dict['type'][0].upper() == "TRANSACTION":
@@ -28,7 +27,11 @@ def offers_response(response_dict):
             time = 86400
         data = filterOffersByTime( response_dict , time  )
     else:
-        data = filterOffers(response_dict['address'][0],response_dict['currencyType'][0].upper(), response_dict['offerType'][0].upper())    
+        address_arr = json.loads(response_dict['address'][0])
+        if type(address_arr) == type([]):
+            data = filterOffers(address_arr,response_dict['currencyType'][0].upper(), response_dict['offerType'][0].upper())
+        else:
+            data = { 'ERR': 'Address field must be a list or array type' }
     
     response_status='OK'
     response='{"status":"'+response_status+'", "data":'+ str(json.dumps(data)) +'}'
@@ -72,6 +75,7 @@ def filterOffersByTime( request_data , time_seconds=86400):
                 if int(tx['tx_time']) >= (atleast_now-time_seconds) and \
                    str(tx['currencyId']) == currency and \
                    str(tx['tx_type_str']) == otLookup[ot]:
+                    #DEBUG info(['hash', tx['tx_hash']])
                     #DEBUG info(['test', tx['currencyId'], currency])
                     #DEBUG info([tx['tx_type_str'], otLookup[ot]])
                     #DEBUG info(['tx time ', time.ctime( int(str( tx['tx_time'] )[:-3]) ) ])
@@ -80,53 +84,68 @@ def filterOffersByTime( request_data , time_seconds=86400):
     
     return transaction_data
 
-def filterOffers(address,currencytype, offertype):
+def filterOffers(addresses,currencytype, offertype):
     # currencyType   =  TMSC or MSC
     # offerType      =  SELL, ACCEPT or BOTH
     
-    #get list of all offers by address
-    try:
-        datadir = data_dir_root + '/addr'
-        filepath =  datadir + '/' + address + '.json'
-        f=open( filepath , 'r' )
-        allOffers = json.loads(f.readline())
-    except IOError:
-        return 'ADDRESS_NOT_FOUND'
-    
-    #filter by currency
-    #1 is TMSC 
-    #0 is MSC
-    if currencytype != 'MSC':
-        currency = '0'
-    else:
-        currency = '1'
-    del allOffers[currency]
-    
-    #filter by offer type
-    #accept_tx are offers accepted
-    #bought_tx are offers bought
-    #offer_tx are offers of sale
-    #sold_tx are offers sold
-    #recieved and sent tx are simple send
-    #exodus tx is not related to offers
+    #DEBUG info(['addr',addresses])
+    offers = {}
+    for address in addresses:
+        offers[address] = {}
+        #get list of all offers by address
+        try:
+            datadir = data_dir_root + '/addr'
+            filepath =  datadir + '/' + address + '.json'
+            f=open( filepath , 'r' )
+            allOffers = json.loads(f.readline())
+        except IOError:
+            offers[address] = 'ADDRESS_NOT_FOUND'
+            continue
         
-    offerstruct = {}
-    for key in allOffers:
-        if isinstance(allOffers[key],dict):
-            if offertype == 'BOTH':
-                offerstruct['accept_tx'] = allOffers[key]['accept_transactions']
-                offerstruct['bought_tx'] = allOffers[key]['bought_transactions']
-                offerstruct['offer_tx'] = allOffers[key]['offer_transactions']
-                offerstruct['sold_tx'] = allOffers[key]['sold_transactions']
-                return offerstruct
-            elif offertype == 'ACCEPT': #accept_tx
-                offerstruct['accept_tx'] = allOffers[key]['accept_transactions']
-                offerstruct['bought_tx'] = allOffers[key]['bought_transactions']
-                return offerstruct
-            elif offertype == 'SELL': #offer_tx
-                offerstruct['offer_tx'] = allOffers[key]['offer_transactions']
-                offerstruct['sold_tx'] = allOffers[key]['sold_transactions']
-                return offerstruct
+
+        #filter by currency
+        #1 is TMSC 
+        #0 is MSC
+        if currencytype == 'MSC':   #only need MSC so del TMSC
+            del allOffers['1']
+        elif currencytype == 'TMSC':  #only need TMSC so del MSC
+            del allOffers['0']
+        elif currencytype == 'BOTH':
+            pass
+
+        #filter by offer type
+        #accept_tx are offers accepted
+        #bought_tx are offers bought
+        #offer_tx are offers of sale
+        #sold_tx are offers sold
+        #recieved and sent tx are simple send
+        #exodus tx is not related to offers
+
+        accept_tx = { 'TMSC': [], 'MSC': [] }
+        bought_tx = { 'TMSC': [], 'MSC': [] }
+        offer_tx =  { 'TMSC': [], 'MSC': [] }
+        sold_tx =   { 'TMSC': [], 'MSC': [] }
+        for key in allOffers:
+            keystr = 'MSC' if key == '0' else 'TMSC'
+            if isinstance(allOffers[key],dict):
+                if offertype == 'BOTH':
+                    accept_tx[ keystr ] = allOffers[key]['accept_transactions']
+                    bought_tx[ keystr ] = allOffers[key]['bought_transactions']
+                    offer_tx[ keystr ] = allOffers[key]['offer_transactions']
+                    sold_tx[ keystr ] = allOffers[key]['sold_transactions']
+                elif offertype == 'ACCEPT': #accept_tx
+                    accept_tx[ keystr ] = allOffers[key]['accept_transactions']
+                    bought_tx[ keystr ] = allOffers[key]['bought_transactions']
+                elif offertype == 'SELL': #offer_tx
+                    offer_tx[ keystr ] = allOffers[key]['offer_transactions']
+                    sold_tx[ keystr ] = allOffers[key]['sold_transactions']
+        
+        offers[address]['accept_tx'] = accept_tx
+        offers[address]['bought_tx'] = bought_tx
+        offers[address]['offer_tx'] = offer_tx
+        offers[address]['sold_tx'] = sold_tx
+        
+    return offers
 
 def filterTransactionBid(transaction,validitystatus):
     # validityStatus =  VALID, INVALID, EXPIRED or ANY
