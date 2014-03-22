@@ -1,7 +1,6 @@
 import os
 import sys
 import random
-import urlparse
 
 tools_dir = os.environ.get('TOOLSDIR')
 lib_path = os.path.abspath(tools_dir)
