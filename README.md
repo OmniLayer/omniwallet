@@ -34,13 +34,63 @@ You can checkout the test builds at [test.omniwallet.org](https://test.omniwalle
 2. Native support for Smart Property and User-Generated Currencies
 3. Alt-coin support – the Omniwallet will support coins that go outside of the usual Mastercoin ecosystem, such as Litecoin, Peercoin and more.
 
-## Setup
+## Ubuntu Setup
 
 Install sx
 ```
 sudo apt-get install git build-essential autoconf libtool libboost-all-dev pkg-config libcurl4-openssl-dev libleveldb-dev libzmq-dev libconfig++-dev libncurses5-dev
 wget http://sx.dyne.org/install-sx.sh
 sudo bash ./install-sx.sh
+```
+update ~/.sx.cfg with an obelisk server details.  Don't have one already set up?  Here's how to build one on Rackspace: https://gist.github.com/curtislacy/8424181
+```
+# ~/.sx.cfg Sample file.
+service = "tcp://162.243.29.201:9091"
+```
+Make sure you have python libraries installed - note that we use ``apt-get`` to install python-git.  Pip installs an older, stable version, and we need things that start in beta version 0.3.2.
+```
+sudo apt-get install git python-simplejson python-git python-pip libffi-dev
+sudo pip install -r requirements.txt
+```
+Install nginx, and drop in the config included with this codebase.
+```
+sudo apt-get install uwsgi uwsgi-plugin-python
+sudo -s
+nginx=stable # use nginx=development for latest development version
+add-apt-repository ppa:nginx/$nginx
+apt-get update 
+apt-get install nginx
+exit
+sudo cp etc/nginx/sites-available/default /etc/nginx/sites-available
+```
+Find this section near the beginning of /etc/nginx/sites-available/default:
+```
+        ## Set this to reflect the location of the www directory within the omniwallet repo.
+        root /home/cmlacy/omniwallet/www/;
+        index index.html index.htm;
+```
+Change the ``root`` directive to reflect the location of your omniwallet codebase (actually the www directory within that codebase).
+
+Make sure you have uglifyjs (Note that there are a couple flavors of this available - you need the ``uglifyjs`` executable, which is included in the ``uglify-js`` NPM module - NOT the ``uglifyjs`` module!
+```
+sudo npm install -g uglify-js
+```
+Run npm install
+```
+npm install
+```
+Create the parsed blockchain data directory
+```
+sudo mkdir /var/lib/omniwallet
+sudo chown {user who will run omniwallet} /var/lib/omniwallet
+```
+
+## Mac OS X Setup
+
+Install sx
+```
+brew tap WyseNynja/bitcoin && brew prune && brew update
+brew install sx
 ```
 update ~/.sx.cfg with an obelisk server details.  Don't have one already set up?  Here's how to build one on Rackspace: https://gist.github.com/curtislacy/8424181
 ```
