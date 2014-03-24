@@ -24,7 +24,7 @@
     <script src="/bower_components/angular-route/angular-route.js"></script>
     <script src="/bower_components/angular-password-strength/build/angular-password-strength.js"></script>
     <script src="/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
-    <script src="/bower_components/angular-bootstrap/ui-bootstrap.js"></script>
+    <script src="/bower_components/angular-bootstrap/ui-bootstrap.min.js"></script>
     <script src="/bower_components/jsrsasign/jsrsasign-latest-all-min.js"></script>
     <script src="/bower_components/forge/js/forge.min.js"></script>
     <script src="/bower_components/bitcoinjs-lib/build/bitcoinjs-lib.js"></script>
@@ -51,13 +51,13 @@
          <div class="header">
            <div ng-include="templates['header']"></div> 
          </div>
-       <div class="middle row">
-            <div ng-view></div>
-        </div>
-          </div>
-        <div class="footer">
-          <div ng-include="templates['footer']"></div> 
-        </div>
+         <div class="middle row">
+           <div ng-view></div>
+         </div>
+       </div>
+       <div class="footer">
+         <div ng-include="templates['footer']"></div> 
+       </div>
       </div>
     </div>
   </body>
