@@ -153,7 +153,11 @@ function WalletTradeController($scope, $http, $q, userService) {
   }
 }
 
-function WalletTradeOverviewController($scope, $http, $q, userService) {
+function WalletTradeOverviewController($scope, $http, $q, userService, hashExplorer) {
+  $scope.setHashExplorer = function(tx) {
+    hashExplorer.tx = JSON.stringify(tx);
+    hashExplorer.loc = window.location.href.split('/').slice(-2).join('/');
+  } 
   $scope.currencyUnit = 'stom'
   $scope.selectedTimeframe = "604800"
   $scope.global.getData = function(time, currency) {
@@ -236,7 +240,11 @@ function WalletTradeHistoryController($scope, $http, $q, userService) {
 }
 
 
-function WalletTradePendingController($scope, $http, $q, userService) {
+function WalletTradePendingController($scope, $http, $q, userService, hashExplorer) {
+  $scope.setHashExplorer = function(tx) {
+    hashExplorer.tx = JSON.stringify(tx);
+    hashExplorer.loc = window.location.href.split('/').slice(-2).join('/');
+  } 
   //$scope.selectedAddress = userService.getAllAddresses()[ userService.getAllAddresses().length-1 ].address;
   $scope.currencyUnit = 'stom'
   $scope.pendingThinking = true
