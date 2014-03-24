@@ -110,7 +110,13 @@ function ExplorerController($scope, $http) {
       });
     }
 }
+function ExplorerInspectorController($scope, hashExplorer) {
+  $scope.transactionData = JSON.parse(hashExplorer.tx)
+  $scope.tx_keys = Object.keys($scope.transactionData);
+  $scope.fieldlist = $scope.tx_keys
+  $scope.pastLoc = hashExplorer.loc
 
+}
 function SidecarController($scope, $http, userService) {
     $scope.values = {};
     $scope.setView = function(viewName) {
