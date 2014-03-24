@@ -1,10 +1,4 @@
 function WalletTradeAssetsController($modal, $scope, $http, $q, userService) {
-  //fee tooltip
-
-  $('#time-blocks').tooltip({ 
-    title: 'Time in blocks the buyer has to complete his purchase (1 block approx. 10 minutes)', 
-    placement: 'left' });
-
   // [ Form Validation]
 
   $scope.showErrors = false 
