@@ -58,7 +58,8 @@ function WalletController($scope, $q, $http, $modal, $location, userService) {
 
 }
 
-function WalletHistoryController($scope, $http, userService) {
+function WalletHistoryController($scope, $http, userService, hashExplorer) {
+  $scope.setHashExplorer = hashExplorer.setHash.bind(hashExplorer)
   $scope.selectedAddress = userService.getAllAddresses()[0].address
   $scope.addresses = userService.getAllAddresses()
 
@@ -94,7 +95,7 @@ function WalletHistoryController($scope, $http, userService) {
         
         angular.forEach(transaction_data, function(transaction, index) {
           //DEBUG console.log(new Date(Number(transaction.tx_time)))
-          transaction_data[index].tx_hash = transaction.tx_hash.substring(0,22) + '...'
+          transaction_data[index].tx_hash_concat = transaction.tx_hash.substring(0,22) + '...'
         });
         
         $scope.history = transaction_data;
@@ -154,10 +155,7 @@ function WalletTradeController($scope, $http, $q, userService) {
 }
 
 function WalletTradeOverviewController($scope, $http, $q, userService, hashExplorer) {
-  $scope.setHashExplorer = function(tx) {
-    hashExplorer.tx = JSON.stringify(tx);
-    hashExplorer.loc = window.location.href.split('/').slice(-2).join('/');
-  } 
+  $scope.setHashExplorer = hashExplorer.setHash.bind(hashExplorer)
   $scope.currencyUnit = 'stom'
   $scope.selectedTimeframe = "604800"
   $scope.global.getData = function(time, currency) {
@@ -199,7 +197,8 @@ function WalletTradeOverviewController($scope, $http, $q, userService, hashExplo
   }
 }
 
-function WalletTradeHistoryController($scope, $http, $q, userService) {
+function WalletTradeHistoryController($scope, $http, $q, userService, hashExplorer) {
+  $scope.setHashExplorer = hashExplorer.setHash.bind(hashExplorer)
   $scope.selectedAddress = userService.getAllAddresses()[0].address;
   $scope.addresses = userService.getAllAddresses();
   $scope.pairs = getPairs()
@@ -241,10 +240,7 @@ function WalletTradeHistoryController($scope, $http, $q, userService) {
 
 
 function WalletTradePendingController($scope, $http, $q, userService, hashExplorer) {
-  $scope.setHashExplorer = function(tx) {
-    hashExplorer.tx = JSON.stringify(tx);
-    hashExplorer.loc = window.location.href.split('/').slice(-2).join('/');
-  } 
+  $scope.setHashExplorer = hashExplorer.setHash.bind(hashExplorer)
   //$scope.selectedAddress = userService.getAllAddresses()[ userService.getAllAddresses().length-1 ].address;
   $scope.currencyUnit = 'stom'
   $scope.pendingThinking = true
