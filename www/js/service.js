@@ -109,8 +109,14 @@ angular.module( 'omniwallet' ).factory( 'appraiser', ['$rootScope', '$http', fun
         setTimeout( MscUpdateLoop, 600000 );
       } );
     }
+    function SptUpdateLoop() {
+      self.updateSptValue( function() {
+        setTimeout( SptUpdateLoop, 600000 );
+      } );
+    }
     BtcUpdateLoop();
     MscUpdateLoop();
+    SptUpdateLoop();
   };
   AppraiserService.prototype.updateBtcValue = function( callback ) {
     var self = this;
@@ -143,6 +149,20 @@ angular.module( 'omniwallet' ).factory( 'appraiser', ['$rootScope', '$http', fun
       console.log( error );
       callback();
     });
+  };
+  AppraiserService.prototype.updateSptValue = function( callback ) {
+    var self = this;
+    // Maybe use $q to call this using deferred?
+    self.smartProperties.forEach(function(token,value){
+        $http.post( '/v1/smartproperty/token', { 'token': token } ).success( function( result ) {
+        // Return the rates of the token.
+        self.conversions[token] = result.data.rate;
+        $rootScope.$emit( 'APPRAISER_VALUE_CHANGED', token );
+      }).error( function( error ) {
+        console.log( error );
+      });
+    });
+    callback();
   };
   AppraiserService.prototype.getValue = function( amount, symbol ) {
     if( symbol == 'TMSC' )
