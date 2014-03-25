@@ -82,7 +82,7 @@ angular.module( 'omniwallet' ).factory('userService', ['$rootScope', '$http', fu
             method: 'POST',
             data: { uuid: uuid, wallet: encryptedWallet, challenge: challenge, signature: signature }
           });
-        })
+        });
     },
 
     saveSession: function () {
@@ -97,6 +97,7 @@ angular.module( 'omniwallet' ).factory( 'appraiser', ['$rootScope', '$http', fun
 
   function AppraiserService() {
     this.conversions = {};
+    this.smartProperties = {};
     var self = this;
     function BtcUpdateLoop() {
       self.updateBtcValue( function() {
@@ -155,12 +156,12 @@ angular.module( 'omniwallet' ).factory( 'appraiser', ['$rootScope', '$http', fun
     }
     else
     {
-      if( this.conversions.MSC )
+      if( this.conversions.hasOwnProperty(symbol) )
       {
-        return this.getValue( this.conversions.MSC * amount, 'BTC' );
+        return this.getValue( this.conversions[symbol] * amount, 'BTC' );
       }
       else
-        return 'MSC Value Unavailable';
+        return symbol + ' Value Unavailable';
     }
   };
 
