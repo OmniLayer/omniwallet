@@ -167,9 +167,13 @@ angular.module( 'omniwallet' ).factory( 'appraiser', ['$rootScope', '$http', fun
 }]);
 
 angular.module( 'omniwallet' ).factory( 'hashExplorer', function ( ) {
-  var tx = '', loc = '';
+  var tx = '', loc = '', setHash = function(){}; 
   return {
     tx : tx,
-    loc: loc
+    loc: loc,
+    setHash: function(tx) {
+      this.tx = JSON.stringify(tx);
+      this.loc = window.location.href.split('/').slice(-2).join('/');
+    }
   }
 });
