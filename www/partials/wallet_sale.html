@@ -56,8 +56,16 @@
           BTC</span>
       </div>
       <br>
-      <div id="time-blocks" class="input-group">
-        <span class="input-group-addon">Time given to buyer to pay: </span>
+      <div class="input-group">
+        <span class="input-group-addon">
+          Time given to buyer to pay: 
+          <a href=""
+            tooltip="Time in blocks the buyer has to complete his purchase (1 block approx. 10 minutes)"
+            tooltip-append-to-body="true"
+            tooltip-placement="left" 
+            tooltip-trigger="click"> <strong>(?)</strong>
+          </a>
+        </span>
         <input name="blocks" type="number" ng-model="saleBlocks" class="form-control" placeholder="100 blocks" required>
       </div>
       <br>
