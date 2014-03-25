@@ -153,16 +153,23 @@ angular.module( 'omniwallet' ).factory( 'appraiser', ['$rootScope', '$http', fun
   AppraiserService.prototype.updateSptValue = function( callback ) {
     var self = this;
     // Maybe use $q to call this using deferred?
-    self.smartProperties.forEach(function(token,value){
+    self.smartProperties.forEach(function(token, value){
         $http.post( '/v1/smartproperty/token', { 'token': token } ).success( function( result ) {
         // Return the rates of the token.
         self.conversions[token] = result.data.rate;
+        self.smartProperties[token] = result.data;
         $rootScope.$emit( 'APPRAISER_VALUE_CHANGED', token );
       }).error( function( error ) {
         console.log( error );
       });
     });
     callback();
+  };
+  AppraiserService.prototype.addSmartPropertyToken = function( symbol ) {
+    var self = this;
+    
+    if( !self.smartProperties.hasOwnProperty(symbol))
+      self.smartProperties[symbol] = {};
   };
   AppraiserService.prototype.getValue = function( amount, symbol ) {
     if( symbol == 'TMSC' )
