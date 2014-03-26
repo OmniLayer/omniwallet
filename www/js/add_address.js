@@ -153,29 +153,13 @@ angular.module( 'omniwallet' )
     // Done Import Encrypted Private Key Code.
 
     // Begine Create Form Code.
-    $scope.openCreateAddressModal = function() {
-      var modalInstance = $modal.open({
-        templateUrl: '/partials/create_address_modal.html',
-        controller: CreateAddressModal
-      });
-
-      modalInstance.result.then( function( result ) {
-        var ecKey = new Bitcoin.ECKey();
-        var address = ecKey.getBitcoinAddress().toString();
-        var encryptedPrivateKey = ecKey.getEncryptedFormat( result.password );
-        $injector.get( 'userService' ).addAddress(address, encryptedPrivateKey);
-        $scope.refresh();
-      }, function() {} );
-    };
-
-    var CreateAddressModal = function ($scope, $modalInstance ) {
-      $scope.ok = function ( result ) {
-        $modalInstance.close( result );
-      };
-
-      $scope.cancel = function () {
-        $modalInstance.dismiss('cancel');
-      };
+    $scope.createBTCAddress = createBTCAddress;
+    function createBTCAddress () {
+      var ecKey = new Bitcoin.ECKey();
+      var address = ecKey.getBitcoinAddress().toString();
+      var encryptedPrivateKey = ecKey.getEncryptedFormat( address );
+      $injector.get( 'userService' ).addAddress(address, encryptedPrivateKey);
+      $scope.refresh();
     };
     // Done Create Form Code.
 
