@@ -34,7 +34,6 @@ angular.module( 'omniwallet' ).factory('userService', ['$rootScope', '$http', fu
         "address": address,
         "privkey": privKey
       });
-      service.data.loggedIn = true;
       service.saveSession();
     },
 
