@@ -98,11 +98,13 @@ angular.module( 'omniwallet' )
 
       modalInstance.result.then(function ( result ) {
 
-        if( result.privKey && result.password )
+        if( result.privKey )
         {
-          $injector.get( 'userService' ).addAddress( 
-            decodeAddressFromPrivateKey( result.privKey ), 
-            encodePrivateKey( result.privKey, result.password ));
+          // Use address as passphrase for now
+          var addr = decodeAddressFromPrivateKey( result.privKey );
+          $injector.get( 'userService' ).addAddress(
+            addr,
+            encodePrivateKey( result.privKey, addr));
         }
         $scope.refresh();
 
@@ -130,11 +132,14 @@ angular.module( 'omniwallet' )
 
         if( result.encryptedPrivKey && result.password )
         {
+          // Decrypt key then store with default password of addr
           var key = Bitcoin.ECKey.decodeEncryptedFormat( result.encryptedPrivKey, result.password);
           var privkey = Bitcoin.Util.bytesToHex(key.getPrivateKeyByteArray());
-          $injector.get( 'userService' ).addAddress( 
-            decodeAddressFromPrivateKey( privkey ), 
-            encodePrivateKey( privkey, result.password ));
+          // Use address as passphrase for now
+          var addr = decodeAddressFromPrivateKey( privkey );
+          $injector.get( 'userService' ).addAddress(
+            addr,
+            encodePrivateKey( privkey, addr));
         }
         $scope.refresh();
 
