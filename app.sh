@@ -56,12 +56,12 @@ do
 	
 		mkdir -p $DATADIR/www/tx $DATADIR/www/addr $DATADIR/www/general $DATADIR/www/offers $DATADIR/www/mastercoin_verify/addresses $DATADIR/www/mastercoin_verify/transactions
 
-    find $DATADIR/tx/. -name "*.json" | xargs -J % cp -rp % $DATADIR/www/tx
-    find $DATADIR/addr/. -name "*.json" | xargs -J % cp -rp % $DATADIR/www/addr
-    find $DATADIR/general/. -name "*.json" | xargs -J % cp -rp % $DATADIR/www/general
-    find $DATADIR/offers/. -name "*.json" | xargs -J % cp -rp % $DATADIR/www/offers
-    find $DATADIR/mastercoin_verify/addresses/. -name "*.json" | xargs -J % cp -rp % $DATADIR/www/mastercoin_verify/addresses
-    find $DATADIR/mastercoin_verify/transactions/. -name "*.json" | xargs -J % cp -rp % $DATADIR/www/mastercoin_verify/transactions
+    find $DATADIR/tx/. -name "*.json" | xargs -I % cp -rp % $DATADIR/www/tx
+    find $DATADIR/addr/. -name "*.json" | xargs -I % cp -rp % $DATADIR/www/addr
+    find $DATADIR/general/. -name "*.json" | xargs -I % cp -rp % $DATADIR/www/general
+    find $DATADIR/offers/. -name "*.json" | xargs -I % cp -rp % $DATADIR/www/offers
+    find $DATADIR/mastercoin_verify/addresses/. -name "*.json" | xargs -I % cp -rp % $DATADIR/www/mastercoin_verify/addresses
+    find $DATADIR/mastercoin_verify/transactions/. -name "*.json" | xargs -I % cp -rp % $DATADIR/www/mastercoin_verify/transactions
 	
 		# unlock
 		rm -f $LOCK_FILE
