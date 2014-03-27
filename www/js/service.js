@@ -34,7 +34,7 @@ angular.module( 'omniwallet' ).factory('userService', ['$rootScope', '$http', fu
       $http.post( '/v1/address/addr/', { 'addr': address } )
         .success( function( result ) {
           var currencies = [];
-          result.data.balance.map(
+          result.balance.map(
             function(e,i,a) { 
                currencies.push(e.symbol);
             }
