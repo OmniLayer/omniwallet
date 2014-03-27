@@ -68,6 +68,18 @@ angular.module( 'omniwallet' ).factory('userService', ['$rootScope', '$http', fu
     getAllAddresses: function () {
       return service.data.wallet.addresses;
     },
+    
+    getCurrencies: function(){
+      currencies = []
+      for(var i in service.data.wallet.addresses) {
+        for(var c =0;c< service.data.wallet.addresses[i].currencies.length;c++){
+          if(currencies.indexOf(service.data.wallet.addresses[i].currencies[c]) == -1) {
+            currencies.push(service.data.wallet.addresses[i].currencies[c]);
+          }
+        }
+      }
+      return currencies;
+    },
 
     getWallet: function() {
       return service.data.wallet;
