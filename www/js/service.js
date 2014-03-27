@@ -30,12 +30,31 @@ angular.module( 'omniwallet' ).factory('userService', ['$rootScope', '$http', fu
           return;
         }
       }
-      service.data.wallet.addresses.push( {
-        "address": address,
-        "privkey": privKey
-      });
-      service.data.loggedIn = true;
-      service.saveSession();
+      // update currencies
+      $http.post( '/v1/address/addr/', { 'addr': address } )
+        .success( function( result ) {
+          var currencies = [];
+          result.data.balance.map(
+            function(e,i,a) { 
+               currencies.push(e.symbol);
+            }
+          );
+          service.data.wallet.addresses.push( {
+            "address": address,
+            "privkey": privKey,
+            "currencies": currencies
+          });
+          service.data.loggedIn = true;
+          service.saveSession();
+        } ).error(
+        function( error ) {
+          service.data.wallet.addresses.push( {
+            "address": address,
+            "privkey": privKey,
+            "currencies": []
+          });
+        }
+      );
     },
 
     getAddress: function(address) {
