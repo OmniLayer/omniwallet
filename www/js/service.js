@@ -191,9 +191,7 @@ angular.module( 'omniwallet' ).factory( 'appraiser', ['$rootScope', '$http', fun
       self.smartProperties[symbol] = {};
   };
   AppraiserService.prototype.getValue = function( amount, symbol ) {
-    if( symbol == 'TMSC' )
-      return 0;
-    else if( symbol == 'BTC' )
+    if( symbol == 'BTC' )
     {
       if( this.conversions.BTC )
         return this.conversions.BTC * amount;
