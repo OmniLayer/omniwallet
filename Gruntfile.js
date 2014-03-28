@@ -12,7 +12,7 @@ module.exports = function(grunt) {
 			mastercointools: {
 				options: {
 					repository: 'https://github.com/curtislacy/mastercoin-tools.git',
-                			branch: 'Common-Repo-With-Fixes-2',
+                			branch: 'Bids-To-Offers',
                 			directory: 'node_modules/mastercoin-tools'
 				},
 			},
