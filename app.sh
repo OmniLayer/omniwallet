@@ -29,7 +29,6 @@ SERVER_PID=$!
 
 while true
 do
-  echo "Start"
 	# check lock (not to run multiple times)
 	if [ ! -f $LOCK_FILE ]; then
 
@@ -68,6 +67,5 @@ do
 	fi
 
 	# Wait a minute, and do it all again.
-  echo "Done"
 	sleep 60
 done
