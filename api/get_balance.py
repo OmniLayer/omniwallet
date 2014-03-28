@@ -29,9 +29,8 @@ def get_msc_balances( addr ):
         balance_data[ i ][ 'value' ] = int( round( float( balance_data[ i ][ 'value' ]) * 100000000 ))
     
     for i in xrange( 0, len( balance_data )):
-      if balance_data[ i ][ 'symbol' ] == 'TMSC':
-        if balance_data[ i ][ 'value' ] == '0.0':
-          balance_data.pop( i )
+      if balance_data[ i ][ 'value' ] == '0.0':
+        balance_data.pop( i )
 
   return ( address_data, None )
 
@@ -45,7 +44,7 @@ def get_btc_balances( addr ):
   elif out == '':
     return None, 'No bitcoin balance available.  Invalid address?: ' + addr
   else:
-      balances[ 'value' ] = int( json.loads( out )[0][ 'paid' ])
+    balances[ 'value' ] = int( json.loads( out )[0][ 'paid' ])
 
   return ( [ balances ], None )
 
