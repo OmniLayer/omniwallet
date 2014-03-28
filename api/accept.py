@@ -1,75 +1,75 @@
-import urlparse
-import os, sys
+import os
+import sys
+import random
 
 tools_dir = os.environ.get('TOOLSDIR')
 lib_path = os.path.abspath(tools_dir)
 sys.path.append(lib_path)
 from msc_utils_parsing import *
 from msc_apps import *
-import random
 
 data_dir_root = os.environ.get('DATADIR')
 
+
 def accept_form_response(response_dict):
-    expected_fields=['buyer', 'amount', 'tx_hash', 'fee']
+    expected_fields = ('buyer', 'amount', 'tx_hash', 'fee')
     for field in expected_fields:
-        if not response_dict.has_key(field):
-            return (None, 'No field '+field+' in response dict '+str(response_dict))
+        if field not in response_dict:
+            return None, 'No field {} in response dict {} '.format(field, response_dict)
         if len(response_dict[field]) != 1:
-            return (None, 'Multiple values for field '+field)
+            return None, 'Multiple values for field {}'.format(field)
 
-    if response_dict.has_key( 'pubKey' ) and is_pubkey_valid( response_dict['pubKey'][0]):
+    if 'pubKey' in response_dict and is_pubkey_valid(response_dict['pubKey'][0]):
         pubkey = response_dict['pubKey'][0]
-        response_status='OK'
+        response_status = 'OK'
     else:
-        response_status='invalid pubkey'
-        pubkey=None
+        pubkey = None
+        response_status = 'invalid pubkey'
 
-    buyer=response_dict['buyer'][0].strip()
+    buyer = response_dict['buyer'][0].strip()
     if not is_valid_bitcoin_address_or_pubkey(buyer):
-        return (None, 'Buyer is neither bitcoin address nor pubkey')
+        return None, 'Buyer is neither bitcoin address nor pubkey'
 
-    amount=response_dict['amount'][0]
-    if float(amount)<0 or float( from_satoshi( amount ))>max_currency_value:
-        return (None, 'Invalid amount')
+    amount = response_dict['amount'][0]
+    if float(amount) < 0 or float(from_satoshi(amount)) > max_currency_value:
+        return None, 'Invalid amount'
 
-    tx_hash=response_dict['tx_hash'][0]
+    tx_hash = response_dict['tx_hash'][0]
     if not is_valid_hash(tx_hash):
-        return (None, 'Invalid tx hash')
+        return None, 'Invalid tx hash'
 
-    fee=response_dict['fee'][0]
-    if float(fee)<0 or float( from_satoshi( fee ))>max_currency_value:
-        return (None, 'Invalid fee')
+    fee = response_dict['fee'][0]
+    if float(fee) < 0 or float(from_satoshi(fee)) > max_currency_value:
+        return None, 'Invalid fee'
 
-    if pubkey == None:
-        tx_to_sign_dict={'transaction':'','sourceScript':''}
-        l=len(buyer)
-        if l == 66 or l == 130: # probably pubkey
+    if pubkey is None:
+        tx_to_sign_dict = {'transaction': '','sourceScript':''}
+        buyer_length = len(buyer)
+        if buyer_length in (66, 130):  # probably pubkey
             if is_pubkey_valid(buyer):
-                pubkey=buyer
-                response_status='OK'
-            else:
-                response_status='invalid pubkey'
-        else:   
+                pubkey = buyer
+                response_status = 'OK'
+        else:
             if not is_valid_bitcoin_address(buyer):
-                response_status='invalid address'
+                response_status = 'invalid address'
             else:
-                buyer_pubkey=get_pubkey(buyer)
+                buyer_pubkey = get_pubkey(buyer)
                 if not is_pubkey_valid(buyer_pubkey):
-                    response_status='missing pubkey'
+                    response_status = 'missing pubkey'
                 else:
-                    pubkey=buyer_pubkey
-                    response_status='OK'
+                    pubkey = buyer_pubkey
+                    response_status = 'OK'
 
     #DEBUG info(['early days', buyer, amount, tx_hash, fee])
-    if pubkey != None:
-        tx_to_sign_dict=prepare_accept_tx_for_signing( pubkey, amount, tx_hash, fee )
+    if pubkey is not None:
+        tx_to_sign_dict = prepare_accept_tx_for_signing(pubkey, amount, tx_hash, fee)
     else:
         # minor hack to show error on page
-        tx_to_sign_dict['sourceScript']=response_status
+        tx_to_sign_dict['sourceScript'] = response_status
 
-    response='{"status":"'+response_status+'", "transaction":"'+tx_to_sign_dict['transaction']+'", "sourceScript":"'+tx_to_sign_dict['sourceScript']+'"}'
-    return (response, None)
+    response = '{"status":"'+response_status+'", "transaction":"'+tx_to_sign_dict['transaction']+'", "sourceScript":"'+tx_to_sign_dict['sourceScript']+'"}'
+    return response, None
+
 
 def prepare_accept_tx_for_signing(buyer, amount, tx_hash, min_btc_fee=10000):
 
