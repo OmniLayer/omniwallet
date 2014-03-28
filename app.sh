@@ -29,6 +29,7 @@ SERVER_PID=$!
 
 while true
 do
+
 	# check lock (not to run multiple times)
 	if [ ! -f $LOCK_FILE ]; then
 
