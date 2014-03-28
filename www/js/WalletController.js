@@ -153,7 +153,11 @@ function WalletTradeController($scope, $http, $q, userService) {
   }
 }
 
-function WalletTradeOverviewController($scope, $http, $q, userService) {
+function WalletTradeOverviewController($scope, $http, $q, userService, hashExplorer) {
+  $scope.setHashExplorer = function(tx) {
+    hashExplorer.tx = JSON.stringify(tx);
+    hashExplorer.loc = window.location.href.split('/').slice(-2).join('/');
+  } 
   $scope.currencyUnit = 'stom'
   $scope.selectedTimeframe = "604800"
   $scope.global.getData = function(time, currency) {
@@ -186,8 +190,8 @@ function WalletTradeOverviewController($scope, $http, $q, userService) {
                   tx[key] = formatCurrencyInFundamentalUnit( tx[key], 'wtos')
               }); 
           });
-
-          //DEBUG console.log(transaction_data)
+          transaction_data.sort(function(a,b) { return a.formatted_price_per_coin - b.formatted_price_per_coin }); // sort cheapest; sort most recent (b.tx_time - a.tx_time)
+          //DEBUG console.log('wallet trade overview ctrl', transaction_data)
         } else transaction_data.push({ tx_hash: 'No offers/bids found for this timeframe' })
       $scope.orderbook = transaction_data;
       }
@@ -236,7 +240,11 @@ function WalletTradeHistoryController($scope, $http, $q, userService) {
 }
 
 
-function WalletTradePendingController($scope, $http, $q, userService) {
+function WalletTradePendingController($scope, $http, $q, userService, hashExplorer) {
+  $scope.setHashExplorer = function(tx) {
+    hashExplorer.tx = JSON.stringify(tx);
+    hashExplorer.loc = window.location.href.split('/').slice(-2).join('/');
+  } 
   //$scope.selectedAddress = userService.getAllAddresses()[ userService.getAllAddresses().length-1 ].address;
   $scope.currencyUnit = 'stom'
   $scope.pendingThinking = true

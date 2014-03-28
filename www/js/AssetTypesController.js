@@ -128,8 +128,8 @@ angular.module( 'omniwallet' )
                 _.defer( updateGraph );
               } );
           });
-        }); 
-      } );          
+        });
+      } );
     }
 
 
@@ -205,48 +205,50 @@ angular.module( 'omniwallet' )
           .value(function(d) {  return d.value; });
 
       var svg = d3.select("#all-assets-graph")
-      
-      $scope.totalsPromise.then(function(successData) {
 
-        var appraiser = $injector.get( 'appraiser' );
-        var data = [], keys = Object.keys($scope.totals);
-        keys.forEach(function(e,i) {
-          var value = appraiser.getValue( $scope.totals[e], keys[i] );
-          if( typeof value == 'number' && value > 0 )
+      if($scope.totalsPromise) {
+        $scope.totalsPromise.then(function(successData) {
+
+          var appraiser = $injector.get( 'appraiser' );
+          var data = [], keys = Object.keys($scope.totals);
+          keys.forEach(function(e,i) {
+            var value = appraiser.getValue( $scope.totals[e], keys[i] );
+            if( typeof value == 'number' && value > 0 )
+            {
+              data.push( { 
+                value : value,
+                name: keys[i], 
+                color: data.length
+              });
+            }
+          });
+
+          //console.log( '*** updateGraph, data.length: ' + data.length );
+          //console.log( data );
+          if( data.length > 0 )
           {
-            data.push( { 
-              value : value,
-              name: keys[i], 
-              color: data.length
-            });
+            var g = svg.selectAll(".arc")
+                .data(pie(data))
+              .enter().append("g")
+                .attr("class", "arc");
+
+            g.append("path")
+                .attr("d", arc)
+                .style("fill", function(d) {  return color(d.data.color); })
+                .attr('transform', 'translate(150,150)');
+
+            g.append("text")
+                .attr("transform", function(d) { 
+                    var c = arc.centroid(d);
+                        return "translate(" + (150+ c[0]) + "," + (150 + c[1]) + ")";
+                   })
+                .attr("dy", ".35em")
+                .style("text-anchor", "middle")
+                .text(function(d) { return d.data.name; });
+
           }
         });
-
-        //console.log( '*** updateGraph, data.length: ' + data.length );
-        //console.log( data );
-        if( data.length > 0 )
-        {
-          var g = svg.selectAll(".arc")
-              .data(pie(data))
-            .enter().append("g")
-              .attr("class", "arc");
-
-          g.append("path")
-              .attr("d", arc)
-              .style("fill", function(d) {  return color(d.data.color); })
-              .attr('transform', 'translate(150,150)');
-
-          g.append("text")
-              .attr("transform", function(d) { 
-                  var c = arc.centroid(d);
-                      return "translate(" + (150+ c[0]) + "," + (150 + c[1]) + ")";
-                 })
-              .attr("dy", ".35em")
-              .style("text-anchor", "middle")
-              .text(function(d) { return d.data.name; });
-
-        }
-      });
+      }
 
     };
 

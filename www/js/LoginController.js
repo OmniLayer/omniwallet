@@ -33,12 +33,21 @@ function Login($scope, $http, $location, $modalInstance, userService) {
       })
       .then(function(result) {
         var data = result.data;
-        var wallet = CryptUtil.decryptObject(data, walletKey);
-        userService.login(wallet, walletKey, asymKey);
-        $modalInstance.close()
-        $location.path('/wallet');
-      }, function(result) {
-        $scope.serverError = true;
+        try {
+          var wallet = CryptUtil.decryptObject(data, walletKey);
+          userService.login(wallet, walletKey, asymKey);
+          $modalInstance.close()
+          $location.path('/wallet');
+        } catch (e) {
+          $scope.badPassword = true;
+        }
+      },
+      function(result) {
+        if(result.status == 404) {
+          $scope.missingUUID = true;
+        } else {
+          $scope.serverError = true;
+        }
       });
   }
 }

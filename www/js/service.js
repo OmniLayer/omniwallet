@@ -29,7 +29,7 @@ angular.module( 'omniwallet' ).factory('userService', ['$rootScope', '$http', fu
           service.saveSession();
           return;
         }
-      }
+      };
       // update currencies
       $http.post( '/v1/address/addr/', { 'addr': address } )
         .success( function( result ) {
@@ -224,3 +224,11 @@ angular.module( 'omniwallet' ).factory( 'appraiser', ['$rootScope', '$http', fun
 
   return new AppraiserService();
 }]);
+
+angular.module( 'omniwallet' ).factory( 'hashExplorer', function ( ) {
+  var tx = '', loc = '';
+  return {
+    tx : tx,
+    loc: loc
+  }
+});
