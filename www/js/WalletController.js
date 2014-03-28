@@ -212,7 +212,7 @@ function WalletTradeHistoryController($scope, $http, $q, userService, hashExplor
     var transaction_data = []
     var postData = { 
       type: 'ADDRESS',
-      address: address, 
+      address: JSON.stringify([address]), 
       currencyType: $scope.currPair.split('/')[0],   
       offerType: 'BOTH'      
     };
@@ -245,44 +245,103 @@ function WalletTradePendingController($scope, $http, $q, userService, hashExplor
   $scope.currencyUnit = 'stom'
   $scope.pendingThinking = true
   $scope.hasAddressesWithPrivkey = getAddressesWithPrivkey()
-  
   $scope.selectedCoin = 'BTC'
   $scope.selectedTimeframe="604800"
+  $scope.filterData = function(time) {
+      var orderbook = JSON.parse($scope.orderBookStorage);
+      
+      var now = Date.now()
+      var filtered_transaction_data = orderbook.filter(function(item) {
+        console.log('time2', +item.tx_time, '>= ?',  (now - (+time) ))
+        return true //(+item.tx_time) <= (now - (+time) ) 
+      });
+      $scope.orderbook = filtered_transaction_data;
+  }
   $scope.getData = function(time) {
     $scope.orderbook = []
     var transaction_data = []
     var postData = { 
-      type: 'TIME',
-      currencyType: 'TMSC',
-      orderType: 'ACCEPT',
-      time: time || 2419200
+      type: 'ADDRESS',
+      currencyType: 'BOTH',
+      address: JSON.stringify($scope.hasAddressesWithPrivkey),
+      offerType: 'BOTH'
     };
     $http.post('/v1/exchange/offers', postData).success(
-      function(offerSuccess) {
-        if(offerSuccess.data.length > 0) {
-          transaction_data = offerSuccess.data
+      function(offerSuccess) { console.log(offerSuccess,' ofsec');
+        
+        //capture data
+        var nestedData = offerSuccess.data, nestedLevels = 0, capturedData = [];
+        while( typeof nestedData == 'object' && nestedLevels < 5 ) {
+          var savedData = []
+          if( nestedData instanceof Object && !(nestedData instanceof Array) ) { //DEBUG console.log('got obj', nestedData);
+             var data_keys = Object.keys(nestedData)
+             data_keys.forEach(function(key) { 
+                savedData = savedData.concat(nestedData[key])
+             });
+          }
+          if (nestedData instanceof Array) {  //DEBUG console.log('got arr', nestedData);
+              var arrayOfObjects = []
+              nestedData.forEach(function(elem) {
+                if( elem instanceof Array || !(elem instanceof Object) )
+                  capturedData.push(elem)
+                else
+                  if( elem instanceof Object && !(elem instanceof Array) ) { //DEBUG console.log('got obj', elem);
+                    var elem_keys = Object.keys(elem)
+                    elem_keys.forEach(function(key) { //DEBUG console.log('got item', typeof elem[key])
+                        if(typeof elem[key] == 'object' && key != 'invalid') 
+                          arrayOfObjects = arrayOfObjects.concat(elem[key])
+                    });
+                    //DEBUG console.log('check len', arrayOfObjects.length)
+                    if( arrayOfObjects.length == 0)
+                      capturedData.push(elem)
+                  } 
+              });                   
+              savedData = arrayOfObjects
+          }
+          //console.log('nesteddata orig', nestedData, 'data saved', savedData)
+          nestedData = savedData
+          nestedLevels++
+        }
 
-          transaction_data.forEach(function(tx) { 
+        transaction_data = capturedData;
+        transaction_data.forEach(function(tx) {
+          if(tx != "ADDRESS_NOT_FOUND") {
             transaction_data_keys = ['formatted_amount','formatted_amount_available',
               'formatted_bitcoin_amount_desired','formatted_fee_required','formatted_price_per_coin', 'bitcoin_required'];
             transaction_data_keys.forEach(function(key) { 
                   tx[key] = formatCurrencyInFundamentalUnit( tx[key], 'wtos')
-              }); 
-          });
+            });
+          } 
+        });
 
-          filtered_transaction_data = []
-          $scope.hasAddressesWithPrivkey.forEach(function(addr) { 
-             transaction_data.forEach(function(elem) {
-                if(addr == elem.from_address) {
-                   //DEBUG console.log(addr, elem.from_address)
-                   filtered_transaction_data.push(elem)
-                }
-              });
-          });
-          transaction_data = filtered_transaction_data
-          //DEBUG console.log(filtered_transaction_data)
-        } else transaction_data.push({ tx_hash: 'No offers/bids found for this timeframe' })
-      $scope.orderbook = transaction_data.length != 0 ? transaction_data : [{ tx_hash: 'No offers/bids found for this timeframe' }];
+        var filtered_transaction_data = transaction_data.filter(function(item) {
+          //console.log('stf', item, typeof item != 'string', 'inv', item.invalid == false && item.invalid.length == undefined) 
+          return (typeof item == 'object' && (item.invalid == false && item.invalid.length == undefined )) 
+         });
+
+        //DEBUG console.log(filtered_transaction_data, 'tettst')
+        //DEBUG console.log('filtered tx data, pending offers',filtered_transaction_data)
+
+        $scope.filtered_buys = filtered_transaction_data.filter(function(item) {
+          var orderType = item.tx_type_str.toLowerCase()
+          var orderStatus = item.status ? item.status.toLowerCase() : undefined;
+          console.log(item.tx_type_str, item.status, orderStatus)
+          return ( orderType == 'sell accept') && ( orderStatus != 'expired') && (orderStatus != 'closed')
+        });
+
+        $scope.filtered_sells = filtered_transaction_data.filter(function(item) {
+          var orderType = item.tx_type_str.toLowerCase()
+          var orderStatus = item.color.match(/expired/gi) || []
+          console.log(orderStatus, item.color)
+          return ( orderType == 'sell offer') && ( orderStatus.length == 0) 
+        });
+
+        transaction_data = filtered_transaction_data
+        //if null, then append simple message
+        $scope.orderbook = transaction_data.length != 0 ? transaction_data : [{ tx_hash: 'No offers/bids found for this timeframe' }];
+        
+        //store around for filtering
+        $scope.orderBookStorage = JSON.stringify($scope.orderbook); 
       }
     );
   }
