@@ -1,12 +1,12 @@
 function WalletTradeAssetsController($modal, $scope, $http, $q, userService) {
   // [ Form Validation]
 
-  $scope.showErrors = false 
+  $scope.showErrors = false;
 
   // [ Template Initialization ]
 
   $scope.currencyList = ['BTC', 'MSC', 'TMSC']
-  $scope.selectedCoin = $scope.currencyList[1] 
+  $scope.selectedCoin = $scope.currencyList[1]
 
   $scope.addressList = getAddressesWithPrivkey()
   $scope.selectedAddress = $scope.addressList[0]
@@ -14,14 +14,14 @@ function WalletTradeAssetsController($modal, $scope, $http, $q, userService) {
   function getAddressesWithPrivkey() {
     var addresses = []
     userService.getAllAddresses().map(
-      function(e,i,a) { 
+      function(e,i,a) {
         if(e.privkey && e.privkey.length == 58) {
           addresses.push(e.address);
         }
       }
     );
     if( addresses.length == 0)
-      addresses = ['Could not find any addresses with attached private keys!'] 
+      addresses = ['Could not find any addresses with attached private keys!']
     return addresses
   }
 
@@ -37,7 +37,7 @@ function WalletTradeAssetsController($modal, $scope, $http, $q, userService) {
     var address = $scope.selectedAddress
     if (address || coin) {
       for(var i = 0; i < addrListBal.length; i++) {
-        if( addrListBal[i].address == address) { 
+        if( addrListBal[i].address == address) {
           for(var k = 0; k < addrListBal[i].balance.length; k++) {
             if(addrListBal[i].balance[k].symbol == coin) {
               $scope.balanceData[0] = addrListBal[i].balance[k].value
@@ -74,7 +74,7 @@ function WalletTradeAssetsController($modal, $scope, $http, $q, userService) {
     try{
       var checkValid = new Bitcoin.Address(addr);
       return true
-    } catch(e) { 
+    } catch(e) {
       return false
     }
   }
@@ -86,7 +86,7 @@ function WalletTradeAssetsController($modal, $scope, $http, $q, userService) {
   }
 
   function pushSignedTransaction(signedTransaction) {
-    var url = '/v1/transaction/pushtx/'; 
+    var url = '/v1/transaction/pushtx/';
     var data = { signedTransaction: signedTransaction }
     var promise = $http.post( url, data );
     return promise;
@@ -97,12 +97,12 @@ function WalletTradeAssetsController($modal, $scope, $http, $q, userService) {
   function getUnsignedBuyTransaction(buyerAddress, pubKey, buyAmount, fee, saleTransactionHash) {
     var deferred = $q.defer();
 
-    var url = '/v1/exchange/accept/'; 
-    $http.post( url, { 
-      buyer: buyerAddress, 
+    var url = '/v1/exchange/accept/';
+    $http.post( url, {
+      buyer: buyerAddress,
       pubKey: pubKey,
       amount: buyAmount,
-      fee: fee, 
+      fee: fee,
       tx_hash: saleTransactionHash
     }).success(function(data) {
         return deferred.resolve(data);
@@ -114,8 +114,8 @@ function WalletTradeAssetsController($modal, $scope, $http, $q, userService) {
   }
 
   function prepareBuyTransaction(buyer, amt, hash, fee, privkeyphrase, $modalScope) {
-    var addressData; userService.getAllAddresses().forEach(function(e,i) { if(e.address == buyer) addressData = e; });
-    var privKey = new Bitcoin.ECKey.decodeEncryptedFormat(addressData.privkey,privkeyphrase.pass);
+    var addressData = userService.getAddress(buyer);
+    var privKey = new Bitcoin.ECKey.decodeEncryptedFormat(addressData.privkey, addressData.address); // Using address as temporary password
     var pubKey = privKey.getPubKeyHex();
 
     $scope.sendTxPromise = getUnsignedBuyTransaction( buyer, pubKey, amt, fee, hash);
@@ -137,14 +137,14 @@ function WalletTradeAssetsController($modal, $scope, $http, $q, userService) {
           var bytes = Bitcoin.Util.hexToBytes(unsignedTransaction)
           var transaction = Bitcoin.Transaction.deserialize(bytes)
           var script = parseScript(successData.sourceScript)
-          
+
           transaction.ins[0].script = script
-          
+
           //DEBUG console.log('before',transaction, Bitcoin.Util.bytesToHex(transaction.serialize()))
           var signedSuccess = transaction.signWithKey(privKey)
 
           var finalTransaction = Bitcoin.Util.bytesToHex(transaction.serialize())
-          
+
           //Showing the user the transaction hash doesn't work right now
           //var transactionHash = Bitcoin.Util.bytesToHex(transaction.getHash().reverse())
 
@@ -193,7 +193,7 @@ function WalletTradeAssetsController($modal, $scope, $http, $q, userService) {
             $modalScope.error = 'Error sending transaction: ' + e.data;
           else
             $modalScope.error = 'Unknown error sending transaction';
-          console.log('Error sending transaction',e );          
+          console.log('Error sending transaction',e );
         }
       }
     },function(errorData) {
@@ -209,9 +209,9 @@ function WalletTradeAssetsController($modal, $scope, $http, $q, userService) {
   }
 
   $scope.validateBuyForm = function(currencyUnit) {
-    var dustValue = 5430; 
-    var minerMinimum = 10000; 
-    var nonZeroValue = 1; 
+    var dustValue = 5430;
+    var minerMinimum = 10000;
+    var nonZeroValue = 1;
 
     var coin = $scope.selectedCoin;
     var address = $scope.selectedAddress
@@ -222,7 +222,7 @@ function WalletTradeAssetsController($modal, $scope, $http, $q, userService) {
 
     var buyAmountMillis = formatCurrencyInFundamentalUnit( buyAmount , 'stom'  ) ;
     var minerFeesMillis = formatCurrencyInFundamentalUnit( minerFees , 'stom' ) ;
-    
+
     var balance = +$scope.balanceData[0]
     var btcbalance = +$scope.balanceData[1]
 
@@ -249,20 +249,18 @@ function WalletTradeAssetsController($modal, $scope, $http, $q, userService) {
     }
     if( error.length < 8) {
       $scope.showErrors = false
-      
+
       // open modal
       var modalInstance = $modal.open({
         template: '\
           <div class="modal-body">\
               <h3 class="text-center"> Confirm send </h3>\
-              <h3>You\'re about to make an offer to buy ' + buyAmountMillis + ' m' + $scope.selectedCoin +   
+              <h3>You\'re about to make an offer to buy ' + buyAmountMillis + ' m' + $scope.selectedCoin +
               ' with ' + minerFeesMillis + ' in fees </h3>\
             <p><br>\
-            If the above is correct, please input your passphrase below and press Send Funds.\
+            If the above is correct, please press Send Funds.\
             If you encounter an error, feel free to click away from the dialog and try again.\
             </p>\
-          <input type="password" name=privkey ng-model="privKeyPass.pass" class="form-control"\
-            placeholder="enter your private key passphrase">\
           </div>\
           <div class="modal-footer">\
               <div class="row">\
@@ -341,8 +339,8 @@ function WalletTradeAssetsController($modal, $scope, $http, $q, userService) {
   }
 
   function prepareSaleTransaction(seller, amt, price, buyerfee, fee, blocks, currency, privkeyphrase, $modalScope) {
-    var addressData; userService.getAllAddresses().forEach(function(e,i) { if(e.address == seller) addressData = e; });
-    var privKey = new Bitcoin.ECKey.decodeEncryptedFormat(addressData.privkey,privkeyphrase.pass);
+    var addressData = userService.getAddress(seller);
+    var privKey = new Bitcoin.ECKey.decodeEncryptedFormat(addressData.privkey, addressData.address); // Using address as temporary password
     var pubKey = privKey.getPubKeyHex();
 
     $scope.sendTxPromise = getUnsignedSaleTransaction(seller, pubKey, amt, price, buyerfee, fee, blocks, currency);
@@ -364,14 +362,14 @@ function WalletTradeAssetsController($modal, $scope, $http, $q, userService) {
           var bytes = Bitcoin.Util.hexToBytes(unsignedTransaction)
           var transaction = Bitcoin.Transaction.deserialize(bytes)
           var script = parseScript(successData.sourceScript)
-          
+
           transaction.ins[0].script = script
-          
+
           //DEBUG console.log('before',transaction, Bitcoin.Util.bytesToHex(transaction.serialize()))
           var signedSuccess = transaction.signWithKey(privKey)
 
           var finalTransaction = Bitcoin.Util.bytesToHex(transaction.serialize())
-          
+
           //Showing the user the transaction hash doesn't work right now
           //var transactionHash = Bitcoin.Util.bytesToHex(transaction.getHash().reverse())
 
@@ -454,7 +452,7 @@ function WalletTradeAssetsController($modal, $scope, $http, $q, userService) {
     var coin = $scope.selectedCoin;
     var address = $scope.selectedAddress
     var saleBlocks = +$scope.saleBlocks
-    
+
     var balance = +$scope.balanceData[0]
     var btcbalance = +$scope.balanceData[1]
 
@@ -495,11 +493,9 @@ function WalletTradeAssetsController($modal, $scope, $http, $q, userService) {
               ', plus charge ' + buyersFeeMillis  + ' in fees over ' +
               $scope.saleBlocks + ' blocks.</h3>\
             <p><br>\
-            If the above is correct, please input your passphrase below and press Send Funds.\
+            If the above is correct, please press Send Funds.\
             If you encounter an error, feel free to click away from the dialog and try again.\
             </p>\
-          <input type="password" name=privkey ng-model="privKeyPass.pass" class="form-control"\
-            placeholder="enter your private key passphrase">\
           </div>\
           <div class="modal-footer">\
               <div class="row">\
@@ -577,8 +573,8 @@ function WalletTradeAssetsController($modal, $scope, $http, $q, userService) {
   }
 
   function prepareSendTransaction(to, from, amt, currency, fee, privkeyphrase, $modalScope) {
-    var addressData; userService.getAllAddresses().forEach(function(e,i) { if(e.address == from) addressData = e; });
-    var privKey = new Bitcoin.ECKey.decodeEncryptedFormat(addressData.privkey,privkeyphrase.pass)
+    var addressData = userService.getAddress(from);
+    var privKey = new Bitcoin.ECKey.decodeEncryptedFormat(addressData.privkey, addressData.address); // Using address as temporary password
     var pubKey = privKey.getPubKeyHex();
 
     $scope.sendTxPromise = getUnsignedSendTransaction(to, pubKey, from, amt, currency, fee);
@@ -600,7 +596,7 @@ function WalletTradeAssetsController($modal, $scope, $http, $q, userService) {
           var bytes = Bitcoin.Util.hexToBytes(unsignedTransaction)
           var transaction = Bitcoin.Transaction.deserialize(bytes)
           var script = parseScript(successData.sourceScript)
-          
+
           transaction.ins.forEach( function( input ) {
             input.script = script;
           } );
@@ -609,7 +605,7 @@ function WalletTradeAssetsController($modal, $scope, $http, $q, userService) {
           var signedSuccess = transaction.signWithKey(privKey)
 
           var finalTransaction = Bitcoin.Util.bytesToHex(transaction.serialize())
-          
+
           //Showing the user the transaction hash doesn't work right now
           //var transactionHash = Bitcoin.Util.bytesToHex(transaction.getHash().reverse())
 
@@ -725,12 +721,9 @@ function WalletTradeAssetsController($modal, $scope, $http, $q, userService) {
               <h3>You\'re about to send ' + sendAmountMillis + ' m' + $scope.selectedCoin +   
               ' plus ' + minerFeesMillis + ' mBTC in fees to ' + $scope.sendTo + '</h3>\
             <p><br>\
-            If the above is correct, please input your passphrase below and press Send Funds.\
+            If the above is correct, please press Send Funds.\
             If you encounter an error, feel free to click away from the dialog and try again.\
             </p>\
-          <input type="password" name=privkey ng-model="privKeyPass.pass" class="form-control"\
-            placeholder="enter your private key passphrase">\
-          </div>\
           <div class="modal-footer">\
               <div class="row">\
               <button ng-disabled="clicked" class="btn btn-primary" ng-click="ok()">Yes, send my funds</button>\
