@@ -21,7 +21,6 @@
     <p>Maybe you should try <a href='' ng-click="openAddForm( 'BTC' )">adding it again?</a></p>
   </div>
   <div ng-include="templates['add_address']"></div>
-
   <div ng-if="balances.balances" ng-repeat="currency in balances.balances">
     <div class="row">
       <div class="col-xs-4">
