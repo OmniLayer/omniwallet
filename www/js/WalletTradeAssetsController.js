@@ -1,10 +1,4 @@
 function WalletTradeAssetsController($modal, $scope, $http, $q, userService) {
-  //fee tooltip
-
-  $('#time-blocks').tooltip({ 
-    title: 'Time in blocks the buyer has to complete his purchase (1 block approx. 10 minutes)', 
-    placement: 'left' });
-
   // [ Form Validation]
 
   $scope.showErrors = false 
@@ -464,7 +458,7 @@ function WalletTradeAssetsController($modal, $scope, $http, $q, userService) {
     var balance = +$scope.balanceData[0]
     var btcbalance = +$scope.balanceData[1]
 
-    var required = [coin,address,saleAmount, salePricePerCoin, minerFees,buyersFee, balance, btcbalance, $scope.saleForm.$valid ]
+    var required = [coin,address,saleAmount, saleBlocks, salePricePerCoin, minerFees,buyersFee, balance, btcbalance, $scope.saleForm.$valid ]
                               console.log(required)
     var error = 'Please '
     if( $scope.saleForm.$valid == false) {
