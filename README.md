@@ -107,24 +107,141 @@ brew install git libffi
 sudo easy_install simplejson GitPython pip
 sudo pip install -r requirements.txt
 ```
+Install uwsing with pip to get python support.
+```
+sudo pip install uwsgi
+```
 Install nginx, and drop in the config included with this codebase.
+[Snow Leopard Install](http://kevinworthington.com/nginx-mac-os-snow-leopard-2-minutes/)
 ```
-sudo apt-get install uwsgi uwsgi-plugin-python
-sudo -s
-nginx=stable # use nginx=development for latest development version
-add-apt-repository ppa:nginx/$nginx
-apt-get update 
-apt-get install nginx
-exit
-sudo cp etc/nginx/sites-available/default /etc/nginx/sites-available
+## DOWNLOADS
+sudo curl -OL h ftp://ftp.csx.cam.ac.uk/pub/software/programming/pcre/pcre-8.01.tar.gz > /usr/local/src/pcre-8.01.tar.gz
+sudo curl -OL h http://nginx.org/download/nginx-0.8.33.tar.gz > /usr/local/src/nginx-0.8.33.tar.gz
+
+## Install PCRE
+sudo mkdir -p /usr/local/src
+cd /usr/local/src
+tar xvzf pcre-8.01.tar.gz
+cd pcre-8.01
+./configure --prefix=/usr/local
+make
+sudo make install
+cd ..
+
+## Install Nginx
+tar xvzf nginx-0.8.33.tar.gz
+cd nginx-0.8.33
+./configure --prefix=/usr/local --with-http_ssl_module
+make
+sudo make install
+
+## Start Nginx
+sudo nginx
 ```
-Find this section near the beginning of /etc/nginx/sites-available/default:
+[Lion Install](http://kevinworthington.com/nginx-for-mac-os-x-lion-in-2-minutes/)
+```
+## DOWNLOADS
+sudo curl -OL h ftp://ftp.csx.cam.ac.uk/pub/software/programming/pcre/pcre-8.13.tar.gz > /usr/local/src/pcre-8.13.tar.gz
+sudo curl -OL h http://nginx.org/download/nginx-1.1.4.tar.gz > /usr/local/src/nginx-1.1.4.tar.gz
+
+## Install PCRE
+sudo mkdir -p /usr/local/src
+cd /usr/local/src
+tar xvzf pcre-8.13.tar.gz
+cd pcre-8.13
+./configure --prefix=/usr/local
+make
+sudo make install
+cd ..
+
+## Install Nginx
+tar xvzf nginx-1.1.4.tar.gz
+cd nginx-1.1.4
+./configure --prefix=/usr/local --with-http_ssl_module
+make
+sudo make install
+
+## Start Nginx
+sudo /usr/local/sbin/nginx
+```
+[Mountain Lion Install](http://kevinworthington.com/nginx-for-mac-os-x-mountain-lion-in-2-minutes/)
+```
+# create, then go into the build directory
+sudo mkdir -p /usr/local/src
+cd /usr/local/src
+
+# download, build, and install pcre
+sudo curl -OL ftp://ftp.csx.cam.ac.uk/pub/software/programming/pcre/pcre-8.31.tar.gz
+sudo tar xvzf pcre-8.31.tar.gz
+cd pcre-8.31
+sudo ./configure --prefix=/usr/local
+sudo make
+sudo make install
+cd ..
+
+# download, build, and install nginx
+sudo curl -OL http://nginx.org/download/nginx-1.3.8.tar.gz
+sudo tar xvzf nginx-1.3.8.tar.gz
+cd nginx-1.3.8
+sudo ./configure --prefix=/usr/local --with-http_ssl_module --with-pcre=../pcre-8.31
+sudo make
+sudo make install
+
+# start nginx
+sudo /usr/local/sbin/nginx
+```
+[Mavericks Install](http://kevinworthington.com/nginx-for-mac-os-x-mavericks-in-2-minutes/)
+```
+# Build Nginx 1.5.7 on Mac OS X Mavericks (10.9)
+# This script was created by Kevin Worthington - http://kevinworthington.com/ - 12 December 2013
+# Original article at: http://kevinworthington.com/nginx-for-mac-os-x-mavericks-in-2-minutes/
+
+# This useful script is provided for free, but without warranty. Use at your own risk.
+# By downloading this script you agree to the terms above.
+
+# create, then go into the build directory
+sudo mkdir -p /usr/local/src
+cd /usr/local/src
+
+# download, build, and install pcre
+sudo curl -OL ftp://ftp.csx.cam.ac.uk/pub/software/programming/pcre/pcre-8.33.tar.gz
+sudo tar xvzf pcre-8.33.tar.gz
+cd pcre-8.33
+sudo ./configure --prefix=/usr/local
+sudo make
+sudo make install
+cd ..
+
+# download, build, and install nginx
+sudo curl -OL http://nginx.org/download/nginx-1.5.7.tar.gz
+sudo tar xvzf nginx-1.5.7.tar.gz
+cd nginx-1.5.7
+sudo ./configure --prefix=/usr/local --with-http_ssl_module --with-pcre=../pcre-8.33
+sudo make
+sudo make install
+
+# start nginx
+sudo /usr/local/sbin/nginx
+```
+Copy nginx configuration
+```
+etc/nginx/sites-available/default /usr/local/nginx/sites-available
+```
+
+
+Find this section near the beginning of /usr/local/nginx/sites-available/default:
 ```
         ## Set this to reflect the location of the www directory within the omniwallet repo.
         root /home/cmlacy/omniwallet/www/;
         index index.html index.htm;
 ```
 Change the ``root`` directive to reflect the location of your omniwallet codebase (actually the www directory within that codebase).
+
+Set the user that will run nginx to the one running omniwallet - one thas has permissions on the source - in the first line of /usr/local/conf/nginx.conf
+```
+  user {owner of source dir} {group of source dir};
+```
+
 
 Make sure you have uglifyjs (Note that there are a couple flavors of this available - you need the ``uglifyjs`` executable, which is included in the ``uglify-js`` NPM module - NOT the ``uglifyjs`` module!
 ```
