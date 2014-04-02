@@ -277,11 +277,6 @@ Start the blockchain parser and python services by running:
 app.sh
 ```
 
-For Mac OS X launch uwsgi without the plugin instruction with:
-```
-app-no-plugin.sh
-```
-
 This will create a parsing & validation work area in /tmp/omniwallet, and begin parsing the blockchain using the server listed in your .sx.cfg file (see above).
 
 ## Development
