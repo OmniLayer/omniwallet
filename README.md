@@ -107,11 +107,12 @@ brew install git libffi
 sudo easy_install simplejson GitPython pip
 sudo pip install -r requirements.txt
 ```
-Install uwsing with pip to get python support.
+Install uwsgi with pip to get python support.
 ```
 sudo pip install uwsgi
 ```
 Install nginx, and drop in the config included with this codebase.
+
 [Snow Leopard Install](http://kevinworthington.com/nginx-mac-os-snow-leopard-2-minutes/)
 ```
 ## DOWNLOADS
@@ -225,7 +226,7 @@ sudo /usr/local/sbin/nginx
 ```
 Copy nginx configuration
 ```
-etc/nginx/sites-available/default /usr/local/nginx/sites-available
+cp etc/nginx/sites-available/default /usr/local/nginx/sites-available
 ```
 
 
@@ -241,7 +242,6 @@ Set the user that will run nginx to the one running omniwallet - one thas has pe
 ```
   user {owner of source dir} {group of source dir};
 ```
-
 
 Make sure you have uglifyjs (Note that there are a couple flavors of this available - you need the ``uglifyjs`` executable, which is included in the ``uglify-js`` NPM module - NOT the ``uglifyjs`` module!
 ```
@@ -259,10 +259,12 @@ sudo chown {user who will run omniwallet} /var/lib/omniwallet
 
 ## Running
 
-Start nginx by running:
+Start nginx by running the command for your distribution.
+on Ubuntu use:
 ```
 sudo service nginx start
 ```
+
 Using the config included, nginx will launch an HTTP server on port 80.
 
 Set an environment variable containing a secret passphrase - this is used to generate salts for indivdual user IDs, and it needs to be both secret AND not change.
@@ -273,6 +275,11 @@ Start the blockchain parser and python services by running:
 
 ```
 app.sh
+```
+
+For Mac OS X launch uwsgi without the plugin instruction with:
+```
+app-no-plugin.sh
 ```
 
 This will create a parsing & validation work area in /tmp/omniwallet, and begin parsing the blockchain using the server listed in your .sx.cfg file (see above).
