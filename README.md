@@ -87,6 +87,12 @@ sudo chown {user who will run omniwallet} /var/lib/omniwallet
 
 ## Mac OS X Setup
 
+Install [Ruby](https://www.ruby-lang.org/en/downloads/) and get [Homebrew](http://brew.sh/) package manager if you don't already have it, by droping this command on a console:
+
+```
+ruby -e "$(curl -fsSL https://raw.github.com/Homebrew/homebrew/go/install)"
+```
+
 Install sx
 ```
 brew tap WyseNynja/bitcoin && brew prune && brew update
