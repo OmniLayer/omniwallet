@@ -19,7 +19,7 @@
 </div>
 <div class="modal-footer">
   <button type="submit" class="btn btn-primary" ng-click="open(login)">Open Wallet</button>
-  <div ng-show="missingUUID" class="bg-danger">Account Doesn't Exist</div>
-  <div ng-show="badPassword" class="bg-danger">Password is Incorrect</div>
-  <div ng-show="serverError" class="bg-danger">Server error, please try again</div>
+  <div ng-show="missingUUID" style="color:red">Account does not exist</div>
+  <div ng-show="badPassword" style="color:red">Password is incorrect</div>
+  <div ng-show="serverError" style="color:red">Server error, please try again</div>
 </div>
