@@ -59,7 +59,8 @@ function WalletTradeAssetsController($modal, $scope, $http, $q, userService) {
         addrListBal[i] = { address: e, balance: successData.balance }
         $scope.setBalance()
      },function(errorData) {
-       console.log('Error, no balance data found for ' + e + ' setting defaults...');
+       alert("We have encountered a problem accessing the server ... Please try again in a few minutes")
+       //console.log('Error, no balance data found for ' + e + ' setting defaults...');
        var balances = [ 
           { symbol: 'MSC', value: '0' },
           { symbol: 'TMSC', value: '0' },
