@@ -87,14 +87,14 @@ sudo chown {user who will run omniwallet} /var/lib/omniwallet
 
 ## Mac OS X Setup
 
-Install [Ruby](https://www.ruby-lang.org/en/downloads/) and get [Homebrew](http://brew.sh/) package manager if you don't already have it, by droping this command on a console:
+Install [Ruby](https://www.ruby-lang.org/en/downloads/) and get [Homebrew](http://brew.sh/) package manager if you don\'t already have it, by droping this command on a console:
 ```
 ruby -e "$(curl -fsSL https://raw.github.com/Homebrew/homebrew/go/install)"
 ```
-Install sx using Homebrew.
+Install sx using Homebrew. We use the --HEAD uption since we need the latest development version.
 ```
 brew tap WyseNynja/bitcoin && brew prune && brew update
-brew install sx
+brew install sx --HEAD
 ```
 update ~/.sx.cfg with an obelisk server details.  Don't have one already set up?  Here's how to build one on Rackspace: https://gist.github.com/curtislacy/8424181
 ```
