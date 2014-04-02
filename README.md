@@ -88,12 +88,10 @@ sudo chown {user who will run omniwallet} /var/lib/omniwallet
 ## Mac OS X Setup
 
 Install [Ruby](https://www.ruby-lang.org/en/downloads/) and get [Homebrew](http://brew.sh/) package manager if you don't already have it, by droping this command on a console:
-
 ```
 ruby -e "$(curl -fsSL https://raw.github.com/Homebrew/homebrew/go/install)"
 ```
-
-Install sx
+Install sx using Homebrew.
 ```
 brew tap WyseNynja/bitcoin && brew prune && brew update
 brew install sx
@@ -103,9 +101,10 @@ update ~/.sx.cfg with an obelisk server details.  Don't have one already set up?
 # ~/.sx.cfg Sample file.
 service = "tcp://162.243.29.201:9091"
 ```
-Make sure you have python libraries installed - note that we use ``apt-get`` to install python-git.  Pip installs an older, stable version, and we need things that start in beta version 0.3.2.
+Make sure you have python libraries installed - note that we use ``easy_install`` to install GitPython.  Pip installs an older, stable version, and we need things that start in beta version 0.3.2.
 ```
-sudo apt-get install git python-simplejson python-git python-pip libffi-dev
+brew install git libffi
+sudo easy_install simplejson GitPython pip
 sudo pip install -r requirements.txt
 ```
 Install nginx, and drop in the config included with this codebase.
