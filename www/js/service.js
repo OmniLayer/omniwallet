@@ -30,11 +30,25 @@ angular.module( 'omniwallet' ).factory('userService', ['$rootScope', '$http', fu
           return;
         }
       }
-      service.data.wallet.addresses.push( {
+      var newAddress = {
         "address": address,
-        "privkey": privKey
-      });
+        "privkey": privKey,
+        "currencies": []
+      };
+      service.data.wallet.addresses.push( newAddress);
+      service.data.loggedIn = true;
       service.saveSession();
+      // update currencies
+      $http.post( '/v1/address/addr/', { 'addr': address } )
+        .success( function( result ) {
+          var currencies = [];
+          result.balance.map(
+            function(e,i,a) { 
+               currencies.push(e.symbol);
+            }
+          );
+          newAddress.currencies = currencies;
+        });
     },
 
     getAddress: function(address) {
@@ -47,6 +61,20 @@ angular.module( 'omniwallet' ).factory('userService', ['$rootScope', '$http', fu
 
     getAllAddresses: function () {
       return service.data.wallet.addresses;
+    },
+    
+    getCurrencies: function(){
+      currencies = []
+      service.data.wallet.addresses.forEach( function( address ) {
+        for( var c=0; c < address.currencies.length; c++ ){
+          if(currencies.indexOf( address.currencies[c] ) == -1) {
+            currencies.push(address.currencies[c]);
+          }
+        }
+      });
+      for(var i in service.data.wallet.addresses) {
+      }
+      return currencies;
     },
 
     getWallet: function() {
@@ -81,7 +109,7 @@ angular.module( 'omniwallet' ).factory('userService', ['$rootScope', '$http', fu
             method: 'POST',
             data: { uuid: uuid, wallet: encryptedWallet, challenge: challenge, signature: signature }
           });
-        })
+        });
     },
 
     saveSession: function () {
@@ -96,6 +124,7 @@ angular.module( 'omniwallet' ).factory( 'appraiser', ['$rootScope', '$http', fun
 
   function AppraiserService() {
     this.conversions = {};
+    this.smartProperties = {};
     var self = this;
     function BtcUpdateLoop() {
       self.updateBtcValue( function() {
@@ -107,8 +136,14 @@ angular.module( 'omniwallet' ).factory( 'appraiser', ['$rootScope', '$http', fun
         setTimeout( MscUpdateLoop, 600000 );
       } );
     }
+    function SptUpdateLoop() {
+      self.updateSptValue( function() {
+        setTimeout( SptUpdateLoop, 600000 );
+      } );
+    }
     BtcUpdateLoop();
     MscUpdateLoop();
+    SptUpdateLoop();
   };
   AppraiserService.prototype.updateBtcValue = function( callback ) {
     var self = this;
@@ -142,10 +177,30 @@ angular.module( 'omniwallet' ).factory( 'appraiser', ['$rootScope', '$http', fun
       callback();
     });
   };
+  AppraiserService.prototype.updateSptValue = function( callback ) {
+    var self = this;
+    // Maybe use $q to call this using deferred?
+    for(var token in self.smartProperties)
+    {
+        $http.post( '/v1/smartproperty/token', { 'token': token } ).success( function( result ) {
+        // Return the rates of the token.
+        self.conversions[token] = result.data.rate;
+        self.smartProperties[token] = result.data;
+        $rootScope.$emit( 'APPRAISER_VALUE_CHANGED', token );
+      }).error( function( error ) {
+        console.log( error );
+      });
+    };
+    callback();
+  };
+  AppraiserService.prototype.addSmartPropertyToken = function( symbol ) {
+    var self = this;
+    
+    if( !self.smartProperties.hasOwnProperty(symbol))
+      self.smartProperties[symbol] = {};
+  };
   AppraiserService.prototype.getValue = function( amount, symbol ) {
-    if( symbol == 'TMSC' )
-      return 0;
-    else if( symbol == 'BTC' )
+    if( symbol == 'BTC' )
     {
       if( this.conversions.BTC )
         return this.conversions.BTC * amount;
@@ -154,12 +209,12 @@ angular.module( 'omniwallet' ).factory( 'appraiser', ['$rootScope', '$http', fun
     }
     else
     {
-      if( this.conversions.MSC )
+      if( this.conversions.hasOwnProperty(symbol) )
       {
-        return this.getValue( this.conversions.MSC * amount, 'BTC' );
+        return this.getValue( this.conversions[symbol] * amount, 'BTC' );
       }
       else
-        return 'MSC Value Unavailable';
+        return symbol + ' Value Unavailable';
     }
   };
 
