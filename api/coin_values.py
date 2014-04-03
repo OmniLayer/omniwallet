@@ -20,17 +20,17 @@ def get_prices():
             fullpath = os.path.join(root, f)
             with open(fullpath, 'r') as property:
                 sp = json.loads(property.readline())[0]
-                symbol= 'SP' + sp.currencyId
+                symbol= 'SP' + str(sp['currencyId'])
                 atomic_json_dump({
-                               symbol : symbol,
-                               price: calculate_spt_price(sp)
+                               'symbol' : symbol,
+                               'price': calculate_spt_price(sp)
                 }, data_dir_root + '/www/values/' + symbol + '.json')
 
 def get_btc_price():
-    r= resquests.get( 'https://api.bitcoinaverage.com/all' )
+    r= requests.get( 'https://api.bitcoinaverage.com/all' )
     result_dict = {
-       symbol : 'BTC',
-       price : result.json()[0].USD.averages.last
+       'symbol' : 'BTC',
+       'price' : r.json()['USD']['averages']['last']
     }
     return result_dict
 
@@ -41,12 +41,12 @@ def get_msc_price():
     sum = 0;
  
     for trade in r.json():
-        volume += float( trade.amount )
-        sum += float( trade.amount ) * float(trade.price )
+        volume += float( trade['amount'] )
+        sum += float( trade['amount'] ) * float(trade['price'] )
 
     result_dict = {
-       symbol : 'MSC',
-       price : sum / volume
+       'symbol' : 'MSC',
+       'price' : sum / volume
     }
     
                 
