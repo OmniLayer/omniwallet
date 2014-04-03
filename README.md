@@ -91,10 +91,11 @@ Install [Ruby](https://www.ruby-lang.org/en/downloads/) and get [Homebrew](http:
 ```
 ruby -e "$(curl -fsSL https://raw.github.com/Homebrew/homebrew/go/install)"
 ```
-Install sx using Homebrew. We use the --HEAD uption since we need the latest development version.
+Install sx using Homebrew. We use the --HEAD uption since we need the latest development version. 
+Note that dependencies need to be installed manually to get the head versions. Build can take a few hours depending on your system.
 ```
 brew tap Nevtep/bitcoin && brew prune && brew update
-brew install sx --HEAD
+brew install boost-gcc48 libbitcoin libwallet obelisk sx --HEAD -v
 ```
 update ~/.sx.cfg with an obelisk server details.  Don't have one already set up?  Here's how to build one on Rackspace: https://gist.github.com/curtislacy/8424181
 ```
