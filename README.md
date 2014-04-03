@@ -93,7 +93,7 @@ ruby -e "$(curl -fsSL https://raw.github.com/Homebrew/homebrew/go/install)"
 ```
 Install sx using Homebrew. We use the --HEAD uption since we need the latest development version.
 ```
-brew tap WyseNynja/bitcoin && brew prune && brew update
+brew tap Nevtep/bitcoin && brew prune && brew update
 brew install sx --HEAD
 ```
 update ~/.sx.cfg with an obelisk server details.  Don't have one already set up?  Here's how to build one on Rackspace: https://gist.github.com/curtislacy/8424181
