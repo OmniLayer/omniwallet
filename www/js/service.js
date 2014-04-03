@@ -145,7 +145,9 @@ function($rootScope, $http) {
   AppraiserService.prototype.updateValues = function(callback) {
     var self = this;
     $http.get('/v1/pricing/valuations.json').then(function(coinValuation) {
-      coinValuation.forEach(function(currency) {
+      for( k in coinValuation )
+      {
+        currency = coinValuation[ k ];
         if (currency.symbol == 'BTC') {
           // Store these things internally as the value of a satoshi.
           self.conversions.BTC = currency.price / 100000000;
@@ -156,8 +158,8 @@ function($rootScope, $http) {
             $rootScope.$emit('APPRAISER_VALUE_CHANGED', currency.symbol);
           }
         }
-      }); 
-      callback();
+        callback();
+      }
     }, function(error) {
       console.log(error);
       callback();
