@@ -71,12 +71,14 @@ angular.module( 'omniwallet' ).factory('userService', ['$rootScope', '$http', fu
     
     getCurrencies: function(){
       currencies = []
-      for(var i in service.data.wallet.addresses) {
-        for(var c =0;c< service.data.wallet.addresses[i].currencies.length;c++){
-          if(currencies.indexOf(service.data.wallet.addresses[i].currencies[c]) == -1) {
-            currencies.push(service.data.wallet.addresses[i].currencies[c]);
+      service.data.wallet.addresses.forEach( function( address ) {
+        for( var c=0; c < address.currencies.length; c++ ){
+          if(currencies.indexOf( address.currencies[c] ) == -1) {
+            currencies.push(address.currencies[c]);
           }
         }
+      });
+      for(var i in service.data.wallet.addresses) {
       }
       return currencies;
     },
