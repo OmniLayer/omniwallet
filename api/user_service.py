@@ -3,6 +3,7 @@ import base64
 import werkzeug.security as ws
 from flask import Flask, request, jsonify, abort, json
 from simplekv.fs import FilesystemStore
+from uuid import UUID
 
 ACCOUNT_CREATION_DIFFICULTY = '0400'
 LOGIN_DIFFICULTY = '0400'
@@ -141,11 +142,13 @@ def failed_challenge(pow_challenge, nonce, difficulty):
   return pow_challenge_response[-len(difficulty):] != difficulty
 
 def write_wallet(uuid, wallet):
+  validate_uuid = UUID(uuid)
   filename = data_dir_root + '/wallets/' + uuid + '.json'
   with open(filename, 'w') as f:
     f.write(wallet)
 
 def read_wallet(uuid):
+  validate_uuid = UUID(uuid)
   filename = data_dir_root + '/wallets/' + uuid + '.json'
   with open(filename, 'r') as f:
     return f.read()
