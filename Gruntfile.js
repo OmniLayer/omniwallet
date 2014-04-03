@@ -11,7 +11,7 @@ module.exports = function(grunt) {
 		gitclone: {
 			mastercointools: {
 				options: {
-					repository: 'https://github.com/curtislacy/mastercoin-tools.git',
+					repository: 'https://github.com/mastercoin-MSC/mastercoin-tools.git',
                 			branch: 'master',
                 			directory: 'node_modules/mastercoin-tools'
 				},

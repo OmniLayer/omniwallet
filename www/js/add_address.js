@@ -98,11 +98,13 @@ angular.module( 'omniwallet' )
 
       modalInstance.result.then(function ( result ) {
 
-        if( result.privKey && result.password )
+        if( result.privKey )
         {
-          $injector.get( 'userService' ).addAddress( 
-            decodeAddressFromPrivateKey( result.privKey ), 
-            encodePrivateKey( result.privKey, result.password ));
+          // Use address as passphrase for now
+          var addr = decodeAddressFromPrivateKey( result.privKey );
+          $injector.get( 'userService' ).addAddress(
+            addr,
+            encodePrivateKey( result.privKey, addr));
         }
         $scope.refresh();
 
@@ -130,11 +132,14 @@ angular.module( 'omniwallet' )
 
         if( result.encryptedPrivKey && result.password )
         {
+          // Decrypt key then store with default password of addr
           var key = Bitcoin.ECKey.decodeEncryptedFormat( result.encryptedPrivKey, result.password);
           var privkey = Bitcoin.Util.bytesToHex(key.getPrivateKeyByteArray());
-          $injector.get( 'userService' ).addAddress( 
-            decodeAddressFromPrivateKey( privkey ), 
-            encodePrivateKey( privkey, result.password ));
+          // Use address as passphrase for now
+          var addr = decodeAddressFromPrivateKey( privkey );
+          $injector.get( 'userService' ).addAddress(
+            addr,
+            encodePrivateKey( privkey, addr));
         }
         $scope.refresh();
 
@@ -153,29 +158,13 @@ angular.module( 'omniwallet' )
     // Done Import Encrypted Private Key Code.
 
     // Begine Create Form Code.
-    $scope.openCreateAddressModal = function() {
-      var modalInstance = $modal.open({
-        templateUrl: '/partials/create_address_modal.html',
-        controller: CreateAddressModal
-      });
-
-      modalInstance.result.then( function( result ) {
-        var ecKey = new Bitcoin.ECKey();
-        var address = ecKey.getBitcoinAddress().toString();
-        var encryptedPrivateKey = ecKey.getEncryptedFormat( result.password );
-        $injector.get( 'userService' ).addAddress(address, encryptedPrivateKey);
-        $scope.refresh();
-      }, function() {} );
-    };
-
-    var CreateAddressModal = function ($scope, $modalInstance ) {
-      $scope.ok = function ( result ) {
-        $modalInstance.close( result );
-      };
-
-      $scope.cancel = function () {
-        $modalInstance.dismiss('cancel');
-      };
+    $scope.createBTCAddress = createBTCAddress;
+    function createBTCAddress () {
+      var ecKey = new Bitcoin.ECKey();
+      var address = ecKey.getBitcoinAddress().toString();
+      var encryptedPrivateKey = ecKey.getEncryptedFormat( address );
+      $injector.get( 'userService' ).addAddress(address, encryptedPrivateKey);
+      $scope.refresh();
     };
     // Done Create Form Code.
 
@@ -183,8 +172,9 @@ angular.module( 'omniwallet' )
     $scope.enumerateAddresses = function () {
 
       $scope.items = enumerated_addresses.getData().then( function( result ) {
+        if(result.addresses.length == 0) { createBTCAddress(); }
         $scope.addresses = result.addresses;
-      } );          
+      } );
     };
 
 

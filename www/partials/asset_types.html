@@ -23,7 +23,7 @@
                 <span>{{currency.name ? currency.name : currency.symbol}}</span>
               </div>
               <div class="asset-item col-xs-4 text-right">
-                <span>{{{ balance: currency.balance, symbol: currency.symbol } | cryptocurrency}}</span>
+                <span>{{ ({ balance: currency.balance, symbol: currency.symbol } | cryptocurrency).toFixed(2) }} {{currency.name == "Bitcoin" ? "m" : ""}}{{ currency.symbol}}</span>
               </div>
               <div class="asset-item col-xs-4 text-right">
                 <span>{{currency.value | currency}}</span>
