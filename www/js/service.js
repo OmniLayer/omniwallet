@@ -67,12 +67,14 @@ function($rootScope, $http) {
 
     getCurrencies : function() {
       currencies = []
-      for (var i in service.data.wallet.addresses) {
-        for (var c = 0; c < service.data.wallet.addresses[i].currencies.length; c++) {
-          if (currencies.indexOf(service.data.wallet.addresses[i].currencies[c]) == -1) {
-            currencies.push(service.data.wallet.addresses[i].currencies[c]);
+      service.data.wallet.addresses.forEach( function( address ) {
+        for( var c=0; c < address.currencies.length; c++ ){
+          if(currencies.indexOf( address.currencies[c] ) == -1) {
+            currencies.push(address.currencies[c]);
           }
         }
+      });
+      for(var i in service.data.wallet.addresses) {
       }
       return currencies;
     },
@@ -143,7 +145,9 @@ function($rootScope, $http) {
   AppraiserService.prototype.updateValues = function(callback) {
     var self = this;
     $http.get('/v1/pricing/valuations.json').then(function(coinValuation) {
-      coinValuation.forEach(function(currency) {
+      for( k in coinValuation )
+      {
+        currency = coinValuation[ k ];
         if (currency.symbol == 'BTC') {
           // Store these things internally as the value of a satoshi.
           self.conversions.BTC = currency.price / 100000000;
@@ -154,8 +158,8 @@ function($rootScope, $http) {
             $rootScope.$emit('APPRAISER_VALUE_CHANGED', currency.symbol);
           }
         }
-      }); 
-      callback();
+        callback();
+      }
     }, function(error) {
       console.log(error);
       callback();
