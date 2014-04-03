@@ -23,7 +23,7 @@ server {
 
 	## Set this to reflect the location of the www directory within the omniwallet repo.
 	root /home/cmlacy/omniwallet/www/;
-	index index.htm;
+	index index.htm index.html;
 
 	#Re-route nested routed through index
 	location / {
