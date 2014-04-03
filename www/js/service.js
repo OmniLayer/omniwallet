@@ -127,8 +127,8 @@ function($rootScope, $http) {
   return service;
 }]);
 
-angular.module('omniwallet').factory('appraiser', ['$rootScope', '$http',
-function($rootScope, $http) {
+angular.module('omniwallet').factory('appraiser', ['$rootScope', '$http','$q'
+function($rootScope, $http,$q) {
 
   function AppraiserService() {
     this.conversions = {};
@@ -144,24 +144,24 @@ function($rootScope, $http) {
   };
   AppraiserService.prototype.updateValues = function(callback) {
     var self = this;
-    $http.get('/v1/pricing/valuations.json').then(function(coinValuation) {
-      for( k in coinValuation )
-      {
-        currency = coinValuation[ k ];
-        if (currency.symbol == 'BTC') {
-          // Store these things internally as the value of a satoshi.
-          self.conversions.BTC = currency.price / 100000000;
-          $rootScope.$emit('APPRAISER_VALUE_CHANGED', 'BTC');
-        } else {
-          if(self.coins.indexOf(currency.symbol) != -1){
+    var requests =[];
+    self.coins.forEach(function(symbol){
+      requests.push(
+        $http.get('/v1/values/'+symbol+'.json').then(function(currency) {
+          if (currency.symbol == 'BTC') {
+            // Store these things internally as the value of a satoshi.
+            self.conversions.BTC = currency.price / 100000000;
+            $rootScope.$emit('APPRAISER_VALUE_CHANGED', 'BTC');
+          } else {
             self.conversions[currency.symbol] = currency.price;
             $rootScope.$emit('APPRAISER_VALUE_CHANGED', currency.symbol);
           }
-        }
-        callback();
-      }
-    }, function(error) {
-      console.log(error);
+        }, function(error) {
+          console.log(error);
+        })
+      );
+    });
+    $q.all( requests ).then(function(responses){
       callback();
     });
   };
