@@ -30,7 +30,6 @@ angular.module( 'omniwallet' )
 
             wallet.addresses.forEach( function( addr ) {
               requests.push( addressRequest( $http, $q, addr ).then( function( result ) {
-                console.log( result.data );
                 if( result.data.balance.length == 0 )
                 {
                   console.log( 'No balances for ' + addr.address + ', invalid address?' );
@@ -88,7 +87,6 @@ angular.module( 'omniwallet' )
                   {
                     var updateFunction = function( result ) {
                       if( result.status == 200 )
-                        console.log( this );
                         this.name = result.data[0].propertyName + ' (' + this.symbol.match( /^SP([0-9]+)$/ )[1] + ')';
                     };
                     spReqs.push( $http.get( '/v1/property/' + spMatch[1] + '.json' ).then( updateFunction.bind( balances[b] )));

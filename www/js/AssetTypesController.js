@@ -67,11 +67,11 @@ angular.module( 'omniwallet' )
                 
                 for( var b in balances ) {
                   var spMatch = balances[b].symbol.match( /^SP([0-9]+)$/ );
+
                   if( spMatch != null )
                   {
                     var updateFunction = function( result ) {
                       if( result.status == 200 )
-                        console.log( this );
                         this.name = result.data[0].propertyName + ' (' + this.symbol.match( /^SP([0-9]+)$/ )[1] + ')';
                     };
                     spReqs.push( $http.get( '/v1/property/' + spMatch[1] + '.json' ).then( updateFunction.bind( balances[b] )));

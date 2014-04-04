@@ -74,8 +74,6 @@ function($rootScope, $http) {
           }
         }
       });
-      for(var i in service.data.wallet.addresses) {
-      }
       return currencies;
     },
 
