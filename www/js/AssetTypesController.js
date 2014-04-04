@@ -48,6 +48,7 @@ angular.module( 'omniwallet' )
                 } );
               }));
             });
+            // First, the standard currencies.
             requests.push( $http.get( '/v1/transaction/values.json' ).then( 
               function( result ) {
                 currencyInfo = result.data;
@@ -61,11 +62,40 @@ angular.module( 'omniwallet' )
                     balances[ item.currency ].name = item.name;
                 });
 
-                deferred.resolve( 
-                  { 
-                    balances: balances,
-                    currencies: currencyInfo
+                // Now, any applicable smart properties.
+                var spReqs = [];
+                
+                for( var b in balances ) {
+                  var spMatch = balances[b].symbol.match( /^SP([0-9]+)$/ );
+                  if( spMatch != null )
+                  {
+                    var updateFunction = function( result ) {
+                      if( result.status == 200 )
+                        console.log( this );
+                        this.name = result.data[0].propertyName + ' (' + this.symbol.match( /^SP([0-9]+)$/ )[1] + ')';
+                    };
+                    spReqs.push( $http.get( '/v1/property/' + spMatch[1] + '.json' ).then( updateFunction.bind( balances[b] )));
+                  }
+                }
+
+                if( spReqs.length > 0 )
+                {
+                  $q.all( spReqs ).then( function() {
+                    deferred.resolve( 
+                      { 
+                        balances: balances,
+                        currencies: currencyInfo
+                      } );
                   } );
+                }
+                else
+                {
+                  deferred.resolve( 
+                    { 
+                      balances: balances,
+                      currencies: currencyInfo
+                    } );
+                }
               }
             } );
           }
