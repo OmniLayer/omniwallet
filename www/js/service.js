@@ -127,7 +127,7 @@ function($rootScope, $http) {
   return service;
 }]);
 
-angular.module('omniwallet').factory('appraiser', ['$rootScope', '$http','$q'
+angular.module('omniwallet').factory('appraiser', ['$rootScope', '$http','$q',
 function($rootScope, $http,$q) {
 
   function AppraiserService() {
@@ -147,7 +147,8 @@ function($rootScope, $http,$q) {
     var requests =[];
     self.coins.forEach(function(symbol){
       requests.push(
-        $http.get('/v1/values/'+symbol+'.json').then(function(currency) {
+        $http.get('/v1/values/'+symbol+'.json').then(function(response) {
+          var currency = response.data[0];
           if (currency.symbol == 'BTC') {
             // Store these things internally as the value of a satoshi.
             self.conversions.BTC = currency.price / 100000000;
