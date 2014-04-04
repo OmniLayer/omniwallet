@@ -127,12 +127,12 @@ function($rootScope, $http) {
   return service;
 }]);
 
-angular.module('omniwallet').factory('appraiser', ['$rootScope', '$http','$q',
-function($rootScope, $http,$q) {
+angular.module('omniwallet').factory('appraiser', ['$rootScope', '$http','$q', '$injector',
+function($rootScope, $http,$q, $injector) {
 
   function AppraiserService() {
     this.conversions = {};
-    this.coins = ['BTC', 'MSC'];
+    this.userService = $injector.get( 'userService' );
     var self = this;
     function UpdateLoop() {
       self.updateValues(function() {
@@ -145,7 +145,8 @@ function($rootScope, $http,$q) {
   AppraiserService.prototype.updateValues = function(callback) {
     var self = this;
     var requests =[];
-    self.coins.forEach(function(symbol){
+    var coins = this.userService.getCurrencies();
+    coins.forEach(function(symbol){
       requests.push(
         $http.get('/v1/values/'+symbol+'.json').then(function(response) {
           var currency = response.data[0];
@@ -165,12 +166,6 @@ function($rootScope, $http,$q) {
     $q.all( requests ).then(function(responses){
       callback();
     });
-  };
-  AppraiserService.prototype.addSmartPropertyToken = function(symbol) {
-    var self = this;
-
-    if (self.coins.indexOf(symbol) == -1)
-      self.coins.push(symbol);
   };
   AppraiserService.prototype.getValue = function(amount, symbol) {
     if (symbol == 'BTC') {
