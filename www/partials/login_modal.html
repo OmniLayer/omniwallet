@@ -6,20 +6,20 @@
     <div class="control-group">
       <label class="control-label" for="inputUUID">UUID</label>
       <div class="controls">
-        <input type="text" ng-model="login.uuid" id="inputUUID" value="{{ uuid }}">
+        <input type="text" ng-model="login.uuid" id="inputUUID" class="form-control" value="{{ uuid }}">
       </div>
     </div>
     <div class="control-group">
       <label class="control-label" for="inputPassword">Password</label>
       <div class="controls">
-        <input type="password" ng-model="login.password" id="inputPassword">
+        <input type="password" ng-model="login.password" id="inputPassword" class="form-control">
       </div>
     </div>
   </div>
   <div class="modal-footer">
     <div class="control-group">
       <div class="controls">
-        <button type="submit" class="btn" ng-click="open(login)">Open Wallet</button>
+        <button type="submit" class="btn btn-primary" ng-click="open(login)">Open Wallet</button>
       </div>
     </div>
     <div ng-show="missingUUID" class="bg-danger">Account Doesn't Exist</div>
