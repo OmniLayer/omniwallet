@@ -52,7 +52,7 @@ do
 		python $TOOLSDIR/msc_validate.py 2>&1 > $VALIDATE_LOG
 	  
 	  mkdir -p $DATADIR/www/values $DATADIR/www/values/history 
-	  python api/coin_values.py
+	  python $APPDIR/api/coin_values.py
 	  
 		# update archive
 		python $TOOLSDIR/msc_archive.py -r $TOOLSDIR 2>&1 > $ARCHIVE_LOG
