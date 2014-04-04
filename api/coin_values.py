@@ -73,7 +73,10 @@ def get_msc_price():
     return result_dict
                 
 def calculate_spt_price(sp):
-    return 0
+    if sp['formatted_transactionType'] == 51:
+        return 1/sp['numberOfProperties']
+    else:
+        return 0
    
 if __name__ == "__main__":
     get_prices()
