@@ -74,7 +74,7 @@ def get_msc_price():
                 
 def calculate_spt_price(sp):
     if sp['formatted_transactionType'] == 51:
-        return 1/sp['numberOfProperties']
+        return 1.0/int( sp['numberOfProperties'] )
     else:
         return 0
    
