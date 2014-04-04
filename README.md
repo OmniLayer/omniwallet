@@ -156,6 +156,41 @@ Returns:
 ]
 ```
 
+### Get coin values
+HTTP GET ``/v1/values/<coin symbol>.json``
+Returns:
+```
+[
+  {
+    "price": 0.06865699418321376, 
+    "symbol": "MSC"
+  }
+]
+```
+
+### Get coin historic values
+HTTP GET ``/v1/values/history/<coin symbol>.json``
+Returns:
+```
+[
+  { 
+    "timestamp": 1396571412.478132, 
+    "value": {
+      "price": 0.06865699418321376, 
+      "symbol": "MSC"
+    }
+  }, 
+  {
+    "timestamp": 1396571448.99139, 
+    "value": {
+      "price": 0.06865699418321678, 
+      "symbol": "MSC"
+    }
+  }
+]
+
+```
+
 ### Get Smart Property details
 HTTP GET ``/v1/property/<property ID>.json``
 Returns:
