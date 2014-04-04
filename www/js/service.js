@@ -85,10 +85,15 @@ function($rootScope, $http) {
       return service.data.wallet.uuid;
     },
 
-    removeAddress : function(address) {
-      for (var i = 0; i < service.data.wallet.addresses.length; i++)
-        if (service.data.wallet.addresses[i].address == address) {
-          service.data.wallet.addresses.splice(i, 1);
+    getAsymKey: function() {
+      return service.data.asymKey;
+    },
+
+    removeAddress: function( address ) {
+      for( var i=0; i<service.data.wallet.addresses.length; i++ )
+        if( service.data.wallet.addresses[i].address == address )
+        {
+          service.data.wallet.addresses.splice( i, 1 );
           service.saveSession();
           return;
         }
@@ -96,23 +101,19 @@ function($rootScope, $http) {
 
     updateWallet : function() {
       var uuid = service.getUUID();
-      return $http.get('/v1/user/wallet/challenge?uuid=' + uuid).then(function(result) {
-        var data = result.data;
-        var encryptedWallet = CryptUtil.encryptObject(service.data.wallet, service.data.walletKey);
-        var challenge = data.challenge;
-        var signature = ""
+      return $http.get('/v1/user/wallet/challenge?uuid='+uuid)
+        .then(function(result) {
+          var data = result.data;
+          var encryptedWallet = CryptUtil.encryptObject(service.data.wallet, service.data.walletKey);
+          var challenge = data.challenge;
+          var signature = CryptUtil.createSignedObject(challenge, service.getAsymKey().privKey);
 
-        return $http({
-          url : '/v1/user/wallet/update',
-          method : 'POST',
-          data : {
-            uuid : uuid,
-            wallet : encryptedWallet,
-            challenge : challenge,
-            signature : signature
-          }
-        });
-      });
+          return $http({
+            url: '/v1/user/wallet/update',
+            method: 'POST',
+            data: { uuid: uuid, wallet: encryptedWallet, signature: signature }
+          });
+        })
     },
 
     saveSession : function() {
