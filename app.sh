@@ -64,7 +64,7 @@ do
     find $DATADIR/general/. -name "*.json" | xargs -I % cp -rp % $DATADIR/www/general
     find $DATADIR/offers/. -name "*.json" | xargs -I % cp -rp % $DATADIR/www/offers
     find $DATADIR/properties/. -name "*.json" | xargs -I % cp -rp % $DATADIR/www/properties
-    find $DATADIR/mastercoin_verify/addresses/. -name "*.json" | xargs -I % cp -rp % $DATADIR/www/mastercoin_verify/addresses
+    find $DATADIR/mastercoin_verify/addresses/. | xargs -I % cp -rp % $DATADIR/www/mastercoin_verify/addresses
     find $DATADIR/mastercoin_verify/transactions/. -name "*.json" | xargs -I % cp -rp % $DATADIR/www/mastercoin_verify/transactions
 	
 		# unlock
