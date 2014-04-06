@@ -87,7 +87,14 @@ sudo chown {user who will run omniwallet} /var/lib/omniwallet
 
 ## Mac OS X Setup
 
-Install [Ruby](https://www.ruby-lang.org/en/downloads/) and get [Homebrew](http://brew.sh/) package manager if you don\'t already have it, by droping this command on a console:
+Omniwallet is installed from the command line, so you'll need to open the Terminal application to run the commands listed in this section.
+
+You'll need to have Xcode 5.1 (or later) installed and the latest command-line tools (Xcode -> Preferences -> Downloads -> Command Line Tools should have a checkmark).
+
+Next, make sure you have [Ruby](https://www.ruby-lang.org/en/downloads/) installed. If you've installed Xcode, you should have Ruby.
+
+If you don't have the [Homebrew](http://brew.sh/) package manager installed, use Ruby to install it:
+
 ```
 ruby -e "$(curl -fsSL https://raw.github.com/Homebrew/homebrew/go/install)"
 ```
