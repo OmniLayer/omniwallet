@@ -45,7 +45,7 @@ sudo bash ./install-sx.sh
 update ~/.sx.cfg with an obelisk server details.  Don't have one already set up?  Here's how to build one on Rackspace: https://gist.github.com/curtislacy/8424181
 ```
 # ~/.sx.cfg Sample file.
-service = "tcp://162.243.29.201:9091"
+service = "tcp://obelisk.bysh.me:9091"
 ```
 Make sure you have python libraries installed - note that we use ``apt-get`` to install python-git.  Pip installs an older, stable version, and we need things that start in beta version 0.3.2.
 ```
