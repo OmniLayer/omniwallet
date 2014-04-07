@@ -156,6 +156,82 @@ Returns:
 ]
 ```
 
+### Get coin values
+HTTP GET ``/v1/values/<coin symbol>.json``
+Returns:
+```
+[
+  {
+    "price": 0.06865699418321376, 
+    "symbol": "MSC"
+  }
+]
+```
+
+### Get coin historic values
+HTTP GET ``/v1/values/history/<coin symbol>.json``
+Returns:
+```
+[
+  { 
+    "timestamp": 1396571412.478132, 
+    "value": {
+      "price": 0.06865699418321376, 
+      "symbol": "MSC"
+    }
+  }, 
+  {
+    "timestamp": 1396571448.99139, 
+    "value": {
+      "price": 0.06865699418321678, 
+      "symbol": "MSC"
+    }
+  }
+]
+
+```
+
+### Get Smart Property details
+HTTP GET ``/v1/property/<property ID>.json``
+Returns:
+```
+[ { baseCoin: '00',
+    block: '293180',
+    color: 'bgc-new',
+    currencyId: 0,
+    currency_str: 'Smart Property',
+    dataSequenceNum: '01',
+    details: 'unknown',
+    ecosystem: '02',
+    formatted_amount: 0,
+    formatted_ecosystem: 2,
+    formatted_previous_property_id: 0,
+    formatted_property_type: 1,
+    formatted_transactionType: 50,
+    formatted_transactionVersion: 0,
+    from_address: '1471EHpnJ62MDxLw96dKcNT8sWPEbHrAUe',
+    icon: 'unknown',
+    index: '486',
+    invalid: false,
+    method: 'multisig',
+    numberOfProperties: '500',
+    previous_property_id: '00000000',
+    propertyCategory: 'Coupons, Gifts',
+    propertyData: 'Each promo coupon allows one free redemption on the Mastercoin faucet.',
+    propertyName: 'Mastercoin Faucet Promo Coupon',
+    propertySubcategory: 'Web',
+    propertyUrl: 'mastercoin-faucet.com/redeem-coupon',
+    property_type: '0001',
+    to_address: 'unknown',
+    transactionType: '0032',
+    transactionVersion: '0000',
+    tx_hash: '331e4e204f9200a37fb5ea3364bfe52c33bfda3a1f0064d66e1b55e5faa03ba6',
+    tx_method_str: 'multisig',
+    tx_time: '1396151474000',
+    tx_type_str: 'Fixed property creation',
+    update_fs: false } ]
+```
+
 ### Get system version information
 HTTP GET ``/v1/system/revision.json``
 Returns:

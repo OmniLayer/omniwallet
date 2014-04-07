@@ -27,7 +27,8 @@ function WalletController($scope, $q, $http, $modal, $location, userService) {
         }
         //console.log($scope)
      },function(errorData) {
-        console.log('Error, no balance data found for ' + e + ' using dummy object....');
+        alert("We have encountered a problem accessing the server ... Please try again in a few minutes")
+        //console.log('Error, no balance data found for ' + e + ' using dummy object....');
         var balances = [ ];
         $scope.currentView = "overview.html";
         $scope.addrListBal[index] = { address: e, balance: balances }
