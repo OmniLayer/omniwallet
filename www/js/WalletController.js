@@ -325,14 +325,14 @@ function WalletTradePendingController($scope, $http, $q, userService, hashExplor
         $scope.filtered_buys = filtered_transaction_data.filter(function(item) {
           var orderType = item.tx_type_str.toLowerCase()
           var orderStatus = item.status ? item.status.toLowerCase() : undefined;
-          console.log(item.tx_type_str, item.status, orderStatus)
+          //DEBUG console.log(item.tx_type_str, item.status, orderStatus)
           return ( orderType == 'sell accept') && ( orderStatus != 'expired') && (orderStatus != 'closed')
         });
 
         $scope.filtered_sells = filtered_transaction_data.filter(function(item) {
           var orderType = item.tx_type_str.toLowerCase()
           var orderStatus = item.color.match(/expired/gi) || []
-          console.log(orderStatus, item.color)
+          //DEBUG console.log(orderStatus, item.color)
           return ( orderType == 'sell offer') && ( orderStatus.length == 0) 
         });
 

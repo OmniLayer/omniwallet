@@ -37,7 +37,7 @@
       </tbody>
 
       <tr ng-repeat="transaction in history track by $index">
-        <td ng-click="setHashExplorer(transaction)"> <a href="/explorer/inspector">{{transaction.tx_hash_concat}}</a></td>
+        <td ng-click="setHashExplorer(transaction)"> <a href="/explorer/inspector?view={{transaction.tx_hash}}">{{transaction.tx_hash_concat}}</a></td>
         <td>{{transaction.currency_str}}</td>
         <td>{{transaction.tx_type_str}}</td>
         <td>{{transaction.formatted_amount}}</td>

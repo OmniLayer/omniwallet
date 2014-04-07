@@ -41,7 +41,7 @@
       </tbody>
 
       <tr ng-repeat="transaction in filtered_buys">
-        <td ng-click="setHashExplorer(transaction)"> <a href="/explorer/inspector">{{transaction.tx_hash}}</a></td>
+        <td ng-click="setHashExplorer(transaction)"> <a href="/explorer/inspector?view={{transaction.tx_hash}}">{{transaction.tx_hash}}</a></td>
         <td ng-if="transaction.formatted_price_per_coin">{{{ balance: transaction.formatted_price_per_coin, symbol: currencyUnit } | cryptocurrency }}</td> 
         <td ng-if="transaction.formatted_amount">{{{ balance: transaction.formatted_amount, symbol: currencyUnit } | cryptocurrency}}</td> 
         <td ng-if="transaction.bitcoin_required">{{ ({ balance: transaction.bitcoin_required, symbol: currencyUnit } | cryptocurrency) }}</td> 
@@ -70,7 +70,7 @@
       </tbody>
 
       <tr ng-repeat="transaction in filtered_sells">
-        <td ng-click="setHashExplorer(transaction)"> <a href="/explorer/inspector">{{transaction.tx_hash}}</a></td>
+        <td ng-click="setHashExplorer(transaction)"> <a href="/explorer/inspector?view={{transaction.tx_hash}}">{{transaction.tx_hash}}</a></td>
         <td>{{{ balance: transaction.formatted_price_per_coin, symbol: currencyUnit } | cryptocurrency }}</td> 
         <td >{{{ balance: transaction.formatted_amount, symbol: currencyUnit } | cryptocurrency}}</td> 
         <td >{{ ({ balance: transaction.bitcoin_required, symbol: currencyUnit } | cryptocurrency) }}</td> 
