@@ -45,10 +45,12 @@ def send_form_response(response_dict):
             currency_id=2
         else:
             if currency=='BTC':
-                # this is a non mastercoin protocol currency
                 currency_id=0
             else:
-                return (None, 'Invalid currency')
+                if currency[:2] == 'SP':
+                    currency_id=int(currency[2:])
+                else:
+                    return (None, 'Invalid currency')
 
     marker_addr=None
     try:
