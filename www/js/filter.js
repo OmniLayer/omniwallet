@@ -29,8 +29,15 @@ function formatCurrencyInFundamentalUnit( balance, symbol) {
     if(balance instanceof Array) {
       balance.forEach(function(e,i,a) { a[i] = e / conversionFactor[symbol]; });
       return balance;
-    } else
+    } 
+    else if( conversionFactor[ symbol ])
+    {
       return ( balance / conversionFactor[ symbol ] ) ;
+    }
+    else
+    {
+      return balance / conversionFactor.stow;
+    }
 }
 function convertToFundamentalUnit( value, symbol ) {
   if( typeof value != 'number' )
