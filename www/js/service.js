@@ -94,7 +94,11 @@ function($rootScope, $http) {
         }
     },
 
-    updateWallet : function() {
+    loggedIn: function () {
+      return service.data.loggedIn;
+    },
+
+    updateWallet: function() {
       var uuid = service.getUUID();
       return $http.get('/v1/user/wallet/challenge?uuid=' + uuid).then(function(result) {
         var data = result.data;
