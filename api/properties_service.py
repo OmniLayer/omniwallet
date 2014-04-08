@@ -43,10 +43,6 @@ def challenge():
 
 def filterProperties( properties ):
     import glob
-    import time
-
-    #ct = request_data['currencyType'][0]
-    #ot = request_data['orderType'][0] if request_data.has_key('orderType') else 'OFFER'
 
     addresses = glob.glob('/home/faiz/Documents/Engine/mastercoin/mastercoin-tools/addr/*')
     addresses_data = []
@@ -57,11 +53,10 @@ def filterProperties( properties ):
                 with open( address_file , 'r' ) as f:
                   try:
                     addr = json.loads(f.readline())
-                    print addr, prop, str(prop) in addr
 
                     if str(prop) in addr:
-                        addresses_data.append({ 'address': address_file.split('/')[-1][:-5], 'data': addr[str(prop)] })
+                      addresses_data.append({ 'address': address_file.split('/')[-1][:-5], 'data': addr[str(prop)] })
                   except ValueError:
-                      print 'Error decoding JSON', address_file.split('/')[-1][:-5]
+                    print 'Error decoding JSON', address_file.split('/')[-1][:-5]
     
     return ['OK',addresses_data]
