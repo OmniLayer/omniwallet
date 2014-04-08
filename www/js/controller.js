@@ -88,7 +88,8 @@ function NavigationController($scope, $http, $modal, userService) {
     $scope.user = userService.data;
 }
 
-function ExplorerController($scope, $http) {
+function ExplorerController($scope, $http, hashExplorer) {
+    $scope.setHashExplorer = hashExplorer.setHash.bind(hashExplorer);
     // Scope members
     $scope.transactions = {};
     $scope.currencies = ['MSC','TMSC']
