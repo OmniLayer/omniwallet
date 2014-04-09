@@ -25,7 +25,7 @@ sudo apt-get install git build-essential autoconf libtool libboost-all-dev pkg-c
 wget http://sx.dyne.org/install-sx.sh
 sudo bash ./install-sx.sh
 ```
-update ~/.sx.cfg with an obelisk server details.  Don't have one already set up?  Here's how to build one on Rackspace: https://gist.github.com/curtislacy/8424181
+Update ~/.sx.cfg with an obelisk server details.  Don't have one already set up?  Here's how to build one on Rackspace: https://gist.github.com/curtislacy/8424181
 ```
 # ~/.sx.cfg Sample file.
 service = "tcp://obelisk.bysh.me:9091"
@@ -91,10 +91,10 @@ ln -s /usr/local/Cellar/boost-gcc48/HEAD/lib/libboost_thread-mt.a /usr/local/Cel
 ln -s /usr/local/Cellar/boost-gcc48/HEAD/lib/libboost_thread-mt.dylib /usr/local/Cellar/boost-gcc48/HEAD/lib/libboost_thread.dylib
 brew install libbitcoin libwallet obelisk sx --HEAD
 ```
-update ~/.sx.cfg with an obelisk server details.  Don't have one already set up?  Here's how to build one on Rackspace: https://gist.github.com/curtislacy/8424181
+Update ~/.sx.cfg with an obelisk server details.  Don't have one already set up?  Here's how to build one on Rackspace: https://gist.github.com/curtislacy/8424181
 ```
 # ~/.sx.cfg Sample file.
-service = "tcp://162.243.29.201:9091"
+service = "tcp://obelisk.bysh.me:9091"
 ```
 Make sure you have python libraries installed - note that we use ``easy_install`` to install GitPython.  Pip installs an older, stable version, and we need things that start in beta version 0.3.2.
 ```
