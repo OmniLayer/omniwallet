@@ -51,11 +51,6 @@ var CryptUtil = {
 		return JSON.parse( forge.util.decodeUtf8( decipher.output ));
 	},
 	createSignedObject: function( data, privKey ) {
-    var sig = new KJUR.crypto.Signature({ alg: 'SHA1withRSA' });
-
-    sig.initSign(privKey);
-    sig.updateString(data);
-
-    return sig.sign();
+    return privKey.signString(data, "sha1");
 	}
 };
