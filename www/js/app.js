@@ -1,6 +1,6 @@
 //global config goes here
 
-angular.module('omniwallet', [
+var app = angular.module('omniwallet', [
     'ngRoute',
     'ui.bootstrap',
     'ui.bootstrap.modal',
@@ -66,6 +66,21 @@ angular.module('omniwallet', [
     }).otherwise({ redirectTo: '/' });
 
     $locationProvider.html5Mode(true).hashPrefix('!');
+});
+
+
+app.config(function() {}).run(function(userService, $location) {
+  //Whitelist pages
+  whitelisted = ['login', 'about', 'stats', 'explorer']; 
+
+  if(!userService.loggedIn()) {
+    for(var i = 0; i < whitelisted.length; i++) {
+      if($location.path().search(whitelisted[i]) != -1) {
+        return;
+      }
+    }
+    $location.path('/');
+  }
 });
 
 //app helpers
