@@ -116,9 +116,12 @@ function($rootScope, $http) {
         })
     },
 
-    saveSession : function() {
-      service.updateWallet().then(function() {
+    saveSession: function () {
+      service.updateWallet().then(function(result) {
         console.log("Success saving")
+      },
+      function(result) {
+        console.log('Failure saving')
       });
     }
   };
