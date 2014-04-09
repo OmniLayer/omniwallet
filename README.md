@@ -1,40 +1,23 @@
+# Omniwallet: A multi-currency web wallet from Mastercoin
+
 ## What is Mastercoin?
 
-[from wiki.mastercoin.org]
-Mastercoin is both a new type of currency (MSC) and a platform. It is a new protocol layer 
-running on top of bitcoin like HTTP runs on top of TCP/IP. Its purpose is to build upon the 
-core Bitcoin protocol and add new advanced features, with a focus on a straight-forward and 
-easy to understand implementation which allows for analysis and its rapid development. 
+[Mastercoin](http://www.mastercoin.org) is both a new type of currency (MSC) and a platform. It is a protocol layer 
+running on top of [Bitcoin](https://bitcoin.org) similar to how HTTP runs on top of TCP/IP. It provides a [decentralized currency exchange](http://wiki.mastercoin.org/index.php/Distributed_exchange), user currencies, [smart property](http://wiki.mastercoin.org/index.php/Smart_property), [savings wallets](http://wiki.mastercoin.org/index.php/Saving_address) and other features.
+
+For more information see the [Mastercoin website](http://www.mastercoin.org). 
 
 ## What is Omniwallet?
 
-Omniwallet is a new type of web wallet, that combines security, ease of use, multi-currency support, and is completely open source from the ground up (up to the deplomeny scripts!)
+[Omniwallet](http://blog.mastercoin.org/2014/03/04/introducing-omniwallet-pre-alpha-developers-wanted/) is a new type of web wallet, that combines security, ease of use, multi-currency support, and is completely open source from the ground up (even including the deployment scripts)
 
 It currently supports Bitcoin and Mastercoin, and will support Mastercoin-derived currency in the future. In addition, support for other blockchains is a high priority for us - you will be able to store Litecoins, Peercoins, and other alts on the same highly secure web wallet (See [running bounty for Peercoin integration](http://peer4commit.com/projects/17)).
 
-You can checkout the test builds at [test.omniwallet.org](https://test.omniwallet.org/) (please note that this is not production ready, only use small amounts of BTC and MSC!)
+For more information see the [Omniwallet announcement](http://blog.mastercoin.org/2014/03/04/introducing-omniwallet-pre-alpha-developers-wanted/).
 
-### Best in class security
+You can try out the test builds at [test.omniwallet.org](https://test.omniwallet.org/) (WARNING: Omniwallet is not production ready, only use small amounts of BTC and MSC!)
 
-1. Private keys are never sent to the server except in an encrypted form.
-2. Private keys are always backed up (encrypted), so even if the server goes offline or is compromised, you can always migrate to another wallet
-3. Everything is open source from the ground up!
-4. You can deploy the Omniwallet on your own server and host your own instance, or use one of the service providers that will host it for you – your money, your choice.
-
-### Baked in usability
-
-1. No software to download or install, no blockchain to synchronize and verify – it just works, lightning fast.
-2. Carefully planned layout, with common operations emphasized
-3. Beautiful and intuitive User Interface
-4. Special care is taken to smooth out operational edge cases to prevent mistakes and ensure a painless experience for the user
-
-### Multi-currency support
-
-1. Omniwallet comes with a pre-built support for Bitcoin, Mastercoin and Test Mastercoins
-2. Native support for Smart Property and User-Generated Currencies
-3. Alt-coin support – the Omniwallet will support coins that go outside of the usual Mastercoin ecosystem, such as Litecoin, Peercoin and more.
-
-## Setup
+## Ubuntu Setup
 
 Install sx
 ```
@@ -45,7 +28,7 @@ sudo bash ./install-sx.sh
 update ~/.sx.cfg with an obelisk server details.  Don't have one already set up?  Here's how to build one on Rackspace: https://gist.github.com/curtislacy/8424181
 ```
 # ~/.sx.cfg Sample file.
-service = "tcp://162.243.29.201:9091"
+service = "tcp://obelisk.bysh.me:9091"
 ```
 Make sure you have python libraries installed - note that we use ``apt-get`` to install python-git.  Pip installs an older, stable version, and we need things that start in beta version 0.3.2.
 ```
@@ -85,12 +68,198 @@ sudo mkdir /var/lib/omniwallet
 sudo chown {user who will run omniwallet} /var/lib/omniwallet
 ```
 
+## Mac OS X Setup
+
+Omniwallet is installed from the command line, so you'll need to open the Terminal application to run the commands listed in this section.
+
+You'll need to have Xcode 5.1 (or later) installed and the latest command-line tools (Xcode -> Preferences -> Downloads -> Command Line Tools should have a checkmark).
+
+Next, make sure you have [Ruby](https://www.ruby-lang.org/en/downloads/) installed. If you've installed Xcode, you should have Ruby.
+
+If you don't have the [Homebrew](http://brew.sh/) package manager installed, use Ruby to install it:
+
+```
+ruby -e "$(curl -fsSL https://raw.github.com/Homebrew/homebrew/go/install)"
+```
+Install sx using Homebrew. We use the --HEAD uption since we need the latest development version. homebrew/versions is needed for gcc48.
+Note that dependencies need to be installed manually to get the head versions. After building libboost, create symbolics links that are missing for boost_thread.
+```
+brew tap homebrew/versions
+brew tap Nevtep/bitcoin && brew prune && brew update
+brew install boost-gcc48  --c++11 --HEAD
+ln -s /usr/local/Cellar/boost-gcc48/HEAD/lib/libboost_thread-mt.a /usr/local/Cellar/boost-gcc48/HEAD/lib/libboost_thread.a
+ln -s /usr/local/Cellar/boost-gcc48/HEAD/lib/libboost_thread-mt.dylib /usr/local/Cellar/boost-gcc48/HEAD/lib/libboost_thread.dylib
+brew install libbitcoin libwallet obelisk sx --HEAD
+```
+update ~/.sx.cfg with an obelisk server details.  Don't have one already set up?  Here's how to build one on Rackspace: https://gist.github.com/curtislacy/8424181
+```
+# ~/.sx.cfg Sample file.
+service = "tcp://162.243.29.201:9091"
+```
+Make sure you have python libraries installed - note that we use ``easy_install`` to install GitPython.  Pip installs an older, stable version, and we need things that start in beta version 0.3.2.
+```
+brew install git libffi
+sudo easy_install simplejson GitPython pip
+sudo pip install -r requirements.txt
+```
+Install uwsgi with pip to get python support.
+```
+sudo pip install uwsgi
+```
+Install nginx, and drop in the config included with this codebase.
+
+[Snow Leopard Install](http://kevinworthington.com/nginx-mac-os-snow-leopard-2-minutes/)
+```
+## DOWNLOADS
+sudo curl -OL h ftp://ftp.csx.cam.ac.uk/pub/software/programming/pcre/pcre-8.01.tar.gz > /usr/local/src/pcre-8.01.tar.gz
+sudo curl -OL h http://nginx.org/download/nginx-0.8.33.tar.gz > /usr/local/src/nginx-0.8.33.tar.gz
+
+## Install PCRE
+sudo mkdir -p /usr/local/src
+cd /usr/local/src
+tar xvzf pcre-8.01.tar.gz
+cd pcre-8.01
+./configure --prefix=/usr/local
+make
+sudo make install
+cd ..
+
+## Install Nginx
+tar xvzf nginx-0.8.33.tar.gz
+cd nginx-0.8.33
+./configure --prefix=/usr/local --with-http_ssl_module
+make
+sudo make install
+
+## Start Nginx
+sudo nginx
+```
+[Lion Install](http://kevinworthington.com/nginx-for-mac-os-x-lion-in-2-minutes/)
+```
+## DOWNLOADS
+sudo curl -OL h ftp://ftp.csx.cam.ac.uk/pub/software/programming/pcre/pcre-8.13.tar.gz > /usr/local/src/pcre-8.13.tar.gz
+sudo curl -OL h http://nginx.org/download/nginx-1.1.4.tar.gz > /usr/local/src/nginx-1.1.4.tar.gz
+
+## Install PCRE
+sudo mkdir -p /usr/local/src
+cd /usr/local/src
+tar xvzf pcre-8.13.tar.gz
+cd pcre-8.13
+./configure --prefix=/usr/local
+make
+sudo make install
+cd ..
+
+## Install Nginx
+tar xvzf nginx-1.1.4.tar.gz
+cd nginx-1.1.4
+./configure --prefix=/usr/local --with-http_ssl_module
+make
+sudo make install
+
+## Start Nginx
+sudo /usr/local/sbin/nginx
+```
+[Mountain Lion Install](http://kevinworthington.com/nginx-for-mac-os-x-mountain-lion-in-2-minutes/)
+```
+# create, then go into the build directory
+sudo mkdir -p /usr/local/src
+cd /usr/local/src
+
+# download, build, and install pcre
+sudo curl -OL ftp://ftp.csx.cam.ac.uk/pub/software/programming/pcre/pcre-8.31.tar.gz
+sudo tar xvzf pcre-8.31.tar.gz
+cd pcre-8.31
+sudo ./configure --prefix=/usr/local
+sudo make
+sudo make install
+cd ..
+
+# download, build, and install nginx
+sudo curl -OL http://nginx.org/download/nginx-1.3.8.tar.gz
+sudo tar xvzf nginx-1.3.8.tar.gz
+cd nginx-1.3.8
+sudo ./configure --prefix=/usr/local --with-http_ssl_module --with-pcre=../pcre-8.31
+sudo make
+sudo make install
+
+# start nginx
+sudo /usr/local/sbin/nginx
+```
+[Mavericks Install](http://kevinworthington.com/nginx-for-mac-os-x-mavericks-in-2-minutes/)
+```
+# Build Nginx 1.5.7 on Mac OS X Mavericks (10.9)
+# This script was created by Kevin Worthington - http://kevinworthington.com/ - 12 December 2013
+# Original article at: http://kevinworthington.com/nginx-for-mac-os-x-mavericks-in-2-minutes/
+
+# This useful script is provided for free, but without warranty. Use at your own risk.
+# By downloading this script you agree to the terms above.
+
+# create, then go into the build directory
+sudo mkdir -p /usr/local/src
+cd /usr/local/src
+
+# download, build, and install pcre
+sudo curl -OL ftp://ftp.csx.cam.ac.uk/pub/software/programming/pcre/pcre-8.33.tar.gz
+sudo tar xvzf pcre-8.33.tar.gz
+cd pcre-8.33
+sudo ./configure --prefix=/usr/local
+sudo make
+sudo make install
+cd ..
+
+# download, build, and install nginx
+sudo curl -OL http://nginx.org/download/nginx-1.5.7.tar.gz
+sudo tar xvzf nginx-1.5.7.tar.gz
+cd nginx-1.5.7
+sudo ./configure --prefix=/usr/local --with-http_ssl_module --with-pcre=../pcre-8.33
+sudo make
+sudo make install
+
+# start nginx
+sudo /usr/local/sbin/nginx
+```
+Copy nginx configuration
+```
+cp etc/nginx/sites-available/default /usr/local/nginx/sites-available
+```
+
+
+Find this section near the beginning of /usr/local/nginx/sites-available/default:
+```
+        ## Set this to reflect the location of the www directory within the omniwallet repo.
+        root /home/cmlacy/omniwallet/www/;
+        index index.html index.htm;
+```
+Change the ``root`` directive to reflect the location of your omniwallet codebase (actually the www directory within that codebase).
+
+Set the user that will run nginx to the one running omniwallet - one thas has permissions on the source - in the first line of /usr/local/conf/nginx.conf
+```
+  user {owner of source dir} {group of source dir};
+```
+
+Make sure you have uglifyjs (Note that there are a couple flavors of this available - you need the ``uglifyjs`` executable, which is included in the ``uglify-js`` NPM module - NOT the ``uglifyjs`` module!
+```
+sudo npm install -g uglify-js
+```
+Run npm install
+```
+npm install
+```
+Create the parsed blockchain data directory
+```
+sudo mkdir /var/lib/omniwallet
+sudo chown {user who will run omniwallet} /var/lib/omniwallet
+```
+
 ## Running
 
-Start nginx by running:
+Start nginx by running the command for your distribution.
+on Ubuntu use:
 ```
 sudo service nginx start
 ```
+
 Using the config included, nginx will launch an HTTP server on port 80.
 
 Set an environment variable containing a secret passphrase - this is used to generate salts for indivdual user IDs, and it needs to be both secret AND not change.
@@ -154,6 +323,82 @@ Returns:
 		"trend2": "rgb(212,48,48)"
 	}
 ]
+```
+
+### Get coin values
+HTTP GET ``/v1/values/<coin symbol>.json``
+Returns:
+```
+[
+  {
+    "price": 0.06865699418321376, 
+    "symbol": "MSC"
+  }
+]
+```
+
+### Get coin historic values
+HTTP GET ``/v1/values/history/<coin symbol>.json``
+Returns:
+```
+[
+  { 
+    "timestamp": 1396571412.478132, 
+    "value": {
+      "price": 0.06865699418321376, 
+      "symbol": "MSC"
+    }
+  }, 
+  {
+    "timestamp": 1396571448.99139, 
+    "value": {
+      "price": 0.06865699418321678, 
+      "symbol": "MSC"
+    }
+  }
+]
+
+```
+
+### Get Smart Property details
+HTTP GET ``/v1/property/<property ID>.json``
+Returns:
+```
+[ { baseCoin: '00',
+    block: '293180',
+    color: 'bgc-new',
+    currencyId: 0,
+    currency_str: 'Smart Property',
+    dataSequenceNum: '01',
+    details: 'unknown',
+    ecosystem: '02',
+    formatted_amount: 0,
+    formatted_ecosystem: 2,
+    formatted_previous_property_id: 0,
+    formatted_property_type: 1,
+    formatted_transactionType: 50,
+    formatted_transactionVersion: 0,
+    from_address: '1471EHpnJ62MDxLw96dKcNT8sWPEbHrAUe',
+    icon: 'unknown',
+    index: '486',
+    invalid: false,
+    method: 'multisig',
+    numberOfProperties: '500',
+    previous_property_id: '00000000',
+    propertyCategory: 'Coupons, Gifts',
+    propertyData: 'Each promo coupon allows one free redemption on the Mastercoin faucet.',
+    propertyName: 'Mastercoin Faucet Promo Coupon',
+    propertySubcategory: 'Web',
+    propertyUrl: 'mastercoin-faucet.com/redeem-coupon',
+    property_type: '0001',
+    to_address: 'unknown',
+    transactionType: '0032',
+    transactionVersion: '0000',
+    tx_hash: '331e4e204f9200a37fb5ea3364bfe52c33bfda3a1f0064d66e1b55e5faa03ba6',
+    tx_method_str: 'multisig',
+    tx_time: '1396151474000',
+    tx_type_str: 'Fixed property creation',
+    update_fs: false } ]
 ```
 
 ### Get system version information

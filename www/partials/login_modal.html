@@ -1,29 +1,25 @@
 <div class="modal-header">
   <h3>Login</h3>
 </div>
-<form novalidate class="form-horizontal">
-  <div class="modal-body">
-    <div class="control-group">
-      <label class="control-label" for="inputUUID">UUID</label>
-      <div class="controls">
-        <input type="text" ng-model="login.uuid" id="inputUUID" class="form-control" value="{{ uuid }}">
+<div class="modal-body">
+  <form novalidate class="form-horizontal">
+    <div class="row">
+      <div class="form-group col-md-10 col-md-push-1">
+        <label class="control-label" for="inputUUID">UUID</label>
+        <input type="text" class="form-control" ng-model="login.uuid" id="inputUUID" value="{{ uuid }}">
       </div>
     </div>
-    <div class="control-group">
-      <label class="control-label" for="inputPassword">Password</label>
-      <div class="controls">
-        <input type="password" ng-model="login.password" id="inputPassword" class="form-control">
+    <div class="row">
+      <div class="form-group col-md-10 col-md-push-1">
+        <label class="control-label" for="inputPassword">Password</label>
+        <input type="password" class="form-control" ng-model="login.password" id="inputPassword">
       </div>
     </div>
-  </div>
-  <div class="modal-footer">
-    <div class="control-group">
-      <div class="controls">
-        <button type="submit" class="btn btn-primary" ng-click="open(login)">Open Wallet</button>
-      </div>
-    </div>
-    <div ng-show="missingUUID" class="bg-danger">Account Doesn't Exist</div>
-    <div ng-show="badPassword" class="bg-danger">Password is Incorrect</div>
-    <div ng-show="serverError" class="bg-danger">Server error, please try again</div>
-  </div>
-</form>
+  </form>
+</div>
+<div class="modal-footer">
+  <button type="submit" class="btn btn-primary" ng-click="open(login)">Open Wallet</button>
+  <div ng-show="missingUUID" style="color:red">Account does not exist</div>
+  <div ng-show="badPassword" style="color:red">Password is incorrect</div>
+  <div ng-show="serverError" style="color:red">Server error, please try again</div>
+</div>

@@ -61,6 +61,17 @@ server {
 		alias /var/lib/omniwallet/www/tx/$1;
 	}
 
+  location ~ "^/v1/property/([0-9]*.json)$" {
+    alias /var/lib/omniwallet/www/properties/properties-$1;
+  }
+  
+  location ~ "^/v1/values/(.*)$" {
+    alias /var/lib/omniwallet/www/values/$1;
+  }
+  location ~ "^/v1/values/history/(.*)$" {
+    alias /var/lib/omniwallet/www/values/history/$1;
+  }
+
 	location ~ "^/v1/address/verify/(.*)$" {
 		alias /var/lib/omniwallet/www/mastercoin_verify/addresses/$1;
 	}

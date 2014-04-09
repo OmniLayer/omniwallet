@@ -6,9 +6,9 @@
     <div class="control-group">
       <label class="control-label" for="inputPassword">Password</label>
       <div class="controls">
-        <input name="password" type="password" ng-model="create.password" id="inputPassword" class="form-control" ng-minlength="8" required>
-        <span class="bg-warning" ng-show="createForm.password.$error.required && createForm.password.$dirty">Required</span>
-        <span class="bg-warning" ng-show="createForm.password.$dirty && createForm.password.$error.minlength">Password must be at least 8 characters long</span>
+        <input name="password" type="password" ng-model="create.password" id="inputPassword" ng-minlength="8" required>
+        <span style="color:red" ng-show="createForm.password.$error.required && createForm.password.$dirty">Required</span>
+        <span style="color:red" ng-show="createForm.password.$dirty && createForm.password.$error.minlength">Password must be at least 8 characters long</span>
         <div id="pass-strength" >
           Strength: {{ create.password | passwordPercent }}
         </div>
@@ -17,19 +17,19 @@
     <div class="control-group">
       <label class="control-label" for="inputRepeatPassword">Repeat Password</label>
       <div class="controls">
-        <input name="repeatPassword" type="password" ng-model="create.repeatPassword" id="inputRepeatPassword" class="form-control" required>
-        <span class="bg-warning" ng-show="createForm.repeatPassword.$error.required && createForm.repeatPassword.$dirty">Required</span>
-        <span class="bg-warning" ng-show="create.password != create.repeatPassword">Passwords do not match</span>
+        <input name="repeatPassword" type="password" ng-model="create.repeatPassword" id="inputRepeatPassword" required>
+        <span style="color:red" ng-show="createForm.repeatPassword.$error.required && createForm.repeatPassword.$dirty">Required</span>
+        <span style="color:red" ng-show="create.password != create.repeatPassword">Passwords do not match</span>
       </div>
     </div>
   </div>
-  <div class="modal-footer" ng-show="create.password.length > 0 && create.password == create.repeatPassword">
+  <div class="modal-footer">
     <div class="control-group">
       <div class="controls">
-        <button type="submit" class="btn btn-primary" ng-click="createWallet(create)">Create Wallet</button>
+        <button type="submit" class="btn" ng-click="createWallet(create)" ng-disabled="createForm.$invalid">Create Wallet</button>
       </div>
     </div>
-    <div class="help-block" ng-show="walletExists">This UUID is already in use</div>
-    <div class="help-block" ng-show="serverError">Server Error, try again later</div>
+    <div style="color:red" ng-show="walletExists">This UUID is already in use</div>
+    <div style="color:red" ng-show="serverError">Server Error, try again later</div>
   </div>
 </form>
