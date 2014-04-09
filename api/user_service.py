@@ -100,18 +100,13 @@ def update():
   signature = request.form['signature']
   wallet = request.form['wallet']
   pubkey = session_store.get(session_pubkey)
-  print signature
-  print challenge
 
   key = RSA.importKey(pubkey)
-  h = SHA.new()
-  h.update(challenge)
+  h = SHA.new(challenge)
   verifier = PKCS1_v1_5.new(key)
-  print verifier.verify(h, signature)
 
-
-  if challenge != session_store.get(session_challenge):
-    print 'Challenge not met'
+  if not verifier.verify(h, signature.decode('hex')):
+    print 'Challenge signature not verified'
     abort(403)
 
   write_wallet(uuid, wallet)
