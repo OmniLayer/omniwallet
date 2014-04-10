@@ -24,7 +24,12 @@ fi
 export TOOLSDIR
 export DATADIR
 cd $APPDIR/api
-uwsgi -s 127.0.0.1:1088 -p 8 -M --vhost --enable-threads --plugin python --logto $DATADIR/apps.log &
+if [[ "$OSTYPE" == "darwin"* ]]; then
+  uwsgi -s 127.0.0.1:1088 -p 8 -M --vhost --enable-threads --logto $DATADIR/apps.log &
+else
+  uwsgi -s 127.0.0.1:1088 -p 8 -M --vhost --enable-threads --plugin python --logto $DATADIR/apps.log &
+fi
+
 SERVER_PID=$!
 
 while true
@@ -64,8 +69,8 @@ do
     find $DATADIR/general/. -name "*.json" | xargs -I % cp -rp % $DATADIR/www/general
     find $DATADIR/offers/. -name "*.json" | xargs -I % cp -rp % $DATADIR/www/offers
     find $DATADIR/properties/. -name "*.json" | xargs -I % cp -rp % $DATADIR/www/properties
-    find $DATADIR/mastercoin_verify/addresses/. -name "*.json" | xargs -I % cp -rp % $DATADIR/www/mastercoin_verify/addresses
-    find $DATADIR/mastercoin_verify/transactions/. -name "*.json" | xargs -I % cp -rp % $DATADIR/www/mastercoin_verify/transactions
+    find $DATADIR/mastercoin_verify/addresses/. | xargs -I % cp -rp % $DATADIR/www/mastercoin_verify/addresses
+    find $DATADIR/mastercoin_verify/transactions/. | xargs -I % cp -rp % $DATADIR/www/mastercoin_verify/transactions
 	
 		# unlock
 		rm -f $LOCK_FILE

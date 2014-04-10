@@ -23,7 +23,7 @@
 
   <tr ng-repeat="trans in transactions">
    
-   <td>{{trans.tx_hash}}</td>
+    <td ng-click="setHashExplorer(trans)"> <a href="/explorer/inspector?view={{trans.tx_hash}}">{{trans.tx_hash}}</a></td>
    <td>{{trans.tx_type_str}}</td>
    <td>{{trans.formatted_amount}}</td>
     <td>{{trans.tx_time | date:'dd MMM HH:mm'}}</td>

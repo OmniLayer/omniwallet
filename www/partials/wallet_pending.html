@@ -7,7 +7,7 @@
       <h1> Pending Offers </h1>
       <div class="col-xs-9">
           <select ng-model="selectedTimeframe"  
-            ng-change="getData(selectedTimeframe)">
+            ng-change="filterData(selectedTimeframe)" disabled>
           <option value="">-- choose timeframe --</option>
           <option value="86400"> 24 Hours </option>
           <option value="604800"> 1 week </option>
@@ -24,6 +24,8 @@
     </div>
 
     <h3 ng-show="orderbook.length == 0" class="text-center">Loading orders...<img src="/assets/img/34-1.gif"></h3>
+    <br>
+    <h3 ng-hide="orderbook.length == 0"> Active Buy Offers </h3>
     <table ng-hide="orderbook.length == 0" class="table table-striped table-hover table-condensed">
       <thead>
           <tr>
@@ -37,8 +39,8 @@
       <tbody>
       </tbody>
 
-      <tr ng-repeat="transaction in orderbook">
-        <td ng-click="setHashExplorer(transaction)"> <a href="/explorer/inspector">{{transaction.tx_hash}}</a></td>
+      <tr ng-repeat="transaction in filtered_buys">
+        <td ng-click="setHashExplorer(transaction)"> <a href="/explorer/inspector?view={{transaction.tx_hash}}">{{transaction.tx_hash}}</a></td>
         <td ng-if="transaction.formatted_price_per_coin">{{{ balance: transaction.formatted_price_per_coin, symbol: currencyUnit } | cryptocurrency }}</td> 
         <td ng-if="transaction.formatted_amount">{{{ balance: transaction.formatted_amount, symbol: currencyUnit } | cryptocurrency}}</td> 
         <td ng-if="transaction.bitcoin_required">{{ ({ balance: transaction.bitcoin_required, symbol: currencyUnit } | cryptocurrency) }}</td> 
@@ -51,6 +53,68 @@
       </tr>
 
     </table>
+
+    <h3 ng-hide="orderbook.length == 0"> Active Sell Offers</h3>
+    <table ng-hide="orderbook.length == 0" class="table table-striped table-hover table-condensed">
+      <thead>
+          <tr>
+            <th>Transaction hash</th>
+            <th>Price per Coin </th>
+            <th>Amount</th>
+            <th>Total Cost</th>
+            <th> Cancel </th>
+          </tr>
+      </thead>
+      <tbody>
+      </tbody>
+
+      <tr ng-repeat="transaction in filtered_sells">
+        <td ng-click="setHashExplorer(transaction)"> <a href="/explorer/inspector?view={{transaction.tx_hash}}">{{transaction.tx_hash}}</a></td>
+        <td>{{{ balance: transaction.formatted_price_per_coin, symbol: currencyUnit } | cryptocurrency }}</td> 
+        <td >{{{ balance: transaction.formatted_amount, symbol: currencyUnit } | cryptocurrency}}</td> 
+        <td >{{ ({ balance: transaction.bitcoin_required, symbol: currencyUnit } | cryptocurrency) }}</td> 
+        <td ><button class="btn btn-primary btn-sm" ng-click="purchaseCoin(transaction)" type="submit" disabled>Cancel Offer</button></td>
+      </tr>
+
+    </table>
+    <!--<div ng-controller="WalletTradeHistoryController" ng-init="getData(selectedAddress)">
+    
+      <h4> Wallet Offers History: 
+        <select ng-model="currPair" ng-options="pairObject as pairObject for pairObject in pairs"
+          ng-change="getData(selectedAddress)">
+        <option value="">-- choose currency pair --</option>
+        </select> 
+          for
+        <select ng-model="selectedAddress" ng-options="addrObject.address as addrObject.address for addrObject in addresses" 
+          ng-change="getData(selectedAddress)">
+        <option value="">-- choose address --</option>
+        </select> 
+      </h4>
+    
+      <table class="table table-striped table-hover table-condensed">
+        <thead>
+            <tr>
+              <th>Transaction hash</th>
+              <th>Type</th>
+              <th>Status</th>
+              <th>Amount</th>
+              <th>Transaction time</th>
+            </tr>
+        </thead>
+        <tbody>
+        </tbody>
+
+        <tr ng-repeat="transaction in orderbook">
+          {{transaction}}
+          <td> <a href="">{{transaction.tx_hash}}</a></td>
+          <td>{{transaction.tx_type_str}}</td>
+          <td>{{transaction.status}}</td>
+          <td>{{transaction.formatted_amount}}</td>
+            <td>{{transaction.tx_time | date:'dd MMM yyyy HH:mma Z'}}</td>
+        </tr>
+      </table>
+    </div> -->
+
   </div>
   <div class="row" ng-hide="pendingThinking">
     <h4 ng-hide="pendingThinking">

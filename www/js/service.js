@@ -6,7 +6,8 @@ function($rootScope, $http) {
       walletKey : '',
       asymKey : {},
       wallet : {},
-      loggedIn : false
+      loggedIn : false,
+      disclaimerSeen : false
     },
 
     login : function(wallet, walletKey, asymKey) {
@@ -182,10 +183,14 @@ function($rootScope, $http,$q, $injector) {
   return new AppraiserService();
 }]);
 
-angular.module('omniwallet').factory('hashExplorer', function() {
-  var tx = '', loc = '';
+angular.module( 'omniwallet' ).factory( 'hashExplorer', function ( ) {
+  var tx = '', loc = '', setHash = function(){}; 
   return {
     tx : tx,
-    loc : loc
+    loc: loc,
+    setHash: function(tx) {
+      this.tx = JSON.stringify(tx);
+      this.loc = window.location.href.split('/').slice(-2).join('/');
+    }
   }
 });
