@@ -1,8 +1,8 @@
 <div class="modal-header">
   <h3>Login</h3>
 </div>
-<div class="modal-body">
-  <form novalidate class="form-horizontal">
+<form novalidate class="form-horizontal" ng-submit="open(login)">
+  <div class="modal-body">
     <div class="row">
       <div class="form-group col-md-10 col-md-push-1">
         <label class="control-label" for="inputUUID">UUID</label>
@@ -14,12 +14,12 @@
         <label class="control-label" for="inputPassword">Password</label>
         <input type="password" class="form-control" ng-model="login.password" id="inputPassword">
       </div>
-    </div>
-  </form>
-</div>
-<div class="modal-footer">
-  <button type="submit" class="btn btn-primary" ng-click="open(login)">Open Wallet</button>
-  <div ng-show="missingUUID" style="color:red">Account does not exist</div>
-  <div ng-show="badPassword" style="color:red">Password is incorrect</div>
-  <div ng-show="serverError" style="color:red">Server error, please try again</div>
-</div>
+     </div>
+  </div>
+  <div class="modal-footer">
+    <input type="submit" class="btn btn-primary" value="Open Wallet">
+    <div ng-show="missingUUID" style="color:red">Account does not exist</div>
+    <div ng-show="badPassword" style="color:red">Password is incorrect</div>
+    <div ng-show="serverError" style="color:red">Server error, please try again</div>
+  </div>
+</form>
