@@ -43,7 +43,12 @@ function WalletController($scope, $q, $http, $modal, $location, userService) {
 
      });
   });
-
+  
+  $scope.disclaimerSeen = userService.data.disclaimerSeen;
+  $scope.$on('$locationChangeSuccess',function(path){
+    userService.data.disclaimerSeen = true;
+  });
+  
   function getData(address) {
     var deferred = $q.defer();
 
