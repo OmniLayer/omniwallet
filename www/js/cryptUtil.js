@@ -51,9 +51,6 @@ var CryptUtil = {
 		return JSON.parse( forge.util.decodeUtf8( decipher.output ));
 	},
 	createSignedObject: function( data, privKey ) {
-		return {
-			data: data,
-			signature: 'TODO: Signature goes here!'
-		}
+    return privKey.signString(data, "sha1");
 	}
 };

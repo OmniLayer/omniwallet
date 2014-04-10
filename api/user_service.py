@@ -1,6 +1,9 @@
 import os
 import base64
 import werkzeug.security as ws
+from Crypto.Signature import PKCS1_v1_5
+from Crypto.Hash import SHA
+from Crypto.PublicKey import RSA
 from flask import Flask, request, jsonify, abort, json
 from simplekv.fs import FilesystemStore
 from uuid import UUID
@@ -38,7 +41,6 @@ def challenge():
 
   session_store.put(session_pow_challenge, pow_challenge)
   session_store.put(session_challenge, challenge)
-  print session_challenge
   response = {
       'salt': salt,
       'pow_challenge': pow_challenge,
@@ -84,18 +86,27 @@ def update():
   uuid = request.form['uuid']
   session = ws.hashlib.sha256(SESSION_SECRET + uuid).hexdigest()
   session_challenge = session + "_challenge"
-  print session_challenge
+  session_pubkey = session + "_public_key"
 
   if session_challenge not in session_store:
     print 'Challenge not in session'
     abort(403)
 
-  challenge = request.form['challenge']
+  if session_pubkey not in session_store:
+    print 'Public key not in session'
+    abort(403)
+
+  challenge = session_store.get(session_challenge)
   signature = request.form['signature']
   wallet = request.form['wallet']
+  pubkey = session_store.get(session_pubkey)
 
-  if challenge != session_store.get(session_challenge):
-    print 'Challenge not met'
+  key = RSA.importKey(pubkey)
+  h = SHA.new(challenge)
+  verifier = PKCS1_v1_5.new(key)
+
+  if not verifier.verify(h, signature.decode('hex')):
+    print 'Challenge signature not verified'
     abort(403)
 
   write_wallet(uuid, wallet)
