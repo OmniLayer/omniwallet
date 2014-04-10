@@ -35,9 +35,30 @@ function Login($scope, $http, $location, $modalInstance, userService) {
         var data = result.data;
         try {
           var wallet = CryptUtil.decryptObject(data, walletKey);
-          userService.login(wallet, walletKey, asymKey);
-          $modalInstance.close()
-          $location.path('/wallet');
+
+          var addCurrencies = function(i) {
+            if (i < wallet.addresses.length) {
+              $http.post('/v1/address/addr/', {
+                'addr' : wallet.addresses[i].address
+              }).then(function(result) {
+                var currencies = [];
+                result.data.balance.map(function(e, i, a) {
+                  currencies.push(e.symbol);
+                });
+                wallet.addresses[i].currencies = currencies;
+                addCurrencies(i+1);
+              }, function(error) {
+                wallet.addresses[i].currencies = [];
+                addCurrencies(i+1);
+              });
+            }
+            else {
+              userService.login(wallet, walletKey, asymKey);
+              $modalInstance.close()
+              $location.path('/wallet');
+            };
+          }
+          addCurrencies(0);
         } catch (e) {
           $scope.badPassword = true;
         }
