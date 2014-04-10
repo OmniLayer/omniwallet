@@ -26,7 +26,8 @@ def get_msc_balances( addr ):
         balance_data.pop( i )
         break
       else:
-        balance_data[ i ][ 'value' ] = int( round( float( balance_data[ i ][ 'value' ]) * 100000000 ))
+        if type(balance_data[i]['value']) == type(0.0): #if float convert (divisible property)
+            balance_data[ i ][ 'value' ] = int( round( float( balance_data[ i ][ 'value' ]) * 100000000 ))
     
     for i in xrange( 0, len( balance_data )):
       if balance_data[ i ][ 'value' ] == '0.0':
