@@ -45,7 +45,7 @@ function WalletController($scope, $q, $http, $modal, $location, userService) {
   });
   
   $scope.disclaimerSeen = userService.data.disclaimerSeen;
-  $scope.$watch($location.path(),function(path){
+  $scope.$on('$locationChangeSuccess',function(path){
     userService.data.disclaimerSeen = true;
   });
   
