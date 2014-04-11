@@ -48,7 +48,7 @@
       <div class="input-group">
         <span class="input-group-addon">Price per coin: </span>
         <input type="number" class="form-control"
-        placeholder="{{ { balance: global['buyOffer'].formatted_price_per_coin , symbol: currencyUnit} | cryptocurrency}}  {{currencyUnit[currencyUnit.length-1]}}BTC" disabled>
+        placeholder="{{ { balance: global['buyOffer'].formatted_price_per_coin , symbol: currencyUnit} | cryptocurrency}}  {{currencyUnit[currencyUnit.length-1]}}BTC" step="0.000000001" disabled>
       </div>
       <br>
       <div class="input-group">
@@ -59,7 +59,7 @@
       
       <div class="input-group">
         <span class="input-group-addon"> Sale fee : </span>
-        <input type="number" class="form-control" 
+        <input type="number" class="form-control" step="0.0001"
         placeholder="{{ { balance: global['buyOffer'].formatted_fee_required , symbol: currencyUnit} | cryptocurrency}} {{currencyUnit[currencyUnit.length-1]}}BTC" disabled>
       </div>
     <br>
@@ -77,7 +77,7 @@
       <div class="input-group">
         <span class="input-group-addon"> Transaction/Miner fees (in {{currencyUnit[currencyUnit.length-1]}}BTC): </span>
         <input name="fees" type="number" ng-model="minerFees" class="form-control" 
-        placeholder="{{{ balance: 10000, symbol: currencyUnit } | cryptocurrency}} minimum" required>
+        placeholder="{{{ balance: 10000, symbol: currencyUnit } | cryptocurrency}} minimum" step="0.0001" required>
         <span class="input-group-addon" > 
           Available Bitcoin: {{ { balance: balanceData[1], symbol: currencyUnit } | cryptocurrency}}
           {{currencyUnit[currencyUnit.length-1]}}BTC
