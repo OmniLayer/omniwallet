@@ -6,19 +6,22 @@ function($rootScope, $http) {
       walletKey : '',
       asymKey : {},
       wallet : {},
+      walletMetadata: { currencies : [] },
       loggedIn : false
     },
 
-    login : function(wallet, walletKey, asymKey) {
+    login : function(wallet, walletKey, asymKey, walletMetadata) {
       service.data.walletKey = walletKey;
       service.data.asymKey = asymKey;
       service.data.wallet = wallet;
+      service.data.walletMetadata = walletMetadata || service.data.walletMetadata;
       service.data.loggedIn = true;
     },
 
     logout : function() {
       service.data.loggedIn = false;
       service.data.wallet = {}
+      service.data.walletMetadata = {}
     },
 
     addAddress : function(address, privKey) {
@@ -29,28 +32,12 @@ function($rootScope, $http) {
           return;
         }
       };
-      // update currencies
-      $http.post('/v1/address/addr/', {
-        'addr' : address
-      }).success(function(result) {
-        var currencies = [];
-        result.balance.map(function(e, i, a) {
-          currencies.push(e.symbol);
-        });
-        service.data.wallet.addresses.push({
-          "address" : address,
-          "privkey" : privKey,
-          "currencies" : currencies
-        });
-        service.data.loggedIn = true;
-        service.saveSession();
-      }).error(function(error) {
-        service.data.wallet.addresses.push({
-          "address" : address,
-          "privkey" : privKey,
-          "currencies" : []
-        });
+      service.data.wallet.addresses.push({
+        "address" : address,
+        "privkey" : privKey
       });
+      service.data.loggedIn = true;
+      service.saveSession();
     },
 
     getAddress : function(address) {
@@ -66,13 +53,8 @@ function($rootScope, $http) {
     },
 
     getCurrencies : function() {
-      currencies = []
-      service.data.wallet.addresses.forEach( function( address ) {
-        for( var c=0; c < address.currencies.length; c++ ){
-          if(currencies.indexOf( address.currencies[c] ) == -1) {
-            currencies.push(address.currencies[c]);
-          }
-        }
+      currencies = service.data.walletMetadata.currencies.map( function( currency ) {
+        return currency.symbol;
       });
       return currencies;
     },
