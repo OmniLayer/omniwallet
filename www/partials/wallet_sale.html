@@ -4,7 +4,7 @@
     <br>
     <div ng-show="showErrors" class="alert alert-danger">{{error}}</div> 
   </div>
-  <form name="saleForm">
+  <form name="saleForm" ng-submit="validateSaleForm(currencyUnit)">
   <div class="row">
     <div class="col-xs-6">
       <h4 class="text-justify" >Sell type of coin:</h4>
@@ -86,7 +86,7 @@
       </div>
     </div>
   </div>
-  </form>
     <br>
-  <button class="btn btn-primary btn-lg col-xs-push-3 col-xs-6" ng-click="validateSaleForm(currencyUnit)" type="submit">Create Sale</button>
+  <input class="btn btn-primary btn-lg col-xs-push-3 col-xs-6" type="submit" value="Create Sale">
+  </form>
 </div>
