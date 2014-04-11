@@ -42,8 +42,8 @@ function Login($scope, $http, $location, $modalInstance, userService) {
               $http.post('/v1/address/addr/', {
                 'addr' : wallet.addresses[i].address
               }).then(function(result) {
-                var currency = null;
                 result.data.balance.forEach(function(balanceItem) {
+                  var currency = null;
                   walletMetadata.currencies.forEach(function(currencyItem){
                     if(currencyItem.symbol == balanceItem.symbol) {
                       currency = currencyItem;
