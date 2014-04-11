@@ -6,7 +6,8 @@ function($rootScope, $http) {
       walletKey : '',
       asymKey : {},
       wallet : {},
-      loggedIn : false
+      loggedIn : false,
+      disclaimerSeen : false
     },
 
     login : function(wallet, walletKey, asymKey) {
