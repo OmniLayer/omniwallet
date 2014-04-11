@@ -44,13 +44,14 @@ function Login($scope, $http, $location, $modalInstance, userService) {
               }).then(function(result) {
                 result.data.balance.forEach(function(balanceItem) {
                   var currency = null;
-                  walletMetadata.currencies.forEach(function(currencyItem){
+                  for( var j = 0; j<walletMetadata.currencies.length; j++ ) {
+                    currencyItem = walletMetadata.currencies[j];
                     if(currencyItem.symbol == balanceItem.symbol) {
                       currency = currencyItem;
                       currency.addresses.push(wallet.addresses[i].address);
                       break;
                     }
-                  });
+                  }
                   if (currency == null){
                     currency = { symbol : balanceItem.symbol, addresses : [wallet.addresses[i].address]};
                     walletMetadata.currencies.push(currency);
