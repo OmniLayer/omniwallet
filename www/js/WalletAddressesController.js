@@ -86,8 +86,10 @@ angular.module( 'omniwallet' )
                   if( spMatch != null )
                   {
                     var updateFunction = function( result ) {
-                      if( result.status == 200 )
+                      if( result.status == 200 ) {
+                        this.property_type = result.data[0].formatted_property_type
                         this.name = result.data[0].propertyName + ' (' + this.symbol.match( /^SP([0-9]+)$/ )[1] + ')';
+                      }
                     };
                     spReqs.push( $http.get( '/v1/property/' + spMatch[1] + '.json' ).then( updateFunction.bind( balances[b] )));
                   }
