@@ -35,29 +35,38 @@ function Login($scope, $http, $location, $modalInstance, userService) {
         var data = result.data;
         try {
           var wallet = CryptUtil.decryptObject(data, walletKey);
-
+          var walletMetadata ={ currencies : [] };
+          
           var addCurrencies = function(i) {
             if (i < wallet.addresses.length) {
               $http.post('/v1/address/addr/', {
                 'addr' : wallet.addresses[i].address
               }).then(function(result) {
-                var currencies = [];
-                result.data.balance.map(function(e, i, a) {
-                  currencies.push(e.symbol);
+                var currency = null;
+                result.data.balance.forEach(function(balanceItem) {
+                  walletMetadata.currencies.forEach(function(currencyItem){
+                    if(currencyItem.symbol == balanceItem.symbol) {
+                      currency = currencyItem;
+                      currency.addresses.push(wallet.addresses[i].address);
+                      break;
+                    }
+                  });
+                  if (currency == null){
+                    currency = { symbol : balanceItem.symbol, addresses : [wallet.addresses[i].address]};
+                    walletMetadata.currencies.push(currency);
+                  }
                 });
-                wallet.addresses[i].currencies = currencies;
                 addCurrencies(i+1);
               }, function(error) {
-                wallet.addresses[i].currencies = [];
                 addCurrencies(i+1);
               });
             }
             else {
-              userService.login(wallet, walletKey, asymKey);
-              $modalInstance.close()
+              userService.login(wallet, walletKey, asymKey, walletMetadata);
+              $modalInstance.close();
               $location.path('/wallet');
             };
-          }
+          };
           addCurrencies(0);
         } catch (e) {
           $scope.badPassword = true;
@@ -70,5 +79,5 @@ function Login($scope, $http, $location, $modalInstance, userService) {
           $scope.serverError = true;
         }
       });
-  }
+  };
 }
