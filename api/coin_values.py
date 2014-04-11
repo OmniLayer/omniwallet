@@ -20,6 +20,8 @@ def get_prices():
     mscvalue=get_msc_price()
     atomic_json_dump(mscvalue, filename)
     write_history(mscvalue)
+    filename = data_dir_root + '/www/values/TMSC.json'
+    atomic_json_dump(0, filename)
     for root, _, files in os.walk(data_dir_root + '/www/properties'):
         for f in files:
             fullpath = os.path.join(root, f)
@@ -71,7 +73,8 @@ def get_msc_price():
        'price' : sum / volume
     }
     return result_dict
-                
+        
+        
 def calculate_spt_price(sp):
     if sp['formatted_transactionType'] == 51:
         return 1.0/int( sp['numberOfProperties'] )
