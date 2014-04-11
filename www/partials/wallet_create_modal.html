@@ -1,12 +1,13 @@
 <div class="modal-header">
   <h3>Create a new Wallet</h3>
 </div>
-<form name="createForm" novalidate class="form-horizontal">
+<form name="createForm" novalidate class="form-horizontal" ng-submit="!createForm.$invalid && createWallet(create)">
   <div class="modal-body">
-    <div class="control-group">
+<div class="row">
+    <div class="form-group col-md-10 col-md-push-1">
       <label class="control-label" for="inputPassword">Password</label>
       <div class="controls">
-        <input name="password" type="password" ng-model="create.password" id="inputPassword" ng-minlength="8" required>
+        <input name="password" type="password" ng-model="create.password" class="form-control" id="inputPassword" ng-minlength="8" required>
         <span style="color:red" ng-show="createForm.password.$error.required && createForm.password.$dirty">Required</span>
         <span style="color:red" ng-show="createForm.password.$dirty && createForm.password.$error.minlength">Password must be at least 8 characters long</span>
         <div id="pass-strength" >
@@ -14,19 +15,22 @@
         </div>
       </div>
     </div>
-    <div class="control-group">
+</div>
+<div class="row">
+    <div class="form-group col-md-10 col-md-push-1">
       <label class="control-label" for="inputRepeatPassword">Repeat Password</label>
       <div class="controls">
-        <input name="repeatPassword" type="password" ng-model="create.repeatPassword" id="inputRepeatPassword" required>
+        <input name="repeatPassword" type="password" ng-model="create.repeatPassword" class="form-control" id="inputRepeatPassword" required>
         <span style="color:red" ng-show="createForm.repeatPassword.$error.required && createForm.repeatPassword.$dirty">Required</span>
         <span style="color:red" ng-show="create.password != create.repeatPassword">Passwords do not match</span>
       </div>
     </div>
+</div>
   </div>
   <div class="modal-footer">
     <div class="control-group">
       <div class="controls">
-        <button type="submit" class="btn" ng-click="createWallet(create)" ng-disabled="createForm.$invalid">Create Wallet</button>
+        <input type="submit" class="btn" ng-disabled="createForm.$invalid" value="Create Wallet">
       </div>
     </div>
     <div style="color:red" ng-show="walletExists">This UUID is already in use</div>
