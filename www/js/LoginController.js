@@ -16,6 +16,7 @@ function Login($scope, $http, $location, $modalInstance, userService) {
     var uuid = login.uuid;
     var asymKey = {};
     var walletKey = '';
+    $scope.loginInProgress=true;
 
     $http.get('/v1/user/wallet/challenge?uuid='+uuid)
       .then(function(result) {
@@ -71,6 +72,8 @@ function Login($scope, $http, $location, $modalInstance, userService) {
           addCurrencies(0);
         } catch (e) {
           $scope.badPassword = true;
+        } finally {
+          $scope.loginInProgress=false;
         }
       },
       function(result) {
@@ -79,6 +82,7 @@ function Login($scope, $http, $location, $modalInstance, userService) {
         } else {
           $scope.serverError = true;
         }
+        $scope.loginInProgress=false;
       });
   };
 }

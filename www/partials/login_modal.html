@@ -14,12 +14,14 @@
         <label class="control-label" for="inputPassword">Password</label>
         <input type="password" class="form-control" ng-model="login.password" id="inputPassword">
       </div>
-     </div>
+    </div>
   </div>
   <div class="modal-footer">
-    <input type="submit" class="btn btn-primary" value="Open Wallet">
+    <img ng-show="loginInProgress" src="/assets/img/34-1.gif" alt="loading">
+    <button ng-disabled="loginInProgress" type="submit" class="btn btn-primary" ng-click="open(login)">Open Wallet</button>
     <div ng-show="missingUUID" style="color:red">Account does not exist</div>
     <div ng-show="badPassword" style="color:red">Password is incorrect</div>
     <div ng-show="serverError" style="color:red">Server error, please try again</div>
   </div>
 </form>
+
