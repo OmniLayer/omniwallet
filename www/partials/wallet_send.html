@@ -3,9 +3,8 @@
 </div>
 
 <div class="col-xs-10" ng-controller="WalletTradeAssetsController">
-
-  <div ng-include="templates['disclaimer']"></div>
-
+  <br>
+  <br>
   <div class="row">
     <h3 class="text-center" >New Transaction Send</h3>
     <br>
@@ -53,7 +52,7 @@
       <div class="input-group">
         <span class="input-group-addon"> Amount to send (in {{currencyUnit[currencyUnit.length-1]}}{{selectedCoin}}): </span>
           <input name="amount" type="number" ng-model="sendAmount" class="form-control" 
-          placeholder="{{{ balance: 100000, symbol: currencyUnit} | cryptocurrency}}" required>
+          placeholder="{{{ balance: 100000, symbol: currencyUnit} | cryptocurrency}}" step="0.000000001" required>
         <span class="input-group-addon" > 
           Available: {{{ balance: balanceData[0], symbol: currencyUnit } | cryptocurrency}} 
           {{currencyUnit[currencyUnit.length-1]}}{{selectedCoin}}</span>
@@ -62,7 +61,7 @@
       <div class="input-group">
         <span class="input-group-addon"> Transaction/Miner fees (in {{currencyUnit[currencyUnit.length-1]}}BTC): </span>
         <input name="fees" type="number" ng-model="minerFees" class="form-control" 
-        placeholder="{{{ balance: 10000, symbol: currencyUnit } | cryptocurrency}} minimum" required>
+        placeholder="{{{ balance: 10000, symbol: currencyUnit } | cryptocurrency}} minimum" step="0.0001" required>
         <span class="input-group-addon" > 
           Available Bitcoin: {{ { balance: balanceData[1], symbol: currencyUnit } | cryptocurrency}}
           {{currencyUnit[currencyUnit.length-1]}}BTC

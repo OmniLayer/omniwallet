@@ -131,8 +131,9 @@ function SidecarController($scope, $http, userService) {
           'about': '/partials/about_sc.html',
           'wallet': '/partials/wallet_sc.html'
     };
-    $scope.hasAddresses = userService.getAllAddresses().length != 0 ? true : false;
-    $scope.hasAddressesWithPrivkey = getAddressesWithPrivkey().length != 0 ? true : false;
+  
+    $scope.hasAddresses = userService.data.loggedIn && userService.getAllAddresses().length != 0 ? true : false;
+    $scope.hasAddressesWithPrivkey = userService.data.loggedIn && getAddressesWithPrivkey().length != 0 ? true : false;
   
     function getAddressesWithPrivkey() {
       var addresses = []

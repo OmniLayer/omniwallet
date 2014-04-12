@@ -6,19 +6,23 @@ function($rootScope, $http) {
       walletKey : '',
       asymKey : {},
       wallet : {},
-      loggedIn : false
+      walletMetadata: { currencies : [] },
+      loggedIn : false,
+      disclaimerSeen : false
     },
 
-    login : function(wallet, walletKey, asymKey) {
+    login : function(wallet, walletKey, asymKey, walletMetadata) {
       service.data.walletKey = walletKey;
       service.data.asymKey = asymKey;
       service.data.wallet = wallet;
+      service.data.walletMetadata = walletMetadata || service.data.walletMetadata;
       service.data.loggedIn = true;
     },
 
     logout : function() {
       service.data.loggedIn = false;
       service.data.wallet = {}
+      service.data.walletMetadata = {}
     },
 
     addAddress : function(address, privKey) {
@@ -29,28 +33,12 @@ function($rootScope, $http) {
           return;
         }
       };
-      // update currencies
-      $http.post('/v1/address/addr/', {
-        'addr' : address
-      }).success(function(result) {
-        var currencies = [];
-        result.balance.map(function(e, i, a) {
-          currencies.push(e.symbol);
-        });
-        service.data.wallet.addresses.push({
-          "address" : address,
-          "privkey" : privKey,
-          "currencies" : currencies
-        });
-        service.data.loggedIn = true;
-        service.saveSession();
-      }).error(function(error) {
-        service.data.wallet.addresses.push({
-          "address" : address,
-          "privkey" : privKey,
-          "currencies" : []
-        });
+      service.data.wallet.addresses.push({
+        "address" : address,
+        "privkey" : privKey
       });
+      service.data.loggedIn = true;
+      service.saveSession();
     },
 
     getAddress : function(address) {
@@ -66,13 +54,8 @@ function($rootScope, $http) {
     },
 
     getCurrencies : function() {
-      currencies = []
-      service.data.wallet.addresses.forEach( function( address ) {
-        for( var c=0; c < address.currencies.length; c++ ){
-          if(currencies.indexOf( address.currencies[c] ) == -1) {
-            currencies.push(address.currencies[c]);
-          }
-        }
+      currencies = service.data.walletMetadata.currencies.map( function( currency ) {
+        return currency.symbol;
       });
       return currencies;
     },
@@ -85,39 +68,47 @@ function($rootScope, $http) {
       return service.data.wallet.uuid;
     },
 
-    removeAddress : function(address) {
-      for (var i = 0; i < service.data.wallet.addresses.length; i++)
-        if (service.data.wallet.addresses[i].address == address) {
-          service.data.wallet.addresses.splice(i, 1);
+    getAsymKey: function() {
+      return service.data.asymKey;
+    },
+
+    removeAddress: function( address ) {
+      for( var i=0; i<service.data.wallet.addresses.length; i++ )
+        if( service.data.wallet.addresses[i].address == address )
+        {
+          service.data.wallet.addresses.splice( i, 1 );
           service.saveSession();
           return;
         }
     },
 
-    updateWallet : function() {
-      var uuid = service.getUUID();
-      return $http.get('/v1/user/wallet/challenge?uuid=' + uuid).then(function(result) {
-        var data = result.data;
-        var encryptedWallet = CryptUtil.encryptObject(service.data.wallet, service.data.walletKey);
-        var challenge = data.challenge;
-        var signature = ""
-
-        return $http({
-          url : '/v1/user/wallet/update',
-          method : 'POST',
-          data : {
-            uuid : uuid,
-            wallet : encryptedWallet,
-            challenge : challenge,
-            signature : signature
-          }
-        });
-      });
+    loggedIn: function () {
+      return service.data.loggedIn;
     },
 
-    saveSession : function() {
-      service.updateWallet().then(function() {
+    updateWallet: function() {
+      var uuid = service.getUUID();
+      return $http.get('/v1/user/wallet/challenge?uuid='+uuid)
+        .then(function(result) {
+          var data = result.data;
+          var encryptedWallet = CryptUtil.encryptObject(service.data.wallet, service.data.walletKey);
+          var challenge = data.challenge;
+          var signature = CryptUtil.createSignedObject(challenge, service.getAsymKey().privKey);
+
+          return $http({
+            url: '/v1/user/wallet/update',
+            method: 'POST',
+            data: { uuid: uuid, wallet: encryptedWallet, signature: signature }
+          });
+        })
+    },
+
+    saveSession: function () {
+      service.updateWallet().then(function(result) {
         console.log("Success saving")
+      },
+      function(result) {
+        console.log('Failure saving')
       });
     }
   };
