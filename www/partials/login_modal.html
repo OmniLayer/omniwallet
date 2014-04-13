@@ -6,19 +6,19 @@
     <div class="row">
       <div class="form-group col-md-10 col-md-push-1">
         <label class="control-label" for="inputUUID">UUID</label>
-        <input type="text" class="form-control" ng-model="login.uuid" id="inputUUID" value="{{ uuid }}">
+        <input type="text" class="form-control" ng-disabled="loginInProgress" ng-model="login.uuid" id="inputUUID" value="{{ uuid }}">
       </div>
     </div>
     <div class="row">
       <div class="form-group col-md-10 col-md-push-1">
         <label class="control-label" for="inputPassword">Password</label>
-        <input type="password" class="form-control" ng-model="login.password" id="inputPassword">
+        <input type="password" class="form-control" ng-disabled="loginInProgress" ng-model="login.password" id="inputPassword">
       </div>
     </div>
   </div>
   <div class="modal-footer">
     <img ng-show="loginInProgress" src="/assets/img/34-1.gif" alt="loading">
-    <button ng-disabled="loginInProgress" type="submit" class="btn btn-primary" ng-click="open(login)">Open Wallet</button>
+    <button type="submit" class="btn btn-primary" ng-disabled="loginInProgress" ng-click="open(login)">Open Wallet</button>
     <div ng-show="missingUUID" style="color:red">Account does not exist</div>
     <div ng-show="badPassword" style="color:red">Password is incorrect</div>
     <div ng-show="serverError" style="color:red">Server error, please try again</div>
