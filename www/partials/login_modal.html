@@ -18,7 +18,7 @@
   </div>
   <div class="modal-footer">
     <img ng-show="loginInProgress" src="/assets/img/34-1.gif" alt="loading">
-    <button type="submit" class="btn btn-primary" ng-disabled="loginInProgress" ng-click="open(login)">Open Wallet</button>
+    <input type="submit" class="btn btn-primary" value="Open Wallet" ng-disabled="loginInProgress" >
     <div ng-show="missingUUID" style="color:red">Account does not exist</div>
     <div ng-show="badPassword" style="color:red">Password is incorrect</div>
     <div ng-show="serverError" style="color:red">Server error, please try again</div>
