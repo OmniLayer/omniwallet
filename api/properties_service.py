@@ -44,7 +44,7 @@ def challenge():
 def filterProperties( properties ):
     import glob
 
-    addresses = glob.glob('/home/faiz/Documents/Engine/mastercoin/mastercoin-tools/addr/*')
+    addresses = glob.glob(data_dir_root + '/addr/*')
     addresses_data = []
     for prop in properties:
         for address_file in addresses:
