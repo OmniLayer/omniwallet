@@ -11,7 +11,6 @@ app.debug = True
 @app.route('/addresses')
 def addresses():
   currency_id = request.args.get('currency_id')
-  print currency_id
   response = []
   addr_glob = glob.glob(data_dir_root + '/addr/*.json')
 
@@ -31,7 +30,6 @@ def addresses():
           msc_currency_id = str(int(currency_id) - 1) # Mastercoin-tools is off by one on currency id from the spec
 
         if msc_currency_id in addr:
-          print addr[currency_id]['balance']
           res['balance'] = float(addr[msc_currency_id]['balance'])
           response.append(res)
 
