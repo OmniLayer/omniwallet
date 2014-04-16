@@ -91,7 +91,8 @@ function NavigationController($scope, $http, $modal, userService) {
 function ExplorerController($scope, $http, hashExplorer) {
     $scope.setHashExplorer = hashExplorer.setHash.bind(hashExplorer);
     // Scope members
-    $scope.transactions = {};
+    $scope.searchQueryText = '';
+    $scope.transactions = [];
     $scope.currencies = ['MSC','TMSC']
     $scope.currency = 'MSC'
 
@@ -110,6 +111,10 @@ function ExplorerController($scope, $http, hashExplorer) {
           }
       });
     }
+
+    $scope.searchQuery = function(trans) { 
+      return ($scope.searchQueryText === '' || trans.tx_hash.indexOf($scope.searchQueryText) >= 0 || trans.from_address.indexOf($scope.searchQueryText) >= 0 || trans.to_address.indexOf($scope.searchQueryText) >= 0);
+    };
 }
 function ExplorerInspectorController($scope, hashExplorer) {
   $scope.transactionData = JSON.parse(hashExplorer.tx)
