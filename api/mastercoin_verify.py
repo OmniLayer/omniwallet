@@ -1,5 +1,6 @@
 import os
 import glob
+import re
 from flask import Flask, request, jsonify, abort, json
 
 data_dir_root = os.environ.get('DATADIR')
@@ -81,6 +82,9 @@ def tx_clean(tx):
   return clean
 
 def read(address):
+  if not re.match('^[a-zA-Z0-9_]+$', address):
+    raise ValueError('Non Alphanumeric address')
+
   filename = data_dir_root + '/addr/' + address + '.json'
   with open(filename, 'r') as f:
     return json.load(f)
