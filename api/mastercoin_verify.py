@@ -27,11 +27,12 @@ def addresses():
         res['balance'] = float(btc_balance)
         response.append(res)
       else:
+        adjust_currency_id = currency_id
         if currency_id == '1' or currency_id == '2':
-          msc_currency_id = str(int(currency_id) - 1) # Mastercoin-tools is off by one on currency id from the spec
+          adjust_currency_id = str(int(currency_id) - 1) # Mastercoin-tools is off by one on currency id from the spec
 
-        if msc_currency_id in addr:
-          res['balance'] = float(addr[msc_currency_id]['balance'])
+        if adjust_currency_id in addr:
+          res['balance'] = float(addr[adjust_currency_id]['balance'])
           response.append(res)
 
   json_response = json.dumps(response)
