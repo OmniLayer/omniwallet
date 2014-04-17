@@ -1,4 +1,28 @@
 //global services go here
+angular.module( 'omniwallet' ).factory( 'balanceService', [ '$http', '$q',
+  function( $http, $q ) {
+    var service = {
+      balance: function( address ) {
+        console.log( '-- Service getBalance -- (' + address + ')' );
+        var deferred = $q.defer();
+        $http.post( '/v1/address/addr/', { 'addr': address } )
+          .success( function( result ) {
+            deferred.resolve( { data: result } );
+          }).error ( function( error ) {
+            deferred.resolve( {
+              data: { 
+                address: addr.address,
+                balance: []
+              }
+            } );
+          } );
+        return deferred.promise;
+      }
+    };
+    return service;
+  }
+] );
+
 angular.module('omniwallet').factory('userService', ['$rootScope', '$http',
 function($rootScope, $http) {
   var service = {
