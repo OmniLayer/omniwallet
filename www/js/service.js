@@ -11,7 +11,7 @@ angular.module( 'omniwallet' ).factory( 'balanceService', [ '$http', '$q',
           }).error ( function( error ) {
             deferred.resolve( {
               data: { 
-                address: addr.address,
+                address: address,
                 balance: []
               }
             } );
