@@ -4,19 +4,18 @@ angular.module( 'omniwallet' ).factory( 'balanceService', [ '$http', '$q',
     var cache = [];
     var service = {
       balance: function( address ) {
-        var deferred = $q.defer();
         var currentTime = new Date().getTime();
         if( cache[ address ] && ( currentTime - cache[ address ].timestamp ) < 60000 )
-          deferred.resolve( { data: cache[address].data } );
+          return cache[ address ].deferred.promise;
         else
         {
+          var deferred = $q.defer();
+          cache[ address ] = {
+            deferred: deferred,
+            timestamp: currentTime
+          }
           $http.post( '/v1/address/addr/', { 'addr': address } )
             .success( function( result ) {
-              cache[ address ] = {
-                data: result,
-                timestamp: new Date().getTime()
-              }
-              console.log( cache );
               deferred.resolve( { data: result } );
             }).error ( function( error ) {
               deferred.resolve( {
@@ -26,8 +25,8 @@ angular.module( 'omniwallet' ).factory( 'balanceService', [ '$http', '$q',
                 }
               } );
             } );
+          return deferred.promise;
         }
-        return deferred.promise;
       }
     };
     return service;
