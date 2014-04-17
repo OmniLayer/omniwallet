@@ -132,6 +132,28 @@ server {
       uwsgi_pass 127.0.0.1:$PORT;
     }
 
+     location = /v1/properties { rewrite ^ /v1/properties/; }
+     location /v1/properties { try_files $uri @flask_properties_service; }
+     location @flask_properties_service {
+       include uwsgi_params;
+       uwsgi_param SCRIPT_NAME /v1/properties;
+       uwsgi_param UWSGI_MODULE properties_service;
+       uwsgi_param UWSGI_CALLABLE app;
+       uwsgi_modifier1 30;
+       uwsgi_pass 127.0.0.1:$PORT;
+     }
+
+    location = /v1/mastercoin_verify { rewrite ^ /v1/mastercoin_verify/; }
+    location /v1/mastercoin_verify { try_files $uri @flask_mastercoin_verify; }
+    location @flask_mastercoin_verify {
+      include uwsgi_params;
+      uwsgi_param SCRIPT_NAME /v1/mastercoin_verify;
+      uwsgi_param UWSGI_MODULE mastercoin_verify;
+      uwsgi_param UWSGI_CALLABLE app;
+      uwsgi_modifier1 30;
+      uwsgi_pass 127.0.0.1:$PORT;
+    }
+
 	# Only for nginx-naxsi used with nginx-naxsi-ui : process denied requests
 	#location /RequestDenied {
 	#	proxy_pass http://127.0.0.1:8080;    

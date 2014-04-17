@@ -89,6 +89,8 @@ brew tap Nevtep/bitcoin && brew prune && brew update
 brew install boost-gcc48  --c++11 --HEAD
 ln -s /usr/local/Cellar/boost-gcc48/HEAD/lib/libboost_thread-mt.a /usr/local/Cellar/boost-gcc48/HEAD/lib/libboost_thread.a
 ln -s /usr/local/Cellar/boost-gcc48/HEAD/lib/libboost_thread-mt.dylib /usr/local/Cellar/boost-gcc48/HEAD/lib/libboost_thread.dylib
+brew install zeromq2-gcc48 czmq-gcc48 --HEAD
+brew install czmqpp-gcc48
 brew install libbitcoin libwallet obelisk sx --HEAD
 ```
 Update ~/.sx.cfg with an obelisk server details.  Don't have one already set up?  Here's how to build one on Rackspace: https://gist.github.com/curtislacy/8424181
@@ -990,3 +992,96 @@ Returns status 'OK' if wallet was found. Example:
 ```
 
 Returns status 'MISSING' if the wallet was not found.
+
+
+#### Verification API
+```
+var postData = {
+  property: 2
+};
+$.post('/v1/properties/list/', postData, function (data) {
+  // Do something with resulting data
+})
+```
+
+Where:
+
+| Variable            | Possible Values              |
+| ------------------- | ---------------------------- |
+| property | Retrieve addresses with given properties |
+
+Returns status 'OK' if property was found.
+Takes a array of integers as input (non hex ints) and returns smart property data as a result.
+Example:
+
+input: [2147483653]
+
+```
+{
+    "data": [
+        {
+            "address": "1471EHpnJ62MDxLw96dKcNT8sWPEbHrAUe",
+            "data": {
+                "accept_transactions": [],
+                "balance": "0.000005",
+                "bought_transactions": [],
+                "exodus_transactions": [],
+                "offer_transactions": [],
+                "received_transactions": [
+                    {
+                        "baseCoin": "00",
+                        "block": "293180",
+                        "color": "bgc-new",
+                        "currencyId": "2147483653",
+                        "currency_str": "Smart Property",
+                        "dataSequenceNum": "01",
+                        "details": "unknown",
+                        "ecosystem": "02",
+                        "formatted_amount": 0,
+                        "formatted_ecosystem": 2,
+                        "formatted_previous_property_id": 0,
+                        "formatted_property_type": 1,
+                        "formatted_transactionType": 50,
+                        "formatted_transactionVersion": 0,
+                        "from_address": "1471EHpnJ62MDxLw96dKcNT8sWPEbHrAUe",
+                        "icon": "unknown",
+                        "index": "486",
+                        "invalid": false,
+                        "method": "multisig",
+                        "numberOfProperties": "500",
+                        "previous_property_id": "00000000",
+                        "propertyCategory": "Coupons, Gifts",
+                        "propertyData": "Each promo coupon allows one free redemption on the Mastercoin faucet.",
+                        "propertyName": "Mastercoin Faucet Promo Coupon",
+                        "propertySubcategory": "Web",
+                        "propertyUrl": "mastercoin-faucet.com/redeem-coupon",
+                        "property_type": "0001",
+                        "to_address": "unknown",
+                        "transactionType": "0032",
+                        "transactionVersion": "0000",
+                        "tx_hash": "331e4e204f9200a37fb5ea3364bfe52c33bfda3a1f0064d66e1b55e5faa03ba6",
+                        "tx_method_str": "multisig",
+                        "tx_time": "1396151474000",
+                        "tx_type_str": "Fixed property creation",
+                        "update_fs": false
+                    }
+                ],
+                "sent_transactions": [],
+                "sold_transactions": [],
+                "total_bought": "0.0",
+                "total_exodus": "0.0",
+                "total_received": "0.0",
+                "total_reserved": "0.0",
+                "total_sell_accept": "0.0",
+                "total_sell_offer": "0.0",
+                "total_sent": "0.0",
+                "total_sold": "0.0"
+            }
+        }
+    ],
+    "status": "OK"
+}
+
+```
+
+Returns error status if the property was not found.

@@ -1,30 +1,47 @@
-function LoginControllerUUID($scope, $http, $location, $modalInstance, userService, uuid) {
+function LoginControllerUUID($scope, $http, $location, $modalInstance, $q, userService, uuid) {
   $scope.login = {
     uuid: uuid
   }
 
-  Login($scope, $http, $location, $modalInstance, userService);
+  Login($scope, $http, $location, $modalInstance, $q, userService);
 }
 
-function LoginController($scope, $http, $location, $modalInstance, userService) {
-  Login($scope, $http, $location, $modalInstance, userService);
+function LoginController($scope, $http, $location, $modalInstance, $q, userService) {
+  Login($scope, $http, $location, $modalInstance, $q, userService);
 }
 
 // Helper (Not sure if this can be fixed with providers)
-function Login($scope, $http, $location, $modalInstance, userService) {
+function Login($scope, $http, $location, $modalInstance, $q, userService) {
   $scope.open = function(login) {
     var uuid = login.uuid;
     var asymKey = {};
     var walletKey = '';
+    var nonce = 0;
+    $scope.loginInProgress=true;
 
     $http.get('/v1/user/wallet/challenge?uuid='+uuid)
       .then(function(result) {
         var data = result.data;
-        var nonce = CryptUtil.generateNonceForDifficulty(data.pow_challenge);
-        walletKey = CryptUtil.generateSymmetricKey(login.password, data.salt);
-        asymKey = CryptUtil.generateAsymmetricPair();
-        encodedPub = window.btoa(asymKey.pubPem);
+        var asyncCrypto = $q.defer();
 
+        // daisy chain several async crypto calls into a promise
+        CryptUtilAsync.generateNonceForDifficulty(data.pow_challenge, function(result) {
+          nonce = result;
+          CryptUtilAsync.generateSymmetricKey(login.password, data.salt, function(result){
+            walletKey = result;
+            CryptUtilAsync.generateAsymmetricPair(function(result){
+              asymKey = result;
+              encodedPub = window.btoa(asymKey.pubPem);
+              $scope.$apply(function(){
+                asyncCrypto.resolve();          
+              });
+            });
+          });
+        });
+        
+        return asyncCrypto.promise;
+      })
+      .then(function(result) {
         return $http({
           url: '/v1/user/wallet/login',
           method: 'GET',
@@ -71,6 +88,8 @@ function Login($scope, $http, $location, $modalInstance, userService) {
           addCurrencies(0);
         } catch (e) {
           $scope.badPassword = true;
+        } finally {
+          $scope.loginInProgress=false;
         }
       },
       function(result) {
@@ -79,6 +98,7 @@ function Login($scope, $http, $location, $modalInstance, userService) {
         } else {
           $scope.serverError = true;
         }
+        $scope.loginInProgress=false;
       });
   };
 }
