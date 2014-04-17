@@ -51,6 +51,7 @@ function($rootScope, $http) {
       service.data.wallet = wallet;
       service.data.walletMetadata = walletMetadata || service.data.walletMetadata;
       service.data.loggedIn = true;
+      service.UpdateLoop();
     },
 
     logout : function() {
@@ -73,6 +74,7 @@ function($rootScope, $http) {
       });
       service.data.loggedIn = true;
       service.saveSession();
+      service.updateCurrencies();
     },
 
     getAddress : function(address) {
@@ -119,6 +121,12 @@ function($rootScope, $http) {
     loggedIn: function () {
       return service.data.loggedIn;
     },
+    
+    UpdateLoop : function() {
+      service.updateMetadata(function() {
+        setTimeout(UpdateLoop, 60000);
+      });
+    },
 
     updateWallet: function() {
       var uuid = service.getUUID();
@@ -134,9 +142,45 @@ function($rootScope, $http) {
             method: 'POST',
             data: { uuid: uuid, wallet: encryptedWallet, signature: signature }
           });
-        })
+        });
+    },
+    
+    updateCurrencies : function(){
+      var addCurrencies = function(i) {
+        if (i < service.data.wallet.addresses.length) {
+          $http.post('/v1/address/addr/', {
+            'addr' : service.data.wallet.addresses[i].address
+          }).then(function(result) {
+            result.data.balance.forEach(function(balanceItem) {
+              var currency = null;
+              for( var j = 0; j<service.data.walletMetadata.currencies.length; j++ ) {
+                currencyItem = service.data.walletMetadata.currencies[j];
+                if(currencyItem.symbol == balanceItem.symbol) {
+                  currency = currencyItem;
+                  if(currency.addresses.indexOf(service.data.wallet.addresses[i].address))
+                    currency.addresses.push(service.data.wallet.addresses[i].address);
+                  break;
+                }
+              }
+              if (currency == null){
+                currency = { symbol : balanceItem.symbol, addresses : [service.data.wallet.addresses[i].address]};
+                service.data.walletMetadata.currencies.push(currency);
+              }
+            });
+            addCurrencies(i+1);
+          }, function(error) {
+            addCurrencies(i+1);
+          });
+        };
+      };
+      addCurrencies(0);
     },
 
+    updateMetadata : function(callback){
+      service.updateCurrencies();
+      callback();  
+    },
+    
     saveSession: function () {
       service.updateWallet().then(function(result) {
         console.log("Success saving")
