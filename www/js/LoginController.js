@@ -1,17 +1,17 @@
-function LoginControllerUUID($scope, $http, $location, $modalInstance, $q, userService, uuid) {
+function LoginControllerUUID( $injector, $scope, $http, $location, $modalInstance, $q, userService, uuid) {
   $scope.login = {
     uuid: uuid
   }
 
-  Login($scope, $http, $location, $modalInstance, $q, userService);
+  Login( $injector, $scope, $http, $location, $modalInstance, $q, userService);
 }
 
-function LoginController($scope, $http, $location, $modalInstance, $q, userService) {
-  Login($scope, $http, $location, $modalInstance, $q, userService);
+function LoginController( $injector, $scope, $http, $location, $modalInstance, $q, userService) {
+  Login($injector, $scope, $http, $location, $modalInstance, $q, userService);
 }
 
 // Helper (Not sure if this can be fixed with providers)
-function Login($scope, $http, $location, $modalInstance, $q, userService) {
+function Login($injector, $scope, $http, $location, $modalInstance, $q, userService) {
   $scope.open = function(login) {
     var uuid = login.uuid;
     var asymKey = {};
@@ -56,9 +56,8 @@ function Login($scope, $http, $location, $modalInstance, $q, userService) {
           
           var addCurrencies = function(i) {
             if (i < wallet.addresses.length) {
-              $http.post('/v1/address/addr/', {
-                'addr' : wallet.addresses[i].address
-              }).then(function(result) {
+              $injector.get( 'balanceService' ).balance( wallet.addresses[i].address )
+              .then(function(result) {
                 result.data.balance.forEach(function(balanceItem) {
                   var currency = null;
                   for( var j = 0; j<walletMetadata.currencies.length; j++ ) {
