@@ -89,6 +89,8 @@ brew tap Nevtep/bitcoin && brew prune && brew update
 brew install boost-gcc48  --c++11 --HEAD
 ln -s /usr/local/Cellar/boost-gcc48/HEAD/lib/libboost_thread-mt.a /usr/local/Cellar/boost-gcc48/HEAD/lib/libboost_thread.a
 ln -s /usr/local/Cellar/boost-gcc48/HEAD/lib/libboost_thread-mt.dylib /usr/local/Cellar/boost-gcc48/HEAD/lib/libboost_thread.dylib
+brew install zeromq2-gcc48 czmq-gcc48 --HEAD
+brew install czmqpp-gcc48
 brew install libbitcoin libwallet obelisk sx --HEAD
 ```
 Update ~/.sx.cfg with an obelisk server details.  Don't have one already set up?  Here's how to build one on Rackspace: https://gist.github.com/curtislacy/8424181
