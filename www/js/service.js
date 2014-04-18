@@ -161,8 +161,11 @@ function($rootScope, $http, $injector) {
                 }
               }
               if (currency === null){
-                currency = { symbol : balanceItem.symbol, addresses : [service.data.wallet.addresses[i].address]};
-                service.data.walletMetadata.currencies.push(currency);
+                var propertyID = balanceItem.symbol.substring(2);
+                $http.get('/v1/property/'+propertyID+'.json').then(function(property){
+                  currency = { title: property.propertyName, symbol : balanceItem.symbol, addresses : [service.data.wallet.addresses[i].address]};
+                  service.data.walletMetadata.currencies.push(currency);
+                });
               }
             });
             addCurrencies(i+1);
