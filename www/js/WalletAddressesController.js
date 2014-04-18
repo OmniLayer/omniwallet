@@ -29,7 +29,7 @@ angular.module( 'omniwallet' )
             var appraiser = $injector.get( 'appraiser' );
 
             wallet.addresses.forEach( function( addr ) {
-              requests.push( addressRequest( $http, $q, addr ).then( function( result ) {
+              requests.push( $injector.get( 'balanceService' ).balance( addr.address ).then( function( result ) {
                 if( result.data.balance.length == 0 )
                 {
                   console.log( 'No balances for ' + addr.address + ', invalid address?' );
@@ -202,23 +202,3 @@ var DeleteBtcAddressModal = function ($scope, $modalInstance, address ) {
   };
 };
 
-function addressRequest( $http, $q, addr ) {
-  var deferred = $q.defer();
-
-
-  $http.post( '/v1/address/addr/', { 'addr': addr.address } )
-    .success( function( result ) {
-      deferred.resolve( { data: result } );
-    } ).error(
-    function( error ) {
-      deferred.resolve( {
-        data: { 
-          address: addr.address,
-          balance: []
-           }
-      });
-    }
-  );
-
-  return deferred.promise;
-}

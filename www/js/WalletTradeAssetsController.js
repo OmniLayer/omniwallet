@@ -81,6 +81,7 @@ function WalletTradeAssetsController($modal, $scope, $http, $q, userService) {
   }
 
   function getAddressData(address) {
+  console.log( 'Addr request 5' );
     var promise = $http.post( '/v1/address/addr/', { 'addr': address });
 
     return promise;
