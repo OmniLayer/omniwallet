@@ -154,7 +154,7 @@ function($rootScope, $http) {
             result.data.balance.forEach(function(balanceItem) {
               var currency = null;
               for( var j = 0; j<service.data.walletMetadata.currencies.length; j++ ) {
-                currencyItem = service.data.walletMetadata.currencies[j];
+                var currencyItem = service.data.walletMetadata.currencies[j];
                 if(currencyItem.symbol == balanceItem.symbol) {
                   currency = currencyItem;
                   if(currency.addresses.indexOf(service.data.wallet.addresses[i].address))
@@ -162,7 +162,7 @@ function($rootScope, $http) {
                   break;
                 }
               }
-              if (currency == null){
+              if (currency === null){
                 currency = { symbol : balanceItem.symbol, addresses : [service.data.wallet.addresses[i].address]};
                 service.data.walletMetadata.currencies.push(currency);
               }
@@ -171,7 +171,7 @@ function($rootScope, $http) {
           }, function(error) {
             addCurrencies(i+1);
           });
-        };
+        }
       };
       addCurrencies(0);
     },
