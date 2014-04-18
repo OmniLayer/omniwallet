@@ -33,8 +33,8 @@ angular.module( 'omniwallet' ).factory( 'balanceService', [ '$http', '$q',
   }
 ] );
 
-angular.module('omniwallet').factory('userService', ['$rootScope', '$http',
-function($rootScope, $http) {
+angular.module('omniwallet').factory('userService', ['$rootScope', '$http', '$injector',
+function($rootScope, $http, $injector) {
   var service = {
     data : {
       walletKey : '',
@@ -148,9 +148,7 @@ function($rootScope, $http) {
     updateCurrencies : function(){
       var addCurrencies = function(i) {
         if (i < service.data.wallet.addresses.length) {
-          $http.post('/v1/address/addr/', {
-            'addr' : service.data.wallet.addresses[i].address
-          }).then(function(result) {
+          $injector.get( 'balanceService' ).balance( addr.address ).then(function(result) {
             result.data.balance.forEach(function(balanceItem) {
               var currency = null;
               for( var j = 0; j<service.data.walletMetadata.currencies.length; j++ ) {
@@ -167,8 +165,6 @@ function($rootScope, $http) {
                 service.data.walletMetadata.currencies.push(currency);
               }
             });
-            addCurrencies(i+1);
-          }, function(error) {
             addCurrencies(i+1);
           });
         }
