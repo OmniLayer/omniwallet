@@ -161,11 +161,16 @@ function($rootScope, $http, $injector) {
                 }
               }
               if (currency === null){
-                var propertyID = balanceItem.symbol.substring(2);
-                $http.get('/v1/property/'+propertyID+'.json').then(function(property){
-                  currency = { title: property.propertyName, symbol : balanceItem.symbol, addresses : [service.data.wallet.addresses[i].address]};
+                if(balanceItem.symbol.substring(0,2) == "SP"){
+                  var propertyID = balanceItem.symbol.substring(2);
+                  $http.get('/v1/property/'+propertyID+'.json').then(function(property){
+                    currency = { name: property.propertyName, symbol : balanceItem.symbol, addresses : [service.data.wallet.addresses[i].address]};
+                    service.data.walletMetadata.currencies.push(currency);
+                  });
+                } else {
+                  currency = { name: balanceItem.symbol, symbol : balanceItem.symbol, addresses : [service.data.wallet.addresses[i].address]};
                   service.data.walletMetadata.currencies.push(currency);
-                });
+                }
               }
             });
             addCurrencies(i+1);
@@ -212,9 +217,9 @@ function($rootScope, $http,$q, $injector) {
     var self = this;
     var requests =[];
     var coins = this.userService.getCurrencies();
-    coins.forEach(function(symbol){
+    coins.forEach(function(coin){
       requests.push(
-        $http.get('/v1/values/'+symbol+'.json').then(function(response) {
+        $http.get('/v1/values/'+coin.symbol+'.json').then(function(response) {
           var currency = response.data[0];
           if (currency.symbol == 'BTC') {
             // Store these things internally as the value of a satoshi.
