@@ -11,12 +11,12 @@ if (typeof(window.Worker) !== 'undefined') {
     var submittedJobs = [];
     
     cryptoWorker.onmessage = function(oEvent){
-      var jobDef = submittedJobs.pop();
+      var jobDef = submittedJobs.shift();
       jobDef.onComplete(oEvent.data);
     };
     
     cryptoWorker.onerror = function(oEvent){
-      var jobDef = submittedJobs.pop();
+      var jobDef = submittedJobs.shift();
       jobDef.onComplete(null);
     };
     
