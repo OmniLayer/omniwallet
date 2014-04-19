@@ -12,6 +12,8 @@ function LoginController( $injector, $scope, $http, $location, $modalInstance, $
 
 // Helper (Not sure if this can be fixed with providers)
 function Login($injector, $scope, $http, $location, $modalInstance, $q, userService) {
+  $scope.loginInProgress=false;
+
   $scope.open = function(login) {
     var uuid = login.uuid;
     var asymKey = {};
@@ -87,8 +89,6 @@ function Login($injector, $scope, $http, $location, $modalInstance, $q, userServ
           addCurrencies(0);
         } catch (e) {
           $scope.badPassword = true;
-        } finally {
-          $scope.loginInProgress=false;
         }
       },
       function(result) {
