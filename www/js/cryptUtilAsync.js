@@ -11,12 +11,12 @@ if (typeof(window.Worker) !== 'undefined') {
     var submittedJobs = [];
     
     cryptoWorker.onmessage = function(oEvent){
-      var jobDef = submittedJobs.pop();
+      var jobDef = submittedJobs.shift();
       jobDef.onComplete(oEvent.data);
     };
     
     cryptoWorker.onerror = function(oEvent){
-      var jobDef = submittedJobs.pop();
+      var jobDef = submittedJobs.shift();
       jobDef.onComplete(null);
     };
     
@@ -27,7 +27,15 @@ if (typeof(window.Worker) !== 'undefined') {
 	    },
 
 	    generateAsymmetricPair: function( onComplete ) {
-    	  submittedJobs.push({ onComplete : onComplete })
+    	  submittedJobs.push({ 
+    	    onComplete : function (result) {
+      	    var keyObj =  {
+              pubPem: result.pubPem,
+              privKey: KEYUTIL.getKey(result.privPem)
+            };
+      	    onComplete(keyObj);
+    	    } 
+    	  });
     	  cryptoWorker.postMessage({ name: 'generateAsymmetricPair' });
 	    },
 
