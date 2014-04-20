@@ -16,12 +16,19 @@ importScripts(
 onmessage = function(oEvent) {
   var jobDesc = oEvent.data;
   var result = null;
+  var key = null;
   switch (jobDesc.name) {
    	case "generateNonceForDifficulty":
    	  result = CryptUtil.generateNonceForDifficulty(jobDesc.challengeString);
    	  break;
    	case "generateAsymmetricPair":
-   	  result = CryptUtil.generateAsymmetricPair();
+   	  key = CryptUtil.generateAsymmetricPair();
+   	  // workaround for jsrsasign bug#37 (https://github.com/kjur/jsrsasign/issues/37)
+   	  key.privKey.isPrivate = true;
+   	  result = {
+   	      pubPem: key.pubPem,
+   	      privPem: KEYUTIL.getPEM( key.privKey, "PKCS8PRV" )
+   	    };
    	  break;
    	case "generateSymmetricKey":
    	  result = CryptUtil.generateSymmetricKey(jobDesc.password, jobDesc.hexSalt);

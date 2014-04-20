@@ -27,7 +27,15 @@ if (typeof(window.Worker) !== 'undefined') {
 	    },
 
 	    generateAsymmetricPair: function( onComplete ) {
-    	  submittedJobs.push({ onComplete : onComplete })
+    	  submittedJobs.push({ 
+    	    onComplete : function (result) {
+      	    var keyObj =  {
+              pubPem: result.pubPem,
+              privKey: KEYUTIL.getKey(result.privPem)
+            };
+      	    onComplete(keyObj);
+    	    } 
+    	  });
     	  cryptoWorker.postMessage({ name: 'generateAsymmetricPair' });
 	    },
 
