@@ -160,7 +160,8 @@ function($rootScope, $http, $injector) {
               if (currency === null){
                 if(balanceItem.symbol.substring(0,2) == "SP"){
                   var propertyID = balanceItem.symbol.substring(2);
-                  $http.get('/v1/property/'+propertyID+'.json').then(function(property){
+                  $http.get('/v1/property/'+propertyID+'.json').then(function(result){
+                    var property = result.data[0];
                     currency = { name: property.propertyName, symbol : balanceItem.symbol, addresses : [service.data.wallet.addresses[i].address]};
                     service.data.walletMetadata.currencies.push(currency);
                   });
