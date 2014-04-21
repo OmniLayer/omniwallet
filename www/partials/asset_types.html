@@ -2,10 +2,10 @@
     
 
 <div class="row" >
-  <div ng-if="balances.balances" class="col-md-6 col-sm-12 text-center">Portfolio Composition 
+  <div ng-if="balances.balances" class="col-md-5 col-sm-12 text-center">Portfolio Composition 
     <svg id="all-assets-graph"></svg>
   </div>
-  <div class="col-md-6 col-sm-12">
+  <div class="col-md-7 col-sm-12">
     <div ng-if="balances.balances">
       <row>
         <div class="currency-name col-xs-8 text-left">
@@ -22,10 +22,10 @@
               <div class="asset-item col-xs-4 text-left">
                 <span>{{currency.name ? currency.name : currency.symbol}}</span>
               </div>
-              <div class="asset-item col-xs-4 text-right">
+              <div class="asset-item col-xs-5 text-right">
                 <span>{{ ({ balance: currency.balance, symbol: currency.symbol } | cryptocurrency).toFixed(2) }} {{currency.name == "Bitcoin" ? "m" : ""}}{{ currency.symbol}}</span>
               </div>
-              <div class="asset-item col-xs-4 text-right">
+              <div class="asset-item col-xs-3 text-right">
                 <span>{{currency.value | currency}}</span>
               </div>
             </div>
