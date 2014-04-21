@@ -124,7 +124,7 @@ function($rootScope, $http, $injector) {
     
     UpdateLoop : function() {
       service.updateMetadata(function() {
-        setTimeout(UpdateLoop, 60000);
+        setTimeout(service.UpdateLoop, 60000);
       });
     },
 
