@@ -71,6 +71,7 @@ function WalletHistoryController($scope, $http, userService, hashExplorer) {
 
   $scope.getData = function getData(address) {
 
+  console.log( 'Addr request 4' );
     $http.post( '/v1/address/addr/', { 'addr': address } )
       .success( function(data, status, headers, config) {
 
