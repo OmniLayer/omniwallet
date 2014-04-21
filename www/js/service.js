@@ -148,7 +148,7 @@ function($rootScope, $http, $injector) {
     updateCurrencies : function(){
       var addCurrencies = function(i) {
         if (i < service.data.wallet.addresses.length) {
-          $injector.get( 'balanceService' ).balance( addr.address ).then(function(result) {
+          $injector.get( 'balanceService' ).balance( service.data.wallet.addresses[i].address ).then(function(result) {
             result.data.balance.forEach(function(balanceItem) {
               var currency = null;
               for( var j = 0; j<service.data.walletMetadata.currencies.length; j++ ) {
@@ -175,6 +175,8 @@ function($rootScope, $http, $injector) {
             });
             addCurrencies(i+1);
           });
+        } else {
+          console.log("Updated Currencies");
         }
       };
       addCurrencies(0);
