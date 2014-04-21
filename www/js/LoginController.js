@@ -54,39 +54,9 @@ function Login($injector, $scope, $http, $location, $modalInstance, $q, userServ
         var data = result.data;
         try {
           var wallet = CryptUtil.decryptObject(data, walletKey);
-          var walletMetadata ={ currencies : [] };
-          
-          var addCurrencies = function(i) {
-            if (i < wallet.addresses.length) {
-              $injector.get( 'balanceService' ).balance( wallet.addresses[i].address )
-              .then(function(result) {
-                result.data.balance.forEach(function(balanceItem) {
-                  var currency = null;
-                  for( var j = 0; j<walletMetadata.currencies.length; j++ ) {
-                    currencyItem = walletMetadata.currencies[j];
-                    if(currencyItem.symbol == balanceItem.symbol) {
-                      currency = currencyItem;
-                      currency.addresses.push(wallet.addresses[i].address);
-                      break;
-                    }
-                  }
-                  if (currency == null){
-                    currency = { symbol : balanceItem.symbol, addresses : [wallet.addresses[i].address]};
-                    walletMetadata.currencies.push(currency);
-                  }
-                });
-                addCurrencies(i+1);
-              }, function(error) {
-                addCurrencies(i+1);
-              });
-            }
-            else {
-              userService.login(wallet, walletKey, asymKey, walletMetadata);
-              $modalInstance.close();
-              $location.path('/wallet');
-            };
-          };
-          addCurrencies(0);
+          userService.login(wallet, walletKey, asymKey);
+          $modalInstance.close()
+          $location.path('/wallet');
         } catch (e) {
           $scope.badPassword = true;
         }
