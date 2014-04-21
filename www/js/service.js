@@ -152,7 +152,7 @@ function($rootScope, $http, $injector) {
                 var currencyItem = service.data.walletMetadata.currencies[j];
                 if(currencyItem.symbol == balanceItem.symbol) {
                   currency = currencyItem;
-                  if(!currency.addresses.indexOf(service.data.wallet.addresses[i].address))
+                  if(currency.addresses.indexOf(service.data.wallet.addresses[i].address) == -1)
                     currency.addresses.push(service.data.wallet.addresses[i].address);
                   break;
                 }
