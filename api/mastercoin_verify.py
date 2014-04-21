@@ -24,7 +24,7 @@ def addresses():
 
       if currency_id == '0':
         btc_balance = [x['value'] for x in addr['balance'] if x['symbol'] == 'BTC'][0]
-        res['balance'] = float(btc_balance)
+        res['balance'] = ('%.8f' % float(btc_balance)).rstrip('0').rstrip('.')
         response.append(res)
       else:
         adjust_currency_id = currency_id
@@ -32,7 +32,7 @@ def addresses():
           adjust_currency_id = str(int(currency_id) - 1) # Mastercoin-tools is off by one on currency id from the spec
 
         if adjust_currency_id in addr:
-          res['balance'] = float(addr[adjust_currency_id]['balance'])
+          res['balance'] = ('%.8f' % float(addr[adjust_currency_id]['balance'])).rstrip('0').rstrip('.')
           response.append(res)
 
   json_response = json.dumps(response)
