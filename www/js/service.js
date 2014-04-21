@@ -90,10 +90,7 @@ function($rootScope, $http, $injector) {
     },
 
     getCurrencies : function() {
-      currencies = service.data.walletMetadata.currencies.map( function( currency ) {
-        return currency.symbol;
-      });
-      return currencies;
+      return service.data.walletMetadata.currencies;
     },
 
     getWallet : function() {
@@ -155,7 +152,7 @@ function($rootScope, $http, $injector) {
                 var currencyItem = service.data.walletMetadata.currencies[j];
                 if(currencyItem.symbol == balanceItem.symbol) {
                   currency = currencyItem;
-                  if(currency.addresses.indexOf(service.data.wallet.addresses[i].address))
+                  if(!currency.addresses.indexOf(service.data.wallet.addresses[i].address))
                     currency.addresses.push(service.data.wallet.addresses[i].address);
                   break;
                 }
