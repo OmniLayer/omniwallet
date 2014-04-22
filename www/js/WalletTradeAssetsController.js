@@ -675,8 +675,15 @@ function WalletTradeAssetsController($modal, $scope, $http, $q, userService) {
     var minerMinimum = 10000; 
     var nonZeroValue = 1; 
 
-    var minerFees = Math.ceil( formatCurrencyInFundamentalUnit( +$scope.minerFees , currencyUnit[3] +'tos' ) );
-    var sendAmount = Math.ceil( formatCurrencyInFundamentalUnit( +$scope.sendAmount , currencyUnit[3]+'tos'  ) );
+    console.log( '** Currency Unit: ' + currencyUnit );
+    var inverseConversion = 'wtow';
+    if( currencyUnit == 'stom' )
+      inverseConversion = 'mtos';
+    else if( currencyUnit == 'stow' )
+      inverseConversion = 'wtos';
+
+    var minerFees = Math.ceil( formatCurrencyInFundamentalUnit( +$scope.minerFees , inverseConversion ) );
+    var sendAmount = Math.ceil( formatCurrencyInFundamentalUnit( +$scope.sendAmount , inverseConversion  ) );
     var minerFeesMillis = formatCurrencyInFundamentalUnit( minerFees , 'stom' ) ;
     var sendAmountMillis = formatCurrencyInFundamentalUnit( sendAmount , 'stom'  ) ;
 
@@ -693,6 +700,8 @@ function WalletTradeAssetsController($modal, $scope, $http, $q, userService) {
         error += 'make sure all fields are completely filled, '
     }
     if( ( sendAmount <= balance ) == false ) {
+	console.log( '** Send Amount: ' + sendAmount );
+	console.log( '** Balance: ' + balance );
         error += 'make sure you aren\'t sending more coins than you own, '
     }
     if( ( minerFees <= btcbalance ) ==  false ) {
