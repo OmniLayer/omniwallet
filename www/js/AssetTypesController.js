@@ -203,6 +203,13 @@ angular.module( 'omniwallet' )
 
     $scope.openCurrencyDetail = function( currencySymbol ) {
       $scope.currencySymbol = currencySymbol;
+      $scope.currencyName = "";
+      var currencies = $injector.get('userService').getCurrencies();
+      currencies.forEach(function(currency){
+        if(currency.symbol == currencySymbol){
+          $scope.currencyName = currency.symbol == "BTC" ? "Bitcoin" : currency.symbol == "MSC" ? "Mastercoin" : currency.symbol == "TMSC" ? "Test Mastercoin" : currency.name;
+        }
+      });
       var modalInstance = $modal.open({
         resolve: {
           currencySymbol: function() {
@@ -210,6 +217,9 @@ angular.module( 'omniwallet' )
           },
           balances: function() {
             return getAssetBalances( currencySymbol );
+          },
+          currencyName : function(){
+            return $scope.currencyName;
           }
         },
         templateUrl: '/partials/currency_detail_modal.html',
@@ -287,8 +297,9 @@ angular.module( 'omniwallet' )
 
   });
 
-var CurrencyDetailModal = function( $scope, currencySymbol, balances ) {
+var CurrencyDetailModal = function( $scope, currencySymbol, balances, currencyName ) {
   $scope.currencySymbol = currencySymbol;
   $scope.balances = balances;
-}
+  $scope.currencyName = currencyName;
+};
 
