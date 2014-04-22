@@ -82,7 +82,7 @@ function NavigationController($scope, $http, $modal, userService) {
     }
 
     $scope.logout = function() {
-      userService.logout();
+      window.location.reload( false );
     }
      
     $scope.user = userService.data;
