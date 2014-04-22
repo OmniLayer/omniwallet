@@ -1,5 +1,39 @@
 
-
+<row>
+  <div class="col-xs-12">
+    <h3>Check your balance!</h3>
+    <form class="form-horizontal" role="form">
+      <div class="form-group">
+        <label for="address" class="col-xs-2 control-label">Address:</label>
+        <div class="col-xs-8">
+          <input type="text" class="form-control" id="address" placeholder="Address" ng-model="balanceAddress">
+        </div>
+        <div class="col-xs-2">
+          <button type="submit" class="btn btn-default" ng-click="checkBalance()">Check!</button>
+        </div>
+      </div>
+    </form>
+    <div ng-if="hasBalances">
+      <div class="asset-table">
+        <div ng-repeat="currency in balances">
+          <row class="col-xs-offset-2 col-xs-10" >
+            <div class="container-fluid">
+              <div class="asset-item col-xs-4 text-left">
+                <span>{{currency.name ? currency.name : currency.symbol}}</span>
+              </div>
+              <div class="asset-item col-xs-5 text-right">
+                <span>{{ ({ balance: currency.balance, symbol: currency.symbol } | cryptocurrency).toFixed(2) }} {{currency.name == "Bitcoin" ? "m" : ""}}{{ currency.symbol}}</span>
+              </div>
+              <div class="asset-item col-xs-3 text-right">
+                <span>{{currency.value | currency}}</span>
+              </div>
+            </div>
+          </row> 
+        </div>
+      </div>
+    </div>
+  </div>
+</row>
 <row>
 	<div class="col-xs-12">
 	<h4>The Omniwallet will be a new type of web wallet that combines security, usability and multi-currency support.</h4>

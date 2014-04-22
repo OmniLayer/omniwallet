@@ -33,8 +33,8 @@ angular.module( 'omniwallet' ).factory( 'balanceService', [ '$http', '$q',
   }
 ] );
 
-angular.module('omniwallet').factory('userService', ['$rootScope', '$http',
-function($rootScope, $http) {
+angular.module('omniwallet').factory('userService', ['$rootScope', '$http', '$injector',
+function($rootScope, $http, $injector) {
   var service = {
     data : {
       walletKey : '',
@@ -51,6 +51,7 @@ function($rootScope, $http) {
       service.data.wallet = wallet;
       service.data.walletMetadata = walletMetadata || service.data.walletMetadata;
       service.data.loggedIn = true;
+      service.UpdateLoop();
     },
 
     logout : function() {
@@ -73,6 +74,7 @@ function($rootScope, $http) {
       });
       service.data.loggedIn = true;
       service.saveSession();
+      service.updateCurrencies();
     },
 
     getAddress : function(address) {
@@ -88,10 +90,7 @@ function($rootScope, $http) {
     },
 
     getCurrencies : function() {
-      currencies = service.data.walletMetadata.currencies.map( function( currency ) {
-        return currency.symbol;
-      });
-      return currencies;
+      return service.data.walletMetadata.currencies;
     },
 
     getWallet : function() {
@@ -119,6 +118,12 @@ function($rootScope, $http) {
     loggedIn: function () {
       return service.data.loggedIn;
     },
+    
+    UpdateLoop : function() {
+      service.updateMetadata(function() {
+        setTimeout(service.UpdateLoop, 60000);
+      });
+    },
 
     updateWallet: function() {
       var uuid = service.getUUID();
@@ -134,9 +139,52 @@ function($rootScope, $http) {
             method: 'POST',
             data: { uuid: uuid, wallet: encryptedWallet, signature: signature }
           });
-        })
+        });
+    },
+    
+    updateCurrencies : function(){
+      var addCurrencies = function(i) {
+        if (i < service.data.wallet.addresses.length) {
+          $injector.get( 'balanceService' ).balance( service.data.wallet.addresses[i].address ).then(function(result) {
+            result.data.balance.forEach(function(balanceItem) {
+              var currency = null;
+              for( var j = 0; j<service.data.walletMetadata.currencies.length; j++ ) {
+                var currencyItem = service.data.walletMetadata.currencies[j];
+                if(currencyItem.symbol == balanceItem.symbol) {
+                  currency = currencyItem;
+                  if(currency.addresses.indexOf(service.data.wallet.addresses[i].address) == -1)
+                    currency.addresses.push(service.data.wallet.addresses[i].address);
+                  break;
+                }
+              }
+              if (currency === null){
+                if(balanceItem.symbol.substring(0,2) == "SP"){
+                  var propertyID = balanceItem.symbol.substring(2);
+                  $http.get('/v1/property/'+propertyID+'.json').then(function(result){
+                    var property = result.data[0];
+                    currency = { name: property.propertyName, symbol : balanceItem.symbol, addresses : [service.data.wallet.addresses[i].address]};
+                    service.data.walletMetadata.currencies.push(currency);
+                  });
+                } else {
+                  currency = { name: balanceItem.symbol, symbol : balanceItem.symbol, addresses : [service.data.wallet.addresses[i].address]};
+                  service.data.walletMetadata.currencies.push(currency);
+                }
+              }
+            });
+            addCurrencies(i+1);
+          });
+        } else {
+          console.log("Updated Currencies");
+        }
+      };
+      addCurrencies(0);
     },
 
+    updateMetadata : function(callback){
+      service.updateCurrencies();
+      callback();  
+    },
+    
     saveSession: function () {
       service.updateWallet().then(function(result) {
         console.log("Success saving")
@@ -169,9 +217,9 @@ function($rootScope, $http,$q, $injector) {
     var self = this;
     var requests =[];
     var coins = this.userService.getCurrencies();
-    coins.forEach(function(symbol){
+    coins.forEach(function(coin){
       requests.push(
-        $http.get('/v1/values/'+symbol+'.json').then(function(response) {
+        $http.get('/v1/values/'+coin.symbol+'.json').then(function(response) {
           var currency = response.data[0];
           if (currency.symbol == 'BTC') {
             // Store these things internally as the value of a satoshi.
