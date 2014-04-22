@@ -5,7 +5,7 @@ function SimpleSendController($scope, userService) {
   MySimpleSendHelpers(wallet);
 
 }
-function HomeCtrl( $templateCache, $injector, $location ) {
+function HomeCtrl( $scope, $templateCache, $injector, $location, $http, $q ) {
   if(  $injector.get( 'userService' ).getUUID() )
   {
     $location.url( '/wallet/overview' );
@@ -15,6 +15,65 @@ function HomeCtrl( $templateCache, $injector, $location ) {
     //DEV ONLY
     console.log('cleared cache')
     $templateCache.removeAll()
+    
+    $scope.balanceAddress = "";
+    $scope.hasBalances = false;
+    $scope.total = 0;
+    $scope.checkBalance = function(){
+      var balances = {};
+      var appraiser = $injector.get('appraiser');
+      $injector.get('balanceService').balance($scope.balanceAddress).then(function(result){
+        result.data.balance.forEach( function( currencyItem ) {
+          balances[ currencyItem.symbol ] = {
+            "symbol": currencyItem.symbol,
+            "balance": parseInt( currencyItem.value ),
+            "value": appraiser.getValue( currencyItem.value, currencyItem.symbol ),
+          };
+        });
+        $http.get( '/v1/transaction/values.json' ).then( 
+              function( result ) {
+                currencyInfo = result.data;
+                
+                currencyInfo.forEach( function( item ) {
+                  if( balances.hasOwnProperty( item.currency ))
+                    balances[ item.currency ].name = item.name;
+                });
+
+                // Now, any applicable smart properties.
+                var spReqs = [];
+                
+                for( var b in balances ) {
+                  var spMatch = balances[b].symbol.match( /^SP([0-9]+)$/ );
+
+                  if( spMatch != null )
+                  {
+                    var updateFunction = function( result ) {
+                      if( result.status == 200 )
+                        this.name = result.data[0].propertyName + ' (' + this.symbol.match( /^SP([0-9]+)$/ )[1] + ')';
+                    };
+                    spReqs.push( $http.get( '/v1/property/' + spMatch[1] + '.json' ).then( updateFunction.bind( balances[b] )));
+                  }
+                }
+
+                if( spReqs.length > 0 )
+                {
+                  $q.all( spReqs ).then( function() {
+                    $scope.balances = balances;
+                    $scope.hasBalances = true;
+                  } );
+                }
+                else
+                {
+                  $scope.balances = balances;
+                  $scope.hasBalances = true;
+                }
+                
+              }
+          );
+        
+      });
+    };
+    
   }
 }
 function StatsCtrl($scope, $route, $routeParams, $http){
