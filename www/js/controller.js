@@ -143,7 +143,7 @@ function SidecarController($scope, $http, userService) {
     $scope.$watch(function(){ return userService.getAllAddresses() }, function(result){
       $scope.hasAddresses = userService.data.loggedIn && result.length != 0 ? true : false;
       $scope.hasAddressesWithPrivkey = userService.data.loggedIn && getAddressesWithPrivkey().length != 0 ? true : false;
-    });
+    }, true);
     
     function getAddressesWithPrivkey() {
       var addresses = []
