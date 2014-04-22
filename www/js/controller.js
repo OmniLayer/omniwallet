@@ -5,7 +5,7 @@ function SimpleSendController($scope, userService) {
   MySimpleSendHelpers(wallet);
 
 }
-function HomeCtrl( $templateCache, $injector, $location ) {
+function HomeCtrl( $scope, $templateCache, $injector, $location ) {
   if(  $injector.get( 'userService' ).getUUID() )
   {
     $location.url( '/wallet/overview' );
@@ -15,6 +15,11 @@ function HomeCtrl( $templateCache, $injector, $location ) {
     //DEV ONLY
     console.log('cleared cache')
     $templateCache.removeAll()
+    
+    $scope.balanceAddress = "";
+    $scope.checkBalance = function(){
+      console.log("Check "+ $scope.balanceAddress)
+    }
   }
 }
 function StatsCtrl($scope, $route, $routeParams, $http){

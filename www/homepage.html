@@ -56,6 +56,22 @@
 	</div>
 </row>
 <row>
+  <div class="col-xs-12">
+    <h3>Check your balance!</h3>
+    <form class="form-horizontal" role="form">
+      <div class="form-group">
+        <label for="address" class="col-xs-2 control-label">Address:</label>
+        <div class="col-xs-8">
+          <input type="text" class="form-control" id="address" placeholder="Address" ng-model="balanceAddress">
+        </div>
+        <div class="col-xs-2">
+          <button type="submit" class="btn btn-default" ng-click="checkBalance()">Check!</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</row>
+<row>
 	<div class="col-xs-12">
 		<h3>Our current status</h3>
 		<p><strong></strong>The Omniwallet is in full-speed development. Our vision and goal are well defined, and we are scrambling to develop the functionality and bring everything up to production grade quality as soon as possible.</p>
