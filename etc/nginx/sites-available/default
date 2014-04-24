@@ -62,10 +62,12 @@ server {
 	}
 
   location ~ "^/v1/property/([0-9]*.json)$" {
+	add_header Access-Control-Allow-Origin *;
     alias /var/lib/omniwallet/www/properties/properties-$1;
   }
   
   location ~ "^/v1/values/(.*)$" {
+	add_header Access-Control-Allow-Origin *;
     alias /var/lib/omniwallet/www/values/$1;
   }
   location ~ "^/v1/values/history/(.*)$" {
@@ -87,6 +89,7 @@ server {
 
 	set $PORT 1088;
     location /v1/address/addr/ {
+	add_header Access-Control-Allow-Origin *;
         set   $app   get_balance;
         uwsgi_pass   127.0.0.1:$PORT;
     }
