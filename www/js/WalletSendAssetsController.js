@@ -328,4 +328,3 @@ function WalletSendAssetsController($modal, $scope, $http, $q, userService) {
   }
 }
 
-}
