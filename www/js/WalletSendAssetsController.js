@@ -8,6 +8,53 @@ function WalletSendAssetsController($modal, $scope, $http, $q, userService) {
   $scope.currencyList = userService.getCurrencies(); // [{symbol: 'BTC', addresses:[], name: 'BTC'}, {symbol: 'MSC', addresses:[], name: 'MSC'}, {symbol: 'TMSC', addresses:[], name: 'TMSC'}]
   $scope.selectedCoin = $scope.currencyList[0].symbol
 
+  // Attach a listener for when the selected
+    $scope.$watch( 'selectedCoin', function( newValue, oldValue ) {
+    });
+
+  function convertSatoshiToDisplayedValue( satoshi ) {
+    if( $scope.selectedCoin == 'BTC' )
+      return satoshi / 100000.0;
+    else if( $scope.selectedCoin.indexOf( 'SP' ) == 0 )
+    {
+      console.log( '** TODO: Check divisibility of coin!' );
+      return satoshi / 100000000.0;
+    }
+    else
+    {
+      return satoshi / 100000000.0;
+    }
+  }
+
+  $scope.convertSatoshiToDisplayedValue = convertSatoshiToDisplayedValue;
+
+  $scope.getDisplayedAbbreviation = function()
+  {
+    if( $scope.selectedCoin == 'BTC' )
+      return 'mBTC';
+    else if( $scope.selectedCoin.indexOf( 'SP' ) == 0 )
+    {
+      return 'Smart Property (' + $scope.selectedCoin.match( /SP([0-9]+)/ )[1] + ')';
+    }
+    else
+      return $scope.selectedCoin;
+  }
+
+  function convertDisplayedValueToSatoshi( value ) {
+    if( $scope.selectedCoin == 'BTC' )
+    {
+      return Math.round( value * 100000 );
+    }
+    else if( $scope.selectedCoin.indexOf( 'SP' ) == 0 )
+    {
+      return Math.round( value * 100000000 );
+    }
+    else
+    {
+      return Math.round( value * 100000000 );
+    }
+  }
+
   $scope.addressList = getAddressesWithPrivkey()
   $scope.selectedAddress = $scope.addressList[0]
 
@@ -26,8 +73,6 @@ function WalletSendAssetsController($modal, $scope, $http, $q, userService) {
   }
 
   // [ Retrieve Balances ]
-  $scope.currencyUnit = 'stom' // satoshi to millibitt
-  $scope.amountUnit = 'mtow'
   $scope.balanceData = [ 0 ];
   var addrListBal = [];
 
@@ -209,22 +254,13 @@ function WalletSendAssetsController($modal, $scope, $http, $q, userService) {
     });
   }
 
-  $scope.validateSendForm = function(currencyUnit) {
+  $scope.validateSendForm = function() {
     var dustValue = 5430; 
     var minerMinimum = 10000; 
     var nonZeroValue = 1; 
 
-    console.log( '** Currency Unit: ' + currencyUnit );
-    var inverseConversion = 'wtow';
-    if( currencyUnit == 'stom' )
-      inverseConversion = 'mtos';
-    else if( currencyUnit == 'stow' )
-      inverseConversion = 'wtos';
-
     var minerFees = Math.ceil( formatCurrencyInFundamentalUnit( +$scope.minerFees , inverseConversion ) );
     var sendAmount = Math.ceil( formatCurrencyInFundamentalUnit( +$scope.sendAmount , inverseConversion  ) );
-    var minerFeesMillis = formatCurrencyInFundamentalUnit( minerFees , 'stom' ) ;
-    var sendAmountMillis = formatCurrencyInFundamentalUnit( sendAmount , 'stom'  ) ;
 
     var balance = +$scope.balanceData[0]  
     var btcbalance = +$scope.balanceData[1]
