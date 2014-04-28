@@ -28,7 +28,7 @@ function WalletSendAssetsController($modal, $scope, $http, $q, userService) {
 
   $scope.convertSatoshiToDisplayedValue = convertSatoshiToDisplayedValue;
 
-  $scope.getDisplayedAbbreviation = function()
+  function getDisplayedAbbreviation()
   {
     if( $scope.selectedCoin == 'BTC' )
       return 'mBTC';
@@ -39,19 +39,20 @@ function WalletSendAssetsController($modal, $scope, $http, $q, userService) {
     else
       return $scope.selectedCoin;
   }
+  $scope.getDisplayedAbbreviation = getDisplayedAbbreviation;
 
   function convertDisplayedValueToSatoshi( value ) {
     if( $scope.selectedCoin == 'BTC' )
     {
-      return Math.round( value * 100000 );
+      return Math.ceil( value * 100000 );
     }
     else if( $scope.selectedCoin.indexOf( 'SP' ) == 0 )
     {
-      return Math.round( value * 100000000 );
+      return Math.ceil( value * 100000000 );
     }
     else
     {
-      return Math.round( value * 100000000 );
+      return Math.ceil( value * 100000000 );
     }
   }
 
@@ -259,8 +260,8 @@ function WalletSendAssetsController($modal, $scope, $http, $q, userService) {
     var minerMinimum = 10000; 
     var nonZeroValue = 1; 
 
-    var minerFees = Math.ceil( formatCurrencyInFundamentalUnit( +$scope.minerFees , inverseConversion ) );
-    var sendAmount = Math.ceil( formatCurrencyInFundamentalUnit( +$scope.sendAmount , inverseConversion  ) );
+    var minerFees = Math.ceil( $scope.minerFees * 100000 );
+    var sendAmount = convertDisplayedValueToSatoshi( $scope.sendAmount );
 
     var balance = +$scope.balanceData[0]  
     var btcbalance = +$scope.balanceData[1]
@@ -275,8 +276,6 @@ function WalletSendAssetsController($modal, $scope, $http, $q, userService) {
         error += 'make sure all fields are completely filled, '
     }
     if( ( sendAmount <= balance ) == false ) {
-	console.log( '** Send Amount: ' + sendAmount );
-	console.log( '** Balance: ' + balance );
         error += 'make sure you aren\'t sending more coins than you own, '
     }
     if( ( minerFees <= btcbalance ) ==  false ) {
@@ -304,8 +303,8 @@ function WalletSendAssetsController($modal, $scope, $http, $q, userService) {
         template: '\
           <div class="modal-body">\
               <h3 class="text-center"> Confirm send </h3>\
-              <h3>You\'re about to send ' + sendAmountMillis + ' m' + $scope.selectedCoin +   
-              ' plus ' + minerFeesMillis + ' mBTC in fees to ' + $scope.sendTo + '</h3>\
+              <h3>You\'re about to send ' + convertSatoshiToDisplayedValue( sendAmount ) + ' ' + getDisplayedAbbreviation() + 
+              ' plus ' + $scope.minerFees + ' mBTC in fees to ' + $scope.sendTo + '</h3>\
             <p><br>\
             If the above is correct, please press Send Funds.\
             If you encounter an error, feel free to click away from the dialog and try again.\
