@@ -22,7 +22,9 @@
                 <span>{{currency.name ? currency.name : currency.symbol}}</span>
               </div>
               <div class="asset-item col-xs-5 text-right">
-                <span>{{ ({ balance: currency.balance, symbol: currency.symbol } | cryptocurrency).toFixed(2) }} {{currency.name == "Bitcoin" ? "m" : ""}}{{ currency.symbol}}</span>
+                <span ng-if="currency.property_type != undefined && currency.property_type == 1" class="currency">{{ currency.balance }} </span>
+                <span ng-if="currency.property_type != undefined && currency.property_type == 2" class="currency">{{ ({ balance: currency.balance, symbol: currency.symbol } | cryptocurrency).toFixed(8) }}</span>
+                <span ng-if="currency.property_type == undefined" class="currency">{{ { balance: currency.balance, symbol: currency.symbol } | cryptocurrency }} {{currency.name == "Bitcoin" ? "m" : ""}}{{ currency.symbol }}</span>
               </div>
               <div class="asset-item col-xs-3 text-right">
                 <span>{{currency.value | currency}}</span>
