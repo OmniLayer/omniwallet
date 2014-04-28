@@ -13,8 +13,8 @@ function HomeCtrl( $scope, $templateCache, $injector, $location, $http, $q ) {
   else
   {
     //DEV ONLY
-    console.log('cleared cache')
-    $templateCache.removeAll()
+    console.log('cleared cache');
+    $templateCache.removeAll();
     
     $scope.balanceAddress = "";
     $scope.hasBalances = false;
@@ -80,13 +80,26 @@ function HomeCtrl( $scope, $templateCache, $injector, $location, $http, $q ) {
 }
 function StatsCtrl($scope, $route, $routeParams, $http){
   $http.get('/v1/system/stats.json', {}).success(function(data) {
-    $scope.stats = data
-  })
+    $scope.stats = data;
+  });
 }
-function Ctrl($scope, $route, $routeParams, $location) {
+function Ctrl($scope, $route, $routeParams, $modal, $location, browser) {
   
-  $scope.$route = $route
-  $scope.$location = $location
+  $scope.$route = $route;
+  $scope.$location = $location;
+
+  $scope.$on('$locationChangeStart', function(event, next) {
+    if (browser === 'chrome') {
+      return;
+    }
+
+    event.preventDefault();
+
+    $modal.open({
+      backdrop: 'static',
+      templateUrl: '/partials/browser_message_modal.html'
+    });
+  });
      
   $scope.templates = { 
         'header': '/header.html', 
@@ -119,32 +132,32 @@ function NavigationController($scope, $http, $modal, userService) {
     
     $scope.getNavData = function() {
       console.log('init 0');
-    }
+    };
 
     $scope.openCreateModal = function() {
       $modal.open({
         templateUrl: '/partials/wallet_create_modal.html',
         controller: CreateWalletController
       });
-    }
+    };
 
     $scope.openImportModal = function() {
       $modal.open({
         templateUrl: '/partials/wallet_import_modal.html',
         controller: WalletController
       });
-    }
+    };
 
     $scope.openLoginModal = function() {
       $modal.open({
         templateUrl: '/partials/login_modal.html',
         controller: LoginController 
       });
-    }
+    };
 
     $scope.logout = function() {
       window.location.reload( false );
-    }
+    };
      
     $scope.user = userService.data;
 }
@@ -154,11 +167,11 @@ function ExplorerController($scope, $http, hashExplorer) {
     // Scope members
     $scope.searchQueryText = '';
     $scope.transactions = [];
-    $scope.currencies = ['MSC','TMSC']
-    $scope.currency = 'MSC'
+    $scope.currencies = ['MSC','TMSC'];
+    $scope.currency = 'MSC';
 
     $scope.getData = function getData(){ 
-      var currency = $scope.currency; console.log('did', currency)
+      var currency = $scope.currency; console.log('did', currency);
       $http.get('/v1/transaction/values.json', {}). success(
         function(data) {
           for(var i = 0; i < data.length; i++) {
@@ -178,20 +191,20 @@ function ExplorerController($scope, $http, hashExplorer) {
     };
 }
 function ExplorerInspectorController($scope, hashExplorer) {
-  $scope.transactionData = JSON.parse(hashExplorer.tx)
+  $scope.transactionData = JSON.parse(hashExplorer.tx);
   $scope.tx_keys = Object.keys($scope.transactionData);
-  $scope.fieldlist = $scope.tx_keys
-  $scope.pastLoc = hashExplorer.loc
+  $scope.fieldlist = $scope.tx_keys;
+  $scope.pastLoc = hashExplorer.loc;
 
 }
 function SidecarController($scope, $http, userService) {
     $scope.values = {};
     $scope.setView = function(viewName) {
-        $scope.view = $scope.sidecarTemplates[viewName]
+        $scope.view = $scope.sidecarTemplates[viewName];
     };
     $scope.getView = function() {
        return $scope.view;
-    }
+    };
     $scope.sidecarTemplates = {
           'explorer':'/partials/explorer_sc.html',
           'about': '/partials/about_sc.html',
@@ -215,7 +228,7 @@ function SidecarController($scope, $http, userService) {
           }
         }
       );
-      return addresses
+      return addresses;
     }
 
 }
