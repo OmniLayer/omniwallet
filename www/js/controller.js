@@ -87,8 +87,9 @@ function Ctrl($scope, $route, $routeParams, $modal, $location, browser) {
   
   $scope.$route = $route;
   $scope.$location = $location;
+  $scope.browser = browser;
 
-  $scope.$on('$locationChangeStart', function(event, next) {
+  /*$scope.$on('$locationChangeStart', function(event, next) {
     if (browser === 'chrome') {
       return;
     }
@@ -99,7 +100,7 @@ function Ctrl($scope, $route, $routeParams, $modal, $location, browser) {
       backdrop: 'static',
       templateUrl: '/partials/browser_message_modal.html'
     });
-  });
+  });*/
      
   $scope.templates = { 
         'header': '/header.html', 

@@ -58,3 +58,6 @@ form.form-search:before {
     opacity: .5;
     z-index: 1000;
 }
+.alert {
+    margin-top: 20px;
+}
