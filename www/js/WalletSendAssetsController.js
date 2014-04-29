@@ -17,7 +17,16 @@ function WalletSendAssetsController($modal, $scope, $http, $q, userService) {
       return satoshi / 100000.0;
     else if( $scope.selectedCoin.indexOf( 'SP' ) == 0 )
     {
-      console.log( '** TODO: Check divisibility of coin!' );
+      for( var i in $scope.currencyList )
+      {
+        if( $scope.currencyList[i].symbol == $scope.selectedCoin )
+        {
+          if( $scope.currencyList[ i ].property_type == 1 )
+            return satoshi;
+          else
+            return satoshi / 100000000.0;
+        }
+      }
       return satoshi / 100000000.0;
     }
     else
@@ -48,6 +57,16 @@ function WalletSendAssetsController($modal, $scope, $http, $q, userService) {
     }
     else if( $scope.selectedCoin.indexOf( 'SP' ) == 0 )
     {
+      for( var i in $scope.currencyList )
+      {
+        if( $scope.currencyList[i].symbol == $scope.selectedCoin )
+        {
+          if( $scope.currencyList[ i ].property_type == 1 )
+            return Math.ceil( value );
+          else
+            return Math.ceil( value * 100000000 );
+        }
+      }
       return Math.ceil( value * 100000000 );
     }
     else
