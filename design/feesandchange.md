@@ -1,4 +1,4 @@
-#Omniwallet Fee's and Change Information
+#Fee's and Change Information
 
 ##Fee's
 
