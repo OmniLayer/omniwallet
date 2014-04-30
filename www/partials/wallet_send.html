@@ -2,7 +2,7 @@
     <div ng-include="templates['sidecar']"></div>
 </div>
 
-<div class="col-xs-10" ng-controller="WalletTradeAssetsController">
+<div class="col-xs-10" ng-controller="WalletSendAssetsController">
   <br>
   <br>
   <div class="row">
@@ -33,15 +33,6 @@
       <h6 class="text-justify"> Please make sure this is the address you are sending from.<br> 
       Note that we allow you to only send from addresses with a valid private key. </h6>
     </div>
-    <div class="col-xs-6"> 
-      <br><br><br><br><br><br><br><br><br>
-      <button class="btn btn-primary btn-md" 
-      ng-click="currencyUnit = 'stom'" type="button">Convert to m{{selectedCoin}} </button>
-      <button class="btn btn-primary btn-md" 
-      ng-click="currencyUnit = 'stow'" type="button">Convert to whole {{selectedCoin}} </button>
-      <button class="btn btn-primary btn-md" 
-      ng-click="currencyUnit = 'wtow'" type="button">Convert to indivisible {{selectedCoin}} </button>
-    </div>
   </div>
     <br>
   <div class="row">
@@ -52,21 +43,20 @@
       </div>
       <br>
       <div class="input-group">
-        <span class="input-group-addon"> Amount to send (in {{currencyUnit[currencyUnit.length-1]}}{{selectedCoin}}): </span>
+        <span class="input-group-addon"> Amount to send ( {{ getDisplayedAbbreviation() }} ): </span>
           <input name="amount" type="number" ng-model="sendAmount" class="form-control" 
-          placeholder="{{{ balance: 100000, symbol: currencyUnit} | cryptocurrency}}" step="0.000000001" required>
+          placeholder="{{{ balance: 100000000, symbol: currencyUnit} | cryptocurrency}}" step="0.000000001" required>
         <span class="input-group-addon" > 
-          Available: {{{ balance: balanceData[0], symbol: currencyUnit } | cryptocurrency}} 
-          {{currencyUnit[currencyUnit.length-1]}}{{selectedCoin}}</span>
+          Available: {{  convertSatoshiToDisplayedValue( balanceData[0] ) }} {{ getDisplayedAbbreviation() }}
+        </span>
       </div>
       <br>
       <div class="input-group">
-        <span class="input-group-addon"> Transaction/Miner fees (in {{currencyUnit[currencyUnit.length-1]}}BTC): </span>
+        <span class="input-group-addon"> Transaction/Miner fees ( mBTC ): </span>
         <input name="fees" type="number" ng-model="minerFees" class="form-control" 
-        placeholder="{{{ balance: 10000, symbol: currencyUnit } | cryptocurrency}} minimum" step="0.0001" required>
+        placeholder="{{{ balance: 10000000, symbol: currencyUnit } | cryptocurrency}} minimum" step="0.01" required>
         <span class="input-group-addon" > 
-          Available Bitcoin: {{ { balance: balanceData[1], symbol: currencyUnit } | cryptocurrency}}
-          {{currencyUnit[currencyUnit.length-1]}}BTC
+          Available Bitcoin: {{ balanceData[1] / 100000.0 }} mBTC
           </span>
       </div>
       <input ng-model="marked" ng-hide="true" ng-init="marked = false" type="checkbox"> 

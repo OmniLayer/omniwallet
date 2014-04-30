@@ -1,5 +1,5 @@
 //global services go here
-angular.module( 'omniwallet' ).factory( 'balanceService', [ '$http', '$q',
+angular.module('omniwallet').factory( 'balanceService', [ '$http', '$q',
   function( $http, $q ) {
     var cache = [];
     var service = {
@@ -162,7 +162,12 @@ function($rootScope, $http, $injector) {
                   var propertyID = balanceItem.symbol.substring(2);
                   $http.get('/v1/property/'+propertyID+'.json').then(function(result){
                     var property = result.data[0];
-                    currency = { name: property.propertyName, symbol : balanceItem.symbol, addresses : [service.data.wallet.addresses[i].address]};
+                    currency = { 
+                      name: property.propertyName, 
+                      symbol : balanceItem.symbol, 
+                      property_type: property.formatted_property_type,
+                      addresses : [service.data.wallet.addresses[i].address]
+                    };
                     service.data.walletMetadata.currencies.push(currency);
                   });
                 } else {
@@ -255,7 +260,7 @@ function($rootScope, $http,$q, $injector) {
   return new AppraiserService();
 }]);
 
-angular.module( 'omniwallet' ).factory( 'hashExplorer', function ( ) {
+angular.module('omniwallet').factory( 'hashExplorer', function ( ) {
   var tx = '', loc = '', setHash = function(){}; 
   return {
     tx : tx,
@@ -266,3 +271,15 @@ angular.module( 'omniwallet' ).factory( 'hashExplorer', function ( ) {
     }
   }
 });
+
+angular.module('omniwallet').factory( 'browser', ['$window', function ($window) {
+  var userAgent = $window.navigator.userAgent;
+
+  var browsers = {chrome: /chrome/i, safari: /safari/i, firefox: /firefox/i, ie: /internet explorer/i};
+
+  for(var key in browsers) {
+    if (browsers[key].test(userAgent)) {
+      return key;
+    }
+  }
+}]);
