@@ -1,5 +1,5 @@
 //global services go here
-angular.module( 'omniwallet' ).factory( 'balanceService', [ '$http', '$q',
+angular.module('omniwallet').factory( 'balanceService', [ '$http', '$q',
   function( $http, $q ) {
     var cache = [];
     var service = {
@@ -255,7 +255,7 @@ function($rootScope, $http,$q, $injector) {
   return new AppraiserService();
 }]);
 
-angular.module( 'omniwallet' ).factory( 'hashExplorer', function ( ) {
+angular.module('omniwallet').factory( 'hashExplorer', function ( ) {
   var tx = '', loc = '', setHash = function(){}; 
   return {
     tx : tx,
@@ -266,3 +266,15 @@ angular.module( 'omniwallet' ).factory( 'hashExplorer', function ( ) {
     }
   }
 });
+
+angular.module('omniwallet').factory( 'browser', ['$window', function ($window) {
+  var userAgent = $window.navigator.userAgent;
+
+  var browsers = {chrome: /chrome/i, safari: /safari/i, firefox: /firefox/i, ie: /internet explorer/i};
+
+  for(var key in browsers) {
+    if (browsers[key].test(userAgent)) {
+      return key;
+    }
+  }
+}]);
