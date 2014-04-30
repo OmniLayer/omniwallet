@@ -12,8 +12,7 @@ This is paid to the miners who process the Bitcoin transactions.
 Since MasterProtocol transactions are a collection of Bitcoin outputs they have a BTC fee associated with them. 
 Every output in a Bitcoin transaction must be above the dust level (.00005460BTC) in order for it to be considered 
 a valid output. MasterProtocol transactions generally have at least 4 outputs.
-So the bare minimium fee for most transactions is (4*.00005460)+.0001 ~= .00032BTC
-This value could increase as MasterProtocol features are added and implimented. 
+So the bare minimium fee for most transactions is 4 times the dust level plus the miners fee: (4*.00005460)+.0001 ~= .00032BTC. This value could increase as MasterProtocol features are added and implimented. 
 It is recommended that you generally have ~.001BTC in the sending address when performing a MasterProtocol transaction. 
 
 ##Change
