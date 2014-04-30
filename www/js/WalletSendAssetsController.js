@@ -10,6 +10,7 @@ function WalletSendAssetsController($modal, $scope, $http, $q, userService) {
 
   // Attach a listener for when the selected
     $scope.$watch( 'selectedCoin', function( newValue, oldValue ) {
+
     });
 
   function convertSatoshiToDisplayedValue( satoshi ) {
@@ -43,7 +44,13 @@ function WalletSendAssetsController($modal, $scope, $http, $q, userService) {
       return 'mBTC';
     else if( $scope.selectedCoin.indexOf( 'SP' ) == 0 )
     {
-      return 'Smart Property (' + $scope.selectedCoin.match( /SP([0-9]+)/ )[1] + ')';
+      for( var i in $scope.currencyList )
+      {
+        if( $scope.currencyList[i].symbol == $scope.selectedCoin )
+          return $scope.currencyList[i].name + ' #' + $scope.selectedCoin.match( /SP([0-9]+)/ )[1];
+      }
+
+      return 'Smart Property #' + $scope.selectedCoin.match( /SP([0-9]+)/ )[1];
     }
     else
       return $scope.selectedCoin;
