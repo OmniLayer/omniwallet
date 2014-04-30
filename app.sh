@@ -24,7 +24,12 @@ fi
 export TOOLSDIR
 export DATADIR
 cd $APPDIR/api
-uwsgi -s 127.0.0.1:1088 -p 8 -M --vhost --enable-threads --plugin python --logto $DATADIR/apps.log &
+if [[ "$OSTYPE" == "darwin"* ]]; then
+  uwsgi -s 127.0.0.1:1088 -p 8 -M --vhost --enable-threads --logto $DATADIR/apps.log &
+else
+  uwsgi -s 127.0.0.1:1088 -p 8 -M --vhost --enable-threads --plugin python --logto $DATADIR/apps.log &
+fi
+
 SERVER_PID=$!
 
 while true

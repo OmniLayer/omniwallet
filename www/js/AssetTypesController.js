@@ -28,7 +28,7 @@ angular.module( 'omniwallet' )
             var appraiser = $injector.get( 'appraiser' );
 
             wallet.addresses.forEach( function( addr ) {
-              requests.push( addressRequest( $http, $q, addr ).then( function( result ) {
+              requests.push( $injector.get( 'balanceService' ).balance( addr.address ).then( function( result ) {
                 result.data.balance.forEach( function( currencyItem ) {
                   if( !balances.hasOwnProperty( currencyItem.symbol )) {
                     balances[ currencyItem.symbol ] = {
@@ -175,7 +175,7 @@ angular.module( 'omniwallet' )
         var balances = [];
         var appraiser = $injector.get( 'appraiser' );
         wallet.addresses.forEach( function( addr ) {
-          requests.push( addressRequest( $http, $q, addr )
+          requests.push( $injector.get( 'balanceService' ).balance( addr.address )
             .then( function( result ) {
               var resultBalances = result.data.balance;
               for( var i in resultBalances )
@@ -203,6 +203,13 @@ angular.module( 'omniwallet' )
 
     $scope.openCurrencyDetail = function( currencySymbol ) {
       $scope.currencySymbol = currencySymbol;
+      $scope.currencyName = "";
+      var currencies = $injector.get('userService').getCurrencies();
+      currencies.forEach(function(currency){
+        if(currency.symbol == currencySymbol){
+          $scope.currencyName = currency.symbol == "BTC" ? "Bitcoin" : currency.symbol == "MSC" ? "Mastercoin" : currency.symbol == "TMSC" ? "Test Mastercoin" : currency.name;
+        }
+      });
       var modalInstance = $modal.open({
         resolve: {
           currencySymbol: function() {
@@ -210,6 +217,9 @@ angular.module( 'omniwallet' )
           },
           balances: function() {
             return getAssetBalances( currencySymbol );
+          },
+          currencyName : function(){
+            return $scope.currencyName;
           }
         },
         templateUrl: '/partials/currency_detail_modal.html',
@@ -287,28 +297,9 @@ angular.module( 'omniwallet' )
 
   });
 
-var CurrencyDetailModal = function( $scope, currencySymbol, balances ) {
+var CurrencyDetailModal = function( $scope, currencySymbol, balances, currencyName ) {
   $scope.currencySymbol = currencySymbol;
   $scope.balances = balances;
-}
+  $scope.currencyName = currencyName;
+};
 
-function addressRequest( $http, $q, addr ) {
-  var deferred = $q.defer();
-
-
-  $http.post( '/v1/address/addr/', { 'addr': addr.address } )
-    .success( function( result ) {
-      deferred.resolve( { data: result } );
-    } ).error(
-    function( error ) {
-      deferred.resolve( {
-        data: { 
-          address: addr.address,
-          balance: []
-         }
-      });
-    }
-  );
-
-  return deferred.promise;
-}

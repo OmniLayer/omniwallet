@@ -1,21 +1,16 @@
 <div class="modal-header">
-    <h3>Import a BTC/MSC Private Key</h3>
+  <h3>Import a BTC/MSC Private Key</h3>
 </div>
-<div class="modal-body">
-
-	<form name=privkeyentry 
-		class="priventry input-group" 
-		style="margin-bottom:20px, margin-top:20px">
-		<span class="input-group-addon">Enter Key (Send/Receive):</span>
-		<input type="text" 
-			name=privkey 
-			class="form-control" 
-			placeholder="enter your private key, formats: hex, b64, WIP, compressed WIP"
-			ng-model="newAddressData.privKey"
-      ng-required="!newAddressData.address">
-	</form>
-
-</div>
-<div class="modal-footer">
-    <button class="btn btn-primary" ng-click="ok( newAddressData )" ng-disabled="privkeyentry.$error.required">Add Address</button>
-</div>
+<form name="privkeyentry" class="form-horizontal" style="margin-bottom:20px, margin-top:20px" ng-submit="!privkeyentry.$error.required && ok(newAddressData)">
+  <div class="modal-body">
+    <div class="row">
+      <div class="form-group col-md-10 col-md-push-1">
+        <label class="control-label">Enter Key (Send/Receive):</label>
+        <input type="text" name="privkey" class="form-control" placeholder="enter your private key, formats: hex, b64, WIP, compressed WIP" ng-model="newAddressData.privKey" ng-required="!newAddressData.address">
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <input type="submit" class="btn btn-primary" ng-disabled="privkeyentry.$error.required" value="Add Address">
+  </div>
+</form>

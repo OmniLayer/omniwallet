@@ -1,19 +1,20 @@
 <div class="modal-header">
     <h3>Import a Watch Only BTC/MSC Address</h3>
 </div>
-<div class="modal-body">
-
-	<form name="addressentry" class="addressentry input-group" style="margin-bottom:20px, margin-top:20px">
-		<span class="input-group-addon">Enter Address (Watch Only):</span>
-		<input type="text" 
-      name="address" 
-			class="form-control" 
-			placeholder="Enter your bitcoin address"
-			ng-model="newAddressData.address"
-      required>
-	</form>
-
-</div>
-<div class="modal-footer">
-    <button class="btn btn-primary" ng-click="ok( newAddressData )" ng-disabled="validate( newAddressData.address ) == false">Add Address</button>
-</div>
+<form name="addressentry" class="form-horizontal" style="margin-bottom:20px, margin-top:20px" ng-submit="(validate(newAddressData.address) != false) && ok(newAddressData)">
+	<div class="modal-body">
+		<div class="row">
+			<div class="form-group col-md-10 col-md-push-1">
+				<label class="control-label">Enter Address (Watch Only):</label>
+				<input type="text"
+					name="address" 
+					class="form-control" 
+					placeholder="Enter your bitcoin address"
+					ng-model="newAddressData.address" required>
+			</div>
+		</div>
+	</div>
+	<div class="modal-footer">
+		<input type="submit" class="btn btn-primary" ng-disabled="validate(newAddressData.address) == false" value="Add Address">
+	</div>
+</form>

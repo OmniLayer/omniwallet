@@ -91,6 +91,7 @@
             <th>Amount</th>
             <th>Total Cost</th>
             <th>Required Fee</th>
+            <th>Block Time</th>
             <th> Buy </th>
           </tr>
       </thead>
@@ -98,11 +99,12 @@
       </tbody>
 
       <tr ng-repeat="transaction in orderbook">
-        <td ng-click="setHashExplorer(transaction)"> <a href="/explorer/inspector">{{transaction.tx_hash}}</a></td>
+        <td ng-click="setHashExplorer(transaction)"> <a href="/explorer/inspector?view={{transaction.tx_hash}}">{{transaction.tx_hash}}</a></td>
         <td>{{{ balance: transaction.formatted_price_per_coin, symbol: currencyUnit } | cryptocurrency }}</td> 
         <td>{{{ balance: transaction.formatted_amount, symbol: currencyUnit } | cryptocurrency}}</td> 
         <td>{{ ({ balance: transaction.formatted_bitcoin_amount_desired, symbol: currencyUnit } | cryptocurrency) }}</td> 
         <td>{{{ balance: transaction.formatted_fee_required, symbol: currencyUnit } | cryptocurrency}}</td> 
+        <td>{{transaction.formatted_block_time_limit}}</td> 
         <td ng-show="(transaction.tx_hash.length == 64) && transaction.status == null && 
             !(transaction.from_address == selectedAddress)">
         <button class="btn btn-primary btn-sm" ng-click="setView('buyOffer', transaction)" type="submit">Buy coin</button>
