@@ -162,7 +162,12 @@ function($rootScope, $http, $injector) {
                   var propertyID = balanceItem.symbol.substring(2);
                   $http.get('/v1/property/'+propertyID+'.json').then(function(result){
                     var property = result.data[0];
-                    currency = { name: property.propertyName, symbol : balanceItem.symbol, addresses : [service.data.wallet.addresses[i].address]};
+                    currency = { 
+                      name: property.propertyName, 
+                      symbol : balanceItem.symbol, 
+                      property_type: property.formatted_property_type,
+                      addresses : [service.data.wallet.addresses[i].address]
+                    };
                     service.data.walletMetadata.currencies.push(currency);
                   });
                 } else {
