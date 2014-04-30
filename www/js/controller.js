@@ -29,6 +29,9 @@ function HomeCtrl( $scope, $templateCache, $injector, $location, $http, $q ) {
             "balance": parseInt( currencyItem.value ),
             "value": appraiser.getValue( currencyItem.value, currencyItem.symbol ),
           };
+          if (currencyItem.symbol == 'BTC') {
+            balances[currencyItem.symbol].name = "Bitcoin";
+          }
         });
         $http.get( '/v1/transaction/values.json' ).then( 
               function( result ) {
