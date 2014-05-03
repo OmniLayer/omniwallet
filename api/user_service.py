@@ -135,7 +135,7 @@ def login():
 
   if not exists(uuid):
     print 'Wallet not found'
-    abort(404)
+    abort(403)
 
   wallet_data = read_wallet(uuid)
   session_store.delete(session_pow_challenge)
@@ -165,5 +165,6 @@ def read_wallet(uuid):
     return f.read()
 
 def exists(uuid):
+  validate_uuid = UUID(uuid)
   filename = data_dir_root + '/wallets/' + uuid + '.json'
   return os.path.exists(filename)

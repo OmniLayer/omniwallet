@@ -52,7 +52,7 @@
             <td ng-if="currency.property_type == undefined" class="currency">{{ { balance: item.balance, symbol: currency.symbol } | cryptocurrency }} {{currency.name == "Bitcoin" ? "m" : ""}}{{ currency.symbol }}</td>
             <td class="currency">{{item.value | currency}}</td>
             <td>
-                  <button class="btn btn-default" ng-click="openDeleteConfirmForm( item.address )">X</button>
+                  <button class="btn btn-default" ng-click="openDeleteConfirmForm( item.address )" title="Remove from Wallet">X</button>
               </div>
             </td>
           </tr>
