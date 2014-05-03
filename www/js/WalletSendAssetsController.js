@@ -6,7 +6,7 @@ function WalletSendAssetsController($modal, $scope, $http, $q, userService) {
   // [ Template Initialization ]
 
   $scope.currencyList = userService.getCurrencies(); // [{symbol: 'BTC', addresses:[], name: 'BTC'}, {symbol: 'MSC', addresses:[], name: 'MSC'}, {symbol: 'TMSC', addresses:[], name: 'TMSC'}]
-  $scope.selectedCoin = $scope.currencyList[0].symbol
+  $scope.selectedCoin = $scope.currencyList[0].symbol;
 
   // Attach a listener for when the selected
     $scope.$watch( 'selectedCoin', function( newValue, oldValue ) {
@@ -82,11 +82,12 @@ function WalletSendAssetsController($modal, $scope, $http, $q, userService) {
     }
   }
 
-  $scope.addressList = getAddressesWithPrivkey()
-  $scope.selectedAddress = $scope.addressList[0]
+  $scope.addressList = getAddressesWithPrivkey();
+  $scope.selectedAddress = $scope.addressList[0];
+  $scope.minerFees = formatCurrencyInFundamentalUnit(0.0001, 'wtom');
 
   function getAddressesWithPrivkey() {
-    var addresses = []
+    var addresses = [];
     userService.getAllAddresses().map(
       function(e,i,a) {
         if(e.privkey && e.privkey.length == 58) {
@@ -95,8 +96,8 @@ function WalletSendAssetsController($modal, $scope, $http, $q, userService) {
       }
     );
     if( addresses.length == 0)
-      addresses = ['Could not find any addresses with attached private keys!']
-    return addresses
+      addresses = ['Could not find any addresses with attached private keys!'];
+    return addresses;
   }
 
   // [ Retrieve Balances ]
@@ -106,38 +107,38 @@ function WalletSendAssetsController($modal, $scope, $http, $q, userService) {
   $scope.setBalance = function() {
     $scope.balanceData = [ 0 ];
     var coin = $scope.selectedCoin;
-    var address = $scope.selectedAddress
+    var address = $scope.selectedAddress;
     if (address || coin) {
       for(var i = 0; i < addrListBal.length; i++) {
-        if( addrListBal[i].address == address) {
+        if( addrListBal[i] && addrListBal[i].address == address) {
           for(var k = 0; k < addrListBal[i].balance.length; k++) {
             if(addrListBal[i].balance[k].symbol == coin) {
-              $scope.balanceData[0] = addrListBal[i].balance[k].value
-              //console.log($scope.address, coin, $scope.balanceData, addrListBal[i].balance[k], k)
+              $scope.balanceData[0] = addrListBal[i].balance[k].value;
+              //console.log($scope.address, coin, $scope.balanceData, addrListBal[i].balance[k], k);
             }
             if(addrListBal[i].balance[k].symbol == 'BTC') {
-              $scope.balanceData[1] = addrListBal[i].balance[k].value
+              $scope.balanceData[1] = addrListBal[i].balance[k].value;
             }
           }
         }
       }
     }
-   }
+  };
 
   $scope.addressList.forEach(function(e,i) {
      var promise = getAddressData(e);
      promise.then(function(successData) {
-        var successData = successData.data
-        addrListBal[i] = { address: e, balance: successData.balance }
-        $scope.setBalance()
+        var successData = successData.data;
+        addrListBal[i] = { address: e, balance: successData.balance };
+        $scope.setBalance();
      },function(errorData) {
        alert("We have encountered a problem accessing the server ... Please try again in a few minutes")
        //console.log('Error, no balance data found for ' + e + ' setting defaults...');
        var balances = [ 
           { symbol: 'MSC', value: '0' },
           { symbol: 'TMSC', value: '0' },
-          { symbol: 'BTC', value: '0' } ]
-       addrListBal[i] = { address: e, balance: balances }
+          { symbol: 'BTC', value: '0' } ];
+       addrListBal[i] = { address: e, balance: balances };
      });
   });
 
@@ -146,14 +147,14 @@ function WalletSendAssetsController($modal, $scope, $http, $q, userService) {
   function validAddress(addr) {
     try{
       var checkValid = new Bitcoin.Address(addr);
-      return true
+      return true;
     } catch(e) {
-      return false
+      return false;
     }
   }
 
   function getAddressData(address) {
-  console.log( 'Addr request 5' );
+    console.log( 'Addr request 5' );
     var promise = $http.post( '/v1/address/addr/', { 'addr': address });
 
     return promise;
@@ -161,7 +162,7 @@ function WalletSendAssetsController($modal, $scope, $http, $q, userService) {
 
   function pushSignedTransaction(signedTransaction) {
     var url = '/v1/transaction/pushtx/';
-    var data = { signedTransaction: signedTransaction }
+    var data = { signedTransaction: signedTransaction };
     var promise = $http.post( url, data );
     return promise;
   }
@@ -179,8 +180,8 @@ function WalletSendAssetsController($modal, $scope, $http, $q, userService) {
       fee: fee,
       marker: $scope.marked,
       pubKey: pubKey
-    }
-    var promise = $http.post( url, data )
+    };
+    var promise = $http.post( url, data );
     
     return promise;
   }
@@ -195,54 +196,54 @@ function WalletSendAssetsController($modal, $scope, $http, $q, userService) {
 
       if( successData.data.error )
       {
-        $modalScope.waiting = false
-        $modalScope.sendError = true
+        $modalScope.waiting = false;
+        $modalScope.sendError = true;
         $modalScope.error = 'Error preparing send transaction: ' + successData.data.error;
       }
       else
       {
-        var successData = successData.data
+        var successData = successData.data;
         var sourceScript = successData.sourceScript;
-        var unsignedTransaction = successData.transaction
+        var unsignedTransaction = successData.transaction;
 
         try {
-          var bytes = Bitcoin.Util.hexToBytes(unsignedTransaction)
-          var transaction = Bitcoin.Transaction.deserialize(bytes)
-          var script = parseScript(successData.sourceScript)
+          var bytes = Bitcoin.Util.hexToBytes(unsignedTransaction);
+          var transaction = Bitcoin.Transaction.deserialize(bytes);
+          var script = parseScript(successData.sourceScript);
 
           transaction.ins.forEach( function( input ) {
             input.script = script;
           } );
 
-          //DEBUG console.log('before',transaction, Bitcoin.Util.bytesToHex(transaction.serialize()))
-          var signedSuccess = transaction.signWithKey(privKey)
+          //DEBUG console.log('before',transaction, Bitcoin.Util.bytesToHex(transaction.serialize()));
+          var signedSuccess = transaction.signWithKey(privKey);
 
-          var finalTransaction = Bitcoin.Util.bytesToHex(transaction.serialize())
+          var finalTransaction = Bitcoin.Util.bytesToHex(transaction.serialize());
 
           //Showing the user the transaction hash doesn't work right now
-          //var transactionHash = Bitcoin.Util.bytesToHex(transaction.getHash().reverse())
+          //var transactionHash = Bitcoin.Util.bytesToHex(transaction.getHash().reverse());
 
           pushSignedTransaction(finalTransaction).then(function(successData) {
-            var successData = successData.data
+            var successData = successData.data;
             if( successData.pushed.match(/submitted|success/gi) != null ) {
-              $modalScope.waiting = false
-              $modalScope.sendSuccess = true
+              $modalScope.waiting = false;
+              $modalScope.sendSuccess = true;
               $modalScope.url = 'http://blockchain.info/address/' + from + '?sort=0';
             } else {
-              $modalScope.waiting = false
-              $modalScope.sendError = true
-              $modalScope.error = successData.pushed  //Unspecified error, show user
+              $modalScope.waiting = false;
+              $modalScope.sendError = true;
+              $modalScope.error = successData.pushed;  //Unspecified error, show user
             }
           },function(errorData) {
-            $modalScope.waiting = false
-            $modalScope.sendError = true
+            $modalScope.waiting = false;
+            $modalScope.sendError = true;
             if( errorData.message )
               $modalScope.error = 'Server error: ' + errorData.message;
             else if( errorData.data )
                 $modalScope.error = 'Server error: ' + errorData.data;
             else
               $modalScope.error = 'Unknown Server Error';
-            console.error( errorData );
+              console.error( errorData );
           });
 
           //DEBUG console.log(addressData, privKey, bytes, transaction, script, signedSuccess, finalTransaction );
@@ -259,7 +260,7 @@ function WalletSendAssetsController($modal, $scope, $http, $q, userService) {
                 return newScript;
          }
         } catch(e) {
-          $modalScope.sendError = true
+          $modalScope.sendError = true;
           if( e.message )
             $modalScope.error = 'Error sending transaction: ' + e.message;
           else if( e.data )
@@ -270,7 +271,7 @@ function WalletSendAssetsController($modal, $scope, $http, $q, userService) {
         }
       }
     },function(errorData) {
-      $modalScope.sendError = true
+      $modalScope.sendError = true;
       if( errorData.message )
         $modalScope.error = 'Server error: ' + errorData.message;
       else if( errorData.data )
@@ -289,41 +290,41 @@ function WalletSendAssetsController($modal, $scope, $http, $q, userService) {
     var minerFees = Math.ceil( $scope.minerFees * 100000 );
     var sendAmount = convertDisplayedValueToSatoshi( $scope.sendAmount );
 
-    var balance = +$scope.balanceData[0]  
-    var btcbalance = +$scope.balanceData[1]
+    var balance = +$scope.balanceData[0];
+    var btcbalance = +$scope.balanceData[1];
     
     var coin = $scope.selectedCoin;
-    var address = $scope.selectedAddress
+    var address = $scope.selectedAddress;
     var sendTo = $scope.sendTo
     var required = [coin,address,sendAmount,sendTo, minerFees,balance, btcbalance, $scope.sendForm.$valid ];
 
-    var error = 'Please '
+    var error = 'Please ';
     if( $scope.sendForm.$valid == false) {
-        error += 'make sure all fields are completely filled, '
+        error += 'make sure all fields are completely filled, ';
     }
     if( ( sendAmount <= balance ) == false ) {
-        error += 'make sure you aren\'t sending more coins than you own, '
+        error += 'make sure you aren\'t sending more coins than you own, ';
     }
     if( ( minerFees <= btcbalance ) ==  false ) {
-        error += 'make sure you have enough Bitcoin to cover your fees, '
+        error += 'make sure you have enough Bitcoin to cover your fees, ';
     }
     if( validAddress(sendTo) == false) {
-       error += 'make sure you are sending to a valid MSC/BTC address, '
+       error += 'make sure you are sending to a valid MSC/BTC address, ';
     }
     if(coin == 'BTC') {
        if( sendAmount < dustValue )
-        error += 'make sure your send amount is at least 0.05430 mBTC if sending BTC, '
+        error += 'make sure your send amount is at least 0.05430 mBTC if sending BTC, ';
        if( minerFees < minerMinimum )
-        error += 'make sure your fee entry is at least 0.1 mBTC to cover miner costs, '
+        error += 'make sure your fee entry is at least 0.1 mBTC to cover miner costs, ';
     }
     if( ( (coin == 'MSC') || (coin == 'TMSC') ) ) {
        if( sendAmount < nonZeroValue )
-        error += 'make sure your send amount is non-zero, '
+        error += 'make sure your send amount is non-zero, ';
        if( minerFees < minerMinimum )
-        error += 'make sure your fee entry is at least 0.1 mBTC, '
+        error += 'make sure your fee entry is at least 0.1 mBTC, ';
     }
     if( error.length < 8) {
-      $scope.showErrors = false
+      $scope.showErrors = false;
       // open modal
       var modalInstance = $modal.open({
         template: '\
@@ -382,10 +383,10 @@ function WalletSendAssetsController($modal, $scope, $http, $q, userService) {
         }
       });
     } else {
-      error += 'and try again.'
-      $scope.error = error
-      $scope.showErrors = true
+      error += 'and try again.';
+      $scope.error = error;
+      $scope.showErrors = true;
     }
-  }
+  };
 }
 
