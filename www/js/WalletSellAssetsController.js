@@ -6,9 +6,10 @@ function WalletSellAssetsController($modal, $scope, $http, $q, userService) {
   // [ Template Initialization ]
 
   $scope.currencyList = userService.getCurrencies(); // [{symbol: 'BTC', addresses:[], name: 'BTC'}, {symbol: 'MSC', addresses:[], name: 'MSC'}, {symbol: 'TMSC', addresses:[], name: 'TMSC'}]
+  $scope.selectedCoin = $scope.currencyList[0];
   $scope.currencyList.forEach(function(e,i){
     if(e.symbol == "MSC")
-      $scope.selectedCoin = e.symbol;
+      $scope.selectedCoin = e;
   });
 
   $scope.addressList = getAddressesWithPrivkey();
@@ -25,6 +26,16 @@ function WalletSellAssetsController($modal, $scope, $http, $q, userService) {
     );
     if( addresses.length == 0)
       addresses = ['Could not find any addresses with attached private keys!'];
+    else {
+      addresses.map(
+        function(e,i,a){
+          if($scope.selectedCoin.addresses.indexOf(e) == -1)
+            addresses.splice(i,1);
+        }
+      );
+      if (addresses.length == 0)
+        addresses = ['You have no addresses with a balance on the selected coin!'];
+    }
     return addresses;
   }
 
@@ -36,7 +47,7 @@ function WalletSellAssetsController($modal, $scope, $http, $q, userService) {
 
   $scope.setBalance = function() {
     $scope.balanceData = [ 0 ];
-    var coin = $scope.selectedCoin;
+    var coin = $scope.selectedCoin.symbol;
     var address = $scope.selectedAddress;
     if (address || coin) {
       for(var i = 0; i < addrListBal.length; i++) {
@@ -233,7 +244,7 @@ function WalletSellAssetsController($modal, $scope, $http, $q, userService) {
     var minerFeesMillis = formatCurrencyInFundamentalUnit( minerFees , 'stom' ) ;
     var saleAmountMillis = formatCurrencyInFundamentalUnit( saleAmount , 'stom'  ) ;
 
-    var coin = $scope.selectedCoin;
+    var coin = $scope.selectedCoin.symbol;
     var address = $scope.selectedAddress;
     var saleBlocks = +$scope.saleBlocks;
 
@@ -272,8 +283,8 @@ function WalletSellAssetsController($modal, $scope, $http, $q, userService) {
         template: '\
           <div class="modal-body">\
               <h3 class="text-center"> Confirm sale order </h3>\
-              <h3>You\'re about to put ' + saleAmountMillis + 'm' + $scope.selectedCoin  +  
-              ' on sale at a price of ' +  salePricePerCoin + ' BTC per ' + $scope.selectedCoin +
+              <h3>You\'re about to put ' + saleAmountMillis + 'm' + $scope.selectedCoin.symbol  +  
+              ' on sale at a price of ' +  salePricePerCoin + ' BTC per ' + $scope.selectedCoin.symbol +
               ', plus charge ' + buyersFeeMillis  + ' in fees over ' +
               $scope.saleBlocks + ' blocks.</h3>\
             <p><br>\
