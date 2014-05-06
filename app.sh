@@ -7,6 +7,7 @@ kill_child_processes() {
 
 # Ctrl-C trap. Catches INT signal
 trap "kill_child_processes 1 $$; exit 0" INT
+echo "Starting app.sh: $(TZ='America/Chicago' date)"
 
 echo "Establishing environment variables..."
 APPDIR=`pwd`
