@@ -52,7 +52,7 @@ do
     # parse until full success
     x=1 # assume failure
     echo -n > $PARSE_LOG
-    echo "Parsing last block $(cat www/revision.json | cut -b 102-109)"
+    echo "Parsing last block $(cat www/revision.json | cut -b 102-109) at $(TZ='America/Chicago' date)"
     while [ "$x" != "0" ];
     do
       python $TOOLSDIR/msc_parse.py -r $TOOLSDIR 2>&1 >> $PARSE_LOG
