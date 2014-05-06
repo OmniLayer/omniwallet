@@ -14,6 +14,11 @@ function WalletSellAssetsController($modal, $scope, $http, $q, userService) {
 
   $scope.addressList = getAddressesWithPrivkey();
   $scope.selectedAddress = $scope.addressList[0];
+  
+  $scope.$watch('selectedCoin', function(){
+    $scope.addressList = getAddressesWithPrivkey();
+    $scope.selectedAddress = $scope.addressList[0];
+  });
 
   function getAddressesWithPrivkey() {
     var addresses = [];
