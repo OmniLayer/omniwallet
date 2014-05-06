@@ -18,6 +18,7 @@ function WalletSellAssetsController($modal, $scope, $http, $q, userService) {
   $scope.$watch('selectedCoin', function(){
     $scope.addressList = getAddressesWithPrivkey();
     $scope.selectedAddress = $scope.addressList[0];
+    $scope.setBalance();
   });
 
   function getAddressesWithPrivkey() {
