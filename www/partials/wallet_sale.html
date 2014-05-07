@@ -40,7 +40,7 @@
       <br>
       <div class="input-group">
         <span class="input-group-addon"> Number of coin to sell (in {{currencyUnit[currencyUnit.length-1]}}{{selectedCoin.symbol}}): </span>
-          <input name="amount" type="number" ng-model="saleAmount" class="form-control" 
+          <input name="amount" type="number" step="{{amountUnit == 'wtow' ? 0.001 : 1}}" ng-model="saleAmount" class="form-control" 
           placeholder="{{{ balance: 100000, symbol: currencyUnit} | cryptocurrency}}" required>
         <span class="input-group-addon" > 
           Available: {{{ balance: balanceData[0], symbol: currencyUnit } | cryptocurrency}} 
@@ -49,7 +49,7 @@
       <br>
       <div class="input-group">
         <span class="input-group-addon"> Price per coin (in BTC/{{ selectedCoin.symbol }}): </span>
-        <input name="ppc" type="number" ng-model="salePricePerCoin" class="form-control" 
+        <input name="ppc" type="number" step="{{amountUnit == 'wtow' ? 0.01 : 1}}" ng-model="salePricePerCoin" class="form-control" 
           placeholder="{{{ balance: 1000000, symbol: currencyUnit} | cryptocurrency}}" required>
         <span class="input-group-addon" > 
           Total Sale Amount: {{ ({ balance: (saleAmount || 0), symbol: amountUnit } | cryptocurrency)*(salePricePerCoin || 0)}}
@@ -66,18 +66,18 @@
             tooltip-trigger="click"> <strong>(?)</strong>
           </a>
         </span>
-        <input name="blocks" type="number" ng-model="saleBlocks" class="form-control" placeholder="100 blocks" required>
+        <input name="blocks" type="number" step="1" ng-model="saleBlocks" class="form-control" placeholder="10 blocks" required>
       </div>
       <br>
       <div class="input-group">
         <span class="input-group-addon"> Buyer's fee (in {{currencyUnit[currencyUnit.length-1]}}{{selectedCoin.symbol}}): </span>
-        <input name="buyerfee" type="number" ng-model="buyersFee" class="form-control" 
+        <input name="buyerfee" type="number" step="{{amountUnit == 'wtow' ? 0.0001 : 0.1}}" ng-model="buyersFee" class="form-control" 
         placeholder="{{{ balance: 10000, symbol: currencyUnit } | cryptocurrency}} minimum" required>
       </div>
       <br>
       <div class="input-group">
         <span class="input-group-addon"> Transaction/Miner fees (in {{currencyUnit[currencyUnit.length-1]}}BTC): </span>
-        <input name="fees" type="number" ng-model="minerFees" class="form-control" 
+        <input name="fees" type="number" step="{{amountUnit == 'wtow' ? 0.0001 : 0.1}}" ng-model="minerFees" class="form-control" 
         placeholder="{{{ balance: 10000, symbol: currencyUnit } | cryptocurrency}} minimum" step="0.0001" required>
         <span class="input-group-addon" > 
           Available Bitcoin: {{ { balance: balanceData[1], symbol: currencyUnit } | cryptocurrency}}
