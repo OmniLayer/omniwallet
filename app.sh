@@ -7,6 +7,7 @@ kill_child_processes() {
 
 # Ctrl-C trap. Catches INT signal
 trap "kill_child_processes 1 $$; exit 0" INT
+echo "Starting app.sh: $(TZ='America/Chicago' date)"
 
 echo "Establishing environment variables..."
 APPDIR=`pwd`
@@ -51,7 +52,7 @@ do
     # parse until full success
     x=1 # assume failure
     echo -n > $PARSE_LOG
-    echo "Parsing last block $(cat www/revision.json | cut -b 102-109)"
+    echo "Parsing last block $(cat www/revision.json | cut -b 102-109) at $(TZ='America/Chicago' date)"
     while [ "$x" != "0" ];
     do
       python $TOOLSDIR/msc_parse.py -r $TOOLSDIR 2>&1 >> $PARSE_LOG
