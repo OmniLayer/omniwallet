@@ -7,7 +7,7 @@
     <div class="form-group col-md-10 col-md-push-1">
       <label class="control-label" for="inputPassword">Password</label>
       <div class="controls">
-        <input name="password" type="password" ng-model="create.password" class="form-control" id="inputPassword" ng-minlength="8" required>
+        <input name="password" type="password" ng-model="create.password" class="form-control" id="inputPassword" ng-minlength="8" required match="create.repeatPassword">
         <span style="color:red" ng-show="createForm.password.$error.required && createForm.password.$dirty">Required</span>
         <span style="color:red" ng-show="createForm.password.$dirty && createForm.password.$error.minlength">Password must be at least 8 characters long</span>
         <div id="pass-strength" >
@@ -20,9 +20,9 @@
     <div class="form-group col-md-10 col-md-push-1">
       <label class="control-label" for="inputRepeatPassword">Repeat Password</label>
       <div class="controls">
-        <input name="repeatPassword" type="password" ng-model="create.repeatPassword" class="form-control" id="inputRepeatPassword" required>
+        <input name="repeatPassword" type="password" ng-model="create.repeatPassword" class="form-control" id="inputRepeatPassword" required match="create.password">
         <span style="color:red" ng-show="createForm.repeatPassword.$error.required && createForm.repeatPassword.$dirty">Required</span>
-        <span style="color:red" ng-show="create.password != create.repeatPassword">Passwords do not match</span>
+        <span style="color:red" ng-show="create.password != create.repeatPassword">Passwords do not match!</span>
       </div>
     </div>
 </div>

@@ -51,8 +51,19 @@
         </span>
       </div>
       <br>
+      <div class="input-group" style="width: 15%">
+        <span class="input-group-addon"> Protocol Transaction fee: 
+	 <a href=""
+            tooltip="MasterProtocol Transactions require additional mBTC. This is used when encoding/sending the Masterprotocol Transaction."
+            tooltip-append-to-body="true"
+            tooltip-placement="left"
+            tooltip-trigger="click"> <strong>(?)</strong>
+          </a></span>
+        <span class="input-group-addon"> 0.25 mBTC </span>
+      </div>
+
       <div class="input-group">
-        <span class="input-group-addon"> Transaction/Miner fees ( mBTC ): </span>
+        <span class="input-group-addon"> Miner fees ( mBTC ): </span>
         <input name="fees" type="number" ng-model="minerFees" class="form-control" 
         placeholder="{{{ balance: 10000000, symbol: currencyUnit } | cryptocurrency}} minimum" step="0.01" required>
         <span class="input-group-addon" > 

@@ -20,6 +20,7 @@ var conversionFactor = {
   'TMSC': 100000000,
 
   'mtow': 1000,
+  'wtom': 0.001,
   'wtow': 1
 };
 function getConversionFactor( symbol ) {
