@@ -6,6 +6,7 @@ function WalletSellAssetsController($modal, $scope, $http, $q, userService) {
   // [ Template Initialization ]
 
   $scope.currencyList = userService.getCurrencies(); // [{symbol: 'BTC', addresses:[], name: 'BTC'}, {symbol: 'MSC', addresses:[], name: 'MSC'}, {symbol: 'TMSC', addresses:[], name: 'TMSC'}]
+  $scope.currencySaleList = [{symbol: 'MSC', addresses:[], name: 'MSC'}];
   $scope.selectedCoin = $scope.currencyList[0];
   $scope.currencyList.forEach(function(e,i){
     if(e.symbol == "MSC")
