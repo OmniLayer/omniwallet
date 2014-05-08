@@ -82,10 +82,12 @@ function HomeCtrl( $scope, $templateCache, $injector, $location, $http, $q ) {
   }
 }
 function StatsCtrl($scope, $route, $routeParams, $http){
+
   $http.get('/v1/system/stats.json', {}).success(function(data) {
     $scope.stats = data;
   });
 }
+
 function Ctrl($scope, $route, $routeParams, $modal, $location, browser) {
   
   $scope.$route = $route;
@@ -115,7 +117,6 @@ function Ctrl($scope, $route, $routeParams, $modal, $location, browser) {
 
 }
 
-
 function HiddenLoginController($scope, $modal, $location) {
   $scope.open = function () {
      $scope.uuid = $location.path().replace("/login/", "");
@@ -130,6 +131,16 @@ function HiddenLoginController($scope, $modal, $location) {
       }
     });
   }
+}
+
+function RevisionController($scope, $http, $modal, userService) {
+
+    $scope.getData = function() {
+      console.log('init 0');
+      $http.get('/v1/system/revision.json', {}).success(function(data) {
+        $scope.rev = data;
+      });
+    };
 }
 
 function NavigationController($scope, $http, $modal, userService) {

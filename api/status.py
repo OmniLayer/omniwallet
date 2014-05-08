@@ -18,9 +18,10 @@ def main(argv):
 
     owlog=commands.getoutput('git --git-dir='+APPDIR+'/.git log --pretty=tformat:"%cd | %h | %H | %s" --date=short -n 12')
     mclog=commands.getoutput('git --git-dir='+APPDIR+'/node_modules/mastercoin-tools/.git log --pretty=tformat:"%cd | %h | %H | %s" --date=short -n 12')
-    lblock='Unknown'
-    lblock=commands.getoutput('cat '+DDIR+'/www/revision.json | cut -b 102-109')
-    time=commands.getoutput('TZ="America/Chicago" date')
+    #lblock='Unknown'
+    #lblock=commands.getoutput('cat '+DDIR+'/www/revision.json | cut -b 102-109')
+    #time=commands.getoutput('TZ="America/Chicago" date')
+    time=commands.getoutput('TZ="GMT" date')
 
 
     #STATUSSTREAM="""<h4>Omniwallet Change Log</h4>
@@ -50,11 +51,11 @@ def main(argv):
     #STATUSSTREAM+=('</table>\n')
     STATUSSTREAM+=('</div></div>')
 
-    STATUSSTREAM+="""<div class="block-tx">
+    STATUSSTREAM+="""<div class="block-tx" ng-controller="RevisionController" ng-init="getData()">
                  <span style=""><strong>Instance Statistics</strong></span><br/>"""
 
     STATUSSTREAM+=('\n<br/><span style="width:95%;float:left;padding-left:1%;padding-top:0px;font-size:85%;">This page last updated: '+time+'</span><br/>\n\n')
-    STATUSSTREAM+=('\n<br/><span style="width:95%;float:left;padding-left:1%;padding-top:0px;font-size:85%;">Last Block Processed: '+lblock+'</span><br/>\n')
+    STATUSSTREAM+=('\n<br/><span style="width:95%;float:left;padding-left:1%;padding-top:0px;font-size:85%;">Last Block Processed: {{rev.last_block}}</span><br/>\n')
     STATUSSTREAM+=('<ng-include src="\'stats.html\'">')
 
     STATUSSTREAM+=('</div>')

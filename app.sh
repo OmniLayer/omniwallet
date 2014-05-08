@@ -80,7 +80,8 @@ do
     find $DATADIR/mastercoin_verify/addresses/. | xargs -I % cp -rp % $DATADIR/www/mastercoin_verify/addresses
     find $DATADIR/mastercoin_verify/transactions/. | xargs -I % cp -rp % $DATADIR/www/mastercoin_verify/transactions
 
-   echo "Updating Status File"
+   echo "Updating Stats/Status File"
+   python $APPDIR/api/stats.py
    python $APPDIR/api/status.py -o $APPDIR -d $DATADIR
 
     # unlock
