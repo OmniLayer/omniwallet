@@ -45,6 +45,10 @@ server {
 		alias /var/lib/omniwallet/www/stats.json;
 	}
 
+        location ~ "^/v1/system/status.html$" {
+                alias /var/lib/omniwallet/www/status.html;
+        }
+
 	location ~ "^/v1/system/revision.json$" {
 		alias /var/lib/omniwallet/www/revision.json;
 	}

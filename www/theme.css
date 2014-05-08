@@ -75,3 +75,16 @@ form.form-search:before {
     border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
     filter: progid:DXImageTransform.Microsoft.gradient(enabled = false);
 }
+.block-tx {
+    -moz-border-radius:2px;
+    -webkit-border-radius:2px;
+    background-color:#E4F1F2;
+    border-radius:2px;
+    margin:20px 0 10px;
+    overflow:hidden;
+    padding:15px;
+    border:1px solid #eee;
+    float:left;
+    width:48%;
+    height:320px;
+}
