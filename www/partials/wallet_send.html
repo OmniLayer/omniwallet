@@ -13,7 +13,7 @@
   <form name="sendForm" ng-submit="validateSendForm(currencyUnit)">
   <div class="row">
     <div class="col-xs-6">
-      <h4 class="text-justify" >Send type of coin:</h4>
+      <h4 class="text-justify" >Choose coin:</h4>
       <div class="form-inline">
           <select name="coin" class="form-control" ng-model="selectedCoin"
             ng-options="currency.symbol as currency.name for currency in currencyList"
@@ -21,7 +21,6 @@
             <option value=""> -- Choose Coin -- </option>
           </select>
         </div> 
-      <h6 class="text-justify"> Please make sure this is the currency you intend to trade with.</h6> 
       <h4 class="text-justify" >Send from address:</h4>
       <div class="form-inline">
           <select name="sender" class="form-control" ng-model="selectedAddress"
@@ -29,9 +28,7 @@
             ng-change="setBalance()" ng-init="setBalance()" required>
             <option value=""> -- Choose Address -- </option>
           </select>
-        </div> 
-      <h6 class="text-justify"> Please make sure this is the address you are sending from.<br> 
-      Note that we allow you to only send from addresses with a valid private key. </h6>
+        </div>
     </div>
   </div>
     <br>
