@@ -25,15 +25,6 @@ fi
 # Export directories for API scripts to use
 export TOOLSDIR
 export DATADIR
-echo "Starting uwsgi daemon..."
-cd $APPDIR/api
-if [[ "$OSTYPE" == "darwin"* ]]; then
-  uwsgi -s 127.0.0.1:1088 -p 8 -M --vhost --enable-threads --logto $DATADIR/apps.log &
-else
-  uwsgi -s 127.0.0.1:1088 -p 8 -M --vhost --enable-threads --plugin python --logto $DATADIR/apps.log &
-fi
-
-SERVER_PID=$!
 
 echo "Beginning main run loop..."
 while true
@@ -44,6 +35,20 @@ do
 
     # lock
     touch $LOCK_FILE
+
+    ps cax | grep uwsgi > /dev/null
+    if [ $? -eq 0 ]; then
+	echo "uwsgi api is running."
+    else
+	echo "Starting uwsgi daemon..."
+	cd $APPDIR/api
+	if [[ "$OSTYPE" == "darwin"* ]]; then
+	  uwsgi -s 127.0.0.1:1088 -p 8 -M --vhost --enable-threads --logto $DATADIR/apps.log &
+	else
+	  uwsgi -s 127.0.0.1:1088 -p 8 -M --vhost --enable-threads --plugin python --logto $DATADIR/apps.log &
+	fi
+	SERVER_PID=$!
+    fi
 
     mkdir -p $DATADIR
     cd $DATADIR
