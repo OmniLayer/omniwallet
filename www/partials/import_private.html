@@ -1,16 +1,17 @@
 <div class="modal-header">
   <h3>Import a BTC/MSC Private Key</h3>
 </div>
-<form name="privkeyentry" class="form-horizontal" style="margin-bottom:20px, margin-top:20px" ng-submit="!privkeyentry.$error.required && ok(newAddressData)">
+<form name="privkeyentry" class="form-horizontal" style="margin-bottom:20px, margin-top:20px" ng-submit="validate(newAddressData.privKey) && ok(newAddressData)">
   <div class="modal-body">
     <div class="row">
       <div class="form-group col-md-10 col-md-push-1">
         <label class="control-label">Enter Key (Send/Receive):</label>
         <input type="text" name="privkey" class="form-control" placeholder="enter your private key, formats: hex, b64, WIP, compressed WIP" ng-model="newAddressData.privKey" ng-required="!newAddressData.address">
+        <span style="color:red" ng-show="privkeyentry.privkey.$dirty && !validate(newAddressData.privKey)">Must be a valid Bitcoin private key</span>
       </div>
     </div>
   </div>
   <div class="modal-footer">
-    <input type="submit" class="btn btn-primary" ng-disabled="privkeyentry.$error.required" value="Add Address">
+    <input type="submit" class="btn btn-primary" ng-disabled="!validate(newAddressData.privKey)" value="Add Address">
   </div>
 </form>
