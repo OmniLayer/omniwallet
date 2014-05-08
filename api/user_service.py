@@ -24,7 +24,8 @@ app.debug = True
 
 @app.route('/challenge')
 def challenge():
-  uuid = request.args.get('uuid')
+  validate_uuid = UUID(request.args.get('uuid'))
+  uuid = str(validate_uuid)
   session = ws.hashlib.sha256(SESSION_SECRET + uuid).hexdigest()
   session_challenge = session + "_challenge"
   session_pow_challenge = session + "_pow_challenge"
@@ -52,7 +53,8 @@ def challenge():
 
 @app.route('/create', methods=['POST'])
 def create():
-  uuid = request.form['uuid']
+  validate_uuid = UUID(request.form['uuid'])
+  uuid = str(validate_uuid)
   session = ws.hashlib.sha256(SESSION_SECRET + uuid).hexdigest()
   session_pow_challenge = session + "_pow_challenge"
 
@@ -83,7 +85,8 @@ def create():
 
 @app.route('/update', methods=['POST'])
 def update():
-  uuid = request.form['uuid']
+  validate_uuid = UUID(request.form['uuid'])
+  uuid = str(validate_uuid)
   session = ws.hashlib.sha256(SESSION_SECRET + uuid).hexdigest()
   session_challenge = session + "_challenge"
   session_pubkey = session + "_public_key"
@@ -117,7 +120,8 @@ def update():
 
 @app.route('/login')
 def login():
-  uuid = request.args.get('uuid')
+  validate_uuid = UUID(request.args.get('uuid'))
+  uuid = str(validate_uuid)
   public_key = base64.b64decode(request.args.get('public_key').encode('UTF-8'))
   nonce = request.args.get('nonce')
 
@@ -153,13 +157,11 @@ def failed_challenge(pow_challenge, nonce, difficulty):
   return pow_challenge_response[-len(difficulty):] != difficulty
 
 def write_wallet(uuid, wallet):
-  validate_uuid = UUID(uuid)
   filename = data_dir_root + '/wallets/' + uuid + '.json'
   with open(filename, 'w') as f:
     f.write(wallet)
 
 def read_wallet(uuid):
-  validate_uuid = UUID(uuid)
   filename = data_dir_root + '/wallets/' + uuid + '.json'
   with open(filename, 'r') as f:
     return f.read()
