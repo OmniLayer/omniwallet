@@ -240,6 +240,12 @@ function WalletTradeOverviewController($scope, $http, $q, userService, hashExplo
                   tx[key] = formatCurrencyInFundamentalUnit( tx[key], 'wtos')
               }); 
           });
+
+          angular.forEach(transaction_data, function(transaction, index) {
+            //DEBUG console.log(new Date(Number(transaction.tx_time)))
+            transaction_data[index].tx_hash_concat = transaction.tx_hash.substring(0,22) + '...'
+          });
+
           transaction_data.sort(function(a,b) { return a.formatted_price_per_coin - b.formatted_price_per_coin }); // sort cheapest; sort most recent (b.tx_time - a.tx_time)
           //DEBUG console.log('wallet trade overview ctrl', transaction_data)
         } else transaction_data.push({ tx_hash: 'No offers/bids found for this timeframe' })
