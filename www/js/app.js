@@ -60,8 +60,8 @@ var app = angular.module('omniwallet', [
        controller: HiddenLoginController
     }).when('/import', {
       templateUrl: '/partials/wallet_import.html',
-    }).when('/stats', {
-       templateUrl: '/stats.html',
+    }).when('/status', {
+       templateUrl: '/status.html',
        controller: StatsCtrl
     }).otherwise({ redirectTo: '/' });
 
@@ -71,7 +71,7 @@ var app = angular.module('omniwallet', [
 
 app.config(function() {}).run(function(userService, $location) {
   //Whitelist pages
-  whitelisted = ['login', 'about', 'stats', 'explorer']; 
+  whitelisted = ['login', 'about', 'status', 'explorer']; 
 
   if(!userService.loggedIn()) {
     for(var i = 0; i < whitelisted.length; i++) {

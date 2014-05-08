@@ -60,15 +60,15 @@ do
     done
     echo "Running validation step..."
     python $TOOLSDIR/msc_validate.py 2>&1 > $VALIDATE_LOG
-    
+
     echo "Getting price calculation..."
     mkdir -p $DATADIR/www/values $DATADIR/www/values/history
     python $APPDIR/api/coin_values.py
-    
+
     # update archive
     echo "Running archive tool..."
     python $TOOLSDIR/msc_archive.py -r $TOOLSDIR 2>&1 > $ARCHIVE_LOG
-  
+
     mkdir -p $DATADIR/www/tx $DATADIR/www/addr $DATADIR/www/general $DATADIR/www/offers $DATADIR/www/properties $DATADIR/www/mastercoin_verify/addresses $DATADIR/www/mastercoin_verify/transactions
 
     echo "Copying data back to /www/ folder..."
@@ -79,7 +79,10 @@ do
     find $DATADIR/properties/. -name "*.json" | xargs -I % cp -rp % $DATADIR/www/properties
     find $DATADIR/mastercoin_verify/addresses/. | xargs -I % cp -rp % $DATADIR/www/mastercoin_verify/addresses
     find $DATADIR/mastercoin_verify/transactions/. | xargs -I % cp -rp % $DATADIR/www/mastercoin_verify/transactions
-  
+
+   echo "Updating Status File"
+   python $APPDIR/api/status.py -o $APPDIR -d $DATADIR
+
     # unlock
     rm -f $LOCK_FILE
   fi
