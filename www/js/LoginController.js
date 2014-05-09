@@ -59,7 +59,7 @@ function Login($injector, $scope, $http, $location, $modalInstance, $q, userServ
           $location.path('/wallet');
         } catch (e) {
           $scope.badPassword = true;
-	  $scope.loginInProgress=false
+	  $scope.loginInProgress=false;
         }
       },
       function(result) {
