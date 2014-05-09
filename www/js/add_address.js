@@ -72,7 +72,6 @@ angular.module( 'omniwallet' )
 
     var AddBtcAddressModal = function ($scope, $modalInstance ) {
       $scope.validate = function( address ) {
-        console.log( 'Validate: ' + address );
         return Bitcoin.Address.validate( address );
       };
 
@@ -113,7 +112,6 @@ angular.module( 'omniwallet' )
 
     var AddPrivateKeyModal = function ($scope, $modalInstance ) {
       $scope.validate = function( address ) {
-        console.log( 'Validate: ' + address );
         if(!address) return false;
 
         try {
