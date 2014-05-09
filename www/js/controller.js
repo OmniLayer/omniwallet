@@ -205,12 +205,24 @@ function ExplorerController($scope, $http, hashExplorer) {
       return ($scope.searchQueryText === '' || trans.tx_hash.indexOf($scope.searchQueryText) >= 0 || trans.from_address.indexOf($scope.searchQueryText) >= 0 || trans.to_address.indexOf($scope.searchQueryText) >= 0);
     };
 }
-function ExplorerInspectorController($scope, hashExplorer) {
-  $scope.transactionData = JSON.parse(hashExplorer.tx);
-  $scope.tx_keys = Object.keys($scope.transactionData);
-  $scope.fieldlist = $scope.tx_keys;
-  $scope.pastLoc = hashExplorer.loc;
+function ExplorerInspectorController($scope, $location, $http, hashExplorer) {
+  function setData() {
+    $scope.transactionData = JSON.parse(hashExplorer.tx);
+    $scope.tx_keys = Object.keys($scope.transactionData);
+    $scope.fieldlist = $scope.tx_keys;
+    $scope.pastLoc = hashExplorer.loc;
+  }
 
+  if (hashExplorer.tx) {
+    setData();
+  }
+  else {
+    $http.get('/v1/transaction/tx/' + $location.search()['view'] + '.json'). success(
+      function(data) {
+        hashExplorer.setHash(data[0]);
+        setData();
+      });
+  }
 }
 function SidecarController($scope, $http, userService) {
     $scope.values = {};

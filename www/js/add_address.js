@@ -112,6 +112,19 @@ angular.module( 'omniwallet' )
     };
 
     var AddPrivateKeyModal = function ($scope, $modalInstance ) {
+      $scope.validate = function( address ) {
+        console.log( 'Validate: ' + address );
+        if(!address) return false;
+
+        try {
+          var eckey = new Bitcoin.ECKey(address);
+          var addr = eckey.getBitcoinAddress().toString();
+          return true;
+        } catch (e) {
+          return false;
+        }
+      };
+
       $scope.ok = function ( result ) {
         $modalInstance.close( result );
       };
