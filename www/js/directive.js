@@ -72,4 +72,20 @@ angular.module('omniwallet').directive('d3PieChart', function() {
 
     }
   }
-}]);
+}]).directive('autoFocus', function($timeout) {
+  return {
+    restrict: 'AC',
+    scope: {
+      'autoFocus': '=autoFocus'
+    },
+    link: function(scope, element) {
+      scope.$watch('autoFocus', function() {
+        if(scope.autoFocus) {
+          $timeout(function(){
+            $(element[0]).focus();
+          }, 100);
+        }
+      });
+    }
+  };
+});;
