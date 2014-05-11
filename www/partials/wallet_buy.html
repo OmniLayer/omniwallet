@@ -10,7 +10,7 @@
       <h4 class="text-justify" >Buy type of coin:</h4>
       <div class="form-inline">
           <select class="form-control" ng-model="selectedCoin"
-            ng-options="currency for currency in currencyList"
+            ng-options="currency as currency.name for currency in currencyList"
             ng-change="setBalance()" ng-init="selectedCoin = currencyList[global.buyOffer.currencyId]" disabled>
             <option value=""> -- Choose Coin -- </option>
           </select>
@@ -30,9 +30,9 @@
     <div class="col-xs-6"> 
       <br><br><br><br><br><br><br><br><br>
       <button class="btn btn-primary btn-md" 
-      ng-click="currencyUnit = 'stom'" type="button">Convert to m{{selectedCoin}} </button>
+      ng-click="currencyUnit = 'stom'" type="button">Convert to m{{selectedCoin.symbol}} </button>
       <button class="btn btn-primary btn-md" 
-      ng-click="currencyUnit = 'stow'" type="button">Convert to whole {{selectedCoin}} </button>
+      ng-click="currencyUnit = 'stow'" type="button">Convert to whole {{selectedCoin.symbol}} </button>
     </div>
   </div>
   <div class="row">
@@ -65,12 +65,12 @@
     <br>
 
       <div class="input-group">
-        <span class="input-group-addon"> Amount to buy (in {{currencyUnit[currencyUnit.length-1]}}{{selectedCoin}}): </span>
+        <span class="input-group-addon"> Amount to buy (in {{currencyUnit[currencyUnit.length-1]}}{{selectedCoin.symbol}}): </span>
           <input name="amount" type="number" ng-model="buyAmount" class="form-control" 
           placeholder="{{{ balance: global['buyOffer'].formatted_amount_available , symbol: currencyUnit} | cryptocurrency}}" required>
         <span class="input-group-addon" > 
           Available: {{{ balance: balanceData[0], symbol: currencyUnit } | cryptocurrency}} 
-          {{currencyUnit[currencyUnit.length-1]}}{{selectedCoin}}</span>
+          {{currencyUnit[currencyUnit.length-1]}}{{selectedCoin.symbol}}</span>
       </div>
       <br>
       
