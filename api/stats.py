@@ -24,17 +24,17 @@ def generate_stats():
   stats.put("amount_of_wallets", amount_of_wallets)
 
   # 2. Count the amount of watch-only and full addresses, we could split this at one point
-  address_count = 0 
-  for wallet in wallet_files:
-    try:
-      f = open("%s/%s" % (wallet_path, wallet))
-      accounts = json.loads(f.read())
-      address_count += len(accounts["addresses"])
-    except IOError as e:
-      print "File could not be read for %s" % wallet
-    except ValueError as e:
-      print "JSON Could not be decoded for %s" % wallet
+  #address_count = 0 
+  #for wallet in wallet_files:
+  #  try:
+  #    f = open("%s/%s" % (wallet_path, wallet))
+  #    accounts = json.loads(f.read())
+  #    address_count += len(accounts["addresses"])
+  #  except IOError as e:
+  #    print "File could not be read for %s" % wallet
+  #  except ValueError as e:
+  #    print "JSON Could not be decoded for %s" % wallet
 
-  stats.put("amount_of_addresses_managed", address_count)
+  #stats.put("amount_of_addresses_managed", address_count)
 
 generate_stats()

@@ -16,8 +16,8 @@ def main(argv):
     	elif opt in ("-d", "--ddir"):
             DDIR = arg
 
-    owlog=commands.getoutput('git --git-dir='+APPDIR+'/.git log --pretty=tformat:"%cd | %h | %H | %s" --date=short -n 12')
-    mclog=commands.getoutput('git --git-dir='+APPDIR+'/node_modules/mastercoin-tools/.git log --pretty=tformat:"%cd | %h | %H | %s" --date=short -n 12')
+    owlog=commands.getoutput('git --git-dir='+APPDIR+'/.git log --pretty=tformat:"%cd | %h | %H | %s" --date=short -n 12 --no-merges')
+    mclog=commands.getoutput('git --git-dir='+APPDIR+'/node_modules/mastercoin-tools/.git log --pretty=tformat:"%cd | %h | %H | %s" --date=short -n 12 --no-merges')
     #lblock='Unknown'
     #lblock=commands.getoutput('cat '+DDIR+'/www/revision.json | cut -b 102-109')
     #time=commands.getoutput('TZ="America/Chicago" date')
