@@ -7,7 +7,7 @@
     <div class="form-group col-md-10 col-md-push-1">
       <label class="control-label" for="inputPassword">Password</label>
       <div class="controls">
-        <input name="password" type="password" ng-model="create.password" class="form-control" id="inputPassword" ng-minlength="8" required match="create.repeatPassword">
+        <input name="password" type="password" ng-model="create.password" class="form-control" id="inputPassword" ng-minlength="8" required match="create.repeatPassword" auto-focus="true">
         <span style="color:red" ng-show="createForm.password.$error.required && createForm.password.$dirty">Required</span>
         <span style="color:red" ng-show="createForm.password.$dirty && createForm.password.$error.minlength">Password must be at least 8 characters long</span>
         <div id="pass-strength" >
