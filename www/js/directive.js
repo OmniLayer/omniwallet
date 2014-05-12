@@ -87,8 +87,7 @@ angular.module('omniwallet').directive('d3PieChart', function() {
 
       }
     }
-  }
-}]).directive('autoFocus', function($timeout) {
+ }]).directive('autoFocus', function($timeout) {
   return {
     restrict: 'AC',
     scope: {
