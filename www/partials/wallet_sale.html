@@ -6,15 +6,19 @@
   </div>
   <form name="saleForm" ng-submit="validateSaleForm(currencyUnit)">
   <div class="row">
-    <div class="col-xs-6">
+    <div class="col-xs-12">
       <h4 class="text-justify" >Choose coin:</h4>
       <div class="form-inline">
-          <select class="form-control" ng-model="selectedCoin"
-            ng-options="currency as currency.name for currency in currencySaleList"
-            ng-change="setBalance()" ng-init="setBalance()">
-            <option value=""> -- Choose Coin -- </option>
-          </select>
-        </div> 
+        <select class="form-control" ng-model="selectedCoin"
+          ng-options="currency as currency.name for currency in currencySaleList"
+          ng-change="setBalance()" ng-init="setBalance()">
+          <option value=""> -- Choose Coin -- </option>
+        </select>
+      </div> 
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-xs-6">
       <h4 class="text-justify" >Sell from address:</h4>
       <div class="form-inline">
           <select class="form-control" ng-model="selectedAddress"
@@ -22,10 +26,9 @@
             ng-change="setBalance()" ng-init="setBalance()">
             <option value=""> -- Choose Address -- </option>
           </select>
-        </div> 
+      </div> 
     </div>
-    <div class="col-xs-6"> 
-      <br><br><br><br><br><br><br><br><br>
+    <div class="col-xs-6" style="padding-top:39px;"> 
       <button class="btn btn-primary btn-md" 
       ng-click="currencyUnit = 'stom'; amountUnit = 'mtow'; saleAmount = saleAmount * 1000; salePricePerCoin = salePricePerCoin * 100; buyersFee = buyersFee * 1000; minerFees = minerFees * 1000" ng-show="currencyUnit == 'stow' && amountUnit == 'wtow'" type="button">Convert to m{{selectedCoin.symbol}} </button>
       <button class="btn btn-primary btn-md" 
