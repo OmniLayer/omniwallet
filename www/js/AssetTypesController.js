@@ -139,7 +139,7 @@ angular.module('omniwallet')
 
       var total = 0;
       for (var k in balances.balances) {
-        if (typeofbalances.balances[k].value == 'number')
+        if (typeof balances.balances[k].value == 'number')
           total += balances.balances[k].value;
       }
       $scope.total = total;
@@ -246,7 +246,7 @@ angular.module('omniwallet')
           keys = Object.keys($scope.totals);
         keys.forEach(function(e, i) {
           var value = appraiser.getValue($scope.totals[e], keys[i]);
-          if (typeofvalue == 'number' && value > 0) {
+          if (typeof value == 'number' && value > 0) {
             data.push({
               value: value,
               name: keys[i],
