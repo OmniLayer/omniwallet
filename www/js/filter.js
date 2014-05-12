@@ -38,7 +38,7 @@ function formatCurrencyInFundamentalUnit(balance, symbol) {
   }
 }
 function convertToFundamentalUnit(value, symbol) {
-  if (typeofvalue != 'number')
+  if (typeof value != 'number')
     return;
 
   return Math.round(value * conversionFactor[symbol]);

@@ -248,7 +248,7 @@ function WalletTradeOverviewController($scope, $http, $q, userService, hashExplo
         transaction_data.forEach(function(tx) {
           transaction_data_keys = Object.keys(tx);
           transaction_data_keys.forEach(function(key) {
-            if ((typeoftx[key] === 'string') && (tx[key].search(/[a-zA-Z]/g) === -1)) {
+            if ((typeof tx[key] === 'string') && (tx[key].search(/[a-zA-Z]/g) === -1)) {
               tx[key] = +tx[key]
             }
           });
@@ -362,7 +362,7 @@ function WalletTradePendingController($scope, $http, $q, userService, hashExplor
       var nestedData = offerSuccess.data,
         nestedLevels = 0,
         capturedData = [];
-      while (typeofnestedData == 'object' && nestedLevels < 5) {
+      while (typeof nestedData == 'object' && nestedLevels < 5) {
         var savedData = []
         if (nestedData instanceof Object && !(nestedData instanceof Array)) { //DEBUG console.log('got obj', nestedData);
           var data_keys = Object.keys(nestedData)
@@ -378,7 +378,7 @@ function WalletTradePendingController($scope, $http, $q, userService, hashExplor
             else if (elem instanceof Object && !(elem instanceof Array)) { //DEBUG console.log('got obj', elem);
               var elem_keys = Object.keys(elem)
               elem_keys.forEach(function(key) { //DEBUG console.log('got item', typeof elem[key])
-                if (typeofelem[key] == 'object' && key != 'invalid')
+                if (typeof elem[key] == 'object' && key != 'invalid')
                   arrayOfObjects = arrayOfObjects.concat(elem[key])
               });
               //DEBUG console.log('check len', arrayOfObjects.length)
@@ -406,7 +406,7 @@ function WalletTradePendingController($scope, $http, $q, userService, hashExplor
 
       var filtered_transaction_data = transaction_data.filter(function(item) {
         //console.log('stf', item, typeof item != 'string', 'inv', item.invalid == false && item.invalid.length == undefined) 
-        return (typeofitem == 'object' && (item.invalid == false && item.invalid.length == undefined))
+        return (typeof item == 'object' && (item.invalid == false && item.invalid.length == undefined))
       });
 
       //DEBUG console.log(filtered_transaction_data, 'tettst')
