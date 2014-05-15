@@ -1,4 +1,4 @@
-function WalletBuyAssetsController($modal, $scope, $http, $q, userService, transactionService) {
+function WalletBuyAssetsController($modal, $scope, $http, $q, userService, transactionService, balanceService) {
   // [ Form Validation]
 
   $scope.showErrors = false;
@@ -63,8 +63,8 @@ function WalletBuyAssetsController($modal, $scope, $http, $q, userService, trans
   });
   
   $scope.setBalance = function() {
-    transactionService.setBalance
-  }
+    $scope.balanceData = balanceService.getBalance($scope.selectedCoin.symbol,$scope.selectedAddress, addrListBal);
+  };
 
   // [ Helper Functions ]
 
