@@ -1,4 +1,4 @@
-function WalletSendAssetsController($modal, $scope, $http, $q, userService) {
+function WalletSendAssetsController($modal, $scope, $http, $q, userService, transactionService) {
   // [ Form Validation]
 
   $scope.showErrors = false;
@@ -6,17 +6,30 @@ function WalletSendAssetsController($modal, $scope, $http, $q, userService) {
   // [ Template Initialization ]
 
   $scope.currencyList = userService.getCurrencies(); // [{symbol: 'BTC', addresses:[], name: 'BTC'}, {symbol: 'MSC', addresses:[], name: 'MSC'}, {symbol: 'TMSC', addresses:[], name: 'TMSC'}]
-  $scope.selectedCoin = $scope.currencyList[0].symbol;
+  $scope.selectedCoin = $scope.currencyList[0];
 
-  // Attach a listener for when the selected
-  $scope.$watch('selectedCoin', function(newValue, oldValue) {});
+  $scope.currencyList.forEach(function(e, i) {
+    if (e.symbol == "MSC")
+      $scope.selectedCoin = e;
+  });
+
+  $scope.addressList = userService.getAddressesWithPrivkey($scope.selectedCoin.addresses);
+  $scope.selectedAddress = $scope.addressList[0];
+
+  $scope.$watch('selectedCoin', function() {
+    $scope.addressList = userService.getAddressesWithPrivkey($scope.selectedCoin.addresses);;
+    $scope.selectedAddress = $scope.addressList[0];
+    $scope.setBalance();
+  });
+  
+  $scope.minerFees = formatCurrencyInFundamentalUnit(0.0001, 'wtom');
 
   function convertSatoshiToDisplayedValue(satoshi) {
-    if ($scope.selectedCoin == 'BTC')
+    if ($scope.selectedCoin.symbol == 'BTC')
       return satoshi / 100000.0;
-    else if ($scope.selectedCoin.indexOf('SP') == 0) {
+    else if ($scope.selectedCoin.symbol.indexOf('SP') == 0) {
       for (var i in $scope.currencyList) {
-        if ($scope.currencyList[i].symbol == $scope.selectedCoin) {
+        if ($scope.currencyList[i].symbol == $scope.selectedCoin.symbol) {
           if ($scope.currencyList[i].property_type == 1)
             return satoshi;
           else
@@ -32,27 +45,27 @@ function WalletSendAssetsController($modal, $scope, $http, $q, userService) {
   $scope.convertSatoshiToDisplayedValue = convertSatoshiToDisplayedValue;
 
   function getDisplayedAbbreviation() {
-    if ($scope.selectedCoin == 'BTC')
+    if ($scope.selectedCoin.symbol == 'BTC')
       return 'mBTC';
-    else if ($scope.selectedCoin.indexOf('SP') == 0) {
+    else if ($scope.selectedCoin.symbol.indexOf('SP') == 0) {
       for (var i in $scope.currencyList) {
-        if ($scope.currencyList[i].symbol == $scope.selectedCoin)
-          return $scope.currencyList[i].name + ' #' + $scope.selectedCoin.match(/SP([0-9]+)/)[1];
+        if ($scope.currencyList[i].symbol == $scope.selectedCoin.symbol)
+          return $scope.currencyList[i].name + ' #' + $scope.selectedCoin.symbol.match(/SP([0-9]+)/)[1];
       }
 
-      return 'Smart Property #' + $scope.selectedCoin.match(/SP([0-9]+)/)[1];
+      return 'Smart Property #' + $scope.selectedCoin.symbol.match(/SP([0-9]+)/)[1];
     }
     else
-      return $scope.selectedCoin;
+      return $scope.selectedCoin.symbol;
   }
   $scope.getDisplayedAbbreviation = getDisplayedAbbreviation;
 
   function convertDisplayedValueToSatoshi(value) {
-    if ($scope.selectedCoin == 'BTC') {
+    if ($scope.selectedCoin.symbol == 'BTC') {
       return Math.ceil(value * 100000);
-    } else if ($scope.selectedCoin.indexOf('SP') == 0) {
+    } else if ($scope.selectedCoin.symbol.indexOf('SP') == 0) {
       for (var i in $scope.currencyList) {
-        if ($scope.currencyList[i].symbol == $scope.selectedCoin) {
+        if ($scope.currencyList[i].symbol == $scope.selectedCoin.symbol) {
           if ($scope.currencyList[i].property_type == 1)
             return Math.ceil(value);
           else
@@ -65,22 +78,6 @@ function WalletSendAssetsController($modal, $scope, $http, $q, userService) {
     }
   }
 
-  $scope.addressList = getAddressesWithPrivkey();
-  $scope.selectedAddress = $scope.addressList[0];
-  $scope.minerFees = formatCurrencyInFundamentalUnit(0.0001, 'wtom');
-
-  function getAddressesWithPrivkey() {
-    var addresses = [];
-    userService.getAllAddresses().map(function(e, i, a) {
-      if (e.privkey && e.privkey.length == 58) {
-        addresses.push(e.address);
-      }
-    }
-    );
-    if (addresses.length == 0)
-      addresses = ['Could not find any addresses with attached private keys!'];
-    return addresses;
-  }
 
   // [ Retrieve Balances ]
   $scope.balanceData = [0];
@@ -88,7 +85,7 @@ function WalletSendAssetsController($modal, $scope, $http, $q, userService) {
 
   $scope.setBalance = function() {
     $scope.balanceData = [0];
-    var coin = $scope.selectedCoin;
+    var coin = $scope.selectedCoin.symbol;
     var address = $scope.selectedAddress;
     if (address || coin) {
       for (var i = 0; i < addrListBal.length; i++) {
@@ -294,7 +291,7 @@ function WalletSendAssetsController($modal, $scope, $http, $q, userService) {
     var balance = +$scope.balanceData[0];
     var btcbalance = +$scope.balanceData[1];
 
-    var coin = $scope.selectedCoin;
+    var coin = $scope.selectedCoin.symbol;
     var address = $scope.selectedAddress;
     var sendTo = $scope.sendTo
     var required = [coin, address, sendAmount, sendTo, minerFees, balance, btcbalance, $scope.sendForm.$valid];

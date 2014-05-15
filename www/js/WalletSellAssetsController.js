@@ -1,4 +1,4 @@
-function WalletSellAssetsController($modal, $scope, $http, $q, userService) {
+function WalletSellAssetsController($modal, $scope, $http, $q, userService, transactionService) {
   // [ Form Validation]
 
   $scope.showErrors = false;
@@ -17,36 +17,16 @@ function WalletSellAssetsController($modal, $scope, $http, $q, userService) {
       $scope.selectedCoin = e;
   });
 
-  $scope.addressList = getAddressesWithPrivkey();
+  $scope.addressList = userService.getAddressesWithPrivkey($scope.selectedCoin.addresses);
   $scope.selectedAddress = $scope.addressList[0];
 
   $scope.$watch('selectedCoin', function() {
-    $scope.addressList = getAddressesWithPrivkey();
+    $scope.addressList = userService.getAddressesWithPrivkey($scope.selectedCoin.addresses);;
     $scope.selectedAddress = $scope.addressList[0];
     $scope.setBalance();
   });
 
-  function getAddressesWithPrivkey() {
-    var addresses = [];
-    userService.getAllAddresses().map(function(e, i, a) {
-      if (e.privkey && e.privkey.length == 58) {
-        addresses.push(e.address);
-      }
-    }
-    );
-    if (addresses.length == 0)
-      addresses = ['Could not find any addresses with attached private keys!']
-    else {
-      addresses.map(function(e, i, a) {
-        if ($scope.selectedCoin.addresses.indexOf(e) == -1)
-          addresses.splice(i, 1);
-      }
-      );
-      if (addresses.length == 0)
-        addresses = ['You have no addresses with a balance on the selected coin!'];
-    }
-    return addresses;
-  }
+  $scope.minerFees = formatCurrencyInFundamentalUnit(0.0001, 'wtom');
 
   // [ Retrieve Balances ]
   $scope.currencyUnit = 'stom'; // satoshi to millibitt

@@ -1,4 +1,33 @@
 //global services go here
+angular.module('omniwallet').factory('transactionService',['$scope',function($scope){
+  var service = {
+    addrListBal : [],
+    setBalance :function(coin,address,addrBalList) {
+      var balanceData = [0];
+      if (address || coin) {
+        for (var i = 0; i < addrListBal.length; i++) {
+          if (addrListBal[i].address == address) {
+            for (var k = 0; k < service.addrListBal[i].balance.length; k++) {
+              if (service.addrListBal[i].balance[k].symbol == coin) {
+                $scope.balanceData[0] = service.addrListBal[i].balance[k].value;
+              }
+              if (service.addrListBal[i].balance[k].symbol == 'BTC') {
+                $scope.balanceData[1] = service.addrListBal[i].balance[k].value;
+              }
+            }
+          }
+        }
+      }
+      
+      return balanceData;
+    }
+    
+  };
+  
+  return service;
+  
+}]);
+
 angular.module('omniwallet').factory('balanceService', ['$http', '$q', function($http, $q) {
     var cache = [];
     var service = {
@@ -90,6 +119,30 @@ angular.module('omniwallet').factory('userService', ['$rootScope', '$http', '$in
 
       getAllAddresses: function() {
         return service.data.wallet.addresses;
+      },
+      
+      getAddressesWithPrivkey: function(addressFilter) {
+        var addresses = service.data.wallet.addresses.filter(function(e) {
+          if (e.privkey && e.privkey.length == 58) {
+            return e.address;
+          }
+        });
+        
+        if (addresses.length == 0)
+          addresses = ['Could not find any addresses with attached private keys!'];
+        else {
+          
+          if(addressFilter){
+            addresses = addresses.filter(function(e) {
+              if (addressFilter.indexOf(e) > -1)
+                return e;
+            });
+            if (addresses.length == 0)
+              addresses = ['You have no addresses with a balance on the selected coin!'];
+          }
+        }
+        
+        return addresses
       },
 
       getCurrencies: function() {

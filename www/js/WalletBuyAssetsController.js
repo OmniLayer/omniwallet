@@ -1,4 +1,4 @@
-function WalletBuyAssetsController($modal, $scope, $http, $q, userService) {
+function WalletBuyAssetsController($modal, $scope, $http, $q, userService, transactionService) {
   // [ Form Validation]
 
   $scope.showErrors = false;
@@ -6,24 +6,24 @@ function WalletBuyAssetsController($modal, $scope, $http, $q, userService) {
   // [ Template Initialization ]
 
   $scope.currencyList = userService.getCurrencies(); // [{symbol: 'BTC', addresses:[], name: 'BTC'}, {symbol: 'MSC', addresses:[], name: 'MSC'}, {symbol: 'TMSC', addresses:[], name: 'TMSC'}]
-  $scope.selectedCoin = $scope.currencyList[0].symbol
+  $scope.selectedCoin = $scope.currencyList[0];
 
-  $scope.addressList = getAddressesWithPrivkey()
-  $scope.selectedAddress = $scope.addressList[0]
+  $scope.currencyList.forEach(function(e, i) {
+    if (e.symbol == "MSC")
+      $scope.selectedCoin = e;
+  });
 
-  function getAddressesWithPrivkey() {
-    var addresses = []
-    userService.getAllAddresses().map(function(e, i, a) {
-      if (e.privkey && e.privkey.length == 58) {
-        addresses.push(e.address);
-      }
-    }
-    );
-    if (addresses.length == 0)
-      addresses = ['Could not find any addresses with attached private keys!']
-    return addresses
-  }
+  $scope.addressList = userService.getAddressesWithPrivkey($scope.selectedCoin.addresses);
+  $scope.selectedAddress = $scope.addressList[0];
 
+  $scope.$watch('selectedCoin', function() {
+    $scope.addressList = userService.getAddressesWithPrivkey($scope.selectedCoin.addresses);
+    $scope.selectedAddress = $scope.addressList[0];
+    $scope.setBalance();
+  });
+
+  $scope.minerFees = formatCurrencyInFundamentalUnit(0.0001, 'wtom');
+  
   // [ Retrieve Balances ]
   $scope.currencyUnit = 'stom' // satoshi to millibitt
   $scope.amountUnit = 'mtow'
@@ -31,24 +31,7 @@ function WalletBuyAssetsController($modal, $scope, $http, $q, userService) {
   var addrListBal = [];
 
   $scope.setBalance = function() {
-    $scope.balanceData = [0];
-    var coin = $scope.selectedCoin;
-    var address = $scope.selectedAddress
-    if (address || coin) {
-      for (var i = 0; i < addrListBal.length; i++) {
-        if (addrListBal[i].address == address) {
-          for (var k = 0; k < addrListBal[i].balance.length; k++) {
-            if (addrListBal[i].balance[k].symbol == coin) {
-              $scope.balanceData[0] = addrListBal[i].balance[k].value
-              //console.log($scope.address, coin, $scope.balanceData, addrListBal[i].balance[k], k)
-            }
-            if (addrListBal[i].balance[k].symbol == 'BTC') {
-              $scope.balanceData[1] = addrListBal[i].balance[k].value
-            }
-          }
-        }
-      }
-    }
+    transactionService.
   }
 
   $scope.addressList.forEach(function(e, i) {
@@ -234,7 +217,7 @@ function WalletBuyAssetsController($modal, $scope, $http, $q, userService) {
     var minerMinimum = 10000;
     var nonZeroValue = 1;
 
-    var coin = $scope.selectedCoin;
+    var coin = $scope.selectedCoin.symbol;
     var address = $scope.selectedAddress
     var saleHash = $scope.buySaleID
 
@@ -276,7 +259,7 @@ function WalletBuyAssetsController($modal, $scope, $http, $q, userService) {
         template: '\
           <div class="modal-body">\
               <h3 class="text-center"> Confirm send </h3>\
-              <h3>You\'re about to make an offer to buy ' + buyAmountMillis + ' m' + $scope.selectedCoin +
+              <h3>You\'re about to make an offer to buy ' + buyAmountMillis + ' m' + $scope.selectedCoin.symbol +
             ' with ' + minerFeesMillis + ' in fees </h3>\
             <p><br>\
             If the above is correct, please press Send Funds.\
