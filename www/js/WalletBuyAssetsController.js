@@ -31,7 +31,7 @@ function WalletBuyAssetsController($modal, $scope, $http, $q, userService, walle
   var addrListBal = [];
 
   $scope.addressList.forEach(function(e, i) {
-    var promise = getAddressData(e);
+    var promise = walletTradeService.getAddressData(e);
     promise.then(function(successData) {
       var successData = successData.data;
       addrListBal[i] = {
@@ -64,29 +64,7 @@ function WalletBuyAssetsController($modal, $scope, $http, $q, userService, walle
   
   $scope.setBalance = function() {
     $scope.balanceData = balanceService.getBalance($scope.selectedCoin.symbol,$scope.selectedAddress, addrListBal);
-  };
-
-  // [ Helper Functions ]
-
-  function validAddress(addr) {
-    try {
-      var checkValid = new Bitcoin.Address(addr);
-      return true
-    } catch (e) {
-      return false
-    }
-  }
-
-  function getAddressData(address) {
-    console.log('Addr request 5');
-    var promise = $http.post('/v1/address/addr/', {
-      'addr': address
-    });
-
-    return promise;
-  }
-
-  
+  };  
 
   // [ Buy Form Helpers ]
 
@@ -229,7 +207,7 @@ function WalletBuyAssetsController($modal, $scope, $http, $q, userService, walle
       error += 'make sure all fields are completely filled, '
     }
     //should be valid hash
-    //if( validAddress(sendTo) == false) {
+    //if( walletTradeService.validAddress(sendTo) == false) {
     //   error += 'make sure you are sending to a valid MSC/BTC address, '
     //}
     if (coin == 'BTC') {

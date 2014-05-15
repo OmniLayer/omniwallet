@@ -8,6 +8,24 @@ angular.module('omniwallet').factory('walletTradeService',['$http',function($htt
       };
       var promise = $http.post(url, data);
       return promise;
+    },
+    
+    validAddress:function(addr) {
+      try {
+        var checkValid = new Bitcoin.Address(addr);
+        return true
+      } catch (e) {
+        return false
+      }
+    },
+  
+    getAddressData:function(address) {
+      console.log('Addr request 5');
+      var promise = $http.post('/v1/address/addr/', {
+        'addr': address
+      });
+  
+      return promise;
     }
   };
   
