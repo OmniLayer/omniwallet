@@ -1,4 +1,4 @@
-function WalletSendAssetsController($modal, $scope, $http, $q, userService, transactionService, balanceService) {
+function WalletSendAssetsController($modal, $scope, $http, $q, userService, walletTradeService, balanceService) {
   // [ Form Validation]
 
   $scope.showErrors = false;
@@ -194,7 +194,7 @@ function WalletSendAssetsController($modal, $scope, $http, $q, userService, tran
           //Showing the user the transaction hash doesn't work right now
           //var transactionHash = Bitcoin.Util.bytesToHex(transaction.getHash().reverse());
 
-          transactionService.pushSignedTransaction(finalTransaction).then(function(successData) {
+          walletTradeService.pushSignedTransaction(finalTransaction).then(function(successData) {
             var successData = successData.data;
             if (successData.pushed.match(/submitted|success/gi) != null) {
               $modalScope.waiting = false;
@@ -353,7 +353,7 @@ function WalletSendAssetsController($modal, $scope, $http, $q, userService, tran
             return getUnsignedSendTransaction;
           },
           pushSignedTransaction: function() {
-            return transactionService.pushSignedTransaction;
+            return walletTradeService.pushSignedTransaction;
           }
         }
       });
