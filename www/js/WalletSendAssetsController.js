@@ -139,14 +139,7 @@ function WalletSendAssetsController($modal, $scope, $http, $q, userService, tran
     return promise;
   }
 
-  function pushSignedTransaction(signedTransaction) {
-    var url = '/v1/transaction/pushtx/';
-    var data = {
-      signedTransaction: signedTransaction
-    };
-    var promise = $http.post(url, data);
-    return promise;
-  }
+  
 
 
   // [ Send Form Helpers ]
@@ -201,7 +194,7 @@ function WalletSendAssetsController($modal, $scope, $http, $q, userService, tran
           //Showing the user the transaction hash doesn't work right now
           //var transactionHash = Bitcoin.Util.bytesToHex(transaction.getHash().reverse());
 
-          pushSignedTransaction(finalTransaction).then(function(successData) {
+          transactionService.pushSignedTransaction(finalTransaction).then(function(successData) {
             var successData = successData.data;
             if (successData.pushed.match(/submitted|success/gi) != null) {
               $modalScope.waiting = false;
@@ -360,7 +353,7 @@ function WalletSendAssetsController($modal, $scope, $http, $q, userService, tran
             return getUnsignedSendTransaction;
           },
           pushSignedTransaction: function() {
-            return pushSignedTransaction;
+            return transactionService.pushSignedTransaction;
           }
         }
       });

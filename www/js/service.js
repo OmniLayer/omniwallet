@@ -1,7 +1,14 @@
 //global services go here
-angular.module('omniwallet').factory('transactionService',[function(){
+angular.module('omniwallet').factory('transactionService',['$http',function($http){
   var service = {
-    
+    pushSignedTransaction : function(signedTransaction) {
+      var url = '/v1/transaction/pushtx/';
+      var data = {
+        signedTransaction: signedTransaction
+      };
+      var promise = $http.post(url, data);
+      return promise;
+    }
   };
   
   return service;
