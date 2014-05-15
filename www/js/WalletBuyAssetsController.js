@@ -25,26 +25,22 @@ function WalletBuyAssetsController($modal, $scope, $http, $q, userService, trans
   $scope.minerFees = formatCurrencyInFundamentalUnit(0.0001, 'wtom');
   
   // [ Retrieve Balances ]
-  $scope.currencyUnit = 'stom' // satoshi to millibitt
-  $scope.amountUnit = 'mtow'
+  $scope.currencyUnit = 'stom'; // satoshi to millibitt
+  $scope.amountUnit = 'mtow';
   $scope.balanceData = [0];
   var addrListBal = [];
-
-  $scope.setBalance = function() {
-    transactionService.
-  }
 
   $scope.addressList.forEach(function(e, i) {
     var promise = getAddressData(e);
     promise.then(function(successData) {
-      var successData = successData.data
+      var successData = successData.data;
       addrListBal[i] = {
         address: e,
         balance: successData.balance
-      }
-      $scope.setBalance()
+      };
+      $scope.setBalance();
     }, function(errorData) {
-      alert("We have encountered a problem accessing the server ... Please try again in a few minutes")
+      alert("We have encountered a problem accessing the server ... Please try again in a few minutes");
       //console.log('Error, no balance data found for ' + e + ' setting defaults...');
       var balances = [
         {
@@ -58,13 +54,17 @@ function WalletBuyAssetsController($modal, $scope, $http, $q, userService, trans
         {
           symbol: 'BTC',
           value: '0'
-        }]
+        }];
       addrListBal[i] = {
         address: e,
         balance: balances
-      }
+      };
     });
   });
+  
+  $scope.setBalance = function() {
+    transactionService.setBalance
+  }
 
   // [ Helper Functions ]
 

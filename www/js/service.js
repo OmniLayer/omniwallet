@@ -2,7 +2,7 @@
 angular.module('omniwallet').factory('transactionService',['$scope',function($scope){
   var service = {
     addrListBal : [],
-    setBalance :function(coin,address,addrBalList) {
+    setBalance :function(coin,address,addrListBal) {
       var balanceData = [0];
       if (address || coin) {
         for (var i = 0; i < addrListBal.length; i++) {

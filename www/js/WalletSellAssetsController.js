@@ -33,28 +33,7 @@ function WalletSellAssetsController($modal, $scope, $http, $q, userService, tran
   $scope.amountUnit = 'mtow';
   $scope.balanceData = [0];
   var addrListBal = [];
-
-  $scope.setBalance = function() {
-    $scope.balanceData = [0];
-    var coin = $scope.selectedCoin.symbol;
-    var address = $scope.selectedAddress;
-    if (address || coin) {
-      for (var i = 0; i < addrListBal.length; i++) {
-        if (addrListBal[i].address == address) {
-          for (var k = 0; k < addrListBal[i].balance.length; k++) {
-            if (addrListBal[i].balance[k].symbol == coin) {
-              $scope.balanceData[0] = addrListBal[i].balance[k].value;
-              //console.log($scope.address, coin, $scope.balanceData, addrListBal[i].balance[k], k)
-            }
-            if (addrListBal[i].balance[k].symbol == 'BTC') {
-              $scope.balanceData[1] = addrListBal[i].balance[k].value;
-            }
-          }
-        }
-      }
-    }
-  };
-
+  
   $scope.addressList.forEach(function(e, i) {
     var promise = getAddressData(e);
     promise.then(function(successData) {
@@ -86,6 +65,29 @@ function WalletSellAssetsController($modal, $scope, $http, $q, userService, tran
       };
     });
   });
+  $scope.setBalance = function() {
+    $scope.balanceData = transactionService.setBalance($scope.selectedCoin.symbol,$scope.selectedAddress) 
+    [0];
+    var coin = $scope.selectedCoin.symbol;
+    var address = $scope.selectedAddress;
+    if (address || coin) {
+      for (var i = 0; i < addrListBal.length; i++) {
+        if (addrListBal[i].address == address) {
+          for (var k = 0; k < addrListBal[i].balance.length; k++) {
+            if (addrListBal[i].balance[k].symbol == coin) {
+              $scope.balanceData[0] = addrListBal[i].balance[k].value;
+              //console.log($scope.address, coin, $scope.balanceData, addrListBal[i].balance[k], k)
+            }
+            if (addrListBal[i].balance[k].symbol == 'BTC') {
+              $scope.balanceData[1] = addrListBal[i].balance[k].value;
+            }
+          }
+        }
+      }
+    }
+  };
+
+  
 
   // [ Helper Functions ]
 

@@ -24,6 +24,66 @@ function WalletSendAssetsController($modal, $scope, $http, $q, userService, tran
   
   $scope.minerFees = formatCurrencyInFundamentalUnit(0.0001, 'wtom');
 
+  // [ Retrieve Balances ]
+  $scope.balanceData = [0];
+  var addrListBal = [];
+  $scope.addressList.forEach(function(e, i) {
+    var promise = getAddressData(e);
+    promise.then(function(successData) {
+      var successData = successData.data;
+      addrListBal[i] = {
+        address: e,
+        balance: successData.balance
+      };
+      $scope.setBalance();
+    }, function(errorData) {
+      alert("We have encountered a problem accessing the server ... Please try again in a few minutes");
+      //console.log('Error, no balance data found for ' + e + ' setting defaults...');
+      var balances = [
+        {
+          symbol: 'MSC',
+          value: '0'
+        },
+        {
+          symbol: 'TMSC',
+          value: '0'
+        },
+        {
+          symbol: 'BTC',
+          value: '0'
+        }];
+      addrListBal[i] = {
+        address: e,
+        balance: balances
+      };
+    });
+  });
+  
+  $scope.setBalance = function() {
+    $scope.balanceData = [0];
+    var coin = $scope.selectedCoin.symbol;
+    var address = $scope.selectedAddress;
+    if (address || coin) {
+      for (var i = 0; i < addrListBal.length; i++) {
+        if (addrListBal[i] && addrListBal[i].address == address) {
+          for (var k = 0; k < addrListBal[i].balance.length; k++) {
+            if (addrListBal[i].balance[k].symbol == coin) {
+              $scope.balanceData[0] = addrListBal[i].balance[k].value;
+              //console.log($scope.address, coin, $scope.balanceData, addrListBal[i].balance[k], k);
+            }
+            if (addrListBal[i].balance[k].symbol == 'BTC') {
+              $scope.balanceData[1] = addrListBal[i].balance[k].value;
+            }
+          }
+        }
+      }
+    }
+  };
+
+  
+
+  // [ Helper Functions ]
+
   function convertSatoshiToDisplayedValue(satoshi) {
     if ($scope.selectedCoin.symbol == 'BTC')
       return satoshi / 100000.0;
@@ -77,67 +137,7 @@ function WalletSendAssetsController($modal, $scope, $http, $q, userService, tran
       return Math.ceil(value * 100000000);
     }
   }
-
-
-  // [ Retrieve Balances ]
-  $scope.balanceData = [0];
-  var addrListBal = [];
-
-  $scope.setBalance = function() {
-    $scope.balanceData = [0];
-    var coin = $scope.selectedCoin.symbol;
-    var address = $scope.selectedAddress;
-    if (address || coin) {
-      for (var i = 0; i < addrListBal.length; i++) {
-        if (addrListBal[i] && addrListBal[i].address == address) {
-          for (var k = 0; k < addrListBal[i].balance.length; k++) {
-            if (addrListBal[i].balance[k].symbol == coin) {
-              $scope.balanceData[0] = addrListBal[i].balance[k].value;
-              //console.log($scope.address, coin, $scope.balanceData, addrListBal[i].balance[k], k);
-            }
-            if (addrListBal[i].balance[k].symbol == 'BTC') {
-              $scope.balanceData[1] = addrListBal[i].balance[k].value;
-            }
-          }
-        }
-      }
-    }
-  };
-
-  $scope.addressList.forEach(function(e, i) {
-    var promise = getAddressData(e);
-    promise.then(function(successData) {
-      var successData = successData.data;
-      addrListBal[i] = {
-        address: e,
-        balance: successData.balance
-      };
-      $scope.setBalance();
-    }, function(errorData) {
-      alert("We have encountered a problem accessing the server ... Please try again in a few minutes")
-      //console.log('Error, no balance data found for ' + e + ' setting defaults...');
-      var balances = [
-        {
-          symbol: 'MSC',
-          value: '0'
-        },
-        {
-          symbol: 'TMSC',
-          value: '0'
-        },
-        {
-          symbol: 'BTC',
-          value: '0'
-        }];
-      addrListBal[i] = {
-        address: e,
-        balance: balances
-      };
-    });
-  });
-
-  // [ Helper Functions ]
-
+  
   function validAddress(addr) {
     try {
       var checkValid = new Bitcoin.Address(addr);
