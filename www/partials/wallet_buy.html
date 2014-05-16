@@ -11,7 +11,7 @@
       <div class="form-inline">
           <select class="form-control" ng-model="selectedCoin"
             ng-options="currency as currency.name for currency in currencyBuyList"
-            ng-change="setBalance()" ng-init="selectedCoin = currencyList[global.buyOffer.currencyId]" disabled>
+            ng-change="setBalance()" ng-init="selectedCoin = currencyList[global.buyOffer.currencyId]"  ng-disabled="true">
             <option value=""> -- Choose Coin -- </option>
           </select>
         </div> 
