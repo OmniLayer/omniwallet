@@ -128,9 +128,9 @@ angular.module('omniwallet').factory('userService', ['$rootScope', '$http', '$in
       
       getAddressesWithPrivkey: function(addressFilter) {
         var addresses = service.data.wallet.addresses.filter(function(e) {
-          if (e.privkey && e.privkey.length == 58) {
-            return e.address;
-          }
+          return e.privkey && e.privkey.length == 58;
+        }).map(function(e){
+          return e.address;
         });
         
         if (addresses.length == 0)
@@ -139,8 +139,7 @@ angular.module('omniwallet').factory('userService', ['$rootScope', '$http', '$in
           
           if(addressFilter){
             addresses = addresses.filter(function(e) {
-              if (addressFilter.indexOf(e) > -1)
-                return e;
+              return addressFilter.indexOf(e) > -1;
             });
             if (addresses.length == 0)
               addresses = ['You have no addresses with a balance on the selected coin!'];
