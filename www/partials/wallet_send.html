@@ -17,7 +17,7 @@
         <h4 class="text-justify" >Choose coin:</h4>
         <div class="form-inline">
             <select name="coin" class="form-control" ng-model="selectedCoin"
-              ng-options="currency.symbol as currency.name for currency in currencyList"
+              ng-options="currency as currency.name for currency in currencyList"
               ng-change="setBalance()" ng-init="setBalance()" required>
               <option value=""> -- Choose Coin -- </option>
             </select>
