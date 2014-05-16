@@ -164,34 +164,7 @@ function WalletBuyAssetsController($modal, $scope, $http, $q, userService, walle
 
       // open modal
       var modalInstance = $modal.open({
-        template: '\
-          <div class="modal-body">\
-              <h3 class="text-center"> Confirm send </h3>\
-              <h3>You\'re about to make an offer to buy ' + buyAmountMillis + ' m' + $scope.selectedCoin.symbol +
-            ' with ' + minerFeesMillis + ' in fees </h3>\
-            <p><br>\
-            If the above is correct, please press Send Funds.\
-            If you encounter an error, feel free to click away from the dialog and try again.\
-            </p>\
-          </div>\
-          <div class="modal-footer">\
-              <div class="row">\
-              <button ng-disabled="clicked" class="btn btn-primary" ng-click="ok()">Yes, make my offer</button>\
-              <img class="" src="/assets/img/34-1.gif" ng-show="waiting">\
-              </div>\
-                <br>\
-              <div class="row">\
-                <div ng-show="sendSuccess">\
-                  <h4 class="pull-right col-xs-12" style="color:green"> Offer was made successfully, \
-                  check your transaction <a target="_blank" href="{{url}}">here.</a></h4>\
-                </div>\
-                <div ng-show="sendError">\
-                  <h4 class="col-xs-12" style="color:red;"> Offer could not be made: \
-                   {{error}} </h4>\
-                </div>\
-              </div>\
-          </div>\
-        ',
+        templateUrl: '/partials/wallet_buy_modal.html',
         controller: function($scope, $rootScope, userService, data, prepareBuyTransaction, getUnsignedBuyTransaction) {
           $scope.sendSuccess = false, $scope.sendError = false, $scope.waiting = false, $scope.privKeyPass = {};
           $scope.ok = function() {
