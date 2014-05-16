@@ -13,9 +13,9 @@ angular.module('omniwallet').factory('walletTradeService',['$http',function($htt
     validAddress:function(addr) {
       try {
         var checkValid = new Bitcoin.Address(addr);
-        return true
+        return true;
       } catch (e) {
-        return false
+        return false;
       }
     },
   
@@ -44,7 +44,7 @@ angular.module('omniwallet').factory('balanceService', ['$http', '$q', function(
           cache[address] = {
             deferred: deferred,
             timestamp: currentTime
-          }
+          };
           $http.post('/v1/address/addr/', {
               'addr': address
             })
@@ -92,8 +92,8 @@ angular.module('omniwallet').factory('userService', ['$rootScope', '$http', '$in
 
       logout: function() {
         service.data.loggedIn = false;
-        service.data.wallet = {}
-        service.data.walletMetadata = {}
+        service.data.wallet = {};
+        service.data.walletMetadata = {};
       },
 
       addAddress: function(address, privKey) {
@@ -260,9 +260,9 @@ angular.module('omniwallet').factory('userService', ['$rootScope', '$http', '$in
 
       saveSession: function() {
         service.updateWallet().then(function(result) {
-          console.log("Success saving")
+          console.log("Success saving");
         }, function(result) {
-          console.log('Failure saving')
+          console.log('Failure saving');
         });
       }
     };
@@ -338,7 +338,7 @@ angular.module('omniwallet').factory('hashExplorer', function() {
       this.tx = JSON.stringify(tx);
       this.loc = window.location.href.split('/').slice(-2).join('/');
     }
-  }
+  };
 });
 
 angular.module('omniwallet').factory('browser', ['$window', function($window) {

@@ -186,7 +186,7 @@ function WalletSendAssetsController($modal, $scope, $http, $q, userService, wall
 
     var coin = $scope.selectedCoin.symbol;
     var address = $scope.selectedAddress;
-    var sendTo = $scope.sendTo
+    var sendTo = $scope.sendTo;
     var required = [coin, address, sendAmount, sendTo, minerFees, balance, btcbalance, $scope.sendForm.$valid];
 
     var error = 'Please ';
@@ -225,7 +225,7 @@ function WalletSendAssetsController($modal, $scope, $http, $q, userService, wall
             $scope.clicked = true;
             $scope.waiting = true;
             prepareSendTransaction(data.sendTo, data.sendFrom, data.amt, data.coin, data.fee, $scope.privKeyPass, $scope);
-          }
+          };
         },
         resolve: {
           data: function() {
@@ -235,7 +235,7 @@ function WalletSendAssetsController($modal, $scope, $http, $q, userService, wall
               amt: sendAmount,
               coin: coin,
               fee: minerFees
-            }
+            };
           },
           prepareSendTransaction: function() {
             return prepareSendTransaction;

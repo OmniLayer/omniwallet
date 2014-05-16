@@ -86,7 +86,7 @@ function WalletSellAssetsController($modal, $scope, $http, $q, userService, wall
             $modalScope.waiting = false;
             $modalScope.sendError = true;
             if (errorData.message)
-              $modalScope.error = 'Server error: ' + errorData.message
+              $modalScope.error = 'Server error: ' + errorData.message;
             else 
               if (errorData.data)
                 $modalScope.error = 'Server error: ' + errorData.data;
@@ -123,7 +123,7 @@ function WalletSellAssetsController($modal, $scope, $http, $q, userService, wall
     }, function(errorData) {
       $modalScope.sendError = true;
       if (errorData.message)
-        $modalScope.error = 'Server error: ' + errorData.message
+        $modalScope.error = 'Server error: ' + errorData.message;
       else 
         if (errorData.data)
           $modalScope.error = 'Server error: ' + errorData.data;
