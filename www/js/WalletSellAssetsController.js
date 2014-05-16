@@ -185,36 +185,7 @@ function WalletSellAssetsController($modal, $scope, $http, $q, userService, wall
 
       // open modal
       var modalInstance = $modal.open({
-        template: '\
-          <div class="modal-body">\
-              <h3 class="text-center"> Confirm sale order </h3>\
-              <h3>You\'re about to put ' + saleAmountMillis + 'm' + $scope.selectedCoin.symbol +
-                        ' on sale at a price of ' + salePricePerCoin + ' BTC per ' + $scope.selectedCoin.symbol +
-                ', plus charge ' + buyersFeeMillis + ' in fees over ' +
-            $scope.saleBlocks + ' blocks.</h3>\
-            <p><br>\
-            If the above is correct, please press Send Funds.\
-            If you encounter an error, feel free to click away from the dialog and try again.\
-            </p>\
-          </div>\
-          <div class="modal-footer">\
-              <div class="row">\
-              <button ng-disabled="clicked" class="btn btn-primary" ng-click="ok()">Yes, create this sale</button>\
-              <img class="" src="/assets/img/34-1.gif" ng-show="waiting">\
-              </div>\
-                <br>\
-              <div class="row">\
-                <div ng-show="sendSuccess">\
-                  <h4 class="pull-right col-xs-12" style="color:green"> Sale created successfully, \
-                  check your transaction <a target="_blank" href="{{url}}">here.</a></h4>\
-                </div>\
-                <div ng-show="sendError">\
-                  <h4 class="col-xs-12" style="color:red;"> Sale not created: \
-                   {{error}} </h4>\
-                </div>\
-              </div>\
-          </div>\
-        ',
+        templateUrl: '/partials/wallet_sale_modal.html',
         controller: function($scope, $rootScope, userService, data, prepareSaleTransaction, getUnsignedSaleTransaction) {
           $scope.sendSuccess = false, $scope.sendError = false, $scope.waiting = false, $scope.privKeyPass = {};
           $scope.ok = function() {
