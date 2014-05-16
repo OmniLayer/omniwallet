@@ -218,33 +218,7 @@ function WalletSendAssetsController($modal, $scope, $http, $q, userService, wall
       $scope.showErrors = false;
       // open modal
       var modalInstance = $modal.open({
-        template: '\
-          <div class="modal-body">\
-              <h3 class="text-center"> Confirm send </h3>\
-              <h3>You\'re about to send ' + convertSatoshiToDisplayedValue(sendAmount) + ' ' + getDisplayedAbbreviation() +
-                ' plus ' + $scope.minerFees + ' mBTC in fees to ' + $scope.sendTo + '</h3>\
-            <p><br>\
-            If the above is correct, please press Send Funds.\
-            If you encounter an error, feel free to click away from the dialog and try again.\
-            </p>\
-          <div class="modal-footer">\
-              <div class="row">\
-              <button ng-disabled="clicked" class="btn btn-primary" ng-click="ok()">Yes, send my funds</button>\
-              <img class="" src="/assets/img/34-1.gif" ng-show="waiting">\
-              </div>\
-                <br>\
-              <div class="row">\
-                <div ng-show="sendSuccess">\
-                  <h4 class="pull-right col-xs-12" style="color:green"> Funds were sent successfully, \
-                  check your transaction <a target="_blank" href="{{url}}">here.</a></h4>\
-                </div>\
-                <div ng-show="sendError">\
-                  <h4 class="col-xs-12" style="color:red;"> Funds could not be sent: \
-                   {{error}} </h4>\
-                </div>\
-              </div>\
-          </div>\
-        ',
+        templateUrl: '/partials/wallet_send_modal.html',
         controller: function($scope, $rootScope, userService, data, prepareSendTransaction, getUnsignedSendTransaction) {
           $scope.sendSuccess = false, $scope.sendError = false, $scope.waiting = false, $scope.privKeyPass = {};
           $scope.ok = function() {
