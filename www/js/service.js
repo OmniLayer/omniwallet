@@ -146,7 +146,7 @@ angular.module('omniwallet').factory('userService', ['$rootScope', '$http', '$in
           }
         }
         
-        return addresses
+        return addresses;
       },
 
       getCurrencies: function() {
