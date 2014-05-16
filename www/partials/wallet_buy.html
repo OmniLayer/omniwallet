@@ -10,7 +10,7 @@
       <h4 class="text-justify" >Buy type of coin:</h4>
       <div class="form-inline">
           <select class="form-control" ng-model="selectedCoin"
-            ng-options="currency as currency.name for currency in currencyList"
+            ng-options="currency as currency.name for currency in currencyBuyList"
             ng-change="setBalance()" ng-init="selectedCoin = currencyList[global.buyOffer.currencyId]" disabled>
             <option value=""> -- Choose Coin -- </option>
           </select>
