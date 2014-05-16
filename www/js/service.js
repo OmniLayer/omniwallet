@@ -62,25 +62,6 @@ angular.module('omniwallet').factory('balanceService', ['$http', '$q', function(
           });
           return deferred.promise;
         }
-      },
-      getBalance:function(coin,address,addrListBal) {
-        var balanceData = [0];
-        if (address || coin) {
-          for (var i = 0; i < addrListBal.length; i++) {
-            if (addrListBal[i].address == address) {
-              for (var k = 0; k < addrListBal[i].balance.length; k++) {
-                if (addrListBal[i].balance[k].symbol == coin) {
-                  balanceData[0] = addrListBal[i].balance[k].value;
-                }
-                if (addrListBal[i].balance[k].symbol == 'BTC') {
-                  balanceData[1] = addrListBal[i].balance[k].value;
-                }
-              }
-            }
-          }
-        }
-        
-        return balanceData;
       }
     };
     return service;

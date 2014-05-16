@@ -1,81 +1,19 @@
-function WalletSellAssetsController($modal, $scope, $http, $q, userService, walletTradeService, balanceService) {
-  // [ Form Validation]
+function WalletSellAssetsController($modal, $scope, $http, $q, userService, walletTradeService) {
 
-  $scope.showErrors = false;
 
   // [ Template Initialization ]
 
-  $scope.currencyList = userService.getCurrencies(); // [{symbol: 'BTC', addresses:[], name: 'BTC'}, {symbol: 'MSC', addresses:[], name: 'MSC'}, {symbol: 'TMSC', addresses:[], name: 'TMSC'}]
   $scope.currencySaleList = [{
       symbol: 'MSC',
       addresses: [],
       name: 'MSC'
     }];
-  $scope.selectedCoin = $scope.currencyList[0];
-  $scope.currencyList.forEach(function(e, i) {
-    if (e.symbol == "MSC")
-      $scope.selectedCoin = e;
-  });
-
-  $scope.addressList = userService.getAddressesWithPrivkey($scope.selectedCoin.addresses);
-  $scope.selectedAddress = $scope.addressList[0];
-
-  $scope.$watch('selectedCoin', function() {
-    $scope.addressList = userService.getAddressesWithPrivkey($scope.selectedCoin.addresses);;
-    $scope.selectedAddress = $scope.addressList[0];
-    $scope.setBalance();
-  });
-
-  $scope.minerFees = formatCurrencyInFundamentalUnit(0.0001, 'wtom');
-
+    
   // [ Retrieve Balances ]
   $scope.currencyUnit = 'stom'; // satoshi to millibitt
   $scope.amountUnit = 'mtow';
-  $scope.balanceData = [0];
-  var addrListBal = [];
+ 
   
-  $scope.addressList.forEach(function(e, i) {
-    var promise = walletTradeService.getAddressData(e);
-    promise.then(function(successData) {
-      var successData = successData.data;
-      addrListBal[i] = {
-        address: e,
-        balance: successData.balance
-      };
-      $scope.setBalance();
-    }, function(errorData) {
-      alert("We have encountered a problem accessing the server ... Please try again in a few minutes");
-      //console.log('Error, no balance data found for ' + e + ' setting defaults...');
-      var balances = [
-        {
-          symbol: 'MSC',
-          value: '0'
-        },
-        {
-          symbol: 'TMSC',
-          value: '0'
-        },
-        {
-          symbol: 'BTC',
-          value: '0'
-        }];
-      addrListBal[i] = {
-        address: e,
-        balance: balances
-      };
-    });
-  });
-  $scope.setBalance = function() {
-    $scope.balanceData = balanceService.getBalance($scope.selectedCoin.symbol,$scope.selectedAddress, addrListBal);
-  };
-
-  
-
-  
-
-
-
-
   // [ Sale Form Helpers ]
 
   function getUnsignedSaleTransaction(sellerAddress, pubKey, saleAmount, salePrice, buyersFee, fee, saleBlocks, currency) {
