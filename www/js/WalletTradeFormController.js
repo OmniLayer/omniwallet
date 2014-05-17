@@ -9,7 +9,7 @@ function WalletTradeFormController($scope, userService, walletTradeService) {
   
   $scope.selectedCoin = $scope.currencyList[0];
   $scope.currencyList.forEach(function(e, i) {
-    if (e.symbol == "MSC")
+    if (e.symbol == "TMSC")
       $scope.selectedCoin = e;
   });
 
