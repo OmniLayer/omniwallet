@@ -4,9 +4,11 @@ function WalletSellAssetsController($modal, $scope, $http, $q, userService, wall
   // [ Template Initialization ]
 
   $scope.currencySaleList = $scope.currencyList.filter(function(currency){
-    return currency.symbol == 'MSC' || currency.symbol == 'TMSC';
+    if (currency.symbol == $scope.activeCurrencyPair[1] )
+      $scope.$parent.selectedCoin = currency;
+    return currency.symbol == $scope.activeCurrencyPair[1];
   });
- 
+
   
   // [ Sale Form Helpers ]
 
