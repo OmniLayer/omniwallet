@@ -1,142 +1,15 @@
-function WalletSellAssetsController($modal, $scope, $http, $q, userService) {
-  // [ Form Validation]
+function WalletSellAssetsController($modal, $scope, $http, $q, userService, walletTradeService) {
 
-  $scope.showErrors = false;
 
   // [ Template Initialization ]
 
-  $scope.currencyList = userService.getCurrencies(); // [{symbol: 'BTC', addresses:[], name: 'BTC'}, {symbol: 'MSC', addresses:[], name: 'MSC'}, {symbol: 'TMSC', addresses:[], name: 'TMSC'}]
-  $scope.currencySaleList = [{
-      symbol: 'MSC',
-      addresses: [],
-      name: 'MSC'
-    }];
-  $scope.selectedCoin = $scope.currencyList[0];
-  $scope.currencyList.forEach(function(e, i) {
-    if (e.symbol == "MSC")
-      $scope.selectedCoin = e;
+  $scope.currencySaleList = $scope.currencyList.filter(function(currency){
+    if (currency.symbol == $scope.activeCurrencyPair[1] )
+      $scope.$parent.selectedCoin = currency;
+    return currency.symbol == $scope.activeCurrencyPair[1];
   });
 
-  $scope.addressList = getAddressesWithPrivkey();
-  $scope.selectedAddress = $scope.addressList[0];
-
-  $scope.$watch('selectedCoin', function() {
-    $scope.addressList = getAddressesWithPrivkey();
-    $scope.selectedAddress = $scope.addressList[0];
-    $scope.setBalance();
-  });
-
-  function getAddressesWithPrivkey() {
-    var addresses = [];
-    userService.getAllAddresses().map(function(e, i, a) {
-      if (e.privkey && e.privkey.length == 58) {
-        addresses.push(e.address);
-      }
-    }
-    );
-    if (addresses.length == 0)
-      addresses = ['Could not find any addresses with attached private keys!']
-    else {
-      addresses.map(function(e, i, a) {
-        if ($scope.selectedCoin.addresses.indexOf(e) == -1)
-          addresses.splice(i, 1);
-      }
-      );
-      if (addresses.length == 0)
-        addresses = ['You have no addresses with a balance on the selected coin!'];
-    }
-    return addresses;
-  }
-
-  // [ Retrieve Balances ]
-  $scope.currencyUnit = 'stom'; // satoshi to millibitt
-  $scope.amountUnit = 'mtow';
-  $scope.balanceData = [0];
-  var addrListBal = [];
-
-  $scope.setBalance = function() {
-    $scope.balanceData = [0];
-    var coin = $scope.selectedCoin.symbol;
-    var address = $scope.selectedAddress;
-    if (address || coin) {
-      for (var i = 0; i < addrListBal.length; i++) {
-        if (addrListBal[i].address == address) {
-          for (var k = 0; k < addrListBal[i].balance.length; k++) {
-            if (addrListBal[i].balance[k].symbol == coin) {
-              $scope.balanceData[0] = addrListBal[i].balance[k].value;
-              //console.log($scope.address, coin, $scope.balanceData, addrListBal[i].balance[k], k)
-            }
-            if (addrListBal[i].balance[k].symbol == 'BTC') {
-              $scope.balanceData[1] = addrListBal[i].balance[k].value;
-            }
-          }
-        }
-      }
-    }
-  };
-
-  $scope.addressList.forEach(function(e, i) {
-    var promise = getAddressData(e);
-    promise.then(function(successData) {
-      var successData = successData.data;
-      addrListBal[i] = {
-        address: e,
-        balance: successData.balance
-      };
-      $scope.setBalance();
-    }, function(errorData) {
-      alert("We have encountered a problem accessing the server ... Please try again in a few minutes");
-      //console.log('Error, no balance data found for ' + e + ' setting defaults...');
-      var balances = [
-        {
-          symbol: 'MSC',
-          value: '0'
-        },
-        {
-          symbol: 'TMSC',
-          value: '0'
-        },
-        {
-          symbol: 'BTC',
-          value: '0'
-        }];
-      addrListBal[i] = {
-        address: e,
-        balance: balances
-      };
-    });
-  });
-
-  // [ Helper Functions ]
-
-  function validAddress(addr) {
-    try {
-      var checkValid = new Bitcoin.Address(addr);
-      return true;
-    } catch (e) {
-      return false;
-    }
-  }
-
-  function getAddressData(address) {
-    console.log('Addr request 5');
-    var promise = $http.post('/v1/address/addr/', {
-      'addr': address
-    });
-
-    return promise;
-  }
-
-  function pushSignedTransaction(signedTransaction) {
-    var url = '/v1/transaction/pushtx/';
-    var data = {
-      signedTransaction: signedTransaction
-    };
-    var promise = $http.post(url, data);
-    return promise;
-  }
-
-
+  
   // [ Sale Form Helpers ]
 
   function getUnsignedSaleTransaction(sellerAddress, pubKey, saleAmount, salePrice, buyersFee, fee, saleBlocks, currency) {
@@ -193,7 +66,7 @@ function WalletSellAssetsController($modal, $scope, $http, $q, userService) {
           //Showing the user the transaction hash doesn't work right now
           //var transactionHash = Bitcoin.Util.bytesToHex(transaction.getHash().reverse())
 
-          pushSignedTransaction(finalTransaction).then(function(successData) {
+          walletTradeService.pushSignedTransaction(finalTransaction).then(function(successData) {
             var successData = successData.data;
             if (successData.pushed.match(/submitted|success/gi) != null) {
               $modalScope.waiting = false;
@@ -209,7 +82,7 @@ function WalletSellAssetsController($modal, $scope, $http, $q, userService) {
             $modalScope.waiting = false;
             $modalScope.sendError = true;
             if (errorData.message)
-              $modalScope.error = 'Server error: ' + errorData.message
+              $modalScope.error = 'Server error: ' + errorData.message;
             else 
               if (errorData.data)
                 $modalScope.error = 'Server error: ' + errorData.data;
@@ -246,7 +119,7 @@ function WalletSellAssetsController($modal, $scope, $http, $q, userService) {
     }, function(errorData) {
       $modalScope.sendError = true;
       if (errorData.message)
-        $modalScope.error = 'Server error: ' + errorData.message
+        $modalScope.error = 'Server error: ' + errorData.message;
       else 
         if (errorData.data)
           $modalScope.error = 'Server error: ' + errorData.data;
@@ -304,42 +177,18 @@ function WalletSellAssetsController($modal, $scope, $http, $q, userService) {
         error += 'make sure your block timeframe is at least 1, ';
     }
     if (error.length < 8) {
-      $scope.showErrors = false;
+      $scope.$parent.showErrors = false;
 
       // open modal
       var modalInstance = $modal.open({
-        template: '\
-          <div class="modal-body">\
-              <h3 class="text-center"> Confirm sale order </h3>\
-              <h3>You\'re about to put ' + saleAmountMillis + 'm' + $scope.selectedCoin.symbol +
-                        ' on sale at a price of ' + salePricePerCoin + ' BTC per ' + $scope.selectedCoin.symbol +
-                ', plus charge ' + buyersFeeMillis + ' in fees over ' +
-            $scope.saleBlocks + ' blocks.</h3>\
-            <p><br>\
-            If the above is correct, please press Send Funds.\
-            If you encounter an error, feel free to click away from the dialog and try again.\
-            </p>\
-          </div>\
-          <div class="modal-footer">\
-              <div class="row">\
-              <button ng-disabled="clicked" class="btn btn-primary" ng-click="ok()">Yes, create this sale</button>\
-              <img class="" src="/assets/img/34-1.gif" ng-show="waiting">\
-              </div>\
-                <br>\
-              <div class="row">\
-                <div ng-show="sendSuccess">\
-                  <h4 class="pull-right col-xs-12" style="color:green"> Sale created successfully, \
-                  check your transaction <a target="_blank" href="{{url}}">here.</a></h4>\
-                </div>\
-                <div ng-show="sendError">\
-                  <h4 class="col-xs-12" style="color:red;"> Sale not created: \
-                   {{error}} </h4>\
-                </div>\
-              </div>\
-          </div>\
-        ',
+        templateUrl: '/partials/wallet_sale_modal.html',
         controller: function($scope, $rootScope, userService, data, prepareSaleTransaction, getUnsignedSaleTransaction) {
           $scope.sendSuccess = false, $scope.sendError = false, $scope.waiting = false, $scope.privKeyPass = {};
+          $scope.saleAmountMillis= data.saleAmountMillis,
+          $scope.selectedCoin=data.selectedCoin,
+          $scope.salePricePerCoin= data.price,
+          $scope.buyersFeeMillis= data.buyersFeeMillis;
+
           $scope.ok = function() {
             $scope.clicked = true;
             $scope.waiting = true;
@@ -357,7 +206,10 @@ function WalletSellAssetsController($modal, $scope, $http, $q, userService) {
               buyerfee: buyersFee,
               fee: minerFees,
               blocks: saleBlocks,
-              currency: coin
+              currency: coin,
+              saleAmountMillis: saleAmountMillis,
+              selectedCoin: $scope.selectedCoin,
+              buyersFeeMillis: buyersFeeMillis
             };
           },
           prepareSaleTransaction: function() {
@@ -367,14 +219,14 @@ function WalletSellAssetsController($modal, $scope, $http, $q, userService) {
             return getUnsignedSaleTransaction;
           },
           pushSignedTransaction: function() {
-            return pushSignedTransaction;
+            return walletTradeService.pushSignedTransaction;
           }
         }
       });
     } else {
       error += 'and try again.';
       $scope.error = error;
-      $scope.showErrors = true;
+      $scope.$parent.showErrors = true;
     }
   };
 }

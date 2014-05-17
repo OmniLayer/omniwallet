@@ -7,25 +7,22 @@
   <form name="buyForm" ng-submit="validateBuyForm(currencyUnit)">
   <div class="row">
     <div class="col-xs-6">
-      <h4 class="text-justify" >Buy type of coin:</h4>
+      <h4 class="text-justify" >Choose coin:</h4>
       <div class="form-inline">
-          <select class="form-control" ng-model="selectedCoin"
+          <select class="form-control" ng-model="$parent.selectedCoin"
             ng-options="currency as currency.name for currency in currencyList"
-            ng-change="setBalance()" ng-init="selectedCoin = currencyList[global.buyOffer.currencyId]" disabled>
+            ng-change="setBalance()" ng-init="$parent.selectedCoin = $parent.currencyList[global.buyOffer.currencyId]"  ng-disabled="true">
             <option value=""> -- Choose Coin -- </option>
           </select>
         </div> 
-      <h6 class="text-justify"> Please make sure this is the currency you intend to trade with.</h6> 
       <h4 class="text-justify" >Buy from address:</h4>
       <div class="form-inline">
-          <select class="form-control" ng-model="selectedAddress"
+          <select class="form-control" ng-model="$parent.selectedAddress"
             ng-options="address for address in addressList"
             ng-change="setBalance()" ng-init="setBalance()">
             <option value=""> -- Choose Address -- </option>
           </select>
         </div> 
-      <h6 class="text-justify"> Please make sure this is the address you are sending from.<br> 
-      Note that we allow you to only send from addresses with a valid private key. </h6>
     </div>
     <div class="col-xs-6"> 
       <br><br><br><br><br><br><br><br><br>
@@ -75,7 +72,7 @@
       <br>
       
       <div class="input-group">
-        <span class="input-group-addon"> Transaction/Miner fees (in {{currencyUnit[currencyUnit.length-1]}}BTC): </span>
+        <span class="input-group-addon"> Miner fees (in {{currencyUnit[currencyUnit.length-1]}}BTC): </span>
         <input name="fees" type="number" ng-model="minerFees" class="form-control" 
         placeholder="{{{ balance: 10000, symbol: currencyUnit } | cryptocurrency}} minimum" step="0.0001" required>
         <span class="input-group-addon" > 
