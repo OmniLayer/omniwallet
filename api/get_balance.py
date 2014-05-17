@@ -45,7 +45,10 @@ def get_btc_balances( addr ):
   elif out == '':
     return None, 'No bitcoin balance available.  Invalid address?: ' + addr
   else:
-    balances[ 'value' ] = int( json.loads( out )[0][ 'paid' ])
+    try:
+        balances[ 'value' ] = int( json.loads( out )[0][ 'paid' ])
+    except ValueError:
+        balances[ 'value' ] = int(-666)
 
   return ( [ balances ], None )
 
