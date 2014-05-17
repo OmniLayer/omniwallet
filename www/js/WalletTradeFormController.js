@@ -29,34 +29,31 @@ function WalletTradeFormController($scope, userService, walletTradeService) {
   $scope.balanceData = [0];
   var addrListBal = [];
   $scope.addressList.forEach(function(e, i) {
+    var balances = [
+      {
+        symbol: 'MSC',
+        value: '0'
+      },
+      {
+        symbol: 'TMSC',
+        value: '0'
+      },
+      {
+        symbol: 'BTC',
+        value: '0'
+      }];
+    addrListBal[i] = {
+      address: e,
+      balance: balances
+    };
     var promise = walletTradeService.getAddressData(e);
     promise.then(function(successData) {
       var successData = successData.data;
-      addrListBal[i] = {
-        address: e,
-        balance: successData.balance
-      };
+      addrListBal[i].balance =  successData.balance;
       $scope.setBalance();
     }, function(errorData) {
       alert("We have encountered a problem accessing the server ... Please try again in a few minutes");
       //console.log('Error, no balance data found for ' + e + ' setting defaults...');
-      var balances = [
-        {
-          symbol: 'MSC',
-          value: '0'
-        },
-        {
-          symbol: 'TMSC',
-          value: '0'
-        },
-        {
-          symbol: 'BTC',
-          value: '0'
-        }];
-      addrListBal[i] = {
-        address: e,
-        balance: balances
-      };
     });
   });
   
