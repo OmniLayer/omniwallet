@@ -179,7 +179,7 @@ function WalletSellAssetsController($modal, $scope, $http, $q, userService, wall
         error += 'make sure your block timeframe is at least 1, ';
     }
     if (error.length < 8) {
-      $scope.showErrors = false;
+      $parent.showErrors = false;
 
       // open modal
       var modalInstance = $modal.open({
@@ -220,7 +220,7 @@ function WalletSellAssetsController($modal, $scope, $http, $q, userService, wall
     } else {
       error += 'and try again.';
       $scope.error = error;
-      $scope.showErrors = true;
+      $parent.showErrors = true;
     }
   };
 }

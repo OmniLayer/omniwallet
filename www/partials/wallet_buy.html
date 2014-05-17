@@ -9,16 +9,16 @@
     <div class="col-xs-6">
       <h4 class="text-justify" >Buy type of coin:</h4>
       <div class="form-inline">
-          <select class="form-control" ng-model="selectedCoin"
+          <select class="form-control" ng-model="$parent.selectedCoin"
             ng-options="currency as currency.name for currency in currencyBuyList"
-            ng-change="setBalance()" ng-init="selectedCoin = currencyList[global.buyOffer.currencyId]"  ng-disabled="true">
+            ng-change="setBalance()" ng-init="$parent.selectedCoin = $parent.currencyList[global.buyOffer.currencyId]"  ng-disabled="true">
             <option value=""> -- Choose Coin -- </option>
           </select>
         </div> 
       <h6 class="text-justify"> Please make sure this is the currency you intend to trade with.</h6> 
       <h4 class="text-justify" >Buy from address:</h4>
       <div class="form-inline">
-          <select class="form-control" ng-model="selectedAddress"
+          <select class="form-control" ng-model="$parent.selectedAddress"
             ng-options="address for address in addressList"
             ng-change="setBalance()" ng-init="setBalance()">
             <option value=""> -- Choose Address -- </option>
