@@ -172,6 +172,10 @@ function WalletBuyAssetsController($modal, $scope, $http, $q, userService, walle
         templateUrl: '/partials/wallet_buy_modal.html',
         controller: function($scope, $rootScope, userService, data, prepareBuyTransaction, getUnsignedBuyTransaction) {
           $scope.sendSuccess = false, $scope.sendError = false, $scope.waiting = false, $scope.privKeyPass = {};
+          $scope.buyAmountMillis= buyAmountMillis,
+          $scope.selectedCoin= data.selectedCoin,
+          $scope.minerFeesMillis= data.minerFeesMillis;
+          
           $scope.ok = function() {
             $scope.clicked = true;
             $scope.waiting = true;
@@ -184,7 +188,10 @@ function WalletBuyAssetsController($modal, $scope, $http, $q, userService, walle
               buyer: address,
               amt: buyAmount,
               hash: saleHash,
-              fee: minerFees
+              fee: minerFees,
+              buyAmountMillis: buyAmountMillis,
+              selectedCoin: $scope.selectedCoin,
+              minerFeesMillis: minerFeesMillis
             };
           },
           prepareBuyTransaction: function() {
