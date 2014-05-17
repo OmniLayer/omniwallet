@@ -215,7 +215,7 @@ function WalletSendAssetsController($modal, $scope, $http, $q, userService, wall
         error += 'make sure your fee entry is at least 0.1 mBTC, ';
     }
     if (error.length < 8) {
-      $parent.showErrors = false;
+      $scope.$parent.showErrors = false;
       // open modal
       var modalInstance = $modal.open({
         templateUrl: '/partials/wallet_send_modal.html',
@@ -263,7 +263,7 @@ function WalletSendAssetsController($modal, $scope, $http, $q, userService, wall
     } else {
       error += 'and try again.';
       $scope.error = error;
-      $parent.showErrors = true;
+      $scope.$parent.showErrors = true;
     }
   };
 }

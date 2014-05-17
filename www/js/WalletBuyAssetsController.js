@@ -165,7 +165,7 @@ function WalletBuyAssetsController($modal, $scope, $http, $q, userService, walle
         error += 'make sure you have enough Bitcoin to cover your fees, ';
     }
     if (error.length < 8) {
-      $parent.showErrors = false;
+      $scope.$parent.showErrors = false;
 
       // open modal
       var modalInstance = $modal.open({
@@ -208,7 +208,7 @@ function WalletBuyAssetsController($modal, $scope, $http, $q, userService, walle
     } else {
       error += 'and try again.';
       $scope.error = error;
-      $parent.showErrors = true;
+      $scope.$parent.showErrors = true;
     }
   };
 
