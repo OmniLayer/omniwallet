@@ -219,8 +219,14 @@ function WalletSendAssetsController($modal, $scope, $http, $q, userService, wall
       // open modal
       var modalInstance = $modal.open({
         templateUrl: '/partials/wallet_send_modal.html',
-        controller: function($scope, $rootScope, userService, data, prepareSendTransaction, getUnsignedSendTransaction) {
+        controller: function($scope, $rootScope, userService, data, prepareSendTransaction, getUnsignedSendTransaction,convertSatoshiToDisplayedValue, getDisplayedAbbreviation) {
           $scope.sendSuccess = false, $scope.sendError = false, $scope.waiting = false, $scope.privKeyPass = {};
+          $scope.convertSatoshiToDisplayedValue=  convertSatoshiToDisplayedValue,
+          $scope.getDisplayedAbbreviation=  getDisplayedAbbreviation,
+          $scope.sendAmount= data.amt,
+          $scope.minerFees= data.fee,
+          $scope.sendTo= data.sendTo;
+          
           $scope.ok = function() {
             $scope.clicked = true;
             $scope.waiting = true;
@@ -245,6 +251,12 @@ function WalletSendAssetsController($modal, $scope, $http, $q, userService, wall
           },
           pushSignedTransaction: function() {
             return walletTradeService.pushSignedTransaction;
+          },
+          convertSatoshiToDisplayedValue: function() {
+            return $scope.convertSatoshiToDisplayedValue;
+          },
+          getDisplayedAbbreviation: function() {
+            return $scope.getDisplayedAbbreviation;
           }
         }
       });
