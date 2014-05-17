@@ -1,8 +1,5 @@
 function WalletBuyAssetsController($modal, $scope, $http, $q, userService, walletTradeService) {
     
-    // [ Retrieve Balances ]
-  $scope.currencyUnit = 'stom'; // satoshi to millibitt
-  $scope.amountUnit = 'mtow';
   
   // [ Buy Form Helpers ]
 

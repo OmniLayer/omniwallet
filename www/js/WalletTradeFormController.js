@@ -24,6 +24,8 @@ function WalletTradeFormController($scope, userService, walletTradeService) {
   $scope.minerFees = formatCurrencyInFundamentalUnit(0.0001, 'wtom');
 
   // [ Retrieve Balances ]
+  $scope.currencyUnit = 'stom'; // satoshi to millibitt
+  $scope.amountUnit = 'mtow';
   $scope.balanceData = [0];
   var addrListBal = [];
   $scope.addressList.forEach(function(e, i) {
@@ -61,7 +63,7 @@ function WalletTradeFormController($scope, userService, walletTradeService) {
   $scope.setBalance = function() {
     var coin = $scope.selectedCoin.symbol;
     var address = $scope.selectedAddress;
-    $scope.balanceData = [0];
+    $scope.balanceData = [0,0];
     if (address || coin) {
       for (var i = 0; i < addrListBal.length; i++) {
         if (addrListBal[i].address == address) {

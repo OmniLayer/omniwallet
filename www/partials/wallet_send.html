@@ -65,8 +65,9 @@
           <input name="fees" type="number" ng-model="minerFees" class="form-control" 
           placeholder="{{{ balance: 10000000, symbol: currencyUnit } | cryptocurrency}} minimum" step="0.01" required>
           <span class="input-group-addon" > 
-            Available Bitcoin: {{ balanceData[1] / 100000.0 }} mBTC
-            </span>
+          Available Bitcoin: {{ { balance: balanceData[1], symbol: currencyUnit } | cryptocurrency}}
+          {{currencyUnit[currencyUnit.length-1]}}BTC
+          </span>
         </div>
         <input ng-model="marked" ng-hide="true" ng-init="marked = false" type="checkbox"> 
       </div>
