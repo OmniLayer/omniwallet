@@ -3,7 +3,7 @@ function WalletBuyAssetsController($modal, $scope, $http, $q, userService, walle
 
   $scope.currencyBuyList = $scope.currencyList.filter(function(currency){
     if (currency.symbol == $scope.activeCurrencyPair[1] )
-      $scope.$parent.selectedCoin = currency;
+      $scope.$parent.$parent.selectedCoin = currency;
     return currency.symbol == $scope.activeCurrencyPair[1];
   });
 
