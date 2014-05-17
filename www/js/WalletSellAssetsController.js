@@ -3,13 +3,9 @@ function WalletSellAssetsController($modal, $scope, $http, $q, userService, wall
 
   // [ Template Initialization ]
 
-  var currencies = userService.getCurrencies();
-
-  currencies.forEach(function(e) { 
-    if (e.symbol == $scope.activeCurrencyPair[1])
-      $scope.selectedCoin = e
-  })
   $scope.currencySaleList = $scope.currencyList.filter(function(currency){
+    if (currency.symbol == $scope.activeCurrencyPair[1] )
+      $scope.$parent.selectedCoin = currency;
     return currency.symbol == $scope.activeCurrencyPair[1];
   });
 
