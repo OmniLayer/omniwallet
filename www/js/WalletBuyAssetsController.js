@@ -1,9 +1,4 @@
 function WalletBuyAssetsController($modal, $scope, $http, $q, userService, walletTradeService) {
-    // [ Template Initialization ]
-
-  $scope.currencyBuyList = $scope.currencyList.filter(function(currency){
-    return currency.symbol == 'MSC';
-  });
     
     // [ Retrieve Balances ]
   $scope.currencyUnit = 'stom'; // satoshi to millibitt
