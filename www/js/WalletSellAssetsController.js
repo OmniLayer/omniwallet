@@ -209,7 +209,8 @@ function WalletSellAssetsController($modal, $scope, $http, $q, userService, wall
               currency: coin,
               saleAmountMillis: saleAmountMillis,
               selectedCoin: $scope.selectedCoin,
-              buyersFeeMillis: buyersFeeMillis
+              buyersFeeMillis: buyersFeeMillis,
+              saleBlocks: saleBlocks
             };
           },
           prepareSaleTransaction: function() {
