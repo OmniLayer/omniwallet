@@ -35,7 +35,6 @@ def pushtx(signed_tx):
     # validate tx first
     ret=validate_tx(f.name)
     if ret != None:
-        f.close()
         return ret
     
     # broadcast
