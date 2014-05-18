@@ -142,7 +142,8 @@ def prepare_send_tx_for_signing(from_address, to_address, marker_address, curren
         try:
             inputs_total_value += int(utxo_split[i*12+7])
         except ValueError:
-            raise Exception('Error: parsing value from '+utxo_split[i*12+7])
+            info('Error parsing utxo, '+ str(utxo_split) )
+            raise Exception('Error: parsing inputs was invalid, do you have enough BTC?')
 
     inputs_outputs='/dev/stdout'
     for i in inputs:
