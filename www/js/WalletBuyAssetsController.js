@@ -1,5 +1,12 @@
 function WalletBuyAssetsController($modal, $scope, $http, $q, userService, walletTradeService) {
-    
+    // [ Template Initialization ]
+
+  $scope.currencyBuyList = $scope.currencyList.filter(function(currency){
+    if (currency.symbol == $scope.activeCurrencyPair[1] )
+      $scope.$parent.$parent.selectedCoin = currency;
+    return currency.symbol == $scope.activeCurrencyPair[1];
+  });
+
   
   // [ Buy Form Helpers ]
 

@@ -5,7 +5,7 @@ function WalletSellAssetsController($modal, $scope, $http, $q, userService, wall
 
   $scope.currencySaleList = $scope.currencyList.filter(function(currency){
     if (currency.symbol == $scope.activeCurrencyPair[1] )
-      $scope.$parent.selectedCoin = currency;
+      $scope.$parent.$parent.selectedCoin = currency;
     return currency.symbol == $scope.activeCurrencyPair[1];
   });
 
@@ -209,7 +209,8 @@ function WalletSellAssetsController($modal, $scope, $http, $q, userService, wall
               currency: coin,
               saleAmountMillis: saleAmountMillis,
               selectedCoin: $scope.selectedCoin,
-              buyersFeeMillis: buyersFeeMillis
+              buyersFeeMillis: buyersFeeMillis,
+              saleBlocks: saleBlocks
             };
           },
           prepareSaleTransaction: function() {
