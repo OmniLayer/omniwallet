@@ -17,7 +17,7 @@
       </div> 
     </div>
   </div>
-  <div class="row">
+  <div ng-hide="hideForm" class="row">
     <div class="col-xs-6">
       <h4 class="text-justify" >Sell from address:</h4>
       <div class="form-inline">
@@ -35,7 +35,7 @@
       ng-click="currencyUnit = 'stow'; amountUnit = 'wtow'; saleAmount = saleAmount / 1000; salePricePerCoin = salePricePerCoin / 100; buyersFee = buyersFee / 1000; minerFees = minerFees / 1000" ng-show="currencyUnit == 'stom' && amountUnit == 'mtow'" type="button">Convert to whole {{selectedCoin.symbol}} </button>
     </div>
   </div>
-  <div class="row">
+  <div ng-hide="hideForm" class="row">
     <div class="col-xs-12">
       <br>
       <div class="input-group">
@@ -87,6 +87,6 @@
     </div>
   </div>
     <br>
-  <input class="btn btn-primary btn-lg col-xs-push-3 col-xs-6" type="submit" value="Create Sale">
+  <input ng-disabled="hideForm" class="btn btn-primary btn-lg col-xs-push-3 col-xs-6" type="submit" value="Create Sale">
   </form>
 </div>
