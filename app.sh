@@ -45,7 +45,7 @@ do
 	if [[ "$OSTYPE" == "darwin"* ]]; then
 	  uwsgi -s 127.0.0.1:1088 -p 8 -M --vhost --enable-threads --logto $DATADIR/apps.log &
 	else
-	  uwsgi -s 127.0.0.1:1088 -p 8 -M --vhost --enable-threads --plugin python --logto $DATADIR/apps.log &
+	  uwsgi -s 127.0.0.1:1088 -p 8 -M --vhost --enable-threads --plugin python -l 1024 --logto $DATADIR/apps.log &
 	fi
 	SERVER_PID=$!
     fi
