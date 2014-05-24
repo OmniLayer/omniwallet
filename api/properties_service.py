@@ -60,3 +60,30 @@ def filterProperties( properties ):
                     print 'Error decoding JSON', address_file.split('/')[-1][:-5]
     
     return ['OK',addresses_data]
+
+@app.route('/issue', methods=['POST'])
+def issue():
+  # TODO: validation
+  script = tools_dir + "/scripts/generateTX" + request.form["tx"] + "_SP.py"
+  process = subprocess.Popen(['python', script], stdin=subprocess.PIPE, stdout=subprocess.PIPE)
+
+  process.stdin.write('{') 
+  process.stdin.write('"transaction_type": ' + request.form["transaction_type"]+',')
+  process.stdin.write('"ecosystem": '+ request.form["ecosystem"]+',')
+  process.stdin.write('"property_type": '+ request.form["property_type"]+',')
+  process.stdin.write('"previous_property_id": '+ request.form["previous_property_id"]+',')
+  process.stdin.write('"property_category": "'+ request.form["property_category"]+'",')
+  process.stdin.write('"property_subcategory": "'+ request.form["property_subcategory"]+'",')
+  process.stdin.write('"property_name": "'+ request.form["property_name"]+'",')
+  process.stdin.write('"property_url": "'+ request.form["property_url"]+'",')
+  process.stdin.write('"property_data": "'+ request.form["property_data"]+'",')
+  process.stdin.write('"number_properties": '+ request.form["number_properties"]+',')
+  process.stdin.write('"transaction_from": "'+ request.form["transaction_from"]+'",')
+  process.stdin.write('"from_private_key": "'+ request.form["from_private_key"]+'"')
+  process.stdin.write('}')
+  process.stdin.write('EOF')
+  
+  process.stdin.close()
+  
+  process.wait()
+  
