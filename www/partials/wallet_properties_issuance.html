@@ -1,0 +1,85 @@
+<div class="sidecar col-xs-2" ng-controller="SidecarController" ng-init="setView('issue')">
+    <div ng-include="templates['sidecar']"></div>
+</div>
+<div class="col-xs-10" ng-controller="PropertyIssuanceController">
+  <br>
+  <br>
+  <div class="row">
+    <h3 class="text-center" >New Smart Properties</h3>
+    <br>
+    <div ng-show="showErrors" class="alert alert-danger"> <strong> {{error}} </strong> </div> 
+  </div>
+  <form name="issuanceForm" ng-submit="validateIssuanceForm()">
+  <div class="row">
+    <div class="col-xs-12">
+      <div class="input-group">
+        <span class="input-group-addon"> Transaction Type: </span>
+        <input name="reciever" type="text" ng-model="transaction_type" class="form-control" placeholder="50" required>
+      </div>
+      <br>
+      <div class="input-group">
+        <span class="input-group-addon"> Ecosystem: </span>
+        <input name="reciever" type="text" ng-model="ecosystem" class="form-control" placeholder="1" required>
+      </div>
+      <br>
+      <div class="input-group">
+        <span class="input-group-addon"> Property Type: </span>
+        <input name="reciever" type="text" ng-model="property_type" class="form-control" placeholder="1" required>
+      </div>
+      <br>
+      <div class="input-group">
+        <span class="input-group-addon"> Property Type: </span>
+        <input name="reciever" type="text" ng-model="property_type" class="form-control" placeholder="3" required>
+      </div>
+      <br>
+      <div class="input-group">
+        <span class="input-group-addon"> previous_property_id: </span>
+        <input name="reciever" type="text" ng-model="previous_property_id" class="form-control" placeholder="3" required>
+      </div>
+      <br>
+      <div class="input-group">
+        <span class="input-group-addon"> property_category: </span>
+        <input name="reciever" type="text" ng-model="property_category" class="form-control" placeholder="3" required>
+      </div>
+      <br>
+      <div class="input-group">
+        <span class="input-group-addon"> property_subcategory: </span>
+        <input name="reciever" type="text" ng-model="property_subcategory" class="form-control" placeholder="3" required>
+      </div>
+      <br>
+      <div class="input-group">
+        <span class="input-group-addon"> property_name: </span>
+        <input name="reciever" type="text" ng-model="property_name" class="form-control" placeholder="3" required>
+      </div>
+      <br>
+      <div class="input-group">
+        <span class="input-group-addon"> property_url: </span>
+        <input name="reciever" type="text" ng-model="property_url" class="form-control" placeholder="3" required>
+      </div>
+      <br>
+      <div class="input-group">
+        <span class="input-group-addon"> property_data: </span>
+        <input name="reciever" type="text" ng-model="property_data" class="form-control" placeholder="3" required>
+      </div>
+      <br>
+      <div class="input-group">
+        <span class="input-group-addon"> number_properties: </span>
+        <input name="reciever" type="text" ng-model="number_properties" class="form-control" placeholder="3" required>
+      </div>
+      <br>
+      <div class="input-group">
+        <span class="input-group-addon"> transaction_from: </span>
+        <input name="reciever" type="text" ng-model="transaction_from" class="form-control" placeholder="3" required>
+      </div>
+      <br>
+      <div class="input-group">
+        <span class="input-group-addon"> from_private_key: </span>
+        <input name="reciever" type="text" ng-model="from_private_key" class="form-control" placeholder="3" required>
+      </div>
+      <br>
+    </div>
+  </div>
+    <br>
+  <input class="btn btn-primary btn-lg col-xs-push-3 col-xs-6" type="submit" value="Send Transaction">
+  </form>
+</div>
