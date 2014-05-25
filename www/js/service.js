@@ -1,4 +1,38 @@
 //global services go here
+angular.module('omniwallet').factory('walletTradeService',['$http',function($http){
+  var service = {
+    pushSignedTransaction : function(signedTransaction) {
+      var url = '/v1/transaction/pushtx/';
+      var data = {
+        signedTransaction: signedTransaction
+      };
+      var promise = $http.post(url, data);
+      return promise;
+    },
+    
+    validAddress:function(addr) {
+      try {
+        var checkValid = new Bitcoin.Address(addr);
+        return true;
+      } catch (e) {
+        return false;
+      }
+    },
+  
+    getAddressData:function(address) {
+      console.log('Addr request 5');
+      var promise = $http.post('/v1/address/addr/', {
+        'addr': address
+      });
+  
+      return promise;
+    }
+  };
+  
+  return service;
+  
+}]);
+
 angular.module('omniwallet').factory('balanceService', ['$http', '$q', function($http, $q) {
     var cache = [];
     var service = {
@@ -10,7 +44,7 @@ angular.module('omniwallet').factory('balanceService', ['$http', '$q', function(
           cache[address] = {
             deferred: deferred,
             timestamp: currentTime
-          }
+          };
           $http.post('/v1/address/addr/', {
               'addr': address
             })
@@ -58,8 +92,8 @@ angular.module('omniwallet').factory('userService', ['$rootScope', '$http', '$in
 
       logout: function() {
         service.data.loggedIn = false;
-        service.data.wallet = {}
-        service.data.walletMetadata = {}
+        service.data.wallet = {};
+        service.data.walletMetadata = {};
       },
 
       addAddress: function(address, privKey) {
@@ -90,6 +124,29 @@ angular.module('omniwallet').factory('userService', ['$rootScope', '$http', '$in
 
       getAllAddresses: function() {
         return service.data.wallet.addresses;
+      },
+      
+      getAddressesWithPrivkey: function(addressFilter) {
+        var addresses = service.data.wallet.addresses.filter(function(e) {
+          return e.privkey && e.privkey.length == 58;
+        }).map(function(e){
+          return e.address;
+        });
+        
+        if (addresses.length == 0)
+          addresses = ['Could not find any addresses with attached private keys!'];
+        else {
+          
+          if(addressFilter){
+            addresses = addresses.filter(function(e) {
+              return addressFilter.indexOf(e) > -1;
+            });
+            if (addresses.length == 0)
+              addresses = ['You have no addresses with a balance on the selected coin!'];
+          }
+        }
+        
+        return addresses;
       },
 
       getCurrencies: function() {
@@ -202,9 +259,9 @@ angular.module('omniwallet').factory('userService', ['$rootScope', '$http', '$in
 
       saveSession: function() {
         service.updateWallet().then(function(result) {
-          console.log("Success saving")
+          console.log("Success saving");
         }, function(result) {
-          console.log('Failure saving')
+          console.log('Failure saving');
         });
       }
     };
@@ -280,7 +337,7 @@ angular.module('omniwallet').factory('hashExplorer', function() {
       this.tx = JSON.stringify(tx);
       this.loc = window.location.href.split('/').slice(-2).join('/');
     }
-  }
+  };
 });
 
 angular.module('omniwallet').factory('browser', ['$window', function($window) {
