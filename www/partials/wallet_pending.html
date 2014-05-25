@@ -75,7 +75,7 @@
         <td>{{{ balance: transaction.formatted_price_per_coin, symbol: currencyUnit } | cryptocurrency }}</td> 
         <td >{{{ balance: transaction.formatted_amount, symbol: currencyUnit } | cryptocurrency}}</td> 
         <td >{{ ({ balance: transaction.bitcoin_required, symbol: currencyUnit } | cryptocurrency) }}</td> 
-        <td ><button class="btn btn-primary btn-sm" ng-click="purchaseCoin(transaction)" type="submit" disabled>Cancel Offer</button></td>
+        <td ><button class="btn btn-primary btn-sm" ng-click="cancelPurchase(transaction)" type="submit">Cancel Offer</button></td>
       </tr>
 
     </table>
