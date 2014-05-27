@@ -6,7 +6,17 @@ function WalletBuyAssetsController($modal, $scope, $http, $q, userService, walle
       $scope.$parent.$parent.selectedCoin = currency;
     return currency.symbol == $scope.activeCurrencyPair[1];
   });
-
+  
+  if( $scope.currencyBuyList.length == 0 ) {
+    var noCurrency={
+        symbol: 'No DeX-tradable coins in wallet!',
+        name: 'No DeX-tradable coins in wallet!',
+        addresses: [] 
+    }
+    $scope.currencyBuyList.push(noCurrency);
+    $scope.$parent.$parent.selectedCoin=noCurrency;
+    $scope.hideForm=true
+  }
   
   // [ Buy Form Helpers ]
 
