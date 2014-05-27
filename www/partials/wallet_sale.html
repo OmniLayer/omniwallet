@@ -6,29 +6,29 @@
   </div>
   <form name="saleForm" ng-submit="validateSaleForm(currencyUnit)">
   <div class="row">
-    <div class="col-xs-6">
-      <h4 class="text-justify" >Sell type of coin:</h4>
+    <div class="col-xs-12">
+      <h4 class="text-justify" >Choose coin:</h4>
       <div class="form-inline">
-          <select class="form-control" ng-model="selectedCoin"
-            ng-options="currency as currency.name for currency in currencySaleList"
-            ng-change="setBalance()" ng-init="setBalance()">
-            <option value=""> -- Choose Coin -- </option>
-          </select>
-        </div> 
-      <h6 class="text-justify"> Please make sure this is the currency you intend to trade with.</h6> 
+        <select class="form-control" ng-model="$parent.selectedCoin"
+          ng-options="currency as currency.name for currency in currencySaleList"
+          ng-change="setBalance()" ng-init="setBalance()" ng-disabled="true">
+          <option value=""> -- Choose Coin -- </option>
+        </select>
+      </div> 
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-xs-6">
       <h4 class="text-justify" >Sell from address:</h4>
       <div class="form-inline">
-          <select class="form-control" ng-model="selectedAddress"
+          <select class="form-control" ng-model="$parent.selectedAddress"
             ng-options="address for address in addressList"
             ng-change="setBalance()" ng-init="setBalance()">
             <option value=""> -- Choose Address -- </option>
           </select>
-        </div> 
-      <h6 class="text-justify"> Please make sure this is the address you are sending from.<br> 
-      Note that we allow you to only send from addresses with a valid private key. </h6>
+      </div> 
     </div>
-    <div class="col-xs-6"> 
-      <br><br><br><br><br><br><br><br><br>
+    <div class="col-xs-6" style="padding-top:39px;"> 
       <button class="btn btn-primary btn-md" 
       ng-click="currencyUnit = 'stom'; amountUnit = 'mtow'; saleAmount = saleAmount * 1000; salePricePerCoin = salePricePerCoin * 100; buyersFee = buyersFee * 1000; minerFees = minerFees * 1000" ng-show="currencyUnit == 'stow' && amountUnit == 'wtow'" type="button">Convert to m{{selectedCoin.symbol}} </button>
       <button class="btn btn-primary btn-md" 
@@ -76,7 +76,7 @@
       </div>
       <br>
       <div class="input-group">
-        <span class="input-group-addon"> Transaction/Miner fees (in {{currencyUnit[currencyUnit.length-1]}}BTC): </span>
+        <span class="input-group-addon"> Miner fees (in {{currencyUnit[currencyUnit.length-1]}}BTC): </span>
         <input name="fees" type="number" step="{{amountUnit == 'wtow' ? 0.0001 : 0.1}}" ng-model="minerFees" class="form-control" 
         placeholder="{{{ balance: 10000, symbol: currencyUnit } | cryptocurrency}} minimum" step="0.0001" required>
         <span class="input-group-addon" > 

@@ -136,13 +136,13 @@ def prepare_send_tx_for_signing(from_address, to_address, marker_address, curren
     inputs_total_value=0
 
     if inputs_number < 1:
-        raise Exception('Error preparing transaction: zero inputs')
+        raise Exception('This address must have enough BTC for protocol transaction fees and miner fees')
     for i in range(inputs_number):
         inputs.append(utxo_split[i*12+3])
         try:
             inputs_total_value += int(utxo_split[i*12+7])
         except ValueError:
-            raise Exception('Error preparing transaction: parsing value from '+utxo_split[i*12+7])
+            raise Exception('Error: parsing value from '+utxo_split[i*12+7])
 
     inputs_outputs='/dev/stdout'
     for i in inputs:
@@ -151,7 +151,7 @@ def prepare_send_tx_for_signing(from_address, to_address, marker_address, curren
     # calculate change
     change_value=inputs_total_value-required_value-fee
     if change_value < 0:
-        raise Exception('Error preparing transaction: negative change value')
+        raise Exception('This address must have enough BTC for miner fees and protocol transaction fees')
 
     if currency_id == 0: # bitcoin
         # create a normal bitcoin transaction (not mastercoin)

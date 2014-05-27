@@ -1,80 +1,80 @@
+
 <div class="sidecar col-xs-2" ng-controller="SidecarController" ng-init=setView('wallet')>
     <div ng-include="templates['sidecar']"></div>
 </div>
-
-<div class="col-xs-10" ng-controller="WalletSendAssetsController">
-  <br>
-  <br>
-  <div class="row">
-    <h3 class="text-center" >New Transaction Send</h3>
+<div ng-controller="WalletTradeFormController">
+  <div class="col-xs-10" ng-controller="WalletSendAssetsController">
     <br>
-    <div ng-show="showErrors" class="alert alert-danger"> <strong> {{error}} </strong> </div> 
-  </div>
-  <form name="sendForm" ng-submit="validateSendForm(currencyUnit)">
-  <div class="row">
-    <div class="col-xs-6">
-      <h4 class="text-justify" >Send type of coin:</h4>
-      <div class="form-inline">
-          <select name="coin" class="form-control" ng-model="selectedCoin"
-            ng-options="currency.symbol as currency.name for currency in currencyList"
-            ng-change="setBalance()" ng-init="setBalance()" required>
-            <option value=""> -- Choose Coin -- </option>
-          </select>
-        </div> 
-      <h6 class="text-justify"> Please make sure this is the currency you intend to trade with.</h6> 
-      <h4 class="text-justify" >Send from address:</h4>
-      <div class="form-inline">
-          <select name="sender" class="form-control" ng-model="selectedAddress"
-            ng-options="address for address in addressList"
-            ng-change="setBalance()" ng-init="setBalance()" required>
-            <option value=""> -- Choose Address -- </option>
-          </select>
-        </div> 
-      <h6 class="text-justify"> Please make sure this is the address you are sending from.<br> 
-      Note that we allow you to only send from addresses with a valid private key. </h6>
+    <br>
+    <div class="row">
+      <h3 class="text-center" >New Transaction Send</h3>
+      <br>
+      <div ng-show="showErrors" class="alert alert-danger"> <strong> {{error}} </strong> </div> 
     </div>
-  </div>
-    <br>
-  <div class="row">
-    <div class="col-xs-12">
-      <div class="input-group">
-        <span class="input-group-addon"> Send funds to: </span>
-        <input name="reciever" type="text" ng-model="sendTo" class="form-control" placeholder="{{selectedAddress}}" required>
+    <form name="sendForm" ng-submit="validateSendForm(currencyUnit)">
+    <div class="row">
+      <div class="col-xs-6">
+        <h4 class="text-justify" >Choose coin:</h4>
+        <div class="form-inline">
+            <select name="coin" class="form-control" ng-model="$parent.selectedCoin"
+              ng-options="currency as currency.name for currency in currencyList"
+              ng-change="setBalance()" ng-init="setBalance()" required>
+              <option value=""> -- Choose Coin -- </option>
+            </select>
+          </div> 
+        <h4 class="text-justify" >Send from address:</h4>
+        <div class="form-inline">
+            <select name="sender" class="form-control" ng-model="$parent.selectedAddress"
+              ng-options="address for address in addressList"
+              ng-change="setBalance()" ng-init="setBalance()" required>
+              <option value=""> -- Choose Address -- </option>
+            </select>
+          </div>
       </div>
+    </div>
       <br>
-      <div class="input-group">
-        <span class="input-group-addon"> Amount to send ( {{ getDisplayedAbbreviation() }} ): </span>
-          <input name="amount" type="number" ng-model="sendAmount" class="form-control" 
-          placeholder="{{{ balance: 100000000, symbol: currencyUnit} | cryptocurrency}}" step="0.000000001" required>
-        <span class="input-group-addon" > 
-          Available: {{  convertSatoshiToDisplayedValue( balanceData[0] ) }} {{ getDisplayedAbbreviation() }}
-        </span>
-      </div>
-      <br>
-      <div class="input-group" style="width: 15%">
-        <span class="input-group-addon"> Protocol Transaction fee: 
-	 <a href=""
-            tooltip="MasterProtocol Transactions require additional mBTC. This is used when encoding/sending the Masterprotocol Transaction."
-            tooltip-append-to-body="true"
-            tooltip-placement="left"
-            tooltip-trigger="click"> <strong>(?)</strong>
-          </a></span>
-        <span class="input-group-addon"> 0.25 mBTC </span>
-      </div>
-
-      <div class="input-group">
-        <span class="input-group-addon"> Miner fees ( mBTC ): </span>
-        <input name="fees" type="number" ng-model="minerFees" class="form-control" 
-        placeholder="{{{ balance: 10000000, symbol: currencyUnit } | cryptocurrency}} minimum" step="0.01" required>
-        <span class="input-group-addon" > 
-          Available Bitcoin: {{ balanceData[1] / 100000.0 }} mBTC
+    <div class="row">
+      <div class="col-xs-12">
+        <div class="input-group">
+          <span class="input-group-addon"> Send funds to: </span>
+          <input name="reciever" type="text" ng-model="sendTo" class="form-control" placeholder="{{selectedAddress}}" required>
+        </div>
+        <br>
+        <div class="input-group">
+          <span class="input-group-addon"> Amount to send ( {{ getDisplayedAbbreviation() }} ): </span>
+            <input name="amount" type="number" ng-model="sendAmount" class="form-control" 
+            placeholder="{{{ balance: 100000000, symbol: currencyUnit} | cryptocurrency}}" step="0.000000001" required>
+          <span class="input-group-addon" > 
+            Available: {{  convertSatoshiToDisplayedValue( balanceData[0] ) }} {{ getDisplayedAbbreviation() }}
           </span>
+        </div>
+        <br>
+        <div class="input-group" style="width: 15%">
+          <span class="input-group-addon"> Protocol Transaction fee: 
+  	 <a href=""
+              tooltip="MasterProtocol Transactions require additional mBTC. This is used when encoding/sending the Masterprotocol Transaction."
+              tooltip-append-to-body="true"
+              tooltip-placement="left"
+              tooltip-trigger="click"> <strong>(?)</strong>
+            </a></span>
+          <span class="input-group-addon"> 0.25 mBTC </span>
+        </div>
+  
+        <div class="input-group">
+          <span class="input-group-addon"> Miner fees ( mBTC ): </span>
+          <input name="fees" type="number" ng-model="minerFees" class="form-control" 
+          placeholder="{{{ balance: 10000000, symbol: currencyUnit } | cryptocurrency}} minimum" step="0.01" required>
+          <span class="input-group-addon" > 
+          Available Bitcoin: {{ { balance: balanceData[1], symbol: currencyUnit } | cryptocurrency}}
+          {{currencyUnit[currencyUnit.length-1]}}BTC
+          </span>
+        </div>
+        <input ng-model="marked" ng-hide="true" ng-init="marked = false" type="checkbox"> 
       </div>
-      <input ng-model="marked" ng-hide="true" ng-init="marked = false" type="checkbox"> 
     </div>
+      <br>
+    <input class="btn btn-primary btn-lg col-xs-push-3 col-xs-6" type="submit" value="Send Transaction">
+    </form>
+  
   </div>
-    <br>
-  <input class="btn btn-primary btn-lg col-xs-push-3 col-xs-6" type="submit" value="Send Transaction">
-  </form>
-
 </div>
