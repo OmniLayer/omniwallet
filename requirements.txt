@@ -3,3 +3,4 @@ pycoin==0.25
 flask==0.10
 simplekv==0.8.4
 pycrypto==2.6.1
+requests==1.2.3
