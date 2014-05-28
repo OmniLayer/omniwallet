@@ -2,9 +2,9 @@ function WalletBuyAssetsController($modal, $scope, $http, $q, userService, walle
     // [ Template Initialization ]
 
   $scope.currencyBuyList = $scope.currencyList.filter(function(currency){
-    if (currency.symbol == $scope.activeCurrencyPair[1] )
+    if (currency.symbol == $scope.activeCurrencyPair[0] )
       $scope.$parent.$parent.selectedCoin = currency;
-    return currency.symbol == $scope.activeCurrencyPair[1];
+    return currency.symbol == $scope.activeCurrencyPair[0];
   });
   
   if( $scope.currencyBuyList.length == 0 ) {
