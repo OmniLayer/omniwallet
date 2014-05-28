@@ -61,11 +61,48 @@ To update data on the server:
 4. The client sends back to the server an object containing the encrypted data and the signed challenge string.
 5. The server validates the request by making sure that the challenge sent matches what was in the session, and that the signature is valid.  If so, the encrypted wallet data is stored, keyed off the UUID.
 
-## Appendix A - TODO
+## Appendix A - HTTP Endpoints
+
+### Challenge Endpoint
+
+This endpoint will start a challenge session for a UUID and return relevant challenges to the client as well as save the relevant session information on the server
+
+``
+GET /v1/user/wallet/challenge?uuid=<UUID>
+``
+
+Where UUID is the users UUID
+
+Example:
+
+``
+curl "http://localhost:8080/v1/user/wallet/challenge?uuid=6b66c8c1-963a-4fdb-d061-150d5ca5baf9"
+{
+  "challenge": "9Zw6gAJTsG1Mbz62w4KVlcLXj3p16wKL",
+  "pow_challenge": "C7F4tXgUfv1KiIhGxNTijcWLJ1D8vdtH",
+  "salt": "b29ae6474a9812c6ee6735f3673d8b2a7e8254ef6da726e1705e3aa3cd70dd94"
+}
+``
+
+### Creation Endpoint
+
+This endpoing will create a new encrypted wallet file on the server if the challenges are met
+
+``
+POST /v1/user/wallet/create
+``
+The POST data should contain:
+
+| UUID | Users UUID |
+| nonce | The challenge response to pow_challenge |
+| public_key | The users public key used to sign future updates
+| wallet | the encrypted wallet data |
+
+## Appendix B - TODO
 
 Session management / preventing replay attacks using session limited salts/challenges with a limited timespan.
 
-## Appendix B - Changes to existing codebase
+## Appendix C - Changes to existing codebase
 
 1. Remove browser-side saved data
 2. Make the login page accept a URL, to allow bookmarking:
