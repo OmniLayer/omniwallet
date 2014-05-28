@@ -84,9 +84,26 @@ curl "http://localhost:8080/v1/user/wallet/challenge?uuid=6b66c8c1-963a-4fdb-d06
 }
 ```
 
+### Login Enpoint
+
+This endpoint will fetch the users encrypted wallet data provided all the challenges are met
+
+```
+GET /v1/user/wallet/login?uuid=<UUID>&nonce=<nonce>&public_key=<public_key>
+```
+
+The query string parameters are as follows:
+
+
+| Value | Explanation |
+| ----- | ----------- |
+| UUID | Users UUID |
+| nonce | The challenge response to pow_challenge |
+| public_key | The users public key used to sign future updates
+
 ### Creation Endpoint
 
-This endpoing will create a new encrypted wallet file on the server if the challenges are met
+This endpoint will create a new encrypted wallet file on the server if the challenges are met
 
 ```
 POST /v1/user/wallet/create
@@ -100,6 +117,23 @@ The POST data should contain:
 | nonce | The challenge response to pow_challenge |
 | public_key | The users public key used to sign future updates
 | wallet | the encrypted wallet data |
+
+### Update Endpoint
+
+This endpoint will update a existing wallet file on the server if the challenges are met
+
+```
+POST /v1/user/wallet/update
+```
+
+The POST data should contain:
+
+| Value | Explanation |
+| ----- | ----------- |
+| UUID | Users UUID |
+| signature | This is the sessions ``challenge`` signed by the clients public key |
+| wallet | the encrypted wallet data |
+
 
 ## Appendix B - TODO
 
