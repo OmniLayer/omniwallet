@@ -1,0 +1,24 @@
+<div class="modal-body">
+    <h3 class="text-center"> Confirm send </h3>
+    <h3>You're about to send {{convertSatoshiToDisplayedValue(sendAmount)}} {{getDisplayedAbbreviation()}} plus {{minerFees}} mBTC in fees to {{sendTo}}</h3>
+  <p><br>
+  If the above is correct, please press Send Funds.
+  If you encounter an error, feel free to click away from the dialog and try again.
+  </p>
+<div class="modal-footer">
+    <div class="row">
+    <button ng-disabled="clicked" class="btn btn-primary" ng-click="ok()">Yes, send my funds</button>
+    <img class="" src="/assets/img/34-1.gif" ng-show="waiting">
+    </div>
+      <br>
+    <div class="row">
+      <div ng-show="sendSuccess">
+        <h4 class="pull-right col-xs-12" style="color:green"> Funds were sent successfully, 
+        check your transaction <a target="_blank" href="{{url}}">here.</a></h4>
+      </div>
+      <div ng-show="sendError">
+        <h4 class="col-xs-12" style="color:red;"> Funds could not be sent: 
+         {{error}} </h4>
+      </div>
+    </div>
+</div>

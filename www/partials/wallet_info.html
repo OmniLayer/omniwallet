@@ -99,7 +99,7 @@
       </tbody>
 
       <tr ng-repeat="transaction in orderbook">
-        <td ng-click="setHashExplorer(transaction)"> <a href="/explorer/inspector?view={{transaction.tx_hash}}">{{transaction.tx_hash}}</a></td>
+        <td ng-click="setHashExplorer(transaction)"> <a href="/explorer/inspector?view={{transaction.tx_hash}}">{{transaction.tx_hash_concat}}</a></td>
         <td>{{{ balance: transaction.formatted_price_per_coin, symbol: currencyUnit } | cryptocurrency }}</td> 
         <td>{{{ balance: transaction.formatted_amount, symbol: currencyUnit } | cryptocurrency}}</td> 
         <td>{{ ({ balance: transaction.formatted_bitcoin_amount_desired, symbol: currencyUnit } | cryptocurrency) }}</td> 

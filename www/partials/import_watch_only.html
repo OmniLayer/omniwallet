@@ -10,7 +10,8 @@
 					name="address" 
 					class="form-control" 
 					placeholder="Enter your bitcoin address"
-					ng-model="newAddressData.address" required>
+          ng-model="newAddressData.address" required>
+        <span style="color:red" ng-show="addressentry.address.$dirty && !validate(newAddressData.address)">Must be a valid Bitcoin address</span>
 			</div>
 		</div>
 	</div>
