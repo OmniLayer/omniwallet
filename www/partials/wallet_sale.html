@@ -30,9 +30,9 @@
     </div>
     <div class="col-xs-6" style="padding-top:39px;"> 
       <button class="btn btn-primary btn-md" 
-      ng-click="currencyUnit = 'stom'; amountUnit = 'mtow'; saleAmount = saleAmount * 1000; salePricePerCoin = salePricePerCoin * 100; buyersFee = buyersFee * 1000; minerFees = minerFees * 1000" ng-show="currencyUnit == 'stow' && amountUnit == 'wtow'" type="button">Convert to m{{selectedCoin.symbol}} </button>
+      ng-click="currencyUnit = 'stom'; amountUnit = 'mtow'; saleAmount = saleAmount * 1000; salePricePerCoin = salePricePerCoin * 1000; buyersFee = buyersFee * 1000; minerFees = minerFees * 1000" ng-show="currencyUnit == 'stow' && amountUnit == 'wtow'" type="button">Convert to m{{selectedCoin.symbol}} </button>
       <button class="btn btn-primary btn-md" 
-      ng-click="currencyUnit = 'stow'; amountUnit = 'wtow'; saleAmount = saleAmount / 1000; salePricePerCoin = salePricePerCoin / 100; buyersFee = buyersFee / 1000; minerFees = minerFees / 1000" ng-show="currencyUnit == 'stom' && amountUnit == 'mtow'" type="button">Convert to whole {{selectedCoin.symbol}} </button>
+      ng-click="currencyUnit = 'stow'; amountUnit = 'wtow'; saleAmount = saleAmount / 1000; salePricePerCoin = salePricePerCoin / 1000; buyersFee = buyersFee / 1000; minerFees = minerFees / 1000" ng-show="currencyUnit == 'stom' && amountUnit == 'mtow'" type="button">Convert to whole {{selectedCoin.symbol}} </button>
     </div>
   </div>
   <div ng-hide="hideForm" class="row">

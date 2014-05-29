@@ -24,13 +24,13 @@
           </select>
         </div> 
     </div>
-    <div ng-hide="hideForm" class="col-xs-6"> 
-      <br><br><br><br><br><br><br><br><br>
-      <button class="btn btn-primary btn-md" 
-      ng-click="currencyUnit = 'stom'" type="button">Convert to m{{selectedCoin.symbol}} </button>
-      <button class="btn btn-primary btn-md" 
-      ng-click="currencyUnit = 'stow'" type="button">Convert to whole {{selectedCoin.symbol}} </button>
+    <div class="col-xs-6" style="padding-top:39px;">
+      <button class="btn btn-primary btn-md"
+      ng-click="currencyUnit = 'stom'; amountUnit = 'mtow'; buyAmount = buyAmount * 1000; minerFees = minerFees * 1000" ng-show="currencyUnit == 'stow' && amountUnit == 'wtow'" type="button">Convert to m{{selectedCoin.symbol}} </button>
+      <button class="btn btn-primary btn-md"
+      ng-click="currencyUnit = 'stow'; amountUnit = 'wtow'; buyAmount = buyAmount / 1000; minerFees = minerFees / 1000" ng-show="currencyUnit == 'stom' && amountUnit == 'mtow'" type="button">Convert to whole {{selectedCoin.symbol}} </button>
     </div>
+
   </div>
   <div ng-hide="hideForm" class="row">
     <div class="col-xs-12">
@@ -66,8 +66,7 @@
           <input name="amount" type="number" ng-model="buyAmount" class="form-control" 
           placeholder="{{{ balance: global['buyOffer'].formatted_amount_available , symbol: currencyUnit} | cryptocurrency}}" min="0" required>
         <span class="input-group-addon" > 
-          Available: {{{ balance: balanceData[0], symbol: currencyUnit } | cryptocurrency}} 
-          {{currencyUnit[currencyUnit.length-1]}}{{selectedCoin.symbol}}</span>
+          Available: {{{ balance: global['buyOffer'].formatted_amount_available , symbol: currencyUnit} | cryptocurrency}}</span>
       </div>
       <br>
       
