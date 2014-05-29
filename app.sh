@@ -1,6 +1,5 @@
 #!/bin/bash
-PYTHONBIN=python2
-
+PYTHONBIN=python
 
 kill_child_processes() {
   kill $SERVER_PID
