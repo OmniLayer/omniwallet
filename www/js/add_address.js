@@ -48,6 +48,8 @@ angular.module('omniwallet')
     $scope.login = {
       uuid: userService.data.wallet.uuid,
       action: 'verify',
+      title: 'Verify Account',
+      button: 'Confirm Export',
       disable: true //disable UUID field in template
     }
     var modalInstance = $modal.open({
