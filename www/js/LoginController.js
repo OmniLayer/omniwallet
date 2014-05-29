@@ -59,8 +59,14 @@ function Login($injector, $scope, $http, $location, $modalInstance, $q, userServ
       try {
         var wallet = CryptUtil.decryptObject(data, walletKey);
         userService.login(wallet, walletKey, asymKey);
-        $modalInstance.close()
-        $location.path('/wallet');
+        if( $scope.login != undefined && $scope.login.action == 'verify' ) {
+          $modalInstance.close(wallet) //pass wallet as verification
+        } else {
+          console.log('after')
+          userService.login(wallet, walletKey, asymKey);
+          $modalInstance.close()
+          $location.path('/wallet');
+        }
       } catch (e) {
         $scope.badPassword = true;
         $scope.loginInProgress = false;
