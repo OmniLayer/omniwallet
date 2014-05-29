@@ -1,27 +1,29 @@
-<div class="modal-header">
-  <h3>Login</h3>
+<div class="modal-header text-center">
+  <h3>{{login.title}}</h3>
 </div>
-<form novalidate class="form-horizontal" ng-submit="open(login)">
+<form novalidate class="form-group" ng-submit="open(login)">
   <div class="modal-body">
     <div class="row">
-      <div class="form-group col-md-10 col-md-push-1">
-        <label class="control-label" for="inputUUID">UUID</label>
-        <input type="text" class="form-control" ng-disabled="loginInProgress" ng-model="login.uuid" id="inputUUID" value="{{ uuid }}" auto-focus="!login.uuid">
+      <div class="form-group col-xs-10 col-xs-push-1">
+        <label for="inputUUID">UUID</label>
+        <input type="text" class="form-control" ng-disabled="loginInProgress || login.disable" ng-model="login.uuid" id="inputUUID" value="{{ uuid }}" auto-focus="!login.uuid">
       </div>
     </div>
     <div class="row">
-      <div class="form-group col-md-10 col-md-push-1">
-        <label class="control-label" for="inputPassword">Password</label>
+      <div class="form-group col-xs-10 col-xs-push-1">
+        <label for="inputPassword">Password</label>
         <input type="password" class="form-control" ng-disabled="loginInProgress" ng-model="login.password" id="inputPassword" auto-focus="login.uuid">
       </div>
     </div>
   </div>
-  <div class="modal-footer">
-    <img ng-show="loginInProgress" src="/assets/img/34-1.gif" alt="loading">
-    <input type="submit" class="btn btn-primary" value="Open Wallet" ng-disabled="loginInProgress" >
-    <div ng-show="missingUUID" style="color:red">Account does not exist</div>
-    <div ng-show="badPassword" style="color:red">Password is incorrect</div>
-    <div ng-show="serverError" style="color:red">Server error, please try again</div>
+  <div class="modal-footer" style="text-align:center">
+    <div class="col-xs-8 col-xs-push-2">
+      <input type="submit" class="btn btn-primary btn-block" value="{{login.button}}" ng-disabled="loginInProgress" >
+      <img ng-show="loginInProgress" src="/assets/img/34-1.gif" alt="loading">
+      <div ng-show="missingUUID" style="color:red">Account does not exist</div>
+      <div ng-show="badPassword" style="color:red">Password is incorrect</div>
+      <div ng-show="serverError" style="color:red">Server error, please try again</div>
+    </div>
   </div>
 </form>
 

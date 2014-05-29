@@ -156,9 +156,14 @@ function NavigationController($scope, $http, $modal, userService) {
   };
 
   $scope.openLoginModal = function() {
+    $scope.login ={
+      title:'Login',
+      button:'Open Wallet'
+    };
     $modal.open({
       templateUrl: '/partials/login_modal.html',
-      controller: LoginController
+      controller: LoginController,
+      scope: $scope
     });
   };
 
