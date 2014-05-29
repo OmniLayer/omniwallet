@@ -9,7 +9,7 @@
     <div class="col-xs-12">
       <h4 class="text-justify" >Choose coin:</h4>
       <div class="form-inline">
-        <select class="form-control" ng-model="$parent.selectedCoin"
+        <select class="form-control" ng-model="$parent.$parent.selectedCoin"
           ng-options="currency as currency.name for currency in currencySaleList"
           ng-change="setBalance()" ng-init="setBalance()" ng-disabled="true">
           <option value=""> -- Choose Coin -- </option>
@@ -21,7 +21,7 @@
     <div class="col-xs-6">
       <h4 class="text-justify" >Sell from address:</h4>
       <div class="form-inline">
-          <select class="form-control" ng-model="$parent.selectedAddress"
+          <select class="form-control" ng-model="$parent.$parent.selectedAddress"
             ng-options="address for address in addressList"
             ng-change="setBalance()" ng-init="setBalance()">
             <option value=""> -- Choose Address -- </option>
