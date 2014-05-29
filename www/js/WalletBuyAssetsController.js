@@ -7,17 +7,14 @@ function WalletBuyAssetsController($modal, $scope, $http, $q, userService, walle
     return currency.symbol == $scope.activeCurrencyPair[1];
   });
   
-  if( $scope.currencyBuyList.length == 0 ) {
-    var noCurrency={
-        symbol: 'No DeX-tradable coins in wallet!',
-        name: 'No DeX-tradable coins in wallet!',
-        addresses: [] 
+
+  $scope.currencyList.forEach(function(e, i) {
+    if (e.symbol == "BTC"){
+      $scope.addressList = userService.getAddressesWithPrivkey(e.addresses);
+      $scope.$parent.$parent.selectedAddress = $scope.addressList[0];
     }
-    $scope.currencyBuyList.push(noCurrency);
-    $scope.$parent.$parent.selectedCoin=noCurrency;
-    $scope.hideForm=true
-  }
-  
+  });
+
   // [ Buy Form Helpers ]
 
   function getUnsignedBuyTransaction(buyerAddress, pubKey, buyAmount, fee, saleTransactionHash) {
