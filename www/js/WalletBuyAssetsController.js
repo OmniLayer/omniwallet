@@ -7,17 +7,14 @@ function WalletBuyAssetsController($modal, $scope, $http, $q, userService, walle
     return currency.symbol == $scope.activeCurrencyPair[1];
   });
   
-  if( $scope.balanceData[1] <= 0 ) {
-    var noCurrency={
-        symbol: 'U broke Bitch!',
-        name: 'U broke Bitch!',
-        addresses: [] 
+
+  $scope.currencyList.forEach(function(e, i) {
+    if (e.symbol == "BTC"){
+      $scope.addressList = userService.getAddressesWithPrivkey(e.addresses);
+      $scope.$parent.$parent.selectedAddress = $scope.addressList[0];
     }
-    $scope.currencyBuyList.push(noCurrency);
-    $scope.$parent.$parent.selectedCoin=noCurrency;
-    $scope.hideForm=true
-  }
-  
+  });
+
   // [ Buy Form Helpers ]
 
   function getUnsignedBuyTransaction(buyerAddress, pubKey, buyAmount, fee, saleTransactionHash) {
