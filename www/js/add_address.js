@@ -62,6 +62,7 @@ angular.module('omniwallet')
         addresses: []
       };
       walletAddresses.forEach(function(obj) {
+        console.log('wallet addrs', obj)
         var ecKey = Bitcoin.ECKey.decodeEncryptedFormat(obj.privkey, obj.address);
         var addr = ecKey.getBitcoinAddress().toString();
         var key = ecKey.getWalletImportFormat();
