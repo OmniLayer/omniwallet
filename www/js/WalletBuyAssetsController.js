@@ -7,8 +7,7 @@ function WalletBuyAssetsController($modal, $scope, $http, $q, userService, walle
     return currency.symbol == $scope.activeCurrencyPair[0];
   });
   
-  console.log( $scope.balanceData)
-  if( $scope.balanceData[1] == 0 ) {
+  if( $scope.balanceData[1] <= 0 ) {
     var noCurrency={
         symbol: 'U broke Bitch!',
         name: 'U broke Bitch!',
