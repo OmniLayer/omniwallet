@@ -7,7 +7,7 @@
   <form name="buyForm" ng-submit="validateBuyForm(currencyUnit)">
   <div class="row">
     <div class="col-xs-6">
-      <h4 class="text-justify" >Choose coin:</h4>
+      <h4 class="text-justify" >Coin type to purchase:</h4>
       <div class="form-inline">
           <select class="form-control" ng-model="$parent.$parent.selectedCoin"
           ng-options="currency as currency.name for currency in currencyBuyList"
