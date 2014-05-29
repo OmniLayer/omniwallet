@@ -62,11 +62,12 @@ angular.module('omniwallet')
         addresses: []
       };
       walletAddresses.forEach(function(obj) {
-        console.log('wallet addrs', obj)
-        var ecKey = Bitcoin.ECKey.decodeEncryptedFormat(obj.privkey, obj.address);
-        var addr = ecKey.getBitcoinAddress().toString();
-        var key = ecKey.getWalletImportFormat();
-        blob.addresses.push({ address: addr, privkey: key });
+        if(obj.privkey) {
+          var ecKey = Bitcoin.ECKey.decodeEncryptedFormat(obj.privkey, obj.address);
+          var addr = ecKey.getBitcoinAddress().toString();
+          var key = ecKey.getWalletImportFormat();
+          blob.addresses.push({ address: addr, privkey: key });
+        }
       })
       var exportBlob = new Blob([JSON.stringify(blob)], {
         type: 'application/json;charset=utf-8'
