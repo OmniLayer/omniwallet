@@ -7,32 +7,32 @@
   <form name="buyForm" ng-submit="validateBuyForm(currencyUnit)">
   <div class="row">
     <div class="col-xs-6">
-      <h4 class="text-justify" >Choose coin:</h4>
+      <h4 class="text-justify" >Coin type to purchase:</h4>
       <div class="form-inline">
-          <select class="form-control" ng-model="$parent.selectedCoin"
+          <select class="form-control" ng-model="$parent.$parent.selectedCoin"
           ng-options="currency as currency.name for currency in currencyBuyList"
           ng-change="setBalance()" ng-init="setBalance()" ng-disabled="true">
           <option value=""> -- Choose Coin -- </option>
         </select>
         </div> 
-      <h4 class="text-justify" >Buy from address:</h4>
-      <div class="form-inline">
-          <select class="form-control" ng-model="$parent.selectedAddress"
+      <h4 ng-hide="hideForm" class="text-justify" >Buy from address:</h4>
+      <div ng-hide="hideForm" class="form-inline">
+          <select class="form-control" ng-model="$parent.$parent.selectedAddress"
             ng-options="address for address in addressList"
             ng-change="setBalance()" ng-init="setBalance()">
             <option value=""> -- Choose Address -- </option>
           </select>
         </div> 
     </div>
-    <div class="col-xs-6"> 
-      <br><br><br><br><br><br><br><br><br>
-      <button class="btn btn-primary btn-md" 
-      ng-click="currencyUnit = 'stom'" type="button">Convert to m{{selectedCoin.symbol}} </button>
-      <button class="btn btn-primary btn-md" 
-      ng-click="currencyUnit = 'stow'" type="button">Convert to whole {{selectedCoin.symbol}} </button>
+    <div class="col-xs-6" style="padding-top:39px;">
+      <button class="btn btn-primary btn-md"
+      ng-click="currencyUnit = 'stom'; amountUnit = 'mtow'; buyAmount = buyAmount * 1000; minerFees = minerFees * 1000" ng-show="currencyUnit == 'stow' && amountUnit == 'wtow'" type="button">Convert to m{{selectedCoin.symbol}} </button>
+      <button class="btn btn-primary btn-md"
+      ng-click="currencyUnit = 'stow'; amountUnit = 'wtow'; buyAmount = buyAmount / 1000; minerFees = minerFees / 1000" ng-show="currencyUnit == 'stom' && amountUnit == 'mtow'" type="button">Convert to whole {{selectedCoin.symbol}} </button>
     </div>
+
   </div>
-  <div class="row">
+  <div ng-hide="hideForm" class="row">
     <div class="col-xs-12">
       
     <br>
@@ -64,17 +64,16 @@
       <div class="input-group">
         <span class="input-group-addon"> Amount to buy (in {{currencyUnit[currencyUnit.length-1]}}{{selectedCoin.symbol}}): </span>
           <input name="amount" type="number" ng-model="buyAmount" class="form-control" 
-          placeholder="{{{ balance: global['buyOffer'].formatted_amount_available , symbol: currencyUnit} | cryptocurrency}}" required>
+          placeholder="{{{ balance: global['buyOffer'].formatted_amount_available , symbol: currencyUnit} | cryptocurrency}}" min="0" required>
         <span class="input-group-addon" > 
-          Available: {{{ balance: balanceData[0], symbol: currencyUnit } | cryptocurrency}} 
-          {{currencyUnit[currencyUnit.length-1]}}{{selectedCoin.symbol}}</span>
+          Available: {{{ balance: global['buyOffer'].formatted_amount_available , symbol: currencyUnit} | cryptocurrency}}</span>
       </div>
       <br>
       
       <div class="input-group">
         <span class="input-group-addon"> Miner fees (in {{currencyUnit[currencyUnit.length-1]}}BTC): </span>
         <input name="fees" type="number" ng-model="minerFees" class="form-control" 
-        placeholder="{{{ balance: 10000, symbol: currencyUnit } | cryptocurrency}} minimum" step="0.0001" required>
+        placeholder="{{{ balance: 10000, symbol: currencyUnit } | cryptocurrency}} minimum" step="0.0001" min="0.0001" required>
         <span class="input-group-addon" > 
           Available Bitcoin: {{ { balance: balanceData[1], symbol: currencyUnit } | cryptocurrency}}
           {{currencyUnit[currencyUnit.length-1]}}BTC
@@ -83,7 +82,7 @@
     </div>
   </div>
     <br>
-  <input class="btn btn-primary btn-lg col-xs-push-3 col-xs-6" type="submit" value="Buy">
+  <input ng-disabled="hideForm" class="btn btn-primary btn-lg col-xs-push-3 col-xs-6" type="submit" value="Buy">
   </form>
 
 </div>

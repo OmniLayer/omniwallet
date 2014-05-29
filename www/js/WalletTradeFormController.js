@@ -16,7 +16,7 @@ function WalletTradeFormController($scope, userService, walletTradeService) {
   $scope.addressList = userService.getAddressesWithPrivkey($scope.selectedCoin.addresses);
   $scope.selectedAddress = $scope.addressList[0];
   $scope.$watch('selectedCoin', function() {
-    $scope.addressList = userService.getAddressesWithPrivkey($scope.selectedCoin.addresses);;
+    $scope.addressList = userService.getAddressesWithPrivkey($scope.selectedCoin.addresses);
     $scope.selectedAddress = $scope.addressList[0];
     $scope.setBalance();
   });

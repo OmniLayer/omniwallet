@@ -17,7 +17,7 @@ def addresses():
 
   for address_file in addr_glob:
     with open(address_file, 'r') as f:
-      addr = json.loads(f.readline())
+      addr = json.load(f)
       res = {
           'address': addr['address']
       }
@@ -88,7 +88,7 @@ def read(address):
 
   filename = data_dir_root + '/addr/' + address + '.json'
   with open(filename, 'r') as f:
-    return json.loads(f.readline())
+    return json.load(f)
 
 def exists(address):
   filename = data_dir_root + '/addr/' + address + '.json'

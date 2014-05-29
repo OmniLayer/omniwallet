@@ -10,6 +10,7 @@
         <input name="password" type="password" ng-model="create.password" class="form-control" id="inputPassword" ng-minlength="8" required match="create.repeatPassword" auto-focus="true">
         <span style="color:red" ng-show="createForm.password.$error.required && createForm.password.$dirty">Required</span>
         <span style="color:red" ng-show="createForm.password.$dirty && createForm.password.$error.minlength">Password must be at least 8 characters long</span>
+        <span style="color:red" ng-show="createForm.password.$dirty && ((create.password | passwordPercent).replace('%', '') < 70)"><br/>Password strength must be at least 70% <br/>  &nbsp;&nbsp;(Try having at least 2: UpperCase/LowerCase/Numbers/Symbols)</span>
         <div id="pass-strength" >
           Strength: {{ create.password | passwordPercent }}
         </div>
@@ -30,7 +31,7 @@
   <div class="modal-footer">
     <div class="control-group">
       <div class="controls">
-        <input type="submit" class="btn" ng-disabled="createForm.$invalid" value="Create Wallet">
+        <input type="submit" class="btn" ng-disabled="createForm.$invalid || ((create.password | passwordPercent).replace('%', '') < 70)" value="Create Wallet">
       </div>
     </div>
     <div style="color:red" ng-show="walletExists">This UUID is already in use</div>

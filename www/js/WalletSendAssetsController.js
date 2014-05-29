@@ -224,7 +224,7 @@ function WalletSendAssetsController($modal, $scope, $http, $q, userService, wall
           $scope.convertSatoshiToDisplayedValue=  convertSatoshiToDisplayedValue,
           $scope.getDisplayedAbbreviation=  getDisplayedAbbreviation,
           $scope.sendAmount= data.amt,
-          $scope.minerFees= data.fee,
+          $scope.minerFees= (data.fee /100000),
           $scope.sendTo= data.sendTo;
           
           $scope.ok = function() {

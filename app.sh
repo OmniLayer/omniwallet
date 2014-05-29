@@ -1,4 +1,5 @@
 #!/bin/bash
+PYTHONBIN=python
 
 kill_child_processes() {
   kill $SERVER_PID
@@ -45,7 +46,7 @@ do
 	if [[ "$OSTYPE" == "darwin"* ]]; then
 	  uwsgi -s 127.0.0.1:1088 -p 8 -M --vhost --enable-threads --logto $DATADIR/apps.log &
 	else
-	  uwsgi -s 127.0.0.1:1088 -p 8 -M --vhost --enable-threads --plugin python --logto $DATADIR/apps.log &
+	  uwsgi -s 127.0.0.1:1088 -p 8 -M --vhost --enable-threads --plugin $PYTHONBIN --logto $DATADIR/apps.log &
 	fi
 	SERVER_PID=$!
     fi
@@ -60,19 +61,19 @@ do
     echo "Parsing last block $(cat www/revision.json | cut -b 102-109) at $(TZ='America/Chicago' date)"
     while [ "$x" != "0" ];
     do
-      python $TOOLSDIR/msc_parse.py -r $TOOLSDIR 2>&1 >> $PARSE_LOG
+      $PYTHONBIN $TOOLSDIR/msc_parse.py -r $TOOLSDIR 2>&1 >> $PARSE_LOG
         x=$?
     done
     echo "Running validation step..."
-    python $TOOLSDIR/msc_validate.py 2>&1 > $VALIDATE_LOG
+    $PYTHONBIN $TOOLSDIR/msc_validate.py 2>&1 > $VALIDATE_LOG
 
     echo "Getting price calculation..."
     mkdir -p $DATADIR/www/values $DATADIR/www/values/history
-    python $APPDIR/api/coin_values.py
+    $PYTHONBIN $APPDIR/api/coin_values.py
 
     # update archive
     echo "Running archive tool..."
-    python $TOOLSDIR/msc_archive.py -r $TOOLSDIR 2>&1 > $ARCHIVE_LOG
+    $PYTHONBIN $TOOLSDIR/msc_archive.py -r $TOOLSDIR 2>&1 > $ARCHIVE_LOG
 
     mkdir -p $DATADIR/www/tx $DATADIR/www/addr $DATADIR/www/general $DATADIR/www/offers $DATADIR/www/properties $DATADIR/www/mastercoin_verify/addresses $DATADIR/www/mastercoin_verify/transactions
 
@@ -86,8 +87,8 @@ do
     find $DATADIR/mastercoin_verify/transactions/. | xargs -I % cp -rp % $DATADIR/www/mastercoin_verify/transactions
 
    echo "Updating Stats/Status File"
-   python $APPDIR/api/stats.py
-   python $APPDIR/api/status.py -o $APPDIR -d $DATADIR
+   $PYTHONBIN $APPDIR/api/stats.py
+   $PYTHONBIN $APPDIR/api/status.py -o $APPDIR -d $DATADIR
 
     # unlock
     rm -f $LOCK_FILE

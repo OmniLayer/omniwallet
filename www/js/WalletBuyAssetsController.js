@@ -6,8 +6,15 @@ function WalletBuyAssetsController($modal, $scope, $http, $q, userService, walle
       $scope.$parent.$parent.selectedCoin = currency;
     return currency.symbol == $scope.activeCurrencyPair[1];
   });
-
   
+
+  $scope.currencyList.forEach(function(e, i) {
+    if (e.symbol == "BTC"){
+      $scope.addressList = userService.getAddressesWithPrivkey(e.addresses);
+      $scope.$parent.$parent.selectedAddress = $scope.addressList[0];
+    }
+  });
+
   // [ Buy Form Helpers ]
 
   function getUnsignedBuyTransaction(buyerAddress, pubKey, buyAmount, fee, saleTransactionHash) {

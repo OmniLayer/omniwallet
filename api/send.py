@@ -136,13 +136,15 @@ def prepare_send_tx_for_signing(from_address, to_address, marker_address, curren
     inputs_total_value=0
 
     if inputs_number < 1:
+        info('Error not enough BTC to generate tx - no inputs')
         raise Exception('This address must have enough BTC for protocol transaction fees and miner fees')
     for i in range(inputs_number):
         inputs.append(utxo_split[i*12+3])
         try:
             inputs_total_value += int(utxo_split[i*12+7])
         except ValueError:
-            raise Exception('Error: parsing value from '+utxo_split[i*12+7])
+            info('Error parsing utxo, '+ str(utxo_split) )
+            raise Exception('Error: parsing inputs was invalid, do you have enough BTC?')
 
     inputs_outputs='/dev/stdout'
     for i in inputs:
@@ -151,6 +153,7 @@ def prepare_send_tx_for_signing(from_address, to_address, marker_address, curren
     # calculate change
     change_value=inputs_total_value-required_value-fee
     if change_value < 0:
+        info('Error not enough BTC to generate tx - negative change')
         raise Exception('This address must have enough BTC for miner fees and protocol transaction fees')
 
     if currency_id == 0: # bitcoin
