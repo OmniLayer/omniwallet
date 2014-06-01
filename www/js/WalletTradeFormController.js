@@ -1,5 +1,6 @@
 function WalletTradeFormController($scope, userService, walletTradeService) {
   // [ Form Validation]
+  var WHOLE_UNIT = 0.00000001; //Backend data returns satoshi, use this conversion ratio
 
   $scope.showErrors = false;
 
@@ -21,7 +22,7 @@ function WalletTradeFormController($scope, userService, walletTradeService) {
     $scope.setBalance();
   });
   
-  $scope.minerFees = formatCurrencyInFundamentalUnit(0.0001, 'wtom');
+  $scope.minerFees = 0.0001; //set default miner fees
 
   // [ Retrieve Balances ]
   $scope.currencyUnit = 'stom'; // satoshi to millibitt
@@ -66,10 +67,10 @@ function WalletTradeFormController($scope, userService, walletTradeService) {
         if (addrListBal[i].address == address) {
           for (var k = 0; k < addrListBal[i].balance.length; k++) {
             if (addrListBal[i].balance[k].symbol == coin) {
-              $scope.balanceData[0] = addrListBal[i].balance[k].value;
+              $scope.balanceData[0] = addrListBal[i].balance[k].value * WHOLE_UNIT;
             }
             if (addrListBal[i].balance[k].symbol == 'BTC') {
-              $scope.balanceData[1] = addrListBal[i].balance[k].value;
+              $scope.balanceData[1] = addrListBal[i].balance[k].value * WHOLE_UNIT;
             }
           }
         }

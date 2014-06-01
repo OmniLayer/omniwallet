@@ -178,7 +178,7 @@ function WalletSendAssetsController($modal, $scope, $http, $q, userService, wall
     var minerMinimum = 10000;
     var nonZeroValue = 1;
 
-    var minerFees = Math.ceil($scope.minerFees * 100000);
+    var minerFees = $scope.minerFees;
     var sendAmount = convertDisplayedValueToSatoshi($scope.sendAmount);
 
     var balance = +$scope.balanceData[0];
