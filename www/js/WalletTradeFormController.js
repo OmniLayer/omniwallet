@@ -1,6 +1,7 @@
 function WalletTradeFormController($scope, userService, walletTradeService) {
   // [ Form Validation]
-  var WHOLE_UNIT = 0.00000001; //Backend data returns satoshi, use this conversion ratio
+  WHOLE_UNIT = new Big(0.00000001); //Backend data returns satoshi, use this conversion ratio
+  SATOSHI_UNIT = new Big(100000000); //Backend data needs satoshi, use this conversion ratio
 
   $scope.showErrors = false;
 
@@ -67,10 +68,11 @@ function WalletTradeFormController($scope, userService, walletTradeService) {
         if (addrListBal[i].address == address) {
           for (var k = 0; k < addrListBal[i].balance.length; k++) {
             if (addrListBal[i].balance[k].symbol == coin) {
-              $scope.balanceData[0] = addrListBal[i].balance[k].value * WHOLE_UNIT;
+              var divisible = addrListBal[i].balance[k].divisible;
+              $scope.balanceData[0] = divisible ? new Big(addrListBal[i].balance[k].value).times(WHOLE_UNIT).valueOf() : addrListBal[i].balance[k].value;
             }
             if (addrListBal[i].balance[k].symbol == 'BTC') {
-              $scope.balanceData[1] = addrListBal[i].balance[k].value * WHOLE_UNIT;
+              $scope.balanceData[1] = new Big(addrListBal[i].balance[k].value).times(WHOLE_UNIT).valueOf();
             }
           }
         }
