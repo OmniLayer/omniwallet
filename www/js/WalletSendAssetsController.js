@@ -1,44 +1,6 @@
 function WalletSendAssetsController($modal, $scope, $http, $q, userService, walletTradeService) {
   // [ Helper Functions ]
 
-  function convertSatoshiToDisplayedValue(satoshi) {
-      if($scope.selectedCoin.divisible)
-        return new Big(satoshi).times(WHOLE_UNIT).toFixed(8);
-      else
-        return satoshi;
-  }
-
-  $scope.convertSatoshiToDisplayedValue = convertSatoshiToDisplayedValue;
-
-  function getDisplayedAbbreviation() {
-    if($scope.selectedCoin.divisible) {
-      $scope.sendPlaceholderValue = '1.00000000'
-      $scope.sendPlaceholderStep = $scope.sendPlaceholderMin = '0.00000001'
-    } else {
-      $scope.sendPlaceholderValue = $scope.sendPlaceholderStep = $scope.sendPlaceholderMin = '1'
-    }
-    if ($scope.selectedCoin.symbol.indexOf('SP') == 0) {
-      for (var i in $scope.currencyList) {
-        if ($scope.currencyList[i].symbol == $scope.selectedCoin.symbol)
-          return $scope.currencyList[i].name + ' #' + $scope.selectedCoin.symbol.match(/SP([0-9]+)/)[1];
-      }
-      return 'Smart Property #' + $scope.selectedCoin.symbol.match(/SP([0-9]+)/)[1];
-    }
-    else
-      return $scope.selectedCoin.symbol;
-  }
-  $scope.getDisplayedAbbreviation = getDisplayedAbbreviation;
-
-  function convertDisplayedValue(value) {
-      if (value instanceof Array) {
-        value.forEach(function(e, i, a) {
-            a[i] = new Big(e).times(SATOSHI_UNIT).valueOf();
-        });
-        return value;
-      } 
-      else
-          return new Big(value).times(SATOSHI_UNIT).valueOf();
-  }
 
   // [ Send Form Helpers ]
 
@@ -172,7 +134,7 @@ function WalletSendAssetsController($modal, $scope, $http, $q, userService, wall
       delete convertToSatoshi[ convertToSatoshi.indexOf( $scope.balanceData[0] ) ];
     }
 
-    var convertedValues = convertDisplayedValue( convertToSatoshi );
+    var convertedValues = $scope.convertDisplayedValue( convertToSatoshi );
 
     var minerFees = +convertedValues[0];
     var sendAmount = divisible ? +convertedValues[1] : +$scope.sendAmount;
@@ -220,7 +182,7 @@ function WalletSendAssetsController($modal, $scope, $http, $q, userService, wall
           $scope.convertSatoshiToDisplayedValue=  convertSatoshiToDisplayedValue,
           $scope.getDisplayedAbbreviation=  getDisplayedAbbreviation,
           $scope.sendAmount= data.amt,
-          $scope.minerFees= new Big(data.fee).times(WHOLE_UNIT).valueOf(),
+          $scope.minerFees= data.fee,
           $scope.sendTo= data.sendTo;
           
           $scope.ok = function() {

@@ -79,4 +79,40 @@ function WalletTradeFormController($scope, userService, walletTradeService) {
       }
     }
   };
+
+  $scope.convertSatoshiToDisplayedValue = function(satoshi) {
+      if($scope.selectedCoin.divisible)
+        return new Big(satoshi).times(WHOLE_UNIT).toFixed(8);
+      else
+        return satoshi;
+  }
+
+  $scope.getDisplayedAbbreviation = function () {
+    if($scope.selectedCoin.divisible) {
+      $scope.sendPlaceholderValue = '1.00000000'
+      $scope.sendPlaceholderStep = $scope.sendPlaceholderMin = '0.00000001'
+    } else {
+      $scope.sendPlaceholderValue = $scope.sendPlaceholderStep = $scope.sendPlaceholderMin = '1'
+    }
+    if ($scope.selectedCoin.symbol.indexOf('SP') == 0) {
+      for (var i in $scope.currencyList) {
+        if ($scope.currencyList[i].symbol == $scope.selectedCoin.symbol)
+          return $scope.currencyList[i].name + ' #' + $scope.selectedCoin.symbol.match(/SP([0-9]+)/)[1];
+      }
+      return 'Smart Property #' + $scope.selectedCoin.symbol.match(/SP([0-9]+)/)[1];
+    }
+    else
+      return $scope.selectedCoin.symbol;
+  }
+
+  $scope.convertDisplayedValue = function (value) {
+      if (value instanceof Array) {
+        value.forEach(function(e, i, a) {
+            a[i] = new Big(e).times(SATOSHI_UNIT).valueOf();
+        });
+        return value;
+      } 
+      else
+          return new Big(value).times(SATOSHI_UNIT).valueOf();
+  }
 };
