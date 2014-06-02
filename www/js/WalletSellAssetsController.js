@@ -138,31 +138,42 @@ function WalletSellAssetsController($modal, $scope, $http, $q, userService, wall
     });
   }
 
-  $scope.validateSaleForm = function(currencyUnit) {
+  $scope.validateSaleForm = function() {
     var dustValue = 5430;
     var minerMinimum = 10000;
     var nonZeroValue = 1;
+    var divisible = $scope.selectedCoin.divisible; 
 
-    // var salePricePerCoin = Math.ceil( formatCurrencyInFundamentalUnit( +$scope.salePricePerCoin , currencyUnit[3]+'tos'  ) );
-    var salePricePerCoin = +$scope.salePricePerCoin;
-    var buyersFee = Math.ceil(formatCurrencyInFundamentalUnit(+$scope.buyersFee, currencyUnit[3] + 'tos'));
-    var minerFees = Math.ceil(formatCurrencyInFundamentalUnit(+$scope.minerFees, currencyUnit[3] + 'tos'));
-    var saleAmount = Math.ceil(formatCurrencyInFundamentalUnit(+$scope.saleAmount, currencyUnit[3] + 'tos'));
+    var convertToSatoshi = [
+        $scope.minerFees,
+        $scope.buyersFee,
+        $scope.salePricePerCoin,
+        $scope.saleAmount,
+        $scope.balanceData[0], 
+        $scope.balanceData[1]
+      ];
 
-    // var salePricePerCoinMillis = formatCurrencyInFundamentalUnit( salePricePerCoin , 'stom' ) ;
-    var buyersFeeMillis = formatCurrencyInFundamentalUnit(buyersFee, 'stom');
-    var minerFeesMillis = formatCurrencyInFundamentalUnit(minerFees, 'stom');
-    var saleAmountMillis = formatCurrencyInFundamentalUnit(saleAmount, 'stom');
+    if (!divisible) {
+      delete convertToSatoshi[ convertToSatoshi.indexOf( $scope.saleAmount ) ];
+      delete convertToSatoshi[ convertToSatoshi.indexOf( $scope.balanceData[0] ) ];
+    }
+
+    var convertedValues = $scope.convertDisplayedValue( convertToSatoshi );
+
+    var minerFees = +convertedValues[0];
+    var buyersFee = +convertedValues[1];
+    var salePricePerCoin = +convertedValues[2];
+    var saleAmount = divisible ? +convertedValues[3] : +$scope.sendAmount;
+    
+    var balance = divisible ? +convertedValues[4] : +$scope.balanceData[0];
+    var btcbalance = +convertedValues[5];
 
     var coin = $scope.selectedCoin.symbol;
     var address = $scope.selectedAddress;
     var saleBlocks = +$scope.saleBlocks;
 
-    var balance = +$scope.balanceData[0];
-    var btcbalance = +$scope.balanceData[1];
-
     var required = [coin, address, saleAmount, saleBlocks, salePricePerCoin, minerFees, buyersFee, balance, btcbalance, $scope.saleForm.$valid];
-    console.log(required);
+    
     var error = 'Please ';
     if ($scope.saleForm.$valid == false) {
       error += 'make sure all fields are completely filled, ';
@@ -174,9 +185,9 @@ function WalletSellAssetsController($modal, $scope, $http, $q, userService, wall
       if (saleAmount < nonZeroValue)
         error += 'make sure your send amount is non-zero, ';
       if (buyersFee < minerMinimum)
-        error += 'make sure your buyers fee entry is at least 0.1 mBTC, ';
+        error += 'make sure your buyers fee entry is at least 0.0001 BTC, ';
       if (minerFees < minerMinimum)
-        error += 'make sure your fee entry is at least 0.1 mBTC, ';
+        error += 'make sure your fee entry is at least 0.0001 BTC, ';
       if ((saleAmount <= balance) == false)
         error += 'make sure you aren\'t putting more coins up for sale than you own, ';
       if ((minerFees <= btcbalance) == false)
@@ -191,19 +202,21 @@ function WalletSellAssetsController($modal, $scope, $http, $q, userService, wall
       // open modal
       var modalInstance = $modal.open({
         templateUrl: '/partials/wallet_sale_modal.html',
-        controller: function($scope, $rootScope, userService, data, prepareSaleTransaction, getUnsignedSaleTransaction) {
+        controller: function($scope, $rootScope, userService, data, prepareSaleTransaction, getUnsignedSaleTransaction, convertSatoshiToDisplayedValue, getDisplayedAbbreviation) {
           $scope.sendSuccess = false, $scope.sendError = false, $scope.waiting = false, $scope.privKeyPass = {};
-          $scope.saleAmountMillis= data.saleAmountMillis,
+          $scope.convertSatoshiToDisplayedValue=convertSatoshiToDisplayedValue,
+          $scope.getDisplayedAbbreviation=getDisplayedAbbreviation,
+          $scope.saleAmount=data.amt,
+          $scope.buyersFee=data.buyersfee,
           $scope.selectedCoin=data.selectedCoin,
-          $scope.salePricePerCoin= data.price,
-          $scope.buyersFeeMillis= data.buyersFeeMillis;
+          $scope.salePricePerCoin= data.price;
 
           $scope.ok = function() {
             $scope.clicked = true;
             $scope.waiting = true;
 
             prepareSaleTransaction(data.seller, data.amt, data.price,
-            data.buyerfee, data.fee, data.blocks, data.currency, $scope.privKeyPass, $scope);
+            data.buyersfee, data.fee, data.blocks, data.currency, $scope.privKeyPass, $scope);
           };
         },
         resolve: {
@@ -212,13 +225,11 @@ function WalletSellAssetsController($modal, $scope, $http, $q, userService, wall
               seller: address,
               amt: saleAmount,
               price: salePricePerCoin,
-              buyerfee: buyersFee,
+              buyersfee: buyersFee,
               fee: minerFees,
               blocks: saleBlocks,
               currency: coin,
-              saleAmountMillis: saleAmountMillis,
               selectedCoin: $scope.selectedCoin,
-              buyersFeeMillis: buyersFeeMillis,
               saleBlocks: saleBlocks
             };
           },
@@ -230,6 +241,12 @@ function WalletSellAssetsController($modal, $scope, $http, $q, userService, wall
           },
           pushSignedTransaction: function() {
             return walletTradeService.pushSignedTransaction;
+          },
+          convertSatoshiToDisplayedValue: function() {
+            return $scope.convertSatoshiToDisplayedValue;
+          },
+          getDisplayedAbbreviation: function() {
+            return $scope.getDisplayedAbbreviation;
           }
         }
       });
