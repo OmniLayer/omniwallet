@@ -233,8 +233,8 @@ function WalletTradeOverviewController($scope, $http, $q, userService, hashExplo
   $scope.currencyUnit = 'stom'
   $scope.selectedTimeframe = "604800"
   $scope.global.getData = function(time, currency) {
-    $scope.orderbook = []
-    var transaction_data = []
+    $scope.orderbook = [];
+    var transaction_data = [];
     var postData = {
       type: 'TIME',
       currencyType: currency || $scope.activeCurrencyPair[1],
@@ -242,14 +242,14 @@ function WalletTradeOverviewController($scope, $http, $q, userService, hashExplo
     };
     $http.post('/v1/exchange/offers', postData).success(function(offerSuccess) {
       if (offerSuccess.data.length > 0) {
-        transaction_data = offerSuccess.data
+        transaction_data = offerSuccess.data;
         //DEBUG console.log(transaction_data)
         //turn everything to number value
         transaction_data.forEach(function(tx) {
           transaction_data_keys = Object.keys(tx);
           transaction_data_keys.forEach(function(key) {
             if ((typeof tx[key] === 'string') && (tx[key].search(/[a-zA-Z]/g) === -1)) {
-              tx[key] = +tx[key]
+              tx[key] = +tx[key];
             }
           });
         });
@@ -264,16 +264,17 @@ function WalletTradeOverviewController($scope, $http, $q, userService, hashExplo
 
         angular.forEach(transaction_data, function(transaction, index) {
           //DEBUG console.log(new Date(Number(transaction.tx_time)))
-          transaction_data[index].tx_hash_concat = transaction.tx_hash.substring(0, 22) + '...'
+          transaction_data[index].tx_hash_concat = transaction.tx_hash.substring(0, 22) + '...';
         });
 
         transaction_data.sort(function(a, b) {
-          return a.formatted_price_per_coin - b.formatted_price_per_coin
+          return a.formatted_price_per_coin - b.formatted_price_per_coin;
         }); // sort cheapest; sort most recent (b.tx_time - a.tx_time)
         //DEBUG console.log('wallet trade overview ctrl', transaction_data)
-      } else transaction_data.push({
-          tx_hash: 'No offers/bids found for this timeframe'
-        })
+      }
+      else transaction_data.push({
+        tx_hash: 'No offers/bids found for this timeframe'
+      });
       $scope.orderbook = transaction_data;
     }
     );
@@ -329,20 +330,20 @@ function WalletTradeHistoryController($scope, $http, $q, userService, hashExplor
 
 
 function WalletTradePendingController($scope, $http, $q, userService, hashExplorer) {
-  $scope.setHashExplorer = hashExplorer.setHash.bind(hashExplorer)
+  $scope.setHashExplorer = hashExplorer.setHash.bind(hashExplorer);
   //$scope.selectedAddress = userService.getAllAddresses()[ userService.getAllAddresses().length-1 ].address;
-  $scope.currencyUnit = 'stom'
-  $scope.pendingThinking = true
-  $scope.hasAddressesWithPrivkey = getAddressesWithPrivkey()
-  $scope.selectedCoin = 'BTC'
-  $scope.selectedTimeframe = "604800"
+  $scope.currencyUnit = 'stom';
+  $scope.pendingThinking = true;
+  $scope.hasAddressesWithPrivkey = getAddressesWithPrivkey();
+  $scope.selectedCoin = 'BTC';
+  $scope.selectedTimeframe = "604800";
   $scope.filterData = function(time) {
     var orderbook = JSON.parse($scope.orderBookStorage);
 
-    var now = Date.now()
+    var now = Date.now();
     var filtered_transaction_data = orderbook.filter(function(item) {
-      console.log('time2', +item.tx_time, '>= ?', (now - (+time)))
-      return true //(+item.tx_time) <= (now - (+time) ) 
+      console.log('time2', +item.tx_time, '>= ?', (now - (+time)));
+      return true; //(+item.tx_time) <= (now - (+time) )
     });
     $scope.orderbook = filtered_transaction_data;
   }
@@ -439,11 +440,18 @@ function WalletTradePendingController($scope, $http, $q, userService, hashExplor
   }
   $scope.purchaseCoin = function(tx) {
     $scope.pendingThinking = false;
-    $scope.buyTransaction = tx
-    $scope.sendTo = tx.to_address
-    $scope.sendAmountPlaceholder = tx.bitcoin_required
-    $scope.selectedAddress = tx.from_address
-  }
+    $scope.buyTransaction = tx;
+    $scope.sendTo = tx.to_address;
+    $scope.sendAmountPlaceholder = tx.bitcoin_required;
+    $scope.selectedAddress = tx.from_address;
+  };
+  $scope.cancelPurchase = function(tx) {
+    $scope.pendingThinking = false;
+    $scope.buyTransaction = tx;
+    $scope.sendTo = null;
+    $scope.sendAmountPlaceholder = null;
+    $scope.selectedAddress = null;
+  };
 
 
   function getAddressesWithPrivkey() {
