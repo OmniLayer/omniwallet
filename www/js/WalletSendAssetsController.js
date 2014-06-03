@@ -1,63 +1,6 @@
 function WalletSendAssetsController($modal, $scope, $http, $q, userService, walletTradeService) {
   // [ Helper Functions ]
 
-  function convertSatoshiToDisplayedValue(satoshi) {
-    if ($scope.selectedCoin.symbol == 'BTC')
-      return satoshi / 100000.0;
-    else if ($scope.selectedCoin.symbol.indexOf('SP') == 0) {
-      for (var i in $scope.currencyList) {
-        if ($scope.currencyList[i].symbol == $scope.selectedCoin.symbol) {
-          if ($scope.currencyList[i].property_type == 1)
-            return satoshi;
-          else
-            return satoshi / 100000000.0;
-        }
-      }
-      return satoshi / 100000000.0;
-    } else {
-      return satoshi / 100000000.0;
-    }
-  }
-
-  $scope.convertSatoshiToDisplayedValue = convertSatoshiToDisplayedValue;
-
-  function getDisplayedAbbreviation() {
-    if ($scope.selectedCoin.symbol == 'BTC')
-      return 'mBTC';
-    else if ($scope.selectedCoin.symbol.indexOf('SP') == 0) {
-      for (var i in $scope.currencyList) {
-        if ($scope.currencyList[i].symbol == $scope.selectedCoin.symbol)
-          return $scope.currencyList[i].name + ' #' + $scope.selectedCoin.symbol.match(/SP([0-9]+)/)[1];
-      }
-
-      return 'Smart Property #' + $scope.selectedCoin.symbol.match(/SP([0-9]+)/)[1];
-    }
-    else
-      return $scope.selectedCoin.symbol;
-  }
-  $scope.getDisplayedAbbreviation = getDisplayedAbbreviation;
-
-  function convertDisplayedValueToSatoshi(value) {
-    if ($scope.selectedCoin.symbol == 'BTC') {
-      return Math.ceil(value * 100000);
-    } else if ($scope.selectedCoin.symbol.indexOf('SP') == 0) {
-      for (var i in $scope.currencyList) {
-        if ($scope.currencyList[i].symbol == $scope.selectedCoin.symbol) {
-          if ($scope.currencyList[i].property_type == 1)
-            return Math.ceil(value);
-          else
-            return Math.ceil(value * 100000000);
-        }
-      }
-      return Math.ceil(value * 100000000);
-    } else {
-      return Math.ceil(value * 100000000);
-    }
-  }
-  
-
-  
-
 
   // [ Send Form Helpers ]
 
@@ -177,12 +120,27 @@ function WalletSendAssetsController($modal, $scope, $http, $q, userService, wall
     var dustValue = 5430;
     var minerMinimum = 10000;
     var nonZeroValue = 1;
+    var divisible = $scope.selectedCoin.divisible; 
 
-    var minerFees = Math.ceil($scope.minerFees * 100000);
-    var sendAmount = convertDisplayedValueToSatoshi($scope.sendAmount);
+    var convertToSatoshi = [
+        $scope.minerFees,
+        $scope.sendAmount,
+        $scope.balanceData[0], 
+        $scope.balanceData[1]
+      ];
 
-    var balance = +$scope.balanceData[0];
-    var btcbalance = +$scope.balanceData[1];
+    if (!divisible) {
+      delete convertToSatoshi[ convertToSatoshi.indexOf( $scope.sendAmount ) ];
+      delete convertToSatoshi[ convertToSatoshi.indexOf( $scope.balanceData[0] ) ];
+    }
+
+    var convertedValues = $scope.convertDisplayedValue( convertToSatoshi );
+
+    var minerFees = +convertedValues[0];
+    var sendAmount = divisible ? +convertedValues[1] : +$scope.sendAmount;
+
+    var balance = divisible ? +convertedValues[2] : +$scope.balanceData[0];
+    var btcbalance = +convertedValues[3];
 
     var coin = $scope.selectedCoin.symbol;
     var address = $scope.selectedAddress;
@@ -204,9 +162,9 @@ function WalletSendAssetsController($modal, $scope, $http, $q, userService, wall
     }
     if (coin == 'BTC') {
       if (sendAmount < dustValue)
-        error += 'make sure your send amount is at least 0.05430 mBTC if sending BTC, ';
+        error += 'make sure your send amount is at least 0.00005430 BTC if sending BTC, ';
       if (minerFees < minerMinimum)
-        error += 'make sure your fee entry is at least 0.1 mBTC to cover miner costs, ';
+        error += 'make sure your fee entry is at least 0.0001 BTC to cover miner costs, ';
     }
     if( ((coin == 'MSC') || (coin == 'TMSC')) ) {
       if (sendAmount < nonZeroValue)
@@ -224,7 +182,7 @@ function WalletSendAssetsController($modal, $scope, $http, $q, userService, wall
           $scope.convertSatoshiToDisplayedValue=  convertSatoshiToDisplayedValue,
           $scope.getDisplayedAbbreviation=  getDisplayedAbbreviation,
           $scope.sendAmount= data.amt,
-          $scope.minerFees= (data.fee /100000),
+          $scope.minerFees= data.fee,
           $scope.sendTo= data.sendTo;
           
           $scope.ok = function() {
