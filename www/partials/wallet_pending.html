@@ -19,10 +19,6 @@
         <!--
             <a href=""> filter </a> 
           -->
-      <button class="btn btn-primary btn-sm" 
-      ng-click="currencyUnit = 'stom'" type="button">Convert to mBTC </button>
-      <button class="btn btn-primary btn-sm" 
-      ng-click="currencyUnit = 'stow'" type="button">Convert to whole BTC </button>
     </div>
 
     <h3 ng-show="orderbook.length == 0" class="text-center">Loading orders...<img src="/assets/img/34-1.gif"></h3>
@@ -43,9 +39,9 @@
 
       <tr ng-repeat="transaction in filtered_buys">
         <td ng-click="setHashExplorer(transaction)"> <a href="/explorer/inspector?view={{transaction.tx_hash}}">{{transaction.tx_hash}}</a></td>
-        <td ng-if="transaction.formatted_price_per_coin">{{{ balance: transaction.formatted_price_per_coin, symbol: currencyUnit } | cryptocurrency }}</td> 
-        <td ng-if="transaction.formatted_amount">{{{ balance: transaction.formatted_amount, symbol: currencyUnit } | cryptocurrency}}</td> 
-        <td ng-if="transaction.bitcoin_required">{{ ({ balance: transaction.bitcoin_required, symbol: currencyUnit } | cryptocurrency) }}</td> 
+        <td ng-if="transaction.formatted_price_per_coin">{{transaction.formatted_price_per_coin}}</td> 
+        <td ng-if="transaction.formatted_amount">{{transaction.formatted_amount}}</td> 
+        <td ng-if="transaction.bitcoin_required">{{transaction.bitcoin_required}}</td> 
         <td ng-show="(transaction.tx_hash.length == 64 && transaction.payment_expired == false)">
         <button class="btn btn-primary btn-sm" ng-click="purchaseCoin(transaction)" type="submit">Purchase coin</button>
       </td>
@@ -72,9 +68,9 @@
 
       <tr ng-repeat="transaction in filtered_sells">
         <td ng-click="setHashExplorer(transaction)"> <a href="/explorer/inspector?view={{transaction.tx_hash}}">{{transaction.tx_hash}}</a></td>
-        <td>{{{ balance: transaction.formatted_price_per_coin, symbol: currencyUnit } | cryptocurrency }}</td> 
-        <td >{{{ balance: transaction.formatted_amount, symbol: currencyUnit } | cryptocurrency}}</td> 
-        <td >{{ ({ balance: transaction.bitcoin_required, symbol: currencyUnit } | cryptocurrency) }}</td> 
+        <td>{{transaction.formatted_price_per_coin }}</td> 
+        <td >{{transaction.formatted_amount}}</td> 
+        <td >{{transaction.bitcoin_required}}</td> 
         <td ><button class="btn btn-primary btn-sm" ng-click="purchaseCoin(transaction)" type="submit" disabled>Cancel Offer</button></td>
       </tr>
 
@@ -129,7 +125,7 @@
         <br>
         <div ng-show="showErrors" class="alert alert-danger"> <strong> {{error}} </strong> </div> 
       </div>
-      <form name="sendForm" ng-submit="validateSendForm(currencyUnit)">
+      <form name="sendForm" ng-submit="validateSendForm()">
       <div class="row">
         <div class="col-xs-6">
           <h4 class="text-justify" >Send type of coin:</h4>
@@ -152,13 +148,6 @@
           <h6 class="text-justify">  
           Note that we allow you to only make payment from addresses with a valid private key. </h6>
         </div>
-        <div class="col-xs-6"> 
-          <br><br><br><br><br><br><br><br><br>
-          <button class="btn btn-primary btn-md" 
-          ng-click="currencyUnit = 'stom'" type="button">Convert to mBTC </button>
-          <button class="btn btn-primary btn-md" 
-          ng-click="currencyUnit = 'stow'" type="button">Convert to whole BTC </button>
-        </div>
       </div>
         <br>
       <div class="row">
@@ -170,21 +159,19 @@
           </div>
           <br>
           <div class="input-group">
-            <span class="input-group-addon"> Amount to send (in {{currencyUnit[currencyUnit.length-1]}}{{selectedCoin}}): </span>
+            <span class="input-group-addon"> Amount to send (in{{selectedCoin}}): </span>
               <input name="amount" type="number" ng-model="sendAmount" class="form-control" 
-              placeholder="{{{ balance: sendAmountPlaceholder, symbol: currencyUnit} | cryptocurrency}}" required>
+              placeholder="{{sendAmountPlaceholder}}" required>
             <span class="input-group-addon" > 
-              Available: {{{ balance: balanceData[0], symbol: currencyUnit } | cryptocurrency}} 
-              {{currencyUnit[currencyUnit.length-1]}}{{selectedCoin}}</span>
+              Available: {{balanceData[0]}} {{selectedCoin}}</span>
           </div>
           <br>
           <div class="input-group">
-            <span class="input-group-addon"> Transaction/Miner fees (in {{currencyUnit[currencyUnit.length-1]}}BTC): </span>
+            <span class="input-group-addon"> Transaction/Miner fees (in BTC): </span>
             <input name="fees" type="number" ng-model="minerFees" class="form-control" 
-            placeholder="{{{ balance: 10000, symbol: currencyUnit } | cryptocurrency}} minimum" required>
+            placeholder="0.0001 minimum" required>
             <span class="input-group-addon" > 
-              Available Bitcoin: {{ { balance: balanceData[1], symbol: currencyUnit } | cryptocurrency}}
-              {{currencyUnit[currencyUnit.length-1]}}{{selectedCoin}}
+              Available Bitcoin: {{ balanceData[1]}} {{selectedCoin}}
               </span>
           </div>
           <input ng-model="marked" ng-hide="true" ng-init="marked = true" type="checkbox"> 

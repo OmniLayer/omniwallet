@@ -21,9 +21,11 @@ function HomeCtrl($scope, $templateCache, $injector, $location, $http, $q) {
       var appraiser = $injector.get('appraiser');
       $injector.get('balanceService').balance($scope.balanceAddress).then(function(result) {
         result.data.balance.forEach(function(currencyItem) {
+          if(currencyItem.divisible)
+            var value=new Big(currencyItem.value).times(WHOLE_UNIT).valueOf();
           balances[currencyItem.symbol] = {
             "symbol": currencyItem.symbol,
-            "balance": parseInt(currencyItem.value),
+            "balance": +value || currencyItem.value,
             "value": appraiser.getValue(currencyItem.value, currencyItem.symbol),
           };
           if (currencyItem.symbol == 'BTC') {
