@@ -163,7 +163,7 @@ function WalletSellAssetsController($modal, $scope, $http, $q, userService, wall
     var minerFees = +convertedValues[0];
     var buyersFee = +convertedValues[1];
     var salePricePerCoin = +convertedValues[2];
-    var saleAmount = divisible ? +convertedValues[3] : +$scope.sendAmount;
+    var saleAmount = divisible ? +convertedValues[3] : +$scope.saleAmount;
     
     var balance = divisible ? +convertedValues[4] : +$scope.balanceData[0];
     var btcbalance = +convertedValues[5];
