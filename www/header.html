@@ -9,6 +9,11 @@
             </button>
             <a class="navbar-brand" href="/"><img src="/assets/img/logo.png" alt="mastercoin"></a>
         </div>
+
+        <div class="navbar-header" ng-show="user.loggedIn">
+	    <br /><div class="btn btn-default" ng-click="openUUIDmodal()">My Wallet<br /><small>{{ user.wallet.uuid }}</small></div>
+        </div>
+
         <div class="navbar-collapse collapse">
             <ul class="nav navbar-nav navbar-right">
               <li ng-hide="user.loggedIn"><a href="/" ng-click="openCreateModal()">Create Wallet</a></li>
@@ -23,3 +28,4 @@
       </div>
   </div>
 </div>
+
