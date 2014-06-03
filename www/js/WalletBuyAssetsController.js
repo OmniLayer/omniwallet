@@ -131,23 +131,35 @@ function WalletBuyAssetsController($modal, $scope, $http, $q, userService, walle
     });
   }
 
-  $scope.validateBuyForm = function(currencyUnit) {
+  $scope.validateBuyForm = function() {
     var dustValue = 5430;
     var minerMinimum = 10000;
     var nonZeroValue = 1;
+    var divisible = $scope.selectedCoin.divisible; 
+
+    var convertToSatoshi = [
+        $scope.minerFees,
+        $scope.buyAmount,
+        $scope.balanceData[0], 
+        $scope.balanceData[1]
+      ];
+
+    if (!divisible) {
+      delete convertToSatoshi[ convertToSatoshi.indexOf( $scope.saleAmount ) ];
+      delete convertToSatoshi[ convertToSatoshi.indexOf( $scope.balanceData[0] ) ];
+    }
+
+    var convertedValues = $scope.convertDisplayedValue( convertToSatoshi );
+
+    var minerFees = +convertedValues[0];
+    var buyAmount = divisible ? +convertedValues[1] : +$scope.buyAmount;
+    
+    var balance = divisible ? +convertedValues[2] : +$scope.balanceData[0];
+    var btcbalance = +convertedValues[3];
 
     var coin = $scope.selectedCoin.symbol;
     var address = $scope.selectedAddress;
     var saleHash = $scope.buySaleID;
-
-    var buyAmount = Math.ceil(formatCurrencyInFundamentalUnit(+$scope.buyAmount, currencyUnit[3] + 'tos'));
-    var minerFees = Math.ceil(formatCurrencyInFundamentalUnit(+$scope.minerFees, currencyUnit[3] + 'tos'));
-
-    var buyAmountMillis = formatCurrencyInFundamentalUnit(buyAmount, 'stom');
-    var minerFeesMillis = formatCurrencyInFundamentalUnit(minerFees, 'stom');
-
-    var balance = +$scope.balanceData[0];
-    var btcbalance = +$scope.balanceData[1];
 
     var required = [coin, address, buyAmount, minerFees, balance, btcbalance, $scope.buyForm.$valid];
     console.log(required);
@@ -166,7 +178,7 @@ function WalletBuyAssetsController($modal, $scope, $http, $q, userService, walle
       if (buyAmount < nonZeroValue)
         error += 'make sure your send amount is non-zero, ';
       if (minerFees < minerMinimum)
-        error += 'make sure your fee entry is at least 0.1 mBTC, ';
+        error += 'make sure your fee entry is at least 0.0001 BTC, ';
       if ((minerFees <= btcbalance) == false)
         error += 'make sure you have enough Bitcoin to cover your fees, ';
     }
@@ -176,11 +188,13 @@ function WalletBuyAssetsController($modal, $scope, $http, $q, userService, walle
       // open modal
       var modalInstance = $modal.open({
         templateUrl: '/partials/wallet_buy_modal.html',
-        controller: function($scope, $rootScope, userService, data, prepareBuyTransaction, getUnsignedBuyTransaction) {
+        controller: function($scope, $rootScope, userService, data, prepareBuyTransaction, getUnsignedBuyTransaction, convertSatoshiToDisplayedValue, getDisplayedAbbreviation) {
           $scope.sendSuccess = false, $scope.sendError = false, $scope.waiting = false, $scope.privKeyPass = {};
-          $scope.buyAmountMillis= buyAmountMillis,
-          $scope.selectedCoin= data.selectedCoin,
-          $scope.minerFeesMillis= data.minerFeesMillis;
+          $scope.convertSatoshiToDisplayedValue=convertSatoshiToDisplayedValue,
+          $scope.getDisplayedAbbreviation=getDisplayedAbbreviation,
+          $scope.buyAmount=data.amt,
+          $scope.minerFees= data.fee,
+          $scope.selectedCoin= data.selectedCoin;
           
           $scope.ok = function() {
             $scope.clicked = true;
@@ -195,9 +209,7 @@ function WalletBuyAssetsController($modal, $scope, $http, $q, userService, walle
               amt: buyAmount,
               hash: saleHash,
               fee: minerFees,
-              buyAmountMillis: buyAmountMillis,
               selectedCoin: $scope.selectedCoin,
-              minerFeesMillis: minerFeesMillis
             };
           },
           prepareBuyTransaction: function() {
@@ -208,6 +220,12 @@ function WalletBuyAssetsController($modal, $scope, $http, $q, userService, walle
           },
           pushSignedTransaction: function() {
             return walletTradeService.pushSignedTransaction;
+          },
+          convertSatoshiToDisplayedValue: function() {
+            return $scope.convertSatoshiToDisplayedValue;
+          },
+          getDisplayedAbbreviation: function() {
+            return $scope.getDisplayedAbbreviation;
           }
         }
       });

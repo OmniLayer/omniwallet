@@ -76,10 +76,6 @@
         <option value="2419200"> 1 month </option>
         <option value="7257600"> 3 months </option>
       </select> <!-- <a href=""> filter </a> -->
-      <button class="btn btn-primary btn-sm" 
-      ng-click="currencyUnit = 'stom'" type="button">Convert to mBTC </button>
-      <button class="btn btn-primary btn-sm" 
-      ng-click="currencyUnit = 'stow'" type="button">Convert to whole BTC </button>
     </div>
 
     <h3 ng-show="orderbook.length == 0" class="text-center">Loading orders...<img src="/assets/img/34-1.gif"></h3>
@@ -100,10 +96,10 @@
 
       <tr ng-repeat="transaction in orderbook">
         <td ng-click="setHashExplorer(transaction)"> <a href="/explorer/inspector?view={{transaction.tx_hash}}">{{transaction.tx_hash_concat}}</a></td>
-        <td>{{{ balance: transaction.formatted_price_per_coin, symbol: currencyUnit } | cryptocurrency }}</td> 
-        <td>{{{ balance: transaction.formatted_amount, symbol: currencyUnit } | cryptocurrency}}</td> 
-        <td>{{ ({ balance: transaction.formatted_bitcoin_amount_desired, symbol: currencyUnit } | cryptocurrency) }}</td> 
-        <td>{{{ balance: transaction.formatted_fee_required, symbol: currencyUnit } | cryptocurrency}}</td> 
+        <td>{{transaction.formatted_price_per_coin}}</td> 
+        <td>{{transaction.formatted_amount}}</td> 
+        <td>{{transaction.formatted_bitcoin_amount_desired}}</td> 
+        <td>{{transaction.formatted_fee_required}}</td> 
         <td>{{transaction.formatted_block_time_limit}}</td> 
         <td ng-show="(transaction.tx_hash.length == 64) && transaction.status == null && 
             !(transaction.from_address == selectedAddress)">
