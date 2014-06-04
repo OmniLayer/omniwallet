@@ -1,4 +1,5 @@
 function PropertyIssuanceController($scope, $http){
+  $scope.showErrors =false;
   $scope.issueProperty = function(){
     var request = { 
       "transaction_type": $scope.transaction_type,

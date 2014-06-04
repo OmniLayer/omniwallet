@@ -1,13 +1,15 @@
-<div class="sidecar col-xs-2" ng-controller="SidecarController" ng-init="setView('issue')">
+<div class="sidecar col-xs-2" ng-controller="SidecarController" ng-init="setView('explorer')">
     <div ng-include="templates['sidecar']"></div>
 </div>
 <div class="col-xs-10" ng-controller="PropertyIssuanceController">
   <br>
   <br>
   <div class="row">
-    <h3 class="text-center" >New Smart Properties</h3>
+    <h3 class="text-center" >Asset Issuance</h3>
     <br>
-    <div ng-show="showErrors" class="alert alert-danger"> <strong> {{error}} </strong> </div> 
+    <div ng-show="showErrors" class="alert alert-danger"> <strong> {{error}} </strong> </div>
+    <br>
+    <div class="alert alert-info"> <strong> Please notice Ecosystem is fixed to TMSC at the moment </strong> </div>  
   </div>
   <form name="issuanceForm" ng-submit="validateIssuanceForm()">
   <div class="row">
@@ -19,62 +21,57 @@
       <br>
       <div class="input-group">
         <span class="input-group-addon"> Ecosystem: </span>
-        <input name="reciever" type="text" ng-model="ecosystem" class="form-control" placeholder="1" required>
+        <input name="reciever" type="text" ng-model="ecosystem" class="form-control" placeholder="1" value="2" disabled>
       </div>
       <br>
       <div class="input-group">
         <span class="input-group-addon"> Property Type: </span>
-        <input name="reciever" type="text" ng-model="property_type" class="form-control" placeholder="1" required>
+        <input name="reciever" type="text" ng-model="property_type" class="form-control" placeholder="1 for new indivisible tokens" required>
       </div>
       <br>
       <div class="input-group">
-        <span class="input-group-addon"> Property Type: </span>
-        <input name="reciever" type="text" ng-model="property_type" class="form-control" placeholder="3" required>
+        <span class="input-group-addon"> Previous Property Id: </span>
+        <input name="reciever" type="text" ng-model="previous_property_id" class="form-control" placeholder="0 for a new smart property (or the existing property ID if replacing or appending)" required>
       </div>
       <br>
       <div class="input-group">
-        <span class="input-group-addon"> previous_property_id: </span>
-        <input name="reciever" type="text" ng-model="previous_property_id" class="form-control" placeholder="3" required>
+        <span class="input-group-addon"> Property Category: </span>
+        <input name="reciever" type="text" ng-model="property_category" class="form-control" placeholder="Companies\0 (10 bytes)" required>
       </div>
       <br>
       <div class="input-group">
-        <span class="input-group-addon"> property_category: </span>
-        <input name="reciever" type="text" ng-model="property_category" class="form-control" placeholder="3" required>
+        <span class="input-group-addon"> Property Subcategory: </span>
+        <input name="reciever" type="text" ng-model="property_subcategory" class="form-control" placeholder="Bitcoin Mining\0 (15 bytes)" required>
       </div>
       <br>
       <div class="input-group">
-        <span class="input-group-addon"> property_subcategory: </span>
-        <input name="reciever" type="text" ng-model="property_subcategory" class="form-control" placeholder="3" required>
+        <span class="input-group-addon"> Property Name: </span>
+        <input name="reciever" type="text" ng-model="property_name" class="form-control" placeholder="Quantum Miner\0 (14 bytes)" required>
       </div>
       <br>
       <div class="input-group">
-        <span class="input-group-addon"> property_name: </span>
-        <input name="reciever" type="text" ng-model="property_name" class="form-control" placeholder="3" required>
+        <span class="input-group-addon"> Property Url: </span>
+        <input name="reciever" type="text" ng-model="property_url" class="form-control" placeholder="tinyurl.com/kwejgoig\0 (21 bytes)" required>
       </div>
       <br>
       <div class="input-group">
-        <span class="input-group-addon"> property_url: </span>
-        <input name="reciever" type="text" ng-model="property_url" class="form-control" placeholder="3" required>
+        <span class="input-group-addon"> Property Data: </span>
+        <input name="reciever" type="text" ng-model="property_data" class="form-control" placeholder="\0 (1 byte)" required>
       </div>
       <br>
       <div class="input-group">
-        <span class="input-group-addon"> property_data: </span>
-        <input name="reciever" type="text" ng-model="property_data" class="form-control" placeholder="3" required>
+        <span class="input-group-addon"> Number Properties: </span>
+        <input name="reciever" type="text" ng-model="number_properties" class="form-control" placeholder="1,000,000 indivisible tokens" required>
       </div>
       <br>
       <div class="input-group">
-        <span class="input-group-addon"> number_properties: </span>
-        <input name="reciever" type="text" ng-model="number_properties" class="form-control" placeholder="3" required>
+        <span class="input-group-addon"> Transaction From: </span>
+        <input name="reciever" type="text" ng-model="transaction_from" class="form-control" placeholder="Your issuing address" required>
       </div>
       <br>
       <div class="input-group">
-        <span class="input-group-addon"> transaction_from: </span>
-        <input name="reciever" type="text" ng-model="transaction_from" class="form-control" placeholder="3" required>
-      </div>
-      <br>
-      <div class="input-group">
-        <span class="input-group-addon"> from_private_key: </span>
-        <input name="reciever" type="text" ng-model="from_private_key" class="form-control" placeholder="3" required>
+        <span class="input-group-addon"> From Private Key: </span>
+        <input name="reciever" type="text" ng-model="from_private_key" class="form-control" placeholder="Your issuing address private key" required>
       </div>
       <br>
     </div>
