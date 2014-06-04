@@ -57,12 +57,12 @@ do
 
     # parse until full success
     x=1 # assume failure
-    echo -n > $PARSE_LOG
-    echo "Parsing last block $(cat www/revision.json | cut -b 102-109) at $(TZ='America/Chicago' date)"
+    # echo -n > $PARSE_LOG #Do not overwrite
     while [ "$x" != "0" ];
     do
+      echo "Parsing last block $(cat www/revision.json | cut -b 102-109) at $(TZ='America/Chicago' date)" | tee -a $PARSE_LOG
       $PYTHONBIN $TOOLSDIR/msc_parse.py -r $TOOLSDIR 2>&1 >> $PARSE_LOG
-        x=$?
+      x=$?
     done
     echo "Running validation step..."
     $PYTHONBIN $TOOLSDIR/msc_validate.py 2>&1 > $VALIDATE_LOG
