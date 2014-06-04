@@ -169,6 +169,13 @@ function NavigationController($scope, $http, $modal, userService) {
     });
   };
 
+  $scope.openUUIDmodal = function() {
+    $modal.open({
+      templateUrl: '/partials/wallet_uuid_modal.html',
+      controller: WalletController
+    });
+  };
+
   $scope.logout = function() {
     window.location.reload(false);
   };

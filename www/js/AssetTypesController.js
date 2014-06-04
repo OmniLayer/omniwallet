@@ -136,6 +136,7 @@ angular.module('omniwallet')
 
   $scope.refresh = function() {
 
+    $scope.isLoading = true;
     $scope.items = asset_types_data.getData().then(function(balances) {
       $scope.balances = balances;
 
@@ -154,6 +155,8 @@ angular.module('omniwallet')
           });
         });
       });
+      $scope.isLoading = false;
+      //console.log("loading refreshed stop");
     });
   }
 

@@ -5,11 +5,11 @@
 </div>
 
 <div class="col-xs-10" ng-controller="WalletController">
-  <div ng-include="templates['disclaimer']" ng-hide="disclaimerSeen"></div>
+  <div ng-include="templates['disclaimer']" ng-hide="!disclaimerSeen"></div>
   <br>
   <br>
   <div class="panel panel-default">
-    <h3 class="text-center panel-body">Wallet Overview <small>{{ uuid }}</small></h3>
+    <h3 class="text-center panel-body">Wallet Overview</h3>
   </div>
   <div ng-if="addrList.length > 0" class="alert alert-info alert-dismissable">
     <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
@@ -27,7 +27,11 @@
   </div>
 
   <div class="row" >
+
+    <h3 ng-controller="AssetTypesController" ng-init="isLoading=true" ng-show="isLoading" class="text-center">Updating Overview...<img src="/assets/img/34-1.gif"></h3>
     <div ng-controller="AssetTypesController" ng-init="refresh()" show-asset-types template="{{template}}">
+
+
     </div>
   </div>
 

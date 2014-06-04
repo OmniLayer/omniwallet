@@ -7,9 +7,8 @@
 a {
    cursor: pointer;
 }
-
 .navbar-brand img {
-  max-height: 10%;
+  max-height: 3.7em;
 }
 .navbar-nav > li {
   padding-top: 5%;
