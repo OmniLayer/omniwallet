@@ -1,8 +1,7 @@
+WHOLE_UNIT = new Big(0.00000001); //Backend data returns satoshi, use this conversion ratio
+SATOSHI_UNIT = new Big(100000000); //Backend data needs satoshi, use this conversion ratio
 function WalletTradeFormController($scope, userService, walletTradeService) {
   // [ Form Validation]
-  WHOLE_UNIT = new Big(0.00000001); //Backend data returns satoshi, use this conversion ratio
-  SATOSHI_UNIT = new Big(100000000); //Backend data needs satoshi, use this conversion ratio
-
   $scope.showErrors = false;
 
   // [ Template Initialization ]

@@ -170,7 +170,7 @@ function WalletSendAssetsController($modal, $scope, $http, $q, userService, wall
       if (sendAmount < nonZeroValue)
         error += 'make sure your send amount is non-zero, ';
       if (minerFees < minerMinimum)
-        error += 'make sure your fee entry is at least 0.1 mBTC, ';
+        error += 'make sure your fee entry is at least 0.0001 BTC, ';
     }
     if (error.length < 8) {
       $scope.$parent.showErrors = false;
