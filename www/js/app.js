@@ -7,6 +7,11 @@ var app = angular.module('omniwallet', [
   'vr.filters.passwordStrength'
 ], function($routeProvider, $locationProvider, $httpProvider) {
 
+  if (!$httpProvider.defaults.headers.get)
+        $httpProvider.defaults.headers.get = {};    
+  $httpProvider.defaults.headers.get['Cache-Control'] = 'no-cache, no-store, must-revalidate'; 
+  $httpProvider.defaults.headers.get['Pragma'] = 'no-cache'; 
+  $httpProvider.defaults.headers.get['Expires'] = '0'; 
   $httpProvider.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded;charset=utf-8';
   $httpProvider.defaults.transformRequest = [TransformRequest];
 
