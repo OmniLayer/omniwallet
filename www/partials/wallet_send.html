@@ -63,7 +63,7 @@
         <div class="input-group">
           <span class="input-group-addon"> Miner fees ( BTC ): </span>
           <input name="fees" type="number" ng-model="minerFees" class="form-control" 
-          placeholder="0.0001 suggested minimum" step="0.0001" min="0.0001" required>
+          placeholder="0.0001 suggested minimum" step="0.00000001" min="0.0001" ng-change="calculateTotal()" required>
           <span class="input-group-addon" > 
           Available Bitcoin: {{ balanceData[1] }} BTC
           </span>
@@ -72,6 +72,17 @@
       </div>
     </div>
       <br>
+        <div class="input-group" style="width: 15%;">
+          <span class="input-group-addon" style="padding: 0.65em;"> Total Transaction Cost: 
+  	 <a href=""
+              tooltip="Total transaction cost in BTC. Includes Miners fee and MasterProtocol costs."
+              tooltip-append-to-body="true"
+              tooltip-placement="left"
+              tooltip-trigger="click"> <strong>(?)</strong>
+            </a></span>
+          <span class="input-group-addon"> {{ totalCost }} BTC </span>
+        </div>
+        <br>
     <input class="btn btn-primary btn-lg col-xs-push-3 col-xs-6" type="submit" value="Send Transaction">
     </form>
   

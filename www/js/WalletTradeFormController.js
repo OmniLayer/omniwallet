@@ -23,6 +23,7 @@ function WalletTradeFormController($scope, userService, walletTradeService) {
   });
   
   $scope.minerFees = 0.0001; //set default miner fees
+  $scope.totalCost = 0.00025 + $scope.minerFees; // set default total cost
 
   // [ Retrieve Balances ]
   $scope.currencyUnit = 'stom'; // satoshi to millibitt
