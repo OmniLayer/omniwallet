@@ -21,6 +21,10 @@ server {
 	listen 80 default_server;
 	listen [::]:80 default_server ipv6only=on;
 
+       add_header Cache-Control "no-cache,no-store,must-revalidate"; 
+       add_header Pragma "no-cache"; 
+       add_header Expires "0";
+
 	## Set this to reflect the location of the www directory within the omniwallet repo.
 	root /home/cmlacy/omniwallet/www/;
 	index index.htm index.html;
