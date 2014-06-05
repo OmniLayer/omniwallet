@@ -79,12 +79,13 @@ function WalletTradeFormController($scope, userService, walletTradeService) {
     }
   };
 
-  $scope.convertSatoshiToDisplayedValue = function(satoshi) {
-      if($scope.selectedCoin.divisible)
+  $scope.convertSatoshiToDisplayedValue = function(satoshi, forceConvertToWhole ) {
+      if($scope.selectedCoin.divisible || forceConvertToWhole )
         return new Big(satoshi).times(WHOLE_UNIT).toFixed(8);
       else
         return satoshi;
   }
+
 
   $scope.getDisplayedAbbreviation = function () {
     if($scope.selectedCoin.divisible) {
