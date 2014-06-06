@@ -185,6 +185,7 @@ function WalletSendAssetsController($modal, $scope, $http, $q, userService, wall
           $scope.sendAmount= data.amt,
           $scope.minerFees= data.fee,
           $scope.sendTo= data.sendTo;
+          $scope.totalCost= data.totalCost;
           
           $scope.ok = function() {
             $scope.clicked = true;
@@ -199,7 +200,8 @@ function WalletSendAssetsController($modal, $scope, $http, $q, userService, wall
               sendFrom: address,
               amt: sendAmount,
               coin: coin,
-              fee: minerFees
+              fee: minerFees,
+              totalCost: totalFeeCost
             };
           },
           prepareSendTransaction: function() {
