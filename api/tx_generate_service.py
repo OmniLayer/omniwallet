@@ -29,25 +29,25 @@ def generate_assets(tx_type):
         expected_fields+=['property_type', 'previous_property_id', 'property_category', 'property_subcategory', 'property_name', 'property_url', 'property_data', 'currency_identifier_desired', 'number_properties', 'deadline', 'earlybird_bonus', 'percentage_for_issuer']
 
     for field in expected_fields:
-        if not request.form.has_key(field):
+        if field not in request.form:
             return jsonify({ 'status': 403, 'data': 'No field in request form '+field })
-        if len(request.form[field]) != 1:
-            return jsonify({ 'status': 403, 'data': 'Multiple values for field '+field })
+        elif request.form[field] == '':
+            return jsonify({ 'status': 403, 'data': 'Empty field in request form '+field })
 
-    error=jsonify({ 'status': 502, 'data': 'Unspecified error '+str(e)}) 
-    
     datatx = prepare_tx(tx_type, request.form)
     if tx_type == 50:
         try:
-            tx_to_sign_dict=prepare_tx50(datatx)
-            return jsonify(tx_to_sign_dict)
+            unsignedhex=prepare_tx50(datatx)
+            return jsonify({ 'status': 200, 'unsignedhex': unsignedhex });
         except Exception as e:
+            error=jsonify({ 'status': 502, 'data': 'Unspecified error '+str(e)}) 
             return error
     elif tx_type == 51:
         try:
-            tx_to_sign_dict=prepare_tx51(datatx)
-            return jsonify(tx_to_sign_dict)
+            unsignedhex=prepare_tx51(datatx)
+            return jsonify({ 'status': 200, 'unsignedhex': unsignedhex });
         except Exception as e:
+            error=jsonify({ 'status': 502, 'data': 'Unspecified error '+str(e)}) 
             return error
     
 def prepare_tx(txtype,form):
@@ -61,11 +61,11 @@ def prepare_tx(txtype,form):
             txdata.append(form['previous_property_id'])
 
             property_category=form['property_category']
-            property_cateogry+='\0' if property_category[-1] != '\0' else property_category
+            property_category+='\0' if property_category[-1] != '\0' else property_category
             txdata.append(property_category)
 
             property_subcategory=form['property_subcategory']
-            property_subcateogry+='\0' if property_subcategory[-1] != '\0' else property_subcategory
+            property_subcategory+='\0' if property_subcategory[-1] != '\0' else property_subcategory
             txdata.append(property_subcategory)
 
             property_name=form['property_name']
@@ -80,7 +80,7 @@ def prepare_tx(txtype,form):
             property_data+='\0' if property_data[-1] != '\0' else property_data
             txdata.append(property_data)
 
-            if tx_type == 51:
+            if txtype == 51:
                 txdata.append(form['currency_identifier_desired'])
                 txdata.append(form['number_properties'])
                 txdata.append(form['deadline'])
@@ -94,8 +94,8 @@ def prepare_tx(txtype,form):
         return [] #other txes are unimplemented
 
 # simple send and bitcoin send (with or without marker)
-def prepare_tx_50_for_signing(transaction_version, transaction_type, ecosystem, property_type, previous_property_id, property_category, property_subcategory, property_name, property_url, property_data, number_properties):
-
+def prepare_tx50(txdata):
+    return txdata
     #calculate bytes
     tx_ver_bytes = hex(transaction_version)[2:].rjust(4,"0") # 2 bytes
     tx_type_bytes = hex(transaction_type)[2:].rjust(4,"0")   # 2 bytes
