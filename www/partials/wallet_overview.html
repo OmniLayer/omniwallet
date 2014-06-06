@@ -5,15 +5,8 @@
 </div>
 
 <div class="col-xs-10" ng-controller="WalletController">
-  <div ng-include="templates['disclaimer']" ng-hide="!disclaimerSeen"></div>
-  <br>
-  <br>
   <div class="panel panel-default">
     <h3 class="text-center panel-body">Wallet Overview</h3>
-  </div>
-  <div ng-if="addrList.length > 0" class="alert alert-info alert-dismissable">
-    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-      <strong>Hey!</strong> This is the overview page, where you can get a broad look at your owned assets.
   </div>
   <div ng-if="addrList.length == 0">
     <div class="alert alert-info alert-dismissable">
