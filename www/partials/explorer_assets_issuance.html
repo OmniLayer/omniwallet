@@ -1,6 +1,8 @@
 <div class="sidecar col-xs-2" ng-controller="SidecarController" ng-init="setView('explorer')">
     <div ng-include="templates['sidecar']"></div>
 </div>
+
+<div ng-controller="WalletTradeFormController">
 <div class="col-xs-10" ng-controller="PropertyIssuanceController">
   <br>
   <br>
@@ -15,68 +17,66 @@
   <div class="row">
     <div class="col-xs-12">
       <div class="input-group">
-        <span class="input-group-addon"> Transaction Type: </span>
-        <input name="reciever" type="text" ng-model="transaction_type" class="form-control" placeholder="50" required>
-      </div>
-      <br>
-      <div class="input-group">
-        <span class="input-group-addon"> Ecosystem: </span>
-        <input name="reciever" type="text" ng-model="ecosystem" class="form-control" value="2" disabled>
-      </div>
-      <br>
-      <div class="input-group">
         <span class="input-group-addon"> Property Type: </span>
-        <input name="reciever" type="text" ng-model="property_type" class="form-control" placeholder="1 for new indivisible tokens" required>
+        <select name="type" class="form-control" ng-model="propertyType" 
+         ng-options="type.value as type.description for type in propertyTypes" 
+         ng-change="checkPropertyType()" required>
+         <option value=""> -- Choose Type -- </option>
+         </select>
+      </div>
+      <div class="input-group" ng-hide="isNewProperty">
+      <br>
+        <span class="input-group-addon"> Previous Property Id: </span>
+        <input name="previous" type="text" ng-model="previousPropertyId" class="form-control" placeholder="0 for a new smart property (or the existing property ID if replacing or appending)" ng-required="!isNewProperty">
       </div>
       <br>
       <div class="input-group">
-        <span class="input-group-addon"> Previous Property Id: </span>
-        <input name="reciever" type="text" ng-model="previous_property_id" class="form-control" placeholder="0 for a new smart property (or the existing property ID if replacing or appending)" required>
+        <span class="input-group-addon"> Issuance Address: </span>
+        <select name="issuer" class="form-control" ng-model="selectedAddress"
+          ng-options="address for address in addressList" required>
+          <option value=""> -- Choose Address -- </option>
+        </select>
       </div>
       <br>
       <div class="input-group">
         <span class="input-group-addon"> Property Category: </span>
-        <input name="reciever" type="text" ng-model="property_category" class="form-control" placeholder="Companies\0 (10 bytes)" required>
+        <input name="category" type="text" ng-model="propertyCategory" class="form-control" placeholder="Companies\0 (10 bytes)" required>
       </div>
       <br>
       <div class="input-group">
         <span class="input-group-addon"> Property Subcategory: </span>
-        <input name="reciever" type="text" ng-model="property_subcategory" class="form-control" placeholder="Bitcoin Mining\0 (15 bytes)" required>
+        <input name="subcategory" type="text" ng-model="propertySubcategory" class="form-control" placeholder="Bitcoin Mining\0 (15 bytes)" required>
       </div>
       <br>
       <div class="input-group">
         <span class="input-group-addon"> Property Name: </span>
-        <input name="reciever" type="text" ng-model="property_name" class="form-control" placeholder="Quantum Miner\0 (14 bytes)" required>
+        <input name="name" type="text" ng-model="propertyName" class="form-control" placeholder="Quantum Miner\0 (14 bytes)" required>
       </div>
       <br>
       <div class="input-group">
         <span class="input-group-addon"> Property Url: </span>
-        <input name="reciever" type="text" ng-model="property_url" class="form-control" placeholder="tinyurl.com/kwejgoig\0 (21 bytes)" required>
-      </div>
-      <br>
-      <div class="input-group">
-        <span class="input-group-addon"> Property Data: </span>
-        <input name="reciever" type="text" ng-model="property_data" class="form-control" placeholder="\0 (1 byte)" required>
+        <input name="url" type="text" ng-model="propertyUrl" class="form-control" placeholder="tinyurl.com/kwejgoig\0 (21 bytes)" required>
       </div>
       <br>
       <div class="input-group">
         <span class="input-group-addon"> Number Properties: </span>
-        <input name="reciever" type="text" ng-model="number_properties" class="form-control" placeholder="1,000,000 indivisible tokens" required>
+        <input name="number" type="text" ng-model="numberProperties" class="form-control" placeholder="1,000,000 indivisible tokens" required>
       </div>
       <br>
       <div class="input-group">
-        <span class="input-group-addon"> Transaction From: </span>
-        <input name="reciever" type="text" ng-model="transaction_from" class="form-control" placeholder="Your issuing address" required>
-      </div>
-      <br>
-      <div class="input-group">
-        <span class="input-group-addon"> From Private Key: </span>
-        <input name="reciever" type="text" ng-model="from_private_key" class="form-control" placeholder="Your issuing address private key" required>
-      </div>
-      <br>
+          <span class="input-group-addon"> Miner fees ( BTC ): </span>
+          <input name="fees" type="number" ng-model="minerFees" class="form-control" 
+          placeholder="0.0001 suggested minimum" step="0.0001" min="0.0001" required>
+          <span class="input-group-addon" > 
+          Available Bitcoin: {{ balanceData[1] }} BTC
+          </span>
+        </div>
+        <br>
+      
     </div>
   </div>
     <br>
-  <input class="btn btn-primary btn-lg col-xs-push-3 col-xs-6" type="submit" value="Send Transaction" ng-click="issueProperty()">
+  <input class="btn btn-primary btn-lg col-xs-push-3 col-xs-6" type="submit" value="Issue Assets" ng-click="validatePropertyIssuanceForm()">
   </form>
+</div>
 </div>
