@@ -165,6 +165,16 @@ server {
       uwsgi_pass 127.0.0.1:$PORT;
     }
 
+    location = /v1/transaction/getunsigned { rewrite ^ /v1/transaction/getunsigned; }
+     location /v1/transaction/getunsigned { try_files $uri @flask_tx_generate_service; }
+     location @flask_tx_generate_service {
+       include uwsgi_params;
+       uwsgi_param SCRIPT_NAME /v1/transaction/getunsigned;
+       uwsgi_param UWSGI_MODULE tx_generate_service;
+       uwsgi_param UWSGI_CALLABLE app;
+       uwsgi_modifier1 30;
+       uwsgi_pass 127.0.0.1:$PORT;
+     }
 	# Only for nginx-naxsi used with nginx-naxsi-ui : process denied requests
 	#location /RequestDenied {
 	#	proxy_pass http://127.0.0.1:8080;    
