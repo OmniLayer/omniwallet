@@ -61,23 +61,23 @@ def prepare_tx(txtype,form):
             txdata.append(form['previous_property_id'])
 
             property_category=form['property_category']
-            property_category+='\0' if property_category[-1] != '\0' else property_category
+            property_category+='\0' if property_category[-1] != '\0' else ''
             txdata.append(property_category)
 
             property_subcategory=form['property_subcategory']
-            property_subcategory+='\0' if property_subcategory[-1] != '\0' else property_subcategory
+            property_subcategory+='\0' if property_subcategory[-1] != '\0' else ''
             txdata.append(property_subcategory)
 
             property_name=form['property_name']
-            property_name+='\0' if property_name[-1] != '\0' else property_name
+            property_name+='\0' if property_name[-1] != '\0' else ''
             txdata.append(property_name)
 
             property_url=form['property_url']
-            property_url+='\0' if property_url[-1] != '\0' else property_url
+            property_url+='\0' if property_url[-1] != '\0' else ''
             txdata.append(property_url)
 
             property_data=form['property_data']
-            property_data+='\0' if property_data[-1] != '\0' else property_data
+            property_data+='\0' if property_data[-1] != '\0' else ''
             txdata.append(property_data)
 
             if txtype == 51:
