@@ -11,43 +11,87 @@ data_dir_root = os.environ.get('DATADIR')
 app = Flask(__name__)
 app.debug = True
 
-@app.route('/50', methods=['POST'])
-def generate_assets():
-    expected_fields=['property_type', 'previous_property_id', 'property_category', 'property_subcategory', 'property_name', 'property_url', 'property_data', 'number_properties']
-    # if marker is True, send dust to marker (for payments of sells)
+@app.route('/<int:tx_type>', methods=['POST'])
+def generate_assets(tx_type):
+
+    #update this to support more transactions
+    supported_transactions = [50,51]
+
+    if tx_type not in supported_transactions:
+        return jsonify({ 'status': 400, 'data': 'Unsupported transaction type '+str(tx_type) })
+    
+    expected_fields=['transaction_version','ecosystem']
+
+    #might add tx 00, 53, etc later;
+    if tx_type == 50:
+        expected_fields+=['property_type', 'previous_property_id', 'property_category', 'property_subcategory', 'property_name', 'property_url', 'property_data', 'number_properties']
+    elif tx_type == 51:
+        expected_fields+=['property_type', 'previous_property_id', 'property_category', 'property_subcategory', 'property_name', 'property_url', 'property_data', 'currency_identifier_desired', 'number_properties', 'deadline', 'earlybird_bonus', 'percentage_for_issuer']
+
     for field in expected_fields:
         if not request.form.has_key(field):
-            #info('No field '+field+' in request form '+str(request.form))
-            abort(403)
+            return jsonify({ 'status': 403, 'data': 'No field in request form '+field })
         if len(request.form[field]) != 1:
-            #info('Multiple values for field '+field)
-            abort(403)
-      
-    property_type=request.form['property_type']
-    previous_property_id=request.form['previous_property_id']
-    property_category=request.form['property_category']
-    if property_category[-1] != '\0':
-        property_category+='\0'
-    property_subcategory=request.form['property_subcategory']
-    if property_subcategory[-1] != '\0':
-        property_subcategory+='\0'
-    property_name=request.form['property_name']
-    if property_name[-1] != '\0':
-        property_name+='\0'    
-    property_url=request.form['property_url']
-    if property_url[-1] != '\0':
-        property_url+='\0'
-    property_data=request.form['property_data']
-    if property_data[-1] != '\0':
-        property_data+='\0'
-    number_properties=request.form['number_properties']
-            
-    try:
-        tx_to_sign_dict=prepare_tx_50_for_signing(transaction_version, transaction_type, ecosystem, property_type, previous_property_id, property_category, property_subcategory, property_name, property_url, property_data, number_properties)
-        return jsonify(tx_to_sign_dict)
-    except Exception as e:
-        abort(502)
+            return jsonify({ 'status': 403, 'data': 'Multiple values for field '+field })
 
+    error=jsonify({ 'status': 502, 'data': 'Unspecified error '+str(e)}) 
+    
+    datatx = prepare_tx(tx_type, request.form)
+    if tx_type == 50:
+        try:
+            tx_to_sign_dict=prepare_tx50(datatx)
+            return jsonify(tx_to_sign_dict)
+        except Exception as e:
+            return error
+    elif tx_type == 51:
+        try:
+            tx_to_sign_dict=prepare_tx51(datatx)
+            return jsonify(tx_to_sign_dict)
+        except Exception as e:
+            return error
+    
+def prepare_tx(txtype,form):
+        txdata=[]
+
+        txdata.append(form['transaction_version'])
+        txdata.append(form['ecosystem'])
+
+        if txtype == 50 or txtype == 51:
+            txdata.append(form['property_type'])
+            txdata.append(form['previous_property_id'])
+
+            property_category=form['property_category']
+            property_cateogry+='\0' if property_category[-1] != '\0' else property_category
+            txdata.append(property_category)
+
+            property_subcategory=form['property_subcategory']
+            property_subcateogry+='\0' if property_subcategory[-1] != '\0' else property_subcategory
+            txdata.append(property_subcategory)
+
+            property_name=form['property_name']
+            property_name+='\0' if property_name[-1] != '\0' else property_name
+            txdata.append(property_name)
+
+            property_url=form['property_url']
+            property_url+='\0' if property_url[-1] != '\0' else property_url
+            txdata.append(property_url)
+
+            property_data=form['property_data']
+            property_data+='\0' if property_data[-1] != '\0' else property_data
+            txdata.append(property_data)
+
+            if tx_type == 51:
+                txdata.append(form['currency_identifier_desired'])
+                txdata.append(form['number_properties'])
+                txdata.append(form['deadline'])
+                txdata.append(form['earlybird_bonus'])
+                txdata.append(form['percentage_for_issuer'])
+            else:
+                txdata.append(form['number_properties'])
+            
+            return txdata
+
+        return [] #other txes are unimplemented
 
 # simple send and bitcoin send (with or without marker)
 def prepare_tx_50_for_signing(transaction_version, transaction_type, ecosystem, property_type, previous_property_id, property_category, property_subcategory, property_name, property_url, property_data, number_properties):
@@ -352,6 +396,3 @@ def prepare_tx_50_for_signing(transaction_version, transaction_type, ecosystem, 
     return_dict={'transaction':hex_transaction}
     return return_dict
 
-@app.route('/51', methods=['POST'])
-def crowdsale_assets():
-    pass  #placeholder for tx51  
