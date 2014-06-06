@@ -10,6 +10,13 @@ angular.module('omniwallet').factory('walletTradeService',['$http',function($htt
       return promise;
     },
     
+    getUnsignedTransaction : function(type, data){
+      var url = '/v1/transaction/getunsigned/'+type;
+      
+      var promise = $http.post(url, data);
+      return promise; 
+    }
+    
     validAddress:function(addr) {
       try {
         var checkValid = new Bitcoin.Address(addr);
