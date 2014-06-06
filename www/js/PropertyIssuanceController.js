@@ -1,28 +1,44 @@
-function PropertyIssuanceController($scope, $http,$modal, userService, walletTransactionService){
+function PropertyIssuanceController($scope, $http,$modal, userService, walletTradeService){
   $scope.showErrors=false;
+  $scope.propertyTypes = [
+    { value: 1, description: "New Indivisible tokens"},
+    { value: 2, description: "New Divisible currency"},
+    { value: 65,  description: "Indivisible tokens replacing a previous property"},
+    { value: 66,  description: "Divisible currency replacing a previous property"},
+    { value: 129,  description: "Indivisible tokens appending a previous property"},
+    { value: 130, description:  "Divisible currency appending a previous property"}
+  ];
+  $scope.isNewProperty = true;
   
-  function getUnsignedPropertyIssuanceTransaction(property_type, previous_property_id, property_category, property_subcategory, property_name, property_url, property_data, number_properties) {
+  $scope.checkPropertyType = function(){
+    if ($scope.propertyType != 1 && $scope.propertyType != 2)
+      $scope.isNewProperty = false;
+    else
+      $scope.isNewProperty = true;
+  };
+  
+  function getUnsignedPropertyIssuanceTransaction(propertyType, previousPropertyId, propertyCategory, propertySubcategory, propertyName, propertyUrl, propertyData, numberProperties) {
     var data = {
-      property_type : property_type, 
-      previous_property_id:previous_property_id, 
-      property_category:property_category, 
-      property_subcategory:property_subcategory, 
-      property_name:property_name, 
-      property_url:property_url, 
-      property_data:property_data, 
-      number_properties:number_properties
+      propertyType : propertyType, 
+      previousPropertyId:previousPropertyId, 
+      propertyCategory:propertyCategory, 
+      propertySubcategory:propertySubcategory, 
+      propertyName:propertyName, 
+      propertyUrl:propertyUrl, 
+      propertyData:propertyData, 
+      numberProperties:numberProperties
     };
-    var promise = walletTransactionService.getUnsignedTransaction(50,data);
+    var promise = walletTradeService.getUnsignedTransaction(50,data);
 
     return promise;
   }
   
-  function preparePropertyIssuanceTransaction(property_type, previous_property_id, property_category, property_subcategory, property_name, property_url, property_data, number_properties, from, $modalScope) {
+  function preparePropertyIssuanceTransaction(propertyType, previousPropertyId, propertyCategory, propertySubcategory, propertyName, propertyUrl, propertyData, numberProperties, from, $modalScope) {
     var addressData = userService.getAddress(from);
     var privKey = new Bitcoin.ECKey.decodeEncryptedFormat(addressData.privkey, addressData.address); // Using address as temporary password
     var pubKey = privKey.getPubKeyHex();
 
-    $scope.propertyIssuanceTxPromise = getUnsignedPropertyIssuanceTransaction(property_type, previous_property_id, property_category, property_subcategory, property_name, property_url, property_data, number_properties, from, $modalScope);
+    $scope.propertyIssuanceTxPromise = getUnsignedPropertyIssuanceTransaction(propertyType, previousPropertyId, propertyCategory, propertySubcategory, propertyName, propertyUrl, propertyData, numberProperties, from, $modalScope);
     $scope.propertyIssuanceTxPromise.then(function(successData) {
 
       if (successData.status != 200) {
@@ -49,7 +65,7 @@ function PropertyIssuanceController($scope, $http,$modal, userService, walletTra
           //Showing the user the transaction hash doesn't work right now
           //var transactionHash = Bitcoin.Util.bytesToHex(transaction.getHash().reverse());
 
-          walletTransactionService.pushSignedTransaction(finalTransaction).then(function(successData) {
+          walletTradeService.pushSignedTransaction(finalTransaction).then(function(successData) {
             var successData = successData.data;
             if (successData.pushed.match(/submitted|success/gi) != null) {
               $modalScope.waiting = false;
@@ -115,57 +131,57 @@ function PropertyIssuanceController($scope, $http,$modal, userService, walletTra
     var dustValue = 5430;
     var minerMinimum = 10000;
     var nonZeroValue = 1;
-    var property_type = $scope.property_type; 
+    var propertyType = $scope.propertyType; 
 
-
-    var minerFees = property_type == 1 ? $scope.minerFees : new Big($scope.minerFees).times(new Big(0.00000001)).toFixed(8);;
-    var number_properties=$scope.number_properties,
-    property_type=$scope.property_type,
-    previous_property_id=$scope.previous_property_id,
-    property_name=$scope.property_name,
-    property_category=$scope.property_category,
-    property_subcategory=$scope.property_subcategory,
-    property_url=$scope.property_url;
+    var minerFees = $scope.convertDisplayedValue($scope.minerFees);
+    var numberProperties=$scope.numberProperties,
+    previousPropertyId=$scope.previousPropertyId,
+    propertyName=$scope.propertyName,
+    propertyCategory=$scope.propertyCategory,
+    propertySubcategory=$scope.propertySubcategory,
+    propertyUrl=$scope.propertyUrl;
     
     var error = 'Please ';
-    if ($scope.sendForm.$valid == false) {
+    if ($scope.issuanceForm.$valid == false) {
       error += 'make sure all fields are completely filled, ';
     }
+    
+    
     
     if (error.length < 8) {
       $scope.$parent.showErrors = false;
       // open modal
       var modalInstance = $modal.open({
         templateUrl: '/partials/explorer_asset_issuance_modal.html',
-        controller: function($scope, $rootScope, userService, data, prepareSendTransaction, getUnsignedSendTransaction,convertSatoshiToDisplayedValue, getDisplayedAbbreviation) {
+        controller: function($scope, $rootScope, userService, data, preparePropertyIssuanceTransaction, getUnsignedPropertyIssuanceTransaction, convertSatoshiToDisplayedValue, getDisplayedAbbreviation) {
           $scope.issueSuccess = false, $scope.issueError = false, $scope.waiting = false, $scope.privKeyPass = {};
           $scope.convertSatoshiToDisplayedValue=  convertSatoshiToDisplayedValue,
           $scope.getDisplayedAbbreviation=  getDisplayedAbbreviation,
-          $scope.number_properties=  data.number_properties,
-          $scope.property_type_name=  data.property_type_name,
-          $scope.property_name= data.property_name,
-          $scope.property_category= data.property_category,
-          $scope.property_subcategory= data.property_subcategory,
-          $scope.property_url= data.property_url;
+          $scope.numberProperties=  data.numberProperties,
+          $scope.propertyTypeName=  data.propertyTypeName,
+          $scope.propertyName= data.propertyName,
+          $scope.propertyCategory= data.propertyCategory,
+          $scope.propertySubcategory= data.propertySubcategory,
+          $scope.propertyUrl= data.propertyUrl;
           
           $scope.ok = function() {
             $scope.clicked = true;
             $scope.waiting = true;
-            preparePropertyIssuanceTransaction(data.property_type, data.previous_property_id, data.property_category, data.property_subcategory, data.property_name, data.property_url, data.property_data, data.number_properties, from, $scope);
+            preparePropertyIssuanceTransaction(data.propertyType, data.previousPropertyId, data.propertyCategory, data.propertySubcategory, data.propertyName, data.propertyUrl, data.propertyData, data.numberProperties, from, $scope);
           };
         },
         resolve: {
           data: function() {
             return {
-              number_properties:number_properties,
-              property_type:property_type,
-              property_type_name:property_type == 1 || property_type == 65 || property_type == 129? 'Indivisible' : 'Divisible', // Only values 1 or 2 are supported right now, but leave room for expansion.
-              previous_property_id:previous_property_id,
-              property_name:property_name,
-              property_category:property_category,
-              property_subcategory:property_subcategory,
-              property_url:property_url,
-              property_data:'\0' // this is fixed to 1 byte by the spec
+              numberProperties:numberProperties,
+              propertyType:propertyType,
+              propertyTypeName:propertyType == 1 || propertyType == 65 || propertyType == 129? 'Indivisible' : 'Divisible', // Only values 1 or 2 are supported right now, but leave room for expansion.
+              previousPropertyId:previousPropertyId,
+              propertyName:propertyName,
+              propertyCategory:propertyCategory,
+              propertySubcategory:propertySubcategory,
+              propertyUrl:propertyUrl,
+              propertyData:'\0' // this is fixed to 1 byte by the spec
             };
           },
           preparePropertyIssuanceTransaction: function() {
@@ -175,7 +191,7 @@ function PropertyIssuanceController($scope, $http,$modal, userService, walletTra
             return getUnsignedPropertyIssuanceTransaction;
           },
           pushSignedTransaction: function() {
-            return walletTransactionService.pushSignedTransaction;
+            return walletTradeService.pushSignedTransaction;
           },
           convertSatoshiToDisplayedValue: function() {
             return $scope.convertSatoshiToDisplayedValue;
