@@ -1,7 +1,6 @@
 function WalletSendAssetsController($modal, $scope, $http, $q, userService, walletTradeService) {
   // [ Helper Functions ]
 
-
   // [ Send Form Helpers ]
 
   function getUnsignedSendTransaction(toAddress, pubKey, fromAddress, amount, currency, fee) {
@@ -126,7 +125,8 @@ function WalletSendAssetsController($modal, $scope, $http, $q, userService, wall
         $scope.minerFees,
         $scope.sendAmount,
         $scope.balanceData[0], 
-        $scope.balanceData[1]
+        $scope.balanceData[1],
+        $scope.totalCost
       ];
 
     if (!divisible) {
@@ -138,6 +138,7 @@ function WalletSendAssetsController($modal, $scope, $http, $q, userService, wall
 
     var minerFees = +convertedValues[0];
     var sendAmount = divisible ? +convertedValues[1] : +$scope.sendAmount;
+    var totalFeeCost = +convertedValues[4]
 
     var balance = divisible ? +convertedValues[2] : +$scope.balanceData[0];
     var btcbalance = +convertedValues[3];
@@ -145,17 +146,17 @@ function WalletSendAssetsController($modal, $scope, $http, $q, userService, wall
     var coin = $scope.selectedCoin.symbol;
     var address = $scope.selectedAddress;
     var sendTo = $scope.sendTo;
-    var required = [coin, address, sendAmount, sendTo, minerFees, balance, btcbalance, $scope.sendForm.$valid];
+    var required = [coin, address, sendAmount, sendTo, minerFees, totalFeeCost,  balance, btcbalance, $scope.sendForm.$valid];
 
     var error = 'Please ';
     if ($scope.sendForm.$valid == false) {
       error += 'make sure all fields are completely filled, ';
     }
     if ((sendAmount <= balance) == false) {
-      error += 'make sure you aren\'t sending more coins than you own, ';
+      error += 'make sure you aren\'t sending more tokens than you own, ';
     }
-    if ((minerFees <= btcbalance) == false) {
-      error += 'make sure you have enough Bitcoin to cover your fees, ';
+    if ((totalFeeCost <= btcbalance) == false) {
+      error += 'make sure you have enough Bitcoin to cover your transaction costs, ';
     }
     if (walletTradeService.validAddress(sendTo) == false) {
       error += 'make sure you are sending to a valid MSC/BTC address, ';
@@ -184,6 +185,7 @@ function WalletSendAssetsController($modal, $scope, $http, $q, userService, wall
           $scope.sendAmount= data.amt,
           $scope.minerFees= data.fee,
           $scope.sendTo= data.sendTo;
+          $scope.totalCost= data.totalCost;
           
           $scope.ok = function() {
             $scope.clicked = true;
@@ -198,7 +200,8 @@ function WalletSendAssetsController($modal, $scope, $http, $q, userService, wall
               sendFrom: address,
               amt: sendAmount,
               coin: coin,
-              fee: minerFees
+              fee: minerFees,
+              totalCost: totalFeeCost
             };
           },
           prepareSendTransaction: function() {
