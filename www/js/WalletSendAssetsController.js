@@ -1,9 +1,5 @@
 function WalletSendAssetsController($modal, $scope, $http, $q, userService, walletTradeService) {
   // [ Helper Functions ]
-  $scope.calculateTotal = function() {
-    $scope.totalCost = (+new Big($scope.minerFees || 0.0001).plus(0.00025).valueOf()).toFixed(8);
-  }
-
 
   // [ Send Form Helpers ]
 

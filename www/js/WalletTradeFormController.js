@@ -1,5 +1,6 @@
 WHOLE_UNIT = new Big(0.00000001); //Backend data returns satoshi, use this conversion ratio
 SATOSHI_UNIT = new Big(100000000); //Backend data needs satoshi, use this conversion ratio
+MIN_MINER_FEE = new Big(0.00010000);
 function WalletTradeFormController($scope, userService, walletTradeService) {
   // [ Form Validation]
   $scope.showErrors = false;
@@ -20,10 +21,14 @@ function WalletTradeFormController($scope, userService, walletTradeService) {
     $scope.addressList = userService.getAddressesWithPrivkey($scope.selectedCoin.addresses);
     $scope.selectedAddress = $scope.addressList[0];
     $scope.setBalance();
+    $scope.minerFees = +MIN_MINER_FEE.valueOf() // reset miner fees
+    $scope.calculateTotal($scope.minerFees);
   });
   
-  $scope.minerFees = 0.0001; //set default miner fees
-  $scope.totalCost = 0.00025 + $scope.minerFees; // set default total cost
+  $scope.calculateTotal = calculateTotal;
+
+  $scope.minerFees = +MIN_MINER_FEE.valueOf(); //set default miner fees
+  $scope.calculateTotal($scope.minerFees);
 
   // [ Retrieve Balances ]
   $scope.currencyUnit = 'stom'; // satoshi to millibitt
@@ -115,5 +120,12 @@ function WalletTradeFormController($scope, userService, walletTradeService) {
       } 
       else
           return new Big(value).times(SATOSHI_UNIT).valueOf();
+  }
+
+  function calculateTotal(minerFees) {
+    $scope.mProtocolCost = 0.00025
+    if ($scope.selectedCoin.symbol == 'BTC')
+      $scope.mProtocolCost = 0.0;
+    $scope.totalCost = (+new Big(minerFees).plus($scope.mProtocolCost).valueOf()).toFixed(8);
   }
 };

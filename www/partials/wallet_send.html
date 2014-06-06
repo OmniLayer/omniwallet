@@ -48,8 +48,8 @@
             Available: {{ balanceData[0] }} {{ getDisplayedAbbreviation() }}
           </span>
         </div>
-        <br>
-        <div class="input-group" style="width: 15%;">
+        <br ng-hide="$parent.selectedCoin.symbol == 'BTC'">
+        <div class="input-group" style="width: 15%;" ng-hide="$parent.selectedCoin.symbol == 'BTC'">
           <span class="input-group-addon" style="padding: 0.65em;"> MasterProtocol Transaction Cost: 
   	 <a href=""
               tooltip="MasterProtocol Transactions require additional BTC. This is used when encoding/sending the Masterprotocol Transaction."
@@ -63,7 +63,7 @@
         <div class="input-group">
           <span class="input-group-addon"> Miner fees ( BTC ): </span>
           <input name="fees" type="number" ng-model="minerFees" class="form-control" 
-          placeholder="0.0001 suggested minimum" step="0.00000001" min="0.0001" ng-change="calculateTotal()" required>
+          placeholder="0.0001 suggested minimum" step="0.00000001" min="0.0001" ng-change="calculateTotal(minerFees)" required>
           <span class="input-group-addon" > 
           Available Bitcoin: {{ balanceData[1] }} BTC
           </span>
