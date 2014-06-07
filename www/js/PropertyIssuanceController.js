@@ -178,12 +178,13 @@ function PropertyIssuanceController($scope, $http,$modal, userService, walletTra
           $scope.ok = function() {
             $scope.clicked = true;
             $scope.waiting = true;
-            preparePropertyIssuanceTransaction(data.propertyType, data.previousPropertyId, data.propertyCategory, data.propertySubcategory, data.propertyName, data.propertyUrl, data.propertyData, data.numberProperties, from, $scope);
+            preparePropertyIssuanceTransaction(data.propertyType, data.previousPropertyId, data.propertyCategory, data.propertySubcategory, data.propertyName, data.propertyUrl, data.propertyData, data.numberProperties, data.from, $scope);
           };
         },
         resolve: {
           data: function() {
             return {
+              from:$scope.selectedAddress,
               numberProperties:numberProperties,
               propertyType:propertyType,
               propertyTypeName:propertyType == 1 || propertyType == 65 || propertyType == 129? 'Indivisible' : 'Divisible', // Only values 1 or 2 are supported right now, but leave room for expansion.
