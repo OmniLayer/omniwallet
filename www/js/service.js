@@ -1,5 +1,5 @@
 //global services go here
-angular.module('omniwallet').factory('walletTradeService',['$http',function($http){
+angular.module('omniwallet').factory('walletTransactionService',['$http',function($http){
   var service = {
     pushSignedTransaction : function(signedTransaction) {
       var url = '/v1/transaction/pushtx/';
