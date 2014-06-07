@@ -2,9 +2,14 @@
     <div ng-include="templates['sidecar']"></div>
 </div>
 
-<div class="col-xs-10">
+<div class="col-xs-10" ng-controller="ExplorerAssetsController">
     <div class="row">
-      <a href="/explorer/assets_issuance" class="btn btn-primary btn-sm">Issue Assets</a>
+      <a href="/assets/issue" class="btn btn-primary btn-sm" ng-show="isLoggedIn">Issue Assets</a>
       
     </div>
+     <table class="table table-striped table-hover table-condensed">
+    <caption>| Assets Listing |</caption>
+    
+
+</table>
 </div>

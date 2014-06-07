@@ -166,7 +166,7 @@ function PropertyIssuanceController($scope, $http,$modal, userService, walletTra
       $scope.$parent.showErrors = false;
       // open modal
       var modalInstance = $modal.open({
-        templateUrl: '/partials/explorer_assets_issuance_modal.html',
+        templateUrl: '/partials/wallet_assets_issue_modal.html',
         controller: function($scope, $rootScope, userService, data, preparePropertyIssuanceTransaction, getUnsignedPropertyIssuanceTransaction, convertSatoshiToDisplayedValue, getDisplayedAbbreviation) {
           $scope.issueSuccess = false, $scope.issueError = false, $scope.waiting = false, $scope.privKeyPass = {};
           $scope.convertSatoshiToDisplayedValue=  convertSatoshiToDisplayedValue,
