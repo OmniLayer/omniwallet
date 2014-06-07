@@ -42,7 +42,7 @@ function PropertyIssuanceController($scope, $http,$modal, userService, walletTra
 
     $scope.propertyIssuanceTxPromise = getUnsignedPropertyIssuanceTransaction(propertyType, previousPropertyId, propertyCategory, propertySubcategory, propertyName, propertyUrl, propertyData, numberProperties, from, $modalScope);
     $scope.propertyIssuanceTxPromise.then(function(successData) {
-
+      successData = successData.data;
       if (successData.status != 200) {
         $modalScope.waiting = false;
         $modalScope.issueError = true;
