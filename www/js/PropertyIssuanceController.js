@@ -131,10 +131,17 @@ function PropertyIssuanceController($scope, $http,$modal, userService, walletTra
     var dustValue = 5430;
     var minerMinimum = 10000;
     var nonZeroValue = 1;
-    var propertyType = $scope.propertyType; 
 
-    var minerFees = $scope.convertDisplayedValue($scope.minerFees);
+    var convertToSatoshi = [
+      $scope.minerFees,
+      $scope.balanceData[1]
+    ];
+    
+    var convertedValues =$scope.convertDisplayedValue(convertToSatoshi);
+    var minerFees = +convertedValues[0];
+    var btcbalance = convertedValues[1];
     var numberProperties=$scope.numberProperties,
+    propertyType = $scope.propertyType,
     previousPropertyId=$scope.previousPropertyId,
     propertyName=$scope.propertyName,
     propertyCategory=$scope.propertyCategory,
@@ -145,9 +152,13 @@ function PropertyIssuanceController($scope, $http,$modal, userService, walletTra
     if ($scope.issuanceForm.$valid == false) {
       error += 'make sure all fields are completely filled, ';
     }
-    
-    
-    
+    if (minerFees < minerMinimum)
+      error += 'make sure your fee entry is at least 0.0001 BTC to cover miner costs, ';
+    if ((minerFees <= btcbalance) == false)
+        error += 'make sure you have enough Bitcoin to cover your fees, ';
+    if (!propertyName || propertyName == '\0')
+      error += 'make sure you enter a Property Name, ';
+      
     if (error.length < 8) {
       $scope.$parent.showErrors = false;
       // open modal
