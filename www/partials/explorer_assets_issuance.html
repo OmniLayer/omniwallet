@@ -40,27 +40,27 @@
       <br>
       <div class="input-group">
         <span class="input-group-addon"> Property Category: </span>
-        <input name="category" type="text" ng-model="propertyCategory" class="form-control" placeholder="Companies\0 (10 bytes)" >
+        <input name="category" type="text" ng-model="propertyCategory" class="form-control" placeholder="Companies\0 (10 bytes)" ng-maxlength="255" >
       </div>
       <br>
       <div class="input-group">
         <span class="input-group-addon"> Property Subcategory: </span>
-        <input name="subcategory" type="text" ng-model="propertySubcategory" class="form-control" placeholder="Bitcoin Mining\0 (15 bytes)" >
+        <input name="subcategory" type="text" ng-model="propertySubcategory" class="form-control" placeholder="Bitcoin Mining\0 (15 bytes)" ng-maxlength="255">
       </div>
       <br>
       <div class="input-group">
         <span class="input-group-addon"> Property Name: </span>
-        <input name="name" type="text" ng-model="propertyName" class="form-control" placeholder="Quantum Miner\0 (14 bytes)" required>
+        <input name="name" type="text" ng-model="propertyName" class="form-control" placeholder="Quantum Miner\0 (14 bytes)" ng-maxlength="255" required>
       </div>
       <br>
       <div class="input-group">
         <span class="input-group-addon"> Property Url: </span>
-        <input name="url" type="text" ng-model="propertyUrl" class="form-control" placeholder="tinyurl.com/kwejgoig\0 (21 bytes)" >
+        <input name="url" type="url" ng-model="propertyUrl" class="form-control" placeholder="tinyurl.com/kwejgoig\0 (21 bytes)" ng-maxlength="255" >
       </div>
       <br>
       <div class="input-group">
         <span class="input-group-addon"> Number Properties: </span>
-        <input name="number" type="text" ng-model="numberProperties" class="form-control" placeholder="1,000,000 indivisible tokens" required>
+        <input name="amount" type="number" step="1" ng-model="numberProperties" class="form-control" placeholder="1,000,000 indivisible tokens" required>
       </div>
       <br>
       <div class="input-group">

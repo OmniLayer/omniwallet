@@ -17,7 +17,7 @@ function PropertyIssuanceController($scope, $http,$modal, userService, walletTra
       $scope.isNewProperty = true;
   };
   
-  function getUnsignedPropertyIssuanceTransaction(propertyType, previousPropertyId, propertyCategory, propertySubcategory, propertyName, propertyUrl, propertyData, numberProperties) {
+  function getUnsignedPropertyIssuanceTransaction(propertyType, previousPropertyId, propertyCategory, propertySubcategory, propertyName, propertyUrl, propertyData, numberProperties, from) {
     var data = {
       transaction_version:0,
       ecosystem:2,
@@ -28,7 +28,8 @@ function PropertyIssuanceController($scope, $http,$modal, userService, walletTra
       property_name:propertyName, 
       property_url:propertyUrl, 
       property_data:propertyData, 
-      number_properties:numberProperties
+      number_properties:numberProperties,
+      transaction_from: from
     };
     var promise = walletTradeService.getUnsignedTransaction(50,data);
 
@@ -40,7 +41,7 @@ function PropertyIssuanceController($scope, $http,$modal, userService, walletTra
     var privKey = new Bitcoin.ECKey.decodeEncryptedFormat(addressData.privkey, addressData.address); // Using address as temporary password
     var pubKey = privKey.getPubKeyHex();
 
-    $scope.propertyIssuanceTxPromise = getUnsignedPropertyIssuanceTransaction(propertyType, previousPropertyId, propertyCategory, propertySubcategory, propertyName, propertyUrl, propertyData, numberProperties, from, $modalScope);
+    $scope.propertyIssuanceTxPromise = getUnsignedPropertyIssuanceTransaction(propertyType, previousPropertyId, propertyCategory, propertySubcategory, propertyName, propertyUrl, propertyData, numberProperties, from);
     $scope.propertyIssuanceTxPromise.then(function(successData) {
       successData = successData.data;
       if (successData.status != 200) {
