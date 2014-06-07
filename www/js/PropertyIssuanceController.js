@@ -1,5 +1,5 @@
 function PropertyIssuanceController($scope, $http,$modal, userService, walletTradeService){
-  $scope.showErrors=false;
+
   $scope.propertyTypes = [
     { value: 1, description: "New Indivisible tokens"},
     { value: 2, description: "New Divisible currency"},
@@ -163,7 +163,7 @@ function PropertyIssuanceController($scope, $http,$modal, userService, walletTra
       $scope.$parent.showErrors = false;
       // open modal
       var modalInstance = $modal.open({
-        templateUrl: '/partials/explorer_asset_issuance_modal.html',
+        templateUrl: '/partials/explorer_assets_issuance_modal.html',
         controller: function($scope, $rootScope, userService, data, preparePropertyIssuanceTransaction, getUnsignedPropertyIssuanceTransaction, convertSatoshiToDisplayedValue, getDisplayedAbbreviation) {
           $scope.issueSuccess = false, $scope.issueError = false, $scope.waiting = false, $scope.privKeyPass = {};
           $scope.convertSatoshiToDisplayedValue=  convertSatoshiToDisplayedValue,
