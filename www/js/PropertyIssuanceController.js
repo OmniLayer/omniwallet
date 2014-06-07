@@ -18,6 +18,99 @@ function PropertyIssuanceController($scope, $http,$modal, userService){
   };
   
   
+  function preparePropertyIssuanceTransaction(propertyType, previousPropertyId, propertyCategory, propertySubcategory, propertyName, propertyUrl, propertyData, numberProperties, from, $modalScope) {
+    var addressData = userService.getAddress(from);
+    var privKey = new Bitcoin.ECKey.decodeEncryptedFormat(addressData.privkey, addressData.address); // Using address as temporary password
+    var pubKey = privKey.getPubKeyHex();
+
+    $scope.propertyIssuanceTxPromise = getUnsignedPropertyIssuanceTransaction(propertyType, previousPropertyId, propertyCategory, propertySubcategory, propertyName, propertyUrl, propertyData, numberProperties, from);
+    $scope.propertyIssuanceTxPromise.then(function(successData) {
+      successData = successData.data;
+      if (successData.status != 200) {
+        $modalScope.waiting = false;
+        $modalScope.issueError = true;
+        $modalScope.error = 'Error preparing Property Issuance transaction: ' + successData.data;
+      } else {
+        var unsignedTransaction = successData.unsignedhex;
+
+        try {
+          var bytes = Bitcoin.Util.hexToBytes(unsignedTransaction);
+          var transaction = Bitcoin.Transaction.deserialize(bytes);
+          var script = parseScript(successData.sourceScript);
+
+          transaction.ins.forEach(function(input) {
+            input.script = script;
+          });
+
+          //DEBUG console.log('before',transaction, Bitcoin.Util.bytesToHex(transaction.serialize()));
+          var signedSuccess = transaction.signWithKey(privKey);
+          
+          var finalTransaction = Bitcoin.Util.bytesToHex(transaction.serialize());
+
+          //Showing the user the transaction hash doesn't work right now
+          //var transactionHash = Bitcoin.Util.bytesToHex(transaction.getHash().reverse());
+
+          walletTransactionService.pushSignedTransaction(finalTransaction).then(function(successData) {
+            var successData = successData.data;
+            if (successData.pushed.match(/submitted|success/gi) != null) {
+              $modalScope.waiting = false;
+              $modalScope.issueSuccess = true;
+              $modalScope.url = 'http://blockchain.info/address/' + from + '?sort=0';
+            } else {
+              $modalScope.waiting = false;
+              $modalScope.issueError = true;
+              $modalScope.error = successData.pushed; //Unspecified error, show user
+            }
+          }, function(errorData) {
+            $modalScope.waiting = false;
+            $modalScope.issueError = true;
+            if (errorData.message)
+              $modalScope.error = 'Server error: ' + errorData.message;
+            else 
+              if (errorData.data)
+                $modalScope.error = 'Server error: ' + errorData.data;
+              else
+                $modalScope.error = 'Unknown Server Error';
+            console.error(errorData);
+          });
+
+          //DEBUG console.log(addressData, privKey, bytes, transaction, script, signedSuccess, finalTransaction );
+          function parseScript(script) {
+            var newScript = new Bitcoin.Script();
+            var s = script.split(" ");
+            for (var i = 0; i < s.length; i++) {
+              if (Bitcoin.Opcode.map.hasOwnProperty(s[i])) {
+                newScript.writeOp(Bitcoin.Opcode.map[s[i]]);
+              } else {
+                newScript.writeBytes(Bitcoin.Util.hexToBytes(s[i]));
+              }
+            }
+            return newScript;
+          }
+        } catch (e) {
+          $modalScope.sendError = true;
+          if (e.message)
+            $modalScope.error = 'Error sending transaction: ' + e.message;
+          else 
+            if (e.data) 
+              $modalScope.error = 'Error sending transaction: ' + e.data;
+            else
+              $modalScope.error = 'Unknown error sending transaction';
+          console.error(e);
+        }
+      }
+    }, function(errorData) {
+      $modalScope.sendError = true;
+      if (errorData.message)
+        $modalScope.error = 'Server error: ' + errorData.message;
+      else 
+        if (errorData.data)
+          $modalScope.error = 'Server error: ' + errorData.data;
+        else
+          $modalScope.error = 'Unknown Server Error';
+      console.error(errorData);
+    });
+  }
   
   $scope.validatePropertyIssuanceForm = function() {
     var dustValue = 5430;
