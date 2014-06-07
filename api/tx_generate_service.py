@@ -37,8 +37,10 @@ def generate_assets(tx_type):
     datatx = prepare_tx(tx_type, request.form)
     if tx_type == 50:
         try:
-            unsignedhex=prepare_tx50(datatx)
-            return jsonify({ 'status': 200, 'unsignedhex': unsignedhex });
+            tx50bytes = prepare_tx50(datatx)
+            return jsonify({ 'status': 200, 'unsignedhex': tx50bytes });
+            final_packets = construct_packets( tx50bytes[0], tx50bytes[1] )
+            unsignedhex = build_transaction( final_packets )
         except Exception as e:
             error=jsonify({ 'status': 502, 'data': 'Unspecified error '+str(e)}) 
             return error
@@ -53,12 +55,13 @@ def generate_assets(tx_type):
 def prepare_tx(txtype,form):
         txdata=[]
 
-        txdata.append(form['transaction_version'])
-        txdata.append(form['ecosystem'])
+        txdata.append(int(form['transaction_version']))
+        txdata.append(int(txtype))
+        txdata.append(int(form['ecosystem']))
 
         if txtype == 50 or txtype == 51:
-            txdata.append(form['property_type'])
-            txdata.append(form['previous_property_id'])
+            txdata.append(int(form['property_type']))
+            txdata.append(int(form['previous_property_id']))
 
             property_category=form['property_category']
             property_category+='\0' if property_category[-1] != '\0' else ''
@@ -81,13 +84,13 @@ def prepare_tx(txtype,form):
             txdata.append(property_data)
 
             if txtype == 51:
-                txdata.append(form['currency_identifier_desired'])
-                txdata.append(form['number_properties'])
-                txdata.append(form['deadline'])
-                txdata.append(form['earlybird_bonus'])
-                txdata.append(form['percentage_for_issuer'])
+                txdata.append(int(form['currency_identifier_desired']))
+                txdata.append(int(form['number_properties']))
+                txdata.append(int(form['deadline']))
+                txdata.append(int(form['earlybird_bonus']))
+                txdata.append(int(form['percentage_for_issuer']))
             else:
-                txdata.append(form['number_properties'])
+                txdata.append(int(form['number_properties']))
             
             return txdata
 
@@ -95,37 +98,37 @@ def prepare_tx(txtype,form):
 
 # simple send and bitcoin send (with or without marker)
 def prepare_tx50(txdata):
-    return txdata
+    print txdata
     #calculate bytes
-    tx_ver_bytes = hex(transaction_version)[2:].rjust(4,"0") # 2 bytes
-    tx_type_bytes = hex(transaction_type)[2:].rjust(4,"0")   # 2 bytes
-    eco_bytes = hex(ecosystem)[2:].rjust(2,"0")              # 1 byte
-    prop_type_bytes = hex(property_type)[2:].rjust(4,"0")    # 2 bytes
-    prev_prop_id_bytes = hex(previous_property_id)[2:].rjust(8,"0")  # 4 bytes
-    num_prop_bytes = hex(number_properties)[2:].rjust(16,"0")        # 8 bytes
+    tx_ver_bytes = hex(txdata[0])[2:].rjust(4,"0") # 2 bytes
+    tx_type_bytes = hex(txdata[1])[2:].rjust(4,"0")   # 2 bytes
+    eco_bytes = hex(txdata[2])[2:].rjust(2,"0")              # 1 byte
+    prop_type_bytes = hex(txdata[3])[2:].rjust(4,"0")    # 2 bytes
+    prev_prop_id_bytes = hex(txdata[4])[2:].rjust(8,"0")  # 4 bytes
     prop_cat_bytes = ''                                      # var bytes
     prop_subcat_bytes = ''                                   # var bytes
     prop_name_bytes = ''                                     # var bytes
     prop_url_bytes = ''                                      # var bytes
     prop_data_bytes = ''                                     # var bytes
-    
-    for let in property_category:
+    num_prop_bytes = hex(txdata[10])[2:].rjust(16,"0")        # 8 bytes
+
+    for let in txdata[5]:
         prop_cat_bytes = prop_cat_bytes + hex(ord(let))[2:]
     prop_cat_bytes = prop_cat_bytes + '00'
     
-    for let in property_subcategory:
+    for let in txdata[6]:
         prop_subcat_bytes = prop_subcat_bytes + hex(ord(let))[2:]
     prop_subcat_bytes = prop_subcat_bytes + '00'
     
-    for let in property_name:
+    for let in txdata[7]:
         prop_name_bytes = prop_name_bytes + hex(ord(let))[2:]
     prop_name_bytes = prop_name_bytes + '00'
     
-    for let in property_url:
+    for let in txdata[8]:
         prop_url_bytes = prop_url_bytes + hex(ord(let))[2:]
     prop_url_bytes = prop_url_bytes + '00'
     
-    for let in property_data:
+    for let in txdata[9]:
         prop_data_bytes = prop_data_bytes + hex(ord(let))[2:]
     prop_data_bytes = prop_data_bytes + '00'
     
@@ -147,8 +150,13 @@ def prepare_tx50(txdata):
     
     #DEBUG print [len(tx_ver_bytes)/2,len(tx_type_bytes)/2,len(eco_bytes)/2,len(prop_type_bytes)/2,len(prev_prop_id_bytes)/2,len(num_prop_bytes)/2,len(prop_cat_bytes)/2,len(prop_subcat_bytes)/2,len(prop_name_bytes)/2,len(prop_url_bytes)/2,len(prop_data_bytes)/2]
                                                                                                                                  
-    #DEBUG print [byte_stream, total_bytes]
+    #DEBUG 
+    print [byte_stream, total_bytes]
     
+    return [byte_stream, total_bytes]
+
+
+def construct_packets(byte_stream, total_bytes):
     import math
     total_packets = int(math.ceil(float(total_bytes)/30)) #get # of packets
     
@@ -244,10 +252,10 @@ def prepare_tx50(txdata):
         #make sure the public key is valid using pybitcointools, if not, regenerate 
         #the last byte of the key and try again
     
-    #DEBUG print final_packets
+    #DEBUG 
+    return final_packets
     
-    #### Build transaction
-    
+def build_transaction(final_packets):
     #calculate fees
     fee_total = Decimal(0.0001) + Decimal(0.000055*total_packets+0.000055*total_outs) + Decimal(0.000055)
     #TODO: largest_spendable_input also comes from bitcoind
@@ -388,11 +396,8 @@ def prepare_tx50(txdata):
         hex_transaction = hex_transaction + (output[0] + output[1] + output[2]) 
     
     hex_transaction = hex_transaction + blocklocktime
-    #TODO: remove bitcoind conn
+    
     #verify that transaction is valid
     assert type(conn.decoderawtransaction(''.join(hex_transaction).lower())) == type({})
 
-    # tx, inputs
-    return_dict={'transaction':hex_transaction}
-    return return_dict
-
+    return ''.join(hex_transaction).lower()
