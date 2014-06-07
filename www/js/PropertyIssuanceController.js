@@ -19,14 +19,16 @@ function PropertyIssuanceController($scope, $http,$modal, userService, walletTra
   
   function getUnsignedPropertyIssuanceTransaction(propertyType, previousPropertyId, propertyCategory, propertySubcategory, propertyName, propertyUrl, propertyData, numberProperties) {
     var data = {
-      propertyType : propertyType, 
-      previousPropertyId:previousPropertyId, 
-      propertyCategory:propertyCategory, 
-      propertySubcategory:propertySubcategory, 
-      propertyName:propertyName, 
-      propertyUrl:propertyUrl, 
-      propertyData:propertyData, 
-      numberProperties:numberProperties
+      transaction_version:0,
+      ecosystem:2,
+      property_type : propertyType, 
+      previous_property_id:previousPropertyId || 0, 
+      property_category:propertyCategory, 
+      property_subcategory:propertySubcategory, 
+      property_name:propertyName, 
+      property_url:propertyUrl, 
+      property_data:propertyData, 
+      number_properties:numberProperties
     };
     var promise = walletTradeService.getUnsignedTransaction(50,data);
 
