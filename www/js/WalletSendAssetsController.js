@@ -1,64 +1,6 @@
 function WalletSendAssetsController($modal, $scope, $http, $q, userService, walletTradeService) {
   // [ Helper Functions ]
 
-  function convertSatoshiToDisplayedValue(satoshi) {
-    if ($scope.selectedCoin.symbol == 'BTC')
-      return satoshi / 100000.0;
-    else if ($scope.selectedCoin.symbol.indexOf('SP') == 0) {
-      for (var i in $scope.currencyList) {
-        if ($scope.currencyList[i].symbol == $scope.selectedCoin.symbol) {
-          if ($scope.currencyList[i].property_type == 1)
-            return satoshi;
-          else
-            return satoshi / 100000000.0;
-        }
-      }
-      return satoshi / 100000000.0;
-    } else {
-      return satoshi / 100000000.0;
-    }
-  }
-
-  $scope.convertSatoshiToDisplayedValue = convertSatoshiToDisplayedValue;
-
-  function getDisplayedAbbreviation() {
-    if ($scope.selectedCoin.symbol == 'BTC')
-      return 'mBTC';
-    else if ($scope.selectedCoin.symbol.indexOf('SP') == 0) {
-      for (var i in $scope.currencyList) {
-        if ($scope.currencyList[i].symbol == $scope.selectedCoin.symbol)
-          return $scope.currencyList[i].name + ' #' + $scope.selectedCoin.symbol.match(/SP([0-9]+)/)[1];
-      }
-
-      return 'Smart Property #' + $scope.selectedCoin.symbol.match(/SP([0-9]+)/)[1];
-    }
-    else
-      return $scope.selectedCoin.symbol;
-  }
-  $scope.getDisplayedAbbreviation = getDisplayedAbbreviation;
-
-  function convertDisplayedValueToSatoshi(value) {
-    if ($scope.selectedCoin.symbol == 'BTC') {
-      return Math.ceil(value * 100000);
-    } else if ($scope.selectedCoin.symbol.indexOf('SP') == 0) {
-      for (var i in $scope.currencyList) {
-        if ($scope.currencyList[i].symbol == $scope.selectedCoin.symbol) {
-          if ($scope.currencyList[i].property_type == 1)
-            return Math.ceil(value);
-          else
-            return Math.ceil(value * 100000000);
-        }
-      }
-      return Math.ceil(value * 100000000);
-    } else {
-      return Math.ceil(value * 100000000);
-    }
-  }
-  
-
-  
-
-
   // [ Send Form Helpers ]
 
   function getUnsignedSendTransaction(toAddress, pubKey, fromAddress, amount, currency, fee) {
@@ -177,42 +119,59 @@ function WalletSendAssetsController($modal, $scope, $http, $q, userService, wall
     var dustValue = 5430;
     var minerMinimum = 10000;
     var nonZeroValue = 1;
+    var divisible = $scope.selectedCoin.divisible; 
 
-    var minerFees = Math.ceil($scope.minerFees * 100000);
-    var sendAmount = convertDisplayedValueToSatoshi($scope.sendAmount);
+    var convertToSatoshi = [
+        $scope.minerFees,
+        $scope.sendAmount,
+        $scope.balanceData[0], 
+        $scope.balanceData[1],
+        $scope.totalCost
+      ];
 
-    var balance = +$scope.balanceData[0];
-    var btcbalance = +$scope.balanceData[1];
+    if (!divisible) {
+      delete convertToSatoshi[ convertToSatoshi.indexOf( $scope.sendAmount ) ];
+      delete convertToSatoshi[ convertToSatoshi.indexOf( $scope.balanceData[0] ) ];
+    }
+
+    var convertedValues = $scope.convertDisplayedValue( convertToSatoshi );
+
+    var minerFees = +convertedValues[0];
+    var sendAmount = divisible ? +convertedValues[1] : +$scope.sendAmount;
+    var totalFeeCost = +convertedValues[4]
+
+    var balance = divisible ? +convertedValues[2] : +$scope.balanceData[0];
+    var btcbalance = +convertedValues[3];
 
     var coin = $scope.selectedCoin.symbol;
     var address = $scope.selectedAddress;
     var sendTo = $scope.sendTo;
-    var required = [coin, address, sendAmount, sendTo, minerFees, balance, btcbalance, $scope.sendForm.$valid];
+    var required = [coin, address, sendAmount, sendTo, minerFees, totalFeeCost,  balance, btcbalance, $scope.sendForm.$valid];
 
     var error = 'Please ';
     if ($scope.sendForm.$valid == false) {
       error += 'make sure all fields are completely filled, ';
     }
     if ((sendAmount <= balance) == false) {
-      error += 'make sure you aren\'t sending more coins than you own, ';
+      error += 'make sure you aren\'t sending more tokens than you own, ';
     }
-    if ((minerFees <= btcbalance) == false) {
-      error += 'make sure you have enough Bitcoin to cover your fees, ';
+    if ((totalFeeCost <= btcbalance) == false) {
+      error += 'make sure you have enough Bitcoin to cover your transaction costs, ';
     }
     if (walletTradeService.validAddress(sendTo) == false) {
       error += 'make sure you are sending to a valid MSC/BTC address, ';
     }
     if (coin == 'BTC') {
       if (sendAmount < dustValue)
-        error += 'make sure your send amount is at least 0.05430 mBTC if sending BTC, ';
+        error += 'make sure your send amount is at least 0.00005430 BTC if sending BTC, ';
       if (minerFees < minerMinimum)
-        error += 'make sure your fee entry is at least 0.1 mBTC to cover miner costs, ';
+        error += 'make sure your fee entry is at least 0.0001 BTC to cover miner costs, ';
     }
     if( ((coin == 'MSC') || (coin == 'TMSC')) ) {
       if (sendAmount < nonZeroValue)
         error += 'make sure your send amount is non-zero, ';
       if (minerFees < minerMinimum)
-        error += 'make sure your fee entry is at least 0.1 mBTC, ';
+        error += 'make sure your fee entry is at least 0.0001 BTC, ';
     }
     if (error.length < 8) {
       $scope.$parent.showErrors = false;
@@ -224,8 +183,9 @@ function WalletSendAssetsController($modal, $scope, $http, $q, userService, wall
           $scope.convertSatoshiToDisplayedValue=  convertSatoshiToDisplayedValue,
           $scope.getDisplayedAbbreviation=  getDisplayedAbbreviation,
           $scope.sendAmount= data.amt,
-          $scope.minerFees= (data.fee /100000),
+          $scope.minerFees= data.fee,
           $scope.sendTo= data.sendTo;
+          $scope.totalCost= data.totalCost;
           
           $scope.ok = function() {
             $scope.clicked = true;
@@ -240,7 +200,8 @@ function WalletSendAssetsController($modal, $scope, $http, $q, userService, wall
               sendFrom: address,
               amt: sendAmount,
               coin: coin,
-              fee: minerFees
+              fee: minerFees,
+              totalCost: totalFeeCost
             };
           },
           prepareSendTransaction: function() {

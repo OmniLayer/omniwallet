@@ -22,11 +22,13 @@ def get_msc_balances( addr ):
     #    use sx's BTC balances directly.
     balance_data = address_data[ 'balance' ]
     for i in xrange(0,len( balance_data )):
+      balance_data[i][ 'divisible' ] = False
       if balance_data[ i ][ 'symbol' ] == 'BTC':
         balance_data.pop( i )
         break
       else:
         if type(balance_data[i]['value']) != type(0): #if not int convert (divisible property)
+            balance_data[ i ][ 'divisible' ] = True
             balance_data[ i ][ 'value' ] = int( round( float( balance_data[ i ][ 'value' ]) * 100000000 ))
 
     for i in xrange( 0, len( balance_data )):
@@ -37,8 +39,7 @@ def get_msc_balances( addr ):
 
 # Get the Bitcoin balances - this is a different format from the MSC one above.
 def get_btc_balances( addr ):
-  balances = {}
-  balances[ 'symbol' ] = 'BTC'
+  balances = { 'symbol': 'BTC', 'divisible': True }
   out, err = run_command( 'sx balance -j ' + addr )
   if err != None:
     return None, err

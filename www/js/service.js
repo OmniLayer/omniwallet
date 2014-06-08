@@ -228,6 +228,7 @@ angular.module('omniwallet').factory('userService', ['$rootScope', '$http', '$in
                       currency = {
                         name: property.propertyName,
                         symbol: balanceItem.symbol,
+                        divisible: balanceItem.divisible,
                         property_type: property.formatted_property_type,
                         addresses: [service.data.wallet.addresses[i].address]
                       };
@@ -237,6 +238,7 @@ angular.module('omniwallet').factory('userService', ['$rootScope', '$http', '$in
                     currency = {
                       name: balanceItem.symbol,
                       symbol: balanceItem.symbol,
+                      divisible: balanceItem.divisible,
                       addresses: [service.data.wallet.addresses[i].address]
                     };
                     service.data.walletMetadata.currencies.push(currency);

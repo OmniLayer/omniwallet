@@ -1,4 +1,9 @@
 
+    <div class="alert alert-info alert-dismissable">
+    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+    <strong>Jun 5 2014 - OpenSSL Update:</strong> Following the most recent <a href="https://www.openssl.org/news/secadv_20140605.txt">OpenSSL Security Advisory</a> Omniwallet has been updated accordingly. <br />We recommend all our users make sure their systems are up to date.  
+    </div>
+
 <row>
   <div class="col-xs-12">
     <h3>Check your balance!</h3>
@@ -23,8 +28,8 @@
               </div>
               <div class="asset-item col-xs-5 text-right">
                 <span ng-if="currency.property_type != undefined && currency.property_type == 1" class="currency">{{ currency.balance }} </span>
-                <span ng-if="currency.property_type != undefined && currency.property_type == 2" class="currency">{{ ({ balance: currency.balance, symbol: currency.symbol } | cryptocurrency).toFixed(8) }}</span>
-                <span ng-if="currency.property_type == undefined" class="currency">{{ { balance: currency.balance, symbol: currency.symbol } | cryptocurrency }} {{currency.name == "Bitcoin" ? "m" : ""}}{{ currency.symbol }}</span>
+                <span ng-if="currency.property_type != undefined && currency.property_type == 2" class="currency">{{ currency.balance.toFixed(8) }}</span>
+                <span ng-if="currency.property_type == undefined" class="currency">{{ currency.balance }} {{ currency.symbol }}</span>
               </div>
               <div class="asset-item col-xs-3 text-right">
                 <span>{{currency.value | currency}}</span>

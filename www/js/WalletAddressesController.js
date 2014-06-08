@@ -34,15 +34,17 @@ angular.module('omniwallet')
                   invalidAddresses.push(addr.address);
                 } else {
                   result.data.balance.forEach(function(currencyItem) {
+                    if(currencyItem.divisible)
+                      var value=new Big(currencyItem.value).times(WHOLE_UNIT).valueOf();
                     if (!balances.hasOwnProperty(currencyItem.symbol)) {
                       balances[currencyItem.symbol] = {
                         "symbol": currencyItem.symbol,
-                        "balance": parseInt(currencyItem.value),
+                        "balance": +value || currencyItem.value,
                         "value": appraiser.getValue(currencyItem.value, currencyItem.symbol),
                         "addresses": {}
                       };
                     } else {
-                      balances[currencyItem.symbol].balance += parseInt(currencyItem.value);
+                      balances[currencyItem.symbol].balance += +value || currencyItem.value;
                       balances[currencyItem.symbol].value += appraiser.getValue(currencyItem.value, currencyItem.symbol);
                     }
 
@@ -51,7 +53,7 @@ angular.module('omniwallet')
                     }
                     balances[currencyItem.symbol].addresses[result.data.address] = {
                       "address": result.data.address,
-                      "balance": currencyItem.value,
+                      "balance": +value || currencyItem.value,
                       "value": appraiser.getValue(currencyItem.value, currencyItem.symbol)
                     };
                   });

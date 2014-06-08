@@ -29,14 +29,16 @@ angular.module('omniwallet')
             wallet.addresses.forEach(function(addr) {
               requests.push($injector.get('balanceService').balance(addr.address).then(function(result) {
                 result.data.balance.forEach(function(currencyItem) {
+                  if(currencyItem.divisible)
+                    var value=new Big(currencyItem.value).times(WHOLE_UNIT).valueOf();
                   if (!balances.hasOwnProperty(currencyItem.symbol)) {
                     balances[currencyItem.symbol] = {
                       "symbol": currencyItem.symbol,
-                      "balance": parseInt(currencyItem.value),
+                      "balance": +value || currencyItem.value,
                       "value": appraiser.getValue(currencyItem.value, currencyItem.symbol),
                     };
                   } else {
-                    balances[currencyItem.symbol].balance += parseInt(currencyItem.value);
+                    balances[currencyItem.symbol].balance += +value || currencyItem.value;
                     balances[currencyItem.symbol].value += appraiser.getValue(currencyItem.value, currencyItem.symbol);
                   }
                   if (currencyItem.symbol == 'BTC') {
@@ -134,6 +136,7 @@ angular.module('omniwallet')
 
   $scope.refresh = function() {
 
+    $scope.isLoading = true;
     $scope.items = asset_types_data.getData().then(function(balances) {
       $scope.balances = balances;
 
@@ -152,6 +155,8 @@ angular.module('omniwallet')
           });
         });
       });
+      $scope.isLoading = false;
+      //console.log("loading refreshed stop");
     });
   }
 
@@ -169,10 +174,12 @@ angular.module('omniwallet')
           var resultBalances = result.data.balance;
           for (var i in resultBalances) {
             var item = resultBalances[i];
+            if(item.divisible)
+              var value=new Big(item.value).times(WHOLE_UNIT).valueOf();
             if (item.symbol == currencySymbol) {
               balances.push({
                 "address": addr,
-                "balance": parseInt(item.value),
+                "balance": +value || item.value,
                 "value": appraiser.getValue(item.value, currencySymbol)
               });
 

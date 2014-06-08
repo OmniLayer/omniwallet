@@ -258,7 +258,7 @@ function WalletTradeOverviewController($scope, $http, $q, userService, hashExplo
           transaction_data_keys = ['formatted_amount', 'formatted_amount_available',
             'formatted_bitcoin_amount_desired', 'formatted_fee_required', 'formatted_price_per_coin'];
           transaction_data_keys.forEach(function(key) {
-            tx[key] = formatCurrencyInFundamentalUnit(tx[key], 'wtos')
+            tx[key] = tx[key];
           });
         });
 
@@ -267,13 +267,16 @@ function WalletTradeOverviewController($scope, $http, $q, userService, hashExplo
           transaction_data[index].tx_hash_concat = transaction.tx_hash.substring(0, 22) + '...'
         });
 
+        transaction_data=transaction_data.filter(function(elem) {
+          return (elem.action != 3);
+        });
+
         transaction_data.sort(function(a, b) {
           return a.formatted_price_per_coin - b.formatted_price_per_coin
         }); // sort cheapest; sort most recent (b.tx_time - a.tx_time)
-        //DEBUG console.log('wallet trade overview ctrl', transaction_data)
-      } else transaction_data.push({
-          tx_hash: 'No offers/bids found for this timeframe'
-        })
+        transaction_data.length == 0 ? transaction_data.push({ tx_hash_concat: 'No offers/bids found for this timeframe' }) : transaction_data;
+      } else 
+          transaction_data.push({ tx_hash_concat: 'No offers/bids found for this timeframe' })
       $scope.orderbook = transaction_data;
     }
     );
@@ -399,7 +402,7 @@ function WalletTradePendingController($scope, $http, $q, userService, hashExplor
           transaction_data_keys = ['formatted_amount', 'formatted_amount_available',
             'formatted_bitcoin_amount_desired', 'formatted_fee_required', 'formatted_price_per_coin', 'bitcoin_required'];
           transaction_data_keys.forEach(function(key) {
-            tx[key] = formatCurrencyInFundamentalUnit(tx[key], 'wtos')
+            tx[key] = tx[key];
           });
         }
       });
