@@ -1,5 +1,6 @@
 import urlparse
 import os, sys, re, random,pybitcointools, bitcoinrpc
+from decimal import Decimal
 from flask import Flask, request, jsonify, abort, json, make_response
 from msc_apps import *
 
@@ -37,15 +38,15 @@ def generate_assets(tx_type):
 
     txdata = prepare_txdata(tx_type, request.form)
     if tx_type == 50:
-        #try:
+        try:
             tx50bytes = prepare_txbytes(txdata)
-            final_packets = construct_packets( tx50bytes[0], tx50bytes[1], request.form['transaction_from'] )
-            print tx50bytes, final_packets
-            return jsonify({ 'status': 200, 'unsignedhex': final_packets });
-            unsignedhex = build_transaction( final_packets )
-        #except Exception as e:
-        #    error=jsonify({ 'status': 502, 'data': 'Unspecified error '+str(e)}) 
-        #    return error
+            packets = construct_packets( tx50bytes[0], tx50bytes[1], request.form['transaction_from'] )
+            unsignedhex = build_transaction( packets[0], packets[1], packets[2], request.form['transaction_from'] )
+            #DEBUG print tx50bytes, packets, unsignedhex
+            return jsonify({ 'status': 200, 'unsignedhex': unsignedhex[0] , 'sourceScript': unsignedhex[1] });
+        except Exception as e:
+            error=jsonify({ 'status': 502, 'data': 'Unspecified error '+str(e)}) 
+            return error
     elif tx_type == 51:
         try:
             unsignedhex=prepare_tx(datatx)
@@ -314,39 +315,68 @@ def construct_packets(byte_stream, total_bytes, from_address):
         #the last byte of the key and try again
     
     #DEBUG print final_packets 
-    return final_packets
+    return [final_packets,total_packets,total_outs]
     
-def build_transaction(final_packets):
+def build_transaction(final_packets, total_packets, total_outs, from_address):
     #calculate fees
-    fee_total = Decimal(0.0001) + Decimal(0.000055*total_packets+0.000055*total_outs) + Decimal(0.000055)
-    #TODO: largest_spendable_input also comes from bitcoind
-    change = largest_spendable_input['amount'] - fee_total
+    fee_total = Decimal(0.0001) + Decimal(0.00005757*total_packets+0.00005757*total_outs) + Decimal(0.00005757)
+    fee_total_satoshi = int( round( fee_total * Decimal(1e8) ) )
+
+    pubkey = get_pubkey(from_address)    
+    #clean sx output, initial version by achamely
+    utxo_list = []
+    #round so we aren't under fee amount
+    dirty_txes = get_utxo( from_address, fee_total_satoshi ).replace(" ", "")
+
+    if (dirty_txes[:3]=='Ass') or (dirty_txes[0][:3]=='Not'):
+        raise Exception({ "status": "NOT OK", "error": "Not enough funds, try again. Needed: " + str(fee_total)  })
+
+    for line in dirty_txes.splitlines():
+        utxo_list.append(line.split(':'))
+
+    z = 0
+    total_amount=0
+    unspent_tx = []
+    for item in utxo_list:
+        # unspent tx: [0] - txid; [1] - vout; [2] - amount;
+        if utxo_list[z][0] == "output":
+            unspent_tx.append( [ utxo_list[z][1] , utxo_list[z][2] ] )
+        if utxo_list[z][0] == "value":
+            unspent_tx[-1] += [ int( utxo_list[z][1] ) ]
+            total_amount += int( utxo_list[z][1] )
+        z += 1
+
     # calculate change : 
     # (total input amount) - (broadcast fee)
+    change = total_amount - fee_total_satoshi
     
-    if (Decimal(change) < Decimal(0) or fee_total > largest_spendable_input['amount']) and not force:
-        print json.dumps({ "status": "NOT OK", "error": "Not enough funds, you need " + str(fee_total) , "fix": "Set \'force\' flag to proceed without balance checks" })
-        exit()
+    #DEBUG 
+    print [ dirty_txes, change, total_amount, fee_total_satoshi,  unspent_tx ] 
+
+    #source script is needed to sign on the client credit grazcoin
+    hash160=bc_address_to_hash_160(from_address).encode('hex_codec')
+    prevout_script='OP_DUP OP_HASH160 ' + hash160 + ' OP_EQUALVERIFY OP_CHECKSIG'
+
+    validnextinputs = []   #get valid redeemable inputs
+    for unspent in unspent_tx:
+        #retrieve raw transaction to spend it
+        prev_tx = conn.getrawtransaction(unspent[0])
+
+        for output in prev_tx.vout:
+            if output['scriptPubKey']['reqSigs'] == 1 and output['scriptPubKey']['type'] != 'multisig':
+                for address in output['scriptPubKey']['addresses']:
+                    if address == from_address:
+                        validnextinputs.append({ "txid": prev_tx.txid, "vout": output['n']})
+
+    validnextoutputs = { "1EXoDusjGwvnjZUyKkxZ4UHEf77z6A5S4P": 0.00005757 }
     
-    #retrieve raw transaction to spend it
-    #TODO: get the raw transacition without bitcoind conn
-    prev_tx = conn.getrawtransaction(largest_spendable_input['txid'])
+    if change > Decimal(0.00005757): # send anything above dust to yourself
+        validnextoutputs[ from_address ] = float( Decimal(change)/Decimal(1e8) )
     
-    validnextinputs = []                      #get valid redeemable inputs
-    for output in prev_tx.vout:
-        if output['scriptPubKey']['reqSigs'] == 1 and output['scriptPubKey']['type'] != 'multisig':
-            for address in output['scriptPubKey']['addresses']:
-                #TODO: transaction_from is the address that is creating the transaction, Maybe we should send that from the client?
-                if address == listOptions['transaction_from']:
-                    validnextinputs.append({ "txid": prev_tx.txid, "vout": output['n']})
-    
-    validnextoutputs = { "1EXoDusjGwvnjZUyKkxZ4UHEf77z6A5S4P": 0.000055 }
-    
-    if change > Decimal(0.000055): # send anything above dust to yourself
-        validnextoutputs[ listOptions['transaction_from'] ] = float(change) 
-    #TODO: remove bitcoind conn
     unsigned_raw_tx = conn.createrawtransaction(validnextinputs, validnextoutputs)
     
+    #DEBUG print change,unsigned_raw_tx
+
     json_tx =  conn.decoderawtransaction(unsigned_raw_tx)
     
     #append  data structure
@@ -388,11 +418,12 @@ def build_transaction(final_packets):
                     "type": "multisig", 
                     "addresses": addresses 
                 }, 
-                "value": 0.000055*len(addresses), 
+                "value": 0.00005757*len(addresses), 
                 "n": n_count
             })
     
-    #print json_tx
+    #DEBUG import pprint    
+    #DEBUG print pprint.pprint(json_tx)
     
     #construct byte arrays for transaction 
     #assert to verify byte lengths are OK
@@ -459,6 +490,13 @@ def build_transaction(final_packets):
     hex_transaction = hex_transaction + blocklocktime
     
     #verify that transaction is valid
-    assert type(conn.decoderawtransaction(''.join(hex_transaction).lower())) == type({})
+    decoded_tx = conn.decoderawtransaction(''.join(hex_transaction).lower());
+    if 'txid' not in decoded_tx:
+        raise Exception({ "status": "NOT OK", "error": "Network byte mismatch: Please try again"  })
 
-    return ''.join(hex_transaction).lower()
+    #DEBUG print ''.join(hex_transaction).lower()
+    #DEBUG print pprint.pprint(conn.decoderawtransaction(''.join(hex_transaction).lower()))
+
+    unsigned_hex=''.join(hex_transaction).lower()
+
+    return [unsigned_hex, prevout_script]
