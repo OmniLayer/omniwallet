@@ -61,7 +61,7 @@
       <div class="input-group">
         <span class="input-group-addon"> Currency Identifier Desired: </span>
         <select name="desired" ng-model="currencyIdentifierDesired" class="form-control" 
-         ng-options="currency.id as currency.value for currency in currencyList" required>
+         ng-options="currency as currency.symbol for currency in currencyList" required>
           <option value=""> -- Choose Currency -- </option>
         </select>
       </div>
@@ -102,7 +102,7 @@
     </div>
   </div>
     <br>
-  <input class="btn btn-primary btn-lg col-xs-push-3 col-xs-6" type="submit" value="Issue Assets" ng-click="validatePropertyIssuanceForm()">
+  <input class="btn btn-primary btn-lg col-xs-push-3 col-xs-6" type="submit" value="Issue Crowdsale" ng-click="validateCrowdsaleIssuanceForm()">
   </form>
 </div>
 </div>
