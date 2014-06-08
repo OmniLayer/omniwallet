@@ -1,5 +1,8 @@
 function CrowdsaleIssuanceController($scope, $http,$modal, userService){
-
+  $scope.currencyList=[
+    { symbol: "BTC", id: 0},
+    { symbol: "MSC", id: 1}
+  ];
   $scope.propertyTypes = [
     { value: 1, description: "New Indivisible tokens"},
     { value: 2, description: "New Divisible currency"},
@@ -37,7 +40,8 @@ function CrowdsaleIssuanceController($scope, $http,$modal, userService){
     propertyCategory=$scope.propertyCategory,
     propertySubcategory=$scope.propertySubcategory,
     propertyUrl=$scope.propertyUrl,
-    currencyIdentifierDesired=$scope.currencyIdentifierDesired,
+    currencyIdentifierDesired=$scope.currencyIdentifierDesired.id,
+    currencyIdentifierDesiredName=$scope.currencyIdentifierDesired.symbol,
     deadline=$scope.deadline,
     earlyBirdBonus=$scope.earlyBirdBonus,
     percentageForIssuer=$scope.percentageForIssuer;
@@ -67,7 +71,11 @@ function CrowdsaleIssuanceController($scope, $http,$modal, userService){
           $scope.propertyName= data.propertyName,
           $scope.propertyCategory= data.propertyCategory,
           $scope.propertySubcategory= data.propertySubcategory,
-          $scope.propertyUrl= data.propertyUrl;
+          $scope.propertyUrl= data.propertyUrl,
+          $scope.currencyIdentifierDesiredName=data.currencyIdentifierDesiredName,
+          $scope.deadline=data.deadline.toLocaleString(),
+          $scope.earlyBirdBonus=data.earlyBirdBonus,
+          $scope.percentageForIssuer=data.percentageForIssuer;
           
           $scope.ok = function() {
             $scope.clicked = true;
@@ -85,7 +93,7 @@ function CrowdsaleIssuanceController($scope, $http,$modal, userService){
                 number_properties:data.numberProperties,
                 transaction_from: data.from,
                 currency_identifier_desired:data.currencyIdentifierDesired,
-                deadline:data.deadline,
+                deadline:data.deadline.getTime(),
                 early_bird_bonus:data.earlyBirdBonus,
                 percentage_for_issuer:data.percentageForIssuer
               }, data.from, $scope);
@@ -105,6 +113,7 @@ function CrowdsaleIssuanceController($scope, $http,$modal, userService){
               propertyUrl:propertyUrl,
               propertyData:'\0', // this is fixed to 1 byte by the spec
               currencyIdentifierDesired:currencyIdentifierDesired,
+              currencyIdentifierDesiredName:currencyIdentifierDesiredName,
               deadline:deadline,
               earlyBirdBonus:earlyBirdBonus,
               percentageForIssuer:percentageForIssuer

@@ -3,6 +3,7 @@
 </div>
 
 <div ng-controller="WalletAssetsFormController">
+  <div ng-controller="TransactionGenerationController">
 <div class="col-xs-10" ng-controller="CrowdsaleIssuanceController">
   <br>
   <br>
@@ -61,7 +62,7 @@
       <div class="input-group">
         <span class="input-group-addon"> Currency Identifier Desired: </span>
         <select name="desired" ng-model="currencyIdentifierDesired" class="form-control" 
-         ng-options="currency.id as currency.value for currency in currencyList" required>
+         ng-options="currency as currency.symbol for currency in currencyList" required>
           <option value=""> -- Choose Currency -- </option>
         </select>
       </div>
@@ -73,7 +74,7 @@
       <br>
       <div class="input-group">
         <span class="input-group-addon"> Deadline: </span>
-        <input type="text" class="form-control" datepicker-popup="{{format}}" datepicker-append-to-body="true" ng-model="deadline" is-open="opened" min-date="today" datepicker-options="dateOptions" date-disabled="disabled(date, mode)" ng-required="true" close-text="Close" />
+        <input type="text" class="form-control" datepicker-append-to-body="true" datepicker-popup="{{format}}" ng-model="deadline" is-open="opened" min-date="today" datepicker-options="dateOptions" date-disabled="disabled(date, mode)" ng-required="true" close-text="Close" />
         <span class="input-group-btn">
           <button type="button" class="btn btn-default" ng-click="open($event)"><i class="glyphicon glyphicon-calendar"></i></button>
         </span>
@@ -102,7 +103,8 @@
     </div>
   </div>
     <br>
-  <input class="btn btn-primary btn-lg col-xs-push-3 col-xs-6" type="submit" value="Issue Assets" ng-click="validatePropertyIssuanceForm()">
+  <input class="btn btn-primary btn-lg col-xs-push-3 col-xs-6" type="submit" value="Issue Crowdsale" ng-click="validateCrowdsaleIssuanceForm()">
   </form>
+</div>
 </div>
 </div>
