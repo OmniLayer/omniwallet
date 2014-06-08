@@ -1,4 +1,4 @@
-function TransactionGenerationController($scope, userService){
+function TransactionGenerationController($scope, userService, walletTransactionService){
   
   $scope.prepareTransaction = function(txType, data, from, $modalScope){
     var addressData = userService.getAddress(from);
