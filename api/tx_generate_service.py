@@ -13,6 +13,8 @@ data_dir_root = os.environ.get('DATADIR')
 app = Flask(__name__)
 app.debug = True
 
+HEXSPACE='21'
+
 @app.route('/<int:tx_type>', methods=['POST'])
 def generate_assets(tx_type):
 
@@ -393,14 +395,14 @@ def build_transaction(final_packets, total_packets, total_outs, from_address):
     #DEBUG print ordered_packets
     
     for i in range(total_outs):
-        hex_string = "5141" + pubkey
+        hex_string = "51" + HEXSPACE + pubkey
         asm_string = "1 " + pubkey
         addresses = [ pybitcointools.pubkey_to_address(pubkey)]
         n_count = len(validnextoutputs)+i
         total_sig_count = 1
         #DEBUG print [i,'added string', ordered_packets[i]]
         for packet in ordered_packets[i]:
-            hex_string = hex_string + "21" + packet.lower() 
+            hex_string = hex_string + HEXSPACE + packet.lower() 
             asm_string = asm_string + " " + packet.lower()
             addresses.append(pybitcointools.pubkey_to_address(packet))
             total_sig_count = total_sig_count + 1
