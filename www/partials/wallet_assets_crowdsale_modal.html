@@ -1,0 +1,25 @@
+<div class="modal-body">
+    <h3 class="text-center"> Confirm Property Creation </h3>
+    <h3>You're about to start a Crowdsale! <br/>
+      This transaction will create {{numberProperties}} {{propertyTypeName}} tokens of {{propertyName}}. Categorized as {{propertyCategory}} > {{propertySubcategory}} at URL {{propertyUrl}}</h3>
+  <p><br>
+  If the above is correct, please press issue my Property.
+  If you encounter an error, feel free to click away from the dialog and try again.
+  </p>
+<div class="modal-footer">
+    <div class="row">
+    <button ng-disabled="clicked" class="btn btn-primary" ng-click="ok()">Yes, issue my Property</button>
+    <img class="" src="/assets/img/34-1.gif" ng-show="waiting">
+    </div>
+      <br>
+    <div class="row">
+      <div ng-show="issueSuccess">
+        <h4 class="pull-right col-xs-12" style="color:green"> Assets issued successfully, 
+        check your transaction <a target="_blank" href="{{url}}">here.</a></h4>
+      </div>
+      <div ng-show="issueError">
+        <h4 class="col-xs-12" style="color:red;"> Assets could not be issued: 
+         {{error}} </h4>
+      </div>
+    </div>
+</div>
