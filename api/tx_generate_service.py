@@ -266,11 +266,12 @@ def construct_packets(byte_stream, total_bytes, from_address):
             if plaintext[i] == '0':
                 datapacket = datapacket + shaaddress[i]
             else:
-                bin_plain = int('0x' + plaintext[i], 16)
-                bin_sha = int('0x' + shaaddress[i], 16)
-                #DEBUG print ['texts, plain & addr', plaintext[i], shaaddress[i],'bins, plain & addr', bin_plain, bin_sha ]
-                xored = hex(bin_plain ^ bin_sha)[2:].upper()
-                datapacket = datapacket + xored
+                if plaintext[i] != 'L': #make sure we are not encoding python's long format L representation
+                    bin_plain = int('0x' + plaintext[i], 16)
+                    bin_sha = int('0x' + shaaddress[i], 16)
+                    #DEBUG print ['texts, plain & addr', plaintext[i], shaaddress[i],'bins, plain & addr', bin_plain, bin_sha ]
+                    xored = hex(bin_plain ^ bin_sha)[2:].upper()
+                    datapacket = datapacket + xored
         obfuscated_packets.append(( datapacket, shaaddress))
     
     #### Test that the obfuscated packets produce the same output as the plaintext packet inputs ####
