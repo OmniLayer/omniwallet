@@ -176,6 +176,13 @@ function NavigationController($scope, $http, $modal, userService) {
     });
   };
 
+  $scope.openNewUUIDmodal = function() {
+    $modal.open({
+      templateUrl: '/partials/wallet_new_modal.html',
+      controller: WalletController
+    });
+  };
+
   $scope.logout = function() {
     window.location.reload(false);
   };
