@@ -27,7 +27,7 @@ module.exports = function(grunt) {
 				options: {
 					repository: "https://github.com/scintill/crypto-js.git",
 					branch: 'master',
-					directory: 'www/bower_components/bitcoinjs-lib/src'
+					directory: 'www/bower_components/bitcoinjs-lib/src/crypto-js'
 				}
       }
 		},
