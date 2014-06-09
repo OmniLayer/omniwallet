@@ -92,8 +92,8 @@ def prepare_txdata(txtype,form):
             txdata.append(property_data)
 
             if txtype == 51:
-                txdata.append(int(form['currency_identifier_desired']))
                 txdata.append(int(form['number_properties']))
+                txdata.append(int(form['currency_identifier_desired']))
                 txdata.append(int(form['deadline']))
                 txdata.append(int(form['earlybird_bonus']))
                 txdata.append(int(form['percentage_for_issuer']))
@@ -130,11 +130,11 @@ def prepare_txbytes(txdata):
     if txdata[1] == 50:
         num_prop_bytes = hex(txdata[10])[2:].rjust(16,"0")        # 8 bytes
     elif txdata[1] == 51:
+        num_prop_bytes = hex(txdata[10])[2:].rjust(16,"0")# 8 bytes
         curr_ident_des_bytes = hex(txdata[11])[2:].rjust(8,"0")      # 4 bytes
-        num_prop_bytes = hex(txdata[12])[2:].rjust(16,"0")# 8 bytes
-        deadline_bytes = hex(txdata[13])[2:].rjust(16,"0")         # 8 bytes
-        earlybird_bytes = hex(txdata[14])[2:].rjust(2,"0")        # 1 byte
-        percent_issuer_bytes = hex(txdata[15])[2:].rjust(2,"0") # 1 byte
+        deadline_bytes = hex(txdata[12])[2:].rjust(16,"0")         # 8 bytes
+        earlybird_bytes = hex(txdata[13])[2:].rjust(2,"0")        # 1 byte
+        percent_issuer_bytes = hex(txdata[14])[2:].rjust(2,"0") # 1 byte
 
     for let in txdata[5]:
         prop_cat_bytes += prep_bytes(let)
