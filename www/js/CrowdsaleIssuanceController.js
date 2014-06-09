@@ -147,17 +147,9 @@ function CrowdsaleIssuanceController($scope, $http,$modal, userService){
   $scope.clear = function () {
     $scope.deadline = null;
   };
-
-  // Disable weekend selection
-  $scope.disabled = function(date, mode) {
-    return ( mode === 'day' && ( date.getDay() === 0 || date.getDay() === 6 ) );
-  };
-
-  $scope.toggleMin = function() {
-    $scope.minDate = $scope.minDate ? null : new Date();
-  };
-  $scope.toggleMin();
-
+  
+  $scope.minDate = new Date((new Date()).getTime() + (1000*60*60*24));
+ 
   $scope.open = function($event) {
     $event.preventDefault();
     $event.stopPropagation();
@@ -170,7 +162,6 @@ function CrowdsaleIssuanceController($scope, $http,$modal, userService){
     startingDay: 1
   };
 
-  $scope.initDate = new Date('2016-15-20');
-  $scope.formats = ['dd-MMMM-yyyy', 'yyyy/MM/dd', 'dd.MM.yyyy', 'shortDate'];
-  $scope.format = $scope.formats[0];
+  //$scope.formats = [, 'yyyy/MM/dd', 'dd.MM.yyyy', 'shortDate'];
+  $scope.format = 'dd-MMMM-yyyy';
 }
