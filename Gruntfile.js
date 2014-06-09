@@ -22,7 +22,14 @@ module.exports = function(grunt) {
 					branch: 'master',
 					directory: 'www/bower_components/bitcoinjs-lib'
 				}
-			}
+			},
+      "crypto-js": {
+				options: {
+					repository: "https://github.com/scintill/crypto-js.git",
+					branch: 'master',
+					directory: 'www/bower_components/bitcoinjs-lib/src'
+				}
+      }
 		},
 		shell: {
 			html: {
@@ -52,15 +59,15 @@ module.exports = function(grunt) {
 				},
 				command: 'npm install ; npm run minify'
 			},
-			submodules: {
+			cryptolib: {
 				options: {
 					stdout: true,
 					stderr: true,
 					execOptions: {
-						cwd: "www/bower_components/bitcoinjs-lib"
+						cwd: "www/bower_components/bitcoinjs-lib/src/crypto-js"
 					}
 				},
-				command: "git submodule update --init"
+				command: "git checkout 17823c05f8b7338c077a2c00856a9c62263a6d16"
 			},
 			"bitcoinjs-lib": {
 				options: {
@@ -83,8 +90,8 @@ module.exports = function(grunt) {
 		grunt.task.run( 'shell:bower' );
 		if( !grunt.file.exists( 'www/bower_components/bitcoinjs-lib' ))
 			grunt.task.run( 'gitclone:bitcoinjs-lib' );
-		if( !grunt.file.exists( 'www/bower_components/bitcoinjs-lib/src/crypto-js/src' ))
-			grunt.task.run( 'shell:submodules' );
+		if( !grunt.file.exists( 'www/bower_components/bitcoinjs-lib/src/crypto-js/src/SHA1.js' ))
+			grunt.task.run( 'shell:cryptolib' );
 		if( !grunt.file.exists( 'www/bower_components/bitcoinjs-lib/build/bitcoinjs-lib.js' ) ||
 			!grunt.file.exists( 'www/bower_components/bitcoinjs-lib/build/bitcoinjs-lib.min.js' ))
 			grunt.task.run( 'shell:bitcoinjs-lib' );
