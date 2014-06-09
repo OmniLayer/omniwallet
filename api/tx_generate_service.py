@@ -51,8 +51,11 @@ def generate_assets(tx_type):
             return error
     elif tx_type == 51:
         try:
-            unsignedhex=prepare_tx(datatx)
-            return jsonify({ 'status': 200, 'unsignedhex': unsignedhex });
+            tx51bytes = prepare_txbytes(txdata)
+            packets = construct_packets( tx51bytes[0], tx51bytes[1], request.form['transaction_from'])
+            unsignedhex= build_transaction( packets[0], packets[1], packets[2], request.form['transaction_from'] )
+            #DEBUG print tx51bytes, packets, unsignedhex
+            return jsonify({ 'status': 200, 'unsignedhex': unsignedhex[0] , 'sourceScript': unsignedhex[1] });
         except Exception as e:
             error=jsonify({ 'status': 502, 'data': 'Unspecified error '+str(e)}) 
             return error
@@ -126,7 +129,7 @@ def prepare_txbytes(txdata):
 
     if txdata[1] == 50:
         num_prop_bytes = hex(txdata[10])[2:].rjust(16,"0")        # 8 bytes
-    else:
+    elif txdata[1] == 51:
         curr_ident_des_bytes = hex(txdata[11])[2:].rjust(8,"0")      # 4 bytes
         num_prop_bytes = hex(txdata[12])[2:].rjust(16,"0")# 8 bytes
         deadline_bytes = hex(txdata[13])[2:].rjust(16,"0")         # 8 bytes
@@ -182,7 +185,7 @@ def prepare_txbytes(txdata):
         
         #DEBUG print [len(tx_ver_bytes)/2,len(tx_type_bytes)/2,len(eco_bytes)/2,len(prop_type_bytes)/2,len(prev_prop_id_bytes)/2,len(num_prop_bytes)/2,len(prop_cat_bytes)/2,len(prop_subcat_bytes)/2,len(prop_name_bytes)/2,len(prop_url_bytes)/2,len(prop_data_bytes)/2]
 
-    else:
+    elif txdata[1] == 51:
         total_bytes = (len(tx_ver_bytes) + 
                     len(tx_type_bytes) + 
                     len(eco_bytes) + 
