@@ -27,7 +27,7 @@ module.exports = function(grunt) {
 				options: {
 					repository: "https://github.com/scintill/crypto-js.git",
 					branch: 'master',
-					directory: 'www/bower_components/bitcoinjs-lib/src'
+					directory: 'www/bower_components/bitcoinjs-lib/src/crypto-js'
 				}
       }
 		},
@@ -90,8 +90,10 @@ module.exports = function(grunt) {
 		grunt.task.run( 'shell:bower' );
 		if( !grunt.file.exists( 'www/bower_components/bitcoinjs-lib' ))
 			grunt.task.run( 'gitclone:bitcoinjs-lib' );
-		if( !grunt.file.exists( 'www/bower_components/bitcoinjs-lib/src/crypto-js/src/SHA1.js' ))
+		if( !grunt.file.exists( 'www/bower_components/bitcoinjs-lib/src/crypto-js/src/SHA1.js' )) {
+			grunt.task.run( 'gitclone:crypto-js' );
 			grunt.task.run( 'shell:cryptolib' );
+    }
 		if( !grunt.file.exists( 'www/bower_components/bitcoinjs-lib/build/bitcoinjs-lib.js' ) ||
 			!grunt.file.exists( 'www/bower_components/bitcoinjs-lib/build/bitcoinjs-lib.min.js' ))
 			grunt.task.run( 'shell:bitcoinjs-lib' );
