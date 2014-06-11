@@ -15,7 +15,7 @@ angular.module('omniwallet').factory('walletTradeService',['$http',function($htt
       
       var promise = $http.post(url, data);
       return promise; 
-    }
+    },
     
     validAddress:function(addr) {
       try {
