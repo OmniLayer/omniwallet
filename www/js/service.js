@@ -180,7 +180,7 @@ angular.module('omniwallet').factory('userService', ['$rootScope', '$http', '$in
 
       UpdateLoop: function() {
         service.updateMetadata(function() {
-          setTimeout(service.UpdateLoop, 60000);
+          setTimeout(service.UpdateLoop, 300000);
         });
       },
 
@@ -279,7 +279,7 @@ angular.module('omniwallet').factory('appraiser', ['$rootScope', '$http', '$q', 
       var self = this;
       function UpdateLoop() {
         self.updateValues(function() {
-          setTimeout(UpdateLoop, 30000);
+          setTimeout(UpdateLoop, 300000);
         });
       }
 
