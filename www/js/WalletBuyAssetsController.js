@@ -1,4 +1,4 @@
-function WalletBuyAssetsController($modal, $scope, $http, $q, userService, walletTradeService) {
+function WalletBuyAssetsController($modal, $scope, $http, $q, userService, walletTransactionService) {
     // [ Template Initialization ]
 
   $scope.currencyBuyList = $scope.currencyList.filter(function(currency){
@@ -68,7 +68,7 @@ function WalletBuyAssetsController($modal, $scope, $http, $q, userService, walle
           //Showing the user the transaction hash doesn't work right now
           //var transactionHash = Bitcoin.Util.bytesToHex(transaction.getHash().reverse())
 
-          walletTradeService.pushSignedTransaction(finalTransaction).then(function(successData) {
+          walletTransactionService.pushSignedTransaction(finalTransaction).then(function(successData) {
             var successData = successData.data;
             if (successData.pushed.match(/submitted|success/gi) != null) {
               $modalScope.waiting = false;
@@ -168,7 +168,7 @@ function WalletBuyAssetsController($modal, $scope, $http, $q, userService, walle
       error += 'make sure all fields are completely filled, ';
     }
     //should be valid hash
-    //if( walletTradeService.validAddress(sendTo) == false) {
+    //if( walletTransactionService.validAddress(sendTo) == false) {
     //   error += 'make sure you are sending to a valid MSC/BTC address, '
     //}
     if (coin == 'BTC') {
@@ -219,7 +219,7 @@ function WalletBuyAssetsController($modal, $scope, $http, $q, userService, walle
             return getUnsignedBuyTransaction;
           },
           pushSignedTransaction: function() {
-            return walletTradeService.pushSignedTransaction;
+            return walletTransactionService.pushSignedTransaction;
           },
           convertSatoshiToDisplayedValue: function() {
             return $scope.convertSatoshiToDisplayedValue;
