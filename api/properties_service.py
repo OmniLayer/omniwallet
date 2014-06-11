@@ -12,7 +12,7 @@ app = Flask(__name__)
 app.debug = True
 
 @app.route('/list', methods=['POST'])
-def challenge():
+def list():
     try:
         property_ = request.form['property']
     except KeyError:
@@ -60,3 +60,5 @@ def filterProperties( properties ):
                     print 'Error decoding JSON', address_file.split('/')[-1][:-5]
     
     return ['OK',addresses_data]
+
+  

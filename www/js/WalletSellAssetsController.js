@@ -1,4 +1,4 @@
-function WalletSellAssetsController($modal, $scope, $http, $q, userService, walletTradeService) {
+function WalletSellAssetsController($modal, $scope, $http, $q, userService, walletTransactionService) {
 
 
   // [ Template Initialization ]
@@ -75,7 +75,7 @@ function WalletSellAssetsController($modal, $scope, $http, $q, userService, wall
           //Showing the user the transaction hash doesn't work right now
           //var transactionHash = Bitcoin.Util.bytesToHex(transaction.getHash().reverse())
 
-          walletTradeService.pushSignedTransaction(finalTransaction).then(function(successData) {
+          walletTransactionService.pushSignedTransaction(finalTransaction).then(function(successData) {
             var successData = successData.data;
             if (successData.pushed.match(/submitted|success/gi) != null) {
               $modalScope.waiting = false;
@@ -240,7 +240,7 @@ function WalletSellAssetsController($modal, $scope, $http, $q, userService, wall
             return getUnsignedSaleTransaction;
           },
           pushSignedTransaction: function() {
-            return walletTradeService.pushSignedTransaction;
+            return walletTransactionService.pushSignedTransaction;
           },
           convertSatoshiToDisplayedValue: function() {
             return $scope.convertSatoshiToDisplayedValue;

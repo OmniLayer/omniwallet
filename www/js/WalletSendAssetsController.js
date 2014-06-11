@@ -1,4 +1,4 @@
-function WalletSendAssetsController($modal, $scope, $http, $q, userService, walletTradeService) {
+function WalletSendAssetsController($modal, $scope, $http, $q, userService, walletTransactionService) {
   // [ Helper Functions ]
 
   // [ Send Form Helpers ]
@@ -53,7 +53,7 @@ function WalletSendAssetsController($modal, $scope, $http, $q, userService, wall
           //Showing the user the transaction hash doesn't work right now
           //var transactionHash = Bitcoin.Util.bytesToHex(transaction.getHash().reverse());
 
-          walletTradeService.pushSignedTransaction(finalTransaction).then(function(successData) {
+          walletTransactionService.pushSignedTransaction(finalTransaction).then(function(successData) {
             var successData = successData.data;
             if (successData.pushed.match(/submitted|success/gi) != null) {
               $modalScope.waiting = false;
@@ -158,7 +158,7 @@ function WalletSendAssetsController($modal, $scope, $http, $q, userService, wall
     if ((totalFeeCost <= btcbalance) == false) {
       error += 'make sure you have enough Bitcoin to cover your transaction costs, ';
     }
-    if (walletTradeService.validAddress(sendTo) == false) {
+    if (walletTransactionService.validAddress(sendTo) == false) {
       error += 'make sure you are sending to a valid MSC/BTC address, ';
     }
     if (coin == 'BTC') {
@@ -211,7 +211,7 @@ function WalletSendAssetsController($modal, $scope, $http, $q, userService, wall
             return getUnsignedSendTransaction;
           },
           pushSignedTransaction: function() {
-            return walletTradeService.pushSignedTransaction;
+            return walletTransactionService.pushSignedTransaction;
           },
           convertSatoshiToDisplayedValue: function() {
             return $scope.convertSatoshiToDisplayedValue;
