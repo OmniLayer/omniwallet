@@ -7,7 +7,9 @@ function WalletTradeFormController($scope, userService, walletTradeService) {
 
   // [ Template Initialization ]
 
-  $scope.currencyList = userService.getCurrencies(); // [{symbol: 'BTC', addresses:[], name: 'BTC'}, {symbol: 'MSC', addresses:[], name: 'MSC'}, {symbol: 'TMSC', addresses:[], name: 'TMSC'}]
+  $scope.currencyList = userService.getCurrencies().filter(function(currency){
+    return currency.tradable;
+  }); // [{symbol: 'BTC', addresses:[], name: 'BTC'}, {symbol: 'MSC', addresses:[], name: 'MSC'}, {symbol: 'TMSC', addresses:[], name: 'TMSC'}]
   
   $scope.selectedCoin = $scope.currencyList[0];
   $scope.currencyList.forEach(function(e, i) {
