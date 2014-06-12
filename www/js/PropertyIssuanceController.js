@@ -1,4 +1,4 @@
-function PropertyIssuanceController($scope, $http,$modal, userService, walletTradeService){
+function PropertyIssuanceController($scope, $http,$modal, userService, walletTransactionService){
 
   $scope.propertyTypes = [
     { value: 1, description: "New Indivisible tokens"},
@@ -31,7 +31,7 @@ function PropertyIssuanceController($scope, $http,$modal, userService, walletTra
       number_properties:numberProperties,
       transaction_from: from
     };
-    var promise = walletTradeService.getUnsignedTransaction(50,data);
+    var promise = walletTransactionService.getUnsignedTransaction(50,data);
 
     return promise;
   }
@@ -68,7 +68,7 @@ function PropertyIssuanceController($scope, $http,$modal, userService, walletTra
           //Showing the user the transaction hash doesn't work right now
           //var transactionHash = Bitcoin.Util.bytesToHex(transaction.getHash().reverse());
 
-          walletTradeService.pushSignedTransaction(finalTransaction).then(function(successData) {
+          walletTransactionService.pushSignedTransaction(finalTransaction).then(function(successData) {
             var successData = successData.data;
             if (successData.pushed.match(/submitted|success/gi) != null) {
               $modalScope.waiting = false;
@@ -206,7 +206,7 @@ function PropertyIssuanceController($scope, $http,$modal, userService, walletTra
             return getUnsignedPropertyIssuanceTransaction;
           },
           pushSignedTransaction: function() {
-            return walletTradeService.pushSignedTransaction;
+            return walletTransactionService.pushSignedTransaction;
           },
           convertSatoshiToDisplayedValue: function() {
             return $scope.convertSatoshiToDisplayedValue;
