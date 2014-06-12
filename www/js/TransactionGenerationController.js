@@ -1,6 +1,6 @@
 function TransactionGenerationController($scope, userService){
   
-  function prepareTransaction(txType, data, from, $modalScope){
+  $scope.prepareTransaction = function(txType, data, from, $modalScope){
     var addressData = userService.getAddress(from);
     var privKey = new Bitcoin.ECKey.decodeEncryptedFormat(addressData.privkey, addressData.address); // Using address as temporary password
     var pubKey = privKey.getPubKeyHex();
