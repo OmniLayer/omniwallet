@@ -15,10 +15,10 @@ function WalletTradeFormController($scope, userService, walletTradeService) {
       $scope.selectedCoin = e;
   });
 
-  $scope.addressList = userService.getAddressesWithPrivkey($scope.selectedCoin.addresses);
+  $scope.addressList = userService.getAddressesWithPrivkey($scope.selectedCoin.tradableAddresses);
   $scope.selectedAddress = $scope.addressList[0];
   $scope.$watch('selectedCoin', function() {
-    $scope.addressList = userService.getAddressesWithPrivkey($scope.selectedCoin.addresses);
+    $scope.addressList = userService.getAddressesWithPrivkey($scope.selectedCoin.tradableAddresses);
     $scope.selectedAddress = $scope.addressList[0];
     $scope.setBalance();
     $scope.minerFees = +MIN_MINER_FEE.valueOf() // reset miner fees
