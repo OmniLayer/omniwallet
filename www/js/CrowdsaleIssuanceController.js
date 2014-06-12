@@ -1,4 +1,5 @@
-function CrowdsaleIssuanceController($scope, $http,$modal, userService){
+function CrowdsaleIssuanceController($scope){
+  var transactionGenerationController = $scope.$parent;
   $scope.currencyList=[
     { symbol: "BTC", id: 0},
     { symbol: "MSC", id: 1}
@@ -11,6 +12,7 @@ function CrowdsaleIssuanceController($scope, $http,$modal, userService){
     { value: 129,  description: "Indivisible tokens appending a previous property"},
     { value: 130, description:  "Divisible currency appending a previous property"}
   ];
+  
   $scope.isNewProperty = true;
   
   $scope.checkPropertyType = function(){
@@ -20,7 +22,7 @@ function CrowdsaleIssuanceController($scope, $http,$modal, userService){
       $scope.isNewProperty = true;
   };
   
-  $scope.validateCrowdsaleIssuanceForm = function() {
+  transactionGenerationController.validateTransactionData = function(){
     var dustValue = 5430;
     var minerMinimum = 10000;
     var nonZeroValue = 1;
@@ -56,87 +58,51 @@ function CrowdsaleIssuanceController($scope, $http,$modal, userService){
         error += 'make sure you have enough Bitcoin to cover your fees, ';
     if (!propertyName || propertyName == '\0')
       error += 'make sure you enter a Property Name, ';
-      
-    if (error.length < 8) {
-      $scope.$parent.showErrors = false;
-      // open modal
-      var modalInstance = $modal.open({
-        templateUrl: '/partials/wallet_assets_crowdsale_modal.html',
-        controller: function($scope, $rootScope, userService, data, prepareCrowdsaleIssuanceTransaction, convertSatoshiToDisplayedValue, getDisplayedAbbreviation) {
-          $scope.issueSuccess = false, $scope.issueError = false, $scope.waiting = false, $scope.privKeyPass = {};
-          $scope.convertSatoshiToDisplayedValue=  convertSatoshiToDisplayedValue,
-          $scope.getDisplayedAbbreviation=  getDisplayedAbbreviation,
-          $scope.numberProperties=  data.numberProperties,
-          $scope.propertyTypeName=  data.propertyTypeName,
-          $scope.propertyName= data.propertyName,
-          $scope.propertyCategory= data.propertyCategory,
-          $scope.propertySubcategory= data.propertySubcategory,
-          $scope.propertyUrl= data.propertyUrl,
-          $scope.currencyIdentifierDesiredName=data.currencyIdentifierDesiredName,
-          $scope.deadline=data.deadline.toLocaleString(),
-          $scope.earlyBirdBonus=data.earlyBirdBonus,
-          $scope.percentageForIssuer=data.percentageForIssuer;
-          
-          $scope.ok = function() {
-            $scope.clicked = true;
-            $scope.waiting = true;
-            prepareCrowdsaleIssuanceTransaction(50, {
-                transaction_version:0,
-                ecosystem:2,
-                property_type : data.propertyType, 
-                previous_property_id:data.previousPropertyId || 0, 
-                property_category:data.propertyCategory, 
-                property_subcategory:data.propertySubcategory, 
-                property_name:data.propertyName, 
-                property_url:data.propertyUrl, 
-                property_data:data.propertyData, 
-                number_properties:data.numberProperties,
-                transaction_from: data.from,
-                currency_identifier_desired:data.currencyIdentifierDesired,
-                deadline:data.deadline.getTime(),
-                early_bird_bonus:data.earlyBirdBonus,
-                percentage_for_issuer:data.percentageForIssuer
-              }, data.from, $scope);
-          };
-        },
-        resolve: {
-          data: function() {
-            return {
-              from:$scope.selectedAddress,
-              numberProperties:numberProperties,
-              propertyType:propertyType,
-              propertyTypeName:propertyType == 1 || propertyType == 65 || propertyType == 129? 'Indivisible' : 'Divisible', // Only values 1 or 2 are supported right now, but leave room for expansion.
-              previousPropertyId:previousPropertyId,
-              propertyName:propertyName,
-              propertyCategory:propertyCategory,
-              propertySubcategory:propertySubcategory,
-              propertyUrl:propertyUrl,
-              propertyData:'\0', // this is fixed to 1 byte by the spec
-              currencyIdentifierDesired:currencyIdentifierDesired,
-              currencyIdentifierDesiredName:currencyIdentifierDesiredName,
-              deadline:deadline,
-              earlyBirdBonus:earlyBirdBonus,
-              percentageForIssuer:percentageForIssuer
-            };
-          },
-          prepareCrowdsaleIssuanceTransaction: function() {
-              return $scope.prepareTransaction;
-          },
-          convertSatoshiToDisplayedValue: function() {
-            return $scope.convertSatoshiToDisplayedValue;
-          },
-          getDisplayedAbbreviation: function() {
-            return $scope.getDisplayedAbbreviation;
-          }
-        }
-      });
-    } else {
-      error += 'and try again.';
-      $scope.error = error;
-      $scope.$parent.showErrors = true;
-    }
+    
+    return error;
   };
   
+  transactionGenerationController.modalTemplateUrl = '/partials/wallet_assets_crowdsale_modal.html';
+  
+  transactionGenerationController.setModalScope = function($modalScope){
+    $modalScope.issueSuccess = false, $modalScope.issueError = false, $modalScope.waiting = false, $modalScope.privKeyPass = {};
+    $modalScope.convertSatoshiToDisplayedValue=  $scope.convertSatoshiToDisplayedValue,
+    $modalScope.getDisplayedAbbreviation=  $scope.getDisplayedAbbreviation,
+    $modalScope.numberProperties=  $scope.numberProperties,
+    $modalScope.propertyTypeName=  $scope.propertyType == 1 || $scope.propertyType == 65 || $scope.propertyType == 129? 'Indivisible' : 'Divisible',
+    $modalScope.propertyName= $scope.propertyName,
+    $modalScope.propertyCategory= $scope.propertyCategory,
+    $modalScope.propertySubcategory= $scope.propertySubcategory,
+    $modalScope.propertyUrl= $scope.propertyUrl,
+    $modalScope.currencyIdentifierDesiredName=$scope.currencyIdentifierDesired.symbol,
+    $modalScope.deadline=$scope.deadline.toLocaleDateString(),
+    $modalScope.earlyBirdBonus=$scope.earlyBirdBonus,
+    $modalScope.percentageForIssuer=$scope.percentageForIssuer;
+  };
+  
+  transactionGenerationController.generateData = function(){
+    return {
+      from:$scope.selectedAddress,
+      transactionType:51,
+      transactionData:{
+        transaction_version:0,
+        ecosystem:2,
+        property_type : $scope.propertyType, 
+        previous_property_id:$scope.previousPropertyId || 0, 
+        property_category:$scope.propertyCategory, 
+        property_subcategory:$scope.propertySubcategory, 
+        property_name:$scope.propertyName, 
+        property_url:$scope.propertyUrl, 
+        property_data:'\0', 
+        number_properties:$scope.numberProperties,
+        transaction_from: $scope.selectedAddress,
+        currency_identifier_desired:$scope.currencyIdentifierDesired.id,
+        deadline:$scope.deadline.getTime(),
+        earlybird_bonus:$scope.earlyBirdBonus,
+        percentage_for_issuer:$scope.percentageForIssuer
+      }
+    };
+  };
   
   // DATEPICKER OPTIONS
   $scope.today = function() {
