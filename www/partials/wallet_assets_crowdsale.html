@@ -3,7 +3,7 @@
 </div>
 
 <div ng-controller="WalletAssetsFormController">
-<div class="col-xs-10">
+<div class="col-xs-10" ng-controller="CrowdsaleIssuanceController">
   <br>
   <br>
   <div class="row">
@@ -24,8 +24,8 @@
          <option value=""> -- Choose Type -- </option>
          </select>
       </div>
+      <br ng-hide="isNewProperty">
       <div class="input-group" ng-hide="isNewProperty">
-      <br>
         <span class="input-group-addon"> Previous Property Id: </span>
         <input name="previous" type="text" ng-model="previousPropertyId" class="form-control" placeholder="0 for a new smart property (or the existing property ID if replacing or appending)" ng-required="!isNewProperty">
       </div>
