@@ -19,4 +19,8 @@
       <button class="btn btn-default" ng-click="backupWallet()">Backup Wallet</button>
     </div>
 </div>
+  <div ng-init="newAddress=false" ng-if="newAddress">
+    <div ng-controller="NavigationController" ng-init="openNewUUIDmodal()">
+    </div>
+  </div>
 </div>

@@ -27,6 +27,10 @@ a {
 	padding-top: 50px;
 }
 
+.asset-table row {
+	cursor: pointer;
+}
+
 .asset-item {
 	font-size: 1.2em;
 }
