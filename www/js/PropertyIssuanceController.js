@@ -1,4 +1,4 @@
-function PropertyIssuanceController($scope, $http,$modal, userService, walletTransactionService){
+function PropertyIssuanceController($scope, $http,$modal, userService){
 
   $scope.propertyTypes = [
     { value: 1, description: "New Indivisible tokens"},
