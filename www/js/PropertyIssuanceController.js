@@ -1,5 +1,5 @@
-function PropertyIssuanceController($scope, $http,$modal, userService){
-
+function PropertyIssuanceController($scope){
+  var transactionGenerationController = $scope.$parent;
   $scope.propertyTypes = [
     { value: 1, description: "New Indivisible tokens"},
     { value: 2, description: "New Divisible currency"},
@@ -17,9 +17,7 @@ function PropertyIssuanceController($scope, $http,$modal, userService){
       $scope.isNewProperty = true;
   };
   
-  
-  
-  $scope.validatePropertyIssuanceForm = function() {
+  transactionGenerationController.validateTransactionData=function(){
     var dustValue = 5430;
     var minerMinimum = 10000;
     var nonZeroValue = 1;
@@ -51,70 +49,40 @@ function PropertyIssuanceController($scope, $http,$modal, userService){
     if (!propertyName || propertyName == '\0')
       error += 'make sure you enter a Property Name, ';
       
-    if (error.length < 8) {
-      $scope.$parent.showErrors = false;
-      // open modal
-      var modalInstance = $modal.open({
-        templateUrl: '/partials/wallet_assets_issue_modal.html',
-        controller: function($scope, $rootScope, userService, data, preparePropertyIssuanceTransaction, convertSatoshiToDisplayedValue, getDisplayedAbbreviation) {
-          $scope.issueSuccess = false, $scope.issueError = false, $scope.waiting = false, $scope.privKeyPass = {};
-          $scope.convertSatoshiToDisplayedValue=  convertSatoshiToDisplayedValue,
-          $scope.getDisplayedAbbreviation=  getDisplayedAbbreviation,
-          $scope.numberProperties=  data.numberProperties,
-          $scope.propertyTypeName=  data.propertyTypeName,
-          $scope.propertyName= data.propertyName,
-          $scope.propertyCategory= data.propertyCategory,
-          $scope.propertySubcategory= data.propertySubcategory,
-          $scope.propertyUrl= data.propertyUrl;
-          
-          $scope.ok = function() {
-            $scope.clicked = true;
-            $scope.waiting = true;
-            preparePropertyIssuanceTransaction(50, {
-                transaction_version:0,
-                ecosystem:2,
-                property_type : data.propertyType, 
-                previous_property_id:data.previousPropertyId || 0, 
-                property_category:data.propertyCategory, 
-                property_subcategory:data.propertySubcategory, 
-                property_name:data.propertyName, 
-                property_url:data.propertyUrl, 
-                property_data:data.propertyData, 
-                number_properties:data.numberProperties,
-                transaction_from: data.from
-              }, data.from, $scope);
-          };
-        },
-        resolve: {
-          data: function() {
-            return {
-              from:$scope.selectedAddress,
-              numberProperties:numberProperties,
-              propertyType:propertyType,
-              propertyTypeName:propertyType == 1 || propertyType == 65 || propertyType == 129? 'Indivisible' : 'Divisible', // Only values 1 or 2 are supported right now, but leave room for expansion.
-              previousPropertyId:previousPropertyId,
-              propertyName:propertyName,
-              propertyCategory:propertyCategory,
-              propertySubcategory:propertySubcategory,
-              propertyUrl:propertyUrl,
-              propertyData:'\0' // this is fixed to 1 byte by the spec
-            };
-          },
-          preparePropertyIssuanceTransaction: function() {
-              return $scope.prepareTransaction;
-          },
-          convertSatoshiToDisplayedValue: function() {
-            return $scope.convertSatoshiToDisplayedValue;
-          },
-          getDisplayedAbbreviation: function() {
-            return $scope.getDisplayedAbbreviation;
-          }
-        }
-      });
-    } else {
-      error += 'and try again.';
-      $scope.error = error;
-      $scope.$parent.showErrors = true;
-    }
+    return error;
+  };
+  
+  transactionGenerationController.modalTemplateUrl = '/partials/wallet_assets_issue_modal.html';
+  
+  transactionGenerationController.setModalScope = function($modalScope){
+    $modalScope.issueSuccess = false, $modalScope.issueError = false, $modalScope.waiting = false, $modalScope.privKeyPass = {};
+    $modalScope.convertSatoshiToDisplayedValue=  $scope.convertSatoshiToDisplayedValue,
+    $modalScope.getDisplayedAbbreviation=  $scope.getDisplayedAbbreviation,
+    $modalScope.numberProperties=  $scope.numberProperties,
+    $modalScope.propertyTypeName=  $scope.propertyType == 1 || $scope.propertyType == 65 || $scope.propertyType == 129? 'Indivisible' : 'Divisible',
+    $modalScope.propertyName= $scope.propertyName,
+    $modalScope.propertyCategory= $scope.propertyCategory,
+    $modalScope.propertySubcategory= $scope.propertySubcategory,
+    $modalScope.propertyUrl= $scope.propertyUrl;
+  };
+  
+  transactionGenerationController.generateData = function(){
+    return {
+      from:$scope.selectedAddress,
+      transactionType: 50,
+      transactionData: {
+        transaction_version:0,
+        ecosystem:2,
+        property_type : $scope.propertyType, 
+        previous_property_id:$scope.previousPropertyId || 0, 
+        property_category:$scope.propertyCategory, 
+        property_subcategory:$scope.propertySubcategory, 
+        property_name:$scope.propertyName, 
+        property_url:$scope.propertyUrl, 
+        property_data:'\0', 
+        number_properties:$scope.numberProperties,
+        transaction_from: $scope.selectedAddress
+      }
+    };
   };
 }
