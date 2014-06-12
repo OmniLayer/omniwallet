@@ -1,4 +1,4 @@
-function TransactionGenerationController($scope, userService, walletTransactionService){
+function TransactionGenerationController($scope, $modal, userService, walletTransactionService){
   
   $scope.prepareTransaction = function(txType, data, from, $modalScope){
     var addressData = userService.getAddress(from);
@@ -93,4 +93,47 @@ function TransactionGenerationController($scope, userService, walletTransactionS
       console.error(errorData);
     });
   }; 
+  
+  $scope.validateForm = function() {
+    
+    var error = $scope.validateTransactionData();
+      
+    if (error.length < 8) {
+      $scope.$parent.showErrors = false;
+      // open modal
+      var modalInstance = $modal.open({
+        templateUrl: $scope.modalTemplateUrl,
+        controller: function($scope, data, prepareTransaction, setModalScope, convertSatoshiToDisplayedValue, getDisplayedAbbreviation) {
+          setModalScope($scope);
+          
+          $scope.ok = function() {
+            $scope.clicked = true;
+            $scope.waiting = true;
+            prepareTransaction(data.transactionType, data.transactionData, data.from, $scope);
+          };
+        },
+        resolve: {
+          data: function() {
+            return $scope.generateData();
+          },
+          prepareTransaction: function() {
+              return $scope.prepareTransaction;
+          },
+          setModalScope: function(){
+            return $scope.setModalScope;
+          },
+          convertSatoshiToDisplayedValue: function() {
+            return $scope.convertSatoshiToDisplayedValue;
+          },
+          getDisplayedAbbreviation: function() {
+            return $scope.getDisplayedAbbreviation;
+          }
+        }
+      });
+    } else {
+      error += 'and try again.';
+      $scope.error = error;
+      $scope.$parent.showErrors = true;
+    }
+  };
 };
