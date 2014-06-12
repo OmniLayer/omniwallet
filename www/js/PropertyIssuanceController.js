@@ -56,7 +56,7 @@ function PropertyIssuanceController($scope, $http,$modal, userService, walletTra
       // open modal
       var modalInstance = $modal.open({
         templateUrl: '/partials/wallet_assets_issue_modal.html',
-        controller: function($scope, $rootScope, userService, data, preparePropertyIssuanceTransaction, getUnsignedPropertyIssuanceTransaction, convertSatoshiToDisplayedValue, getDisplayedAbbreviation) {
+        controller: function($scope, $rootScope, userService, data, preparePropertyIssuanceTransaction, convertSatoshiToDisplayedValue, getDisplayedAbbreviation) {
           $scope.issueSuccess = false, $scope.issueError = false, $scope.waiting = false, $scope.privKeyPass = {};
           $scope.convertSatoshiToDisplayedValue=  convertSatoshiToDisplayedValue,
           $scope.getDisplayedAbbreviation=  getDisplayedAbbreviation,
@@ -101,13 +101,7 @@ function PropertyIssuanceController($scope, $http,$modal, userService, walletTra
             };
           },
           preparePropertyIssuanceTransaction: function() {
-              return prepareTransaction;
-          },
-          getUnsignedPropertyIssuanceTransaction: function() {
-            return getUnsignedTransaction;
-          },
-          pushSignedTransaction: function() {
-            return walletTransactionService.pushSignedTransaction;
+              return $scope.prepareTransaction;
           },
           convertSatoshiToDisplayedValue: function() {
             return $scope.convertSatoshiToDisplayedValue;
