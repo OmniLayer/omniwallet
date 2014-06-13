@@ -7,7 +7,7 @@
     <br>
     <br>
     <div class="row">
-      <h3 class="text-center" >New Transaction Send</h3>
+      <h3 class="text-center" >Send Coins</h3>
       <br>
       <div ng-show="showErrors" class="alert alert-danger"> <strong> {{error}} </strong> </div> 
     </div>
@@ -36,16 +36,16 @@
     <div class="row">
       <div class="col-xs-12">
         <div class="input-group">
-          <span class="input-group-addon"> Send funds to: </span>
-          <input name="reciever" type="text" ng-model="sendTo" class="form-control" placeholder="{{selectedAddress}}" required>
+          <span class="input-group-addon"> To: </span>
+          <input name="reciever" type="text" ng-model="sendTo" class="form-control" placeholder="Address" required>
         </div>
         <br>
         <div class="input-group">
-          <span class="input-group-addon"> Amount to send ( {{ getDisplayedAbbreviation() }} ): </span>
+          <span class="input-group-addon"> Amount ( {{ balanceData[0] }} {{ getDisplayedAbbreviation() }} Available ): </span>
             <input name="amount" type="number" ng-model="sendAmount" class="form-control" 
             placeholder="{{ sendPlaceholderValue }}" step="{{ sendPlaceholderStep }}" min="{{ sendPlaceholderMin }}" required>
           <span class="input-group-addon" > 
-            Available: {{ balanceData[0] }} {{ getDisplayedAbbreviation() }}
+            
           </span>
         </div>
         <br ng-hide="$parent.selectedCoin.symbol == 'BTC'">
