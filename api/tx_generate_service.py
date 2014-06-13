@@ -19,19 +19,20 @@ HEXSPACE='21'
 def generate_assets(tx_type):
 
     #update this to support more transactions
-    supported_transactions = [50,51]
+    supported_transactions = [50,51, 0]
 
     if tx_type not in supported_transactions:
         return jsonify({ 'status': 400, 'data': 'Unsupported transaction type '+str(tx_type) })
     
-    expected_fields=['transaction_version','ecosystem']
+    expected_fields=['transaction_version']
 
     #might add tx 00, 53, etc later;
     if tx_type == 50:
-        expected_fields+=['property_type', 'previous_property_id', 'property_category', 'property_subcategory', 'property_name', 'property_url', 'property_data', 'number_properties', 'transaction_from']
+        expected_fields+=['ecosystem', 'property_type', 'previous_property_id', 'property_category', 'property_subcategory', 'property_name', 'property_url', 'property_data', 'number_properties', 'transaction_from']
     elif tx_type == 51:
-        expected_fields+=['property_type', 'previous_property_id', 'property_category', 'property_subcategory', 'property_name', 'property_url', 'property_data', 'currency_identifier_desired', 'number_properties', 'deadline', 'earlybird_bonus', 'percentage_for_issuer', 'transaction_from']
-
+        expected_fields+=['ecosystem', 'property_type', 'previous_property_id', 'property_category', 'property_subcategory', 'property_name', 'property_url', 'property_data', 'currency_identifier_desired', 'number_properties', 'deadline', 'earlybird_bonus', 'percentage_for_issuer', 'transaction_from']
+    elif tx_type == 0:
+        expected_fields+=['currency_identifier', 'amount_to_transfer']
     for field in expected_fields:
         if field not in request.form:
             return jsonify({ 'status': 403, 'data': 'No field in request form '+field })
@@ -59,15 +60,24 @@ def generate_assets(tx_type):
         except Exception as e:
             error=jsonify({ 'status': 502, 'data': 'Unspecified error '+str(e)}) 
             return error
-    
+    elif tx_type == 0:
+        try:
+            tx0bytes = prepare_txbytes(txdata)
+            packets = construct_packets( tx0bytes[0], tx0bytes[1], request.form['transaction_from'])
+            unsignedhex= build_transaction( packets[0], packets[1], packets[2], request.form['transaction_from'] )
+            #DEBUG print tx51bytes, packets, unsignedhex
+            return jsonify({ 'status': 200, 'unsignedhex': unsignedhex[0] , 'sourceScript': unsignedhex[1] });
+        except Exception as e:
+            error=jsonify({ 'status': 502, 'data': 'Unspecified error '+str(e)}) 
+            return error
 def prepare_txdata(txtype,form):
         txdata=[]
 
         txdata.append(int(form['transaction_version']))
         txdata.append(int(txtype))
-        txdata.append(int(form['ecosystem']))
-
+        
         if txtype == 50 or txtype == 51:
+            txdata.append(int(form['ecosystem']))
             txdata.append(int(form['property_type']))
             txdata.append(int(form['previous_property_id']))
 
@@ -101,7 +111,11 @@ def prepare_txdata(txtype,form):
                 txdata.append(int(form['number_properties']))
             
             return txdata
-
+        elif txtype == 0:
+            txdata.append(int(form['currency_identifier']))
+            txdata.append(int(form['amount_to_transfer']))
+            
+            return txdata
         return [] #other txes are unimplemented
 
 # helper funcs
@@ -118,110 +132,125 @@ def prepare_txbytes(txdata):
     #calculate bytes
     tx_ver_bytes = hex(txdata[0])[2:].rjust(4,"0") # 2 bytes
     tx_type_bytes = hex(txdata[1])[2:].rjust(4,"0")   # 2 bytes
-    eco_bytes = hex(txdata[2])[2:].rjust(2,"0")              # 1 byte
-    prop_type_bytes = hex(txdata[3])[2:].rjust(4,"0")    # 2 bytes
-    prev_prop_id_bytes = hex(txdata[4])[2:].rjust(8,"0")  # 4 bytes
-    prop_cat_bytes = ''                                      # var bytes
-    prop_subcat_bytes = ''                                   # var bytes
-    prop_name_bytes = ''                                     # var bytes
-    prop_url_bytes = ''                                      # var bytes
-    prop_data_bytes = ''                                     # var bytes
+    if txdata[1] == 50 or txdata[1] == 51:
+        eco_bytes = hex(txdata[2])[2:].rjust(2,"0")              # 1 byte
+        prop_type_bytes = hex(txdata[3])[2:].rjust(4,"0")    # 2 bytes
+        prev_prop_id_bytes = hex(txdata[4])[2:].rjust(8,"0")  # 4 bytes
+        prop_cat_bytes = ''                                      # var bytes
+        prop_subcat_bytes = ''                                   # var bytes
+        prop_name_bytes = ''                                     # var bytes
+        prop_url_bytes = ''                                      # var bytes
+        prop_data_bytes = ''                                     # var bytes
 
-    if txdata[1] == 50:
-        num_prop_bytes = hex(txdata[10])[2:].rjust(16,"0")        # 8 bytes
-    elif txdata[1] == 51:
-        num_prop_bytes = hex(txdata[10])[2:].rjust(16,"0")# 8 bytes
-        curr_ident_des_bytes = hex(txdata[11])[2:].rjust(8,"0")      # 4 bytes
-        deadline_bytes = hex(txdata[12])[2:].rjust(16,"0")         # 8 bytes
-        earlybird_bytes = hex(txdata[13])[2:].rjust(2,"0")        # 1 byte
-        percent_issuer_bytes = hex(txdata[14])[2:].rjust(2,"0") # 1 byte
+        if txdata[1] == 50:
+            num_prop_bytes = hex(txdata[10])[2:].rjust(16,"0")        # 8 bytes
+        elif txdata[1] == 51:
+            num_prop_bytes = hex(txdata[10])[2:].rjust(16,"0")# 8 bytes
+            curr_ident_des_bytes = hex(txdata[11])[2:].rjust(8,"0")      # 4 bytes
+            deadline_bytes = hex(txdata[12])[2:].rjust(16,"0")         # 8 bytes
+            earlybird_bytes = hex(txdata[13])[2:].rjust(2,"0")        # 1 byte
+            percent_issuer_bytes = hex(txdata[14])[2:].rjust(2,"0") # 1 byte
+            
+        for let in txdata[5]:
+            prop_cat_bytes += prep_bytes(let)
+        prop_cat_bytes += '00'
+    
+        for let in txdata[6]:
+            prop_subcat_bytes += prep_bytes(let) 
+        prop_subcat_bytes += '00'
+    
+        for let in txdata[7]:
+            prop_name_bytes += prep_bytes(let)
+        prop_name_bytes += '00'
+    
+        for let in txdata[8]:
+            prop_url_bytes += prep_bytes(let)
+        prop_url_bytes += '00'
+    
+        for let in txdata[9]:
+            prop_data_bytes += prep_bytes(let)
+        prop_data_bytes += '00'
+    
+        if txdata[1] == 50:
+            total_bytes = (len(tx_ver_bytes) + 
+                        len(tx_type_bytes) + 
+                        len(eco_bytes) + 
+                        len(prop_type_bytes) + 
+                        len(prev_prop_id_bytes) + 
+                        len(num_prop_bytes) + 
+                        len(prop_cat_bytes) + 
+                        len(prop_subcat_bytes) + 
+                        len(prop_name_bytes) + 
+                        len(prop_url_bytes) + 
+                        len(prop_data_bytes))/2
+    
+            byte_stream = (tx_ver_bytes + 
+                        tx_type_bytes + 
+                        eco_bytes + 
+                        prop_type_bytes + 
+                        prev_prop_id_bytes + 
+                        prop_cat_bytes + 
+                        prop_subcat_bytes + 
+                        prop_name_bytes + 
+                        prop_url_bytes + 
+                        prop_data_bytes + 
+                        num_prop_bytes)
+            
+            #DEBUG print [tx_ver_bytes,tx_type_bytes,eco_bytes,prop_type_bytes,prev_prop_id_bytes,num_prop_bytes,prop_cat_bytes,prop_subcat_bytes,prop_name_bytes,prop_url_bytes,prop_data_bytes]
+            
+            #DEBUG print [len(tx_ver_bytes)/2,len(tx_type_bytes)/2,len(eco_bytes)/2,len(prop_type_bytes)/2,len(prev_prop_id_bytes)/2,len(num_prop_bytes)/2,len(prop_cat_bytes)/2,len(prop_subcat_bytes)/2,len(prop_name_bytes)/2,len(prop_url_bytes)/2,len(prop_data_bytes)/2]
+    
+        elif txdata[1] == 51:
+            total_bytes = (len(tx_ver_bytes) + 
+                        len(tx_type_bytes) + 
+                        len(eco_bytes) + 
+                        len(prop_type_bytes) + 
+                        len(prev_prop_id_bytes) + 
+                        len(num_prop_bytes) +
+                        len(curr_ident_des_bytes) +
+                        len(deadline_bytes) +
+                        len(earlybird_bytes) +
+                        len(percent_issuer_bytes) +
+                        len(prop_cat_bytes) + 
+                        len(prop_subcat_bytes) + 
+                        len(prop_name_bytes) + 
+                        len(prop_url_bytes) + 
+                        len(prop_data_bytes))/2
+    
+            byte_stream = (tx_ver_bytes + 
+                        tx_type_bytes + 
+                        eco_bytes + 
+                        prop_type_bytes + 
+                        prev_prop_id_bytes + 
+                        prop_cat_bytes + 
+                        prop_subcat_bytes + 
+                        prop_name_bytes + 
+                        prop_url_bytes + 
+                        prop_data_bytes +
+                        curr_ident_des_bytes +
+                        num_prop_bytes +
+                        deadline_bytes +
+                        earlybird_bytes +
+                        percent_issuer_bytes)
+    
+            #DEBUG print [tx_ver_bytes,tx_type_bytes,eco_bytes,prop_type_bytes,prev_prop_id_bytes,num_prop_bytes,prop_cat_bytes,prop_subcat_bytes,prop_name_bytes,prop_url_bytes,prop_data_bytes]
+    
+            #DEBUG print [len(tx_ver_bytes)/2,len(tx_type_bytes)/2,len(eco_bytes)/2,len(prop_type_bytes)/2,len(prev_prop_id_bytes)/2,len(num_prop_bytes)/2,len(prop_cat_bytes)/2,len(prop_subcat_bytes)/2,len(prop_name_bytes)/2,len(prop_url_bytes)/2,len(prop_data_bytes)/2]
 
-    for let in txdata[5]:
-        prop_cat_bytes += prep_bytes(let)
-    prop_cat_bytes += '00'
-
-    for let in txdata[6]:
-        prop_subcat_bytes += prep_bytes(let) 
-    prop_subcat_bytes += '00'
-
-    for let in txdata[7]:
-        prop_name_bytes += prep_bytes(let)
-    prop_name_bytes += '00'
-
-    for let in txdata[8]:
-        prop_url_bytes += prep_bytes(let)
-    prop_url_bytes += '00'
-
-    for let in txdata[9]:
-        prop_data_bytes += prep_bytes(let)
-    prop_data_bytes += '00'
-
-    if txdata[1] == 50:
+    elif txdata[1] == 0:
+        currency_id_bytes = hex(txdata[2])[2:].rjust(8,"0")  # 4 bytes
+        amount_bytes = hex(txdata[3])[2:].rjust(16,"0")  # 8 bytes
+        
         total_bytes = (len(tx_ver_bytes) + 
-                    len(tx_type_bytes) + 
-                    len(eco_bytes) + 
-                    len(prop_type_bytes) + 
-                    len(prev_prop_id_bytes) + 
-                    len(num_prop_bytes) + 
-                    len(prop_cat_bytes) + 
-                    len(prop_subcat_bytes) + 
-                    len(prop_name_bytes) + 
-                    len(prop_url_bytes) + 
-                    len(prop_data_bytes))/2
-
+                        len(tx_type_bytes) + 
+                        len(currency_id_bytes) + 
+                        len(amount_bytes))/2
+    
         byte_stream = (tx_ver_bytes + 
                     tx_type_bytes + 
-                    eco_bytes + 
-                    prop_type_bytes + 
-                    prev_prop_id_bytes + 
-                    prop_cat_bytes + 
-                    prop_subcat_bytes + 
-                    prop_name_bytes + 
-                    prop_url_bytes + 
-                    prop_data_bytes + 
-                    num_prop_bytes)
-        
-        #DEBUG print [tx_ver_bytes,tx_type_bytes,eco_bytes,prop_type_bytes,prev_prop_id_bytes,num_prop_bytes,prop_cat_bytes,prop_subcat_bytes,prop_name_bytes,prop_url_bytes,prop_data_bytes]
-        
-        #DEBUG print [len(tx_ver_bytes)/2,len(tx_type_bytes)/2,len(eco_bytes)/2,len(prop_type_bytes)/2,len(prev_prop_id_bytes)/2,len(num_prop_bytes)/2,len(prop_cat_bytes)/2,len(prop_subcat_bytes)/2,len(prop_name_bytes)/2,len(prop_url_bytes)/2,len(prop_data_bytes)/2]
-
-    elif txdata[1] == 51:
-        total_bytes = (len(tx_ver_bytes) + 
-                    len(tx_type_bytes) + 
-                    len(eco_bytes) + 
-                    len(prop_type_bytes) + 
-                    len(prev_prop_id_bytes) + 
-                    len(num_prop_bytes) +
-                    len(curr_ident_des_bytes) +
-                    len(deadline_bytes) +
-                    len(earlybird_bytes) +
-                    len(percent_issuer_bytes) +
-                    len(prop_cat_bytes) + 
-                    len(prop_subcat_bytes) + 
-                    len(prop_name_bytes) + 
-                    len(prop_url_bytes) + 
-                    len(prop_data_bytes))/2
-
-        byte_stream = (tx_ver_bytes + 
-                    tx_type_bytes + 
-                    eco_bytes + 
-                    prop_type_bytes + 
-                    prev_prop_id_bytes + 
-                    prop_cat_bytes + 
-                    prop_subcat_bytes + 
-                    prop_name_bytes + 
-                    prop_url_bytes + 
-                    prop_data_bytes +
-                    curr_ident_des_bytes +
-                    num_prop_bytes +
-                    deadline_bytes +
-                    earlybird_bytes +
-                    percent_issuer_bytes)
-
-        #DEBUG print [tx_ver_bytes,tx_type_bytes,eco_bytes,prop_type_bytes,prev_prop_id_bytes,num_prop_bytes,prop_cat_bytes,prop_subcat_bytes,prop_name_bytes,prop_url_bytes,prop_data_bytes]
-
-        #DEBUG print [len(tx_ver_bytes)/2,len(tx_type_bytes)/2,len(eco_bytes)/2,len(prop_type_bytes)/2,len(prev_prop_id_bytes)/2,len(num_prop_bytes)/2,len(prop_cat_bytes)/2,len(prop_subcat_bytes)/2,len(prop_name_bytes)/2,len(prop_url_bytes)/2,len(prop_data_bytes)/2]
-                                                                                                                                 
+                    currency_id_bytes + 
+                    amount_bytes)
+                                                                                                                                         
     return [byte_stream, total_bytes]
 
 def construct_packets(byte_stream, total_bytes, from_address):
