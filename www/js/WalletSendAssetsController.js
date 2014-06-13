@@ -84,6 +84,7 @@ function WalletSendAssetsController($modal, $scope, $http, $q, userService, wall
       transactionType:0,
       transactionData:{
         transaction_version:0,
+        transaction_from: $scope.selectedAddress,
         currency_identifier:$scope.selectedCoin.id,
         amount_to_transfer : +$scope.sendAmount
       }
