@@ -210,8 +210,8 @@ angular.module('omniwallet').factory('userService', ['$rootScope', '$http', '$in
           if (i < service.data.wallet.addresses.length) {
             $injector.get('balanceService').balance(service.data.wallet.addresses[i].address).then(function(result) {
               result.data.balance.forEach(function(balanceItem) {
-                var address = service.getAddress(balanceItem.address);
-                var tradable = address.privKey && address.privKey.length == 58;
+                var address = service.data.wallet.addresses[i];
+                var tradable = address.privkey && address.privkey.length == 58 && balanceItem.value > 0;
                 var currency = null;
                 for (var j = 0; j < service.data.walletMetadata.currencies.length; j++) {
                   var currencyItem = service.data.walletMetadata.currencies[j];
