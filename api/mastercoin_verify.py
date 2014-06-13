@@ -22,7 +22,7 @@ def addresses():
           'address': addr['address']
       }
 
-      if currency_id == '0':
+      if currency_id == '0': #BTC
         btc_balance = [x['value'] for x in addr['balance'] if x['symbol'] == 'BTC'][0]
         res['balance'] = ('%.8f' % float(btc_balance)).rstrip('0').rstrip('.')
         response.append(res)
@@ -33,6 +33,7 @@ def addresses():
 
         if adjust_currency_id in addr:
           res['balance'] = ('%.8f' % float(addr[adjust_currency_id]['balance'])).rstrip('0').rstrip('.')
+          res['reserved_balance'] = ('%.8f' % float(addr[adjust_currency_id]['total_reserved'])).rstrip('0').rstrip('.')
           response.append(res)
 
   json_response = json.dumps(response)
