@@ -24,13 +24,13 @@ def generate_assets(tx_type):
     if tx_type not in supported_transactions:
         return jsonify({ 'status': 400, 'data': 'Unsupported transaction type '+str(tx_type) })
     
-    expected_fields=['transaction_version']
+    expected_fields=['transaction_version', 'transaction_from']
 
     #might add tx 00, 53, etc later;
     if tx_type == 50:
-        expected_fields+=['ecosystem', 'property_type', 'previous_property_id', 'property_category', 'property_subcategory', 'property_name', 'property_url', 'property_data', 'number_properties', 'transaction_from']
+        expected_fields+=['ecosystem', 'property_type', 'previous_property_id', 'property_category', 'property_subcategory', 'property_name', 'property_url', 'property_data', 'number_properties']
     elif tx_type == 51:
-        expected_fields+=['ecosystem', 'property_type', 'previous_property_id', 'property_category', 'property_subcategory', 'property_name', 'property_url', 'property_data', 'currency_identifier_desired', 'number_properties', 'deadline', 'earlybird_bonus', 'percentage_for_issuer', 'transaction_from']
+        expected_fields+=['ecosystem', 'property_type', 'previous_property_id', 'property_category', 'property_subcategory', 'property_name', 'property_url', 'property_data', 'currency_identifier_desired', 'number_properties', 'deadline', 'earlybird_bonus', 'percentage_for_issuer']
     elif tx_type == 0:
         expected_fields+=['currency_identifier', 'amount_to_transfer']
     for field in expected_fields:
@@ -65,7 +65,7 @@ def generate_assets(tx_type):
             tx0bytes = prepare_txbytes(txdata)
             packets = construct_packets( tx0bytes[0], tx0bytes[1], request.form['transaction_from'])
             unsignedhex= build_transaction( packets[0], packets[1], packets[2], request.form['transaction_from'] )
-            #DEBUG print tx51bytes, packets, unsignedhex
+            #DEBUG print tx0bytes, packets, unsignedhex
             return jsonify({ 'status': 200, 'unsignedhex': unsignedhex[0] , 'sourceScript': unsignedhex[1] });
         except Exception as e:
             error=jsonify({ 'status': 502, 'data': 'Unspecified error '+str(e)}) 
