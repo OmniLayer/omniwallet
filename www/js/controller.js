@@ -256,7 +256,7 @@ function SidecarController($scope, $http, $modal, userService, balanceService) {
   
   $scope.checkSendingEnabled = function($event) {
     var error = "Send page is unavailable because ";
-    if($scope.hasAddressesWithPrivkey){
+    if(!$scope.hasAddressesWithPrivkey){
       $event.preventDefault();
       $event.stopPropagation();
       error += "the wallet has no addresses with private keys (no address to send from)";
