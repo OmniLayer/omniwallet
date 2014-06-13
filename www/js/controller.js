@@ -234,7 +234,7 @@ function ExplorerInspectorController($scope, $location, $http, hashExplorer) {
     });
   }
 }
-function SidecarController($scope, $http, $modal, userService, balanceService) {
+function SidecarController($scope, $http, $modal, $location, userService, balanceService) {
   $scope.values = {};
   $scope.setView = function(viewName) {
     $scope.view = $scope.sidecarTemplates[viewName];
@@ -261,7 +261,7 @@ function SidecarController($scope, $http, $modal, userService, balanceService) {
       $event.stopPropagation();
       error += "the wallet has no addresses with private keys (no address to send from)";
     } else {
-      if(!$scope.hasTadeableCoins){
+      if(!$scope.hasTradableCoins){
         $event.preventDefault();
         $event.stopPropagation();
         error += "the wallet has no coins in the addresses that have private keys (nothing to send)";
