@@ -2,89 +2,85 @@
 <div class="sidecar col-xs-2" ng-controller="SidecarController" ng-init=setView('wallet')>
     <div ng-include="templates['sidecar']"></div>
 </div>
-<div ng-controller="WalletTradeFormController">
-  <div class="col-xs-10" ng-controller="WalletSendAssetsController">
-    <br>
-    <br>
-    <div class="row">
-      <h3 class="text-center" >New Transaction Send</h3>
+<div ng-controller="WalletAssetsFormController">
+  <div ng-controller="TransactionGenerationController">
+    <div class="col-xs-10" ng-controller="WalletSendAssetsController">
       <br>
-      <div ng-show="showErrors" class="alert alert-danger"> <strong> {{error}} </strong> </div> 
-    </div>
-    <form name="sendForm" ng-submit="validateSendForm()">
-    <div class="row">
-      <div class="col-xs-6">
-        <h4 class="text-justify" >Choose coin:</h4>
-        <div class="form-inline">
-            <select name="coin" class="form-control" ng-model="$parent.selectedCoin"
-              ng-options="currency as currency.name for currency in currencyList"
-              ng-change="setBalance()" ng-init="setBalance()" required>
-              <option value=""> -- Choose Coin -- </option>
-            </select>
-          </div> 
-        <h4 class="text-justify" >Send from address:</h4>
-        <div class="form-inline">
-            <select name="sender" class="form-control" ng-model="$parent.selectedAddress"
-              ng-options="address for address in addressList"
-              ng-change="setBalance()" ng-init="setBalance()" required>
-              <option value=""> -- Choose Address -- </option>
-            </select>
+      <br>
+      <div class="row">
+        <h3 class="text-center" >Send Coins</h3>
+        <br>
+        <div ng-show="showErrors" class="alert alert-danger"> <strong> {{error}} </strong> </div> 
+      </div>
+      <form name="sendForm" ng-submit="validateForm()">
+      <div class="row">
+        <div class="col-xs-6">
+          <h4 class="text-justify" >Choose coin:</h4>
+          <div class="form-inline">
+              <select name="coin" class="form-control" ng-model="walletAssets.selectedCoin"
+                ng-options="currency as currency.name for currency in currencyList"
+                ng-change="setBalance()" ng-init="setBalance()" required>
+                <option value=""> -- Choose Coin -- </option>
+              </select>
+            </div> 
+          <h4 class="text-justify" >Send from address:</h4>
+          <div class="form-inline">
+              <select name="sender" class="form-control" ng-model="walletAssets.selectedAddress"
+                ng-options="address for address in addressList"
+                ng-change="setBalance()" ng-init="setBalance()" required>
+                <option value=""> -- Choose Address -- </option>
+              </select>
+            </div>
+        </div>
+      </div>
+        <br>
+      <div class="row">
+        <div class="col-xs-12">
+          <div class="input-group">
+            <span class="input-group-addon"> To: </span>
+            <input name="reciever" type="text" ng-model="sendTo" class="form-control" placeholder="Address" required>
           </div>
+          <br>
+          <div class="input-group">
+            <span class="input-group-addon"> Amount ( {{ balanceData[0] }} {{ getDisplayedAbbreviation() }} Available ): </span>
+              <input name="amount" type="number" ng-model="sendAmount" class="form-control" 
+              placeholder="{{ sendPlaceholderValue }}" step="{{ sendPlaceholderStep }}" min="{{ sendPlaceholderMin }}" required>
+            
+          </div>
+          <br ng-hide="$parent.selectedCoin.symbol == 'BTC'">
+          <div class="input-group" style="width: 15%;" ng-hide="$parent.selectedCoin.symbol == 'BTC'">
+            <span class="input-group-addon" style="padding: 0.65em;"> MasterProtocol Transaction Cost: 
+    	 <a href=""
+                tooltip="MasterProtocol Transactions require additional BTC. This is used when encoding/sending the Masterprotocol Transaction."
+                tooltip-append-to-body="true"
+                tooltip-placement="left"
+                tooltip-trigger="click"> <strong>(?)</strong>
+              </a></span>
+            <span class="input-group-addon"> 0.00025 BTC </span>
+          </div>
+          <br>
+          <div class="input-group">
+            <span class="input-group-addon"> Miner fees ( {{ balanceData[1] }} BTC Available ): </span>
+            <input name="fees" type="number" ng-model="minerFees" class="form-control" 
+            placeholder="0.0001 suggested minimum" step="0.00000001" min="0.0001" ng-change="calculateTotal(minerFees)" required>
+          </div>
+          <input ng-model="marked" ng-hide="true" ng-init="marked = false" type="checkbox"> 
+        </div>
       </div>
-    </div>
-      <br>
-    <div class="row">
-      <div class="col-xs-12">
-        <div class="input-group">
-          <span class="input-group-addon"> Send funds to: </span>
-          <input name="reciever" type="text" ng-model="sendTo" class="form-control" placeholder="{{selectedAddress}}" required>
-        </div>
         <br>
-        <div class="input-group">
-          <span class="input-group-addon"> Amount to send ( {{ getDisplayedAbbreviation() }} ): </span>
-            <input name="amount" type="number" ng-model="sendAmount" class="form-control" 
-            placeholder="{{ sendPlaceholderValue }}" step="{{ sendPlaceholderStep }}" min="{{ sendPlaceholderMin }}" required>
-          <span class="input-group-addon" > 
-            Available: {{ balanceData[0] }} {{ getDisplayedAbbreviation() }}
-          </span>
-        </div>
-        <br ng-hide="$parent.selectedCoin.symbol == 'BTC'">
-        <div class="input-group" style="width: 15%;" ng-hide="$parent.selectedCoin.symbol == 'BTC'">
-          <span class="input-group-addon" style="padding: 0.65em;"> MasterProtocol Transaction Cost: 
-  	 <a href=""
-              tooltip="MasterProtocol Transactions require additional BTC. This is used when encoding/sending the Masterprotocol Transaction."
-              tooltip-append-to-body="true"
-              tooltip-placement="left"
-              tooltip-trigger="click"> <strong>(?)</strong>
-            </a></span>
-          <span class="input-group-addon"> 0.00025 BTC </span>
-        </div>
-        <br>
-        <div class="input-group">
-          <span class="input-group-addon"> Miner fees ( BTC ): </span>
-          <input name="fees" type="number" ng-model="minerFees" class="form-control" 
-          placeholder="0.0001 suggested minimum" step="0.00000001" min="0.0001" ng-change="calculateTotal(minerFees)" required>
-          <span class="input-group-addon" > 
-          Available Bitcoin: {{ balanceData[1] }} BTC
-          </span>
-        </div>
-        <input ng-model="marked" ng-hide="true" ng-init="marked = false" type="checkbox"> 
-      </div>
-    </div>
-      <br>
-        <div class="input-group" style="width: 15%;">
-          <span class="input-group-addon" style="padding: 0.65em;"> Total Transaction Cost: 
-  	 <a href=""
-              tooltip="Total transaction cost in BTC. Includes Miners fee and MasterProtocol costs."
-              tooltip-append-to-body="true"
-              tooltip-placement="left"
-              tooltip-trigger="click"> <strong>(?)</strong>
-            </a></span>
-          <span class="input-group-addon"> {{ totalCost }} BTC </span>
-        </div>
-        <br>
-    <input class="btn btn-primary btn-lg col-xs-push-3 col-xs-6" type="submit" value="Send Transaction">
-    </form>
-  
+          <div class="input-group" style="width: 15%;">
+            <span class="input-group-addon" style="padding: 0.65em;"> Total Transaction Cost: 
+    	 <a href=""
+                tooltip="Total transaction cost in BTC. Includes Miners fee and MasterProtocol costs."
+                tooltip-append-to-body="true"
+                tooltip-placement="left"
+                tooltip-trigger="click"> <strong>(?)</strong>
+              </a></span>
+            <span class="input-group-addon"> {{ totalCost }} BTC </span>
+          </div>
+          <br>
+      <input class="btn btn-primary btn-lg col-xs-push-3 col-xs-6" type="submit" value="Send Transaction">
+      </form>
+    </div>    
   </div>
 </div>
