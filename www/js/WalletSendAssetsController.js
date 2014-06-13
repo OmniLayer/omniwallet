@@ -68,7 +68,7 @@ function WalletSendAssetsController($modal, $scope, $http, $q, userService, wall
   transactionGenerationController.modalTemplateUrl = '/partials/wallet_send_modal.html';
   
   transactionGenerationController.setModalScope = function($modalScope){
-    $modalScope.sendSuccess = false, $modalScope.sendError = false, $modalScope.waiting = false, $modalScope.privKeyPass = {};
+    $modalScope.transactionSuccess = false, $modalScope.transactionError = false, $modalScope.waiting = false, $modalScope.privKeyPass = {};
     $modalScope.convertSatoshiToDisplayedValue=  $scope.convertSatoshiToDisplayedValue,
     $modalScope.getDisplayedAbbreviation=  $scope.getDisplayedAbbreviation,
     $modalScope.sendAmount=  $scope.selectedCoin.divisible ? +$scope.convertDisplayedValue($scope.sendAmount) : +$scope.sendAmount,
