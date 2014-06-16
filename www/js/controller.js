@@ -255,7 +255,7 @@ function SidecarController($scope, $http, $modal, $location, userService, balanc
   checkBalance(getAddressesWithPrivkey());
   
   $scope.checkSendingEnabled = function($event) {
-    var error = "Send page is unavailable because ";
+    var error = "Cannot send anything because ";
     if(!$scope.hasAddressesWithPrivkey){
       $event.preventDefault();
       $event.stopPropagation();
