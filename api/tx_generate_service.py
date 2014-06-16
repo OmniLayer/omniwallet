@@ -13,7 +13,8 @@ data_dir_root = os.environ.get('DATADIR')
 app = Flask(__name__)
 app.debug = True
 
-HEXSPACE='21'
+HEXSPACE_FIRST='41'
+HEXSPACE_SECOND='21'
 
 @app.route('/<int:tx_type>', methods=['POST'])
 def generate_assets(tx_type):
@@ -32,7 +33,7 @@ def generate_assets(tx_type):
     elif tx_type == 51:
         expected_fields+=['ecosystem', 'property_type', 'previous_property_id', 'property_category', 'property_subcategory', 'property_name', 'property_url', 'property_data', 'currency_identifier_desired', 'number_properties', 'deadline', 'earlybird_bonus', 'percentage_for_issuer']
     elif tx_type == 0:
-        expected_fields+=['currency_identifier', 'amount_to_transfer']
+        expected_fields+=['currency_identifier', 'amount_to_transfer', 'transaction_to']
     for field in expected_fields:
         if field not in request.form:
             return jsonify({ 'status': 403, 'data': 'No field in request form '+field })
@@ -64,7 +65,7 @@ def generate_assets(tx_type):
         try:
             tx0bytes = prepare_txbytes(txdata)
             packets = construct_packets( tx0bytes[0], tx0bytes[1], request.form['transaction_from'])
-            unsignedhex= build_transaction( packets[0], packets[1], packets[2], request.form['transaction_from'] )
+            unsignedhex= build_transaction( packets[0], packets[1], packets[2], request.form['transaction_from'], request.form['transaction_to'])
             #DEBUG print tx0bytes, packets, unsignedhex
             return jsonify({ 'status': 200, 'unsignedhex': unsignedhex[0] , 'sourceScript': unsignedhex[1] });
         except Exception as e:
@@ -352,7 +353,7 @@ def construct_packets(byte_stream, total_bytes, from_address):
     #DEBUG print final_packets 
     return [final_packets,total_packets,total_outs]
     
-def build_transaction(final_packets, total_packets, total_outs, from_address):
+def build_transaction(final_packets, total_packets, total_outs, from_address, to_address=None):
     #calculate fees
     fee_total = Decimal(0.0001) + Decimal(0.00005757*total_packets+0.00005757*total_outs) + Decimal(0.00005757)
     fee_total_satoshi = int( round( fee_total * Decimal(1e8) ) )
@@ -404,6 +405,8 @@ def build_transaction(final_packets, total_packets, total_outs, from_address):
                         validnextinputs.append({ "txid": prev_tx.txid, "vout": output['n']})
 
     validnextoutputs = { "1EXoDusjGwvnjZUyKkxZ4UHEf77z6A5S4P": 0.00005757 }
+    if to_address != None:
+        validnextoutputs[to_address]=0.00005757 #Add for simple send
     
     if change > Decimal(0.00005757): # send anything above dust to yourself
         validnextoutputs[ from_address ] = float( Decimal(change)/Decimal(1e8) )
@@ -428,14 +431,14 @@ def build_transaction(final_packets, total_packets, total_outs, from_address):
     #DEBUG print ordered_packets
     
     for i in range(total_outs):
-        hex_string = "51" + HEXSPACE + pubkey
+        hex_string = "51" + HEXSPACE_FIRST + pubkey
         asm_string = "1 " + pubkey
         addresses = [ pybitcointools.pubkey_to_address(pubkey)]
         n_count = len(validnextoutputs)+i
         total_sig_count = 1
         #DEBUG print [i,'added string', ordered_packets[i]]
         for packet in ordered_packets[i]:
-            hex_string = hex_string + HEXSPACE + packet.lower() 
+            hex_string = hex_string + HEXSPACE_SECOND + packet.lower() 
             asm_string = asm_string + " " + packet.lower()
             addresses.append(pybitcointools.pubkey_to_address(packet))
             total_sig_count = total_sig_count + 1
