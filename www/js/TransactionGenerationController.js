@@ -4,6 +4,7 @@ function TransactionGenerationController($scope, $modal, userService, walletTran
     var addressData = userService.getAddress(from);
     var privKey = new Bitcoin.ECKey.decodeEncryptedFormat(addressData.privkey, addressData.address); // Using address as temporary password
     var pubKey = privKey.getPubKeyHex();
+    data['pubkey'] = pubKey;
 
     $scope.TxPromise = walletTransactionService.getUnsignedTransaction(txType,data);
     $scope.TxPromise.then(function(successData) {
