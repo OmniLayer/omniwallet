@@ -10,7 +10,7 @@ function WalletBuyAssetsController($modal, $scope, $http, $q, userService, walle
 
   $scope.currencyList.forEach(function(e, i) {
     if (e.symbol == "BTC"){
-      $scope.addressList = userService.getAddressesWithPrivkey(e.addresses);
+      $scope.addressList = userService.getAddressesWithPrivkey(e.tradableAddresses);
       $scope.$parent.$parent.selectedAddress = $scope.addressList[0];
     }
   });
