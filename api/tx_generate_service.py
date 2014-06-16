@@ -25,7 +25,7 @@ def generate_assets(tx_type):
     if tx_type not in supported_transactions:
         return jsonify({ 'status': 400, 'data': 'Unsupported transaction type '+str(tx_type) })
     
-    expected_fields=['transaction_version', 'transaction_from']
+    expected_fields=['transaction_version', 'transaction_from','pubkey']
 
     #might add tx 00, 53, etc later;
     if tx_type == 50:
@@ -45,7 +45,7 @@ def generate_assets(tx_type):
         try:
             tx50bytes = prepare_txbytes(txdata)
             packets = construct_packets( tx50bytes[0], tx50bytes[1], request.form['transaction_from'] )
-            unsignedhex = build_transaction( packets[0], packets[1], packets[2], request.form['transaction_from'] )
+            unsignedhex = build_transaction( request.form['pubkey'], packets[0], packets[1], packets[2], request.form['transaction_from'] )
             #DEBUG print tx50bytes, packets, unsignedhex
             return jsonify({ 'status': 200, 'unsignedhex': unsignedhex[0] , 'sourceScript': unsignedhex[1] });
         except Exception as e:
@@ -55,7 +55,7 @@ def generate_assets(tx_type):
         try:
             tx51bytes = prepare_txbytes(txdata)
             packets = construct_packets( tx51bytes[0], tx51bytes[1], request.form['transaction_from'])
-            unsignedhex= build_transaction( packets[0], packets[1], packets[2], request.form['transaction_from'] )
+            unsignedhex= build_transaction( request.form['pubkey'], packets[0], packets[1], packets[2], request.form['transaction_from'] )
             #DEBUG print tx51bytes, packets, unsignedhex
             return jsonify({ 'status': 200, 'unsignedhex': unsignedhex[0] , 'sourceScript': unsignedhex[1] });
         except Exception as e:
@@ -65,7 +65,7 @@ def generate_assets(tx_type):
         try:
             tx0bytes = prepare_txbytes(txdata)
             packets = construct_packets( tx0bytes[0], tx0bytes[1], request.form['transaction_from'])
-            unsignedhex= build_transaction( packets[0], packets[1], packets[2], request.form['transaction_from'], request.form['transaction_to'])
+            unsignedhex= build_transaction( request.form['pubkey'], packets[0], packets[1], packets[2], request.form['transaction_from'], request.form['transaction_to'])
             #DEBUG print tx0bytes, packets, unsignedhex
             return jsonify({ 'status': 200, 'unsignedhex': unsignedhex[0] , 'sourceScript': unsignedhex[1] });
         except Exception as e:
@@ -353,12 +353,11 @@ def construct_packets(byte_stream, total_bytes, from_address):
     #DEBUG print final_packets 
     return [final_packets,total_packets,total_outs]
     
-def build_transaction(final_packets, total_packets, total_outs, from_address, to_address=None):
+def build_transaction(pubkey,final_packets, total_packets, total_outs, from_address, to_address=None):
     #calculate fees
     fee_total = Decimal(0.0001) + Decimal(0.00005757*total_packets+0.00005757*total_outs) + Decimal(0.00005757)
     fee_total_satoshi = int( round( fee_total * Decimal(1e8) ) )
 
-    pubkey = get_pubkey(from_address)    
     #clean sx output, initial version by achamely
     utxo_list = []
     #round so we aren't under fee amount
