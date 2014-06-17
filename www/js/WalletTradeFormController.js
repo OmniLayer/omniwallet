@@ -37,7 +37,8 @@ function WalletTradeFormController($scope, userService, walletTradeService) {
   $scope.amountUnit = 'mtow';
   $scope.balanceData = [0];
   var addrListBal = [];
-  $scope.addressList.forEach(function(e, i) {
+  // fill the addrBalanceList with all the addresses on the wallet for which we've got private keys.
+  userService.getAddressesWithPrivkey().forEach(function(e, i) {
     var balances = [
       {
         symbol: 'MSC',
