@@ -235,6 +235,7 @@ angular.module('omniwallet').factory('userService', ['$rootScope', '$http', '$in
                   if (balanceItem.symbol.substring(0, 2) == "SP") {
                     var propertyID = balanceItem.symbol.substring(2);
                     currency = {
+                        id: propertyID,
                         symbol: balanceItem.symbol,
                         divisible: balanceItem.divisible,
                         tradableAddresses: balanceItem.value > 0 ? [service.data.wallet.addresses[i].address] : [],
@@ -251,6 +252,7 @@ angular.module('omniwallet').factory('userService', ['$rootScope', '$http', '$in
                     });
                   } else {
                     currency = {
+                      id: balanceItem.symbol == "BTC" ? 0 : balanceItem.symbol == "MSC" ? 1 :balanceItem.symbol == "TMSC" ? 2 : null,
                       name: balanceItem.symbol,
                       symbol: balanceItem.symbol,
                       divisible: balanceItem.divisible,
