@@ -252,7 +252,7 @@ function SidecarController($scope, $http, $modal, $location, userService, balanc
   $scope.hasAddressesWithPrivkey = userService.data.loggedIn && getAddressesWithPrivkey().length != 0 ? true : false;
   $scope.hasTradableCoins = false;
   $scope.hasBTC = false;
-  checkBalance(getAddressesWithPrivkey());
+  if (userService.data.loggedIn) checkBalance(getAddressesWithPrivkey());
   
   $scope.checkSendingEnabled = function($event) {
     var error = "Cannot send anything because ";
@@ -296,7 +296,7 @@ function SidecarController($scope, $http, $modal, $location, userService, balanc
   }, function(result) {
     $scope.hasAddresses = userService.data.loggedIn && result.length != 0 ? true : false;
     $scope.hasAddressesWithPrivkey = userService.data.loggedIn && getAddressesWithPrivkey().length != 0 ? true : false;
-    checkBalance(getAddressesWithPrivkey())
+    if (userService.data.loggedIn) checkBalance(getAddressesWithPrivkey());
   }, true);
 
   function getAddressesWithPrivkey() {
