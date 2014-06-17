@@ -7,7 +7,9 @@ function WalletTradeFormController($scope, userService, walletTradeService) {
 
   // [ Template Initialization ]
 
-  $scope.currencyList = userService.getCurrencies(); // [{symbol: 'BTC', addresses:[], name: 'BTC'}, {symbol: 'MSC', addresses:[], name: 'MSC'}, {symbol: 'TMSC', addresses:[], name: 'TMSC'}]
+  $scope.currencyList = userService.getCurrencies().filter(function(currency){
+    return currency.tradable;
+  }); // [{symbol: 'BTC', addresses:[], name: 'BTC'}, {symbol: 'MSC', addresses:[], name: 'MSC'}, {symbol: 'TMSC', addresses:[], name: 'TMSC'}]
   
   $scope.selectedCoin = $scope.currencyList[0];
   $scope.currencyList.forEach(function(e, i) {
@@ -15,10 +17,10 @@ function WalletTradeFormController($scope, userService, walletTradeService) {
       $scope.selectedCoin = e;
   });
 
-  $scope.addressList = userService.getAddressesWithPrivkey($scope.selectedCoin.addresses);
+  $scope.addressList = userService.getAddressesWithPrivkey($scope.selectedCoin.tradableAddresses);
   $scope.selectedAddress = $scope.addressList[0];
   $scope.$watch('selectedCoin', function() {
-    $scope.addressList = userService.getAddressesWithPrivkey($scope.selectedCoin.addresses);
+    $scope.addressList = userService.getAddressesWithPrivkey($scope.selectedCoin.tradableAddresses);
     $scope.selectedAddress = $scope.addressList[0];
     $scope.setBalance();
     $scope.minerFees = +MIN_MINER_FEE.valueOf() // reset miner fees
@@ -35,7 +37,8 @@ function WalletTradeFormController($scope, userService, walletTradeService) {
   $scope.amountUnit = 'mtow';
   $scope.balanceData = [0];
   var addrListBal = [];
-  $scope.addressList.forEach(function(e, i) {
+  // fill the addrBalanceList with all the addresses on the wallet for which we've got private keys.
+  userService.getAddressesWithPrivkey().forEach(function(e, i) {
     var balances = [
       {
         symbol: 'MSC',
