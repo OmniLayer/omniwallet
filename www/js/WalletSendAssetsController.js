@@ -86,7 +86,7 @@ function WalletSendAssetsController($modal, $scope, $http, $q, userService, wall
         transaction_version:0,
         transaction_from: $scope.selectedAddress,
         currency_identifier:$scope.selectedCoin.id,
-        amount_to_transfer : +$scope.sendAmount,
+        amount_to_transfer : $scope.selectedCoin.divisible ? +$scope.convertDisplayedValue($scope.sendAmount) : +$scope.sendAmount,
         transaction_to: $scope.sendTo
       }
     }; 
