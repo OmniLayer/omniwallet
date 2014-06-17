@@ -227,19 +227,20 @@ angular.module('omniwallet').factory('userService', ['$rootScope', '$http', '$in
                 if (currency === null) {
                   if (balanceItem.symbol.substring(0, 2) == "SP") {
                     var propertyID = balanceItem.symbol.substring(2);
-                    $http.get('/v1/property/' + propertyID + '.json').then(function(result) {
-                      var property = result.data[0];
-                      currency = {
-                        name: property.propertyName,
+                    currency = {
                         symbol: balanceItem.symbol,
                         divisible: balanceItem.divisible,
-                        property_type: property.formatted_property_type,
                         tradableAddresses: balanceItem.value > 0 ? [service.data.wallet.addresses[i].address] : [],
                         watchAddresses: balanceItem.value == 0 ? [service.data.wallet.addresses[i].address] : [],
                         addresses: function(){ return this.tradableAddresses.concat(this.watchAddresses); },
                         tradable:tradable
                       };
-                      service.data.walletMetadata.currencies.push(currency);
+                    service.data.walletMetadata.currencies.push(currency);
+                    
+                    $http.get('/v1/property/' + propertyID + '.json').then(function(result) {
+                      var property = result.data[0];
+                      currency["name"] = property.propertyName;
+                      currency["property_type"] = property.formatted_property_type;
                     });
                   } else {
                     currency = {
