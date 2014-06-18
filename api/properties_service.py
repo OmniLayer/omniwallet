@@ -51,8 +51,15 @@ def list():
         ecosystem = request.form['ecosystem']
     except KeyError:
         abort(make_response('No field \'ecosystem\' in request, request failed', 400))
+    try:
+        issuer = request.form['issuer_address']
+    except KeyError:
+        issuer = ""
+    
        
     data = listProperties(ecosystem)
+    if issuer != "":
+        data = [property for property in data if property["from_address"] == issuer]
     response = {
                 'status' : 'OK',
                 'properties' : data
