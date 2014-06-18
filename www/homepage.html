@@ -4,7 +4,7 @@
     <strong>Jun 5 2014 - OpenSSL Update:</strong> Following the most recent <a href="https://www.openssl.org/news/secadv_20140605.txt">OpenSSL Security Advisory</a> Omniwallet has been updated accordingly. <br />We recommend all our users make sure their systems are up to date.  
     </div>
 
-<row >
+<row>
   <div class="col-xs-12">
     <h3>Check your balance!</h3>
     <form class="form-horizontal" role="form">
@@ -19,10 +19,10 @@
       </div>
     </form>
     <div ng-if="hasBalances">
-      <div class="asset-table ">
+      <div class="asset-table">
         <div ng-repeat="currency in balances">
           <row class="col-xs-offset-1 col-xs-10">
-            <div class="container-fluid " >
+            <div class="container-fluid">
               <div class="asset-item col-xs-4 text-left">
                 <span>{{currency.name ? currency.name : currency.symbol}}</span>
               </div>
@@ -37,7 +37,7 @@
             </div>
           </row> 
         </div>
-     </div> 
+      </div> 
     </div>
   </div>
 </row>
