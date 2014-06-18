@@ -19,10 +19,10 @@
       </div>
     </form>
     <div ng-if="hasBalances">
-      <div class="asset-table">
+      <div class="asset-table ">
         <div ng-repeat="currency in balances">
-          <row class="col-xs-offset-2 col-xs-10" style="background-color:#dddddd;">
-            <div class="container-fluid" >
+          <row class="col-xs-offset-1 col-xs-10">
+            <div class="container-fluid " >
               <div class="asset-item col-xs-4 text-left">
                 <span>{{currency.name ? currency.name : currency.symbol}}</span>
               </div>
@@ -32,7 +32,7 @@
                 <span ng-if="currency.property_type == undefined" class="currency">{{ currency.balance.toFixed(8) }} {{ currency.symbol }}</span>
               </div>
               <div class="asset-item col-xs-3 text-right">
-                <span>{{currency.value || currency}}</span>
+                <span>{{currency.value | currency}}</span>
               </div>
             </div>
           </row> 
