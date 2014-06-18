@@ -16,6 +16,10 @@ function HomeCtrl($scope, $templateCache, $injector, $location, $http, $q) {
     $scope.balanceAddress = "";
     $scope.hasBalances = false;
     $scope.total = 0;
+    $scope.validate = function(address) {
+     //console.log('checking '+address);
+      return Bitcoin.Address.validate(address);
+    };
     $scope.checkBalance = function() {
       var balances = {};
       var appraiser = $injector.get('appraiser');

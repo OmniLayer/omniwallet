@@ -7,14 +7,15 @@
 <row>
   <div class="col-xs-12">
     <h3>Check your balance!</h3>
-    <form class="form-horizontal" role="form">
+    <form class="form-horizontal" role="form" name="addressentry">
       <div class="form-group">
         <label for="address" class="col-xs-2 control-label">Address:</label>
         <div class="col-xs-8">
-          <input type="text" class="form-control" id="address" placeholder="Address" ng-model="balanceAddress">
+          <input type="text" class="form-control" name="address" id="address" placeholder="Address" ng-model="balanceAddress">
+          <span style="color:red" ng-show="addressentry.address.$dirty && !validate(balanceAddress)">Must be a valid Bitcoin address</span>
         </div>
         <div class="col-xs-2">
-          <button type="submit" class="btn btn-default" ng-click="checkBalance()">Check!</button>
+          <button type="submit" class="btn btn-default" ng-click="checkBalance()" ng-disabled="validate(balanceAddress) == false">Check!</button>
         </div>
       </div>
     </form>
