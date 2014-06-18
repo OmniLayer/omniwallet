@@ -11,6 +11,39 @@ data_dir_root = os.environ.get('DATADIR')
 app = Flask(__name__)
 app.debug = True
 
+@app.route('/categories', methods=['POST'])
+def categories():
+    try:
+        ecosystem = request.form['ecosystem']
+    except KeyError:
+        abort(make_response('No field \'ecosystem\' in request, request failed', 400))
+       
+    data = []
+    [data.append(property['category']) for property in propertylistProperties(ecosystem) if property['category'] not in data]
+        
+    response = {
+                'status' : 'OK',
+                'categories' : data
+                }
+
+    return jsonify(response)
+
+@app.route('/subcategories', methods=['POST'])
+def subcategories():
+    try:
+        ecosystem = request.form['ecosystem']
+    except KeyError:
+        abort(make_response('No field \'ecosystem\' in request, request failed', 400))
+       
+    data = []
+    [data.append(property['subcategory']) for property in propertylistProperties(ecosystem) if property['subcategory'] not in data]
+        
+    response = {
+                'status' : 'OK',
+                'subcategories' : data
+                }
+
+    return jsonify(response)
 
 @app.route('/list', methods=['POST'])
 def list():
@@ -25,7 +58,7 @@ def list():
                 'properties' : data
                 }
 
-    return jsonfy(response)
+    return jsonify(response)
 
 @app.route('/info', methods=['POST'])
 def info():
