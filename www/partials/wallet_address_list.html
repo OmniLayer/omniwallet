@@ -24,7 +24,7 @@
       <div class="col-xs-3">
           <span ng-if="currency.property_type != undefined && currency.property_type == 1" class="currency-total">{{ currency.balance }} </span>
           <span ng-if="currency.property_type != undefined && currency.property_type == 2" class="currency-total">{{ currency.balance.toFixed(8) }}</span>
-          <span ng-if="currency.property_type == undefined" class="currency-total">{{ currency.balance }} {{ currency.symbol }}</span>
+          <span ng-if="currency.property_type == undefined" class="currency-total">{{ currency.balance.toFixed(8) }} {{ currency.symbol }}</span>
       </div>
       <div class="col-xs-3">
         <span class="currency-value">{{currency.value | currency}}</span>
