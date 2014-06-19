@@ -135,7 +135,7 @@ def listProperties(ecosystem):
         if property_file[-5:] == '.json':
             with open(property_file, 'r') as f:
                 try:
-                    prop = json.loads(f.readline())
+                    prop = json.loads(f.readline())[0]
                     if prop["ecosystem"] == ecosystem: properties_data.append(prop)
                 except ValueError:
                     print 'Error decoding JSON', property_file.split('/')[-1][:-5]        
