@@ -7,102 +7,154 @@
   <br>
   <br>
   <div class="row">
-    <h3 class="text-center" >Asset Crowdsale</h3>
-    <br>
-    <div ng-show="showErrors" class="alert alert-danger"> <strong> {{error}} </strong> </div>
-    <br>
-    <div class="alert alert-info"> <strong> Please notice Ecosystem is fixed to TMSC at the moment </strong> </div>  
-  </div>
-  <form name="issuanceForm" ng-submit="validateIssuanceForm()">
-  <div class="row">
-    <div class="col-xs-12">
-      <div class="input-group">
-        <span class="input-group-addon"> Property Type: </span>
-        <select name="type" class="form-control" ng-model="propertyType" 
-         ng-options="type.value as type.description for type in propertyTypes" 
-         ng-change="checkPropertyType()" required>
-         <option value=""> -- Choose Type -- </option>
+    <h2 class="col-xs-9">Start a Crowdsale</h2>
+    <div class="col-xs-3" style="padding-top: 20px">
+      <div class="input-group pull-right">
+        <span class="input-group-addon"> Environment: </span>
+        <select name="ecosystem" class="form-control" ng-model="ecosystem" required>
+         <option value="1"> Production </option>
+         <option value="2"> Testing </option>
          </select>
       </div>
-      <br ng-hide="isNewProperty">
-      <div class="input-group" ng-hide="isNewProperty">
-        <span class="input-group-addon"> Previous Property Id: </span>
-        <input name="previous" type="text" ng-model="previousPropertyId" class="form-control" placeholder="0 for a new smart property (or the existing property ID if replacing or appending)" ng-required="!isNewProperty">
-      </div>
-      <br>
-      <div class="input-group">
-        <span class="input-group-addon"> Issuance Address: </span>
-        <select name="issuer" class="form-control" ng-model="selectedAddress"
-          ng-options="address for address in addressList" required>
-          <option value=""> -- Choose Address -- </option>
-        </select>
-      </div>
-      <br>
-      <div class="input-group">
-        <span class="input-group-addon"> Property Category: </span>
-        <input name="category" type="text" ng-model="propertyCategory" class="form-control" placeholder="Companies\0 (10 bytes)" ng-maxlength="255" >
-      </div>
-      <br>
-      <div class="input-group">
-        <span class="input-group-addon"> Property Subcategory: </span>
-        <input name="subcategory" type="text" ng-model="propertySubcategory" class="form-control" placeholder="Bitcoin Mining\0 (15 bytes)" ng-maxlength="255">
-      </div>
-      <br>
-      <div class="input-group">
-        <span class="input-group-addon"> Property Name: </span>
-        <input name="name" type="text" ng-model="propertyName" class="form-control" placeholder="Quantum Miner\0 (14 bytes)" ng-maxlength="255" required>
-      </div>
-      <br>
-      <div class="input-group">
-        <span class="input-group-addon"> Property Url: </span>
-        <input name="url" type="url" ng-model="propertyUrl" class="form-control" placeholder="tinyurl.com/kwejgoig\0 (21 bytes)" ng-maxlength="255" >
-      </div>
-      <br>
-      <div class="input-group">
-        <span class="input-group-addon"> Currency Identifier Desired: </span>
-        <select name="desired" ng-model="currencyIdentifierDesired" class="form-control" 
-         ng-options="currency as currency.symbol for currency in currencyList" required>
-          <option value=""> -- Choose Currency -- </option>
-        </select>
-      </div>
-      <br>
-      <div class="input-group">
-        <span class="input-group-addon"> Number Properties per unit invested: </span>
-        <input name="amount" type="number" step="1" ng-model="numberProperties" class="form-control" placeholder="1,000,000 indivisible tokens" required>
-      </div>
-      <br>
-      <div class="input-group">
-        <span class="input-group-addon"> Deadline: </span>
-        <input type="text" class="form-control" datepicker-append-to-body="true" datepicker-popup="{{format}}" ng-model="deadline" is-open="opened" min-date="today" datepicker-options="dateOptions" date-disabled="disabled(date, mode)" ng-required="true" close-text="Close" />
-        <span class="input-group-btn">
-          <button type="button" class="btn btn-default" ng-click="open($event)"><i class="glyphicon glyphicon-calendar"></i></button>
-        </span>
-      </div>
-      <br>
-      <div class="input-group">
-        <span class="input-group-addon"> Early Bird Bonus %/Week: </span>
-        <input name="early" type="number" step="1" ng-model="earlyBirdBonus" class="form-control" placeholder="200" required>
-      </div>
-      <br>
-      <div class="input-group">
-        <span class="input-group-addon"> Percentage for issuer: </span>
-        <input name="percentage" type="number" step="1" ng-model="percentageForIssuer" class="form-control" placeholder="10" required>
-      </div>
-      <br>
-      <div class="input-group">
-          <span class="input-group-addon"> Miner fees ( BTC ): </span>
-          <input name="fees" type="number" ng-model="minerFees" class="form-control" 
-          placeholder="0.0001 suggested minimum" step="0.0001" min="0.0001" required>
-          <span class="input-group-addon" > 
-          Available Bitcoin: {{ balanceData[1] }} BTC
-          </span>
-        </div>
-        <br>
-      
     </div>
   </div>
-    <br>
-  <input class="btn btn-primary btn-lg col-xs-push-3 col-xs-6" type="submit" value="Issue Crowdsale" ng-click="validateForm()">
-  </form>
+  <div class="row">
+    <div ng-show="showErrors" class="alert alert-danger"> <strong> {{error}} </strong> </div>
+  </div>
+  <div class="row">
+    <div class="col-xs-12">
+      <form name="issuanceForm" ng-submit="validateIssuanceForm()">
+        <div class="row">
+          <h3 class="col-xs-12" style="color:lightgrey">Smart Property details</h3>
+        </div>
+        <div class="form-group">
+          <div class="input-group col-xs-6">
+            <span class="input-group-addon"> Name: </span>
+            <input name="name" type="text" ng-model="propertyName" class="form-control" placeholder="ex: BobCoin" ng-maxlength="255" required>
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="input-group col-xs-6">
+            <span class="input-group-addon"> Divisible: </span>
+            <select name="type" class="form-control" ng-model="propertyType" 
+             ng-change="checkPropertyType()" required>
+             <option value="2"> Yes </option>
+             <option value="1"> No </option>
+             </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="row">
+            <div class="col-xs-6">
+              <div class="input-group">
+                <span class="input-group-addon"> Category: </span>
+                <select name="category" ng-model="propertyCategory" class="form-control" ng-init="loadCategories()"
+                  ng-options="category for category in categories" ng-change="loadSubcategories(propertyCategory)">
+                  <option value="">Select a category</option>
+                </select>
+              </div>
+            </div>
+            <div class="col-xs-6">
+              <div class="input-group">
+                <span class="input-group-addon"> Subcategory: </span>
+                <select name="subcategory" ng-model="propertySubcategory" class="form-control"
+                ng-options="subcategory for subcategory in subcategories">
+                <option value="">Select a subcategory</option>
+                </select>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="input-group">
+            <span class="input-group-addon"> Property Url: </span>
+            <input name="url" type="url" ng-model="propertyUrl" class="form-control" placeholder="Enter a web address for the user to get more info on the Smart Property" ng-maxlength="255" >
+          </div>
+        </div>
+        <div class="form-group">
+          <textarea class="form-control" ng-model="propertyData" ng-maxlength="255" placeholder="Enter Smart Property description."></textarea>
+        </div>
+        <!--
+          <br ng-hide="isNewProperty">
+          <div class="input-group" ng-hide="isNewProperty">
+            <span class="input-group-addon"> Previous Property Id: </span>
+            <input name="previous" type="text" ng-model="previousPropertyId" class="form-control" placeholder="0 for a new smart property (or the existing property ID if replacing or appending)" ng-required="!isNewProperty">
+          </div>
+          <br>-->
+        <div class="row">
+          <h3 class="col-xs-12" style="color:lightgrey">Crowdsale details</h3>
+        </div>
+        <div class="form-group">
+          <div class="input-group col-xs-6">
+            <span class="input-group-addon">Deadline: </span>
+            <input type="text" class="form-control" datepicker-append-to-body="true" datepicker-popup="{{format}}" ng-model="deadline" is-open="opened" min-date="today" datepicker-options="dateOptions" date-disabled="disabled(date, mode)" ng-required="true" close-text="Close" />
+            <span class="input-group-btn">
+              <button type="button" class="btn btn-default" ng-click="open($event)"><i class="glyphicon glyphicon-calendar"></i></button>
+            </span>
+          </div>
+          <timepicker ng-model="deadlineTime" ng-change="setDeadlineTime(deadlineTime)"></timepicker>
+        </div>
+        <div class="form-group">
+          <div class="input-group">
+            <span class="input-group-addon">Percentage for issuer: </span>
+            <input name="percentage" type="number" step="1" ng-model="percentageForIssuer" class="form-control" placeholder="For example: 10" required>
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="input-group">
+            <span class="input-group-addon">Initial early bird bonus percentage: </span>
+            <input name="early" type="number" step="1" ng-model="earlyBirdBonus" class="form-control" placeholder="For example: 25" required>
+          </div>
+        </div>
+        <div class="form-group" ng-repeat="investment in currenciesDesired">
+          <div class="panel panel-default">
+            <div class="panel-body">
+              <form class="form-inline" role="form">
+                  <div class="form-group">
+                    <input name="amount" type="number" step="1" ng-model="numberOfTokens" class="form-control" placeholder="# of tokens" required>
+                  </div>
+                  <div class="form-group">
+                    <label>per</label>
+                    <select class="form-control" name="currencyDesired" ng-model="currencyIdentifierDesired"
+                      ng-options="currency.currencyId as currency.propertyName for currency in investment.availableTokens">
+                      </select>
+                    <label>invested</label>
+                  </div>
+                  <button type="button" class="close" aria-hidden="true">&times;</button>
+              </form>
+            </div>
+          </div>
+        </div>
+        <div class="panel panel-default">
+          <div class="panel-body">
+            <button type="button" class="btn btn-link" ng-click="addInvestmentCurrency()">+ Add investment currency</button>
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="input-group">
+            <span class="input-group-addon"> Issuance Address: </span>
+            <select name="issuer" class="form-control" ng-model="selectedAddress"
+              ng-options="address for address in addressList" required>
+              <option value=""> -- Choose Address -- </option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="input-group">
+            <span class="input-group-addon"> Miner fees ( BTC ): </span>
+            <input name="fees" type="number" ng-model="minerFees" class="form-control" 
+              placeholder="0.0001 suggested minimum" step="0.0001" min="0.0001" required>
+            <span class="input-group-addon" > 
+            Available Bitcoin: {{ balanceData[1] }} BTC
+            </span>
+          </div>
+        </div>
+        <div class="row">
+          <input class="btn btn-primary btn-lg col-xs-push-3 col-xs-6" type="submit" value="Issue Crowdsale" ng-click="validateForm()">  
+        </div>
+      </form>
+    </div>
+  </div>
 </div>
 </div>
+
