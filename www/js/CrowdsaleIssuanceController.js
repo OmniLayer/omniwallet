@@ -1,18 +1,5 @@
-function CrowdsaleIssuanceController($scope){
-  var transactionGenerationController = $scope.$parent;
-  $scope.currencyList=[
-    { symbol: "BTC", id: 0},
-    { symbol: "MSC", id: 1}
-  ];
-  $scope.propertyTypes = [
-    { value: 1, description: "New Indivisible tokens"},
-    { value: 2, description: "New Divisible currency"},
-    { value: 65,  description: "Indivisible tokens replacing a previous property"},
-    { value: 66,  description: "Divisible currency replacing a previous property"},
-    { value: 129,  description: "Indivisible tokens appending a previous property"},
-    { value: 130, description:  "Divisible currency appending a previous property"}
-  ];
-  
+function CrowdsaleIssuanceController($scope, propertiesService){
+  /*
   $scope.isNewProperty = true;
   
   $scope.checkPropertyType = function(){
@@ -20,6 +7,67 @@ function CrowdsaleIssuanceController($scope){
       $scope.isNewProperty = false;
     else
       $scope.isNewProperty = true;
+  };*/
+ 
+  var transactionGenerationController = $scope.$parent;
+  $scope.ecosystem = 1;
+  $scope.divisible = 2;
+  var availableDesiredCurrencies=[];
+  var selectedDesiredCurrencies=[];
+  $scope.currenciesDesired=[];
+  
+  $scope.setEcosystem = function(){
+    availableDesiredCurrencies=$scope.ecosystem == 1 ? [{currencyId:1,propertyName:"Mastercoin"},{currencyId:0,propertyName:"Bitcoin"}]:[{currencyId:2,propertyName:"Test Mastercoin"}];
+    propertiesService.list($scope.ecosystem).then(function(result){    
+      availableDesiredCurrencies.concat(result.data.properties);
+      var availableTokens = availableDesiredCurrencies.filter(function(currency){
+        return selectedDesiredCurrencies.indexOf(currency) == -1;
+      });
+      $scope.currenciesDesired =[{numberOfTokens:"", selectedCurrency:availableTokens[0] , previousCurrency:availableTokens[0], availableTokens:availableTokens}];
+    });
+  };
+  $scope.setEcosystem();
+  
+  $scope.categories=[];
+  $scope.subcategories=[];
+  $scope.loadCategories=function(){
+    propertiesService.loadCategories($scope.ecosystem).then(function(result){  
+      $scope.categories=result.data;
+    });
+  };
+  $scope.loadSubcategories=function(category){
+    propertiesService.loadSubcategories($scope.ecosystem, category).then(function(result){  
+      $scope.subcategories=result.data;
+    });
+  };
+  
+  $scope.setDeadlineTime=function(time){
+    $scope.deadline.setHours(time.hours);
+    $scope.deadline.setMinutes(time.minute);
+    $scope.deadline.setSeconds(0);
+  };
+  $scope.addCurrencyDesired=function(){
+    if(availableDesiredCurrencies.length - selectedDesiredCurrencies.length > 0) {
+      var availableTokens = availableDesiredCurrencies.filter(function(currency){
+        return selectedDesiredCurrencies.indexOf(currency) == -1;
+      });
+      var newCurrencyDesired = {numberOfTokens:"", selectedCurrency:availableTokens[0] , previousCurrency:availableTokens[0], availableTokens:availableTokens};
+      $scope.setAvailableTokens(newCurrencyDesired);
+      $scope.currenciesDesired.push(newCurrencyDesired);
+    }
+  };
+  
+  $scope.setAvailableTokens=function(currencyDesired){
+    $scope.currenciesDesired.forEach(function(currency){
+      if(currency.availableTokens.indexOf(currencyDesired.previousCurrency) == -1)
+        currency.availableTokens.push(currencyDesired.previousCurrency);
+      currency.availableTokens.splice(currencyDesired.selectedCurrency);
+      currency.availableTokens.sort(function(a,b){
+        return a.propertyName;
+      });
+    });
+    selectedDesiredCurrencies.splice(currencyDesired.previousCurrency);
+    selectedDesiredCurrencies.push(currencyDesired.selectedCurrency);
   };
   
   transactionGenerationController.validateTransactionData = function(){
