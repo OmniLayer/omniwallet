@@ -317,10 +317,11 @@ def construct_packets(byte_stream, total_bytes, from_address):
             if obpacket[i] == shaaddress[i]:
                 datapacket = datapacket + '0'
             else:
-                bin_ob = int('0x' + obpacket[i], 16)
-                bin_sha = int('0x' + shaaddress[i], 16)
-                xored = hex(bin_ob ^ bin_sha)[2:].upper()
-                datapacket = datapacket + xored
+                if plaintext[i] != 'L':
+                    bin_ob = int('0x' + obpacket[i], 16)
+                    bin_sha = int('0x' + shaaddress[i], 16)
+                    xored = hex(bin_ob ^ bin_sha)[2:].upper()
+                    datapacket = datapacket + xored
         plaintext_packets.append(datapacket)
     
     #check the packet is formed correctly by comparing it to the input
