@@ -210,6 +210,12 @@ function ExplorerController($scope, $http, hashExplorer) {
         if (currency == data[i].currency) {
           var file = '/v1/transaction/general/' + currency + '_0001.json';
           $http.get(file, {}).success(function(data, status, headers, config) {
+
+            angular.forEach(data, function(transaction, index) {
+              //DEBUG console.log(new Date(Number(transaction.tx_time)))
+              data[index].tx_hash_concat = transaction.tx_hash.substring(0, 22) + '...'
+            });
+
             $scope.transactions = data;
           });
         }
