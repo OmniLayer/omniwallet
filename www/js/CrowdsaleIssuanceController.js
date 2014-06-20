@@ -11,9 +11,11 @@ function CrowdsaleIssuanceController($scope, propertiesService){
  
   var transactionGenerationController = $scope.$parent;
   $scope.ecosystem = 1;
-  $scope.divisible = 2;
+  $scope.propertyType = 2;
   var availableDesiredCurrencies=[];
   var selectedDesiredCurrencies=[];
+  $scope.categories=[];
+  $scope.subcategories=[];
   $scope.currenciesDesired=[];
   
   $scope.setEcosystem = function(){
@@ -24,20 +26,21 @@ function CrowdsaleIssuanceController($scope, propertiesService){
         return selectedDesiredCurrencies.indexOf(currency) == -1;
       });
       $scope.currenciesDesired =[{numberOfTokens:"", selectedCurrency:availableTokens[0] , previousCurrency:availableTokens[0], availableTokens:availableTokens}];
+      selectedDesiredCurrencies.push(availableTokens[0]);
     });
+    $scope.categories=[];
+    $scope.subcategories=[];
+    $scope.loadCategories();
   };
-  $scope.setEcosystem();
   
-  $scope.categories=[];
-  $scope.subcategories=[];
   $scope.loadCategories=function(){
     propertiesService.loadCategories($scope.ecosystem).then(function(result){  
-      $scope.categories=result.data;
+      $scope.categories=result.data.categories;
     });
   };
   $scope.loadSubcategories=function(category){
     propertiesService.loadSubcategories($scope.ecosystem, category).then(function(result){  
-      $scope.subcategories=result.data;
+      $scope.subcategories=result.data.subcategories;
     });
   };
   
@@ -59,16 +62,21 @@ function CrowdsaleIssuanceController($scope, propertiesService){
   
   $scope.setAvailableTokens=function(currencyDesired){
     $scope.currenciesDesired.forEach(function(currency){
-      if(currency.availableTokens.indexOf(currencyDesired.previousCurrency) == -1)
-        currency.availableTokens.push(currencyDesired.previousCurrency);
-      currency.availableTokens.splice(currencyDesired.selectedCurrency);
-      currency.availableTokens.sort(function(a,b){
-        return a.propertyName;
-      });
+      if(currency != currencyDesired){
+        if(currency.availableTokens.indexOf(currencyDesired.previousCurrency) == -1)
+          currency.availableTokens.push(currencyDesired.previousCurrency);
+        currency.availableTokens.splice(currency.availableTokens.indexOf(currencyDesired.selectedCurrency),1);
+        currency.availableTokens.sort(function(a,b){
+          return a.propertyName;
+        });
+      };
     });
-    selectedDesiredCurrencies.splice(currencyDesired.previousCurrency);
+    if(selectedDesiredCurrencies.indexOf(currencyDesired.previousCurrency) != -1)
+      selectedDesiredCurrencies.splice(selectedDesiredCurrencies.indexOf(currencyDesired.previousCurrency),1);
     selectedDesiredCurrencies.push(currencyDesired.selectedCurrency);
   };
+  
+  $scope.setEcosystem();
   
   transactionGenerationController.validateTransactionData = function(){
     var dustValue = 5757;
