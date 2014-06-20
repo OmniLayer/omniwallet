@@ -41,6 +41,7 @@ angular.module('omniwallet')
                     balances[currencyItem.symbol].balance += +value || currencyItem.value;
                     balances[currencyItem.symbol].value += appraiser.getValue(currencyItem.value, currencyItem.symbol);
                   }
+		  //console.log(balances);
                   if (currencyItem.symbol == 'BTC') {
                     balances[currencyItem.symbol].name = "Bitcoin"
                   }
@@ -287,7 +288,8 @@ angular.module('omniwallet')
             .text(function(d) {
             return d.data.name;
           });
-
+        console.log("gValue");
+        $scope.gValue=false;
         }
       });
     }

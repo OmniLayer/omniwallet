@@ -1,6 +1,8 @@
 <div class="col-xs-12" ng-controller="WalletBuyAssetsController">
   <div class="row">
-    <h3 class="text-center" >New Buy Offer</h3>
+   <div class="panel-default">
+    <h3 class="text-left panel-body om-title" >New Buy Accept</h3>
+   </div>
     <br>
     <div ng-show="showErrors" class="alert alert-danger">{{error}}</div> 
   </div>
@@ -15,7 +17,7 @@
           <option value=""> -- Choose Coin -- </option>
         </select>
         </div> 
-      <h4 ng-hide="hideForm" class="text-justify" >Buy from address:</h4>
+      <h4 ng-hide="hideForm" class="text-justify" >Buying Address:</h4>
       <div ng-hide="hideForm" class="form-inline">
           <select class="form-control" ng-model="$parent.$parent.selectedAddress"
             ng-options="address for address in addressList"
@@ -30,8 +32,8 @@
       
     <br>
       <div class="input-group">
-        <span class="input-group-addon">Sale to buy from (ID or hash): </span>
-        <input name="buyhash" type="text" ng-model="buySaleID" class="form-control" ng-init="buySaleID=global['buyOffer'].tx_hash" disabled>
+        <span class="input-group-addon">Sale Offer (ID / hash): </span>
+        <a href="/explorer/inspector?view={{buySaleID}}" target="_blank"><input name="buyhash" type="text" ng-model="buySaleID" class="form-control" ng-init="buySaleID=global['buyOffer'].tx_hash" disabled></a>
       </div>
     <br>
 

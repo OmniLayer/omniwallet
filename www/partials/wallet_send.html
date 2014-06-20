@@ -1,13 +1,12 @@
-
 <div class="sidecar col-xs-2" ng-controller="SidecarController" ng-init=setView('wallet')>
     <div ng-include="templates['sidecar']"></div>
 </div>
 <div ng-controller="WalletAssetsFormController">
   <div class="col-xs-10" ng-controller="WalletSendAssetsController">
-    <br>
-    <br>
     <div class="row">
-      <h3 class="text-center" >Send Coins</h3>
+     <div class="panel-default">
+       <div class="text-send panel-body om-title">Send</div>
+     </div>
       <br>
       <div ng-show="showErrors" class="alert alert-danger"> <strong> {{error}} </strong> </div> 
     </div>

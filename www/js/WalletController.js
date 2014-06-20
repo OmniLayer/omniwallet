@@ -3,7 +3,7 @@
 function WalletController($scope, $q, $http, $modal, $location, userService) {
   $scope.uuid = userService.getUUID();
   $scope.loginLink = $location.protocol() + "://" + $location.host() + "/login/" + $scope.uuid;
-  console.log(userService.getAllAddresses());
+  //console.log(userService.getAllAddresses());
 
   $scope.addrList = userService.getAllAddresses().map(function(e, i, a) {
     return e.address;
@@ -232,6 +232,7 @@ function WalletTradeOverviewController($scope, $http, $q, userService, hashExplo
   $scope.setHashExplorer = hashExplorer.setHash.bind(hashExplorer)
   $scope.currencyUnit = 'stom'
   $scope.selectedTimeframe = "604800"
+  $scope.AssignedDate = Date;
   $scope.global.getData = function(time, currency) {
     $scope.orderbook = []
     var transaction_data = []
