@@ -135,6 +135,12 @@ angular.module('omniwallet')
     $scope.refresh();
   });
 
+  $scope.refreshInit = function() {
+    var appraiser = $injector.get('appraiser');
+    $scope.refresh();
+    appraiser.updateValues(function() { console.log("refreshed init") });
+  }
+
   $scope.refresh = function() {
 
     $scope.isLoading = true;
@@ -288,8 +294,6 @@ angular.module('omniwallet')
             .text(function(d) {
             return d.data.name;
           });
-        console.log("gValue");
-        $scope.gValue=false;
         }
       });
     }
