@@ -429,6 +429,11 @@ function WalletTradePendingController($scope, $http, $q, userService, hashExplor
         return (orderType == 'sell offer') && (orderStatus.length == 0)
       });
 
+      angular.forEach(filtered_transaction_data, function(transaction, index) {
+        //DEBUG console.log(new Date(Number(transaction.tx_time)))
+        filtered_transaction_data[index].tx_hash_concat = transaction.tx_hash.substring(0, 22) + '...'
+      });
+
       transaction_data = filtered_transaction_data
       //if null, then append simple message
       $scope.orderbook = transaction_data.length != 0 ? transaction_data : [{
