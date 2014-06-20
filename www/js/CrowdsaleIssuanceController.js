@@ -51,6 +51,8 @@ function CrowdsaleIssuanceController($scope, propertiesService){
     $scope.deadline.setSeconds(0);
   };
   
+  
+  // MULTIPLE CURRENCIES SUPPORT
   $scope.addCurrencyDesired=function(){
     if(availableDesiredCurrencies.length - selectedDesiredCurrencies.length > 0) {
       var availableTokens = availableDesiredCurrencies.filter(function(currency){
@@ -90,12 +92,19 @@ function CrowdsaleIssuanceController($scope, propertiesService){
     });
   };
   
+  $scope.formatCurrencyDisplay = function(currencyDesired){
+    return currencyDesired.propertyName + " (" + currencyDesired.currencyId + ")";
+  };
+  
+  // Initialize the form
   $scope.setEcosystem();
   
   $scope.$watch(function(){ return selectedDesiredCurrencies.length;}, function(count){
     $scope.singleCurrency = count == 1;
   });
   
+  
+  // TRASANCTION GENERATION CONFIG 
   transactionGenerationController.validateTransactionData = function(){
     var dustValue = 5757;
     var minerMinimum = 10000;

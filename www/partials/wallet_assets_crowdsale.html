@@ -122,7 +122,7 @@
               <div class="form-group col-xs-7">
                 <label>per</label>
                 <select class="form-control" name="currencyDesired" ng-model="investment.selectedCurrency"
-                  ng-options="currency as currency.propertyName for currency in investment.availableTokens"
+                  ng-options="currency as formatCurrencyDisplay(currency) for currency in investment.availableTokens"
                   ng-change="setAvailableTokens(investment)">
                   </select>
                 <label>invested</label>
