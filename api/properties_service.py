@@ -19,7 +19,7 @@ def categories():
         abort(make_response('No field \'ecosystem\' in request, request failed', 400))
        
     data = []
-    [data.append(property['category']) for property in listProperties(ecosystem) if property['category'] not in data]
+    [data.append(property['propertyCategory']) for property in listProperties(ecosystem) if property['propertyCategory'] not in data]
         
     response = {
                 'status' : 'OK',
@@ -42,7 +42,7 @@ def subcategories():
     
        
     data = []
-    [data.append(property['subcategory']) for property in listProperties(ecosystem) if property['category'] == category and property['subcategory'] not in data]
+    [data.append(property['propertySubcategory']) for property in listProperties(ecosystem) if property['propertyCategory'] == category and property['propertySubcategory'] not in data]
         
     response = {
                 'status' : 'OK',
