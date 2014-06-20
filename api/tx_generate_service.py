@@ -131,12 +131,12 @@ def prep_bytes(letter):
 
 def prepare_txbytes(txdata):
     #calculate bytes
-    tx_ver_bytes = hex(txdata[0])[2:].rjust(4,"0") # 2 bytes
-    tx_type_bytes = hex(txdata[1])[2:].rjust(4,"0")   # 2 bytes
+    tx_ver_bytes = hex(txdata[0])[2:].rstrip('L').rjust(4,"0") # 2 bytes
+    tx_type_bytes = hex(txdata[1])[2:].rstrip('L').rjust(4,"0")   # 2 bytes
     if txdata[1] == 50 or txdata[1] == 51:
-        eco_bytes = hex(txdata[2])[2:].rjust(2,"0")              # 1 byte
-        prop_type_bytes = hex(txdata[3])[2:].rjust(4,"0")    # 2 bytes
-        prev_prop_id_bytes = hex(txdata[4])[2:].rjust(8,"0")  # 4 bytes
+        eco_bytes = hex(txdata[2])[2:].rstrip('L').rjust(2,"0")              # 1 byte
+        prop_type_bytes = hex(txdata[3])[2:].rstrip('L').rjust(4,"0")    # 2 bytes
+        prev_prop_id_bytes = hex(txdata[4])[2:].rstrip('L').rjust(8,"0")  # 4 bytes
         prop_cat_bytes = ''                                      # var bytes
         prop_subcat_bytes = ''                                   # var bytes
         prop_name_bytes = ''                                     # var bytes
@@ -144,13 +144,13 @@ def prepare_txbytes(txdata):
         prop_data_bytes = ''                                     # var bytes
 
         if txdata[1] == 50:
-            num_prop_bytes = hex(txdata[10])[2:].rjust(16,"0")        # 8 bytes
+            num_prop_bytes = hex(txdata[10])[2:].rstrip('L').rjust(16,"0")        # 8 bytes
         elif txdata[1] == 51:
-            num_prop_bytes = hex(txdata[10])[2:].rjust(16,"0")# 8 bytes
-            curr_ident_des_bytes = hex(txdata[11])[2:].rjust(8,"0")      # 4 bytes
-            deadline_bytes = hex(txdata[12])[2:].rjust(16,"0")         # 8 bytes
-            earlybird_bytes = hex(txdata[13])[2:].rjust(2,"0")        # 1 byte
-            percent_issuer_bytes = hex(txdata[14])[2:].rjust(2,"0") # 1 byte
+            num_prop_bytes = hex(txdata[10])[2:].rstrip('L').rjust(16,"0")# 8 bytes
+            curr_ident_des_bytes = hex(txdata[11])[2:].rstrip('L').rjust(8,"0")      # 4 bytes
+            deadline_bytes = hex(txdata[12])[2:].rstrip('L').rjust(16,"0")         # 8 bytes
+            earlybird_bytes = hex(txdata[13])[2:].rstrip('L').rjust(2,"0")        # 1 byte
+            percent_issuer_bytes = hex(txdata[14])[2:].rstrip('L').rjust(2,"0") # 1 byte
             
         for let in txdata[5]:
             prop_cat_bytes += prep_bytes(let)
@@ -239,8 +239,8 @@ def prepare_txbytes(txdata):
             #DEBUG print [len(tx_ver_bytes)/2,len(tx_type_bytes)/2,len(eco_bytes)/2,len(prop_type_bytes)/2,len(prev_prop_id_bytes)/2,len(num_prop_bytes)/2,len(prop_cat_bytes)/2,len(prop_subcat_bytes)/2,len(prop_name_bytes)/2,len(prop_url_bytes)/2,len(prop_data_bytes)/2]
 
     elif txdata[1] == 0:
-        currency_id_bytes = hex(txdata[2])[2:].rjust(8,"0")  # 4 bytes
-        amount_bytes = hex(txdata[3])[2:].rjust(16,"0")  # 8 bytes
+        currency_id_bytes = hex(txdata[2])[2:].rstrip('L').rjust(8,"0")  # 4 bytes
+        amount_bytes = hex(txdata[3])[2:].rstrip('L').rjust(16,"0")  # 8 bytes
         
         total_bytes = (len(tx_ver_bytes) + 
                         len(tx_type_bytes) + 
@@ -296,12 +296,11 @@ def construct_packets(byte_stream, total_bytes, from_address):
             if plaintext[i] == '0':
                 datapacket = datapacket + shaaddress[i]
             else:
-                if plaintext[i] != 'L': #make sure we are not encoding python's long format L representation
-                    bin_plain = int('0x' + plaintext[i], 16)
-                    bin_sha = int('0x' + shaaddress[i], 16)
-                    #DEBUG print ['texts, plain & addr', plaintext[i], shaaddress[i],'bins, plain & addr', bin_plain, bin_sha ]
-                    xored = hex(bin_plain ^ bin_sha)[2:].upper()
-                    datapacket = datapacket + xored
+                bin_plain = int('0x' + plaintext[i], 16)
+                bin_sha = int('0x' + shaaddress[i], 16)
+                #DEBUG print ['texts, plain & addr', plaintext[i], shaaddress[i],'bins, plain & addr', bin_plain, bin_sha ]
+                xored = hex(bin_plain ^ bin_sha)[2:].upper()
+                datapacket = datapacket + xored
         obfuscated_packets.append(( datapacket, shaaddress))
     
     #### Test that the obfuscated packets produce the same output as the plaintext packet inputs ####
@@ -317,11 +316,10 @@ def construct_packets(byte_stream, total_bytes, from_address):
             if obpacket[i] == shaaddress[i]:
                 datapacket = datapacket + '0'
             else:
-                if plaintext[i] != 'L':
-                    bin_ob = int('0x' + obpacket[i], 16)
-                    bin_sha = int('0x' + shaaddress[i], 16)
-                    xored = hex(bin_ob ^ bin_sha)[2:].upper()
-                    datapacket = datapacket + xored
+                bin_ob = int('0x' + obpacket[i], 16)
+                bin_sha = int('0x' + shaaddress[i], 16)
+                xored = hex(bin_ob ^ bin_sha)[2:].upper()
+                datapacket = datapacket + xored
         plaintext_packets.append(datapacket)
     
     #check the packet is formed correctly by comparing it to the input
