@@ -46,8 +46,8 @@ function CrowdsaleIssuanceController($scope, propertiesService){
   };
   
   $scope.setDeadlineTime=function(time){
-    $scope.deadline.setHours(time.hours);
-    $scope.deadline.setMinutes(time.minute);
+    $scope.deadline.setHours(time.getHours());
+    $scope.deadline.setMinutes(time.getMinutes());
     $scope.deadline.setSeconds(0);
   };
   
