@@ -12,6 +12,7 @@ function CrowdsaleIssuanceController($scope, propertiesService){
   var transactionGenerationController = $scope.$parent;
   $scope.ecosystem = 1;
   $scope.propertyType = 2;
+  $scope.singleCurrency = true;
   var availableDesiredCurrencies=[];
   var selectedDesiredCurrencies=[];
   $scope.categories=[];
@@ -78,7 +79,22 @@ function CrowdsaleIssuanceController($scope, propertiesService){
     currencyDesired.previousCurrency=currencyDesired.selectedCurrency;
   };
   
+  $scope.removeCurrencyDesired = function(currencyDesired){
+    selectedDesiredCurrencies.splice(selectedDesiredCurrencies.indexOf(currencyDesired.selectedCurrency),1);
+    $scope.currenciesDesired.splice($scope.currenciesDesired.indexOf(currencyDesired),1);
+    $scope.currenciesDesired.forEach(function(currency){
+        currency.availableTokens.push(currencyDesired.selectedCurrency);
+        currency.availableTokens.sort(function(a,b){
+          return a.propertyName;
+        });
+    });
+  };
+  
   $scope.setEcosystem();
+  
+  $scope.$watch(function(){ return selectedDesiredCurrencies.length;}, function(count){
+    $scope.singleCurrency = count == 1;
+  });
   
   transactionGenerationController.validateTransactionData = function(){
     var dustValue = 5757;
