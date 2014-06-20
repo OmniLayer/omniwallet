@@ -1,9 +1,25 @@
 <div class="modal-body">
     <h3 class="text-center"> Confirm Property Creation </h3>
-    <h3>You're about to start a Crowdsale! <br/>
-      This transaction will create a crowdsale for {{currencyIdentifierDesired}} that ends on {{deadline}} the number of properties per unit vested is {{numberProperties}} {{propertyTypeName}} tokens of {{propertyName}}. Categorized as {{propertyCategory}} > {{propertySubcategory}} at URL {{propertyUrl}}
-      It will have an early bird bonus of %{{earlyBirdBonus}} and the percentage for the issuer is going to be %{{percentageForIssuer}}
-      </h3>
+    <h3>You're about to start a Crowdsale!</h3> <br/>
+      <h4>This transaction will create a crowdsale with this data:</h4>
+      <ul>
+        <li>Name: {{propertyName}}</li>
+        <li>Description: {{propertyData}}</li>
+        <li>Divisible: {{divisible}}</li>
+        <li>Category: {{propertyCategory}}</li>
+        <li>Subcategory: {{propertySubcategory}}</li>
+        <li>Url: {{propertyUrl}}</li>
+        <li>Early bird initial bonus: %{{earlyBirdBonus}}</li>
+        <li>Percentage for issuer: %{{percentageForIssuer}}</li>
+        <li>Deadline: {{deadline}}</li>
+        <li>Payouts: 
+          <ul>
+            <li ng-repeat="currency in currenciesDesired">
+              {{currency.numberOfTokens}} per {{currency.selectedCurrency.propertyName}} ({{currency.selectedCurrency.currencyId}}) invested
+            </li>
+          </ul>
+        </li>
+      </ul>
   <p><br>
   If the above is correct, please press issue my Property.
   If you encounter an error, feel free to click away from the dialog and try again.

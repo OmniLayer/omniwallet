@@ -118,18 +118,7 @@ function CrowdsaleIssuanceController($scope, propertiesService){
     var convertedValues =$scope.convertDisplayedValue(convertToSatoshi);
     var minerFees = +convertedValues[0];
     var btcbalance = convertedValues[1];
-    var numberProperties=$scope.numberProperties,
-    propertyType = $scope.propertyType,
-    previousPropertyId=$scope.previousPropertyId,
-    propertyName=$scope.propertyName,
-    propertyCategory=$scope.propertyCategory,
-    propertySubcategory=$scope.propertySubcategory,
-    propertyUrl=$scope.propertyUrl,
-    currencyIdentifierDesired=$scope.currencyIdentifierDesired.id,
-    currencyIdentifierDesiredName=$scope.currencyIdentifierDesired.symbol,
-    deadline=$scope.deadline,
-    earlyBirdBonus=$scope.earlyBirdBonus,
-    percentageForIssuer=$scope.percentageForIssuer;
+    var propertyName=$scope.propertyName;
     
     var error = 'Please ';
     if ($scope.issuanceForm.$valid == false) {
@@ -151,39 +140,63 @@ function CrowdsaleIssuanceController($scope, propertiesService){
     $modalScope.issueSuccess = false, $modalScope.issueError = false, $modalScope.waiting = false, $modalScope.privKeyPass = {};
     $modalScope.convertSatoshiToDisplayedValue=  $scope.convertSatoshiToDisplayedValue,
     $modalScope.getDisplayedAbbreviation=  $scope.getDisplayedAbbreviation,
-    $modalScope.numberProperties=  $scope.numberProperties,
-    $modalScope.propertyTypeName=  $scope.propertyType == 1 || $scope.propertyType == 65 || $scope.propertyType == 129? 'Indivisible' : 'Divisible',
+    $modalScope.divisible=  $scope.propertyType == 1 || $scope.propertyType == 65 || $scope.propertyType == 129? 'No' : 'Yes',
     $modalScope.propertyName= $scope.propertyName,
+    $modalScope.propertyData= $scope.propertyData,
     $modalScope.propertyCategory= $scope.propertyCategory,
     $modalScope.propertySubcategory= $scope.propertySubcategory,
     $modalScope.propertyUrl= $scope.propertyUrl,
-    $modalScope.currencyIdentifierDesiredName=$scope.currencyIdentifierDesired.symbol,
+    $modalScope.currenciesDesired=$scope.currenciesDesired,
     $modalScope.deadline=$scope.deadline.toLocaleDateString(),
     $modalScope.earlyBirdBonus=$scope.earlyBirdBonus,
     $modalScope.percentageForIssuer=$scope.percentageForIssuer;
   };
   
   transactionGenerationController.generateData = function(){
+    var transactionData = [];
+    $scope.currenciesDesired.forEach(function(currency,index){
+      if(index == 0){
+        transactionData.push({
+          transaction_version:1,
+          ecosystem:$scope.ecosystem,
+          property_type : $scope.propertyType, 
+          previous_property_id:$scope.previousPropertyId || 0, 
+          property_category:$scope.propertyCategory, 
+          property_subcategory:$scope.propertySubcategory, 
+          property_name:$scope.propertyName, 
+          property_url:$scope.propertyUrl, 
+          property_data:$scope.propertyData || '\0', 
+          number_properties:currency.numberOfTokens,
+          transaction_from: $scope.selectedAddress,
+          currency_identifier_desired:currency.currencyId,
+          deadline:$scope.deadline.getTime(),
+          earlybird_bonus:$scope.earlyBirdBonus,
+          percentage_for_issuer:$scope.percentageForIssuer
+        });
+      } else {
+        transactionData.push({
+          transaction_version:1,
+          ecosystem:$scope.ecosystem,
+          property_type : 0, 
+          previous_property_id:0, 
+          property_category:'\0', 
+          property_subcategory:'\0', 
+          property_name:'\0', 
+          property_url:'\0', 
+          property_data:'\0', 
+          number_properties:currency.numberOfTokens,
+          transaction_from: $scope.selectedAddress,
+          currency_identifier_desired:currency.currencyId,
+          deadline:0,
+          earlybird_bonus:0,
+          percentage_for_issuer:0
+        });
+      }
+    });
     return {
       from:$scope.selectedAddress,
       transactionType:51,
-      transactionData:{
-        transaction_version:0,
-        ecosystem:2,
-        property_type : $scope.propertyType, 
-        previous_property_id:$scope.previousPropertyId || 0, 
-        property_category:$scope.propertyCategory, 
-        property_subcategory:$scope.propertySubcategory, 
-        property_name:$scope.propertyName, 
-        property_url:$scope.propertyUrl, 
-        property_data:'\0', 
-        number_properties:$scope.numberProperties,
-        transaction_from: $scope.selectedAddress,
-        currency_identifier_desired:$scope.currencyIdentifierDesired.id,
-        deadline:$scope.deadline.getTime(),
-        earlybird_bonus:$scope.earlyBirdBonus,
-        percentage_for_issuer:$scope.percentageForIssuer
-      }
+      transactionData:transactionData
     };
   };
   
