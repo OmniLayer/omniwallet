@@ -168,7 +168,7 @@ function CrowdsaleIssuanceController($scope, propertiesService){
           property_data:$scope.propertyData || '\0', 
           number_properties:currency.numberOfTokens,
           transaction_from: $scope.selectedAddress,
-          currency_identifier_desired:currency.currencyId,
+          currency_identifier_desired:currency.selectedCurrency.currencyId,
           deadline:$scope.deadline.getTime(),
           earlybird_bonus:$scope.earlyBirdBonus,
           percentage_for_issuer:$scope.percentageForIssuer
@@ -186,7 +186,7 @@ function CrowdsaleIssuanceController($scope, propertiesService){
           property_data:'\0', 
           number_properties:currency.numberOfTokens,
           transaction_from: $scope.selectedAddress,
-          currency_identifier_desired:currency.currencyId,
+          currency_identifier_desired:currency.selectedCurrency.currencyId,
           deadline:0,
           earlybird_bonus:0,
           percentage_for_issuer:0
