@@ -6,8 +6,11 @@ function TransactionGenerationController($scope, $modal, userService, walletTran
     var pubKey = privKey.getPubKeyHex();
     
     var data = rawdata instanceof Array ? rawdata : [rawdata];
+
+    pushOrderedTransactions(data,0);
     
-    data.forEach(function(txdata){
+    function pushOrderedTransactions(transactions,index){
+      var txdata = transactions[index];
       txdata['pubkey'] = pubKey;
       $scope.TxPromise = walletTransactionService.getUnsignedTransaction(txType,txdata);
       $scope.TxPromise.then(function(successData) {
@@ -39,9 +42,13 @@ function TransactionGenerationController($scope, $modal, userService, walletTran
             walletTransactionService.pushSignedTransaction(finalTransaction).then(function(successData) {
               var successData = successData.data;
               if (successData.pushed.match(/submitted|success/gi) != null) {
-                $modalScope.waiting = false;
-                $modalScope.issueSuccess = true;
-                $modalScope.url = 'http://blockchain.info/address/' + from + '?sort=0';
+                if(index +1 == transactions.length){
+                  $modalScope.waiting = false;
+                  $modalScope.issueSuccess = true;
+                  $modalScope.url = 'http://blockchain.info/address/' + from + '?sort=0';
+                } else {
+                  pushOrderedTransactions(transactions,index+1);
+                }
               } else {
                 $modalScope.waiting = false;
                 $modalScope.issueError = true;
@@ -96,7 +103,7 @@ function TransactionGenerationController($scope, $modal, userService, walletTran
             $modalScope.error = 'Unknown Server Error';
         console.error(errorData);
       });
-    });
+    };
   }; 
   
   $scope.validateForm = function() {
