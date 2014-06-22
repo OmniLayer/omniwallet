@@ -103,4 +103,29 @@ angular.module('omniwallet').directive('d3PieChart', function() {
       });
     }
   };
+}).directive('combobox', function(){
+  return {
+    restrict:'E',
+    templateUrl:'/template/combobox/combobox.html',
+    scope:{
+      optionList: '=',
+      modelValue:'=',
+      valueSelected:'&'
+    },
+    link: function(scope, element){
+      scope.open = function(){
+        $('.dropdown',element).toggleClass('open');
+      };
+      
+      scope.filter=function(){
+        scope.filteredList = scope.optionList.filter(function(option){
+          return scope.modelValue != "" ? option.indexOf(scope.modelValue) : true;
+        });
+      };
+      
+      scope.optionSelected = function(option){
+        
+      };
+    }
+  };
 });
