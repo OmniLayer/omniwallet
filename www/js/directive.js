@@ -124,7 +124,9 @@ angular.module('omniwallet').directive('d3PieChart', function() {
       };
       
       scope.optionSelected = function(option){
-        
+        scope.modelValue = option;
+        $('.dropdown',element).removeClass('open');
+        scope.valueSelected();
       };
     }
   };

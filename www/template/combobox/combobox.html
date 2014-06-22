@@ -2,9 +2,10 @@
   <input type="text" ng-model="modelValue" ng-change="filter" ng-focus="open" class="form-control"/>
   <div class="input-group-btn">
     <button class="btn" type="button" id="dropdownMenu1" ng-click="toggle">
-    <span class="caret"></span>
+      <span class="caret"></span>
     </button>
   </div>
   <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
-    <li role="presentation" ng-repeat="option in filteredList"><a role="menuitem" tabindex="-1" href="#">{{option}}</a></li>  </ul>
+    <li role="presentation" ng-repeat="option in filteredList"><a role="menuitem" tabindex="-1" href="#" ng-click="optionSelected(option)">{{option}}</a></li>
+  </ul>
 </div>
