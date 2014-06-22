@@ -110,10 +110,13 @@ angular.module('omniwallet').directive('d3PieChart', function() {
     scope:{
       optionList: '=',
       modelValue:'=',
+      label:'@',
+      placeholder:'@',
       valueSelected:'&'
     },
     controller:function($scope){
       $scope.filteredList = $scope.optionList;
+      $scope.selectedOption=false;
       
       $scope.filter=function(){
         scope.filteredList = scope.optionList.filter(function(option){
@@ -127,17 +130,20 @@ angular.module('omniwallet').directive('d3PieChart', function() {
     },
     link: function(scope, element, attr){
       scope.toggle = function(){
-        $('.dropdown',element).toggleClass('open');
+        if(!scope.selectedOption)
+          $('.dropdown',element).toggleClass('open');
       };
 
       scope.optionSelected = function(option){
         scope.modelValue = option;
         $('.dropdown',element).removeClass('open');
-        scope.valueSelected();
+        scope.valueSelected({category:option});
+        scope.selectedOption=false;
       };
       
-      scope.label=attr.label;
-      scope.placeholder=attr.placeholder;
+      element.on('mousedown','a',function(){
+        scope.selectedOption = true;
+      });
     }
   };
 });
