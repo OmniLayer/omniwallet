@@ -127,7 +127,9 @@ angular.module('omniwallet').directive('d3PieChart', function() {
       
       $scope.$watch(function(){ return $scope.optionList; },function(options){
         $scope.filteredList = options;
-      });
+      }).$watch(function(){ return $scope.label; }, $scope.setupListStyles);
+      
+      
     },
     link: function(scope, element, attr){
       scope.open = function(){
@@ -150,12 +152,15 @@ angular.module('omniwallet').directive('d3PieChart', function() {
         scope.selectedOption = true;
       });
       
-      $('ul',element).css({
-        "max-height": 150,
-        "overflow-y": "auto",
-        "width":$('input',element).width(),
-        "left":$('.input-group-addon',element).width()
-      });
+      scope.setupListStyles = function(){
+        $('ul',element).css({
+          "max-height": 150,
+          "overflow-y": "auto",
+          "width":$('input',element).width(),
+          "left":$('.input-group-addon',element).width()
+        });  
+      };
+      
     }
   };
 });
