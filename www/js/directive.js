@@ -130,9 +130,13 @@ angular.module('omniwallet').directive('d3PieChart', function() {
       });
     },
     link: function(scope, element, attr){
-      scope.toggle = function(){
+      scope.open = function(){
+          $('.dropdown',element).addClass('open');
+      };
+      
+      scope.close = function(){
         if(!scope.selectedOption)
-          $('.dropdown',element).toggleClass('open');
+          $('.dropdown',element).removeClass('open');
       };
 
       scope.optionSelected = function(option){
@@ -144,6 +148,13 @@ angular.module('omniwallet').directive('d3PieChart', function() {
       
       element.on('mousedown','a',function(){
         scope.selectedOption = true;
+      });
+      
+      $('ul',element).css({
+        "max-height": 150,
+        "overflow-y": "auto",
+        "width":$('input',element).width(),
+        "left":$('.input-group-addon',element).width()
       });
     }
   };
