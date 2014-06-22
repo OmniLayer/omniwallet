@@ -19,10 +19,10 @@
     </div>
   </div>
 
-  <div class="row" >
+  <div class="row" ng-controller="AssetTypesController">
 
-    <h3 ng-controller="AssetTypesController" ng-init="isLoading=true" ng-show="isLoading" class="text-center">Updating Overview...<img src="/assets/img/34-1.gif"></h3>
-    <div ng-controller="AssetTypesController" ng-init="refresh()" show-asset-types template="{{template}}">
+    <h3  ng-init="isLoading=true" ng-show="isLoading" class="text-center">Updating Overview...<img src="/assets/img/34-1.gif"></h3>
+    <div ng-init="refresh()" show-asset-types template="{{template}}">
 
 
     </div>
