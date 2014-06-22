@@ -5,10 +5,10 @@
 
 <div class="col-xs-10" ng-controller="ExplorerController" ng-init="getData()">
   <form class="form-search form-inline">
-        <div class="input-group" ng-submit="getData()">
-            <input type="text" class="form-control search-query" ng-model="searchQueryText" placeholder="Search for an address or transaction" />
+        <div class="input-group">
+            <input type="text" class="form-control search-query" ng-model="searchQueryText" placeholder="Search for at least 4 characters of a transaction or a full transaction hash" ng-minlength=4/>
             <span class="input-group-btn">
-                <input type="submit" class="btn btn-primary" value="search" />
+                <input type="click" ng-click="doSearch()" class="btn btn-primary" value="search" />
             </span>
         </div>
     </form>
@@ -29,14 +29,14 @@
     <tbody>
     </tbody>
 
-  <tr ng-repeat="trans in filteredTransactions = (transactions | filter:searchQuery)">
+  <tr ng-repeat="trans in transactions">
    
     <td ng-click="setHashExplorer(trans)"> <a href="/explorer/inspector?view={{trans.tx_hash}}">{{trans.tx_hash_concat}}</a></td>
    <td>{{trans.tx_type_str}}</td>
    <td>{{trans.formatted_amount}}</td>
     <td>{{trans.tx_time | date:'dd MMM HH:mm'}}</td>
   </tr>
-  <tr ng-hide="filteredTransactions.length > 0 || transactions.length === 0">
+  <tr ng-hide="transactions.length != 0">
     <td colspan="4" style="text-align: center;"><h4>Searched for invalid address or transaction</h4></td>
   </tr>
 

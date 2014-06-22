@@ -222,7 +222,16 @@ function ExplorerController($scope, $http, hashExplorer) {
       }
     });
   }
-
+  $scope.doSearch = function() {
+    var file = '/v1/search/';
+    $http.get('/v1/search/?query=' + $scope.searchQueryText, {}).success(function(successData, status, headers, config) {
+      angular.forEach(successData.data, function(transaction, index) {
+        console.log(transaction)
+        successData.data[index].tx_hash_concat = transaction.tx_hash.substring(0, 22) + '...'
+      });
+      $scope.transactions = successData.data;
+    });
+  };
   $scope.searchQuery = function(trans) {
     return ($scope.searchQueryText === '' || trans.tx_hash.indexOf($scope.searchQueryText) >= 0 || trans.from_address.indexOf($scope.searchQueryText) >= 0 || trans.to_address.indexOf($scope.searchQueryText) >= 0);
   };
