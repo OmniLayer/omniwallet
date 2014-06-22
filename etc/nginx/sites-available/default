@@ -175,6 +175,18 @@ server {
        uwsgi_modifier1 30;
        uwsgi_pass 127.0.0.1:$PORT;
      }
+
+    location = /v1/search { rewrite ^ /v1/search; }
+      location /v1/search { try_files $uri @flask_search_service; }
+      location @flask_search_service {
+        include uwsgi_params;
+        uwsgi_param SCRIPT_NAME /v1/search;
+        uwsgi_param UWSGI_MODULE search_service;
+        uwsgi_param UWSGI_CALLABLE app;
+        uwsgi_modifier1 30;
+        uwsgi_pass 127.0.0.1:$PORT;
+      }
+
 	# Only for nginx-naxsi used with nginx-naxsi-ui : process denied requests
 	#location /RequestDenied {
 	#	proxy_pass http://127.0.0.1:8080;    
