@@ -112,15 +112,18 @@ angular.module('omniwallet').directive('d3PieChart', function() {
       modelValue:'=',
       valueSelected:'&'
     },
-    link: function(scope, element){
-      scope.open = function(){
-        $('.dropdown',element).toggleClass('open');
-      };
+    controller:function($scope){
+      $scope.filteredList = $scope.optionList;
       
-      scope.filter=function(){
+      $scope.filter=function(){
         scope.filteredList = scope.optionList.filter(function(option){
           return scope.modelValue != "" ? option.indexOf(scope.modelValue) : true;
         });
+      };
+    },
+    link: function(scope, element, attr){
+      scope.toggle = function(){
+        $('.dropdown',element).toggleClass('open');
       };
       
       scope.optionSelected = function(option){
@@ -128,6 +131,9 @@ angular.module('omniwallet').directive('d3PieChart', function() {
         $('.dropdown',element).removeClass('open');
         scope.valueSelected();
       };
+      
+      scope.label=attr.label;
+      scope.placeholder=attr.placeholder;
     }
   };
 });
