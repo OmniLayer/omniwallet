@@ -119,10 +119,12 @@ angular.module('omniwallet').directive('d3PieChart', function() {
       $scope.selectedOption=false;
       
       $scope.filter=function(){
-        $scope.filteredList = $scope.optionList.filter(function(option){
+        var results = $scope.optionList.filter(function(option){
           var matcher = new RegExp("^"+$scope.modelValue);
           return matcher.test(option);
-        });
+        }) ;
+ 
+        $scope.filteredList = results.length > 0 ? results: ["No results"];
       };
       
       $scope.$watch(function(){ return $scope.optionList; },function(options){
