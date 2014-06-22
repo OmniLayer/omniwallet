@@ -120,7 +120,8 @@ angular.module('omniwallet').directive('d3PieChart', function() {
       
       $scope.filter=function(){
         scope.filteredList = scope.optionList.filter(function(option){
-          return scope.modelValue != "" ? option.indexOf(scope.modelValue) : true;
+          var matcher = new RegExp("^"+scope.modelValue);
+          return matcher.test(option);
         });
       };
       
