@@ -120,12 +120,16 @@ angular.module('omniwallet').directive('d3PieChart', function() {
           return scope.modelValue != "" ? option.indexOf(scope.modelValue) : true;
         });
       };
+      
+      $scope.$watch(function(){ return $scope.optionList; },function(options){
+        $scope.filteredList = options;
+      });
     },
     link: function(scope, element, attr){
       scope.toggle = function(){
         $('.dropdown',element).toggleClass('open');
       };
-      
+
       scope.optionSelected = function(option){
         scope.modelValue = option;
         $('.dropdown',element).removeClass('open');
