@@ -127,13 +127,19 @@ angular.module('omniwallet').directive('d3PieChart', function() {
       
       $scope.$watch(function(){ return $scope.optionList; },function(options){
         $scope.filteredList = options;
-      }).$watch(function(){ return $scope.label; }, $scope.setupListStyles);
+      });
       
       
     },
     link: function(scope, element, attr){
       scope.open = function(){
-          $('.dropdown',element).addClass('open');
+        $('ul',element).css({
+          "max-height": 150,
+          "overflow-y": "auto",
+          "width":$('input',element).outerWidth(),
+          "left":$('.input-group-addon',element).outerWidth()
+        });
+        $('.dropdown',element).addClass('open');
       };
       
       scope.close = function(){
@@ -152,15 +158,15 @@ angular.module('omniwallet').directive('d3PieChart', function() {
         scope.selectedOption = true;
       });
       
-      scope.setupListStyles = function(){
+      
+      scope.$watch(function(){ return scope.label; }, function(){
         $('ul',element).css({
           "max-height": 150,
           "overflow-y": "auto",
           "width":$('input',element).width(),
-          "left":$('.input-group-addon',element).width()
-        });  
-      };
-      
+          "left":$('.input-group-addon',element).outerWidth()
+        });
+      });
     }
   };
 });
