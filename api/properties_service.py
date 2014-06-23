@@ -11,8 +11,70 @@ data_dir_root = os.environ.get('DATADIR')
 app = Flask(__name__)
 app.debug = True
 
+@app.route('/categories', methods=['POST'])
+def categories():
+    try:
+        ecosystem = request.form['ecosystem']
+    except KeyError:
+        abort(make_response('No field \'ecosystem\' in request, request failed', 400))
+       
+    data = []
+    [data.append(property['propertyCategory']) for property in listProperties(ecosystem) if property['propertyCategory'] not in data]
+        
+    response = {
+                'status' : 'OK',
+                'categories' : data
+                }
+
+    return jsonify(response)
+
+@app.route('/subcategories', methods=['POST'])
+def subcategories():
+    try:
+        ecosystem = request.form['ecosystem']
+    except KeyError:
+        abort(make_response('No field \'ecosystem\' in request, request failed', 400))
+    
+    try:
+        category = request.form['category']
+    except KeyError:
+        abort(make_response('No field \'category\' in request, request failed', 400))
+    
+       
+    data = []
+    [data.append(property['propertySubcategory']) for property in listProperties(ecosystem) if property['propertyCategory'] == category and property['propertySubcategory'] not in data]
+        
+    response = {
+                'status' : 'OK',
+                'subcategories' : data
+                }
+
+    return jsonify(response)
+
 @app.route('/list', methods=['POST'])
-def challenge():
+def list():
+    try:
+        ecosystem = request.form['ecosystem']
+    except KeyError:
+        abort(make_response('No field \'ecosystem\' in request, request failed', 400))
+    try:
+        issuer = request.form['issuer_address']
+    except KeyError:
+        issuer = ""
+    
+       
+    data = listProperties(ecosystem)
+    if issuer != "":
+        data = [property for property in data if property["from_address"] == issuer]
+    response = {
+                'status' : 'OK',
+                'properties' : data
+                }
+
+    return jsonify(response)
+
+@app.route('/info', methods=['POST'])
+def info():
     try:
         property_ = request.form['property']
     except KeyError:
@@ -41,6 +103,7 @@ def challenge():
     #DEBUG print response
     return jsonify(response)
 
+# refactor this to be compatible with mastercored
 def filterProperties( properties ):
     import glob
 
@@ -60,3 +123,21 @@ def filterProperties( properties ):
                     print 'Error decoding JSON', address_file.split('/')[-1][:-5]
     
     return ['OK',addresses_data]
+
+
+# refactor this to be compatible with mastercored
+def listProperties(ecosystem):
+    import glob
+    
+    properties = glob.glob(data_dir_root +'/properties/*')
+    properties_data = []
+    for property_file in properties:
+        if property_file[-5:] == '.json':
+            with open(property_file, 'r') as f:
+                try:
+                    prop = json.loads(f.readline())[0]
+                    if prop["formatted_ecosystem"] == int(ecosystem): properties_data.append(prop)
+                except ValueError:
+                    print 'Error decoding JSON', property_file.split('/')[-1][:-5]        
+                         
+    return properties_data
