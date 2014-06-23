@@ -107,11 +107,6 @@ server {
         uwsgi_pass   127.0.0.1:$PORT;
     }
 
-    location /v1/transaction/send/ {
-        set   $app   send;
-        uwsgi_pass   127.0.0.1:$PORT;
-    }
-
     location /v1/exchange/sell/ {
         set   $app   sell;
         uwsgi_pass   127.0.0.1:$PORT;
