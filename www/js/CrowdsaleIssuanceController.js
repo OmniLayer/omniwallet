@@ -8,9 +8,9 @@ function CrowdsaleIssuanceController($scope, propertiesService){
     else
       $scope.isNewProperty = true;
   };*/
- 
+  $scope.walletAssets = $scope.$parent.$parent;
   var transactionGenerationController = $scope.$parent;
-  $scope.ecosystem = 1;
+  $scope.ecosystem = 2;
   $scope.propertyType = 2;
   $scope.singleCurrency = true;
   var availableDesiredCurrencies=[];

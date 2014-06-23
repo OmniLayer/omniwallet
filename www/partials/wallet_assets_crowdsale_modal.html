@@ -31,11 +31,11 @@
     </div>
       <br>
     <div class="row">
-      <div ng-show="issueSuccess">
+      <div ng-show="transactionSuccess">
         <h4 class="pull-right col-xs-12" style="color:green"> Assets issued successfully, 
         check your transaction <a target="_blank" href="{{url}}">here.</a></h4>
       </div>
-      <div ng-show="issueError">
+      <div ng-show="transactionError">
         <h4 class="col-xs-12" style="color:red;"> Assets could not be issued: 
          {{error}} </h4>
       </div>

@@ -12,7 +12,7 @@
         <div class="col-xs-3" style="padding-top: 20px">
           <div class="input-group pull-right">
             <span class="input-group-addon"> Environment: </span>
-            <select name="ecosystem" class="form-control" ng-model="ecosystem" ng-change="setEcosystem()" required>
+            <select name="ecosystem" class="form-control" ng-model="ecosystem" ng-change="setEcosystem()" disabled="">
               <option value="1"> Production </option>
               <option value="2"> Testing </option>
             </select>
@@ -143,7 +143,7 @@
             <div class="form-group">
               <div class="input-group">
                 <span class="input-group-addon"> Issuance Address: </span>
-                <select name="issuer" class="form-control" ng-model="selectedAddress"
+                <select name="issuer" class="form-control" ng-model="walletAssets.selectedAddress"
                 ng-options="address for address in addressList"
                 ng-change="setBalance()" ng-init="setBalance()" required>
                   <option value=""> -- Choose Address -- </option>
