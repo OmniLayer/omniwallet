@@ -1,4 +1,5 @@
 function PropertyIssuanceController($scope, propertiesService){
+  $scope.walletAssets=$scope.$parent.$parent;
   var transactionGenerationController = $scope.$parent;
   $scope.ecosystem = 2;
   $scope.propertyType = 2;
@@ -66,6 +67,7 @@ function PropertyIssuanceController($scope, propertiesService){
     $modalScope.propertySubcategory= $scope.propertySubcategory,
     $modalScope.propertyUrl= $scope.propertyUrl;
     $modalScope.propertyData= $scope.propertyData;
+    $modalScope.selectedAddress= $scope.selectedAddress;
   };
   
   transactionGenerationController.generateData = function(){
@@ -81,7 +83,7 @@ function PropertyIssuanceController($scope, propertiesService){
         property_subcategory:$scope.propertySubcategory, 
         property_name:$scope.propertyName, 
         property_url:$scope.propertyUrl, 
-        property_data:$scope.propertyData, 
+        property_data:$scope.propertyData || '\0', 
         number_properties:$scope.numberProperties,
         transaction_from: $scope.selectedAddress
       }

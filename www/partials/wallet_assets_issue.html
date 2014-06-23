@@ -90,7 +90,7 @@
             <div class="form-group">
               <div class="input-group">
                 <span class="input-group-addon"> Issuance Address: </span>
-                <select name="issuer" class="form-control" ng-model="$parent.$parent.selectedAddress"
+                <select name="issuer" class="form-control" ng-model="walletAssets.selectedAddress"
                 ng-options="address for address in addressList"
                 ng-change="setBalance()" ng-init="setBalance()" required>
                   <option value=""> -- Choose Address -- </option>
