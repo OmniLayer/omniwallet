@@ -25,7 +25,7 @@ function PropertyIssuanceController($scope, propertiesService){
   $scope.setEcosystem();
   
   transactionGenerationController.validateTransactionData=function(){
-    var dustValue = 5430;
+    var dustValue = 5757;
     var minerMinimum = 10000;
     var nonZeroValue = 1;
 
@@ -37,13 +37,7 @@ function PropertyIssuanceController($scope, propertiesService){
     var convertedValues =$scope.convertDisplayedValue(convertToSatoshi);
     var minerFees = +convertedValues[0];
     var btcbalance = convertedValues[1];
-    var numberProperties=$scope.numberProperties,
-    propertyType = $scope.propertyType,
-    previousPropertyId=$scope.previousPropertyId,
-    propertyName=$scope.propertyName,
-    propertyCategory=$scope.propertyCategory,
-    propertySubcategory=$scope.propertySubcategory,
-    propertyUrl=$scope.propertyUrl;
+    var propertyName=$scope.propertyName;
     
     var error = 'Please ';
     if ($scope.issuanceForm.$valid == false) {
@@ -62,15 +56,16 @@ function PropertyIssuanceController($scope, propertiesService){
   transactionGenerationController.modalTemplateUrl = '/partials/wallet_assets_issue_modal.html';
   
   transactionGenerationController.setModalScope = function($modalScope){
-    $modalScope.issueSuccess = false, $modalScope.issueError = false, $modalScope.waiting = false, $modalScope.privKeyPass = {};
+    $modalScope.transactionSuccess = false, $modalScope.transactionError = false, $modalScope.waiting = false, $modalScope.privKeyPass = {};
     $modalScope.convertSatoshiToDisplayedValue=  $scope.convertSatoshiToDisplayedValue,
     $modalScope.getDisplayedAbbreviation=  $scope.getDisplayedAbbreviation,
     $modalScope.numberProperties=  $scope.numberProperties,
-    $modalScope.propertyTypeName=  $scope.propertyType == 1 || $scope.propertyType == 65 || $scope.propertyType == 129? 'Indivisible' : 'Divisible',
+    $modalScope.divisible=  $scope.propertyType == 1 || $scope.propertyType == 65 || $scope.propertyType == 129? 'No' : 'Yes',
     $modalScope.propertyName= $scope.propertyName,
     $modalScope.propertyCategory= $scope.propertyCategory,
     $modalScope.propertySubcategory= $scope.propertySubcategory,
     $modalScope.propertyUrl= $scope.propertyUrl;
+    $modalScope.propertyData= $scope.propertyData;
   };
   
   transactionGenerationController.generateData = function(){
@@ -79,14 +74,14 @@ function PropertyIssuanceController($scope, propertiesService){
       transactionType: 50,
       transactionData: {
         transaction_version:0,
-        ecosystem:2,
+        ecosystem:$scope.ecosystem,
         property_type : $scope.propertyType, 
         previous_property_id:$scope.previousPropertyId || 0, 
         property_category:$scope.propertyCategory, 
         property_subcategory:$scope.propertySubcategory, 
         property_name:$scope.propertyName, 
         property_url:$scope.propertyUrl, 
-        property_data:'\0', 
+        property_data:$scope.propertyData, 
         number_properties:$scope.numberProperties,
         transaction_from: $scope.selectedAddress
       }

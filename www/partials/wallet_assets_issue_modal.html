@@ -1,7 +1,17 @@
 <div class="modal-body">
     <h3 class="text-center"> Confirm Property Creation </h3>
-    <h3>You're about to Issue Properties! <br/>
-      This transaction will create {{numberProperties}} {{propertyTypeName}} tokens of {{propertyName}}. Categorized as {{propertyCategory}} > {{propertySubcategory}} at URL {{propertyUrl}}</h3>
+    <h3>You're about to Issue Properties!</h3>
+    
+      <h4>This transaction will create this smart property:</h4>
+      <ul>
+        <li>Name: {{propertyName}}</li>
+        <li>Description: {{propertyData}}</li>
+        <li>Divisible: {{divisible}}</li>
+        <li>Category: {{propertyCategory}}</li>
+        <li>Subcategory: {{propertySubcategory}}</li>
+        <li>Url: {{propertyUrl}}</li>
+        <li>Number of properties: {{numberProperties}}</li>
+      </ul>
   <p><br>
   If the above is correct, please press issue my Property.
   If you encounter an error, feel free to click away from the dialog and try again.
@@ -13,11 +23,11 @@
     </div>
       <br>
     <div class="row">
-      <div ng-show="issueSuccess">
+      <div ng-show="transactionSuccess">
         <h4 class="pull-right col-xs-12" style="color:green"> Assets issued successfully, 
         check your transaction <a target="_blank" href="{{url}}">here.</a></h4>
       </div>
-      <div ng-show="issueError">
+      <div ng-show="transactionError">
         <h4 class="col-xs-12" style="color:red;"> Assets could not be issued: 
          {{error}} </h4>
       </div>
