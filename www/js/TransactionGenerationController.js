@@ -115,13 +115,17 @@ function TransactionGenerationController($scope, $modal, userService, walletTran
       // open modal
       var modalInstance = $modal.open({
         templateUrl: $scope.modalTemplateUrl,
-        controller: function($scope, data, prepareTransaction, setModalScope, convertSatoshiToDisplayedValue, getDisplayedAbbreviation) {
+        controller: function($scope, $modalInstance, data, prepareTransaction, setModalScope, convertSatoshiToDisplayedValue, getDisplayedAbbreviation) {
           setModalScope($scope);
           
           $scope.ok = function() {
             $scope.clicked = true;
             $scope.waiting = true;
             prepareTransaction(data.transactionType, data.transactionData, data.from, $scope);
+          };
+          
+          $scope.cancel = function () {
+            $modalInstance.dismiss('cancel');
           };
         },
         resolve: {

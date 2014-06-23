@@ -62,6 +62,8 @@ function CrowdsaleIssuanceController($scope, propertiesService){
       $scope.setAvailableTokens(newCurrencyDesired);
       $scope.currenciesDesired.push(newCurrencyDesired);
     }
+    
+    $scope.singleCurrency=selectedDesiredCurrencies.length == 1;
   };
   
   $scope.setAvailableTokens=function(currencyDesired){
@@ -90,6 +92,7 @@ function CrowdsaleIssuanceController($scope, propertiesService){
           return a.propertyName;
         });
     });
+    $scope.singleCurrency=selectedDesiredCurrencies.length == 1;
   };
   
   $scope.formatCurrencyDisplay = function(currencyDesired){
@@ -150,6 +153,7 @@ function CrowdsaleIssuanceController($scope, propertiesService){
     $modalScope.deadline=$scope.deadline.toLocaleDateString(),
     $modalScope.earlyBirdBonus=$scope.earlyBirdBonus,
     $modalScope.percentageForIssuer=$scope.percentageForIssuer;
+    $modalScope.selectedAddress=$scope.selectedAddress;
   };
   
   transactionGenerationController.generateData = function(){
