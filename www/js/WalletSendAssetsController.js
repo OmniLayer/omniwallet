@@ -4,7 +4,7 @@ function WalletSendAssetsController($modal, $scope, $http, $q, userService, wall
 
 
   transactionGenerationController.validateTransactionData = function(){
-    var dustValue = 5430;
+    var dustValue = 5757;
     var minerMinimum = 10000;
     var nonZeroValue = 1;
     var divisible = $scope.selectedCoin.divisible; 
