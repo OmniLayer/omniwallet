@@ -1,21 +1,28 @@
-function PropertyIssuanceController($scope){
+function PropertyIssuanceController($scope, propertiesService){
   var transactionGenerationController = $scope.$parent;
-  $scope.propertyTypes = [
-    { value: 1, description: "New Indivisible tokens"},
-    { value: 2, description: "New Divisible currency"},
-    { value: 65,  description: "Indivisible tokens replacing a previous property"},
-    { value: 66,  description: "Divisible currency replacing a previous property"},
-    { value: 129,  description: "Indivisible tokens appending a previous property"},
-    { value: 130, description:  "Divisible currency appending a previous property"}
-  ];
-  $scope.isNewProperty = true;
+  $scope.ecosystem = 2;
+  $scope.propertyType = 2;
+  $scope.categories=[];
+  $scope.subcategories=[];
   
-  $scope.checkPropertyType = function(){
-    if ($scope.propertyType != 1 && $scope.propertyType != 2)
-      $scope.isNewProperty = false;
-    else
-      $scope.isNewProperty = true;
+   $scope.setEcosystem = function(){
+    $scope.categories=[];
+    $scope.subcategories=[];
+    $scope.loadCategories();
   };
+  
+  $scope.loadCategories=function(){
+    propertiesService.loadCategories($scope.ecosystem).then(function(result){  
+      $scope.categories=result.data.categories;
+    });
+  };
+  $scope.loadSubcategories=function(category){
+    propertiesService.loadSubcategories($scope.ecosystem, category).then(function(result){  
+      $scope.subcategories=result.data.subcategories;
+    });
+  };
+  
+  $scope.setEcosystem();
   
   transactionGenerationController.validateTransactionData=function(){
     var dustValue = 5430;
