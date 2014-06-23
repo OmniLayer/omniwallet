@@ -56,22 +56,12 @@
             <div class="form-group">
               <div class="row">
                 <div class="col-xs-6">
-                  <div class="input-group">
-                    <span class="input-group-addon"> Category: </span>
-                    <select name="category" ng-model="propertyCategory" class="form-control" ng-init="loadCategories()"
-                    ng-options="category for category in categories" ng-change="loadSubcategories(propertyCategory)">
-                      <option value="">Select a category</option>
-                    </select>
-                  </div>
+                  <combobox name="category" model-value="propertyCategory" placeholder="Select a category" label="Category:"
+                  option-list="categories" value-selected="loadSubcategories(category)"></combobox>
                 </div>
                 <div class="col-xs-6">
-                  <div class="input-group">
-                    <span class="input-group-addon"> Subcategory: </span>
-                    <select name="subcategory" ng-model="propertySubcategory" class="form-control"
-                    ng-options="subcategory for subcategory in subcategories">
-                      <option value="">Select a subcategory</option>
-                    </select>
-                  </div>
+                  <combobox name="subcategory" model-value="propertySubcategory" placeholder="Select a subcategory" label="Subcategory:"
+                  option-list="subcategories"></combobox>
                 </div>
               </div>
             </div>
@@ -100,7 +90,7 @@
             <div class="form-group">
               <div class="input-group">
                 <span class="input-group-addon"> Issuance Address: </span>
-                <select name="issuer" class="form-control" ng-model="selectedAddress"
+                <select name="issuer" class="form-control" ng-model="$parentScope.$parent.selectedAddress"
                 ng-options="address for address in addressList"
                 ng-change="setBalance()" ng-init="setBalance()" required>
                   <option value=""> -- Choose Address -- </option>
