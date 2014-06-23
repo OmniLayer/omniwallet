@@ -6,7 +6,10 @@
     <br>
     <div ng-show="showErrors" class="alert alert-danger">{{error}}</div> 
   </div>
-  <form name="buyForm" ng-submit="validateBuyForm()">
+ <div ng-hide="addressList.length > 0">No Funds on Addresses with private keys to complete the purchase! <br />
+   Send some funding to an address on the <a class="" href="/wallet/addresses"> My Addresses </a> page or add an address with funds. 
+ </div>
+  <form name="buyForm" ng-submit="validateBuyForm()" ng-if="addressList.length > 0">
   <div class="row">
     <div class="col-xs-6">
       <h4 ng-hide="hideForm" class="text-justify" >Buying Address:</h4>
@@ -66,6 +69,6 @@
     </div>
   </div>
     <br>
-  <input ng-disabled="hideForm" class="btn btn-primary btn-lg col-xs-push-3 col-xs-6" type="submit" value="Buy">
+  <input ng-disabled="hideForm" class="btn btn-primary btn-lg col-xs-push-3 col-xs-6" type="submit" value="Accept">
   </form>
 </div>
