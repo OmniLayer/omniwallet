@@ -41,6 +41,7 @@ angular.module('omniwallet')
                     balances[currencyItem.symbol].balance += +value || currencyItem.value;
                     balances[currencyItem.symbol].value += appraiser.getValue(currencyItem.value, currencyItem.symbol);
                   }
+		  //console.log(balances);
                   if (currencyItem.symbol == 'BTC') {
                     balances[currencyItem.symbol].name = "Bitcoin"
                   }
@@ -133,6 +134,12 @@ angular.module('omniwallet')
   $rootScope.$on('APPRAISER_VALUE_CHANGED', function() {
     $scope.refresh();
   });
+
+  $scope.refreshInit = function() {
+    var appraiser = $injector.get('appraiser');
+    $scope.refresh();
+    appraiser.updateValues(function() { console.log("refreshed init") });
+  }
 
   $scope.refresh = function() {
 
@@ -287,7 +294,6 @@ angular.module('omniwallet')
             .text(function(d) {
             return d.data.name;
           });
-
         }
       });
     }
