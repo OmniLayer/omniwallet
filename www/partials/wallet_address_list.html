@@ -39,7 +39,7 @@
         </thead>
         <tbody>
           <tr ng-repeat="item in currency.addresses">
-            <td ng-show={{item.private}}>{{item.address}}<span class="glyphicon glyphicon-lock" tooltip="Your Wallet has the Private key for this address"></span></td>
+            <td ng-show={{item.private}}>{{item.address}} <span class="glyphicon glyphicon-lock" tooltip="Your Wallet has the Private key for this address"></span></td>
             <td ng-hide={{item.private}}>{{item.address}}</td>
             <td ng-if="currency.property_type != undefined && currency.property_type == 1" class="currency">{{ item.balance }} </td>
             <td ng-if="currency.property_type != undefined && currency.property_type == 2" class="currency">{{ item.balance.toFixed(8) }}</td>
