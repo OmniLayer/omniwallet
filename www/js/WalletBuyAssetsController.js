@@ -1,11 +1,8 @@
 function WalletBuyAssetsController($modal, $scope, $http, $q, userService, walletTransactionService) {
     // [ Template Initialization ]
 
-  $scope.currencyBuyList = $scope.currencyList.filter(function(currency){
-    if (currency.symbol == $scope.activeCurrencyPair[1] )
-      $scope.$parent.$parent.selectedCoin = currency;
-    return currency.symbol == $scope.activeCurrencyPair[1];
-  });
+  
+
   
 
   $scope.currencyList.forEach(function(e, i) {
@@ -14,6 +11,33 @@ function WalletBuyAssetsController($modal, $scope, $http, $q, userService, walle
       $scope.$parent.$parent.selectedAddress = $scope.addressList[0];
     }
   });
+  
+  // Override parent
+  $scope.getDisplayedAbbreviation = function () {
+    var transaction = $scope.global['buyOffer'];
+    $http.get('/v1/transaction/tx/' + transaction.tx_hash + '.json').success(function(data) {
+      var tx = data[0];
+      $scope.selectedCoin=tx.currency_str;
+
+      if(parseInt(tx.currencyId) <3) {
+        $scope.sendPlaceholderValue = '1.00000000';
+        $scope.sendPlaceholderStep = $scope.sendPlaceholderMin = '0.00000001';
+        $scope.displayedAbbreviation = tx.currency_str;
+      } else {
+        $http.get("/v1/property/"+tx.currencyId +".json", function(data) {
+          var property = data[0];
+          if(property.propertyType == "0001")
+            $scope.sendPlaceholderValue = $scope.sendPlaceholderStep = $scope.sendPlaceholderMin = '1';
+          else  {
+            $scope.sendPlaceholderValue = '1.00000000';
+            $scope.sendPlaceholderStep = $scope.sendPlaceholderMin = '0.00000001';
+          }
+            
+          $scope.displayedAbbreviation = property.propertyName + " #" + property.currencyId;
+        });
+      }
+    });
+  };
 
   // [ Buy Form Helpers ]
 
