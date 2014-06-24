@@ -6,11 +6,12 @@
 <div class="col-xs-10" ng-controller="ExplorerController" ng-init="getData()">
   <form class="form-search form-inline">
         <div class="input-group">
-            <input type="text" class="form-control search-query" ng-model="searchQueryText" placeholder="Search for at least 4 characters of a transaction or a full transaction hash" ng-minlength=4/>
+            <input type="text" class="form-control search-query" ng-model="searchQueryText" placeholder="Search for part of a transaction or a full transaction hash" ng-change="doSearch()" />
             <span class="input-group-btn">
                 <input type="click" ng-click="doSearch()" class="btn btn-primary" value="search" />
             </span>
         </div>
+            <p style="margin-top:5px;" class="text-muted" ng-show="searchQueryText.length > 0 && searchQueryText.length < 4" > You need at least {{ 4-searchQueryText.length }} characters to search. </p>
     </form>
   <br>
   <table class="table table-striped table-hover table-condensed">
@@ -36,8 +37,8 @@
    <td>{{trans.formatted_amount}}</td>
     <td>{{trans.tx_time | date:'dd MMM HH:mm'}}</td>
   </tr>
-  <tr ng-hide="transactions.length != 0">
-    <td colspan="4" style="text-align: center;"><h4>Searched for invalid address or transaction</h4></td>
+  <tr ng-show="transactions.length == 0">
+    <td colspan="4" style="text-align: center;"><h4>Searched for non-alphanumeric string or found non-existent transaction, either way, we didn't find anything.</h4></td>
   </tr>
 
 </table>

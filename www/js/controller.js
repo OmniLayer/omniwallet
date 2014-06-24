@@ -223,10 +223,12 @@ function ExplorerController($scope, $http, hashExplorer) {
     });
   }
   $scope.doSearch = function() {
+    if( $scope.searchQueryText == undefined || $scope.searchQueryText == '' || $scope.searchQueryText.length < 4 )
+      return -1;
     var file = '/v1/search/';
     $http.get('/v1/search/?query=' + $scope.searchQueryText, {}).success(function(successData, status, headers, config) {
       angular.forEach(successData.data, function(transaction, index) {
-        console.log(transaction)
+        //DEBUG console.log(transaction)
         successData.data[index].tx_hash_concat = transaction.tx_hash.substring(0, 22) + '...'
       });
       $scope.transactions = successData.data;
