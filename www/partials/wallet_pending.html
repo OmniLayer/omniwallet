@@ -3,10 +3,11 @@
 </div>
 
   <div class="col-xs-10" ng-controller="WalletTradePendingController" ng-init="getData(selectedTimeframe)">
-  <br>
-  <br>
+  <div class="panel-default">
+    <div class="text-left panel-body om-title">Pending Offers</div>
+  </div>
+
   <div ng-show="pendingThinking">
-      <h1> Pending Offers </h1>
       <div class="col-xs-9">
           <select ng-model="selectedTimeframe"  
             ng-change="filterData(selectedTimeframe)" disabled>
@@ -38,7 +39,7 @@
       </tbody>
 
       <tr ng-repeat="transaction in filtered_buys">
-        <td ng-click="setHashExplorer(transaction)"> <a href="/explorer/inspector?view={{transaction.tx_hash}}">{{transaction.tx_hash}}</a></td>
+        <td ng-click="setHashExplorer(transaction)"> <a href="/explorer/inspector?view={{transaction.tx_hash}}">{{transaction.tx_hash_concat}}</a></td>
         <td ng-if="transaction.formatted_price_per_coin">{{transaction.formatted_price_per_coin}}</td> 
         <td ng-if="transaction.formatted_amount">{{transaction.formatted_amount}}</td> 
         <td ng-if="transaction.bitcoin_required">{{transaction.bitcoin_required}}</td> 
@@ -67,7 +68,7 @@
       </tbody>
 
       <tr ng-repeat="transaction in filtered_sells">
-        <td ng-click="setHashExplorer(transaction)"> <a href="/explorer/inspector?view={{transaction.tx_hash}}">{{transaction.tx_hash}}</a></td>
+        <td ng-click="setHashExplorer(transaction)"> <a href="/explorer/inspector?view={{transaction.tx_hash}}">{{transaction.tx_hash_concat}}</a></td>
         <td>{{transaction.formatted_price_per_coin }}</td> 
         <td >{{transaction.formatted_amount}}</td> 
         <td >{{transaction.bitcoin_required}}</td> 

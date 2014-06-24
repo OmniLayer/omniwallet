@@ -8,7 +8,7 @@ function WalletAssetsFormController($scope, userService, walletTransactionServic
   // [ Template Initialization ]
 
   $scope.currencyList = userService.getCurrencies().filter(function(currency){
-    return currency.tradable;
+       return currency.tradable;
   }); // [{symbol: 'BTC', addresses:[], name: 'BTC'}, {symbol: 'MSC', addresses:[], name: 'MSC'}, {symbol: 'TMSC', addresses:[], name: 'TMSC'}]
   
   $scope.selectedCoin = $scope.currencyList[0];
@@ -17,11 +17,11 @@ function WalletAssetsFormController($scope, userService, walletTransactionServic
       $scope.selectedCoin = e;
   });
 
-  $scope.addressList = userService.getAddressesWithPrivkey($scope.selectedCoin.tradableAddresses);
-  $scope.selectedAddress = $scope.addressList[0];
+  $scope.addressList = $scope.selectedCoin ? userService.getAddressesWithPrivkey($scope.selectedCoin.tradableAddresses) : [];
+  $scope.selectedAddress = $scope.addressList[0] || null;
   $scope.$watch('selectedCoin', function() {
-    $scope.addressList = userService.getAddressesWithPrivkey($scope.selectedCoin.tradableAddresses);
-    $scope.selectedAddress = $scope.addressList[0];
+    $scope.addressList = $scope.selectedCoin ? userService.getAddressesWithPrivkey($scope.selectedCoin.tradableAddresses) : [];
+    $scope.selectedAddress = $scope.addressList[0] || null;
     $scope.setBalance();
     $scope.minerFees = +MIN_MINER_FEE.valueOf() // reset miner fees
     $scope.calculateTotal($scope.minerFees);
@@ -68,7 +68,7 @@ function WalletAssetsFormController($scope, userService, walletTransactionServic
   });
   
   $scope.setBalance = function() {
-    var coin = $scope.selectedCoin.symbol;
+    var coin = $scope.selectedCoin ? $scope.selectedCoin.symbol : null;
     var address = $scope.selectedAddress;
     $scope.balanceData = [0,0];
     if (address || coin) {
@@ -127,7 +127,7 @@ function WalletAssetsFormController($scope, userService, walletTransactionServic
 
   function calculateTotal(minerFees) {
     $scope.mProtocolCost = 0.00025
-    if ($scope.selectedCoin.symbol == 'BTC')
+    if ($scope.selectedCoin && $scope.selectedCoin.symbol == 'BTC')
       $scope.mProtocolCost = 0.0;
     $scope.totalCost = (+new Big(minerFees).plus($scope.mProtocolCost).valueOf()).toFixed(8);
   }

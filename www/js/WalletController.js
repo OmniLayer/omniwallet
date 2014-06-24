@@ -3,7 +3,7 @@
 function WalletController($scope, $q, $http, $modal, $location, userService) {
   $scope.uuid = userService.getUUID();
   $scope.loginLink = $location.protocol() + "://" + $location.host() + "/login/" + $scope.uuid;
-  console.log(userService.getAllAddresses());
+  //console.log(userService.getAllAddresses());
 
   $scope.addrList = userService.getAllAddresses().map(function(e, i, a) {
     return e.address;
@@ -232,6 +232,7 @@ function WalletTradeOverviewController($scope, $http, $q, userService, hashExplo
   $scope.setHashExplorer = hashExplorer.setHash.bind(hashExplorer)
   $scope.currencyUnit = 'stom'
   $scope.selectedTimeframe = "604800"
+  $scope.AssignedDate = Date;
   $scope.global.getData = function(time, currency) {
     $scope.orderbook = []
     var transaction_data = []
@@ -427,6 +428,11 @@ function WalletTradePendingController($scope, $http, $q, userService, hashExplor
         var orderStatus = item.color.match(/expired/gi) || []
         //DEBUG console.log(orderStatus, item.color)
         return (orderType == 'sell offer') && (orderStatus.length == 0)
+      });
+
+      angular.forEach(filtered_transaction_data, function(transaction, index) {
+        //DEBUG console.log(new Date(Number(transaction.tx_time)))
+        filtered_transaction_data[index].tx_hash_concat = transaction.tx_hash.substring(0, 22) + '...'
       });
 
       transaction_data = filtered_transaction_data
