@@ -140,6 +140,7 @@ angular.module('omniwallet').directive('d3PieChart', function() {
         $('ul',element).css({
           "max-height": 150,
           "overflow-y": "auto",
+          "overflow-x": "hidden",
           "width":$('input',element).outerWidth(),
           "left":$('.input-group-addon',element).outerWidth()
         });
@@ -160,16 +161,6 @@ angular.module('omniwallet').directive('d3PieChart', function() {
       
       element.on('mousedown','a',function(){
         scope.selectedOption = true;
-      });
-      
-      
-      scope.$watch(function(){ return scope.label; }, function(){
-        $('ul',element).css({
-          "max-height": 150,
-          "overflow-y": "auto",
-          "width":$('input',element).width(),
-          "left":$('.input-group-addon',element).outerWidth()
-        });
       });
     }
   };
