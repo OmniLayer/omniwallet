@@ -173,9 +173,10 @@ angular.module('omniwallet')
         .then(function(result) {
           var resultBalances = result.data.balance;
           for (var i in resultBalances) {
+            var value = null;
             var item = resultBalances[i];
             if(item.divisible)
-              var value=new Big(item.value).times(WHOLE_UNIT).valueOf();
+              value=new Big(item.value).times(WHOLE_UNIT).valueOf();
             if (item.symbol == currencySymbol) {
               balances.push({
                 "address": addr,
