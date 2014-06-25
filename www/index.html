@@ -60,13 +60,13 @@
          <div class="header">
            <div ng-include="templates['header']"></div> 
          </div>
-         <div class="middle row">
+         <div class="container middle row">
            <div class="alert alert-custom alert-dismissable" ng-show="browser !== 'chrome'">
              <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
              <strong>Browser not supported</strong> Omniwallet currently only supports Chrome, and may not function well on other browsers.
            </div>
            <div ng-view></div>
-         </div><br/>
+         </div><br/><br />
          <div class="footer">
           <div ng-include="templates['footer']"></div> 
          </div>

@@ -16,7 +16,7 @@ kill_child_processes() {
 
 # Ctrl-C trap. Catches INT signal
 trap "kill_child_processes 1 $$; exit 0" INT
-echo "Starting app.sh: $(TZ='America/Chicago' date)"
+echo "Starting app.sh: $(TZ='UTC' date)"
 
 echo "Establishing environment variables..."
 APPDIR=`pwd`
@@ -67,7 +67,7 @@ do
     # echo -n > $PARSE_LOG #Do not overwrite
     while [ "$x" != "0" ];
     do
-      echo "Parsing...$(cat www/revision.json | cut -d"," -f3),$(cat www/revision.json | cut -d"," -f4), time now is $(TZ='America/Chicago' date)" | tee -a $PARSE_LOG
+      echo "Parsing...$(cat www/revision.json | cut -d"," -f3),$(cat www/revision.json | cut -d"," -f4), time now is $(TZ='UTC' date)" | tee -a $PARSE_LOG
       $PYTHONBIN $TOOLSDIR/msc_parse.py -r $TOOLSDIR 2>&1 >> $PARSE_LOG
       x=$?
     done

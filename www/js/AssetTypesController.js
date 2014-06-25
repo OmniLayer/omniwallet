@@ -41,6 +41,7 @@ angular.module('omniwallet')
                     balances[currencyItem.symbol].balance += +value || currencyItem.value;
                     balances[currencyItem.symbol].value += appraiser.getValue(currencyItem.value, currencyItem.symbol);
                   }
+		  //console.log(balances);
                   if (currencyItem.symbol == 'BTC') {
                     balances[currencyItem.symbol].name = "Bitcoin"
                   }
@@ -70,6 +71,7 @@ angular.module('omniwallet')
                       if (result.status == 200)
                         this.property_type = result.data[0].formatted_property_type;
                       this.name = result.data[0].propertyName + ' (' + this.symbol.match(/^SP([0-9]+)$/)[1] + ')';
+		      this.shortname = result.data[0].propertyName;
                     };
                     spReqs.push($http.get('/v1/property/' + spMatch[1] + '.json').then(updateFunction.bind(balances[b])));
                   }
@@ -288,7 +290,6 @@ angular.module('omniwallet')
             .text(function(d) {
             return d.data.name;
           });
-
         }
       });
     }
