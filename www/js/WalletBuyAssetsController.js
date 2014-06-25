@@ -19,7 +19,7 @@ function WalletBuyAssetsController($modal, $scope, $http, $q, userService, walle
       $scope.sendPlaceholderStep = $scope.sendPlaceholderMin = '0.00000001';
       $scope.displayedAbbreviation = tx.currency_str;
     } else {
-      $http.get("/v1/property/"+tx.currencyId +".json", function(data) {
+      $http.get("/v1/property/"+tx.currencyId.replace(new RegExp("^0+"), "") +".json", function(data) {
         var property = data[0];
         if(property.propertyType == "0001")
           $scope.sendPlaceholderValue = $scope.sendPlaceholderStep = $scope.sendPlaceholderMin = '1';
