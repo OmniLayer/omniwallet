@@ -1,0 +1,9 @@
+{
+  "name": "websocket",
+  "version": "0.0.1",
+  "description": "websocket server",
+  "dependencies": {
+    "express": "~4.4.4",
+    "socket.io": "~1.0.6"
+  }
+}
