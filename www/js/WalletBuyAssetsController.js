@@ -1,10 +1,6 @@
 function WalletBuyAssetsController($modal, $scope, $http, $q, userService, walletTransactionService) {
     // [ Template Initialization ]
-
-  
-
-  
-
+    
   $scope.currencyList.forEach(function(e, i) {
     if (e.symbol == "BTC"){
       $scope.addressList = userService.getAddressesWithPrivkey(e.tradableAddresses);
@@ -12,33 +8,30 @@ function WalletBuyAssetsController($modal, $scope, $http, $q, userService, walle
     }
   });
   
-  // Override parent
-  $scope.getDisplayedAbbreviation = function () {
-    var transaction = $scope.global['buyOffer'];
-    $http.get('/v1/transaction/tx/' + transaction.tx_hash + '.json').success(function(data) {
-      var tx = data[0];
-      $scope.selectedCoin=tx.currency_str;
+  // OInitialize values.
+  var transaction = $scope.global['buyOffer'];
+  $http.get('/v1/transaction/tx/' + transaction.tx_hash + '.json').success(function(data) {
+    var tx = data[0];
+    $scope.selectedCoin=tx.currency_str;
 
-      if(parseInt(tx.currencyId) <3) {
-        $scope.sendPlaceholderValue = '1.00000000';
-        $scope.sendPlaceholderStep = $scope.sendPlaceholderMin = '0.00000001';
-        $scope.displayedAbbreviation = tx.currency_str;
-      } else {
-        $http.get("/v1/property/"+tx.currencyId +".json", function(data) {
-          var property = data[0];
-          if(property.propertyType == "0001")
-            $scope.sendPlaceholderValue = $scope.sendPlaceholderStep = $scope.sendPlaceholderMin = '1';
-          else  {
-            $scope.sendPlaceholderValue = '1.00000000';
-            $scope.sendPlaceholderStep = $scope.sendPlaceholderMin = '0.00000001';
-          }
-            
-          $scope.displayedAbbreviation = property.propertyName + " #" + property.currencyId;
-        });
-      }
-    });
-  };
-
+    if(parseInt(tx.currencyId) <3) {
+      $scope.sendPlaceholderValue = '1.00000000';
+      $scope.sendPlaceholderStep = $scope.sendPlaceholderMin = '0.00000001';
+      $scope.displayedAbbreviation = tx.currency_str;
+    } else {
+      $http.get("/v1/property/"+tx.currencyId +".json", function(data) {
+        var property = data[0];
+        if(property.propertyType == "0001")
+          $scope.sendPlaceholderValue = $scope.sendPlaceholderStep = $scope.sendPlaceholderMin = '1';
+        else  {
+          $scope.sendPlaceholderValue = '1.00000000';
+          $scope.sendPlaceholderStep = $scope.sendPlaceholderMin = '0.00000001';
+        }
+          
+        $scope.displayedAbbreviation = property.propertyName + " #" + property.currencyId;
+      });
+    }
+  });
   // [ Buy Form Helpers ]
 
   function getUnsignedBuyTransaction(buyerAddress, pubKey, buyAmount, fee, saleTransactionHash) {
@@ -212,10 +205,10 @@ function WalletBuyAssetsController($modal, $scope, $http, $q, userService, walle
       // open modal
       var modalInstance = $modal.open({
         templateUrl: '/partials/wallet_buy_modal.html',
-        controller: function($scope, $rootScope, userService, data, prepareBuyTransaction, getUnsignedBuyTransaction, convertSatoshiToDisplayedValue, getDisplayedAbbreviation) {
+        controller: function($scope, $rootScope, userService, data, prepareBuyTransaction, getUnsignedBuyTransaction, convertSatoshiToDisplayedValue) {
           $scope.sendSuccess = false, $scope.sendError = false, $scope.waiting = false, $scope.privKeyPass = {};
           $scope.convertSatoshiToDisplayedValue=convertSatoshiToDisplayedValue,
-          $scope.getDisplayedAbbreviation=getDisplayedAbbreviation,
+          $scope.displayedAbbreviation=data.displayedAbbreviation,
           $scope.buyAmount=data.amt,
           $scope.minerFees= data.fee,
           $scope.selectedCoin= data.selectedCoin;
@@ -234,6 +227,7 @@ function WalletBuyAssetsController($modal, $scope, $http, $q, userService, walle
               hash: saleHash,
               fee: minerFees,
               selectedCoin: $scope.selectedCoin,
+              displayedAbbreviation: $scope.displayedAbbreviation
             };
           },
           prepareBuyTransaction: function() {
@@ -247,9 +241,6 @@ function WalletBuyAssetsController($modal, $scope, $http, $q, userService, walle
           },
           convertSatoshiToDisplayedValue: function() {
             return $scope.convertSatoshiToDisplayedValue;
-          },
-          getDisplayedAbbreviation: function() {
-            return $scope.getDisplayedAbbreviation;
           }
         }
       });
