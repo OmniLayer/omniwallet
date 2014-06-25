@@ -15,15 +15,18 @@ function WalletBuyAssetsController($modal, $scope, $http, $q, userService, walle
     $scope.selectedCoin=tx.currency_str;
 
     if(parseInt(tx.currencyId) <3) {
+      $scope.divisible = true;
       $scope.sendPlaceholderValue = '1.00000000';
       $scope.sendPlaceholderStep = $scope.sendPlaceholderMin = '0.00000001';
       $scope.displayedAbbreviation = tx.currency_str;
     } else {
       $http.get("/v1/property/"+tx.currencyId.replace(new RegExp("^0+"), "") +".json", function(data) {
         var property = data[0];
-        if(property.propertyType == "0001")
+        if(property.propertyType == "0001"){
+          $scope.divisible =false;
           $scope.sendPlaceholderValue = $scope.sendPlaceholderStep = $scope.sendPlaceholderMin = '1';
-        else  {
+        } else  {
+          $scope.divisible = true;
           $scope.sendPlaceholderValue = '1.00000000';
           $scope.sendPlaceholderStep = $scope.sendPlaceholderMin = '0.00000001';
         }
@@ -149,10 +152,10 @@ function WalletBuyAssetsController($modal, $scope, $http, $q, userService, walle
   }
 
   $scope.validateBuyForm = function() {
-    var dustValue = 5430;
+    var dustValue = 5757;
     var minerMinimum = 10000;
     var nonZeroValue = 1;
-    var divisible = $scope.selectedCoin.divisible; 
+    var divisible = $scope.divisible; 
 
     var convertToSatoshi = [
         $scope.minerFees,
