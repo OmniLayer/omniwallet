@@ -266,7 +266,9 @@ angular.module('omniwallet').factory('userService', ['$rootScope', '$http', '$in
               addCurrencies(i + 1);
             });
           } else {
-            console.log("Updated Currencies");
+	    $injector.get('appraiser').updateValues(function() {
+                console.log("Updated Currencies");
+            });
           }
         };
         addCurrencies(0);
