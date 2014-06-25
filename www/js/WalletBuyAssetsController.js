@@ -165,7 +165,7 @@ function WalletBuyAssetsController($modal, $scope, $http, $q, userService, walle
       ];
 
     if (!divisible) {
-      delete convertToSatoshi[ convertToSatoshi.indexOf( $scope.saleAmount ) ];
+      delete convertToSatoshi[ convertToSatoshi.indexOf( $scope.buyAmount ) ];
       delete convertToSatoshi[ convertToSatoshi.indexOf( $scope.balanceData[0] ) ];
     }
 
@@ -177,7 +177,7 @@ function WalletBuyAssetsController($modal, $scope, $http, $q, userService, walle
     var balance = divisible ? +convertedValues[2] : +$scope.balanceData[0];
     var btcbalance = +convertedValues[3];
 
-    var coin = $scope.selectedCoin.symbol;
+    var coin = $scope.selectedCoin;
     var address = $scope.selectedAddress;
     var saleHash = $scope.buySaleID;
 
@@ -191,10 +191,10 @@ function WalletBuyAssetsController($modal, $scope, $http, $q, userService, walle
     //if( walletTransactionService.validAddress(sendTo) == false) {
     //   error += 'make sure you are sending to a valid MSC/BTC address, '
     //}
-    if (coin == 'BTC') {
+    if (coin == 'Bitcoin') {
       error += 'make sure your sale is for MSC or TMSC, ';
     }
-    if( ((coin == 'MSC') || (coin == 'TMSC')) ) {
+    if( ((coin == 'Mastercoin') || (coin == 'Test Mastercoin')) ) {
       if (buyAmount < nonZeroValue)
         error += 'make sure your send amount is non-zero, ';
       if (minerFees < minerMinimum)
