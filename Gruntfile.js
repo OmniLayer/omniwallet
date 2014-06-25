@@ -59,6 +59,14 @@ module.exports = function(grunt) {
 				},
 				command: 'npm install ; npm run minify'
 			},
+      "omni-websocket": {
+        options: {
+          execOptions: {
+            cwd: "api/websocket"
+          }
+        },
+        command: 'npm install'
+      },
 			cryptolib: {
 				options: {
 					stdout: true,
@@ -99,6 +107,8 @@ module.exports = function(grunt) {
 			grunt.task.run( 'shell:bitcoinjs-lib' );
 		if( !grunt.file.exists( 'www/bower_components/forge/js/forge.min.js' ))
 			grunt.task.run( 'shell:forge' );
+		if( !grunt.file.exists( 'api/websocket/node_modules' ))
+      grunt.task.run( 'shell:omni-websocket' );
 	} );
 
 
