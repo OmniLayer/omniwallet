@@ -13,14 +13,15 @@ app.debug = True
 
 @app.route('/categories', methods=['POST'])
 def categories():
-    try:
-        ecosystem = request.form['ecosystem']
-    except KeyError:
-        abort(make_response('No field \'ecosystem\' in request, request failed', 400))
-       
-    data = []
-    [data.append(property['propertyCategory']) for property in listProperties(ecosystem) if property['propertyCategory'] not in data]
-        
+    categories_file = data_dir_root + "/www/categories.json"
+    with open(categories_file, 'r') as f:
+        try:
+            categories = json.loads(f.read())[0]
+        except ValueError:
+            print 'Error decoding JSON', categories_file.split('/')[-1][:-5]
+    
+    data = categories.keys()
+    
     response = {
                 'status' : 'OK',
                 'categories' : data
@@ -31,19 +32,22 @@ def categories():
 @app.route('/subcategories', methods=['POST'])
 def subcategories():
     try:
-        ecosystem = request.form['ecosystem']
-    except KeyError:
-        abort(make_response('No field \'ecosystem\' in request, request failed', 400))
-    
-    try:
         category = request.form['category']
     except KeyError:
         abort(make_response('No field \'category\' in request, request failed', 400))
     
-       
-    data = []
-    [data.append(property['propertySubcategory']) for property in listProperties(ecosystem) if property['propertyCategory'] == category and property['propertySubcategory'] not in data]
-        
+    categories_file = data_dir_root + "/www/categories.json"
+    with open(categories_file, 'r') as f:
+        try:
+            categories = json.loads(f.read())[0]
+        except ValueError:
+            print 'Error decoding JSON', categories_file.split('/')[-1][:-5]
+    
+    try:
+        data = categories[category]
+    except KeyError:
+        abort(make_response('Unexisting category, request failed', 400))
+          
     response = {
                 'status' : 'OK',
                 'subcategories' : data
