@@ -10,6 +10,7 @@ function WalletBuyAssetsController($modal, $scope, $http, $q, userService, walle
   
   // OInitialize values.
   var transaction = $scope.global['buyOffer'];
+  $scope.buySaleID = transaction.tx_hash;
   $http.get('/v1/transaction/tx/' + transaction.tx_hash + '.json').success(function(data) {
     var tx = data[0];
     $scope.selectedCoin=tx.currency_str;
