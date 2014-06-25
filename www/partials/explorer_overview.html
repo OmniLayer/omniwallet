@@ -11,8 +11,14 @@
                 <input type="click" ng-click="doSearch()" class="btn btn-primary" value="search" />
             </span>
         </div>
-            <p style="margin-top:5px;" class="text-muted" ng-show="searchQueryText.length > 0 && searchQueryText.length < 4" > You need at least {{ 4-searchQueryText.length }} characters to search. </p>
+
     </form>
+
+        <div style="height:2em;">
+            <p style="float:left;height:1em;" class="text-muted" ng-show="searchQueryText.length > 0 && searchQueryText.length < 4" > You need at least {{ 4-searchQueryText.length }} more character(s) to search. </p>
+            <br>
+            <h3 style="height:1em;" ng-show="searchQueryReturned"> Results for: {{searchQueryReturnedText}} </h3>
+        </div>
   <br>
   <table class="table table-striped table-hover table-condensed">
     <caption>Latest 
