@@ -15,6 +15,24 @@ var app = angular.module('omniwallet', [
   $httpProvider.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded;charset=utf-8';
   $httpProvider.defaults.transformRequest = [TransformRequest];
 
+  $routeProvider.when('/assets/:page?', {
+      templateUrl: function(route) {
+        //new views added here
+        var availableViews = ['issue'];
+
+        var view;
+        var viewFound = availableViews.indexOf(route.page);
+        if (viewFound != -1)
+          view = '/partials/wallet_assets_' + route.page + '.html';
+        else
+          view = '/partials/explorer_assets.html';
+        
+        return view;
+      }
+    }).otherwise({
+      redirectTo:'/explorer/assets'
+    });
+
   $routeProvider.when('/wallet/:page?', {
       templateUrl: function(route) {
         //new views added here
