@@ -71,6 +71,7 @@ angular.module('omniwallet')
                       if (result.status == 200)
                         this.property_type = result.data[0].formatted_property_type;
                       this.name = result.data[0].propertyName + ' (' + this.symbol.match(/^SP([0-9]+)$/)[1] + ')';
+		      this.shortname = result.data[0].propertyName;
                     };
                     spReqs.push($http.get('/v1/property/' + spMatch[1] + '.json').then(updateFunction.bind(balances[b])));
                   }
@@ -134,12 +135,6 @@ angular.module('omniwallet')
   $rootScope.$on('APPRAISER_VALUE_CHANGED', function() {
     $scope.refresh();
   });
-
-  $scope.refreshInit = function() {
-    var appraiser = $injector.get('appraiser');
-    $scope.refresh();
-    appraiser.updateValues(function() { console.log("refreshed init") });
-  }
 
   $scope.refresh = function() {
 
