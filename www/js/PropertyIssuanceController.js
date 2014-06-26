@@ -6,7 +6,7 @@ function PropertyIssuanceController($scope, propertiesService){
   $scope.categories=[];
   $scope.subcategories=[];
   
-   $scope.setEcosystem = function(){
+  $scope.setEcosystem = function(){
     $scope.categories=[];
     $scope.subcategories=[];
     $scope.loadCategories();
@@ -24,6 +24,10 @@ function PropertyIssuanceController($scope, propertiesService){
   };
   
   $scope.setEcosystem();
+  
+  $scope.isDivisible=function(){
+    return $scope.propertyType == 2 || $scope.propertyType == 66 || $scope.propertyType == 130
+  };
   
   transactionGenerationController.validateTransactionData=function(){
     var dustValue = 5757;
@@ -61,7 +65,7 @@ function PropertyIssuanceController($scope, propertiesService){
     $modalScope.convertSatoshiToDisplayedValue=  $scope.convertSatoshiToDisplayedValue,
     $modalScope.getDisplayedAbbreviation=  $scope.getDisplayedAbbreviation,
     $modalScope.numberProperties=  $scope.numberProperties,
-    $modalScope.divisible=  $scope.propertyType == 1 || $scope.propertyType == 65 || $scope.propertyType == 129? 'No' : 'Yes',
+    $modalScope.divisible=  $scope.isDivisible() ? 'Yes' : 'No',
     $modalScope.propertyName= $scope.propertyName,
     $modalScope.propertyCategory= $scope.propertyCategory,
     $modalScope.propertySubcategory= $scope.propertySubcategory,
@@ -84,7 +88,7 @@ function PropertyIssuanceController($scope, propertiesService){
         property_name:$scope.propertyName, 
         property_url:$scope.propertyUrl, 
         property_data:$scope.propertyData || '\0', 
-        number_properties:$scope.numberProperties,
+        number_properties: $scope.isDivisible() ? +$scope.convertDisplayedValue($scope.numberProperties) : +$scope.numberProperties,
         transaction_from: $scope.selectedAddress
       }
     };

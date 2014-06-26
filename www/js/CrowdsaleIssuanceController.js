@@ -102,6 +102,10 @@ function CrowdsaleIssuanceController($scope, propertiesService){
   // Initialize the form
   $scope.setEcosystem();
   
+  $scope.isDivisible=function(){
+    return $scope.propertyType == 2 || $scope.propertyType == 66 || $scope.propertyType == 130
+  };
+  
   $scope.$watch(function(){ return selectedDesiredCurrencies.length;}, function(count){
     $scope.singleCurrency = count == 1;
   });
@@ -170,7 +174,7 @@ function CrowdsaleIssuanceController($scope, propertiesService){
           property_name:$scope.propertyName, 
           property_url:$scope.propertyUrl, 
           property_data:$scope.propertyData || '\0', 
-          number_properties:currency.numberOfTokens,
+          number_properties:$scope.isDivisible() ? +$scope.convertDisplayedValue(currency.numberOfTokens) : +currency.numberOfTokens,
           transaction_from: $scope.selectedAddress,
           currency_identifier_desired:currency.selectedCurrency.currencyId,
           deadline:$scope.deadline.getTime(),
@@ -188,7 +192,7 @@ function CrowdsaleIssuanceController($scope, propertiesService){
           property_name:'\0', 
           property_url:'\0', 
           property_data:'\0', 
-          number_properties:currency.numberOfTokens,
+          number_properties: $scope.isDivisible() ? +$scope.convertDisplayedValue(currency.numberOfTokens) : +currency.numberOfTokens,
           transaction_from: $scope.selectedAddress,
           currency_identifier_desired:currency.selectedCurrency.currencyId,
           deadline:0,
