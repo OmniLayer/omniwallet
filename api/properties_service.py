@@ -16,7 +16,7 @@ def categories():
     categories_file = data_dir_root + "/www/categories.json"
     with open(categories_file, 'r') as f:
         try:
-            categories = json.loads(f.read())[0]
+            categories = json.loads(f.read())
         except ValueError:
             print 'Error decoding JSON', categories_file.split('/')[-1][:-5]
     
@@ -39,7 +39,7 @@ def subcategories():
     categories_file = data_dir_root + "/www/categories.json"
     with open(categories_file, 'r') as f:
         try:
-            categories = json.loads(f.read())[0]
+            categories = json.loads(f.read())
         except ValueError:
             print 'Error decoding JSON', categories_file.split('/')[-1][:-5]
     
