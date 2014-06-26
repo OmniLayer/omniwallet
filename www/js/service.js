@@ -11,10 +11,20 @@ angular.module('omniwallet').factory('walletTransactionService',['$http',functio
     },
     
     getUnsignedTransaction : function(type, data){
-      var url = '/v1/transaction/getunsigned/'+type;
-      
-      var promise = $http.post(url, data);
-      return promise; 
+      if (type == 0 && data.currency_identifier == 0){
+        btc_send_data = {
+          'from_address':data.transaction_from, 'to_address':data.transaction_to, 'amount':data.amount_to_transfer, 'currency':0, 'fee':data.fee
+        };
+        var url = '/v1/transaction/send/';
+        
+        var promise = $http.post(url, btc_send_data);
+        return promise;
+      }else{
+        var url = '/v1/transaction/getunsigned/'+type;
+        
+        var promise = $http.post(url, data);
+        return promise;
+      } 
     },
     
     validAddress:function(addr) {
@@ -235,6 +245,7 @@ angular.module('omniwallet').factory('userService', ['$rootScope', '$http', '$in
                   if (balanceItem.symbol.substring(0, 2) == "SP") {
                     var propertyID = balanceItem.symbol.substring(2);
                     currency = {
+                        id: propertyID,
                         symbol: balanceItem.symbol,
                         divisible: balanceItem.divisible,
                         tradableAddresses: balanceItem.value > 0 ? [service.data.wallet.addresses[i].address] : [],
@@ -251,6 +262,7 @@ angular.module('omniwallet').factory('userService', ['$rootScope', '$http', '$in
                     });
                   } else {
                     currency = {
+                      id: balanceItem.symbol == "BTC" ? 0 : balanceItem.symbol == "MSC" ? 1 :balanceItem.symbol == "TMSC" ? 2 : null,
                       name: balanceItem.symbol,
                       symbol: balanceItem.symbol,
                       divisible: balanceItem.divisible,

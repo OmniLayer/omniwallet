@@ -4,13 +4,14 @@ function TransactionGenerationController($scope, $modal, userService, walletTran
     var addressData = userService.getAddress(from);
     var privKey = new Bitcoin.ECKey.decodeEncryptedFormat(addressData.privkey, addressData.address); // Using address as temporary password
     var pubKey = privKey.getPubKeyHex();
+    data['pubkey'] = pubKey;
 
     $scope.TxPromise = walletTransactionService.getUnsignedTransaction(txType,data);
     $scope.TxPromise.then(function(successData) {
       var successData = successData.data;
       if (successData.status != 200) {
         $modalScope.waiting = false;
-        $modalScope.issueError = true;
+        $modalScope.transactionError = true;
         $modalScope.error = 'Error preparing Property Issuance transaction: ' + successData.data;
       } else {
         var unsignedTransaction = successData.unsignedhex;
@@ -36,16 +37,16 @@ function TransactionGenerationController($scope, $modal, userService, walletTran
             var successData = successData.data;
             if (successData.pushed.match(/submitted|success/gi) != null) {
               $modalScope.waiting = false;
-              $modalScope.issueSuccess = true;
+              $modalScope.transactionSuccess = true;
               $modalScope.url = 'http://blockchain.info/address/' + from + '?sort=0';
             } else {
               $modalScope.waiting = false;
-              $modalScope.issueError = true;
+              $modalScope.transactionError = true;
               $modalScope.error = successData.pushed; //Unspecified error, show user
             }
           }, function(errorData) {
             $modalScope.waiting = false;
-            $modalScope.issueError = true;
+            $modalScope.transactionError = true;
             if (errorData.message)
               $modalScope.error = 'Server error: ' + errorData.message;
             else 
