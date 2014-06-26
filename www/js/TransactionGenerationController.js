@@ -12,7 +12,7 @@ function TransactionGenerationController($scope, $modal, userService, walletTran
       if (successData.status != 200) {
         $modalScope.waiting = false;
         $modalScope.transactionError = true;
-        $modalScope.error = 'Error preparing Property Issuance transaction: ' + successData.data;
+        $modalScope.error = 'Error preparing Property Issuance transaction: ' + successData;
       } else {
         var unsignedTransaction = successData.unsignedhex;
 

@@ -13,7 +13,7 @@ angular.module('omniwallet').factory('walletTransactionService',['$http',functio
     getUnsignedTransaction : function(type, data){
       if (type == 0 && data.currency_identifier == 0){
         btc_send_data = {
-          'from_address':data.transaction_from, 'to_address':data.transaction_to, 'amount':data.amount_to_transfer, 'currency':0, 'fee':data.fee
+          'from_address':data.transaction_from, 'to_address':data.transaction_to, 'amount':data.amount_to_transfer, 'currency':'BTC', 'fee':data.fee
         };
         var url = '/v1/transaction/send/';
         
