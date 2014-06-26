@@ -16,6 +16,10 @@ function HomeCtrl($scope, $templateCache, $injector, $location, $http, $q) {
     $scope.balanceAddress = "";
     $scope.hasBalances = false;
     $scope.total = 0;
+    $scope.validate = function(address) {
+     //console.log('checking '+address);
+      return Bitcoin.Address.validate(address);
+    };
     $scope.checkBalance = function() {
       var balances = {};
       var appraiser = $injector.get('appraiser');
@@ -176,6 +180,13 @@ function NavigationController($scope, $http, $modal, userService) {
     });
   };
 
+  $scope.openNewUUIDmodal = function() {
+    $modal.open({
+      templateUrl: '/partials/wallet_new_modal.html',
+      controller: WalletController
+    });
+  };
+
   $scope.logout = function() {
     window.location.reload(false);
   };
@@ -199,6 +210,12 @@ function ExplorerController($scope, $http, hashExplorer) {
         if (currency == data[i].currency) {
           var file = '/v1/transaction/general/' + currency + '_0001.json';
           $http.get(file, {}).success(function(data, status, headers, config) {
+
+            angular.forEach(data, function(transaction, index) {
+              //DEBUG console.log(new Date(Number(transaction.tx_time)))
+              data[index].tx_hash_concat = transaction.tx_hash.substring(0, 22) + '...'
+            });
+
             $scope.transactions = data;
           });
         }
@@ -227,7 +244,7 @@ function ExplorerInspectorController($scope, $location, $http, hashExplorer) {
     });
   }
 }
-function SidecarController($scope, $http, userService) {
+function SidecarController($scope, $http, $modal, $location, userService, balanceService) {
   $scope.values = {};
   $scope.setView = function(viewName) {
     $scope.view = $scope.sidecarTemplates[viewName];
@@ -243,12 +260,53 @@ function SidecarController($scope, $http, userService) {
 
   $scope.hasAddresses = userService.data.loggedIn && userService.getAllAddresses().length != 0 ? true : false;
   $scope.hasAddressesWithPrivkey = userService.data.loggedIn && getAddressesWithPrivkey().length != 0 ? true : false;
+  $scope.hasTradableCoins = false;
+  $scope.hasBTC = false;
+  if (userService.data.loggedIn) checkBalance(getAddressesWithPrivkey());
+  
+  $scope.checkSendingEnabled = function($event) {
+    var error = "Cannot send anything because ";
+    if(!$scope.hasAddressesWithPrivkey){
+      $event.preventDefault();
+      $event.stopPropagation();
+      error += "the wallet has no addresses with private keys (no address to send from)";
+    } else {
+      if(!$scope.hasTradableCoins){
+        $event.preventDefault();
+        $event.stopPropagation();
+        error += "the wallet has no coins in the addresses that have private keys (nothing to send)";
+      } else {
+        if(!$scope.hasBTC){
+          $event.preventDefault();
+          $event.stopPropagation();
+          error += "wallet has no BTC in addresses that have private keys (no way to pay tx fees)";
+        } 
+      }
+    }
+    
+    if(error.length > 33){
+      $modal.open({
+        templateUrl: "/partials/popup_error.html",
+        controller: function($scope, error){
+          $scope.error = error;
+        },
+        resolve:{
+          error:function(){
+            return error;
+          }
+        }
+      });
+    } else {
+      $location.path("/wallet/send");
+    }
+  };
 
   $scope.$watch(function() {
     return userService.getAllAddresses()
   }, function(result) {
     $scope.hasAddresses = userService.data.loggedIn && result.length != 0 ? true : false;
     $scope.hasAddressesWithPrivkey = userService.data.loggedIn && getAddressesWithPrivkey().length != 0 ? true : false;
+    if (userService.data.loggedIn) checkBalance(getAddressesWithPrivkey());
   }, true);
 
   function getAddressesWithPrivkey() {
@@ -262,5 +320,22 @@ function SidecarController($scope, $http, userService) {
     return addresses;
   }
 
+  function checkBalance(addresses){
+    $scope.hasTradableCoins = false;
+    $scope.hasBTC = false;
+    if(addresses instanceof Array){
+      addresses.forEach(function(address){
+        balanceService.balance(address).then(function(result){
+          var balances = result.data.balance;
+          balances.forEach(function(balance){
+            if(balance.value > 0)
+              $scope.hasTradableCoins = true;
+            if(balance.symbol == "BTC" && balance.value > 0)
+              $scope.hasBTC = true;
+          });
+        });
+      });
+    }
+  }
 }
 

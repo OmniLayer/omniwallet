@@ -1,12 +1,10 @@
 <div tooltip=""></div> <!-- initalize ui.bootstrap.tooltip (bad interaction with ng-route) -->
-
 <div class="sidecar col-xs-2" ng-controller="SidecarController" ng-init=setView('wallet')>
     <div ng-include="templates['sidecar']"></div>
 </div>
-
 <div class="col-xs-10" ng-controller="WalletController">
-  <div class="panel panel-default">
-    <h3 class="text-center panel-body">Wallet Overview</h3>
+  <div class="panel-default">
+    <div class="text-left panel-body om-title" >Overview</div>
   </div>
   <div ng-if="addrList.length == 0">
     <div class="alert alert-info alert-dismissable">
@@ -19,13 +17,13 @@
     </div>
   </div>
 
-  <div class="row" >
+  <div class="row" ng-controller="AssetTypesController">
 
-    <h3 ng-controller="AssetTypesController" ng-init="isLoading=true" ng-show="isLoading" class="text-center">Updating Overview...<img src="/assets/img/34-1.gif"></h3>
-    <div ng-controller="AssetTypesController" ng-init="refresh()" show-asset-types template="{{template}}">
+    <h3  ng-init="isLoading=true" ng-show="isLoading" class="text-center">Updating Overview...<img src="/assets/img/34-1.gif"></h3>
+    <div ng-hide="isLoading"><br /><br /><br /></div>   
+    <div ng-init="refresh()" show-asset-types template="{{template}}">
 
 
     </div>
   </div>
-
-</div>
+ </div>

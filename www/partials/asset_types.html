@@ -1,5 +1,6 @@
 <div class="row" > 
    <div ng-if="balances.balances" class="col-md-5 col-sm-12 text-center">Portfolio Composition 
+<!--   <div ng-show="balances.balances['BTC']='BTC Value UnavailableBTC Value UnavailableBTC Value Unavailable'"><br /> Updating Assets Value ...<br /><small>(This may take a few minutes)</small><br /><img src="/assets/img/34-1.gif"></div> -->
     <svg id="all-assets-graph"></svg>
   </div>
   <div class="col-md-7 col-sm-12">
@@ -17,12 +18,12 @@
           <row class="col-xs-12" ng-click="openCurrencyDetail( currency.symbol )">
             <div class="container-fluid">
               <div class="asset-item col-xs-4 text-left">
-                <span>{{currency.name ? currency.name : currency.symbol}}</span>
+                <span tooltip={{currency.symbol}}>{{currency.shortname ? currency.shortname : (currency.name ? currency.name : currency.symbol) }}</span>
               </div>
               <div class="asset-item col-xs-5 text-right">
                 <span ng-if="currency.property_type != undefined && currency.property_type == 1" class="currency">{{ currency.balance }} </span>
                 <span ng-if="currency.property_type != undefined && currency.property_type == 2" class="currency">{{ currency.balance.toFixed(8) }}</span>
-                <span ng-if="currency.property_type == undefined" class="currency">{{ currency.balance }} {{ currency.symbol }}</span>
+                <span ng-if="currency.property_type == undefined" class="currency">{{ currency.balance.toFixed(8) }} {{ currency.symbol }}</span>
               </div>
               <div class="asset-item col-xs-3 text-right">
                 <span>{{currency.value | currency}}</span>

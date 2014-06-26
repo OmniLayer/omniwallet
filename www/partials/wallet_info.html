@@ -1,9 +1,6 @@
-<div class="row alert alert-info alert-dismissable">
-  <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-  This is the trading page, where you can start submitting orders or send money to others.
-</div>
-
-  <h1 class="row" style="color:lightgray"> Trade </h1>
+  <div class="panel-default">
+    <div class="text-left panel-body om-title">Trade</div>
+  </div>
 
   <ul class="row nav nav-pills" ng-init="setActiveCurrencyPair()">
       <li ng-repeat="currencyPair in currPairs" ng-class="isActiveCurrencyPair(currencyPair)">
@@ -14,7 +11,7 @@
 
   <div class="row" ng-show="onTradeView">
     <h3> <strong> {{ currAcronyms[ activeCurrencyPair[0] ] }} / {{ currAcronyms[ activeCurrencyPair[1] ] }} </strong> </h3> 
-      <button type="button" class="btn btn-primary btn-lg">
+    <!--  <button type="button" class="btn btn-primary btn-lg">
         <span class="glyphicon glyphicon-signal"></span>
       </button>
       &nbsp;
@@ -35,14 +32,14 @@
               <li><a href="#">Dropdown link</a></li>
             </ul>
           </div>
-        </div>
+        </div>  -->
   </div>
   <div class="row" ng-controller="WalletTradeOverviewController" ng-init="global.getData()">
     <div class="row" >
       <div class="col-xs-9">
         <div class="row">
-          <h3 class="col-xs-7"> <strong> Buy {{ currAcronyms[ activeCurrencyPair[1] ] }} </strong>
-          <!--  <select ng-model="currPair" ng-options="pairObject as pairObject for pairObject in pairs"
+          <!-- <h3 class="col-xs-7"> <strong> Buy {{ currAcronyms[ activeCurrencyPair[1] ] }} </strong>
+              <select ng-model="currPair" ng-options="pairObject as pairObject for pairObject in pairs"
               ng-change="getData(selectedAddress)">
             <option value="">-- choose currency pair --</option>
             </select> 
@@ -53,7 +50,7 @@
             </select> -->
           </h3>
       </div>
-        <h1 class="col-xs-9"> |depth chart| </h1> 
+        <h1 class="col-xs-9"> Active Offers </h1> 
       </div>
       <div class="col-xs-3"> 
         <h3> <strong> Sell {{ currAcronyms[ activeCurrencyPair[1] ] }} </strong> </h3>
@@ -75,27 +72,27 @@
         <option value="604800"> 1 week </option>
         <option value="2419200"> 1 month </option>
         <option value="7257600"> 3 months </option>
+        <option value={{AssignedDate.now()-1394834400000}}> All </option>
       </select> <!-- <a href=""> filter </a> -->
     </div>
-
     <h3 ng-show="orderbook.length == 0" class="text-center">Loading orders...<img src="/assets/img/34-1.gif"></h3>
+    <br /><small><h4 ng-hide="orderbook.length == 0"> Found {{orderbook.length}} transacations</h4></small>
     <table ng-hide="orderbook.length == 0" class="table table-striped table-hover table-condensed">
       <thead>
           <tr>
             <th>Transaction hash</th>
             <th>Price ({{ activeCurrencyPair[0] + '/' + activeCurrencyPair[1] }}) </th>
             <th>Amount</th>
-            <th>Total Cost</th>
-            <th>Required Fee</th>
-            <th>Block Time</th>
-            <th> Buy </th>
+            <th>Cost</th>
+            <th>Buyer Fee</th>
+            <th>Payment Window <br /> (Blocks)</th>
           </tr>
       </thead>
       <tbody>
       </tbody>
 
       <tr ng-repeat="transaction in orderbook">
-        <td ng-click="setHashExplorer(transaction)"> <a href="/explorer/inspector?view={{transaction.tx_hash}}">{{transaction.tx_hash_concat}}</a></td>
+        <td ng-click="setHashExplorer(transaction)"><a href="/explorer/inspector?view={{transaction.tx_hash}}">{{transaction.tx_hash_concat}}</a></td>
         <td>{{transaction.formatted_price_per_coin}}</td> 
         <td>{{transaction.formatted_amount}}</td> 
         <td>{{transaction.formatted_bitcoin_amount_desired}}</td> 

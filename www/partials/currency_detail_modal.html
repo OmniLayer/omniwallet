@@ -13,7 +13,8 @@
 		</thead>
 		<tbody>
 		  <tr ng-repeat="item in balances">
-		    <td>{{item.address.address}}</td>
+                    <td ng-hide={{item.address.privkey}}>{{item.address.address}}</td>
+                    <td ng-show={{item.address.privkey}}>{{item.address.address}}<span class="glyphicon glyphicon-lock" tooltip="Your Wallet has the Private key for this address"></span></td>
 		    <td class="currency">{{item.balance}}</td>
 		    <td class="currency">{{ item.value | currency}}</td>
 		  </tr>

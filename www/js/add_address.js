@@ -209,6 +209,7 @@ angular.module('omniwallet')
     $scope.items = enumerated_addresses.getData().then(function(result) {
       if (result.addresses.length == 0) {
         createBTCAddress();
+	$scope.newAddress=true;
       }
       $scope.addresses = result.addresses;
     });

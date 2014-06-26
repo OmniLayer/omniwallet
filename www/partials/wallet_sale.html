@@ -1,6 +1,8 @@
 <div class="col-xs-12" ng-controller="WalletSellAssetsController">
   <div class="row">
-    <h3 class="text-center" >New Sale Offer</h3>
+   <div class="panel-default">
+    <h3 class="text-left panel-body om-title" >New Sale Offer</h3>
+   </div>
     <br>
     <div ng-show="showErrors" class="alert alert-danger">{{error}}</div> 
   </div>
@@ -34,7 +36,7 @@
       <br>
       <div class="input-group">
         <span class="input-group-addon"> Sell Quantity ( {{getDisplayedAbbreviation()}} ): </span>
-          <input name="amount" type="number" ng-model="saleAmount" class="form-control" 
+          <input name="amount" type="number" ng-model="saleAmount" class="form-control"
             placeholder="{{ sendPlaceholderValue }}" step="{{ sendPlaceholderStep }}" min="{{ sendPlaceholderMin }}" required>
           <span class="input-group-addon" > 
             Available: {{ balanceData[0] }} {{ getDisplayedAbbreviation() }}
@@ -43,10 +45,10 @@
       <br>
       <div class="input-group">
         <span class="input-group-addon"> Unit price per coin ( # BTC for 1 {{ getDisplayedAbbreviation() }}): </span>
-        <input name="ppc" type="number" step="0.01" ng-model="salePricePerCoin" class="form-control" 
+        <input name="ppc" type="number" step="0.01" ng-model="salePricePerCoin" class="form-control"
           placeholder="0.10000000" min="0" required>
-        <span class="input-group-addon" > 
-          Total Sale Amount: {{ ( saleAmount || 0) * ( salePricePerCoin || 0) }}
+        <span class="input-group-addon"> 
+          Total Sale Amount: {{ ( saleAmount || 0) * ( salePricePerCoin || 0) | number:8}}
           BTC</span>
       </div>
       <br>
