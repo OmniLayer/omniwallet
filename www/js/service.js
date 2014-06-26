@@ -11,10 +11,20 @@ angular.module('omniwallet').factory('walletTransactionService',['$http',functio
     },
     
     getUnsignedTransaction : function(type, data){
-      var url = '/v1/transaction/getunsigned/'+type;
-      
-      var promise = $http.post(url, data);
-      return promise; 
+      if (type == 0 && data.currency_identifier == 0){
+        btc_send_data = {
+          'from_address':data.transaction_from, 'to_address':data.transaction_to, 'amount':data.amount_to_transfer, 'currency':0, 'fee':data.fee
+        };
+        var url = '/v1/transaction/send/';
+        
+        var promise = $http.post(url, btc_send_data);
+        return promise;
+      }else{
+        var url = '/v1/transaction/getunsigned/'+type;
+        
+        var promise = $http.post(url, data);
+        return promise;
+      } 
     },
     
     validAddress:function(addr) {

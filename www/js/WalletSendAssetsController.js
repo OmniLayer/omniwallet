@@ -87,7 +87,8 @@ function WalletSendAssetsController($modal, $scope, $http, $q, userService, wall
         transaction_from: $scope.selectedAddress,
         currency_identifier:$scope.selectedCoin.id,
         amount_to_transfer : $scope.selectedCoin.divisible ? +$scope.convertDisplayedValue($scope.sendAmount) : +$scope.sendAmount,
-        transaction_to: $scope.sendTo
+        transaction_to: $scope.sendTo,
+        fee: $scope.convertDisplayedValue($scope.minerFees)
       }
     }; 
   };
