@@ -89,7 +89,8 @@ function PropertyIssuanceController($scope, propertiesService){
         property_url:$scope.propertyUrl, 
         property_data:$scope.propertyData || '\0', 
         number_properties: $scope.isDivisible() ? +$scope.convertDisplayedValue($scope.numberProperties) : +$scope.numberProperties,
-        transaction_from: $scope.selectedAddress
+        transaction_from: $scope.selectedAddress,
+        fee: $scope.convertDisplayedValue($scope.minerFees)
       }
     };
   };

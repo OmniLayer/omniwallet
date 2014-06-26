@@ -187,7 +187,8 @@ function CrowdsaleIssuanceController($scope, propertiesService){
           currency_identifier_desired:currency.selectedCurrency.currencyId,
           deadline:$scope.deadline.getTime(),
           earlybird_bonus:$scope.earlyBirdBonus,
-          percentage_for_issuer:$scope.percentageForIssuer
+          percentage_for_issuer:$scope.percentageForIssuer,
+          fee: $scope.convertDisplayedValue($scope.minerFees)
         });
       } else {
         transactionData.push({
@@ -205,7 +206,8 @@ function CrowdsaleIssuanceController($scope, propertiesService){
           currency_identifier_desired:currency.selectedCurrency.currencyId,
           deadline:0,
           earlybird_bonus:0,
-          percentage_for_issuer:0
+          percentage_for_issuer:0,
+          fee: $scope.convertDisplayedValue($scope.minerFees)
         });
       }
     });
