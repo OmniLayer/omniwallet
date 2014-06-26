@@ -13,6 +13,9 @@ a {
 .navbar-nav > li {
   padding-top: 5%;
 }
+.footer .navbar-nav > li {
+  padding-top: 0;
+}
 
 .currency-name, .currency-total, .currency-value {
 	font-weight: bold;
