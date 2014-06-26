@@ -1,0 +1,43 @@
+<div class="modal-body">
+    <h3 class="text-center"> Confirm Crowdsale Creation </h3>
+      <h4>You'll create a crowdsale with this data:</h4>
+      <ul>
+        <li>Name: {{propertyName}}</li>
+        <li>Description: {{propertyData}}</li>
+        <li>Divisible: {{divisible}}</li>
+        <li>Category: {{propertyCategory}}</li>
+        <li>Subcategory: {{propertySubcategory}}</li>
+        <li>Url: {{propertyUrl}}</li>
+        <li>Early bird initial bonus: {{earlyBirdBonus}}%</li>
+        <li>Percentage for issuer: {{percentageForIssuer}}%</li>
+        <li>Deadline: {{deadline}}</li>
+        <li>Issuer address: {{selectedAddress}}</li>
+        <li>Issuance rates: 
+          <ul>
+            <li ng-repeat="currency in currenciesDesired">
+              {{currency.numberOfTokens}} tokens per {{currency.selectedCurrency.propertyName}} ({{currency.selectedCurrency.currencyId}}) invested
+            </li>
+          </ul>
+        </li>
+      </ul>
+  <p><br>
+  If the above is correct, please press Start the Crowdsale.
+  </p>
+<div class="modal-footer">
+    <div class="row">
+    <button ng-disabled="clicked" class="btn btn-primary" ng-click="ok()">Start the Crowdsale</button>
+    <button ng-disabled="wating" class="btn btn-warning" ng-click="cancel()">Cancel</button>
+    <img class="" src="/assets/img/34-1.gif" ng-show="waiting">
+    </div>
+      <br>
+    <div class="row">
+      <div ng-show="transactionSuccess">
+        <h4 class="pull-right col-xs-12" style="color:green"> Crowdsale started successfully, 
+        check your transaction <a target="_blank" href="{{url}}">here.</a></h4>
+      </div>
+      <div ng-show="transactionError">
+        <h4 class="col-xs-12" style="color:red;"> Crowdsale could not be started: 
+         {{error}} </h4>
+      </div>
+    </div>
+</div>
