@@ -1,8 +1,6 @@
-<div >
-  <br>
-<br>
-  <div class="panel panel-default">
-    <h3 class="text-center panel-body"> My Addresses </h3>
+<div class="om-container">
+  <div class="panel-default">
+    <div class="text-left panel-body om-title">Addresses</div>
   </div>
   <div ng-if="balances.invalidAddresses.length" class="alert alert-danger">
      <h3>Invalid Addresses in Your Wallet</h3>
@@ -41,19 +39,23 @@
         </thead>
         <tbody>
           <tr ng-repeat="item in currency.addresses">
-            <td>{{item.address}}</td>
+            <td ng-show={{item.private}}>{{item.address}} <span class="glyphicon glyphicon-lock" tooltip="Your Wallet has the Private key for this address"></span></td>
+            <td ng-hide={{item.private}}>{{item.address}}</td>
             <td ng-if="currency.property_type != undefined && currency.property_type == 1" class="currency">{{ item.balance }} </td>
             <td ng-if="currency.property_type != undefined && currency.property_type == 2" class="currency">{{ item.balance.toFixed(8) }}</td>
             <td ng-if="currency.property_type == undefined" class="currency">{{ item.balance}} {{ currency.symbol }}</td>
             <td class="currency">{{item.value | currency}}</td>
             <td>
-                  <button class="btn btn-default" ng-click="openDeleteConfirmForm( item.address )" title="Remove from Wallet">X</button>
+		<div class="dropdown">
+		<a data-toggle="dropdown" href="#" class="btn btn-info btn-xs">Options</a>
+		  <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu9">
+                    <li role="presentation"><a role="menuitem" tabindex="-1" href="#" ng-click="openDeleteConfirmForm( item.address )" >Remove from Wallet</a></li>
+		  </ul>
               </div>
             </td>
           </tr>
         </tbody>
       </table>
     </div>
-  </div> 
-
+  </div>
 </div>

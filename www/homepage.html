@@ -1,8 +1,7 @@
-
-    <div class="alert alert-info alert-dismissable">
-    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-    <strong>Jun 5 2014 - OpenSSL Update:</strong> Following the most recent <a href="https://www.openssl.org/news/secadv_20140605.txt">OpenSSL Security Advisory</a> Omniwallet has been updated accordingly. <br />We recommend all our users make sure their systems are up to date.  
-    </div>
+  <div class="alert alert-warning alert-dismissable hide">
+   <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+   <strong>Maintenance Mode (Enter Date):</strong> Pardon the interuption. Omniwallet is undergoing some changes today. The <b>(Page/Feature)</b>  may be periodically unavailable while we round up the monkeys and put them back to work. 
+  </div>
 
 <row>
   <div class="col-xs-12">
@@ -11,15 +10,15 @@
       <div class="form-group">
         <label for="address" class="col-xs-2 control-label">Address:</label>
         <div class="col-xs-8">
-          <input type="text" class="form-control" name="address" id="address" placeholder="Address" ng-model="balanceAddress">
+          <input type="text" class="form-control" name="address" id="address" placeholder="Address" ng-model="balanceAddress" ng-change="showResult=false">
           <span style="color:red" ng-show="addressentry.address.$dirty && !validate(balanceAddress)">Must be a valid Bitcoin address</span>
         </div>
         <div class="col-xs-2">
-          <button type="submit" class="btn btn-default" ng-click="checkBalance()" ng-disabled="validate(balanceAddress) == false">Check!</button>
+          <button type="submit" class="btn btn-default" ng-click="checkBalance(); showResult=true" ng-disabled="validate(balanceAddress) == false">Check!</button>
         </div>
       </div>
     </form>
-    <div ng-if="hasBalances">
+    <div ng-if="hasBalances && showResult">
       <div class="asset-table">
         <div ng-repeat="currency in balances">
           <row class="col-xs-offset-1 col-xs-10">
@@ -113,3 +112,4 @@
 		<p>Contributions are eligible for the <a href="http://mastercointalk.org/index.php?topic=121.0">bounties we have in place</a>&nbsp;- so please be sure to submit any contribution you make to the bounty thread.</p>
 	</div>
 </row>
+
