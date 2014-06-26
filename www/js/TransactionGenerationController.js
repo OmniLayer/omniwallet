@@ -18,7 +18,7 @@ function TransactionGenerationController($scope, $modal, userService, walletTran
         if (successData.status != 200 && successData.status != "OK") { /* Backwards compatibility for mastercoin-tools send API */
           $modalScope.waiting = false;
           $modalScope.transactionError = true;
-          $modalScope.error = 'Error preparing Property Issuance transaction: ' + successData.error; /* Backwards compatibility for mastercoin-tools send API */
+          $modalScope.error = 'Error preparing transaction: ' + successData.error; /* Backwards compatibility for mastercoin-tools send API */
         } else {
         var unsignedTransaction = successData.unsignedhex || successData.transaction; /* Backwards compatibility for mastercoin-tools send API */
 
