@@ -22,7 +22,11 @@ function CrowdsaleIssuanceController($scope, propertiesService){
   $scope.setEcosystem = function(){
     availableDesiredCurrencies=$scope.ecosystem == 1 ? [{currencyId:1,propertyName:"Mastercoin"},{currencyId:0,propertyName:"Bitcoin"}]:[{currencyId:2,propertyName:"Test Mastercoin"}];
     propertiesService.list($scope.ecosystem).then(function(result){
-      availableDesiredCurrencies = availableDesiredCurrencies.concat(result.data.properties);
+      availableDesiredCurrencies = availableDesiredCurrencies.concat(result.data.properties).sort(function(a, b) {
+          var currencyA = a.propertyName.toUpperCase();
+          var currencyB = b.propertyName.toUpperCase();
+          return (currencyA < currencyB) ? -1 : (currencyA > currencyB) ? 1 : 0;
+      });
       var availableTokens = availableDesiredCurrencies.filter(function(currency){
         return selectedDesiredCurrencies.indexOf(currency) == -1;
       });
@@ -36,12 +40,12 @@ function CrowdsaleIssuanceController($scope, propertiesService){
   
   $scope.loadCategories=function(){
     propertiesService.loadCategories($scope.ecosystem).then(function(result){  
-      $scope.categories=result.data.categories;
+      $scope.categories=result.data.categories.sort();
     });
   };
   $scope.loadSubcategories=function(category){
     propertiesService.loadSubcategories($scope.ecosystem, category).then(function(result){  
-      $scope.subcategories=result.data.subcategories;
+      $scope.subcategories=result.data.subcategories.sort();
     });
   };
   
@@ -72,8 +76,10 @@ function CrowdsaleIssuanceController($scope, propertiesService){
         if(currency.availableTokens.indexOf(currencyDesired.previousCurrency) == -1)
           currency.availableTokens.push(currencyDesired.previousCurrency);
         currency.availableTokens.splice(currency.availableTokens.indexOf(currencyDesired.selectedCurrency),1);
-        currency.availableTokens.sort(function(a,b){
-          return a.propertyName;
+        currency.availableTokens.sort(function(a, b) {
+            var currencyA = a.propertyName.toUpperCase();
+            var currencyB = b.propertyName.toUpperCase();
+            return (currencyA < currencyB) ? -1 : (currencyA > currencyB) ? 1 : 0;
         });
       };
     });
@@ -88,8 +94,10 @@ function CrowdsaleIssuanceController($scope, propertiesService){
     $scope.currenciesDesired.splice($scope.currenciesDesired.indexOf(currencyDesired),1);
     $scope.currenciesDesired.forEach(function(currency){
         currency.availableTokens.push(currencyDesired.selectedCurrency);
-        currency.availableTokens.sort(function(a,b){
-          return a.propertyName;
+        currency.availableTokens.sort(function(a, b) {
+            var currencyA = a.propertyName.toUpperCase();
+            var currencyB = b.propertyName.toUpperCase();
+            return (currencyA < currencyB) ? -1 : (currencyA > currencyB) ? 1 : 0;
         });
     });
     $scope.singleCurrency=selectedDesiredCurrencies.length == 1;

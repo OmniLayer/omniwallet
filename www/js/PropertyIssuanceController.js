@@ -14,12 +14,12 @@ function PropertyIssuanceController($scope, propertiesService){
   
   $scope.loadCategories=function(){
     propertiesService.loadCategories($scope.ecosystem).then(function(result){  
-      $scope.categories=result.data.categories;
+      $scope.categories=result.data.categories.sort();
     });
   };
   $scope.loadSubcategories=function(category){
     propertiesService.loadSubcategories($scope.ecosystem, category).then(function(result){  
-      $scope.subcategories=result.data.subcategories;
+      $scope.subcategories=result.data.subcategories.sort();
     });
   };
   
