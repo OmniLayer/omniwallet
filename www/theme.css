@@ -56,6 +56,9 @@ a {
 .navbar-nav > li {
   padding-top: 5%;
 }
+.footer .navbar-nav > li {
+  padding-top: 0;
+}
 
 input[type=number]::-webkit-inner-spin-button,
 input[type=number]::-webkit-outer-spin-button {
@@ -140,6 +143,25 @@ form.form-search:before {
     width:48%;
     height:320px;
 }
+/* Social icons (source: http://azmind.com/2012/11/06/social-icons-sprites-35-ready-to-use-icons-psd-png-html-css/) */
+.icons a {
+    display: inline-block;
+    width: 24px;
+    height: 24px;
+    margin: 10px;
+    vertical-align: middle;
+    -o-transition: all .3s;
+    -moz-transition: all .3s;
+    -webkit-transition: all .3s;
+    -ms-transition: all .3s;
+}
+ 
+.icons a.twitter { background: url(/assets/img/social-icons/twitter.png) left top no-repeat; }
+.icons a.reddit { background: url(/assets/img/social-icons/reddit.png) left top no-repeat; }
+.icons a.facebook { background: url(/assets/img/social-icons/facebook.png) left top no-repeat; }
+
+.icons a:hover { background-position: left -34px; }
+
 /* Social icons (source: http://azmind.com/2012/11/06/social-icons-sprites-35-ready-to-use-icons-psd-png-html-css/) */
 .icons a {
     display: inline-block;
