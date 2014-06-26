@@ -401,8 +401,10 @@ def build_transaction(miner_fee_satoshis, pubkey,final_packets, total_packets, t
         for output in prev_tx.vout:
             if output['scriptPubKey']['reqSigs'] == 1 and output['scriptPubKey']['type'] != 'multisig':
                 for address in output['scriptPubKey']['addresses']:
-                    if address == from_address:
+                    if address == from_address and int(output['n']) == int(unspent[1]):
                         validnextinputs.append({ "txid": prev_tx.txid, "vout": output['n']})
+                        break
+
 
     validnextoutputs = { "1EXoDusjGwvnjZUyKkxZ4UHEf77z6A5S4P": 0.00005757 }
     if to_address != None:
@@ -484,7 +486,7 @@ def build_transaction(miner_fee_satoshis, pubkey,final_packets, total_packets, t
     inputsdata = []
     for _input in json_tx['vin']:
         prior_input_txhash = _input['txid'].upper()  
-        prior_input_index = str(_input['vout']).rjust(2,"0").ljust(8,"0")
+        prior_input_index = str(hex(_input['vout'])[2:]).rjust(2,"0").ljust(8,"0")
         input_raw_signature = _input['scriptSig']['hex']
         
         prior_txhash_bytes =  [prior_input_txhash[ start: start + 2 ] for start in range(0, len(prior_input_txhash), 2)][::-1]
