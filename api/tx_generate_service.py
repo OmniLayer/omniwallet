@@ -135,7 +135,7 @@ def prepare_txbytes(txdata):
     tx_ver_bytes = hex(txdata[0])[2:].rstrip('L').rjust(4,"0") # 2 bytes
     tx_type_bytes = hex(txdata[1])[2:].rstrip('L').rjust(4,"0")   # 2 bytes
     if txdata[1] == 50 or txdata[1] == 51:
-        eco_bytes = hex(txdata[2])[2:].rstrip('L').rjust(2,"0")              # 1 byte
+        eco_bytes = hex(v << 1 if v == 1 else v)[2:].rstrip('L').rjust(2,"0")              # 1 byte
         prop_type_bytes = hex(txdata[3])[2:].rstrip('L').rjust(4,"0")    # 2 bytes
         prev_prop_id_bytes = hex(txdata[4])[2:].rstrip('L').rjust(8,"0")  # 4 bytes
         prop_cat_bytes = ''                                      # var bytes
