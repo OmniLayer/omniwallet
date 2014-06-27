@@ -337,7 +337,8 @@ function WalletTradePendingController($scope, $http, $q, userService, hashExplor
   //$scope.selectedAddress = userService.getAllAddresses()[ userService.getAllAddresses().length-1 ].address;
   $scope.currencyUnit = 'stom'
   $scope.pendingThinking = true
-  $scope.hasAddressesWithPrivkey = getAddressesWithPrivkey()
+  $scope.hasAddressesWithPrivkey = getAddressesWithPrivkey();
+  $scope.selectedAddress = $scope.hasAddressesWithPrivkey[0];
   userService.getCurrencies().filter(function(currency){
        return currency.tradable;
   }).forEach(function(coin){
@@ -346,7 +347,6 @@ function WalletTradePendingController($scope, $http, $q, userService, hashExplor
     }
   });
   
-  $scope.selectedAddress = $scope.hasAddressesWithPrivkey[0];
   $scope.selectedTimeframe = "604800"
   $scope.filterData = function(time) {
     var orderbook = JSON.parse($scope.orderBookStorage);

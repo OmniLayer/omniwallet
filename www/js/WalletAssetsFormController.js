@@ -30,6 +30,9 @@ function WalletAssetsFormController($scope, userService, walletTransactionServic
     $scope.minerFees = +MIN_MINER_FEE.valueOf() // reset miner fees
     $scope.calculateTotal($scope.minerFees);
   });
+  $scope.$watch('selectedAddress', function() {
+    $scope.setBalance();
+  });
   
   $scope.calculateTotal = calculateTotal;
 
