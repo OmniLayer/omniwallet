@@ -8,6 +8,18 @@ data_dir_root = os.environ.get('DATADIR')
 app = Flask(__name__)
 app.debug = True
 
+@app.route('/properties')
+def properties():
+  prop_glob = glob.glob(data_dir_root + '/properties/*.json')
+
+  response = []
+  for property_file in prop_glob:
+    with open(property_file, 'r') as f:
+      prop = json.load(f)[0]
+      response.append({ prop['currencyId']: prop['propertyName'] })
+
+  json_response = json.dumps(response)
+  return json_response
 
 @app.route('/addresses')
 def addresses():
