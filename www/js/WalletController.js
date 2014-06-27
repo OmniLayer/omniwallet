@@ -338,7 +338,14 @@ function WalletTradePendingController($scope, $http, $q, userService, hashExplor
   $scope.currencyUnit = 'stom'
   $scope.pendingThinking = true
   $scope.hasAddressesWithPrivkey = getAddressesWithPrivkey()
-  $scope.selectedCoin = 'BTC'
+  userService.getCurrencies().filter(function(currency){
+       return currency.tradable;
+  }).forEach(function(coin){
+    if(coin.symbol=='BTC'){
+      $scope.selectedCoin = coin;    
+    }
+  });
+  
   $scope.selectedTimeframe = "604800"
   $scope.filterData = function(time) {
     var orderbook = JSON.parse($scope.orderBookStorage);

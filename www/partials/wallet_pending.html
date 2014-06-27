@@ -132,18 +132,18 @@
         <div class="col-xs-6">
           <h4 class="text-justify" >Send type of coin:</h4>
           <div class="form-inline">
-              <select name="coin" class="form-control" ng-model="selectedCoin"
-                ng-options="currency for currency in currencyList"
-                ng-change="setBalance()" ng-init="setBalance()" disabled>
+              <select name="coin" class="form-control" ng-model="walletAssets.selectedCoin"
+                ng-options="currency as currency.name for currency in currencyList"
+                ng-change="setBalance()" ng-init="setBalance()" required>
                 <option value=""> -- Choose Coin -- </option>
               </select>
             </div> 
           <h6 class="text-justify"> To complete a pending offer, you must make purchases in Bitcoin.</h6> 
           <h4 class="text-justify" >Send from address:</h4>
           <div class="form-inline">
-              <select name="sender" class="form-control" ng-model="selectedAddress"
+             <select name="sender" class="form-control" ng-model="walletAssets.selectedAddress"
                 ng-options="address for address in addressList"
-                ng-change="setBalance()" ng-init="setBalance()" disabled>
+                ng-change="setBalance()" ng-init="setBalance()" required>
                 <option value=""> -- Choose Address -- </option>
               </select>
             </div> 
@@ -161,16 +161,16 @@
           </div>
           <br>
           <div class="input-group">
-            <span class="input-group-addon"> Amount to send (in{{selectedCoin}}): </span>
+            <span class="input-group-addon"> Amount to send (in {{selectedCoin}}): </span>
               <input name="amount" type="number" ng-model="sendAmount" class="form-control" 
               placeholder="{{sendAmountPlaceholder}}" ng-disabled="true">
             <span class="input-group-addon" > 
-              Available: {{balanceData[0]}} {{selectedCoin}}</span>
+              Available: {{balanceData[1]}} {{selectedCoin}}</span>
           </div>
           <br>
           <div class="input-group">
             <span class="input-group-addon"> Transaction/Miner fees (in BTC): </span>
-            <input name="fees" type="number" ng-model="minerFees" class="form-control" 
+            <input name="fees" type="number" step="0.00000001" ng-model="minerFees" class="form-control" 
             placeholder="0.0001 minimum" required>
             <span class="input-group-addon" > 
               Available Bitcoin: {{ balanceData[1]}} {{selectedCoin}}
