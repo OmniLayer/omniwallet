@@ -14,7 +14,13 @@ body {
   height: 100px;
   background-color: #f5f5f5;
 }
+.brown{color:#9b846b}
+.green{color:#61B329}
 .om-container {
+}
+.om-body {
+  margin-left: 100px;
+
 }
 .sidebar {
   position: fixed;
