@@ -119,6 +119,20 @@ function WalletHistoryController($scope, $q, $http, userService, hashExplorer) {
           transaction.currency_str = transaction.propertyName;
         if(transaction.currency_str == undefined)
           transaction.currency_str = transaction.icon_text;
+        if(transaction.tx_type_str == undefined)
+          transaction.tx_type_str = transaction.icon_text;
+
+        var addresses = $scope.addresses.map(function(addrO) { return addrO.address; });
+        var incoming = addresses.indexOf(transaction.to_address);
+
+        if(incoming == -1 && transaction.to_address.length > 32)
+          transaction.color = 'danger';
+        if(incoming != -1 && transaction.to_address.length > 32)
+          transaction.color = 'success';
+        if(transaction.to_address.length < 32)
+          transaction.color = 'warning';
+
+        //DEBUG console.log(incoming, 'inc', transaction.to_address, 'hash', transaction.tx_hash, 'color', transaction.color)
       });
 
       var hashes = [];
@@ -183,6 +197,20 @@ function WalletHistoryController($scope, $q, $http, userService, hashExplorer) {
           transaction.currency_str = transaction.propertyName;
         if(transaction.currency_str == undefined)
           transaction.currency_str = transaction.icon_text;
+        if(transaction.tx_type_str == undefined)
+          transaction.tx_type_str = transaction.icon_text;
+
+        var addresses = $scope.addresses.map(function(addrO) { return addrO.address; });
+        var incoming = addresses.indexOf(transaction.to_address);
+
+        if(incoming == -1 && transaction.to_address.length > 32)
+          transaction.color = 'danger';
+        if(incoming != -1 && transaction.to_address.length > 32)
+          transaction.color = 'success';
+        if(transaction.to_address.length < 32)
+          transaction.color = 'warning';
+
+        //DEBUG console.log(incoming, 'inc', transaction.to_address, 'hash', transaction.tx_hash, 'color', transaction.color)
       });
 
       var hashes = [];
