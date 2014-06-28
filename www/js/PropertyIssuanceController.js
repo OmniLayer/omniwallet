@@ -29,6 +29,11 @@ function PropertyIssuanceController($scope, propertiesService){
     return $scope.propertyType == 2 || $scope.propertyType == 66 || $scope.propertyType == 130
   };
   
+  $scope.typeChanged = function(){
+    $scope.tokenStep = $scope.tokenMin = $scope.isDivisible() ? 0.00000001 : 1;
+    $scope.tokenMax = $scope.isDivisible() ? "92233720368.54775807" : "9223372036854775807";
+  };
+  
   transactionGenerationController.validateTransactionData=function(){
     var dustValue = 5757;
     var minerMinimum = 10000;

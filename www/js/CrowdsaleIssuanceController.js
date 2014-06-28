@@ -118,6 +118,10 @@ function CrowdsaleIssuanceController($scope, propertiesService){
     $scope.singleCurrency = count == 1;
   });
   
+  $scope.typeChanged = function(){
+    $scope.tokenStep = $scope.tokenMin = $scope.isDivisible() ? 0.00000001 : 1;
+    $scope.tokenMax = $scope.isDivisible() ? "92233720368.54775807" : "9223372036854775807";
+  };
   
   // TRASANCTION GENERATION CONFIG 
   transactionGenerationController.validateTransactionData = function(){

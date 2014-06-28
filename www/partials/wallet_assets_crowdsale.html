@@ -5,6 +5,9 @@
 <div ng-controller="WalletAssetsFormController">
   <div ng-controller="TransactionGenerationController">
     <div class="col-xs-10" ng-controller="CrowdsaleIssuanceController">
+      <h4>
+        <a href="/explorer/assets"> <strong> &lt; Go back </strong> </a>
+      </h4>
       <div class="row">
         <div class="panel-default">
          <div class="col-xs-9 text-left panel-body om-title">Start a Crowdsale</div>
@@ -46,7 +49,7 @@
                 <div class="col-xs-6">
                   <div class="input-group">
                     <span class="input-group-addon"> Divisible: </span>
-                    <select name="type" class="form-control" ng-model="propertyType" required>
+                    <select name="type" class="form-control" ng-model="propertyType" ng-change="typeChanged()" required>
                       <option value="2"> Yes </option>
                       <option value="1"> No </option>
                     </select>
@@ -60,7 +63,7 @@
                   <combobox name="category" model-value="propertyCategory" placeholder="Select a category" label="Category:"
                   option-list="categories" value-selected="loadSubcategories(category)"></combobox>
                 </div>
-                <div class="col-xs-6">
+                <div class="col-xs-6" ng-show="propertyCategory != ''">
                   <combobox name="subcategory" model-value="propertySubcategory" placeholder="Select a subcategory" label="Subcategory:"
                   option-list="subcategories"></combobox>
                 </div>
@@ -73,7 +76,7 @@
               </div>
             </div>
             <div class="form-group">
-              <textarea class="form-control" ng-model="propertyData" ng-maxlength="255" placeholder="Enter Smart Property description."></textarea>
+              <textarea class="form-control" ng-model="propertyData" ng-maxlength="254" maxlength="254" placeholder="Enter Smart Property description."></textarea>
             </div>
             <!--
             <br ng-hide="isNewProperty">
@@ -119,7 +122,7 @@
               <div class="panel panel-default" ng-repeat="investment in currenciesDesired">
                 <div class="panel-body form-inline">
                   <div class="form-group col-xs-5">
-                    <input name="amount" type="number" step="1" ng-model="investment.numberOfTokens" class="form-control" placeholder="# of tokens" required>
+                    <input name="amount" type="number" step="{{tokenStep}}" min="{{tokenMin}}" max="{{tokenMax}}" ng-model="investment.numberOfTokens" class="form-control" placeholder="# of tokens" required>
                   </div>
                   <div class="form-group col-xs-7">
                     <label>per</label>
