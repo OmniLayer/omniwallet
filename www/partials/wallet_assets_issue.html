@@ -86,7 +86,7 @@
             <div class="form-group">
               <div class="input-group">
                 <span class="input-group-addon"> Number of Tokens: </span>
-                <input name="amount" type="number" step="1" ng-model="numberProperties" step="{{tokenStep}}" min="{{tokenMin}}" max="{{tokenMax}}" class="form-control" placeholder="Enter desired amount" required>
+                <input name="amount" type="number" step="1" ng-model="numberProperties" step="{{tokenStep}}" min="{{tokenMin}}" max="{{tokenMax}}" ensureInteger="!isDivisible()" class="form-control" placeholder="Enter desired amount" required>
               </div>
             </div>
             <div class="form-group">

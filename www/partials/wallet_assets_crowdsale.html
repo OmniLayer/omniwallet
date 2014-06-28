@@ -122,7 +122,7 @@
               <div class="panel panel-default" ng-repeat="investment in currenciesDesired">
                 <div class="panel-body form-inline">
                   <div class="form-group col-xs-5">
-                    <input name="amount" type="number" step="{{tokenStep}}" min="{{tokenMin}}" max="{{tokenMax}}" ng-model="investment.numberOfTokens" class="form-control" placeholder="# of tokens" required>
+                    <input name="amount" type="number" step="{{tokenStep}}" min="{{tokenMin}}" max="{{tokenMax}}" ng-model="investment.numberOfTokens"  ensureInteger="!isDivisible()" class="form-control" placeholder="# of tokens" required>
                   </div>
                   <div class="form-group col-xs-7">
                     <label>per</label>

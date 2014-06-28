@@ -164,4 +164,17 @@ angular.module('omniwallet').directive('d3PieChart', function() {
       });
     }
   };
+}).directive('ensureInteger', function() {
+  return {
+    restrict: 'A',
+    require: '?ngModel',
+    link: function(scope, ele, attrs, ngModel) {
+      scope.$watch(attrs.ngModel, function(value) {
+        if(attrs.ensureInteger)
+          ngModel.$setValidity('integer', (typeof value==='number' && (value%1)===0));
+        else
+          ngModel.$setValidity('integer', true);
+      });
+    }
+  };
 });
