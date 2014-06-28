@@ -166,7 +166,7 @@ function CrowdsaleIssuanceController($scope, propertiesService){
     $modalScope.propertySubcategory= $scope.propertySubcategory,
     $modalScope.propertyUrl= $scope.propertyUrl,
     $modalScope.currenciesDesired=$scope.currenciesDesired,
-    $modalScope.deadline=$scope.deadline.toLocaleDateString(),
+    $modalScope.deadline=$scope.deadline.toUTCString()(),
     $modalScope.earlyBirdBonus=$scope.earlyBirdBonus,
     $modalScope.percentageForIssuer=$scope.percentageForIssuer;
     $modalScope.selectedAddress=$scope.selectedAddress;
@@ -189,7 +189,7 @@ function CrowdsaleIssuanceController($scope, propertiesService){
           number_properties:$scope.isDivisible() ? +$scope.convertDisplayedValue(currency.numberOfTokens) : +currency.numberOfTokens,
           transaction_from: $scope.selectedAddress,
           currency_identifier_desired:currency.selectedCurrency.currencyId,
-          deadline:$scope.deadline.getTime(),
+          deadline:$scope.deadline.UTC(),
           earlybird_bonus:$scope.earlyBirdBonus,
           percentage_for_issuer:$scope.percentageForIssuer,
           fee: $scope.convertDisplayedValue($scope.minerFees)
@@ -226,7 +226,10 @@ function CrowdsaleIssuanceController($scope, propertiesService){
   $scope.today = function() {
     $scope.deadline= new Date();
   };
-  $scope.today();
+  
+  var nextMonth = new Date()
+  nextMonth.setMonth(now.getMonth() +1);
+  $scope.deadline = nextMonth;
 
   $scope.open = function($event) {
     $event.preventDefault();
@@ -234,7 +237,12 @@ function CrowdsaleIssuanceController($scope, propertiesService){
 
     $scope.opened = true;
   };
-
+  
+  // Disable weekend selection
+  $scope.disabled = function(date, mode) {
+    return ( mode === 'day' && date.getTime() < (new Date()).getTime());
+  };
+  
   $scope.dateOptions = {
     formatYear: 'yy',
     startingDay: 1
