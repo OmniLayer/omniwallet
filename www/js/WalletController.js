@@ -232,7 +232,7 @@ function WalletTradeOverviewController($scope, $http, $q, userService, hashExplo
   $scope.setHashExplorer = hashExplorer.setHash.bind(hashExplorer)
   $scope.currencyUnit = 'stom'
   $scope.selectedTimeframe = "604800"
-  $scope.AssignedDate = Date;
+  $scope.timeNow = Date.now();
   $scope.global.getData = function(time, currency) {
     $scope.orderbook = []
     var transaction_data = []
