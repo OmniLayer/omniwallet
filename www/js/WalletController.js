@@ -462,12 +462,11 @@ function WalletTradePendingController($scope, $http, $q, userService, hashExplor
     $scope.selectedAddress = tx.from_address;
     $http.get('/v1/transaction/tx/' + tx.sell_offer_txid + '.json').success(function(data) {
       var sell_tx = data[0];
-      $http.get('https://blockchain.info/latestblock').success(function(data){
-        $scope.remainingBlocks = data.height - tx.block -sell_tx.formatted_block_time_limit;
+      $http.post('/v1/blocks/getlatest',{origin:"blockchain"}).success(function(response){
+        $scope.remainingBlocks = response.data.height - tx.block -sell_tx.formatted_block_time_limit;
       });
     });
   };
-
 
   function getAddressesWithPrivkey() {
     var addresses = [];

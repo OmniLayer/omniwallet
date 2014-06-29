@@ -175,6 +175,17 @@ server {
        uwsgi_modifier1 30;
        uwsgi_pass 127.0.0.1:$PORT;
      }
+     
+     location = /v1/blocks { rewrite ^ /v1/blocks/; }
+    location /v1/blocks { try_files $uri @flask_getblocks; }
+    location @flask_getblocks {
+      include uwsgi_params;
+      uwsgi_param SCRIPT_NAME /v1/blocks;
+      uwsgi_param UWSGI_MODULE getblocks;
+      uwsgi_param UWSGI_CALLABLE app;
+      uwsgi_modifier1 30;
+      uwsgi_pass 127.0.0.1:$PORT;
+    }
 	# Only for nginx-naxsi used with nginx-naxsi-ui : process denied requests
 	#location /RequestDenied {
 	#	proxy_pass http://127.0.0.1:8080;    
