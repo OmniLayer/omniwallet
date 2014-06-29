@@ -9,6 +9,11 @@ function CrowdsaleIssuanceController($scope, propertiesService){
       $scope.isNewProperty = true;
   };*/
   $scope.walletAssets = $scope.$parent.$parent;
+  $scope.walletAssets.currencyList.forEach(function(e, i) {
+    if (e.symbol == "BTC")
+      $scope.walletAssets.selectedCoin = e;
+  });
+  
   var transactionGenerationController = $scope.$parent;
   $scope.ecosystem = 2;
   $scope.propertyType = 2;
@@ -18,9 +23,11 @@ function CrowdsaleIssuanceController($scope, propertiesService){
   $scope.categories=[];
   $scope.subcategories=[];
   $scope.currenciesDesired=[];
+  var mastercoin ={currencyId:1,propertyName:"Mastercoin"};
+  var bitcoin = {currencyId:0,propertyName:"Bitcoin"};
   
   $scope.setEcosystem = function(){
-    availableDesiredCurrencies=$scope.ecosystem == 1 ? [{currencyId:1,propertyName:"Mastercoin"},{currencyId:0,propertyName:"Bitcoin"}]:[{currencyId:2,propertyName:"Test Mastercoin"}];
+    availableDesiredCurrencies=$scope.ecosystem == 1 ? [mastercoin,bitcoin]:[{currencyId:2,propertyName:"Test Mastercoin"}];
     propertiesService.list($scope.ecosystem).then(function(result){
       availableDesiredCurrencies = availableDesiredCurrencies.concat(result.data.properties).sort(function(a, b) {
           var currencyA = a.propertyName.toUpperCase();
@@ -30,8 +37,8 @@ function CrowdsaleIssuanceController($scope, propertiesService){
       var availableTokens = availableDesiredCurrencies.filter(function(currency){
         return selectedDesiredCurrencies.indexOf(currency) == -1;
       });
-      $scope.currenciesDesired =[{numberOfTokens:"", selectedCurrency:availableTokens[0] , previousCurrency:availableTokens[0], availableTokens:availableTokens}];
-      selectedDesiredCurrencies.push(availableTokens[0]);
+      $scope.currenciesDesired =[{numberOfTokens:"", selectedCurrency:mastercoin , previousCurrency:mastercoin, availableTokens:availableTokens}];
+      selectedDesiredCurrencies.push(mastercoin);
     });
     $scope.categories=[];
     $scope.subcategories=[];
@@ -62,7 +69,8 @@ function CrowdsaleIssuanceController($scope, propertiesService){
       var availableTokens = availableDesiredCurrencies.filter(function(currency){
         return selectedDesiredCurrencies.indexOf(currency) == -1;
       });
-      var newCurrencyDesired = {numberOfTokens:"", selectedCurrency:availableTokens[0] , previousCurrency:availableTokens[0], availableTokens:availableTokens};
+      var selectedCurrency = availableTokens.indexOf(mastercoin) > -1 ? mastercoin : availableTokens.indexOf(bitcoin) > -1 ? bitcoin : availableTokens[0];
+      var newCurrencyDesired = {numberOfTokens:"", selectedCurrency:selectedCurrency, previousCurrency:selectedCurrency, availableTokens:availableTokens};
       $scope.setAvailableTokens(newCurrencyDesired);
       $scope.currenciesDesired.push(newCurrencyDesired);
     }
@@ -159,7 +167,7 @@ function CrowdsaleIssuanceController($scope, propertiesService){
     $modalScope.issueSuccess = false, $modalScope.issueError = false, $modalScope.waiting = false, $modalScope.privKeyPass = {};
     $modalScope.convertSatoshiToDisplayedValue=  $scope.convertSatoshiToDisplayedValue,
     $modalScope.getDisplayedAbbreviation=  $scope.getDisplayedAbbreviation,
-    $modalScope.divisible=  $scope.propertyType == 1 || $scope.propertyType == 65 || $scope.propertyType == 129? 'No' : 'Yes',
+    $modalScope.divisible= $scope.isDivisible() ? 'Yes' : 'No',
     $modalScope.propertyName= $scope.propertyName,
     $modalScope.propertyData= $scope.propertyData,
     $modalScope.propertyCategory= $scope.propertyCategory,
@@ -190,7 +198,7 @@ function CrowdsaleIssuanceController($scope, propertiesService){
           transaction_from: $scope.selectedAddress,
           currency_identifier_desired:currency.selectedCurrency.currencyId,
           deadline:$scope.deadline.UTC(),
-          earlybird_bonus:$scope.earlyBirdBonus,
+          earlybird_bonus:$scope.earlyBirdBonus / ((($scope.deadline.getTime() / 1000) - ((new Date()).getTime() /1000)) /604800 ),
           percentage_for_issuer:$scope.percentageForIssuer,
           fee: $scope.convertDisplayedValue($scope.minerFees)
         });
@@ -228,7 +236,7 @@ function CrowdsaleIssuanceController($scope, propertiesService){
   };
   
   var nextMonth = new Date()
-  nextMonth.setMonth(now.getMonth() +1);
+  nextMonth.setMonth(nextMonth.getMonth() +1);
   $scope.deadline = nextMonth;
 
   $scope.open = function($event) {

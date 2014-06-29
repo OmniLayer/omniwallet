@@ -61,7 +61,7 @@
                   <combobox name="category" model-value="propertyCategory" placeholder="Select a category" label="Category:"
                   option-list="categories" value-selected="loadSubcategories(category)"></combobox>
                 </div>
-                <div class="col-xs-6">
+                <div class="col-xs-6" ng-show="propertyCategory != ''">
                   <combobox name="subcategory" model-value="propertySubcategory" placeholder="Select a subcategory" label="Subcategory:"
                   option-list="subcategories"></combobox>
                 </div>
