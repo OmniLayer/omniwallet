@@ -54,6 +54,7 @@ function CrowdsaleIssuanceController($scope, propertiesService){
     });
   };
   $scope.loadSubcategories=function(category){
+    $scope.propertySubcategory = '';
     propertiesService.loadSubcategories($scope.ecosystem, category).then(function(result){  
       $scope.subcategories=result.data.subcategories.sort();
     });
