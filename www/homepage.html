@@ -5,11 +5,11 @@
       <div class="form-group">
         <label for="address" class="col-xs-2 control-label">Address:</label>
         <div class="col-xs-6">
-          <input type="text" class="form-control" name="address" id="address" placeholder="Address" ng-model="balanceAddress" ng-change="showResult=false">
-          <span><small>Enter a valid Bitcoin Address, e.g. 1EXoDusjGwvnjZUyKkxZ4UHEf77z6A5S4P</small></span>
-        </div>
-        <div class="col-xs-1">
-          <span ng-show="validate(balanceAddress)" class="glyphicon glyphicon-ok-sign green"></span>
+           <div class="input-group col-xs-12">
+            <input type="text" class="form-control input-group" name="address" id="address" placeholder="Address" ng-model="balanceAddress" ng-change="showResult=false">
+            <span ng-show="validate(balanceAddress)" class="glyphicon glyphicon-ok green input-group-addon input-group"></span>
+           </div>
+           <span class="help-block"><small>Enter a valid Bitcoin Address, e.g. 1EXoDusjGwvnjZUyKkxZ4UHEf77z6A5S4P</small></span>
         </div>
         <div class="col-xs-1">
 	  <button type="submit" class="btn btn-default" ng-click="checkBalance(); showResult=true" ng-disabled="validate(balanceAddress) == false"> Check! </button>
