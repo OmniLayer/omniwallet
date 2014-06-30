@@ -30,6 +30,7 @@
           <th>Transaction</th>
           <th>Details</th>
           <th>Amount</th>
+          <th>Block</th>
           <th>Block time</th>
         </tr>
     </thead>
@@ -38,10 +39,19 @@
 
   <tr ng-repeat="trans in transactions">
    
-    <td ng-click="setHashExplorer(trans)"> <a href="/explorer/inspector?view={{trans.tx_hash}}">{{trans.tx_hash_concat}}</a></td>
+    <td ng-click="setHashExplorer(trans)"> 
+      <a href="/explorer/inspector?view={{trans.tx_hash}}"
+        tooltip="{{trans.tx_hash.slice(0,22) }} {{trans.tx_hash.slice(22,44)}} {{ trans.tx_hash.slice(44) }}"
+        tooltip-append-to-body="true"
+        tooltip-placement="bottom"
+        tooltip-trigger="mouseenter">
+        {{trans.tx_hash_concat}}
+      </a>
+    </td>
    <td>{{trans.tx_type_str}}</td>
    <td>{{trans.accomulated_payment ? trans.accomulated_payment : trans.formatted_amount}}</td>
-    <td>{{trans.tx_time | date:'dd MMM HH:mm'}}</td>
+   <td>{{trans.block}}</td>
+    <td>{{trans.utc_time}}</td>
   </tr>
   <tr ng-show="transactions.length == 0">
     <td colspan="4" style="text-align: center;"><h4>Searched for non-alphanumeric string or found non-existent transaction, either way, we didn't find anything.</h4></td>
