@@ -150,6 +150,10 @@
           <h6 class="text-justify">  
           Note that we allow you to only make payment from addresses with a valid private key. </h6>
         </div>
+        <div class="col-xs-6">
+          <h4>Blocks Remaining</h4>
+          <span ng-class="{text-primary : remainingBlocks > 4, text-warning: remainingBlocks == 4, text-danger: remainingBlocks < 4}" tooltip="Your payment must be received within this many blocks to complete successfully">{{remainingBlocks}} blocks</span>
+        </div>
       </div>
         <br>
       <div class="row">
