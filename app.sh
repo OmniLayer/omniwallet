@@ -58,7 +58,7 @@ do
         SERVER_PID=$!
     fi
 
-    ps cax | grep "omni-websocket" > /dev/null
+    ps a | grep -v grep | grep "omni-websocket" > /dev/null
     if [ $? -eq 0 ]; then
         echo "websocket api is running."
       else
