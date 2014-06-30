@@ -76,7 +76,7 @@
               </div>
             </div>
             <div class="form-group">
-              <textarea class="form-control" ng-model="propertyData" ng-maxlength="254" maxlength="254" placeholder="Enter Smart Property description."></textarea>
+              <textarea class="form-control" ng-model="propertyData" ng-maxlength="254" maxlength="254" placeholder="Enter Smart Property description." rows="3"></textarea>
             </div>
             <!--
             <br ng-hide="isNewProperty">
@@ -102,8 +102,12 @@
                   </div>
                 </div>
                 <div class="col-xs-6">
-                  <timepicker ng-model="deadlineTime" ng-change="setDeadlineTime(deadlineTime)"></timepicker>
-                  <span>UTC</span>
+                  <div class="col-xs-5">
+                    <timepicker ng-model="deadlineTime" ng-change="setDeadlineTime(deadlineTime)"></timepicker>
+                  </div>
+                  <div class="col-xs-7" style="padding-top: 45px">
+                    UTC
+                  </div>
                 </div>
               </div>
             </div>

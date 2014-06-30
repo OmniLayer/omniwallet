@@ -5,6 +5,7 @@ function PropertyIssuanceController($scope, propertiesService){
   $scope.propertyType = 2;
   $scope.categories=[];
   $scope.subcategories=[];
+  $scope.propertyCategory='';
   
   $scope.setEcosystem = function(){
     $scope.categories=[];
@@ -88,10 +89,10 @@ function PropertyIssuanceController($scope, propertiesService){
         ecosystem:$scope.ecosystem,
         property_type : $scope.propertyType, 
         previous_property_id:$scope.previousPropertyId || 0, 
-        property_category:$scope.propertyCategory, 
-        property_subcategory:$scope.propertySubcategory, 
+        property_category:$scope.propertyCategory || '\0', 
+        property_subcategory:$scope.propertySubcategory || '\0', 
         property_name:$scope.propertyName, 
-        property_url:$scope.propertyUrl, 
+        property_url:$scope.propertyUrl || '\0', 
         property_data:$scope.propertyData || '\0', 
         number_properties: $scope.isDivisible() ? +$scope.convertDisplayedValue($scope.numberProperties) : +$scope.numberProperties,
         transaction_from: $scope.selectedAddress,

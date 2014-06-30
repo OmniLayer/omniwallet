@@ -23,11 +23,14 @@ function CrowdsaleIssuanceController($scope, propertiesService){
   $scope.categories=[];
   $scope.subcategories=[];
   $scope.currenciesDesired=[];
+  $scope.propertyCategory='';
+  
   var mastercoin ={currencyId:1,propertyName:"Mastercoin"};
   var bitcoin = {currencyId:0,propertyName:"Bitcoin"};
+  var testMastercoin = {currencyId:2,propertyName:"Test Mastercoin"};
   
   $scope.setEcosystem = function(){
-    availableDesiredCurrencies=$scope.ecosystem == 1 ? [mastercoin,bitcoin]:[{currencyId:2,propertyName:"Test Mastercoin"}];
+    availableDesiredCurrencies=$scope.ecosystem == 1 ? [mastercoin,bitcoin]:[testMastercoin];
     propertiesService.list($scope.ecosystem).then(function(result){
       availableDesiredCurrencies = availableDesiredCurrencies.concat(result.data.properties).sort(function(a, b) {
           var currencyA = a.propertyName.toUpperCase();
@@ -37,7 +40,7 @@ function CrowdsaleIssuanceController($scope, propertiesService){
       var availableTokens = availableDesiredCurrencies.filter(function(currency){
         return selectedDesiredCurrencies.indexOf(currency) == -1;
       });
-      $scope.currenciesDesired =[{numberOfTokens:"", selectedCurrency:mastercoin , previousCurrency:mastercoin, availableTokens:availableTokens}];
+      $scope.currenciesDesired =[{numberOfTokens:"", selectedCurrency:$scope.ecosystem == 1 ?mastercoin:testMastercoin , previousCurrency:$scope.ecosystem == 1 ?mastercoin:testMastercoin, availableTokens:availableTokens}];
       selectedDesiredCurrencies.push(mastercoin);
     });
     $scope.categories=[];
@@ -189,10 +192,10 @@ function CrowdsaleIssuanceController($scope, propertiesService){
           ecosystem:$scope.ecosystem,
           property_type : $scope.propertyType, 
           previous_property_id:$scope.previousPropertyId || 0, 
-          property_category:$scope.propertyCategory, 
-          property_subcategory:$scope.propertySubcategory, 
+          property_category:$scope.propertyCategory || '\0', 
+          property_subcategory:$scope.propertySubcategory || '\0', 
           property_name:$scope.propertyName, 
-          property_url:$scope.propertyUrl, 
+          property_url:$scope.propertyUrl || '\0', 
           property_data:$scope.propertyData || '\0', 
           number_properties:$scope.isDivisible() ? +$scope.convertDisplayedValue(currency.numberOfTokens) : +currency.numberOfTokens,
           transaction_from: $scope.selectedAddress,
