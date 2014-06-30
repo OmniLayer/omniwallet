@@ -165,11 +165,11 @@
           </div>
           <br>
           <div class="input-group">
-            <span class="input-group-addon"> Amount to send (in {{selectedCoin}}): </span>
+            <span class="input-group-addon"> Amount to send (in {{selectedCoin.symbol}}): </span>
               <input name="amount" type="number" ng-model="sendAmount" class="form-control" 
               placeholder="{{sendAmountPlaceholder}}" ng-disabled="true">
             <span class="input-group-addon" > 
-              Available: {{balanceData[1]}} {{selectedCoin}}</span>
+              Available: {{balanceData[1]}} {{selectedCoin.symbol}}</span>
           </div>
           <br>
           <div class="input-group">
@@ -177,7 +177,7 @@
             <input name="fees" type="number" step="0.00000001" ng-model="minerFees" class="form-control" 
             placeholder="0.0001 minimum" required>
             <span class="input-group-addon" > 
-              Available Bitcoin: {{ balanceData[1]}} {{selectedCoin}}
+              Available Bitcoin: {{ balanceData[1]}} {{selectedCoin.symbol}}
               </span>
           </div>
           <input ng-model="marked" ng-hide="true" ng-init="marked = true" type="checkbox"> 
