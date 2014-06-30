@@ -15,7 +15,7 @@ app.debug = True
 @app.route('/', methods=['GET'])
 def search():
     if 'query' in request.args:
-        query = re.sub(r'\W+', '', request.args.get('query') ) # strip and get query
+        query = re.sub(r'\W+', '0', request.args.get('query') ) # strip and get query
     else:
         return jsonify({ 'status': 400, 'data': 'No query found in request' })
 
