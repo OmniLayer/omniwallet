@@ -458,7 +458,7 @@ function WalletTradePendingController($scope, $http, $q, userService, hashExplor
     $scope.pendingThinking = false;
     $scope.buyTransaction = tx;
     $scope.sendTo = tx.to_address;
-    $scope.sendAmountPlaceholder = tx.bitcoin_required;
+    $scope.sendAmount = tx.bitcoin_required;
     $scope.selectedAddress = tx.from_address;
     $http.get('/v1/transaction/tx/' + tx.sell_offer_txid + '.json').success(function(data) {
       var sell_tx = data[0];
