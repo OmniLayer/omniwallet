@@ -20,5 +20,5 @@ def getlast():
     if origin == "blockchain":
         block= request.get('https://blockchain.info/latestblock')
         return jsonify(block.json())
-    else
+    else:
         abort(make_response('Unsupported origin', 400))
