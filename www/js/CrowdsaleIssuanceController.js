@@ -40,8 +40,9 @@ function CrowdsaleIssuanceController($scope, propertiesService){
       var availableTokens = availableDesiredCurrencies.filter(function(currency){
         return selectedDesiredCurrencies.indexOf(currency) == -1;
       });
-      $scope.currenciesDesired =[{numberOfTokens:"", selectedCurrency:$scope.ecosystem == 1 ?mastercoin:testMastercoin , previousCurrency:$scope.ecosystem == 1 ?mastercoin:testMastercoin, availableTokens:availableTokens}];
-      selectedDesiredCurrencies.push(mastercoin);
+      var selectedCurrency = $scope.ecosystem == 1 ? mastercoin : testMastercoin;
+      $scope.currenciesDesired =[{numberOfTokens:"", selectedCurrency:selectedCurrency, previousCurrency:selectedCurrency, availableTokens:availableTokens}];
+      selectedDesiredCurrencies.push(selectedCurrency);
     });
     $scope.categories=[];
     $scope.subcategories=[];
