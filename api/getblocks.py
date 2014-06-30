@@ -1,4 +1,3 @@
-import requests
 import os, sys, re, random
 import requests
 from decimal import Decimal
@@ -18,7 +17,7 @@ def getlast():
         abort(make_response('No field \'origin\' in request, request failed', 400))
         
     if origin == "blockchain":
-        block= request.get('https://blockchain.info/latestblock')
+        block= requests.get('https://blockchain.info/latestblock')
         return jsonify(block.json())
     else:
         abort(make_response('Unsupported origin', 400))
