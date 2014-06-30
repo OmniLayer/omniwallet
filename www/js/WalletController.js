@@ -462,7 +462,7 @@ function WalletTradePendingController($scope, $http, $q, userService, hashExplor
     $scope.selectedAddress = tx.from_address;
     $http.get('/v1/transaction/tx/' + tx.sell_offer_txid + '.json').success(function(data) {
       var sell_tx = data[0];
-      $http.post('/v1/blocks/getlatest',{origin:"blockchain"}).success(function(response){
+      $http.post('/v1/blocks/getlast',{origin:"blockchain"}).success(function(response){
         $scope.remainingBlocks = response.data.height - tx.block -sell_tx.formatted_block_time_limit;
       });
     });
