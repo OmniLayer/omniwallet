@@ -8,6 +8,8 @@ function PropertyIssuanceController($scope, propertiesService){
   var transactionGenerationController = $scope.$parent;
   $scope.ecosystem = 2;
   $scope.propertyType = 2;
+  $scope.tokenStep = $scope.tokenMin =  0.00000001;
+  $scope.tokenMax = "92233720368.54775807";
   $scope.categories=[];
   $scope.subcategories=[];
   $scope.propertyCategory='';
