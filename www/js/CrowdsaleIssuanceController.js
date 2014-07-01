@@ -171,6 +171,7 @@ function CrowdsaleIssuanceController($scope, propertiesService){
   transactionGenerationController.modalTemplateUrl = '/partials/wallet_assets_crowdsale_modal.html';
   
   transactionGenerationController.setModalScope = function($modalScope){
+    $scope.deadline.setSeconds(0);
     $modalScope.issueSuccess = false, $modalScope.issueError = false, $modalScope.waiting = false, $modalScope.privKeyPass = {};
     $modalScope.convertSatoshiToDisplayedValue=  $scope.convertSatoshiToDisplayedValue,
     $modalScope.getDisplayedAbbreviation=  $scope.getDisplayedAbbreviation,
