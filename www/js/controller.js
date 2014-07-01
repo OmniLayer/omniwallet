@@ -195,6 +195,8 @@ function NavigationController($scope, $http, $modal, userService) {
 }
 
 function ExplorerController($scope, $http, hashExplorer) {
+
+
   $scope.setHashExplorer = hashExplorer.setHash.bind(hashExplorer);
   // Scope members
   $scope.searchQueryText = '';
@@ -206,7 +208,6 @@ function ExplorerController($scope, $http, hashExplorer) {
 
   $scope.getData = function getData() {
     var currency = $scope.currency;
-    console.log('did', currency);
     $http.get('/v1/transaction/values.json', {}). success(function(data) {
       for (var i = 0; i < data.length; i++) {
         if (currency == data[i].currency) {
@@ -221,6 +222,9 @@ function ExplorerController($scope, $http, hashExplorer) {
             });
 
             $scope.transactions = data;
+            $scope.searchQueryText = '';
+            $scope.searchRan = false;
+            $scope.searchQueryReturned=false;
           });
         }
       }
@@ -246,11 +250,18 @@ function ExplorerController($scope, $http, hashExplorer) {
       $scope.transactions = successData.data;
       $scope.searchQueryReturned=true;
       $scope.searchQueryReturnedText=[ successData.data.length, $scope.searchQueryText.slice(0,7) + ( $scope.searchQueryText.length > 7 ? '...' : '' ) ];
+      hashExplorer.setSearch( $scope.searchQueryText );
     });
   };
   $scope.searchQuery = function(trans) {
     return ($scope.searchQueryText === '' || trans.tx_hash.indexOf($scope.searchQueryText) >= 0 || trans.from_address.indexOf($scope.searchQueryText) >= 0 || trans.to_address.indexOf($scope.searchQueryText) >= 0);
-  };
+  };        
+
+  //set up state
+  if (hashExplorer.tx != '') {
+    $scope.searchQueryText = hashExplorer.search;
+    $scope.doSearch();
+  }
 }
 function ExplorerInspectorController($scope, $location, $http, hashExplorer) {
   function setData() {
