@@ -114,13 +114,13 @@
             <div class="form-group">
               <div class="input-group">
                 <span class="input-group-addon">Percentage for issuer: </span>
-                <input name="percentage" type="number" step="0.01" min="0" ng-model="percentageForIssuer" class="form-control" placeholder="For example: 10" required>
+                <input name="percentage" type="number" step="0.01" min="0" max="255" ng-model="percentageForIssuer" class="form-control" placeholder="For example: 10" required>
               </div>
             </div>
             <div class="form-group">
               <div class="input-group">
                 <span class="input-group-addon">Initial early bird bonus percentage: </span>
-                <input name="early" type="number" step="0.01" min="0" ng-model="earlyBirdBonus" class="form-control" placeholder="For example: 25" required>
+                <input name="early" type="number" step="0.01" min="0" max="255" ng-model="earlyBirdBonus" class="form-control" placeholder="For example: 25" required>
               </div>
             </div>
             <div class="form-group">
