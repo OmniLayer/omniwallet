@@ -4,18 +4,20 @@
 
 
 <div class="col-xs-10" ng-controller="ExplorerController" ng-init="getData()">
-  <form class="form-search form-inline">
-        <div class="input-group">
-            <input type="text" class="form-control search-query" ng-model="searchQueryText" placeholder="Search for part of a transaction or a full transaction hash" ng-change="doSearch()" />
-            <span class="input-group-btn">
+  <form class="form-search form-inline" name="searchForm">
+        <div class="input-group col-xs-12">
+            <input type="text" name="searchEntry" class="form-control search-query" ng-model="searchQueryText" placeholder="Search for part of a transaction or a full transaction hash" ng-change=" searchForm.searchEntry.$error.pattern == false ? doSearch() : null;" ng-pattern="/^[a-zA-Z0-9]+$/"/>
+            <p class="col-xs-12 label label-danger" ng-if="searchForm.searchEntry.$error.pattern"> You cannot use non-alphanumeric characters while searching. </p>
+            <p class="col-xs-12 label label-warning" ng-show="searchQueryText.length > 0 && searchQueryText.length < 4" > You need at least {{ 4-searchQueryText.length }} more character(s) to search. </p>
+            <!--<span class="input-group-btn">
                 <input type="click" ng-click="doSearch()" class="btn btn-primary" value="search" />
-            </span>
+            </span>-->
         </div>
 
     </form>
 
         <div style="height:2em;">
-            <p style="float:left;height:1em;" class="text-muted" ng-show="searchQueryText.length > 0 && searchQueryText.length < 4" > You need at least {{ 4-searchQueryText.length }} more character(s) to search. </p>
+
             <br>
             <h3 style="height:1em;" ng-show="searchQueryReturned"> Results for: {{searchQueryReturnedText}} </h3>
         </div>
@@ -40,11 +42,7 @@
   <tr ng-repeat="trans in transactions">
    
     <td ng-click="setHashExplorer(trans)"> 
-      <a href="/explorer/inspector?view={{trans.tx_hash}}"
-        tooltip="{{trans.tx_hash.slice(0,22) }} {{trans.tx_hash.slice(22,44)}} {{ trans.tx_hash.slice(44) }}"
-        tooltip-append-to-body="true"
-        tooltip-placement="bottom"
-        tooltip-trigger="mouseenter">
+      <a href="/explorer/inspector?view={{trans.tx_hash}}">
         {{trans.tx_hash_concat}}
       </a>
     </td>
