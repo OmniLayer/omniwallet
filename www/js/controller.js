@@ -222,6 +222,8 @@ function ExplorerController($scope, $http, hashExplorer) {
             });
 
             $scope.transactions = data;
+            $scope.searchQueryText = '';
+            $scope.searchRan = false;
             $scope.searchQueryReturned=false;
           });
         }
