@@ -214,6 +214,8 @@ function ExplorerController($scope, $http, hashExplorer) {
           $http.get(file, {}).success(function(data, status, headers, config) {
 
             angular.forEach(data, function(transaction, index) {
+
+              data[index].utc_time = new Date(+transaction.tx_time).toUTCString();
               //DEBUG console.log(new Date(Number(transaction.tx_time)))
               data[index].tx_hash_concat = transaction.tx_hash.substring(0, 22) + '...'
             });
@@ -243,7 +245,7 @@ function ExplorerController($scope, $http, hashExplorer) {
       });
       $scope.transactions = successData.data;
       $scope.searchQueryReturned=true;
-      $scope.searchQueryReturnedText=$scope.searchQueryText.slice(0,7) + '...';
+      $scope.searchQueryReturnedText=[ successData.data.length, $scope.searchQueryText.slice(0,7) + ( $scope.searchQueryText.length > 7 ? '...' : '' ) ];
     });
   };
   $scope.searchQuery = function(trans) {
