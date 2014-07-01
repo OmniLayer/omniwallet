@@ -1,5 +1,5 @@
 import urlparse
-import os, sys, re, random,pybitcointools, bitcoinrpc
+import os, sys, re, random,pybitcointools, bitcoinrpc, math
 from decimal import Decimal
 from flask import Flask, request, jsonify, abort, json, make_response
 from msc_apps import *
@@ -107,8 +107,8 @@ def prepare_txdata(txtype,form):
                 txdata.append(int(form['number_properties']))
                 txdata.append(int(form['currency_identifier_desired']))
                 txdata.append(int(form['deadline']))
-                txdata.append(int(form['earlybird_bonus']))
-                txdata.append(int(form['percentage_for_issuer']))
+                txdata.append(int(math.ceil(float(form['earlybird_bonus']))))
+                txdata.append(int(math.ceil(float(form['percentage_for_issuer']))))
             else:
                 txdata.append(int(form['number_properties']))
             
