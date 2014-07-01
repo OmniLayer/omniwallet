@@ -400,8 +400,16 @@ function WalletTradePendingController($scope, $http, $q, userService, hashExplor
   //$scope.selectedAddress = userService.getAllAddresses()[ userService.getAllAddresses().length-1 ].address;
   $scope.currencyUnit = 'stom'
   $scope.pendingThinking = true
-  $scope.hasAddressesWithPrivkey = getAddressesWithPrivkey()
-  $scope.selectedCoin = 'BTC'
+  $scope.hasAddressesWithPrivkey = getAddressesWithPrivkey();
+  $scope.selectedAddress = $scope.hasAddressesWithPrivkey[0];
+  userService.getCurrencies().filter(function(currency){
+       return currency.tradable;
+  }).forEach(function(coin){
+    if(coin.symbol=='BTC'){
+      $scope.selectedCoin = coin;    
+    }
+  });
+  
   $scope.selectedTimeframe = "604800"
   $scope.filterData = function(time) {
     var orderbook = JSON.parse($scope.orderBookStorage);
@@ -495,10 +503,10 @@ function WalletTradePendingController($scope, $http, $q, userService, hashExplor
 
       angular.forEach(filtered_transaction_data, function(transaction, index) {
         //DEBUG console.log(new Date(Number(transaction.tx_time)))
-        filtered_transaction_data[index].tx_hash_concat = transaction.tx_hash.substring(0, 22) + '...'
+        filtered_transaction_data[index].tx_hash_concat = transaction.tx_hash.substring(0, 22) + '...';
       });
 
-      transaction_data = filtered_transaction_data
+      transaction_data = filtered_transaction_data;
       //if null, then append simple message
       $scope.orderbook = transaction_data.length != 0 ? transaction_data : [{
             tx_hash: 'No offers/bids found for this timeframe'
@@ -508,25 +516,30 @@ function WalletTradePendingController($scope, $http, $q, userService, hashExplor
       $scope.orderBookStorage = JSON.stringify($scope.orderbook);
     }
     );
-  }
+};
   $scope.purchaseCoin = function(tx) {
     $scope.pendingThinking = false;
-    $scope.buyTransaction = tx
-    $scope.sendTo = tx.to_address
-    $scope.sendAmountPlaceholder = tx.bitcoin_required
-    $scope.selectedAddress = tx.from_address
-  }
-
+    $scope.buyTransaction = tx;
+    $scope.sendTo = tx.to_address;
+    $scope.sendAmount = tx.bitcoin_required;
+    $scope.selectedAddress = tx.from_address;
+    $http.get('/v1/transaction/tx/' + tx.sell_offer_txid + '.json').success(function(data) {
+      var sell_tx = data[0];
+      $http.post('/v1/blocks/getlast',{origin:"blockchain"}).success(function(block){
+        $scope.remainingBlocks = sell_tx.formatted_block_time_limit - (block.height - tx.block);
+      });
+    });
+  };
 
   function getAddressesWithPrivkey() {
-    var addresses = []
+    var addresses = [];
     userService.getAllAddresses().map(function(e, i, a) {
       if (e.privkey && e.privkey.length == 58) {
         addresses.push(e.address);
       }
     }
     );
-    return addresses
+    return addresses;
   }
 }
 
