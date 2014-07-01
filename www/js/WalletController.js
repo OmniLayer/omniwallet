@@ -90,18 +90,17 @@ function WalletHistoryController($scope, $q, $http, userService, hashExplorer) {
       .success(function(data, status, headers, config) {
         delete data.address;
         delete data.balance;
-        angular.forEach(data[0], function(msc_tx, tx_type) {
-          if (msc_tx instanceof Array && msc_tx.length != 0) {
-            //DEBUG console.log(tx_type, msc_tx);
-            transaction_data = transaction_data.concat(msc_tx);
-          }
-        });
 
-        angular.forEach(data[1], function(tmsc_tx, tx_type) {
-          if (tmsc_tx instanceof Array && tmsc_tx.length != 0) {
-            //DEBUG console.log(tx_type, tmsc_tx);
-            transaction_data = transaction_data.concat(tmsc_tx);
-          }
+        var keys = Object.keys(data);
+
+        angular.forEach(keys, function(tx_type) {
+          tx_data = data[ tx_type ];
+          angular.forEach( data[ tx_type ], function( tx_a, idx ) {
+            if (tx_a instanceof Array && tx_a.length != 0) {
+              //DEBUG console.log(tx_type, msc_tx);
+              transaction_data = transaction_data.concat(tx_a);
+            }
+          });
         });
       })
       );
@@ -115,6 +114,39 @@ function WalletHistoryController($scope, $q, $http, userService, hashExplorer) {
       angular.forEach(transaction_data, function(transaction, index) {
         //DEBUG console.log(new Date(Number(transaction.tx_time)))
         transaction_data[index].tx_hash_concat = transaction.tx_hash.substring(0, 22) + '...'
+
+        if(transaction.currency_str == 'Smart Property') 
+          transaction.currency_str = transaction.propertyName;
+        if(transaction.currency_str == undefined)
+          transaction.currency_str = transaction.icon_text;
+        if(transaction.tx_type_str == undefined)
+          transaction.tx_type_str = transaction.icon_text;
+
+        var addresses = $scope.addresses.map(function(addrO) { return addrO.address; });
+        var incoming = addresses.indexOf(transaction.to_address);
+
+        if(incoming == -1 && transaction.to_address.length > 32)
+          transaction.color = 'danger';
+        if(incoming != -1 && transaction.to_address.length > 32)
+          transaction.color = 'success';
+        if(transaction.to_address.length < 32)
+          transaction.color = 'warning';
+
+        //DEBUG console.log(incoming, 'inc', transaction.to_address, 'hash', transaction.tx_hash, 'color', transaction.color)
+      });
+
+      var hashes = [];
+      var clone = transaction_data.slice(0);
+      transaction_data.forEach(function(tx,idx) { 
+        var foundHash = hashes.indexOf( tx.tx_hash );
+
+        if( foundHash === -1 ) { 
+          hashes.push(tx.tx_hash);
+        } 
+        else {
+          //console.log('found dup', tx.tx_hash, idx);
+          delete transaction_data[idx];
+        }
       });
 
       $scope.history = transaction_data;
@@ -140,18 +172,16 @@ function WalletHistoryController($scope, $q, $http, userService, hashExplorer) {
       delete data.balance;
 
       var transaction_data = [];
-      angular.forEach(data[0], function(msc_tx, tx_type) {
-        if (msc_tx instanceof Array && msc_tx.length != 0) {
-          //DEBUG console.log(tx_type, msc_tx);
-          transaction_data = transaction_data.concat(msc_tx);
-        }
-      });
+      var keys = Object.keys(data);
 
-      angular.forEach(data[1], function(tmsc_tx, tx_type) {
-        if (tmsc_tx instanceof Array && tmsc_tx.length != 0) {
-          //DEBUG console.log(tx_type, tmsc_tx);
-          transaction_data = transaction_data.concat(tmsc_tx);
-        }
+      angular.forEach(keys, function(tx_type) {
+        tx_data = data[ tx_type ];
+        angular.forEach( data[ tx_type ], function( tx_a, idx ) {
+          if (tx_a instanceof Array && tx_a.length != 0) {
+            //DEBUG console.log(tx_type, msc_tx);
+            transaction_data = transaction_data.concat(tx_a);
+          }
+        });
       });
 
       //sort by date, ascending
@@ -162,6 +192,39 @@ function WalletHistoryController($scope, $q, $http, userService, hashExplorer) {
       angular.forEach(transaction_data, function(transaction, index) {
         //DEBUG console.log(new Date(Number(transaction.tx_time)))
         transaction_data[index].tx_hash_concat = transaction.tx_hash.substring(0, 22) + '...'
+
+        if(transaction.currency_str == 'Smart Property') 
+          transaction.currency_str = transaction.propertyName;
+        if(transaction.currency_str == undefined)
+          transaction.currency_str = transaction.icon_text;
+        if(transaction.tx_type_str == undefined)
+          transaction.tx_type_str = transaction.icon_text;
+
+        var addresses = $scope.addresses.map(function(addrO) { return addrO.address; });
+        var incoming = addresses.indexOf(transaction.to_address);
+
+        if(incoming == -1 && transaction.to_address.length > 32)
+          transaction.color = 'danger';
+        if(incoming != -1 && transaction.to_address.length > 32)
+          transaction.color = 'success';
+        if(transaction.to_address.length < 32)
+          transaction.color = 'warning';
+
+        //DEBUG console.log(incoming, 'inc', transaction.to_address, 'hash', transaction.tx_hash, 'color', transaction.color)
+      });
+
+      var hashes = [];
+      var clone = transaction_data.slice(0);
+      transaction_data.forEach(function(tx,idx) { 
+        var foundHash = hashes.indexOf( tx.tx_hash );
+
+        if( foundHash === -1 ) { 
+          hashes.push(tx.tx_hash);
+        } 
+        else {
+          //console.log('found dup', tx.tx_hash, idx);
+          delete transaction_data[idx];
+        }
       });
 
       $scope.history = transaction_data;
@@ -232,7 +295,7 @@ function WalletTradeOverviewController($scope, $http, $q, userService, hashExplo
   $scope.setHashExplorer = hashExplorer.setHash.bind(hashExplorer)
   $scope.currencyUnit = 'stom'
   $scope.selectedTimeframe = "604800"
-  $scope.AssignedDate = Date;
+  $scope.timeNow = Date.now();
   $scope.global.getData = function(time, currency) {
     $scope.orderbook = []
     var transaction_data = []

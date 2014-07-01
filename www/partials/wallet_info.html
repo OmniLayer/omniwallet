@@ -72,7 +72,7 @@
         <option value="604800"> 1 week </option>
         <option value="2419200"> 1 month </option>
         <option value="7257600"> 3 months </option>
-        <option value={{AssignedDate.now()-1394834400000}}> All </option>
+        <option value={{timeNow-1394834400000}}> All </option>
       </select> <!-- <a href=""> filter </a> -->
     </div>
     <h3 ng-show="orderbook.length == 0" class="text-center">Loading orders...<img src="/assets/img/34-1.gif"></h3>
@@ -82,7 +82,7 @@
           <tr>
             <th>Transaction hash</th>
             <th>Price ({{ activeCurrencyPair[0] + '/' + activeCurrencyPair[1] }}) </th>
-            <th>Amount</th>
+            <th>Amount Remaining</th>
             <th>Cost</th>
             <th>Buyer Fee</th>
             <th>Payment Window <br /> (Blocks)</th>
@@ -94,13 +94,13 @@
       <tr ng-repeat="transaction in orderbook">
         <td ng-click="setHashExplorer(transaction)"><a href="/explorer/inspector?view={{transaction.tx_hash}}">{{transaction.tx_hash_concat}}</a></td>
         <td>{{transaction.formatted_price_per_coin}}</td> 
-        <td>{{transaction.formatted_amount}}</td> 
+        <td>{{ (transaction.formatted_amount_available==0.0) ? "Sold Out!" : (transaction.formatted_amount_available | number: 8) }}</td> 
         <td>{{transaction.formatted_bitcoin_amount_desired}}</td> 
         <td>{{transaction.formatted_fee_required}}</td> 
         <td>{{transaction.formatted_block_time_limit}}</td> 
         <td ng-show="(transaction.tx_hash.length == 64) && transaction.status == null && 
             !(transaction.from_address == selectedAddress)">
-        <button class="btn btn-primary btn-sm" ng-click="setView('buyOffer', transaction)" type="submit">Buy coin</button>
+        <button class="btn btn-primary btn-sm" ng-hide="{{transaction.formatted_amount_available==0.0}}" ng-click="setView('buyOffer', transaction)" type="submit">Buy coin</button>
         
         <td ng-show="transaction.from_address == selectedAddress"> Your offer/purchase </td>
       </td>
