@@ -171,7 +171,6 @@ function CrowdsaleIssuanceController($scope, propertiesService){
   transactionGenerationController.modalTemplateUrl = '/partials/wallet_assets_crowdsale_modal.html';
   
   transactionGenerationController.setModalScope = function($modalScope){
-    $scope.deadline.setSeconds(0);
     $modalScope.issueSuccess = false, $modalScope.issueError = false, $modalScope.waiting = false, $modalScope.privKeyPass = {};
     $modalScope.convertSatoshiToDisplayedValue=  $scope.convertSatoshiToDisplayedValue,
     $modalScope.getDisplayedAbbreviation=  $scope.getDisplayedAbbreviation,
@@ -182,7 +181,7 @@ function CrowdsaleIssuanceController($scope, propertiesService){
     $modalScope.propertySubcategory= $scope.propertySubcategory,
     $modalScope.propertyUrl= $scope.propertyUrl,
     $modalScope.currenciesDesired=$scope.currenciesDesired,
-    $modalScope.deadline=$scope.deadline.toUTCString(),
+    $modalScope.deadline=(new Date(Date.UTC($scope.deadline.getFullYear(),$scope.deadline.getMonth(),$scope.deadline.getDate(), $scope.deadline.getHours(), $scope.deadline.getMinutes(), 0, 0))).toUTCString(),
     $modalScope.earlyBirdBonus=$scope.earlyBirdBonus,
     $modalScope.percentageForIssuer=$scope.percentageForIssuer;
     $modalScope.selectedAddress=$scope.selectedAddress;
