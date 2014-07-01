@@ -167,12 +167,21 @@ angular.module('omniwallet').directive('d3PieChart', function() {
 }).directive('ensureInteger', function() {
   return {
     restrict: 'A',
-    require: '?ngModel',
+    require: 'ngModel',
+    scope:{
+      ensureIf:'&',
+      ensureOver:'='
+    },
     link: function(scope, ele, attrs, ngModel) {
-      scope.$watch(attrs.ngModel, function(value) {
-        if(attrs.ensureInteger)
+      scope.$watch("ensureOver", function(value) {
+        if(scope.ensureIf())
           if (!(typeof value==='number' && (value%1)===0))
-            ngModel = Math.ceil(ngModel);
+            scope.ensureOver = Math.ceil(value);
+      });
+      scope.$watch("ensureIf", function(value) {
+        if(scope.ensureIf())
+          if (!(typeof value==='number' && (value%1)===0))
+            scope.ensureOver = Math.ceil(value);
       });
     }
   };

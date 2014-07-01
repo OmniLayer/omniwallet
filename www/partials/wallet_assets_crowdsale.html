@@ -114,20 +114,20 @@
             <div class="form-group">
               <div class="input-group">
                 <span class="input-group-addon">Percentage for issuer: </span>
-                <input name="percentage" type="number" step="0.01" min="0" max="255" ng-model="percentageForIssuer" class="form-control" placeholder="For example: 10" ensure-integer="true" required>
+                <input name="percentage" type="number" step="0.01" min="0" max="255" ng-model="percentageForIssuer" class="form-control" placeholder="For example: 10" ensure-integer ensure-over="percentageForIssuer" ensure-if="true" required>
               </div>
             </div>
             <div class="form-group">
               <div class="input-group">
                 <span class="input-group-addon">Initial early bird bonus percentage: </span>
-                <input name="early" type="number" step="0.01" min="0" max="255" ng-model="earlyBirdBonus" class="form-control" placeholder="For example: 25" ensure-integer="true" required>
+                <input name="early" type="number" step="0.01" min="0" max="255" ng-model="earlyBirdBonus" class="form-control" placeholder="For example: 25" ensure-integer ensure-over="earlyBirdBonus" ensure-if="true" required>
               </div>
             </div>
             <div class="form-group">
               <div class="panel panel-default" ng-repeat="investment in currenciesDesired">
                 <div class="panel-body form-inline">
                   <div class="form-group col-xs-5">
-                    <input name="amount" type="number" step="{{tokenStep}}" min="{{tokenMin}}" max="{{tokenMax}}" ng-model="investment.numberOfTokens" ensure-integer="!isDivisible()" class="form-control" placeholder="# of tokens" required>
+                    <input name="amount" type="number" step="{{tokenStep}}" min="{{tokenMin}}" max="{{tokenMax}}" ng-model="investment.numberOfTokens" ensure-integer ensure-over="investment.numberOfTokens" ensure-if="!isDivisible()" class="form-control" placeholder="# of tokens" required>
                   </div>
                   <div class="form-group col-xs-7">
                     <label>per</label>
