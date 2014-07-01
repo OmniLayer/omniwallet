@@ -181,7 +181,7 @@ function CrowdsaleIssuanceController($scope, propertiesService){
     $modalScope.propertySubcategory= $scope.propertySubcategory,
     $modalScope.propertyUrl= $scope.propertyUrl,
     $modalScope.currenciesDesired=$scope.currenciesDesired,
-    $modalScope.deadline=$scope.deadline.toUTCString()(),
+    $modalScope.deadline=$scope.deadline.toUTCString(),
     $modalScope.earlyBirdBonus=$scope.earlyBirdBonus,
     $modalScope.percentageForIssuer=$scope.percentageForIssuer;
     $modalScope.selectedAddress=$scope.selectedAddress;
@@ -204,7 +204,7 @@ function CrowdsaleIssuanceController($scope, propertiesService){
           number_properties:$scope.isDivisible() ? +$scope.convertDisplayedValue(currency.numberOfTokens) : +currency.numberOfTokens,
           transaction_from: $scope.selectedAddress,
           currency_identifier_desired:currency.selectedCurrency.currencyId,
-          deadline:$scope.deadline.UTC(),
+          deadline:Date.UTC($scope.deadline.getFullYear(),$scope.deadline.getMonth(),$scope.deadline.getDate(), $scope.deadline.getHours(), $scope.deadline.getMinutes(), 0, 0),
           earlybird_bonus:$scope.earlyBirdBonus / ((($scope.deadline.getTime() / 1000) - ((new Date()).getTime() /1000)) /604800 ),
           percentage_for_issuer:$scope.percentageForIssuer,
           fee: $scope.convertDisplayedValue($scope.minerFees)
