@@ -397,10 +397,14 @@ angular.module('omniwallet').factory('appraiser', ['$rootScope', '$http', '$q', 
 angular.module('omniwallet').factory('hashExplorer', function() {
   var tx = '',
     loc = '',
+    search = '',
+    getHash = function() {},
     setHash = function() {};
   return {
     tx: tx,
     loc: loc,
+    search: search,
+    setSearch: function(query) { this.search = query; },
     setHash: function(tx) {
       this.tx = JSON.stringify(tx);
       this.loc = window.location.href.split('/').slice(-2).join('/');
