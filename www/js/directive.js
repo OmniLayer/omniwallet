@@ -171,9 +171,8 @@ angular.module('omniwallet').directive('d3PieChart', function() {
     link: function(scope, ele, attrs, ngModel) {
       scope.$watch(attrs.ngModel, function(value) {
         if(attrs.ensureInteger)
-          ngModel.$setValidity('integer', (typeof value==='number' && (value%1)===0));
-        else
-          ngModel.$setValidity('integer', true);
+          if (!(typeof value==='number' && (value%1)===0))
+            ngModel = Math.ceil(ngModel);
       });
     }
   };
