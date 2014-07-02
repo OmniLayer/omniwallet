@@ -21,9 +21,17 @@ def pushtx_response(response_dict):
     signed_tx=response_dict['signedTransaction'][0]
     
     response_status='OK'
-    pushed=pushtx(signed_tx)
+    pushed=pushtxnode(signed_tx)
+    print signed_tx
     response='{"status":"'+response_status+'", "pushed":"'+pushed+'"}'
+    print response
     return (response, None)
+
+def pushtxnode(signed_tx):
+    import commands, json
+    signed_tx = re.sub(r'\W+', '', signed_tx) #check alphanumeric
+    output=commands.getoutput('bitcoind sendrawtransaction ' +  str(signed_tx) )
+    return json.dumps(output)
 
 def pushtx(signed_tx):
     info(signed_tx)
