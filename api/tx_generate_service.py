@@ -357,9 +357,9 @@ def build_transaction(miner_fee_satoshis, pubkey,final_packets, total_packets, t
     #calculate fees
     miner_fee = Decimal(miner_fee_satoshis) / Decimal(1e8)
     if to_address != None:
-      fee_total = Decimal(miner_fee) + Decimal(0.00005757*total_packets+0.00005757*total_outs) + Decimal(2*0.00005757)
-    else: 
       fee_total = Decimal(miner_fee) + Decimal(0.00005757*total_packets+0.00005757*total_outs) + Decimal(0.00005757)
+    else: 
+      fee_total = Decimal(miner_fee) + Decimal(0.00005757*total_packets+0.00005757*total_outs) + Decimal(2*0.00005757)
     fee_total_satoshi = int( round( fee_total * Decimal(1e8) ) )
 
     #clean sx output, initial version by achamely
@@ -390,7 +390,7 @@ def build_transaction(miner_fee_satoshis, pubkey,final_packets, total_packets, t
     change = total_amount - fee_total_satoshi
     
     #DEBUG 
-    print [ dirty_txes, change, total_amount, fee_total_satoshi,  unspent_tx, total_packets, total_outs ] 
+    print [ dirty_txes, miner_fee_satoshis, miner_fee, change, total_amount, fee_total_satoshi,  unspent_tx, total_packets, total_outs, to_address ] 
 
     #source script is needed to sign on the client credit grazcoin
     hash160=bc_address_to_hash_160(from_address).encode('hex_codec')
