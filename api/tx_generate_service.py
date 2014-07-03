@@ -357,29 +357,21 @@ def build_transaction(miner_fee_satoshis, pubkey,final_packets, total_packets, t
     #calculate fees
 
     #set the tx cost/dust limit
-    TXCOST = int(5757)
-    TXCOSTD = float( Decimal(TXCOST)/Decimal(1e8) )
-    #TXCOSTD = 0.00005757
     miner_fee = Decimal(miner_fee_satoshis) / Decimal(1e8)
-
     if to_address==None or to_address==from_address:
-	#change goes to sender/receiver
+ 	#change goes to sender/receiver
         print "Single extra fee calculation"  
-	fee_total_satoshi = int(miner_fee_satoshis + (TXCOST * total_packets) + (TXCOST * total_outs) + TXCOST)  #exodus output is last
+ 	fee_total = Decimal(miner_fee) + Decimal(0.00005757*total_packets+0.00005757*total_outs) + Decimal(0.00005757)  #exodus output is last
     else:
-	#need 1 extra output for exodus and 1 for receiver.
-	print "Double extra fee calculation"
-	fee_total_satoshi = int(miner_fee_satoshis + (TXCOST * total_packets) + (TXCOST * total_outs) + (2 * TXCOST))  #exodus output is last
-        print "d done"
-    fee_total = ( Decimal(fee_total_satoshi) / Decimal(1e8) ) 
-    print "fee"
+ 	#need 1 extra output for exodus and 1 for receiver.
+ 	print "Double extra fee calculation"
+ 	fee_total = Decimal(miner_fee) + Decimal(0.00005757*total_packets+0.00005757*total_outs) + Decimal(2*0.00005757)  #exodus output is last
+    fee_total_satoshi = int( round( fee_total * Decimal(1e8) ) )
 
     #clean sx output, initial version by achamely
     utxo_list = []
     #round so we aren't under fee amount
     dirty_txes = get_utxo( from_address, fee_total_satoshi ).replace(" ", "")
-
-    print "dtx"
 
     if (dirty_txes[:3]=='Ass') or (dirty_txes[0][:3]=='Not'):
         raise Exception({ "status": "NOT OK", "error": "Not enough funds, try again. Needed: " + str(fee_total)  })
@@ -398,8 +390,6 @@ def build_transaction(miner_fee_satoshis, pubkey,final_packets, total_packets, t
             unspent_tx[-1] += [ int( utxo_list[z][1] ) ]
             total_amount += int( utxo_list[z][1] )
         z += 1
-
-    print "change"
 
     # calculate change : 
     # (total input amount) - (broadcast fee)
@@ -425,11 +415,11 @@ def build_transaction(miner_fee_satoshis, pubkey,final_packets, total_packets, t
                         break
 
 
-    validnextoutputs = { "1EXoDusjGwvnjZUyKkxZ4UHEf77z6A5S4P": TXCOSTD }
+    validnextoutputs = { "1EXoDusjGwvnjZUyKkxZ4UHEf77z6A5S4P": 0.00005757 }
     if to_address != None:
-        validnextoutputs[to_address]=TXCOSTD #Add for simple send
+        validnextoutputs[to_address]=0.00005757 #Add for simple send
     
-    if change >= TXCOST: # send anything above dust to yourself
+    if change >= 5757: # send anything above dust to yourself
         validnextoutputs[ from_address ] = float( Decimal(change)/Decimal(1e8) )
     
     unsigned_raw_tx = conn.createrawtransaction(validnextinputs, validnextoutputs)
@@ -477,7 +467,7 @@ def build_transaction(miner_fee_satoshis, pubkey,final_packets, total_packets, t
                     "type": "multisig", 
                     "addresses": addresses 
                 }, 
-                "value": TXCOSTD*len(addresses), 
+                "value": 0.00005757*len(addresses), 
                 "n": n_count
             })
     
