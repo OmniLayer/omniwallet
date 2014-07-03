@@ -355,16 +355,20 @@ def construct_packets(byte_stream, total_bytes, from_address):
     
 def build_transaction(miner_fee_satoshis, pubkey,final_packets, total_packets, total_outs, from_address, to_address=None):
     #calculate fees
+
+    #set the tx cost/dust limit
+    TXCOST = int(5757)
     miner_fee = Decimal(miner_fee_satoshis) / Decimal(1e8)
+
     if to_address==None or to_address==from_address:
 	#change goes to sender/receiver
         print "Single extra fee calculation"  
-	fee_total = Decimal(miner_fee) + Decimal(0.00005757*total_packets+0.00005757*total_outs) + Decimal(0.00005757)  #exodus output is last
+	fee_total_satoshi = satoshi_miner_fee + (TXCOST * total_packets) + (TXCOST * total_outs) + TXCOST  #exodus output is last
     else:
 	#need 1 extra output for exodus and 1 for receiver.
 	print "Double extra fee calculation"
-	fee_total = Decimal(miner_fee) + Decimal(0.00005757*total_packets+0.00005757*total_outs) + Decimal(2*0.00005757)  #exodus output is last
-    fee_total_satoshi = int( round( fee_total * Decimal(1e8) ) )
+	fee_total_satoshi = satoshi_miner_fee + (TXCOST * total_packets) + (TXCOST * total_outs) + (2 * TXCOST)  #exodus output is last
+    #fee_total_satoshi = int( round( fee_total * Decimal(1e8) ) )
 
     #clean sx output, initial version by achamely
     utxo_list = []
