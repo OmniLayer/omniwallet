@@ -195,8 +195,6 @@ function NavigationController($scope, $http, $modal, userService) {
 }
 
 function ExplorerController($scope, $http, hashExplorer) {
-
-
   $scope.setHashExplorer = hashExplorer.setHash.bind(hashExplorer);
   // Scope members
   $scope.searchQueryText = '';
@@ -216,7 +214,7 @@ function ExplorerController($scope, $http, hashExplorer) {
 
             angular.forEach(data, function(transaction, index) {
 
-              data[index].utc_time = new Date(+transaction.tx_time).toUTCString();
+              data[index].utc_time = new Date(+transaction.tx_time).toUTCString().replace('GMT','UTC');
               //DEBUG console.log(new Date(Number(transaction.tx_time)))
               data[index].tx_hash_concat = transaction.tx_hash.substring(0, 22) + '...'
             });
@@ -239,7 +237,7 @@ function ExplorerController($scope, $http, hashExplorer) {
     $http.get('/v1/search/?query=' + $scope.searchQueryText, {}).success(function(successData, status, headers, config) {
       angular.forEach(successData.data, function(transaction, index) {
         //DEBUG console.log(transaction)
-        successData.data[index].utc_time = new Date(+transaction.tx_time).toUTCString();
+        successData.data[index].utc_time = new Date(+transaction.tx_time).toUTCString().replace('GMT','UTC');
         successData.data[index].tx_hash_concat = transaction.tx_hash.substring(0, 22) + '...'
       });
 
