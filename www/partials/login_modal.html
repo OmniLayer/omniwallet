@@ -5,7 +5,7 @@
   <div class="modal-body">
     <div class="row">
       <div class="form-group col-xs-10 col-xs-push-1">
-        <label for="inputUUID">UUID</label>
+        <label for="inputUUID">Wallet ID</label>
         <input type="text" class="form-control" ng-disabled="loginInProgress || login.disable" ng-model="login.uuid" id="inputUUID" value="{{ uuid }}" auto-focus="!login.uuid">
       </div>
     </div>
@@ -20,9 +20,9 @@
     <div class="col-xs-8 col-xs-push-2">
       <input type="submit" class="btn btn-primary btn-block" value="{{login.button}}" ng-disabled="loginInProgress" >
       <img ng-show="loginInProgress" src="/assets/img/34-1.gif" alt="loading">
-      <div ng-show="missingUUID" style="color:red">Account does not exist</div>
-      <div ng-show="badPassword" style="color:red">Password is incorrect</div>
-      <div ng-show="serverError" style="color:red">Server error, please try again</div>
+      <div ng-show="missingUUID" style="color:red">Please enter a valid wallet id and password</div>
+      <div ng-show="badPassword" style="color:red">Please enter a valid wallet id and password</div>
+      <div ng-show="serverError" style="color:red">Server error, please try again in 5 min</div>
     </div>
   </div>
 </form>

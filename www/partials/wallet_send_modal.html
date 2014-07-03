@@ -8,15 +8,16 @@
 <div class="modal-footer">
     <div class="row">
     <button ng-disabled="clicked" class="btn btn-primary" ng-click="ok()">Yes, send my funds</button>
+    <button ng-disabled="wating" class="btn btn-warning" ng-click="cancel()">Cancel</button>
     <img class="" src="/assets/img/34-1.gif" ng-show="waiting">
     </div>
       <br>
     <div class="row">
-      <div ng-show="sendSuccess">
+      <div ng-show="transactionSuccess">
         <h4 class="pull-right col-xs-12" style="color:green"> Funds were sent successfully, 
         check your transaction <a target="_blank" href="{{url}}">here.</a></h4>
       </div>
-      <div ng-show="sendError">
+      <div ng-show="transactionError">
         <h4 class="col-xs-12" style="color:red;"> Funds could not be sent: 
          {{error}} </h4>
       </div>

@@ -22,6 +22,9 @@ function Login($injector, $scope, $http, $location, $modalInstance, $q, userServ
     var walletKey = '';
     var nonce = 0;
     $scope.loginInProgress = true;
+    $scope.missingUUID = false;
+    $scope.badPassword = false;
+    $scope.serverError = false;
 
     $http.get('/v1/user/wallet/challenge?uuid=' + uuid)
       .then(function(result) {

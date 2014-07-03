@@ -3,14 +3,8 @@
 </div>
 
 <div class="col-xs-10">
-  <br>
-  <br>
-  <div class="panel panel-default">
-    <h3 class="text-center panel-body"> Wallet History </h3>
-  </div>
-  <div class="alert alert-info alert-dismissable">
-    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-    This page contains your wallet history. You can click on transactions to view them too, later.
+  <div class="panel-default">
+    <div class="text-left panel-body om-title">History</div>
   </div>
 
   <div ng-controller="WalletHistoryController" ng-init="getData(selectedAddress)">
@@ -22,7 +16,7 @@
         </select> 
       </h4>
     
-    <table class="table table-striped table-hover table-condensed">
+    <table class="table table-hover table-condensed">
       <thead>
           <tr>
             <th>Transaction hash</th>
@@ -35,7 +29,7 @@
       <tbody>
       </tbody>
 
-      <tr ng-repeat="transaction in history track by $index">
+      <tr class="{{ transaction.color }}" ng-repeat="transaction in history track by $index" ng-show="transaction.tx_hash != undefined">
         <td ng-click="setHashExplorer(transaction)"> <a href="/explorer/inspector?view={{transaction.tx_hash}}">{{transaction.tx_hash_concat}}</a></td>
         <td>{{transaction.currency_str}}</td>
         <td>{{transaction.tx_type_str}}</td>

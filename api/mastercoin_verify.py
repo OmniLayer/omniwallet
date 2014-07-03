@@ -8,6 +8,18 @@ data_dir_root = os.environ.get('DATADIR')
 app = Flask(__name__)
 app.debug = True
 
+@app.route('/properties')
+def properties():
+  prop_glob = glob.glob(data_dir_root + '/properties/*.json')
+
+  response = []
+  for property_file in prop_glob:
+    with open(property_file, 'r') as f:
+      prop = json.load(f)[0]
+      response.append({ prop['currencyId']: prop['propertyName'] })
+
+  json_response = json.dumps(response)
+  return json_response
 
 @app.route('/addresses')
 def addresses():
@@ -22,7 +34,7 @@ def addresses():
           'address': addr['address']
       }
 
-      if currency_id == '0':
+      if currency_id == '0': #BTC
         btc_balance = [x['value'] for x in addr['balance'] if x['symbol'] == 'BTC'][0]
         res['balance'] = ('%.8f' % float(btc_balance)).rstrip('0').rstrip('.')
         response.append(res)
@@ -33,6 +45,7 @@ def addresses():
 
         if adjust_currency_id in addr:
           res['balance'] = ('%.8f' % float(addr[adjust_currency_id]['balance'])).rstrip('0').rstrip('.')
+          res['reserved_balance'] = ('%.8f' % float(addr[adjust_currency_id]['total_reserved'])).rstrip('0').rstrip('.')
           response.append(res)
 
   json_response = json.dumps(response)

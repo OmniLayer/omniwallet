@@ -2,6 +2,19 @@
     <div ng-include="templates['sidecar']"></div>
 </div>
 
-<div class="col-xs-10">
-Explorer Assets
+<div class="col-xs-10" ng-controller="ExplorerAssetsController">
+<div class="panel-default">
+    <div class="text-left panel-body om-title" >
+  Assets
+  </div>
+  <div class="row hide">
+      <a href="/assets/issue" class="btn btn-primary btn-sm" ng-show="isLoggedIn">Issue Assets</a>
+      <a href="/assets/crowdsale" class="btn btn-primary btn-sm" ng-show="isLoggedIn">Start Crowdsale</a>
+    </div>
+     <table class="table table-striped table-hover table-condensed">
+    <caption class="hide">| Assets Listing |</caption>
+    
+
+</table>
+</div>
 </div>
