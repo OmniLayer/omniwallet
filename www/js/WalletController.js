@@ -82,6 +82,8 @@ function WalletHistoryController($scope, $q, $http, userService, hashExplorer) {
   $scope.getAllData = function getAllData() {
     var transaction_data = [];
     var promises = [];
+    $scope.isLoading = "True";
+
 
     angular.forEach($scope.addresses, function(addrObject) {
       promises.push($http.post('/v1/address/addr/', {
@@ -150,6 +152,7 @@ function WalletHistoryController($scope, $q, $http, userService, hashExplorer) {
       });
 
       $scope.history = transaction_data;
+      $scope.isLoading = "False";
     });
   }
 
@@ -159,6 +162,7 @@ function WalletHistoryController($scope, $q, $http, userService, hashExplorer) {
       $scope.getAllData();
       return;
     }
+    $scope.isLoading = "True";
 
     console.log('Addr request 4');
     $http.post('/v1/address/addr/', {
@@ -228,6 +232,7 @@ function WalletHistoryController($scope, $q, $http, userService, hashExplorer) {
       });
 
       $scope.history = transaction_data;
+      $scope.isLoading = "False";
     });
   }
 }
