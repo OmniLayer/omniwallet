@@ -294,8 +294,16 @@ function WalletTradeController($scope, $http, $q, userService) {
 function WalletTradeOverviewController($scope, $http, $q, userService, hashExplorer) {
   $scope.setHashExplorer = hashExplorer.setHash.bind(hashExplorer)
   $scope.currencyUnit = 'stom'
-  $scope.selectedTimeframe = "604800"
   $scope.timeNow = Date.now();
+  $scope.timeAll = $scope.timeNow - 1394834400000;
+  $scope.timeOptions = [
+    {name:'24 Hours', value:'86400'},
+    {name:'1 Week', value:'604800'},
+    {name:'1 Month', value:'2419200'},
+    {name:'3 Month', value:'7257600'},
+    {name:'All', value:$scope.timeAll}
+  ];  
+  $scope.selectedTimeframe = $scope.timeOptions[4].value;
   $scope.global.getData = function(time, currency) {
     $scope.orderbook = []
     var transaction_data = []
