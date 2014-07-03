@@ -363,11 +363,11 @@ def build_transaction(miner_fee_satoshis, pubkey,final_packets, total_packets, t
     if to_address==None or to_address==from_address:
 	#change goes to sender/receiver
         print "Single extra fee calculation"  
-	fee_total_satoshi = satoshi_miner_fee + (TXCOST * total_packets) + (TXCOST * total_outs) + TXCOST  #exodus output is last
+	fee_total_satoshi = miner_fee_satoshis + (TXCOST * total_packets) + (TXCOST * total_outs) + TXCOST  #exodus output is last
     else:
 	#need 1 extra output for exodus and 1 for receiver.
 	print "Double extra fee calculation"
-	fee_total_satoshi = satoshi_miner_fee + (TXCOST * total_packets) + (TXCOST * total_outs) + (2 * TXCOST)  #exodus output is last
+	fee_total_satoshi = miner_fee_satoshis + (TXCOST * total_packets) + (TXCOST * total_outs) + (2 * TXCOST)  #exodus output is last
     #fee_total_satoshi = int( round( fee_total * Decimal(1e8) ) )
 
     #clean sx output, initial version by achamely
