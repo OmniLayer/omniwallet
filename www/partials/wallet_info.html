@@ -66,13 +66,7 @@
 
     <div class="col-xs-9">
       <select ng-model="selectedTimeframe"  
-          ng-change="global.getData(selectedTimeframe)">
-        <option value="">-- choose timeframe --</option>
-        <option value="86400"> 24 Hours </option>
-        <option value="604800"> 1 week </option>
-        <option value="2419200"> 1 month </option>
-        <option value="7257600"> 3 months </option>
-        <option value={{timeNow-1394834400000}}> All </option>
+          ng-change="global.getData(selectedTimeframe)" ng-options="time.value as time.name for time in timeOptions">
       </select> <!-- <a href=""> filter </a> -->
     </div>
     <h3 ng-show="orderbook.length == 0" class="text-center">Loading orders...<img src="/assets/img/34-1.gif"></h3>
