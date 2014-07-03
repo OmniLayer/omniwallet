@@ -358,7 +358,8 @@ def build_transaction(miner_fee_satoshis, pubkey,final_packets, total_packets, t
 
     #set the tx cost/dust limit
     TXCOST = int(5757)
-    TXCOSTD = float( Decimal(TXCOST)/Decimal(1e8) )
+    #TXCOSTD = float( Decimal(TXCOST)/Decimal(1e8) )
+    TXCOSTD = 0.00005757
     miner_fee = Decimal(miner_fee_satoshis) / Decimal(1e8)
 
     if to_address==None or to_address==from_address:
