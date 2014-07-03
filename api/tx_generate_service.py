@@ -13,7 +13,7 @@ data_dir_root = os.environ.get('DATADIR')
 app = Flask(__name__)
 app.debug = True
 
-HEXSPACE_FIRST='41'
+HEXSPACE_FIRST='21'
 HEXSPACE_SECOND='21'
 
 @app.route('/<int:tx_type>', methods=['POST'])
