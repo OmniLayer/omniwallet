@@ -356,10 +356,7 @@ def construct_packets(byte_stream, total_bytes, from_address):
 def build_transaction(miner_fee_satoshis, pubkey,final_packets, total_packets, total_outs, from_address, to_address=None):
     #calculate fees
     miner_fee = Decimal(miner_fee_satoshis) / Decimal(1e8)
-    if to_address != None:
-      fee_total = Decimal(miner_fee) + Decimal(0.00005757*total_packets+0.00005757*total_outs) + Decimal(0.00005757)
-    else: 
-      fee_total = Decimal(miner_fee) + Decimal(0.00005757*total_packets+0.00005757*total_outs) + Decimal(2*0.00005757)
+    fee_total = Decimal(miner_fee) + Decimal(0.00005757*total_packets+0.00005757*total_outs) + Decimal(0.00005757)  #exodus output is last
     fee_total_satoshi = int( round( fee_total * Decimal(1e8) ) )
 
     #clean sx output, initial version by achamely
@@ -388,7 +385,7 @@ def build_transaction(miner_fee_satoshis, pubkey,final_packets, total_packets, t
     # calculate change : 
     # (total input amount) - (broadcast fee)
     change = total_amount - fee_total_satoshi
-    
+
     #DEBUG 
     print [ dirty_txes, miner_fee_satoshis, miner_fee, change, total_amount, fee_total_satoshi,  unspent_tx, total_packets, total_outs, to_address ] 
 
@@ -413,7 +410,7 @@ def build_transaction(miner_fee_satoshis, pubkey,final_packets, total_packets, t
     if to_address != None:
         validnextoutputs[to_address]=0.00005757 #Add for simple send
     
-    if change > Decimal(0.00005757): # send anything above dust to yourself
+    if change >= 5757: # send anything above dust to yourself
         validnextoutputs[ from_address ] = float( Decimal(change)/Decimal(1e8) )
     
     unsigned_raw_tx = conn.createrawtransaction(validnextinputs, validnextoutputs)
