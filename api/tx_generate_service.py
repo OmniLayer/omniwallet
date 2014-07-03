@@ -358,8 +358,8 @@ def build_transaction(miner_fee_satoshis, pubkey,final_packets, total_packets, t
 
     #set the tx cost/dust limit
     TXCOST = int(5757)
-    #TXCOSTD = float( Decimal(TXCOST)/Decimal(1e8) )
-    TXCOSTD = 0.00005757
+    TXCOSTD = float( Decimal(TXCOST)/Decimal(1e8) )
+    #TXCOSTD = 0.00005757
     miner_fee = Decimal(miner_fee_satoshis) / Decimal(1e8)
 
     if to_address==None or to_address==from_address:
@@ -370,12 +370,16 @@ def build_transaction(miner_fee_satoshis, pubkey,final_packets, total_packets, t
 	#need 1 extra output for exodus and 1 for receiver.
 	print "Double extra fee calculation"
 	fee_total_satoshi = miner_fee_satoshis + (TXCOST * total_packets) + (TXCOST * total_outs) + (2 * TXCOST)  #exodus output is last
-    #fee_total_satoshi = int( round( fee_total * Decimal(1e8) ) )
+        print "d done"
+    fee_total = ( Decimal(fee_total_satoshi) / Decimal(1e8) ) 
+    print "fee"
 
     #clean sx output, initial version by achamely
     utxo_list = []
     #round so we aren't under fee amount
     dirty_txes = get_utxo( from_address, fee_total_satoshi ).replace(" ", "")
+
+    print "dtx"
 
     if (dirty_txes[:3]=='Ass') or (dirty_txes[0][:3]=='Not'):
         raise Exception({ "status": "NOT OK", "error": "Not enough funds, try again. Needed: " + str(fee_total)  })
@@ -394,6 +398,8 @@ def build_transaction(miner_fee_satoshis, pubkey,final_packets, total_packets, t
             unspent_tx[-1] += [ int( utxo_list[z][1] ) ]
             total_amount += int( utxo_list[z][1] )
         z += 1
+
+    print "change"
 
     # calculate change : 
     # (total input amount) - (broadcast fee)
