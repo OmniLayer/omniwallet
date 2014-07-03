@@ -358,6 +358,7 @@ def build_transaction(miner_fee_satoshis, pubkey,final_packets, total_packets, t
 
     #set the tx cost/dust limit
     TXCOST = int(5757)
+    TXCOSTD = float( Decimal(TXCOST)/Decimal(1e8) )
     miner_fee = Decimal(miner_fee_satoshis) / Decimal(1e8)
 
     if to_address==None or to_address==from_address:
@@ -417,11 +418,11 @@ def build_transaction(miner_fee_satoshis, pubkey,final_packets, total_packets, t
                         break
 
 
-    validnextoutputs = { "1EXoDusjGwvnjZUyKkxZ4UHEf77z6A5S4P": 0.00005757 }
+    validnextoutputs = { "1EXoDusjGwvnjZUyKkxZ4UHEf77z6A5S4P": TXCOSTD }
     if to_address != None:
-        validnextoutputs[to_address]=0.00005757 #Add for simple send
+        validnextoutputs[to_address]=TXCOSTD #Add for simple send
     
-    if change >= 5757: # send anything above dust to yourself
+    if change >= TXCOST: # send anything above dust to yourself
         validnextoutputs[ from_address ] = float( Decimal(change)/Decimal(1e8) )
     
     unsigned_raw_tx = conn.createrawtransaction(validnextinputs, validnextoutputs)
@@ -469,7 +470,7 @@ def build_transaction(miner_fee_satoshis, pubkey,final_packets, total_packets, t
                     "type": "multisig", 
                     "addresses": addresses 
                 }, 
-                "value": 0.00005757*len(addresses), 
+                "value": TXCOSTD*len(addresses), 
                 "n": n_count
             })
     
