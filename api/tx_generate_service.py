@@ -355,6 +355,7 @@ def construct_packets(byte_stream, total_bytes, from_address):
     
 def build_transaction(miner_fee_satoshis, pubkey,final_packets, total_packets, total_outs, from_address, to_address=None):
     if len(request.form['pubkey']) > 100:
+      print "Compressed Key, using hexspace 41"
       global HEXSPACE
       HEXSPACE='41'
 
