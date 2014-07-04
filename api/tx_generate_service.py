@@ -13,7 +13,7 @@ data_dir_root = os.environ.get('DATADIR')
 app = Flask(__name__)
 app.debug = True
 
-HEXSPACE_FIRST='21'
+HEXSPACE_FIRST='41'
 HEXSPACE_SECOND='21'
 
 @app.route('/<int:tx_type>', methods=['POST'])
@@ -354,9 +354,11 @@ def construct_packets(byte_stream, total_bytes, from_address):
     return [final_packets,total_packets,total_outs]
     
 def build_transaction(miner_fee_satoshis, pubkey,final_packets, total_packets, total_outs, from_address, to_address=None):
-    #calculate fees
+    if len(request.form['pubkey']) > 100:
+      global HEXSPACE
+      HEXSPACE='41'
 
-    #set the tx cost/dust limit
+    #calculate fees
     miner_fee = Decimal(miner_fee_satoshis) / Decimal(1e8)
     if to_address==None or to_address==from_address:
  	#change goes to sender/receiver
