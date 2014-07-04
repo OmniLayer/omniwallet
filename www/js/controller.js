@@ -247,6 +247,10 @@ function ExplorerController($scope, $http, hashExplorer) {
       successData.data = successData.data.sort(function(a, b) {
         return b.tx_time - a.tx_time;
       });
+
+      if ($scope.searchQueryText == "")
+        $scope.searchQueryText = hashExplorer.search
+
       $scope.transactions = successData.data;
       $scope.searchQueryReturned=true;
       $scope.searchQueryReturnedText=[ successData.data.length, $scope.searchQueryText.slice(0,7) + ( $scope.searchQueryText.length > 7 ? '...' : '' ) ];
