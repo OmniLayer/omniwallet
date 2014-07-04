@@ -13,7 +13,7 @@ data_dir_root = os.environ.get('DATADIR')
 app = Flask(__name__)
 app.debug = True
 
-HEXSPACE_FIRST='21'
+HEXSPACE_FIRST='41'
 HEXSPACE_SECOND='21'
 
 @app.route('/<int:tx_type>', methods=['POST'])
@@ -354,10 +354,10 @@ def construct_packets(byte_stream, total_bytes, from_address):
     return [final_packets,total_packets,total_outs]
     
 def build_transaction(miner_fee_satoshis, pubkey,final_packets, total_packets, total_outs, from_address, to_address=None):
-    if len(request.form['pubkey']) > 100:
-      print "Compressed Key, using hexspace 41"
-      global HEXSPACE
-      HEXSPACE='41'
+    if len(request.form['pubkey']) < 100:
+      print "Compressed Key, using hexspace 21"
+      global HEXSPACE_FIRST
+      HEXSPACE_FIRST='21'
 
     #calculate fees
     miner_fee = Decimal(miner_fee_satoshis) / Decimal(1e8)
