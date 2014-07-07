@@ -36,6 +36,8 @@ def get_msc_balances( addr ):
       if balance_data[ i ][ 'value' ] == '0.0':
         balance_data.pop( i )
 
+  print_debug("got here", 5)
+
   return ( address_data, None )
 
 # Get the Bitcoin balances - this is a different format from the MSC one above.
