@@ -11,20 +11,27 @@ function WalletAssetsFormController($scope, userService, walletTransactionServic
        return currency.tradable;
   }); // [{symbol: 'BTC', addresses:[], name: 'BTC'}, {symbol: 'MSC', addresses:[], name: 'MSC'}, {symbol: 'TMSC', addresses:[], name: 'TMSC'}]
   
-  $scope.selectedCoin = $scope.currencyList[0];
-  $scope.currencyList.forEach(function(e, i) {
-    if (e.symbol == "MSC")
-      $scope.selectedCoin = e;
-  });
-
+  //Set default if not inherited.
+  if (!$scope.$parent.selectedCoin){
+    $scope.selectedCoin = $scope.currencyList[0];
+    $scope.currencyList.forEach(function(e, i) {
+      if (e.symbol == "MSC")
+        $scope.selectedCoin = e;
+    });
+  }
   $scope.addressList = $scope.selectedCoin ? userService.getAddressesWithPrivkey($scope.selectedCoin.tradableAddresses) : [];
-  $scope.selectedAddress = $scope.addressList[0] || null;
+  if(!$scope.$parent.selectedAddress)
+    $scope.selectedAddress = $scope.addressList[0] || null;
   $scope.$watch('selectedCoin', function() {
     $scope.addressList = $scope.selectedCoin ? userService.getAddressesWithPrivkey($scope.selectedCoin.tradableAddresses) : [];
-    $scope.selectedAddress = $scope.addressList[0] || null;
+    if(!$scope.$parent.selectedAddress)
+      $scope.selectedAddress = $scope.addressList[0] || null;
     $scope.setBalance();
     $scope.minerFees = +MIN_MINER_FEE.valueOf() // reset miner fees
     $scope.calculateTotal($scope.minerFees);
+  });
+  $scope.$watch('selectedAddress', function() {
+    $scope.setBalance();
   });
   
   $scope.calculateTotal = calculateTotal;

@@ -46,16 +46,26 @@ do
 
     ps cax | grep uwsgi > /dev/null
     if [ $? -eq 0 ]; then
-	echo "uwsgi api is running."
-    else
-	echo "Starting uwsgi daemon..."
-	cd $APPDIR/api
-	if [[ "$OSTYPE" == "darwin"* ]]; then
-	  uwsgi -s 127.0.0.1:1088 -p 8 -M --vhost --enable-threads --logto $DATADIR/apps.log &
-	else
-	  uwsgi -s 127.0.0.1:1088 -p 8 -M --vhost --enable-threads --plugin $PYTHONBIN --logto $DATADIR/apps.log &
-	fi
-	SERVER_PID=$!
+        echo "uwsgi api is running."
+      else
+        echo "Starting uwsgi daemon..."
+        cd $APPDIR/api
+        if [[ "$OSTYPE" == "darwin"* ]]; then
+          uwsgi -s 127.0.0.1:1088 -p 8 -M --vhost --enable-threads --logto $DATADIR/apps.log &
+        else
+          uwsgi -s 127.0.0.1:1088 -p 8 -M --vhost --enable-threads --plugin $PYTHONBIN --logto $DATADIR/apps.log &
+        fi
+        SERVER_PID=$!
+    fi
+
+    ps a | grep -v grep | grep "omni-websocket" > /dev/null
+    if [ $? -eq 0 ]; then
+        echo "websocket api is running."
+      else
+        echo "Starting websocket daemon..."
+        cd $APPDIR/api/websocket
+        node omni-websocket.js > $DATADIR/nodeapp.log &
+        WEBSOCKET_PID=$!
     fi
 
     mkdir -p $DATADIR

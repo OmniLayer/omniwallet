@@ -1,33 +1,34 @@
 <row>
-  <div class="col-xs-12">
-    <h3>Balance Check</h3>
+  <div class="center-block col-xs-12">
+    <h3 class="text-center">Balance Check</h3>
     <form class="form-horizontal" role="form" name="addressentry">
       <div class="form-group">
-        <label for="address" class="col-xs-2 control-label">Address:</label>
-        <div class="col-xs-8">
-          <input type="text" class="form-control" name="address" id="address" placeholder="Address" ng-model="balanceAddress" ng-change="showResult=false">
-          <span><small>Enter a valid Bitcoin Address, e.g. 1EXoDusjGwvnjZUyKkxZ4UHEf77z6A5S4P</small></span>
-        </div>
-        <div class="col-xs-2">
-	  <button type="submit" class="btn btn-default" ng-click="checkBalance(); showResult=true" ng-disabled="validate(balanceAddress) == false"> Check! </button>
-          <span ng-show="validate(balanceAddress)" class="glyphicon glyphicon-ok-sign green"></span>
+        <div class="col-xs-offset-2 col-xs-10">
+           <div class="input-group col-xs-10">
+            <span ng-show="validate(balanceAddress)" class="glyphicon glyphicon-ok green input-group-addon input-group"></span>
+            <input type="text" class="form-control input-group" name="address" id="address" placeholder="Address" ng-model="balanceAddress" ng-change="showResult=false">
+            <span class="input-group-btn">
+                <input type="click" ng-click="checkBalance(); showResult=true" ng-disabled="validate(balanceAddress) == false" class="btn btn-primary" value="Click!" />
+            </span>
+           </div>
+           <span class="help-block"><small>Enter a valid Bitcoin Address, e.g. 1EXoDusjGwvnjZUyKkxZ4UHEf77z6A5S4P</small></span>
         </div>
       </div>
     </form>
     <div ng-if="hasBalances && showResult">
       <div class="asset-table">
         <div ng-repeat="currency in balances">
-          <row class="col-xs-offset-1 col-xs-10">
+          <row class="col-xs-offset-2 col-xs-10">
             <div class="container-fluid">
               <div class="asset-item col-xs-4 text-left">
                 <span>{{currency.name ? currency.name : currency.symbol}}</span>
               </div>
-              <div class="asset-item col-xs-5 text-right">
+              <div class="asset-item col-xs-6 text-right">
                 <span ng-if="currency.property_type != undefined && currency.property_type == 1" class="currency">{{ currency.balance }} </span>
                 <span ng-if="currency.property_type != undefined && currency.property_type == 2" class="currency">{{ currency.balance.toFixed(8) }}</span>
                 <span ng-if="currency.property_type == undefined" class="currency">{{ currency.balance.toFixed(8) }} {{ currency.symbol }}</span>
               </div>
-              <div class="asset-item col-xs-3 text-right">
+              <div class="asset-item col-xs-2 text-right">
                 <span>{{currency.value | currency}}</span>
               </div>
             </div>
@@ -43,7 +44,7 @@
 </row>
 
 <row>
-  <div class="col-xs-12 alert alert-info alert-dismissable">
+  <div class="col-xs-12 alert alert-info alert-dismissable hide">
    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
    <strong>Coming Soon:</strong> We are proud to announce that starting next week Omni will be moving to Beta status. <br />
            You will also be able to find us on the main domain:  http://www.omniwallet.org <br /> 
