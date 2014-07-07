@@ -214,7 +214,7 @@ function ExplorerController($scope, $http, hashExplorer) {
 
             angular.forEach(data, function(transaction, index) {
 
-              data[index].utc_time = new Date(+transaction.tx_time).toUTCString().replace('GMT','UTC');
+              data[index].utc_time = new Date(+transaction.tx_time).toUTCString().replace('GMT','');
               //DEBUG console.log(new Date(Number(transaction.tx_time)))
               data[index].tx_hash_concat = transaction.tx_hash.substring(0, 22) + '...'
             });
