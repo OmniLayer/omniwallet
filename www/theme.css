@@ -149,6 +149,24 @@ form.form-search:before {
     width:48%;
     height:320px;
 }
+
+.number {
+    font-family: Inconsolata;
+}
+.number .numeral-integer, .number .numeral-left {
+    color: #484848;
+    font-weight: bold;
+    float: left;
+    text-align: right;
+    width: 50%;
+}
+.number .numeral-right {
+    color: #7c7c7c;
+    float: left;
+    text-align: left;
+    width: 50%;
+}
+
 /* Social icons (source: http://azmind.com/2012/11/06/social-icons-sprites-35-ready-to-use-icons-psd-png-html-css/) */
 .icons a {
     display: inline-block;

@@ -9,8 +9,7 @@
         <div class="currency-name col-xs-8 text-left">
           Estimated Total Value
         </div>
-        <div class="currency-value col-xs-4 text-right">
-          {{total | currency}}
+        <div class="currency-value col-xs-4 text-right number" ng-bind-html="total | numeraljs: '$0,0.00'">
         </div>
       </row>
       <div class="asset-table">
@@ -25,8 +24,7 @@
                 <span ng-if="currency.property_type != undefined && currency.property_type == 2" class="currency">{{ currency.balance.toFixed(8) }}</span>
                 <span ng-if="currency.property_type == undefined" class="currency">{{ currency.balance.toFixed(8) }} {{ currency.symbol }}</span>
               </div>
-              <div class="asset-item col-xs-3 text-right">
-                <span>{{currency.value | currency}}</span>
+              <div class="asset-item col-xs-3 text-right number" ng-bind-html="currency.value | numeraljs: '$0,0.00'">
               </div>
             </div>
           </row> 

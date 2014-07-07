@@ -93,11 +93,11 @@
 
       <tr ng-repeat="transaction in orderbook">
         <td ng-click="setHashExplorer(transaction)"><a href="/explorer/inspector?view={{transaction.tx_hash}}">{{transaction.tx_hash_concat}}</a></td>
-        <td>{{transaction.formatted_price_per_coin}}</td> 
-        <td>{{transaction.formatted_amount}}</td> 
-        <td>{{transaction.formatted_bitcoin_amount_desired}}</td> 
-        <td>{{transaction.formatted_fee_required}}</td> 
-        <td>{{transaction.formatted_block_time_limit}}</td> 
+        <td class="number" ng-bind-html="transaction.formatted_price_per_coin | numeraljs: '0,0.00'"></td> 
+        <td class="number" ng-bind-html="transaction.formatted_amount | numeraljs: '0,0.00'"></td> 
+        <td class="number" ng-bind-html="transaction.formatted_bitcoin_amount_desired | numeraljs: '0,0.00'"></td> 
+        <td class="number" ng-bind-html="transaction.formatted_fee_required | numeraljs: '0,0.00'"></td> 
+        <td class="number" ng-bind-html="transaction.formatted_block_time_limit | numeraljs: '0,0.00'"></td> 
         <td ng-show="(transaction.tx_hash.length == 64) && transaction.status == null && 
             !(transaction.from_address == selectedAddress)">
         <button class="btn btn-primary btn-sm" ng-click="setView('buyOffer', transaction)" type="submit">Buy coin</button>
