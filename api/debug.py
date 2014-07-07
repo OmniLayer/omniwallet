@@ -11,7 +11,7 @@ debug_level = int(os.environ.get('DEBUGLEVEL'))
 def print_debug( msg, verbose ):
 
 
-  if int(verbose) > debug_level:
+  if int(verbose) < debug_level:
     commands.getoutput('echo '+msg+' >> '+data_dir_root+'/debug.log')
     return 1
    
