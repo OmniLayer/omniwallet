@@ -1,5 +1,5 @@
 import urlparse
-import os, sys
+import os, sys,re
 tools_dir = os.environ.get('TOOLSDIR')
 lib_path = os.path.abspath(tools_dir)
 sys.path.append(lib_path)
@@ -20,10 +20,28 @@ def pushtx_response(response_dict):
             
     signed_tx=response_dict['signedTransaction'][0]
     
-    response_status='OK'
-    pushed=pushtx(signed_tx)
-    response='{"status":"'+response_status+'", "pushed":"'+pushed+'"}'
+    response=pushtxnode(signed_tx)
+    print signed_tx,'\n', response
     return (response, None)
+
+def pushtxnode(signed_tx):
+    import commands, json
+    signed_tx = re.sub(r'\W+', '', signed_tx) #check alphanumeric
+    output=commands.getoutput('bitcoind sendrawtransaction ' +  str(signed_tx) )
+    
+    ret=re.findall('{.+',output)
+    if len(ret) > 0:
+        output=json.loads(ret[0])
+
+        response_status='NOTOK'
+        response=json.dumps({"status":response_status, "pushed": output['message'], "code": output['code'] })
+        response=json.dumps(output)
+    else:
+        response_status='OK'
+        response=json.dumps({"status":response_status, "pushed": 'success', "tx": output })
+
+    print response
+    return response
 
 def pushtx(signed_tx):
     info(signed_tx)
