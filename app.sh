@@ -44,6 +44,10 @@ do
     # lock
     touch $LOCK_FILE
 
+    #Update debug level
+    DEBUGLEVEL=`cat $DATADIR/debug.level`
+    export DEBUGLEVEL
+
     ps cax | grep uwsgi > /dev/null
     if [ $? -eq 0 ]; then
         echo "uwsgi api is running."
