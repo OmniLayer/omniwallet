@@ -125,25 +125,29 @@ def filterOffers(addresses,currencytype, offertype):
         bought_tx = { 'TMSC': [], 'MSC': [] }
         offer_tx =  { 'TMSC': [], 'MSC': [] }
         sold_tx =   { 'TMSC': [], 'MSC': [] }
+
+
         for key in allOffers:
             keystr = 'MSC' if key == '0' else 'TMSC'
-            if isinstance(allOffers[key],dict):
+            if isinstance(allOffers[key],dict) and int(key) < 2:
                 if offertype == 'BOTH':
-                    accept_tx[ keystr ] = allOffers[key]['accept_transactions']
-                    bought_tx[ keystr ] = allOffers[key]['bought_transactions']
-                    offer_tx[ keystr ] = allOffers[key]['offer_transactions']
-                    sold_tx[ keystr ] = allOffers[key]['sold_transactions']
+                    accept_tx[ keystr ] += allOffers[key]['accept_transactions']
+                    bought_tx[ keystr ] += allOffers[key]['bought_transactions']
+                    offer_tx[ keystr ] += allOffers[key]['offer_transactions']
+                    sold_tx[ keystr ] += allOffers[key]['sold_transactions']
                 elif offertype == 'ACCEPT': #accept_tx
-                    accept_tx[ keystr ] = allOffers[key]['accept_transactions']
-                    bought_tx[ keystr ] = allOffers[key]['bought_transactions']
+                    accept_tx[ keystr ] += allOffers[key]['accept_transactions']
+                    bought_tx[ keystr ] += allOffers[key]['bought_transactions']
                 elif offertype == 'SELL': #offer_tx
-                    offer_tx[ keystr ] = allOffers[key]['offer_transactions']
-                    sold_tx[ keystr ] = allOffers[key]['sold_transactions']
+                    offer_tx[ keystr ] += allOffers[key]['offer_transactions']
+                    sold_tx[ keystr ] += allOffers[key]['sold_transactions']
         
         offers[address]['accept_tx'] = accept_tx
         offers[address]['bought_tx'] = bought_tx
         offers[address]['offer_tx'] = offer_tx
         offers[address]['sold_tx'] = sold_tx
+
+        print accept_tx
         
     return offers
 
