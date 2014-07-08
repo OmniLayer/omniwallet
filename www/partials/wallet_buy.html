@@ -61,8 +61,7 @@
             <span class="input-group-addon"> Payment Timeframe : <a href=""
               tooltip="If your reservation offer is accepted and validated you will have to complete the payment within this time frame."
               tooltip-append-to-body="true"
-              tooltip-placement="top"
-              tooltip-trigger="click"> <strong>(?)</strong> </a> </span>
+              tooltip-placement="top"> <strong>(?)</strong> </a> </span>
             <input type="number" class="form-control"
             placeholder="{{ global['buyOffer'].formatted_block_time_limit }} Blocks. (Approx {{ (global['buyOffer'].formatted_block_time_limit * 10)/60 | number:2}} hours based on an average of 10min/block)" disabled>
           </div>
@@ -80,8 +79,7 @@
             <span class="input-group-addon"> Approx Cost : <a href=""
               tooltip="If your reservation offer is accepted and validated, you will have to pay this amount to complete the transaction."
               tooltip-append-to-body="true"
-              tooltip-placement="top"
-              tooltip-trigger="click"> <strong>(?)</strong> </a> </span>
+              tooltip-placement="top"> <strong>(?)</strong> </a> </span>
             <input type="number" class="form-control"
             placeholder="{{ ( global['buyOffer'].formatted_price_per_coin * buyAmount ) | number:8 }} BTC" disabled>
             <!-- need to update this to dynamic cost/currency type once metadex launces -->
