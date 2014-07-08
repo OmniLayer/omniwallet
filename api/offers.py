@@ -147,8 +147,6 @@ def filterOffers(addresses,currencytype, offertype):
         offers[address]['offer_tx'] = offer_tx
         offers[address]['sold_tx'] = sold_tx
 
-        print accept_tx
-        
     return offers
 
 def filterTransactionBid(transaction,validitystatus):

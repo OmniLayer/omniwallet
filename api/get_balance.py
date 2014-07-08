@@ -36,7 +36,7 @@ def get_msc_balances( addr ):
       if balance_data[ i ][ 'value' ] == '0.0':
         balance_data.pop( i )
 
-  print_debug("got here", 5)
+  #print_debug("got here", 5)
 
   return ( address_data, None )
 
