@@ -5,6 +5,7 @@ tools_dir = os.environ.get('TOOLSDIR')
 lib_path = os.path.abspath(tools_dir)
 sys.path.append(lib_path)
 from msc_apps import *
+from debug import *
 
 data_dir_root = os.environ.get('DATADIR')
 TIMEOUT='timeout -s 9 60 '
@@ -34,6 +35,8 @@ def get_msc_balances( addr ):
     for i in xrange( 0, len( balance_data )):
       if balance_data[ i ][ 'value' ] == '0.0':
         balance_data.pop( i )
+
+  #print_debug("got here", 5)
 
   return ( address_data, None )
 
