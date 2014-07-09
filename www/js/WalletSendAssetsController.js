@@ -34,7 +34,9 @@ function WalletSendAssetsController($modal, $scope, $http, $q, userService, wall
     var coin = $scope.selectedCoin.symbol;
     var address = $scope.selectedAddress;
     var sendTo = $scope.sendTo;
-    var required = [coin, address, sendAmount, sendTo, minerFees, totalFeeCost,  balance, btcbalance, $scope.sendForm.$valid];
+    var marked = $scope.marked;
+
+    var required = [coin, address, sendAmount, sendTo, minerFees, totalFeeCost,  balance, btcbalance, $scope.sendForm.$valid, marked];
 
     var error = 'Please ';
     if ($scope.sendForm.$valid == false) {
@@ -88,7 +90,8 @@ function WalletSendAssetsController($modal, $scope, $http, $q, userService, wall
         currency_identifier:$scope.selectedCoin.id,
         amount_to_transfer : $scope.selectedCoin.divisible ? +$scope.convertDisplayedValue($scope.sendAmount) : +$scope.sendAmount,
         transaction_to: $scope.sendTo,
-        fee: $scope.convertDisplayedValue($scope.minerFees)
+        fee: $scope.convertDisplayedValue($scope.minerFees),
+        marker: $scope.marked
       }
     }; 
   };
