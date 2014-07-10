@@ -44,11 +44,11 @@
       </div>
       <br>
       <div class="input-group">
-        <span class="input-group-addon"> Unit price per coin ( # BTC for 1 {{ getDisplayedAbbreviation() }}): </span>
+        <span class="input-group-addon"> Bitcoin desired for sale ( # BTC for {{ saleAmount || 0 }} {{ getDisplayedAbbreviation() }}): </span>
         <input name="ppc" type="number" step="0.01" ng-model="salePricePerCoin" class="form-control"
           placeholder="0.10000000" min="0" required>
         <span class="input-group-addon"> 
-          Cost: {{  (saleAmount && salePricePerCoin) ? (( saleAmount || 0) * ( salePricePerCoin || 0) | number:8) : 0  }}
+          Price per coin: {{  (saleAmount && salePricePerCoin) ? (( saleAmount || 0) / ( salePricePerCoin || 0) | number:8) : 0  }}
           BTC</span>
       </div>
       <br>

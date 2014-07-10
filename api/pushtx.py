@@ -35,7 +35,6 @@ def pushtxnode(signed_tx):
 
         response_status='NOTOK'
         response=json.dumps({"status":response_status, "pushed": output['message'], "code": output['code'] })
-        response=json.dumps(output)
     else:
         response_status='OK'
         response=json.dumps({"status":response_status, "pushed": 'success', "tx": output })
