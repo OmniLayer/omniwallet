@@ -1,5 +1,5 @@
 import urlparse
-import os, sys, re, random,pybitcointools, bitcoinrpc
+import os, sys, re, random,pybitcointools, bitcoinrpc, math
 from decimal import Decimal
 from flask import Flask, request, jsonify, abort, json, make_response
 from msc_apps import *
@@ -13,7 +13,6 @@ data_dir_root = os.environ.get('DATADIR')
 app = Flask(__name__)
 app.debug = True
 
-HEXSPACE_FIRST='41'
 HEXSPACE_SECOND='21'
 
 @app.route('/<int:tx_type>', methods=['POST'])
@@ -26,6 +25,8 @@ def generate_assets(tx_type):
         return jsonify({ 'status': 400, 'data': 'Unsupported transaction type '+str(tx_type) })
     
     expected_fields=['transaction_version', 'transaction_from','pubkey','fee']
+
+    print "Form ",request.form
 
     #might add tx 00, 53, etc later;
     if tx_type == 50:
@@ -107,8 +108,8 @@ def prepare_txdata(txtype,form):
                 txdata.append(int(form['number_properties']))
                 txdata.append(int(form['currency_identifier_desired']))
                 txdata.append(int(form['deadline']))
-                txdata.append(int(form['earlybird_bonus']))
-                txdata.append(int(form['percentage_for_issuer']))
+                txdata.append(int(math.ceil(float(form['earlybird_bonus']))))
+                txdata.append(int(math.ceil(float(form['percentage_for_issuer']))))
             else:
                 txdata.append(int(form['number_properties']))
             
@@ -354,12 +355,23 @@ def construct_packets(byte_stream, total_bytes, from_address):
     return [final_packets,total_packets,total_outs]
     
 def build_transaction(miner_fee_satoshis, pubkey,final_packets, total_packets, total_outs, from_address, to_address=None):
+    print 'pubkey', request.form['pubkey'], len(request.form['pubkey']) 
+    if len(request.form['pubkey']) < 100:
+      print "Compressed Key, using hexspace 21"
+      HEXSPACE_FIRST='21'
+    else:
+      HEXSPACE_FIRST='41'
+
     #calculate fees
     miner_fee = Decimal(miner_fee_satoshis) / Decimal(1e8)
-    if to_address != None:
-      fee_total = Decimal(miner_fee) + Decimal(0.00005757*total_packets+0.00005757*total_outs) + Decimal(2*0.00005757)
-    else: 
-      fee_total = Decimal(miner_fee) + Decimal(0.00005757*total_packets+0.00005757*total_outs) + Decimal(0.00005757)
+    if to_address==None or to_address==from_address:
+ 	    #change goes to sender/receiver
+        print "Single extra fee calculation"  
+        fee_total = Decimal(miner_fee) + Decimal(0.00005757*total_packets+0.00005757*total_outs) + Decimal(0.00005757)  #exodus output is last
+    else:
+        #need 1 extra output for exodus and 1 for receiver.
+        print "Double extra fee calculation"
+        fee_total = Decimal(miner_fee) + Decimal(0.00005757*total_packets+0.00005757*total_outs) + Decimal(2*0.00005757)  #exodus output is last
     fee_total_satoshi = int( round( fee_total * Decimal(1e8) ) )
 
     #clean sx output, initial version by achamely
@@ -388,9 +400,9 @@ def build_transaction(miner_fee_satoshis, pubkey,final_packets, total_packets, t
     # calculate change : 
     # (total input amount) - (broadcast fee)
     change = total_amount - fee_total_satoshi
-    
+
     #DEBUG 
-    print [ dirty_txes, change, total_amount, fee_total_satoshi,  unspent_tx, total_packets, total_outs ] 
+    print [ "Debugging...", dirty_txes,"miner fee sats: ", miner_fee_satoshis,"miner fee: ", miner_fee, "change: ",change,"total_amt: ", total_amount,"fee tot sat: ", fee_total_satoshi,"utxo ",  unspent_tx,"total pax ", total_packets, "total outs ",total_outs,"to ", to_address ]
 
     #source script is needed to sign on the client credit grazcoin
     hash160=bc_address_to_hash_160(from_address).encode('hex_codec')
@@ -413,7 +425,7 @@ def build_transaction(miner_fee_satoshis, pubkey,final_packets, total_packets, t
     if to_address != None:
         validnextoutputs[to_address]=0.00005757 #Add for simple send
     
-    if change > Decimal(0.00005757): # send anything above dust to yourself
+    if change >= 5757: # send anything above dust to yourself
         validnextoutputs[ from_address ] = float( Decimal(change)/Decimal(1e8) )
     
     unsigned_raw_tx = conn.createrawtransaction(validnextinputs, validnextoutputs)
@@ -449,7 +461,8 @@ def build_transaction(miner_fee_satoshis, pubkey,final_packets, total_packets, t
             total_sig_count = total_sig_count + 1
         hex_string = hex_string + "5" + str(total_sig_count) + "ae"
         asm_string = asm_string + " " + str(total_sig_count) + " " + "OP_CHECKMULTISIG"
-        #DEBUG print [hex_string, asm_string, addresses,total_sig_count]
+        #DEBUG 
+        print ["hex string, asm string, addrs, total_sigs, ", hex_string, asm_string, addresses,total_sig_count]
         #add multisig output to json object
         json_tx['vout'].append(
             { 
@@ -537,7 +550,8 @@ def build_transaction(miner_fee_satoshis, pubkey,final_packets, total_packets, t
     if 'txid' not in decoded_tx:
         raise Exception({ "status": "NOT OK", "error": "Network byte mismatch: Please try again"  })
 
-    #DEBUG print ''.join(hex_transaction).lower()
+    #DEBUG 
+    print 'final hex ', ''.join(hex_transaction).lower()
     #DEBUG print pprint.pprint(conn.decoderawtransaction(''.join(hex_transaction).lower()))
 
     unsigned_hex=''.join(hex_transaction).lower()

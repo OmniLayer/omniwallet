@@ -12,7 +12,7 @@
             </span>
         </div>
             <p class="col-xs-12 label label-danger" ng-if="searchForm.searchEntry.$error.pattern"> You cannot use non-alphanumeric characters while searching. </p>
-            <p class="col-xs-12 label label-danger" ng-if="transactions.length == 0"> Found no transactions for your query. </p>
+            <p class="col-xs-12 label label-danger" ng-if="searchQueryText.length > 3 && transactions.length == 0"> Found no transactions for your query. </p>
             <p class="col-xs-12 label label-warning" ng-show="searchQueryText.length > 0 && searchQueryText.length < 4" > You need at least {{ 4-searchQueryText.length }} more character(s) to search. </p>
     </form>
 
@@ -31,7 +31,7 @@
           <th>Details</th>
           <th>Amount</th>
           <th>Block</th>
-          <th>Block time</th>
+          <th>Block time (UTC)</th>
         </tr>
     </thead>
     <tbody>
