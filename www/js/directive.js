@@ -164,4 +164,25 @@ angular.module('omniwallet').directive('d3PieChart', function() {
       });
     }
   };
+}).directive('ensureInteger', function() {
+  return {
+    restrict: 'A',
+    require: 'ngModel',
+    scope:{
+      ensureIf:'&',
+      ensureOver:'='
+    },
+    link: function(scope, ele, attrs, ngModel) {
+      scope.$watch("ensureOver", function(value) {
+        if(scope.ensureIf())
+          if (!(typeof value==='number' && (value%1)===0))
+            scope.ensureOver = Math.ceil(value);
+      });
+      scope.$watch("ensureIf", function(value) {
+        if(scope.ensureIf())
+          if (!(typeof value==='number' && (value%1)===0))
+            scope.ensureOver = Math.ceil(value);
+      });
+    }
+  };
 });
