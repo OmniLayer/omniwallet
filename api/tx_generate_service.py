@@ -1,5 +1,5 @@
 import urlparse
-import os, sys, re, random,pybitcointools, bitcoinrpc
+import os, sys, re, random,pybitcointools, bitcoinrpc, math
 from decimal import Decimal
 from flask import Flask, request, jsonify, abort, json, make_response
 from msc_apps import *
@@ -107,8 +107,8 @@ def prepare_txdata(txtype,form):
                 txdata.append(int(form['number_properties']))
                 txdata.append(int(form['currency_identifier_desired']))
                 txdata.append(int(form['deadline']))
-                txdata.append(int(form['earlybird_bonus']))
-                txdata.append(int(form['percentage_for_issuer']))
+                txdata.append(int(math.ceil(float(form['earlybird_bonus']))))
+                txdata.append(int(math.ceil(float(form['percentage_for_issuer']))))
             else:
                 txdata.append(int(form['number_properties']))
             
@@ -362,13 +362,13 @@ def build_transaction(miner_fee_satoshis, pubkey,final_packets, total_packets, t
     #calculate fees
     miner_fee = Decimal(miner_fee_satoshis) / Decimal(1e8)
     if to_address==None or to_address==from_address:
- 	#change goes to sender/receiver
+ 	    #change goes to sender/receiver
         print "Single extra fee calculation"  
- 	fee_total = Decimal(miner_fee) + Decimal(0.00005757*total_packets+0.00005757*total_outs) + Decimal(0.00005757)  #exodus output is last
+        fee_total = Decimal(miner_fee) + Decimal(0.00005757*total_packets+0.00005757*total_outs) + Decimal(0.00005757)  #exodus output is last
     else:
- 	#need 1 extra output for exodus and 1 for receiver.
- 	print "Double extra fee calculation"
- 	fee_total = Decimal(miner_fee) + Decimal(0.00005757*total_packets+0.00005757*total_outs) + Decimal(2*0.00005757)  #exodus output is last
+        #need 1 extra output for exodus and 1 for receiver.
+        print "Double extra fee calculation"
+        fee_total = Decimal(miner_fee) + Decimal(0.00005757*total_packets+0.00005757*total_outs) + Decimal(2*0.00005757)  #exodus output is last
     fee_total_satoshi = int( round( fee_total * Decimal(1e8) ) )
 
     #clean sx output, initial version by achamely

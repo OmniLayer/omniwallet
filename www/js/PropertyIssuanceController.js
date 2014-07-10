@@ -1,10 +1,18 @@
 function PropertyIssuanceController($scope, propertiesService){
   $scope.walletAssets=$scope.$parent.$parent;
+  $scope.walletAssets.currencyList.forEach(function(e, i) {
+    if (e.symbol == "BTC")
+      $scope.walletAssets.selectedCoin = e;
+  });
+  
   var transactionGenerationController = $scope.$parent;
   $scope.ecosystem = 2;
   $scope.propertyType = 2;
+  $scope.tokenStep = $scope.tokenMin =  0.00000001;
+  $scope.tokenMax = "92233720368.54775807";
   $scope.categories=[];
   $scope.subcategories=[];
+  $scope.propertyCategory='';
   
   $scope.setEcosystem = function(){
     $scope.categories=[];
@@ -18,6 +26,7 @@ function PropertyIssuanceController($scope, propertiesService){
     });
   };
   $scope.loadSubcategories=function(category){
+    $scope.propertySubcategory = '';
     propertiesService.loadSubcategories($scope.ecosystem, category).then(function(result){  
       $scope.subcategories=result.data.subcategories.sort();
     });
@@ -27,6 +36,11 @@ function PropertyIssuanceController($scope, propertiesService){
   
   $scope.isDivisible=function(){
     return $scope.propertyType == 2 || $scope.propertyType == 66 || $scope.propertyType == 130
+  };
+  
+  $scope.typeChanged = function(){
+    $scope.tokenStep = $scope.tokenMin = $scope.isDivisible() ? 0.00000001 : 1;
+    $scope.tokenMax = $scope.isDivisible() ? "92233720368.54775807" : "9223372036854775807";
   };
   
   transactionGenerationController.validateTransactionData=function(){
@@ -83,10 +97,10 @@ function PropertyIssuanceController($scope, propertiesService){
         ecosystem:$scope.ecosystem,
         property_type : $scope.propertyType, 
         previous_property_id:$scope.previousPropertyId || 0, 
-        property_category:$scope.propertyCategory, 
-        property_subcategory:$scope.propertySubcategory, 
+        property_category:$scope.propertyCategory || '\0', 
+        property_subcategory:$scope.propertySubcategory || '\0', 
         property_name:$scope.propertyName, 
-        property_url:$scope.propertyUrl, 
+        property_url:$scope.propertyUrl || '\0', 
         property_data:$scope.propertyData || '\0', 
         number_properties: $scope.isDivisible() ? +$scope.convertDisplayedValue($scope.numberProperties) : +$scope.numberProperties,
         transaction_from: $scope.selectedAddress,

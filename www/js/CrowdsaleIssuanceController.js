@@ -9,18 +9,30 @@ function CrowdsaleIssuanceController($scope, propertiesService){
       $scope.isNewProperty = true;
   };*/
   $scope.walletAssets = $scope.$parent.$parent;
+  $scope.walletAssets.currencyList.forEach(function(e, i) {
+    if (e.symbol == "BTC")
+      $scope.walletAssets.selectedCoin = e;
+  });
+  
   var transactionGenerationController = $scope.$parent;
   $scope.ecosystem = 2;
   $scope.propertyType = 2;
+  $scope.tokenStep = $scope.tokenMin =  0.00000001;
+  $scope.tokenMax = "92233720368.54775807";
   $scope.singleCurrency = true;
   var availableDesiredCurrencies=[];
   var selectedDesiredCurrencies=[];
   $scope.categories=[];
   $scope.subcategories=[];
   $scope.currenciesDesired=[];
+  $scope.propertyCategory='';
+  
+  var mastercoin ={currencyId:1,propertyName:"Mastercoin"};
+  var bitcoin = {currencyId:0,propertyName:"Bitcoin"};
+  var testMastercoin = {currencyId:2,propertyName:"Test Mastercoin"};
   
   $scope.setEcosystem = function(){
-    availableDesiredCurrencies=$scope.ecosystem == 1 ? [{currencyId:1,propertyName:"Mastercoin"},{currencyId:0,propertyName:"Bitcoin"}]:[{currencyId:2,propertyName:"Test Mastercoin"}];
+    availableDesiredCurrencies=$scope.ecosystem == 1 ? [mastercoin,bitcoin]:[testMastercoin];
     propertiesService.list($scope.ecosystem).then(function(result){
       availableDesiredCurrencies = availableDesiredCurrencies.concat(result.data.properties).sort(function(a, b) {
           var currencyA = a.propertyName.toUpperCase();
@@ -30,8 +42,9 @@ function CrowdsaleIssuanceController($scope, propertiesService){
       var availableTokens = availableDesiredCurrencies.filter(function(currency){
         return selectedDesiredCurrencies.indexOf(currency) == -1;
       });
-      $scope.currenciesDesired =[{numberOfTokens:"", selectedCurrency:availableTokens[0] , previousCurrency:availableTokens[0], availableTokens:availableTokens}];
-      selectedDesiredCurrencies.push(availableTokens[0]);
+      var selectedCurrency = $scope.ecosystem == 1 ? mastercoin : testMastercoin;
+      $scope.currenciesDesired =[{numberOfTokens:"", selectedCurrency:selectedCurrency, previousCurrency:selectedCurrency, availableTokens:availableTokens}];
+      selectedDesiredCurrencies.push(selectedCurrency);
     });
     $scope.categories=[];
     $scope.subcategories=[];
@@ -44,6 +57,7 @@ function CrowdsaleIssuanceController($scope, propertiesService){
     });
   };
   $scope.loadSubcategories=function(category){
+    $scope.propertySubcategory = '';
     propertiesService.loadSubcategories($scope.ecosystem, category).then(function(result){  
       $scope.subcategories=result.data.subcategories.sort();
     });
@@ -62,7 +76,8 @@ function CrowdsaleIssuanceController($scope, propertiesService){
       var availableTokens = availableDesiredCurrencies.filter(function(currency){
         return selectedDesiredCurrencies.indexOf(currency) == -1;
       });
-      var newCurrencyDesired = {numberOfTokens:"", selectedCurrency:availableTokens[0] , previousCurrency:availableTokens[0], availableTokens:availableTokens};
+      var selectedCurrency = availableTokens.indexOf(mastercoin) > -1 ? mastercoin : availableTokens.indexOf(bitcoin) > -1 ? bitcoin : availableTokens[0];
+      var newCurrencyDesired = {numberOfTokens:"", selectedCurrency:selectedCurrency, previousCurrency:selectedCurrency, availableTokens:availableTokens};
       $scope.setAvailableTokens(newCurrencyDesired);
       $scope.currenciesDesired.push(newCurrencyDesired);
     }
@@ -118,6 +133,10 @@ function CrowdsaleIssuanceController($scope, propertiesService){
     $scope.singleCurrency = count == 1;
   });
   
+  $scope.typeChanged = function(){
+    $scope.tokenStep = $scope.tokenMin = $scope.isDivisible() ? 0.00000001 : 1;
+    $scope.tokenMax = $scope.isDivisible() ? "92233720368.54775807" : "9223372036854775807";
+  };
   
   // TRASANCTION GENERATION CONFIG 
   transactionGenerationController.validateTransactionData = function(){
@@ -155,14 +174,14 @@ function CrowdsaleIssuanceController($scope, propertiesService){
     $modalScope.issueSuccess = false, $modalScope.issueError = false, $modalScope.waiting = false, $modalScope.privKeyPass = {};
     $modalScope.convertSatoshiToDisplayedValue=  $scope.convertSatoshiToDisplayedValue,
     $modalScope.getDisplayedAbbreviation=  $scope.getDisplayedAbbreviation,
-    $modalScope.divisible=  $scope.propertyType == 1 || $scope.propertyType == 65 || $scope.propertyType == 129? 'No' : 'Yes',
+    $modalScope.divisible= $scope.isDivisible() ? 'Yes' : 'No',
     $modalScope.propertyName= $scope.propertyName,
     $modalScope.propertyData= $scope.propertyData,
     $modalScope.propertyCategory= $scope.propertyCategory,
     $modalScope.propertySubcategory= $scope.propertySubcategory,
     $modalScope.propertyUrl= $scope.propertyUrl,
     $modalScope.currenciesDesired=$scope.currenciesDesired,
-    $modalScope.deadline=$scope.deadline.toLocaleDateString(),
+    $modalScope.deadline=(new Date(Date.UTC($scope.deadline.getFullYear(),$scope.deadline.getMonth(),$scope.deadline.getDate(), $scope.deadline.getHours(), $scope.deadline.getMinutes(), 0, 0))).toUTCString(),
     $modalScope.earlyBirdBonus=$scope.earlyBirdBonus,
     $modalScope.percentageForIssuer=$scope.percentageForIssuer;
     $modalScope.selectedAddress=$scope.selectedAddress;
@@ -177,16 +196,16 @@ function CrowdsaleIssuanceController($scope, propertiesService){
           ecosystem:$scope.ecosystem,
           property_type : $scope.propertyType, 
           previous_property_id:$scope.previousPropertyId || 0, 
-          property_category:$scope.propertyCategory, 
-          property_subcategory:$scope.propertySubcategory, 
+          property_category:$scope.propertyCategory || '\0', 
+          property_subcategory:$scope.propertySubcategory || '\0', 
           property_name:$scope.propertyName, 
-          property_url:$scope.propertyUrl, 
+          property_url:$scope.propertyUrl || '\0', 
           property_data:$scope.propertyData || '\0', 
           number_properties:$scope.isDivisible() ? +$scope.convertDisplayedValue(currency.numberOfTokens) : +currency.numberOfTokens,
           transaction_from: $scope.selectedAddress,
           currency_identifier_desired:currency.selectedCurrency.currencyId,
-          deadline:$scope.deadline.getTime(),
-          earlybird_bonus:$scope.earlyBirdBonus,
+          deadline:Date.UTC($scope.deadline.getFullYear(),$scope.deadline.getMonth(),$scope.deadline.getDate(), $scope.deadline.getHours(), $scope.deadline.getMinutes(), 0, 0),
+          earlybird_bonus:$scope.earlyBirdBonus / ((($scope.deadline.getTime() / 1000) - ((new Date()).getTime() /1000)) /604800 ),
           percentage_for_issuer:$scope.percentageForIssuer,
           fee: $scope.convertDisplayedValue($scope.minerFees)
         });
@@ -222,7 +241,10 @@ function CrowdsaleIssuanceController($scope, propertiesService){
   $scope.today = function() {
     $scope.deadline= new Date();
   };
-  $scope.today();
+  
+  var nextMonth = new Date()
+  nextMonth.setMonth(nextMonth.getMonth() +1);
+  $scope.deadline = nextMonth;
 
   $scope.open = function($event) {
     $event.preventDefault();
@@ -230,7 +252,12 @@ function CrowdsaleIssuanceController($scope, propertiesService){
 
     $scope.opened = true;
   };
-
+  
+  // Disable weekend selection
+  $scope.disabled = function(date, mode) {
+    return ( mode === 'day' && date.getTime() < (new Date()).getTime());
+  };
+  
   $scope.dateOptions = {
     formatYear: 'yy',
     startingDay: 1
