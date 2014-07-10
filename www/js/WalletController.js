@@ -82,6 +82,8 @@ function WalletHistoryController($scope, $q, $http, userService, hashExplorer) {
   $scope.getAllData = function getAllData() {
     var transaction_data = [];
     var promises = [];
+    $scope.isLoading = "True";
+
 
     angular.forEach($scope.addresses, function(addrObject) {
       promises.push($http.post('/v1/address/addr/', {
@@ -150,6 +152,7 @@ function WalletHistoryController($scope, $q, $http, userService, hashExplorer) {
       });
 
       $scope.history = transaction_data;
+      $scope.isLoading = "False";
     });
   }
 
@@ -159,6 +162,7 @@ function WalletHistoryController($scope, $q, $http, userService, hashExplorer) {
       $scope.getAllData();
       return;
     }
+    $scope.isLoading = "True";
 
     console.log('Addr request 4');
     $http.post('/v1/address/addr/', {
@@ -228,6 +232,7 @@ function WalletHistoryController($scope, $q, $http, userService, hashExplorer) {
       });
 
       $scope.history = transaction_data;
+      $scope.isLoading = "False";
     });
   }
 }
@@ -294,8 +299,16 @@ function WalletTradeController($scope, $http, $q, userService) {
 function WalletTradeOverviewController($scope, $http, $q, userService, hashExplorer) {
   $scope.setHashExplorer = hashExplorer.setHash.bind(hashExplorer)
   $scope.currencyUnit = 'stom'
-  $scope.selectedTimeframe = "604800"
   $scope.timeNow = Date.now();
+  $scope.timeAll = $scope.timeNow - 1394834400000;
+  $scope.timeOptions = [
+    {name:'24 Hours', value:'86400'},
+    {name:'1 Week', value:'604800'},
+    {name:'1 Month', value:'2419200'},
+    {name:'3 Month', value:'7257600'},
+    {name:'All', value:$scope.timeAll}
+  ];  
+  $scope.selectedTimeframe = $scope.timeOptions[4].value;
   $scope.global.getData = function(time, currency) {
     $scope.orderbook = []
     var transaction_data = []

@@ -48,7 +48,7 @@ angular.module('omniwallet').factory('walletTransactionService',['$http',functio
     getUnsignedTransaction : function(type, data){
       if (type == 0 && data.currency_identifier == 0){
         btc_send_data = {
-          'from_address':data.transaction_from, 'to_address':data.transaction_to, 'amount':data.amount_to_transfer, 'currency':'BTC', 'fee':data.fee
+          'from_address':data.pubkey, 'to_address':data.transaction_to, 'amount':data.amount_to_transfer, 'currency':'BTC', 'fee':data.fee,'marker': (data.marker || false)
         };
         var url = '/v1/transaction/send/';
         
@@ -397,10 +397,14 @@ angular.module('omniwallet').factory('appraiser', ['$rootScope', '$http', '$q', 
 angular.module('omniwallet').factory('hashExplorer', function() {
   var tx = '',
     loc = '',
+    search = '',
+    getHash = function() {},
     setHash = function() {};
   return {
     tx: tx,
     loc: loc,
+    search: search,
+    setSearch: function(query) { this.search = query; },
     setHash: function(tx) {
       this.tx = JSON.stringify(tx);
       this.loc = window.location.href.split('/').slice(-2).join('/');

@@ -16,9 +16,9 @@ def properties():
   for property_file in prop_glob:
     with open(property_file, 'r') as f:
       prop = json.load(f)[0]
-      response.append({ prop['currencyId']: prop['propertyName'] })
+      response.append({ 'currencyID': prop['currencyId'], 'name': prop['propertyName'] })
 
-  json_response = json.dumps(response)
+  json_response = json.dumps( sorted(response, key=lambda x:  int(x['currencyID']) ))
   return json_response
 
 @app.route('/addresses')
