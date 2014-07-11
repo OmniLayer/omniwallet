@@ -40,9 +40,9 @@
 
       <tr ng-repeat="transaction in filtered_buys">
         <td ng-click="setHashExplorer(transaction)"> <a href="/explorer/inspector?view={{transaction.tx_hash}}">{{transaction.tx_hash_concat}}</a></td>
-        <td ng-if="transaction.formatted_price_per_coin" class="number" ng-bind-html="transaction.formatted_price_per_coin | numeraljs: '0,0.00'"></td> 
-        <td ng-if="transaction.formatted_amount" class="number" ng-bind-html="transaction.formatted_amount | numeraljs: '0,0.00'"></td> 
-        <td ng-if="transaction.bitcoin_required" class="number" ng-bind-html="transaction.bitcoin_required | numeraljs: '0,0.00'"></td> 
+        <td ng-if="transaction.formatted_price_per_coin" class="number" title="{{transaction.formatted_price_per_coin}}" ng-bind-html="transaction.formatted_price_per_coin | numeraljs: '0,0.00000000'"></td> 
+        <td ng-if="transaction.formatted_amount" class="number" title="{{transaction.formatted_amount}}" ng-bind-html="transaction.formatted_amount | numeraljs: '0,0.00000000'"></td> 
+        <td ng-if="transaction.bitcoin_required" class="number" title="{{transaction.bitcoin_required}}" ng-bind-html="transaction.bitcoin_required | numeraljs: '0,0.00000000'"></td> 
         <td ng-show="(transaction.tx_hash.length == 64 && transaction.payment_expired == false)">
         <button class="btn btn-primary btn-sm" ng-click="purchaseCoin(transaction)" type="submit">Purchase coin</button>
       </td>
@@ -69,9 +69,9 @@
 
       <tr ng-repeat="transaction in filtered_sells">
         <td ng-click="setHashExplorer(transaction)"> <a href="/explorer/inspector?view={{transaction.tx_hash}}">{{transaction.tx_hash_concat}}</a></td>
-        <td class="number" ng-bind-html="transaction.formatted_price_per_coin | numeraljs: '0,0.00'"></td> 
-        <td class="number" ng-bind-html="transaction.formatted_amount | numeraljs: '0,0.00'"></td> 
-        <td class="number" ng-bind-html="transaction.bitcoin_required | numeraljs: '0,0.00'"></td> 
+        <td class="number" title="{{transaction.formatted_price_per_coin}}" ng-bind-html="transaction.formatted_price_per_coin | numeraljs: '0,0.00000000'"></td> 
+        <td class="number" title="{{transaction.formatted_amount}}" ng-bind-html="transaction.formatted_amount | numeraljs: '0,0.00000000'"></td> 
+        <td class="number" title="{{transaction.bitcoin_required}}" ng-bind-html="transaction.bitcoin_required | numeraljs: '0,0.00000000'"></td> 
         <td><button class="btn btn-primary btn-sm" ng-click="purchaseCoin(transaction)" type="submit" disabled>Cancel Offer</button></td>
       </tr>
 
