@@ -4,7 +4,8 @@ from decimal import Decimal
 from flask import Flask, request, jsonify, abort, json, make_response
 from msc_apps import *
 
-conn = bitcoinrpc.connect_to_local()
+#conn = bitcoinrpc.connect_to_local()
+conn = getRPCconn()
 tools_dir = os.environ.get('TOOLSDIR')
 lib_path = os.path.abspath(tools_dir)
 sys.path.append(lib_path)
