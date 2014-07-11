@@ -10,6 +10,17 @@ import tempfile
 sys.path.append(os.path.abspath("../lib"))
 from stats_backend import StatsBackend
 
+error_codez= {
+ '-22': 'Error parsing transaction. Contact a developer.',
+ '-27': 'Transaction already in chain. Contact a developer.',
+ '1': 'Transaction malformed. Contact a developer.',
+ '16': 'Transaction was invalid. Contact a developer.',
+ '65': 'Transaction sent was under dust limit. Contact a developer.',
+ '66': 'Transaction did not meet fees. Contact a developer.',
+ '69.2': 'Your hair is on fire. Contact a stylist.'
+}
+
+
 def pushtx_response(response_dict):
     expected_fields=['signedTransaction']
     for field in expected_fields:
@@ -34,7 +45,7 @@ def pushtxnode(signed_tx):
         output=json.loads(ret[0])
 
         response_status='NOTOK'
-        response=json.dumps({"status":response_status, "pushed": output['message'], "code": output['code'] })
+        response=json.dumps({"status":response_status, "pushed": error_codez[ output['code'] ], "message": output['message'], "code": output['code'] })
     else:
         response_status='OK'
         response=json.dumps({"status":response_status, "pushed": 'success', "tx": output })
