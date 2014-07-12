@@ -55,7 +55,7 @@ def pushtxnode(signed_tx):
 
         response_status='NOTOK'
         try:
-            response=json.dumps({"status":response_status, "pushed": error_codez[ output['code'] ], "message": output['message'], "code": output['code'] })
+            response=json.dumps({"status":response_status, "pushed": error_codez[ str(output['code']) ], "message": output['message'], "code": output['code'] })
         except KeyError, e:
             response=json.dumps({"status":response_status, "pushed": str(e), "message": output['message'], "code": output['code'] })
     else:
