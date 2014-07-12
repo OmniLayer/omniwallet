@@ -77,8 +77,8 @@ def get_msc_price():
         
 def calculate_spt_price(sp):
     if sp['currencyId'] == "25":
-	#set CryptoNext to 1 until api/exchange is live
-	return 1
+	#set CryptoNext until api/exchange is live
+	return 158340.5906104029768
     elif sp['formatted_transactionType'] == 51:
         return 1.0/int( sp['numberOfProperties'] )
     else:
