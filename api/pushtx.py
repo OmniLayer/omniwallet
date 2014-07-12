@@ -11,7 +11,16 @@ sys.path.append(os.path.abspath("../lib"))
 from stats_backend import StatsBackend
 
 error_codez= {
+ '-1': 'Exception thrown. Contact a developer.',
+ '-2': 'Server is in safe mode. Contact a developer.',
+ '-3': 'Unexpected type. Contact a developer.',
+ '-5': 'Invalid address or key. Contact a developer.',
+ '-7': 'Out of memory. Contact a developer.',
+ '-8': 'Invalid parameter. Contact a developer.',
+ '-20': 'Database error. Contact a developer.',
  '-22': 'Error parsing transaction. Contact a developer.',
+ '-25': 'General error. Contact a developer.',
+ '-26': 'Transaction rejected by the network. Contact a developer.',
  '-27': 'Transaction already in chain. Contact a developer.',
  '1': 'Transaction malformed. Contact a developer.',
  '16': 'Transaction was invalid. Contact a developer.',
