@@ -15,7 +15,7 @@
   <div ng-include="templates['add_address']"></div>
 
   <div ng-if="balances.balances" ng-repeat="currency in balances.balances">
-   <div ng-if="currency.balance>0" >
+   <div ng-if="currency.balance>0 || currency.symbol == 'BTC'" >
     <div class="row">
       <div class="col-xs-4">
         <span class="currency-name">{{currency.name ? currency.name : currency.symbol}}</span>
