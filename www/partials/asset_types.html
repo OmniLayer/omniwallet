@@ -14,7 +14,7 @@
       </row>
       <div class="asset-table">
         <div ng-repeat="currency in balances.balances">
-         <span ng-if="currency.balance > 0">
+         <span ng-if="currency.balance > 0 || currency.symbol == 'BTC'">
           <row class="col-xs-12" ng-click="openCurrencyDetail( currency.symbol )">
             <div class="container-fluid">
               <div class="asset-item col-xs-4 text-left">
