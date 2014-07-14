@@ -31,8 +31,7 @@ angular.module('omniwallet')
     var addr = eckey.getBitcoinAddress().toString();
 
     return addr;
-  }
-  ;
+  };
 
   function encodePrivateKey(key, passphrase) {
 
@@ -41,8 +40,7 @@ angular.module('omniwallet')
     var enc = eckey.getEncryptedFormat(passphrase);
 
     return enc;
-  }
-  ;
+  };
 
   $scope.backupWallet = function() {
     $scope.login = {
@@ -70,13 +68,13 @@ angular.module('omniwallet')
           var key = ecKey.getWalletImportFormat();
           blob.addresses.push({ address: addr, privkey: key });
         }
-      })
+      });
       var exportBlob = new Blob([JSON.stringify(blob)], {
         type: 'application/json;charset=utf-8'
       });
       saveAs(exportBlob, "wallet.json");
     });
-  }
+  };
 
   // Begin Import watch only Form Code
   $scope.openImportWatchOnlyForm = function() {
@@ -202,6 +200,52 @@ angular.module('omniwallet')
   }
   ;
   // Done Create Form Code.
+  // Begin Import Private Key Form Code
+  $scope.openImportWalletForm = function() {
+    var modalInstance = $modal.open({
+      templateUrl: '/partials/import_wallet.html',
+      controller: ImportWalletModal
+    });
+
+    modalInstance.result.then(function(result) {
+
+      if (result) {
+        var wallet = JSON.parse(result);
+        
+        wallet.addresses.forEach(function(addr){
+          // Use address as passphrase for now
+          $injector.get('userService').addAddress(
+            addr.address,
+            encodePrivateKey(addr.privKey, addr.address));
+        });
+      }
+      $scope.refresh();
+
+    }, function() {});
+  };
+
+  var ImportWalletModal = function($scope, $modalInstance) {
+    $scope.validate = function(json) {
+      if (!json) return false;
+
+      try {
+        var wallet = JSON.parse(json)
+        return true;
+      } catch (e) {
+        return false;
+      }
+    };
+
+    $scope.ok = function(result) {
+      $modalInstance.close(result);
+    };
+
+    $scope.cancel = function() {
+      $modalInstance.dismiss('cancel');
+    };
+  };
+  // Done Import Private Key Form Code.
+  
 
 
   $scope.enumerateAddresses = function() {
