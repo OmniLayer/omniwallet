@@ -200,7 +200,7 @@ angular.module('omniwallet')
   }
   ;
   // Done Create Form Code.
-  // Begin Import Private Key Form Code
+  // Begin Import Backup Form Code
   $scope.openImportWalletForm = function() {
     var modalInstance = $modal.open({
       templateUrl: '/partials/import_wallet.html',
@@ -244,7 +244,7 @@ angular.module('omniwallet')
       $modalInstance.dismiss('cancel');
     };
   };
-  // Done Import Private Key Form Code.
+  // Done Import Import Backup Form Code.
   
 
 
