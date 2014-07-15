@@ -4,7 +4,7 @@ function WalletSellAssetsController($modal, $scope, $http, $q, userService, wall
   // [ Template Initialization ]
 
   if ($scope.isCancel == true) {
-    $scope.activeCurrencyPair=['BTC','MSC']; // set defaults for Cancel
+    $scope.activeCurrencyPair=['BTC','BTC']; // set defaults for Cancel
   }
 
   $scope.currencySaleList = $scope.currencyList.filter(function(currency){
@@ -173,7 +173,7 @@ function WalletSellAssetsController($modal, $scope, $http, $q, userService, wall
     var balance = divisible ? +convertedValues[4] : +$scope.balanceData[0];
     var btcbalance = +convertedValues[5];
 
-    var coin = $scope.selectedCoin.symbol;
+    var coin = $scope.isCancel != true ? $scope.selectedCoin.symbol : $scope.selectedCoin_extra;
     var salePricePerCoin = $scope.salePricePerCoin;
     var address = $scope.selectedAddress;
     var saleBlocks = +$scope.saleBlocks;
@@ -184,7 +184,7 @@ function WalletSellAssetsController($modal, $scope, $http, $q, userService, wall
     if ($scope.saleForm.$valid == false) {
       error += 'make sure all fields are completely filled, ';
     }
-    if (coin == 'BTC') {
+    if ( $scope.isCancel != true && coin == 'BTC') {
       error += 'make sure your sale is for MSC or TMSC, ';
     }
     if( $scope.isCancel != true && ((coin == 'MSC') || (coin == 'TMSC')) ) {
