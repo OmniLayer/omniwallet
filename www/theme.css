@@ -152,6 +152,9 @@ form.form-search:before {
 
 .number {
     /*font-family: Inconsolata;*/
+    overflow: hidden;
+    text-align: left;
+    text-overflow: ellipsis;
 }
 .number .numeral-integer, .number .numeral-left {
     color: #484848;
