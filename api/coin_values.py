@@ -50,6 +50,18 @@ def write_history(value):
     else:
         atomic_json_dump(history, filename)
 
+def calculate_spt_price(sp):
+    if sp['currencyId'] == "3":
+	return get_sp3_price() 
+    elif sp['currencyId'] == "25":
+        btcvalue=get_btc_price()
+	#set CryptoNext until api/exchange is live
+	return ((1 / btcvalue['price'])*100000000)
+    elif sp['formatted_transactionType'] == 51:
+        return 1.0/int( sp['numberOfProperties'] )
+    else:
+        return 0
+   
 def get_btc_price():
     r= requests.get( 'https://api.bitcoinaverage.com/all' )
     result_dict = {
@@ -73,13 +85,19 @@ def get_msc_price():
        'price' : sum / volume
     }
     return result_dict
-        
-        
-def calculate_spt_price(sp):
-    if sp['formatted_transactionType'] == 51:
-        return 1.0/int( sp['numberOfProperties'] )
-    else:
-        return 0
-   
+
+def get_sp3_price():
+    #maidsafe
+    r = requests.get( 'https://masterxchange.com/api/v2/trades.php?currency=maid' )
+
+    volume = 0;
+    sum = 0;
+
+    for trade in r.json():
+        volume += float( trade['amount'] )
+        sum += float( trade['amount'] ) * float(trade['price'] )
+    #BTC is calculated in satashis in getvalue, so adjust our value here to compensate
+    return "{:.8f}".format( 100000000 * (sum / volume))
+
 if __name__ == "__main__":
     get_prices()
