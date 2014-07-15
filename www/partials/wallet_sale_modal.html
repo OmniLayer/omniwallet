@@ -1,6 +1,6 @@
 <div class="modal-body">
     <h3 class="text-center"> Confirm sale order </h3>
-    <h3>You're about to put {{ convertSatoshiToDisplayedValue(saleAmount) }} {{ getDisplayedAbbreviation() }} on sale at a price of {{ convertSatoshiToDisplayedValue( saleAmount / salePricePerCoin, true) }} BTC per {{ getDisplayedAbbreviation() }}, plus charge {{ convertSatoshiToDisplayedValue(buyersFee, true) }} in fees over {{ saleBlocks }} blocks.</h3>
+    <h3>You're about to put {{ convertSatoshiToDisplayedValue(saleAmount) }} {{ getDisplayedAbbreviation() }} on sale at a price of {{ salePricePerCoin / convertSatoshiToDisplayedValue( saleAmount, true) }} BTC per {{ getDisplayedAbbreviation() }}, plus charge {{ convertSatoshiToDisplayedValue(buyersFee, true) }} in fees over {{ saleBlocks }} blocks.</h3>
   <p><br>
   If the above is correct, please press Send Funds.
   If you encounter an error, feel free to click away from the dialog and try again.

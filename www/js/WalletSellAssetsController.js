@@ -217,8 +217,8 @@ function WalletSellAssetsController($modal, $scope, $http, $q, userService, wall
           $scope.saleAmount=data.amt,
           $scope.buyersFee=data.buyersfee,
           $scope.selectedCoin=data.selectedCoin,
-          $scope.salePricePerCoin= data.price;
-
+          $scope.salePricePerCoin= data.price,
+          $scope.saleBlocks = data.blocks;
 
           $scope.ok = function() {
             $scope.clicked = true;
