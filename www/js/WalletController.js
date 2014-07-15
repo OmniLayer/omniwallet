@@ -554,6 +554,13 @@ function WalletTradePendingController($scope, $http, $q, userService, hashExplor
     );
     return addresses;
   }
+
+  $scope.isCancel=true;
+  $scope.confirmCancel = function(tx) {
+    $scope.selectedAddress = tx.from_address;
+    $scope.selectedCoin_extra = (+tx.currencyId) == 1 ? 'MSC' : 'TMSC';
+    $scope.cancelTrig=!$scope.cancelTrig;
+  }
 }
 
 

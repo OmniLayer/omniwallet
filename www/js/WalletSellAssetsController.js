@@ -3,6 +3,10 @@ function WalletSellAssetsController($modal, $scope, $http, $q, userService, wall
 
   // [ Template Initialization ]
 
+  if ($scope.isCancel == true) {
+    $scope.activeCurrencyPair=['BTC','BTC']; // set defaults for Cancel
+  }
+
   $scope.currencySaleList = $scope.currencyList.filter(function(currency){
     if (currency.symbol == $scope.activeCurrencyPair[1] )
       $scope.$parent.$parent.selectedCoin = currency;
@@ -142,6 +146,7 @@ function WalletSellAssetsController($modal, $scope, $http, $q, userService, wall
     var dustValue = 5430;
     var minerMinimum = 10000;
     var nonZeroValue = 1;
+    var cancelFees = (5757*3);
     var divisible = $scope.selectedCoin.divisible; 
 
     var convertToSatoshi = [
@@ -168,7 +173,7 @@ function WalletSellAssetsController($modal, $scope, $http, $q, userService, wall
     var balance = divisible ? +convertedValues[4] : +$scope.balanceData[0];
     var btcbalance = +convertedValues[5];
 
-    var coin = $scope.selectedCoin.symbol;
+    var coin = $scope.isCancel != true ? $scope.selectedCoin.symbol : $scope.selectedCoin_extra;
     var salePricePerCoin = $scope.salePricePerCoin;
     var address = $scope.selectedAddress;
     var saleBlocks = +$scope.saleBlocks;
@@ -179,10 +184,10 @@ function WalletSellAssetsController($modal, $scope, $http, $q, userService, wall
     if ($scope.saleForm.$valid == false) {
       error += 'make sure all fields are completely filled, ';
     }
-    if (coin == 'BTC') {
+    if ( $scope.isCancel != true && coin == 'BTC') {
       error += 'make sure your sale is for MSC or TMSC, ';
     }
-    if( ((coin == 'MSC') || (coin == 'TMSC')) ) {
+    if( $scope.isCancel != true && ((coin == 'MSC') || (coin == 'TMSC')) ) {
       if (saleAmount < nonZeroValue)
         error += 'make sure your send amount is non-zero, ';
       if (buyersFee < minerMinimum)
@@ -197,12 +202,14 @@ function WalletSellAssetsController($modal, $scope, $http, $q, userService, wall
       if (saleBlocks < 1)
         error += 'make sure your block timeframe is at least 1, ';
     }
+    if ($scope.isCancel == true && (((cancelFees + minerFees) <= btcbalance) == false) )
+      error += 'make sure you have enough Bitcoin to cover your transaction fees, ';
     if (error.length < 8) {
       $scope.$parent.showErrors = false;
 
       // open modal
       var modalInstance = $modal.open({
-        templateUrl: '/partials/wallet_sale_modal.html',
+        templateUrl: $scope.isCancel == true ? '/partials/wallet_cancel_modal.html' : '/partials/wallet_sale_modal.html',
         controller: function($scope, $rootScope, userService, data, prepareSaleTransaction, getUnsignedSaleTransaction, convertSatoshiToDisplayedValue, getDisplayedAbbreviation) {
           $scope.sendSuccess = false, $scope.sendError = false, $scope.waiting = false, $scope.privKeyPass = {};
           $scope.convertSatoshiToDisplayedValue=convertSatoshiToDisplayedValue,
@@ -210,7 +217,8 @@ function WalletSellAssetsController($modal, $scope, $http, $q, userService, wall
           $scope.saleAmount=data.amt,
           $scope.buyersFee=data.buyersfee,
           $scope.selectedCoin=data.selectedCoin,
-          $scope.salePricePerCoin= data.price;
+          $scope.salePricePerCoin= data.price,
+          $scope.saleBlocks = data.blocks;
 
           $scope.ok = function() {
             $scope.clicked = true;
@@ -251,6 +259,15 @@ function WalletSellAssetsController($modal, $scope, $http, $q, userService, wall
           }
         }
       });
+
+      modalInstance.result.then(function() {
+        if ($scope.isCancel)
+          $scope.$parent.$parent.$parent.cancelTrig = null;
+      }, function() {
+        if ($scope.isCancel)
+          $scope.$parent.$parent.$parent.cancelTrig = null;
+      });
+
     } else {
       error += 'and try again.';
       $scope.error = error;

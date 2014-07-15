@@ -74,7 +74,8 @@ angular.module('omniwallet')
       var exportBlob = new Blob([JSON.stringify(blob)], {
         type: 'application/json;charset=utf-8'
       });
-      saveAs(exportBlob, "wallet.json");
+      fileName=userService.data.wallet.uuid+".json"
+      saveAs(exportBlob, fileName);
     });
   }
 
