@@ -12,11 +12,11 @@
     </div>
       <br>
     <div class="row">
-      <div ng-show="sendSuccess">
+      <div ng-show="sendSuccess" class="text-center">
         <h4 class="pull-right col-xs-12" style="color:green"> Sale cancelled successfully, 
         check your transaction <a target="_blank" href="{{url}}">here.</a></h4> <br> <h5><small>It can take up to 20 minutes to update the wallet, please do not make another cancellation during this time.</small></h5>
       </div>
-      <div ng-show="sendError">
+      <div ng-show="sendError" class="text-center">
         <h4 class="col-xs-12" style="color:red;"> Sale not cancelled: 
          {{error}} </h4>
       </div>
