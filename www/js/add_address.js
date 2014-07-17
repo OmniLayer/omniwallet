@@ -225,11 +225,15 @@ angular.module('omniwallet')
   };
 
   var ImportWalletModal = function($scope, $modalInstance) {
-    $scope.validate = function(json) {
-      if (!json) return false;
+    $scope.validate = function(backup) {
+      if (!backup) return false;
 
       try {
-        var wallet = JSON.parse(json)
+        var wallet = JSON.parse(backup);
+        wallet.addresses.forEach(function(address){  
+          var eckey = new Bitcoin.ECKey(address.privkey);
+          var addr = eckey.getBitcoinAddress().toString();
+        });
         return true;
       } catch (e) {
         return false;
