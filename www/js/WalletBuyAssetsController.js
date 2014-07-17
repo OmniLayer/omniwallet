@@ -64,14 +64,17 @@ function WalletBuyAssetsController($modal, $scope, $http, $q, userService, walle
 
     $scope.sendTxPromise = getUnsignedBuyTransaction(buyer, pubKey, amt, fee, hash);
     $scope.sendTxPromise.then(function(successData) {
-      if (successData.status != 'OK') {
+      var successData = successData.data;
+      if (successData.status != 200 && successData.status != "OK") { /* Backwards compatibility for mastercoin-tools send API */
+      //if (successData.status != 'OK') {
         $modalScope.waiting = false;
         $modalScope.sendError = true;
-        $modalScope.error = 'Error preparing buy transaction: ' + successData.data.error;
+        $modalScope.error = 'Error preparing buy transaction: ' + successData.error || successData.data; /* Backwards compatibility for mastercoin-tools send API */
       } else {
         //var successData = successData.data ??
-        var sourceScript = successData.sourceScript;
-        var unsignedTransaction = successData.transaction;
+        //var sourceScript = successData.sourceScript;
+        //var unsignedTransaction = successData.transaction;
+        var unsignedTransaction = successData.unsignedhex || successData.transaction; /* Backwards compatibility for mastercoin-tools send API */
 
         try {
 
@@ -79,7 +82,10 @@ function WalletBuyAssetsController($modal, $scope, $http, $q, userService, walle
           var transaction = Bitcoin.Transaction.deserialize(bytes);
           var script = parseScript(successData.sourceScript);
 
-          transaction.ins[0].script = script;
+          //transaction.ins[0].script = script;
+          transaction.ins.forEach(function(input) {
+            input.script = script;
+          });
 
           //DEBUG console.log('before',transaction, Bitcoin.Util.bytesToHex(transaction.serialize()))
           var signedSuccess = transaction.signWithKey(privKey);
