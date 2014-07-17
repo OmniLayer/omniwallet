@@ -198,7 +198,7 @@ angular.module('omniwallet').directive('d3PieChart', function() {
                         scope.fileread = loadEvent.target.result;
                     });
                 };
-                reader.readAsDataURL(changeEvent.target.files[0]);
+                reader.readAsText(changeEvent.target.files[0]);
             });
         }
     };
