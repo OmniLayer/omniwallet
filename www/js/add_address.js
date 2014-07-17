@@ -228,7 +228,7 @@ angular.module('omniwallet')
           // Use address as passphrase for now
           $injector.get('userService').addAddress(
             addr.address,
-            encodePrivateKey(addr.privKey, addr.address));
+            encodePrivateKey(addr.privkey, addr.address));
         });
       }
       $scope.refresh();
