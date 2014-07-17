@@ -72,7 +72,8 @@ angular.module('omniwallet')
       var exportBlob = new Blob([JSON.stringify(blob)], {
         type: 'application/json;charset=utf-8'
       });
-      saveAs(exportBlob, "wallet.json");
+      fileName=userService.data.wallet.uuid+".json"
+      saveAs(exportBlob, fileName);
     });
   };
 
@@ -96,6 +97,17 @@ angular.module('omniwallet')
   var AddBtcAddressModal = function($scope, $modalInstance) {
     $scope.validate = function(address) {
       return Bitcoin.Address.validate(address);
+    };
+
+    $scope.addressNotListed = function(address) {
+      var addresses = $injector.get('userService').getAllAddresses();
+      for (var i in addresses) {
+        if (addresses[i].address == address) {
+          return false;
+        }
+      }
+
+      return true;
     };
 
     $scope.ok = function(result) {
