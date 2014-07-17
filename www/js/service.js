@@ -150,13 +150,13 @@ angular.module('omniwallet').factory('userService', ['$rootScope', '$http', '$in
 
       addAddress: function(address, privKey) {
         for (var i in service.data.wallet.addresses) {
-          if (service.data.wallet.addresses[i].address == address) {
+          if (service.data.wallet.addresses[i].address == address && privKey) {
             service.data.wallet.addresses[i].privkey = privKey;
             service.saveSession();
             return;
           }
         }
-        ;
+
         service.data.wallet.addresses.push({
           "address": address,
           "privkey": privKey

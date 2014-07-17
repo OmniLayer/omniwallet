@@ -101,6 +101,17 @@ angular.module('omniwallet')
       return Bitcoin.Address.validate(address);
     };
 
+    $scope.addressNotListed = function(address) {
+      var addresses = $injector.get('userService').getAllAddresses();
+      for (var i in addresses) {
+        if (addresses[i].address == address) {
+          return false;
+        }
+      }
+
+      return true;
+    };
+
     $scope.ok = function(result) {
       if (Bitcoin.Address.validate(result.address))
         $modalInstance.close(result);
