@@ -64,7 +64,7 @@ function WalletBuyAssetsController($modal, $scope, $http, $q, userService, walle
 
     $scope.sendTxPromise = getUnsignedBuyTransaction(buyer, pubKey, amt, fee, hash);
     $scope.sendTxPromise.then(function(successData) {
-      var successData = successData.data;
+      //var successData = successData.data;
       if (successData.status != 200 && successData.status != "OK") { /* Backwards compatibility for mastercoin-tools send API */
       //if (successData.status != 'OK') {
         $modalScope.waiting = false;
