@@ -19,6 +19,7 @@ def get_msc_balances( addr ):
     address_data=host.call("getallbalancesforaddress_MP", addr)
 
     address_data['balance']=address_data.pop('result')
+    address_data['address']=str(addr)
     balance_data = address_data[ 'balance' ]
 
     #Convert to the implimented format
