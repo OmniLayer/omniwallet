@@ -1,6 +1,6 @@
 import urlparse
 import os, sys
-import json
+import json, bitcoinrpc
 tools_dir = os.environ.get('TOOLSDIR')
 lib_path = os.path.abspath(tools_dir)
 sys.path.append(lib_path)
@@ -9,8 +9,37 @@ from debug import *
 
 data_dir_root = os.environ.get('DATADIR')
 TIMEOUT='timeout -s 9 60 '
+conn=getRPCconn()
+
 # Get the Mastercoin balances.  Not that this is also creating the default balance
 # object, and should run before all the other currency checks.
+def get_rpcmsc_balances( addr ):
+
+    #address_data=[]
+    address_data = json.load(conn.getallbalancesforaddress_MP(addr))
+    balance_data = address_data[ 'result' ]
+
+    # Once the data's been loaded, remove the BTC entry since we're going to
+    #    use sx's BTC balances directly.
+    for i in xrange(0,len( balance_data )):
+      balance_data[i][ 'divisible' ] = False
+      if balance_data[ i ][ 'propertyid' ] == 0:
+        balance_data.pop( i )
+	break
+      else:
+        if type(balance_data[i]['balance']) != type(0): #if not int convert (divisible property)
+            balance_data[ i ][ 'divisible' ] = True
+            balance_data[ i ][ 'balance' ] = int( round( float( balance_data[ i ][ 'balance' ]) * 100000000 ))
+
+    for i in xrange( 0, len( balance_data )):
+      if balance_data[ i ][ 'balance' ] == '0.0':
+        balance_data.pop( i )
+
+    #print_debug("got here", 5)
+    print address_data
+    return ( address_data, None )
+
+
 def get_msc_balances( addr ):
   filename = data_dir_root + '/www/addr/' + addr + '.json'
 
@@ -76,10 +105,13 @@ def get_balance_response(request_dict):
     address_data[ 'balance' ] = []
 
   bitcoin_balances, err = get_btc_balances( addr )
-
+ 
   if err == None:
     for i in xrange(0,len( bitcoin_balances )):
       address_data[ 'balance' ].append( bitcoin_balances[i] )
+
+  #test_bal, err = get_rpcmsc_balances ( addr )
+  #print ("testdata",test_bal," realdata", address_data)
 
   return (json.dumps( address_data ), None)
 
