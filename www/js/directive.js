@@ -185,4 +185,17 @@ angular.module('omniwallet').directive('d3PieChart', function() {
       });
     }
   };
-});
+}).directive('big-number', function() {
+  return {
+    restrict: 'A',
+    require: 'ngModel',
+    scope:{
+      model:'='
+    },
+    link: function(scope, ele, attrs, ngModel) {
+      scope.$watch("model", function(value) {
+        scope.model = new Big(ele.val());
+      });
+    }
+  };
+});;
