@@ -24,6 +24,12 @@ def get_msc_balances( addr ):
     #Convert to the implimented format
     for i in xrange(0,len( balance_data )):
       balance_data[i][ 'value' ] = balance_data[i]['balance']     
+
+      #if type(balance_data[i]['balance']) != type(0):
+	#balance_data[i][ 'value' ] = balance_data[i]['balance']
+      #else:
+	#balance_data[i][ 'value' ] = str(balance_data[i]['balance'])
+
       if balance_data[ i ][ 'propertyid' ] == 0:
         balance_data[i][ 'symbol' ] = "BTC"
       elif balance_data[ i ][ 'propertyid' ] == 1:
@@ -46,7 +52,7 @@ def get_msc_balances( addr ):
             balance_data[ i ][ 'value' ] = int( round( float( balance_data[ i ][ 'value' ]) * 100000000 ))
 
     for i in xrange( 0, len( balance_data )):
-      if balance_data[ i ][ 'balance' ] == '0.0' or balance_data[ i ][ 'balance' ] == 0.0:
+      if balance_data[ i ][ 'balance' ] == '0.0':
         balance_data.pop( i )
 
     #print_debug("got here", 5)
