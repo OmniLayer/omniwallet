@@ -15,9 +15,13 @@ TIMEOUT='timeout -s 9 60 '
 # object, and should run before all the other currency checks.
 def get_rpcmsc_balances( addr ):
 
-    args=[]
-    args.append(addr)
-    address_data=callRPCmsc("getallbalancesforaddress_MP", args):
+    #args=[]
+    #args.append(addr)
+    #address_data=callRPCmsc("getallbalancesforaddress_MP", args)
+    host=RPCHost()
+    address_data=host.call("getallbalancesforaddress_MP", addr)
+
+    print address_data
 
     #address_data = json.load(conn.getallbalancesforaddress_MP(addr))
     balance_data = address_data[ 'result' ]
@@ -113,7 +117,8 @@ def get_balance_response(request_dict):
     for i in xrange(0,len( bitcoin_balances )):
       address_data[ 'balance' ].append( bitcoin_balances[i] )
 
-  #test_bal, err = get_rpcmsc_balances ( addr )
+  test_bal, err = get_rpcmsc_balances ( addr )
+  print ("testdata",test_bal)
   #print ("testdata",test_bal," realdata", address_data)
 
   return (json.dumps( address_data ), None)

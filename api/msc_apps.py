@@ -1,6 +1,6 @@
 import urlparse
 import os, sys, pybitcointools, bitcoinrpc, getpass
-import re, commands
+import re, commands, requests
 tools_dir = os.environ.get('TOOLSDIR')
 lib_path = os.path.abspath(tools_dir)
 sys.path.append(lib_path)
@@ -8,29 +8,62 @@ from msc_utils_obelisk import *
 
 http_status = '200 OK'
 
-def callRPCmsc(apicall, arg_array):
-  
-    #check if apicall was passed, otherwise return/error
-    try:
-	apicall
-    except NameError:
-	return 'error: {"code":-999,"message":"No api call specified"}'
-
-    #get length of arg's and construct the final string to pass to command
-    length = len(arg_array)
-    arg=""    
-
-    pattern = re.compile('[\W_]+')
-
-    if length > 0:
-	for x in var_array:
-	    arg=arg+" "+pattern.sub('',x)
-
-    #call the bitcoind from path          
-    result=commands.getoutput('bitcoind '+apicall+arg_array)
-    
-    return result
-
+class RPCHost():
+    def __init__(self):
+	USER=getpass.getuser()
+        self._session = requests.Session()
+        try:
+            with open('/home/'+USER+'/.bitcoin/bitcoin.conf') as fp:
+                RPCPORT="8332"
+                RPCHOST="localhost"
+                for line in fp:
+                    #print line
+                    if line.split('=')[0] == "rpcuser":
+                        RPCUSER=line.split('=')[1].strip()
+                    elif line.split('=')[0] == "rpcpassword":
+                        RPCPASS=line.split('=')[1].strip()
+                    elif line.split('=')[0] == "rpcconnect":
+                        RPCHOST=line.split('=')[1].strip()
+                    elif line.split('=')[0] == "rpcport":
+                        RPCPORT=line.split('=')[1].strip()
+                    elif line.split('=')[0] == "rpcssl":
+                        if line.split('=')[1].strip() == "1":
+                            RPCSSL="True"
+                        else:
+                            RPCSSL="False"
+        except IOError as e:
+            response='{"error": "Unable to load bitcoin config file. Please Notify Site Administrator"}'
+            return response
+        if RPCSSL:
+            self._url = "https://"+RPCUSER+":"+RPCPASS+"@"+RPCHOST+":"+RPCPORT
+        else:
+            self._url = "http://"+RPCUSER+":"+RPCPASS+"@"+RPCHOST+":"+RPCPORT
+        self._headers = {'content-type': 'application/json'}
+    def call(self, rpcMethod, *params):
+        payload = json.dumps({"method": rpcMethod, "params": list(params), "jsonrpc": "2.0"})
+        tries = 10
+        hadConnectionFailures = False
+        while True:
+            try:
+                response = self._session.get(self._url, headers=self._headers, data=payload, verify=False)
+            except requests.exceptions.ConnectionError:
+                tries -= 1
+                if tries == 0:
+                    raise Exception('Failed to connect for remote procedure call.')
+                hadFailedConnections = True
+                print("Couldn't connect for remote procedure call, will sleep for ten seconds and then try again ({} more tries)".format(tries))
+                time.sleep(10)
+            else:
+                if hadConnectionFailures:
+                    print('Connected for remote procedure call after retry.')
+                break
+        if not response.status_code in (200, 500):
+            raise Exception('RPC connection failure: ' + str(response.status_code) + ' ' + response.reason)
+        responseJSON = response.json()
+        if 'error' in responseJSON and responseJSON['error'] != None:
+            raise Exception('Error in RPC call: ' + str(responseJSON['error']))
+        #return responseJSON['result']
+        return responseJSON
 
 def getRPCconn():
     USER=getpass.getuser()
