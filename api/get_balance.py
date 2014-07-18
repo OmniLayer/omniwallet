@@ -1,6 +1,6 @@
 import urlparse
 import os, sys
-import json, bitcoinrpc
+import json
 tools_dir = os.environ.get('TOOLSDIR')
 lib_path = os.path.abspath(tools_dir)
 sys.path.append(lib_path)
@@ -9,7 +9,6 @@ from debug import *
 
 data_dir_root = os.environ.get('DATADIR')
 TIMEOUT='timeout -s 9 60 '
-#conn=getRPCconn()
 
 # Get the Mastercoin balances.  Not that this is also creating the default balance
 # object, and should run before all the other currency checks.

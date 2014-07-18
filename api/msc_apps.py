@@ -1,6 +1,6 @@
 import urlparse
 import os, sys, pybitcointools, bitcoinrpc, getpass
-import re, commands, requests
+import requests
 tools_dir = os.environ.get('TOOLSDIR')
 lib_path = os.path.abspath(tools_dir)
 sys.path.append(lib_path)
