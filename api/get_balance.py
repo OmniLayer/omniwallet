@@ -9,14 +9,17 @@ from debug import *
 
 data_dir_root = os.environ.get('DATADIR')
 TIMEOUT='timeout -s 9 60 '
-conn=getRPCconn()
+#conn=getRPCconn()
 
 # Get the Mastercoin balances.  Not that this is also creating the default balance
 # object, and should run before all the other currency checks.
 def get_rpcmsc_balances( addr ):
 
-    #address_data=[]
-    address_data = json.load(conn.getallbalancesforaddress_MP(addr))
+    args=[]
+    args.append(addr)
+    address_data=callRPCmsc("getallbalancesforaddress_MP", args):
+
+    #address_data = json.load(conn.getallbalancesforaddress_MP(addr))
     balance_data = address_data[ 'result' ]
 
     # Once the data's been loaded, remove the BTC entry since we're going to

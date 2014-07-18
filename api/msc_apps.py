@@ -1,11 +1,36 @@
 import urlparse
 import os, sys, pybitcointools, bitcoinrpc, getpass
+import re, commands
 tools_dir = os.environ.get('TOOLSDIR')
 lib_path = os.path.abspath(tools_dir)
 sys.path.append(lib_path)
 from msc_utils_obelisk import *
 
 http_status = '200 OK'
+
+def callRPCmsc(apicall, arg_array):
+  
+    #check if apicall was passed, otherwise return/error
+    try:
+	apicall
+    except NameError:
+	return 'error: {"code":-999,"message":"No api call specified"}'
+
+    #get length of arg's and construct the final string to pass to command
+    length = len(arg_array)
+    arg=""    
+
+    pattern = re.compile('[\W_]+')
+
+    if length > 0:
+	for x in var_array:
+	    arg=arg+" "+pattern.sub('',x)
+
+    #call the bitcoind from path          
+    result=commands.getoutput('bitcoind '+apicall+arg_array)
+    
+    return result
+
 
 def getRPCconn():
     USER=getpass.getuser()
