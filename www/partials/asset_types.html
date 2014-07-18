@@ -15,10 +15,10 @@
       <div class="asset-table">
         <div ng-repeat="currency in balances.balances">
          <span ng-if="currency.balance > 0 || currency.symbol == 'BTC'">
-          <row class="col-xs-16" ng-click="openCurrencyDetail( currency.symbol )">
+          <row class="col-xs-12" ng-click="openCurrencyDetail( currency.symbol )">
             <div class="container-fluid">
               <div class="asset-item col-xs-4 text-left">
-                <span class="text-info" tooltip={{currency.symbol}}><strong>{{currency.shortname ? currency.shortname : (currency.name ? currency.name : currency.symbol) }}</strong></span>
+                <span class="text-info" tooltip={{currency.symbol}}><strong>{{(currency.shortname ? currency.shortname : (currency.name ? currency.name : currency.symbol)) | truncate:14}}</strong></span>
               </div>
               <div class="asset-item col-xs-5 text-right">
                 <span ng-if="currency.property_type != undefined && currency.property_type == 1" class="currency">{{ currency.balance }} </span>
