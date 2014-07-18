@@ -25,11 +25,6 @@ def get_msc_balances( addr ):
     for i in xrange(0,len( balance_data )):
       balance_data[i][ 'value' ] = balance_data[i]['balance']     
 
-      #if type(balance_data[i]['balance']) != type(0):
-	#balance_data[i][ 'value' ] = balance_data[i]['balance']
-      #else:
-	#balance_data[i][ 'value' ] = str(balance_data[i]['balance'])
-
       if balance_data[ i ][ 'propertyid' ] == 0:
         balance_data[i][ 'symbol' ] = "BTC"
       elif balance_data[ i ][ 'propertyid' ] == 1:
@@ -58,7 +53,7 @@ def get_msc_balances( addr ):
     #print_debug("got here", 5)
     return ( address_data, None )
 
-
+#Old get balances that used local files = deprecated
 def get_msc_balances2( addr ):
   filename = data_dir_root + '/www/addr/' + addr + '.json'
 
