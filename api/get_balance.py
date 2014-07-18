@@ -13,41 +13,47 @@ TIMEOUT='timeout -s 9 60 '
 
 # Get the Mastercoin balances.  Not that this is also creating the default balance
 # object, and should run before all the other currency checks.
-def get_rpcmsc_balances( addr ):
+def get_msc_balances( addr ):
 
-    #args=[]
-    #args.append(addr)
-    #address_data=callRPCmsc("getallbalancesforaddress_MP", args)
     host=RPCHost()
     address_data=host.call("getallbalancesforaddress_MP", addr)
 
-    print address_data
+    address_data['balance']=address_data.pop('result')
+    balance_data = address_data[ 'balance' ]
 
-    #address_data = json.load(conn.getallbalancesforaddress_MP(addr))
-    balance_data = address_data[ 'result' ]
+    #Convert to the implimented format
+    for i in xrange(0,len( balance_data )):
+      balance_data[i][ 'value' ] = balance_data[i]['balance']     
+      if balance_data[ i ][ 'propertyid' ] == 0:
+        balance_data[i][ 'symbol' ] = "BTC"
+      elif balance_data[ i ][ 'propertyid' ] == 1:
+        balance_data[i][ 'symbol' ] = "MSC"
+      elif balance_data[ i ][ 'propertyid' ] == 2:
+        balance_data[i][ 'symbol' ] = "TMSC"
+      else:
+	 balance_data[i][ 'symbol' ] = "SP"+str(balance_data[ i ][ 'propertyid' ])
 
     # Once the data's been loaded, remove the BTC entry since we're going to
     #    use sx's BTC balances directly.
     for i in xrange(0,len( balance_data )):
       balance_data[i][ 'divisible' ] = False
-      if balance_data[ i ][ 'propertyid' ] == 0:
+      if balance_data[ i ][ 'symbol' ] == 'BTC':
         balance_data.pop( i )
-	break
+        break
       else:
-        if type(balance_data[i]['balance']) != type(0): #if not int convert (divisible property)
+        if type(balance_data[i]['value']) != type(0): #if not int convert (divisible property)
             balance_data[ i ][ 'divisible' ] = True
-            balance_data[ i ][ 'balance' ] = int( round( float( balance_data[ i ][ 'balance' ]) * 100000000 ))
+            balance_data[ i ][ 'value' ] = int( round( float( balance_data[ i ][ 'value' ]) * 100000000 ))
 
     for i in xrange( 0, len( balance_data )):
-      if balance_data[ i ][ 'balance' ] == '0.0':
+      if balance_data[ i ][ 'balance' ] == '0.0' or balance_data[ i ][ 'balance' ] == 0.0:
         balance_data.pop( i )
 
     #print_debug("got here", 5)
-    print address_data
     return ( address_data, None )
 
 
-def get_msc_balances( addr ):
+def get_msc_balances2( addr ):
   filename = data_dir_root + '/www/addr/' + addr + '.json'
 
   if not os.path.exists(filename):
@@ -116,10 +122,6 @@ def get_balance_response(request_dict):
   if err == None:
     for i in xrange(0,len( bitcoin_balances )):
       address_data[ 'balance' ].append( bitcoin_balances[i] )
-
-  test_bal, err = get_rpcmsc_balances ( addr )
-  print ("testdata",test_bal)
-  #print ("testdata",test_bal," realdata", address_data)
 
   return (json.dumps( address_data ), None)
 
