@@ -167,12 +167,11 @@ angular.module('omniwallet').directive('d3PieChart', function() {
 }).directive('ensureInteger', function() {
   return {
     restrict: 'A',
-    require: 'ngModel',
     scope:{
       ensureIf:'&',
       ensureOver:'='
     },
-    link: function(scope, ele, attrs, ngModel) {
+    link: function(scope, ele, attrs) {
       scope.$watch("ensureOver", function(value) {
         if(scope.ensureIf())
           if (!(typeof value==='number' && (value%1)===0))
@@ -188,13 +187,12 @@ angular.module('omniwallet').directive('d3PieChart', function() {
 }).directive('big-number', function() {
   return {
     restrict: 'A',
-    require: 'ngModel',
     scope:{
-      model:'='
+      bigNumber:'='
     },
-    link: function(scope, ele, attrs, ngModel) {
-      scope.$watch("model", function(value) {
-        scope.model = new Big(ele.val());
+    link: function(scope, ele, attrs) {
+      ele.on("change", function(event){
+        scope.bigNumber = new Big(ele.val());
       });
     }
   };
