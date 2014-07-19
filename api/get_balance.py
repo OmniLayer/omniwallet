@@ -15,7 +15,17 @@ TIMEOUT='timeout -s 9 60 '
 def get_msc_balances( addr ):
 
     host=RPCHost()
-    address_data=host.call("getallbalancesforaddress_MP", addr)
+    try:
+        address_data=host.call("getallbalancesforaddress_MP", addr)
+    except Exception,e:
+        #Address not found
+        address_data={ 'result': 
+        [ 
+            { 
+              'balance': 0.0, 
+              'propertyid': 0
+            }
+        ] }
 
     address_data['balance']=address_data.pop('result')
     address_data['address']=str(addr)
@@ -32,7 +42,7 @@ def get_msc_balances( addr ):
       elif balance_data[ i ][ 'propertyid' ] == 2:
         balance_data[i][ 'symbol' ] = "TMSC"
       else:
-	 balance_data[i][ 'symbol' ] = "SP"+str(balance_data[ i ][ 'propertyid' ])
+        balance_data[i][ 'symbol' ] = "SP"+str(balance_data[ i ][ 'propertyid' ])
 
     # Once the data's been loaded, remove the BTC entry since we're going to
     #    use sx's BTC balances directly.
@@ -50,7 +60,6 @@ def get_msc_balances( addr ):
       if balance_data[ i ][ 'balance' ] == '0.0':
         balance_data.pop( i )
 
-    #print_debug("got here", 5)
     return ( address_data, None )
 
 #Old get balances that used local files = deprecated
