@@ -92,7 +92,7 @@
         <td ng-if="transaction.formatted_amount_available !== 0.0" class="number" title="{{transaction.formatted_amount_available}}" ng-bind-html="transaction.formatted_amount_available | numeraljs: '0,0.00000000000'"></td>
         <td class="number" title="{{transaction.formatted_bitcoin_amount_desired}}" ng-bind-html="transaction.formatted_bitcoin_amount_desired | numeraljs: '0,0.00000000000'"></td> 
         <td class="number" title="{{transaction.formatted_fee_required}}" ng-bind-html="transaction.formatted_fee_required | numeraljs: '0,0.00000000000'"></td> 
-        <td class="number" title="{{transaction.formatted_block_time_limit}}" ng-bind-html="transaction.formatted_block_time_limit | numeraljs: '0,0.00000000000'"></td> 
+        <td class="number" title="{{transaction.formatted_block_time_limit}}" ng-bind-html="transaction.formatted_block_time_limit | numeraljs: '0,0'"></td> 
         <td ng-show="(transaction.tx_hash.length == 64) && transaction.status == null && 
             !(transaction.from_address == selectedAddress)">
         <button class="btn btn-primary btn-sm" ng-hide="{{transaction.formatted_amount_available==0.0}}" ng-click="setView('buyOffer', transaction)" type="submit">Buy coin</button>
