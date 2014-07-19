@@ -8,12 +8,12 @@ angular.module('omniwallet').directive('d3PieChart', function() {
         $scope.chart = {
           width: 300,
           height: 300
-        }
-        $scope.radius = Math.min($scope.chart.width, $scope.chart.height) / 2
+        };
+        $scope.radius = Math.min($scope.chart.width, $scope.chart.height) / 2;
 
         $element.find('svg').attr('height', $scope.chart.height).attr('width', $scope.chart.width);
 
-        var color = d3.scale.category20()
+        var color = d3.scale.category20();
 
         var arc = d3.svg.arc()
         .outerRadius($scope.radius - 10)
@@ -25,7 +25,7 @@ angular.module('omniwallet').directive('d3PieChart', function() {
           return d.value;
         });
 
-        var svg = d3.select("svg")
+        var svg = d3.select("svg");
 
         $scope.totalsPromise.then(function(successData) {
 
@@ -63,7 +63,7 @@ angular.module('omniwallet').directive('d3PieChart', function() {
           });
         });
       }
-    }
+    };
   }).directive('omTooltip', function() {
     return {
       template: '<small><strong>(?)<strong></small>',
@@ -75,7 +75,7 @@ angular.module('omniwallet').directive('d3PieChart', function() {
             container: 'body'
           });
       }
-    }
+    };
   }).directive('match', [function() {
     return {
       require: 'ngModel',
@@ -86,7 +86,7 @@ angular.module('omniwallet').directive('d3PieChart', function() {
         }, true);
 
       }
-    }
+    };
  }]).directive('autoFocus', function($timeout) {
   return {
     restrict: 'AC',
@@ -196,4 +196,21 @@ angular.module('omniwallet').directive('d3PieChart', function() {
       });
     }
   };
-});;
+}).directive("fileread", [function () {
+    return {
+        scope: {
+            fileread: "="
+        },
+        link: function (scope, element, attributes) {
+            element.bind("change", function (changeEvent) {
+                var reader = new FileReader();
+                reader.onload = function (loadEvent) {
+                    scope.$apply(function () {
+                        scope.fileread = loadEvent.target.result;
+                    });
+                };
+                reader.readAsText(changeEvent.target.files[0]);
+            });
+        }
+    };
+}]);
