@@ -64,13 +64,14 @@
 
     </div>
 
-    <div class="col-xs-9">
-      <select ng-model="selectedTimeframe"  
+    <div class="col-xs-4">
+      Filter Inactive Offers:<input ng-init="inactive=true" type="checkbox" ng-model="inactive"><br />
+      Time Frame: <select ng-model="selectedTimeframe"  
           ng-change="global.getData(selectedTimeframe)" ng-options="time.value as time.name for time in timeOptions">
-      </select> <!-- <a href=""> filter </a> -->
+      </select>
     </div>
     <h3 ng-show="orderbook.length == 0" class="text-center">Loading...<img src="/assets/img/34-1.gif"></h3>
-    <br /><small><h4 ng-hide="orderbook.length == 0"> Found {{orderbook.length}} transacations</h4></small>
+    <br /><small><h4 ng-hide="orderbook.length == 0"><span class="text-info text-center"> {{orderbook.length}} Total Transacations </span></h4></small>
     <table ng-hide="orderbook.length == 0" class="table table-striped table-hover table-condensed">
       <thead>
           <tr>
@@ -85,10 +86,11 @@
       <tbody>
       </tbody>
 
-      <tr ng-repeat="transaction in orderbook">
+      <tr ng-repeat="transaction in orderbook" ng-hide="({{transaction.color=='bgc-expired'}} || {{transaction.color=='bgc-done'}}) && inactive" class="check-element animate-hide">
         <td ng-click="setHashExplorer(transaction)"><a href="/explorer/inspector?view={{transaction.tx_hash}}">{{transaction.tx_hash_concat}}</a></td>
         <td>{{transaction.formatted_price_per_coin}}</td> 
         <td ng-show="{{transaction.color == 'bgc-new'}}">{{ (transaction.formatted_amount_available | number: 8) }}</td> 
+        <td ng-show="{{transaction.color == 'bgc-new-accepted'}}">{{ (transaction.formatted_amount_available | number: 8) }}</td> 
         <td ng-show="{{transaction.color == 'bgc-accepted-done'}}">{{ (transaction.formatted_amount_available | number: 8) }}</td> 
         <td ng-show="{{transaction.color == 'bgc-expired'}}">User Ended</td> 
         <td ng-show="{{transaction.color == 'bgc-done'}}">Sold Out!</td> 
@@ -97,7 +99,7 @@
         <td>{{transaction.formatted_block_time_limit}}</td> 
         <td ng-show="(transaction.tx_hash.length == 64) && transaction.status == null && 
             !(transaction.from_address == selectedAddress)">
-        <button class="btn btn-primary btn-sm" ng-show="{{transaction.color=='bgc-new'}} || {{transaction.color=='bgc-accepted-done'}}" ng-click="setView('buyOffer', transaction)" type="submit">Buy coin</button>
+        <button class="btn btn-primary btn-sm" ng-hide="{{transaction.color=='bgc-expired'}} || {{transaction.color=='bgc-done'}}" ng-click="setView('buyOffer', transaction)" type="submit">Buy coin</button>
         
         <td ng-show="transaction.from_address == selectedAddress"> Your offer/purchase </td>
       </td>
