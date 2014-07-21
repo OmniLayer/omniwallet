@@ -88,13 +88,16 @@
       <tr ng-repeat="transaction in orderbook">
         <td ng-click="setHashExplorer(transaction)"><a href="/explorer/inspector?view={{transaction.tx_hash}}">{{transaction.tx_hash_concat}}</a></td>
         <td>{{transaction.formatted_price_per_coin}}</td> 
-        <td>{{ (transaction.formatted_amount_available==0.0) ? "Sold Out!" : (transaction.formatted_amount_available | number: 8) }}</td> 
+        <td ng-show="{{transaction.color == 'bgc-new'}}">{{ (transaction.formatted_amount_available | number: 8) }}</td> 
+        <td ng-show="{{transaction.color == 'bgc-accepted-done'}}">{{ (transaction.formatted_amount_available | number: 8) }}</td> 
+        <td ng-show="{{transaction.color == 'bgc-expired'}}">User Ended</td> 
+        <td ng-show="{{transaction.color == 'bgc-done'}}">Sold Out!</td> 
         <td>{{transaction.formatted_bitcoin_amount_desired}}</td> 
         <td>{{transaction.formatted_fee_required}}</td> 
         <td>{{transaction.formatted_block_time_limit}}</td> 
         <td ng-show="(transaction.tx_hash.length == 64) && transaction.status == null && 
             !(transaction.from_address == selectedAddress)">
-        <button class="btn btn-primary btn-sm" ng-hide="{{transaction.formatted_amount_available==0.0}}" ng-click="setView('buyOffer', transaction)" type="submit">Buy coin</button>
+        <button class="btn btn-primary btn-sm" ng-show="{{transaction.color=='bgc-new'}} || {{transaction.color=='bgc-accepted-done'}}" ng-click="setView('buyOffer', transaction)" type="submit">Buy coin</button>
         
         <td ng-show="transaction.from_address == selectedAddress"> Your offer/purchase </td>
       </td>
