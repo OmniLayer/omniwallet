@@ -88,8 +88,8 @@
       <tr ng-repeat="transaction in orderbook">
         <td ng-click="setHashExplorer(transaction)"><a href="/explorer/inspector?view={{transaction.tx_hash}}">{{transaction.tx_hash_concat}}</a></td>
         <td>{{transaction.formatted_price_per_coin}}</td> 
-        <td ng-show="{{transaction.color == 'bgc-new'}}">{{ (transaction.formatted_amount_available==0.0) ? "Sold Out!" : (transaction.formatted_amount_available | number: 8) }}</td> 
-        <td ng-show="{{transaction.color == 'bgc-accepted-done'}}">{{ (transaction.formatted_amount_available==0.0) ? "Sold Out!" : (transaction.formatted_amount_available | number: 8) }}</td> 
+        <td ng-show="{{transaction.color == 'bgc-new'}}">{{ (transaction.formatted_amount_available | number: 8) }}</td> 
+        <td ng-show="{{transaction.color == 'bgc-accepted-done'}}">{{ (transaction.formatted_amount_available | number: 8) }}</td> 
         <td ng-show="{{transaction.color == 'bgc-expired'}}">User Ended</td> 
         <td ng-show="{{transaction.color == 'bgc-done'}}">Sold Out!</td> 
         <td>{{transaction.formatted_bitcoin_amount_desired}}</td> 
