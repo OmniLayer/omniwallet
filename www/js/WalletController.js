@@ -339,6 +339,13 @@ function WalletTradeOverviewController($scope, $http, $q, userService, hashExplo
           });
         });
 
+        transaction_data = transaction_data.filter(function(item) {
+          var orderType = item.tx_type_str.toLowerCase()
+          var orderStatus = item.color.match(/expired/gi) || []
+          //DEBUG console.log(orderStatus, item.color)
+          return (orderType == 'sell offer') && (orderStatus.length == 0)
+        });
+
         angular.forEach(transaction_data, function(transaction, index) {
           //DEBUG console.log(new Date(Number(transaction.tx_time)))
           transaction_data[index].tx_hash_concat = transaction.tx_hash.substring(0, 22) + '...'
