@@ -117,7 +117,7 @@ function WalletHistoryController($scope, $q, $http, userService, hashExplorer) {
         //DEBUG console.log(new Date(Number(transaction.tx_time)))
         transaction_data[index].tx_hash_concat = transaction.tx_hash.substring(0, 22) + '...'
 
-        if(transaction.currency_str == 'Smart Property') 
+        if(transaction.currency_str == 'Smart Property' && transaction.propertyName != undefined) 
           transaction.currency_str = transaction.propertyName;
         if(transaction.currency_str == undefined)
           transaction.currency_str = transaction.icon_text;
@@ -128,7 +128,7 @@ function WalletHistoryController($scope, $q, $http, userService, hashExplorer) {
         var incoming = addresses.indexOf(transaction.to_address);
 
         if(incoming == -1 && transaction.to_address.length > 32)
-          transaction.color = 'danger';
+          transaction.color = 'info';
         if(incoming != -1 && transaction.to_address.length > 32)
           transaction.color = 'success';
         if(transaction.to_address.length < 32)
@@ -197,7 +197,7 @@ function WalletHistoryController($scope, $q, $http, userService, hashExplorer) {
         //DEBUG console.log(new Date(Number(transaction.tx_time)))
         transaction_data[index].tx_hash_concat = transaction.tx_hash.substring(0, 22) + '...'
 
-        if(transaction.currency_str == 'Smart Property') 
+        if(transaction.currency_str == 'Smart Property' && transaction.propertyName != undefined) 
           transaction.currency_str = transaction.propertyName;
         if(transaction.currency_str == undefined)
           transaction.currency_str = transaction.icon_text;
@@ -208,7 +208,7 @@ function WalletHistoryController($scope, $q, $http, userService, hashExplorer) {
         var incoming = addresses.indexOf(transaction.to_address);
 
         if(incoming == -1 && transaction.to_address.length > 32)
-          transaction.color = 'danger';
+          transaction.color = 'info';
         if(incoming != -1 && transaction.to_address.length > 32)
           transaction.color = 'success';
         if(transaction.to_address.length < 32)
@@ -337,6 +337,13 @@ function WalletTradeOverviewController($scope, $http, $q, userService, hashExplo
           transaction_data_keys.forEach(function(key) {
             tx[key] = tx[key];
           });
+        });
+
+        transaction_data = transaction_data.filter(function(item) {
+           var orderType = item.tx_type_str.toLowerCase()
+           var orderStatus = item.color.match(/expired/gi) || []
+           //DEBUG console.log(orderStatus, item.color)
+           return (orderType == 'sell offer') && (orderStatus.length == 0)
         });
 
         angular.forEach(transaction_data, function(transaction, index) {
