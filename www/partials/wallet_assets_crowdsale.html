@@ -10,8 +10,8 @@
       </h4>
       <div class="row">
         <div class="panel-default">
-         <div class="col-xs-9 text-left panel-body om-title">Start a Crowdsale</div>
-          <div class="col-xs-3" style="padding-top: 20px">
+         <div class="col-xs-8 text-left panel-body om-title">Start a Crowdsale</div>
+         <div class="col-xs-4" style="padding-top: 20px">
           <div class="input-group pull-right">
             <span class="input-group-addon"> Environment: </span>
             <select name="ecosystem" class="form-control" ng-model="ecosystem" ng-change="setEcosystem()" disabled="">
@@ -127,7 +127,7 @@
               <div class="panel panel-default" ng-repeat="investment in currenciesDesired">
                 <div class="panel-body form-inline">
                   <div class="form-group col-xs-5">
-                    <input name="amount" type="number" big-number step="{{tokenStep}}" min="{{tokenMin}}" max="{{tokenMax}}" ng-model="investment.numberOfTokens" ensure-integer ensure-over="investment.numberOfTokens" ensure-if="!isDivisible()" class="form-control" placeholder="# of tokens" required>
+                    <input name="amount" type="number" big-number="investment.numberOfTokens" step="{{tokenStep}}" min="{{tokenMin}}" max="{{tokenMax}}" ensure-integer ensure-over="investment.numberOfTokens" ensure-if="!isDivisible()" class="form-control" placeholder="# of tokens" required>
                   </div>
                   <div class="form-group col-xs-7">
                     <label>per</label>

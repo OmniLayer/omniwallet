@@ -204,7 +204,7 @@ function CrowdsaleIssuanceController($scope, propertiesService){
           number_properties:$scope.isDivisible() ? +$scope.convertDisplayedValue(currency.numberOfTokens) : +currency.numberOfTokens,
           transaction_from: $scope.selectedAddress,
           currency_identifier_desired:currency.selectedCurrency.currencyId,
-          deadline:Date.UTC($scope.deadline.getFullYear(),$scope.deadline.getMonth(),$scope.deadline.getDate(), $scope.deadline.getHours(), $scope.deadline.getMinutes(), 0, 0),
+          deadline:Date.UTC($scope.deadline.getFullYear(),$scope.deadline.getMonth(),$scope.deadline.getDate(), $scope.deadline.getHours(), $scope.deadline.getMinutes(), 0, 0) / 1000,
           earlybird_bonus:$scope.earlyBirdBonus / ((($scope.deadline.getTime() / 1000) - ((new Date()).getTime() /1000)) /604800 ),
           percentage_for_issuer:$scope.percentageForIssuer,
           fee: $scope.convertDisplayedValue($scope.minerFees)
@@ -244,7 +244,7 @@ function CrowdsaleIssuanceController($scope, propertiesService){
   
   var nextMonth = new Date()
   nextMonth.setMonth(nextMonth.getMonth() +1);
-  $scope.deadline = nextMonth;
+  $scope.deadline = new Date(Date.UTC(nextMonth.getFullYear(),nextMonth.getMonth(),nextMonth.getDate(), nextMonth.getHours(), nextMonth.getMinutes(), 0, 0));
 
   $scope.open = function($event) {
     $event.preventDefault();
