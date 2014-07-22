@@ -242,9 +242,10 @@ function CrowdsaleIssuanceController($scope, propertiesService){
     $scope.deadline= new Date();
   };
   
-  var nextMonth = new Date()
+  var nextMonth = new Date();
   nextMonth.setMonth(nextMonth.getMonth() +1);
-  $scope.deadline = new Date(Date.UTC(nextMonth.getFullYear(),nextMonth.getMonth(),nextMonth.getDate(), nextMonth.getHours(), nextMonth.getMinutes(), 0, 0));
+  var offset = nextMonth.getTimezoneOffset() * 60000;
+  $scope.deadline = new Date(nextMonth.getTime() + offset);
 
   $scope.open = function($event) {
     $event.preventDefault();
