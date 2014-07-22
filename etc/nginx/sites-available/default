@@ -18,16 +18,16 @@
 ##
 
 server {
-	listen 80 default_server;
-	listen [::]:80 default_server ipv6only=on;
+        listen 80 default_server;
+        listen [::]:80 default_server ipv6only=on;
 
         add_header Cache-Control "no-cache,no-store,must-revalidate"; 
         add_header Pragma "no-cache"; 
         add_header Expires "0";
 
-	## Set this to reflect the location of the www directory within the omniwallet repo.
-	root /home/myUser/omniwallet/www/;
-	index index.htm index.html;
+        ## Set this to reflect the location of the www directory within the omniwallet repo.
+        root /home/myUser/omniwallet/www/;
+        index index.htm index.html;
 
         #Re-route nested routed through index
         location / {
@@ -207,4 +207,3 @@ server {
                 uwsgi_pass 127.0.0.1:$PORT;
         }
 }
-
