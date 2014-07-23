@@ -13,7 +13,7 @@ angular.module('omniwallet')
         if (end === undefined)
             end = "...";
 
-        if (text.length <= length || text.length - end.length <= length) {
+        if (text === undefined || text.length <= length || text.length - end.length <= length) {
             return text;
         }
         else {
