@@ -15,8 +15,10 @@ var app = angular.module('omniwallet', [
   $httpProvider.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded;charset=utf-8';
   $httpProvider.defaults.transformRequest = [TransformRequest];
 
-  if (document.location.href.match('testnet') != null)
+  if (document.location.href.match('testnet') != null) {
     Bitcoin.setNetwork('test');
+    TESTNET=true;
+  }
 
   $routeProvider.when('/assets/:page?', {
       templateUrl: function(route) {
