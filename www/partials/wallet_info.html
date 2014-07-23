@@ -15,13 +15,13 @@
         <span class="glyphicon glyphicon-signal"></span>
       </button>
       &nbsp;
-      <button type="button" class="btn btn-default disabled">Last Price <br> <small> 0.00000000000 </small> </button>
+      <button type="button" class="btn btn-default disabled">Last Price <br> <small> 0.00000000 </small> </button>
       &nbsp;
       <div class="btn-group">
-      <button type="button" class="btn btn-default disabled">High <br> <small> 0.00000000000 </small> </button>
-      <button type="button" class="btn btn-default disabled">Low <br> <small> 0.00000000000 </small> </button>
-      <button type="button" class="btn btn-default disabled">Avg Price <br> <small> 0.00000000000 </small> </button>
-      <button type="button" class="btn btn-default disabled">Volume <br> <small> 0.00000000000 </small> </button>
+      <button type="button" class="btn btn-default disabled">High <br> <small> 0.00000000 </small> </button>
+      <button type="button" class="btn btn-default disabled">Low <br> <small> 0.00000000 </small> </button>
+      <button type="button" class="btn btn-default disabled">Avg Price <br> <small> 0.00000000 </small> </button>
+      <button type="button" class="btn btn-default disabled">Volume <br> <small> 0.00000000 </small> </button>
       <div class="btn-group">
             <button type="button" class="btn btn-default dropdown-toggle disabled" data-toggle="dropdown">
               24 hours 
@@ -87,11 +87,11 @@
 
       <tr ng-repeat="transaction in orderbook">
         <td ng-click="setHashExplorer(transaction)"><a href="/explorer/inspector?view={{transaction.tx_hash}}">{{transaction.tx_hash_concat}}</a></td>
-        <td class="number" title="{{transaction.formatted_price_per_coin}}" ng-bind-html="transaction.formatted_price_per_coin | numeraljs: '0,0.00000000000'"></td> 
+        <td class="number" title="{{transaction.formatted_price_per_coin}}" ng-bind-html="transaction.formatted_price_per_coin | numeraljs: '0,0.00000000'"></td> 
         <td ng-if="transaction.formatted_amount_available === 0.0">Sold Out!</td>
-        <td ng-if="transaction.formatted_amount_available !== 0.0" class="number" title="{{transaction.formatted_amount_available}}" ng-bind-html="transaction.formatted_amount_available | numeraljs: '0,0.00000000000'"></td>
-        <td class="number" title="{{transaction.formatted_bitcoin_amount_desired}}" ng-bind-html="transaction.formatted_bitcoin_amount_desired | numeraljs: '0,0.00000000000'"></td> 
-        <td class="number" title="{{transaction.formatted_fee_required}}" ng-bind-html="transaction.formatted_fee_required | numeraljs: '0,0.00000000000'"></td> 
+        <td ng-if="transaction.formatted_amount_available !== 0.0" class="number" title="{{transaction.formatted_amount_available}}" ng-bind-html="transaction.formatted_amount_available | numeraljs: '0,0.00000000'"></td>
+        <td class="number" title="{{transaction.formatted_bitcoin_amount_desired}}" ng-bind-html="transaction.formatted_bitcoin_amount_desired | numeraljs: '0,0.00000000'"></td> 
+        <td class="number" title="{{transaction.formatted_fee_required}}" ng-bind-html="transaction.formatted_fee_required | numeraljs: '0,0.00000000'"></td> 
         <td class="number" title="{{transaction.formatted_block_time_limit}}" ng-bind-html="transaction.formatted_block_time_limit | numeraljs: '0,0'"></td> 
         <td ng-show="(transaction.tx_hash.length == 64) && transaction.status == null && 
             !(transaction.from_address == selectedAddress)">
