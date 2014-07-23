@@ -169,7 +169,7 @@ def prepTX(from_address, to_address, marker_address, currency_id, amount, btc_fe
     if marker_address != None:
         validnextoutputs = { marker_address : 0.00005757 }
     
-    validnextoutputs[to_address]=0.00005757 #Add for simple send
+    validnextoutputs[to_address]=float(Decimal(amount)/Decimal(1e8)) #Add for simple send
 
     if change >= 5757: # send anything above dust to yourself otherwise it goes to mining fees
         validnextoutputs[ from_address ] = float( Decimal(change)/Decimal(1e8) )
