@@ -103,7 +103,7 @@
                 </div>
                 <div class="col-xs-6">
                   <div class="col-xs-5">
-                    <timepicker ng-model="deadlineTime" ng-change="setDeadlineTime(deadlineTime)"></timepicker>
+                    <timepicker ng-model="deadline"></timepicker>
                   </div>
                   <div class="col-xs-7" style="padding-top: 45px">
                     UTC
@@ -127,7 +127,7 @@
               <div class="panel panel-default" ng-repeat="investment in currenciesDesired">
                 <div class="panel-body form-inline">
                   <div class="form-group col-xs-5">
-                    <input name="amount" type="number" big-number="investment.numberOfTokens" step="{{tokenStep}}" min="{{tokenMin}}" max="{{tokenMax}}" ensure-integer ensure-over="investment.numberOfTokens" ensure-if="!isDivisible()" class="form-control" placeholder="# of tokens" required>
+                    <input name="amount" type="text" ng-model="investment.numberOfTokens" big-number step="{{tokenStep}}" min="{{tokenMin}}" max="{{tokenMax}}" ensure-integer ensure-over="investment.numberOfTokens" ensure-if="!isDivisible()" class="form-control" placeholder="# of tokens" required>
                   </div>
                   <div class="form-group col-xs-7">
                     <label>per</label>

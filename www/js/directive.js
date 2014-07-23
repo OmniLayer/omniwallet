@@ -184,15 +184,62 @@ angular.module('omniwallet').directive('d3PieChart', function() {
       });
     }
   };
-}).directive('big-number', function() {
+}).directive('bigNumber', function() {
   return {
     restrict: 'A',
-    scope:{
-      bigNumber:'='
-    },
-    link: function(scope, ele, attrs) {
-      ele.on("change", function(event){
-        scope.bigNumber = new Big(ele.val());
+    require:'?ngModel',
+    link: function(scope, ele, attr, ctrl) {           
+                  
+      // add a parser that will process each time the value is 
+      // parsed into the model when the user updates it.
+      ctrl.$parsers.unshift(function(value) {
+          // test and set the validity after update.
+          var number=undefined;
+          try{
+            number= new Big(value);
+            ctrl.$setValidity('invalidValue', true);
+          } catch(e) {
+            ctrl.$setValidity('invalidValue', false);
+          };
+          if(number != undefined){
+            var min = number > new Big(attr.min);
+            ctrl.$setValidity('minValue', max);
+            
+            var max = number < new Big(attr.max);
+            ctrl.$setValidity('maxValue', max);
+            
+            if(!max || !min)
+              number=undefined;
+          }
+          // if it's valid, return the value to the model, 
+          // otherwise return undefined.
+          return number;
+      });
+      
+      // add a formatter that will process each time the value 
+      // is updated on the DOM element.
+      ctrl.$formatters.unshift(function(value) {
+          // validate.
+          var number=undefined;
+          try{
+            number= new Big(value);
+            ctrl.$setValidity('invalidValue', true);
+          } catch(e) {
+            ctrl.$setValidity('invalidValue', false);
+          };
+          if(number != undefined){
+            var min = number > new Big(attr.min);
+            ctrl.$setValidity('minValue', max);
+            
+            var max = number < new Big(attr.max);
+            ctrl.$setValidity('maxValue', max);
+            
+            if(!max || !min)
+              number=undefined;
+          }
+          
+          // return the value or nothing will be written to the DOM.
+          return value;
       });
     }
   };

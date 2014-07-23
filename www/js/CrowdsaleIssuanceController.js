@@ -63,13 +63,6 @@ function CrowdsaleIssuanceController($scope, propertiesService){
     });
   };
   
-  $scope.setDeadlineTime=function(time){
-    $scope.deadline.setHours(time.getHours());
-    $scope.deadline.setMinutes(time.getMinutes());
-    $scope.deadline.setSeconds(0);
-  };
-  
-  
   // MULTIPLE CURRENCIES SUPPORT
   $scope.addCurrencyDesired=function(){
     if(availableDesiredCurrencies.length - selectedDesiredCurrencies.length > 0) {
@@ -246,6 +239,7 @@ function CrowdsaleIssuanceController($scope, propertiesService){
   nextMonth.setMonth(nextMonth.getMonth() +1);
   var offset = nextMonth.getTimezoneOffset() * 60000;
   $scope.deadline = new Date(nextMonth.getTime() + offset);
+  $scope.deadlineTime = new Date(nextMonth.getTime() + offset);
 
   $scope.open = function($event) {
     $event.preventDefault();
