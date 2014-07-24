@@ -233,4 +233,14 @@ form.form-search:before {
 
 .shout {
   background-image: url("/assets/img/shout.png");
+  width: 106px;
+  height: 106px;
+  position: relative;
+}
+
+.shout > span {
+  position: absolute;
+  left: 41px;
+  top: 41px;
+  color: #fff;
 }
