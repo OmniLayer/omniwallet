@@ -71,6 +71,29 @@ def list():
 
     return jsonify(response)
 
+@app.route('/listactivecrowdsales', methods=['POST'])
+def listcrowdsales():
+    try:
+        ecosystem = request.form['ecosystem']
+    except KeyError:
+        abort(make_response('No field \'ecosystem\' in request, request failed', 400))
+    
+       
+    host = RPCHost()
+    try:
+        list = host.call("getactivecrowdsales_MP")['result']
+        data = [ crowdsale for crowdsale in list if (ecosystem == "1" and crowdsale['propertyid'] < 2147483651) or (ecosystem == "2" and crowdsale['propertyid'] >= 2147483651)]
+    except Exception,e:
+        #Properties not found
+        data= []  
+        
+    response = {
+                'status' : 'OK',
+                'crowdsales' : data
+                }
+
+    return jsonify(response)
+
 @app.route('/getdata/<int:property_id>')
 def getdata(property_id):
     host = RPCHost()
