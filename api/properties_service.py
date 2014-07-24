@@ -71,6 +71,49 @@ def list():
 
     return jsonify(response)
 
+@app.route('/getdata/<int:property_id>')
+def getdata(property_id):
+    host = RPCHost()
+    try:
+        property = host.call("getproperty_MP", property_id)['result']
+    except Exception,e:
+        abort(make_response('Error getting property', 400))
+        
+    return jsonify(property)
+
+@app.route('/getcrowdsale/<int:property_id>')
+def getcrowdsale(property_id):
+    host = RPCHost()
+    try:
+        crowdsale = host.call("getcrowdsale_MP", property_id)['result']
+    except Exception,e:
+        abort(make_response('Error getting crowdsale', 400))
+        
+    return jsonify(crowdsale)
+
+@app.route('/getcrowdsalehistory/<int:property_id>', method=["POST"])
+def getcrowdsalehistory(property_id):
+    try:
+        start = request.form['start']
+    except KeyError:
+        abort(make_response('No field \'start\' in request, request failed', 400))
+        
+    try:
+        count = request.form['count']
+    except KeyError:
+        abort(make_response('No field \'count\' in request, request failed', 400))
+    
+    host = RPCHost()
+    try:
+        crowdsale = host.call("getcrowdsale_MP", property_id, True)['result']
+    except Exception,e:
+        abort(make_response('Error getting crowdsale', 400))
+    
+    
+    end = start + count if len(crowdsale['participanttransactions']) < start + count else -1
+        
+    return jsonify(crowdsale['participanttransactions'][start:end])
+
 @app.route('/info', methods=['POST'])
 def info():
     try:
