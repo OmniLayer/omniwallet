@@ -1,4 +1,4 @@
-function AssetDetailsController($route, $scope, propertiesService, userService){
+function AssetDetailsController($route, $scope, $timeout, $element, $compile, propertiesService, userService){
   $scope.propertyId = $route.current.params.propertyId;
   $scope.property = {
     "name" : "",
@@ -62,7 +62,33 @@ function AssetDetailsController($route, $scope, propertiesService, userService){
         $scope.earlyBirdBonus =  (($scope.crowdsale.deadline - (now.getTime()/1000)) / 604800) * $scope.crowdsale.earlybonus;
         $scope.estimatedWorth = "0";
         
-        $('timer')[0].addCDSeconds($scope.crowdsale.deadline - now.getTime() / 1000);
+        // we need to compile the timer dinamically to get the appropiate end-date set.
+        var endtime = $scope.crowdsale.deadline * 1000 - now.getTime();
+        $timeout(function (){
+          var timerNode = $('<timer end-time='+endtime+'> \
+            <span class="countdown-group"> \
+              <span class="countdown-number">{{days}}</span> \
+              <span class="countdown-label">day{{daysS}}</span> \
+            </span> \
+            : \
+            <span class="countdown-group"> \
+              <span class="countdown-number">{{hours}}</span> \
+              <span class="countdown-label">hour{{hoursS}}</span> \
+            </span> \
+            : \
+            <span class="countdown-group"> \
+              <span class="countdown-number">{{minutes}}</span> \
+              <span class="countdown-label">minute{{minutesS}}</span> \
+            </span> \
+            : \
+            <span class="countdown-group"> \
+              <span class="countdown-number">{{seconds}}</span> \
+              <span class="countdown-label">second{{secondsS}}</span> \
+            </span> \
+          </timer>');
+          $element.find('#timerWrapper').append(timerNode);
+          $compile(timerNode)($scope);
+        });
       });
       
       propertiesService.getCrowdsaleHistory($scope.propertyId,0,5).then(function(result){
