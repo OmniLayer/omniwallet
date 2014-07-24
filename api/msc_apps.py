@@ -16,6 +16,7 @@ class RPCHost():
             with open('/home/'+USER+'/.bitcoin/bitcoin.conf') as fp:
                 RPCPORT="8332"
                 RPCHOST="localhost"
+                RPCSSL=False
                 for line in fp:
                     #print line
                     if line.split('=')[0] == "rpcuser":
