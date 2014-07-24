@@ -37,7 +37,7 @@
       <div class="row">Follow us: L F T G</div>
       <div class="row">
         <h2><span ng-show="isOwner">Your </span>Active crowdsale</h2>
-        <timer end-time="1420070400000">{{days}} days, {{hours}} hours, {{minutes}} minutes, {{seconds}} seconds.</timer>
+        <timer end-time="{{crowdsale.deadline * 1000}}">{{days}} days, {{hours}} hours, {{minutes}} minutes, {{seconds}} seconds.</timer>
       </div>
       <div class="row">
         Crowdsale started {{formatedStartDate}} (~{{daysAgo}} days ago)

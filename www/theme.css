@@ -186,3 +186,7 @@ form.form-search:before {
 .icons a.facebook { background: url(/assets/img/social-icons/facebook.png) left top no-repeat; }
 
 .icons a:hover { background-position: left -34px; }
+
+.show-grid {
+  margin-bottom:15px;
+}

@@ -4,7 +4,8 @@ var app = angular.module('omniwallet', [
   'ngRoute',
   'ui.bootstrap',
   'ui.bootstrap.modal',
-  'vr.filters.passwordStrength'
+  'vr.filters.passwordStrength',
+  'timer'
 ], function($routeProvider, $locationProvider, $httpProvider) {
 
   if (!$httpProvider.defaults.headers.get)
