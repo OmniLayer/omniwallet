@@ -27,7 +27,7 @@ function AssetDetailsController($route, $scope, propertiesService, userService){
     "tokensissued" : 79.42773456
   };
   
-  $scope.isOwner = userService.getAddressesWithPrivkey().indexOf($scope.crowdsale.issuer) > -1;
+  $scope.isOwner = userService.loggedIn() && userService.getAddressesWithPrivkey().indexOf($scope.crowdsale.issuer) > -1;
   
   $scope.acceptedCurrencies = [{name:"Test Mastercoin",rate:$scope.crowdsale.tokensperunit}];
   $scope.formatedCurency = "Test Mastercoin";
