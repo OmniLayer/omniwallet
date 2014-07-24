@@ -113,8 +113,8 @@ def getcrowdsale(property_id):
         abort(make_response('Error getting crowdsale', 400))
     
     history = crowdsale.pop("participanttransactions", [])    
-    crowdsale["participanttokens"] = sum([tx.participanttokens for tx in history])
-    crowdsale["issuertokens"] = sum([tx.issuertokens for tx in history])
+    crowdsale["participanttokens"] = sum([tx["participanttokens"] for tx in history])
+    crowdsale["issuertokens"] = sum([tx["issuertokens"] for tx in history])
     
     return jsonify(crowdsale)
 
