@@ -16,7 +16,7 @@
                     <td>{{item.address.address}}</td>
                    <!-- <td ng-show={{item.address.privkey}}>{{item.address.address}}<span class="glyphicon glyphicon-lock" tooltip="Your Wallet has the Private key for this address"></span></td> -->
 		    <td class="currency number" title="{{item.balance}}" ng-bind-html="item.balance | numeraljs: '0,0.00000000'"></td>
-		    <td class="currency number" title="{{item.value}}" ng-bind-html="item.value | numeraljs: '$0,0.00'"></td>
+		    <td class="currency number" title="{{item.value}}" ng-bind-html="item.value | numeraljs: '$0,0.00':true"></td>
 		  </tr>
 		</tbody>
 	</table>
