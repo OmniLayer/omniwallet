@@ -61,6 +61,8 @@ function AssetDetailsController($route, $scope, propertiesService, userService){
         $scope.daysAgo = Math.round((now.getTime() - startDate.getTime()) / (1000*60*60*24));
         $scope.earlyBirdBonus =  (($scope.crowdsale.deadline - (now.getTime()/1000)) / 604800) * $scope.crowdsale.earlybonus;
         $scope.estimatedWorth = "0";
+        
+        $('timer')[0].addCDSeconds($scope.crowdsale.deadline - now.getTime() / 1000);
       });
       
       propertiesService.getCrowdsaleHistory($scope.propertyId,0,5).then(function(result){
