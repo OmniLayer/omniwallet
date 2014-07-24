@@ -27,16 +27,16 @@ function CrowdsaleIssuanceController($scope, propertiesService){
   $scope.currenciesDesired=[];
   $scope.propertyCategory='';
   
-  var mastercoin ={currencyId:1,propertyName:"Mastercoin"};
-  var bitcoin = {currencyId:0,propertyName:"Bitcoin"};
-  var testMastercoin = {currencyId:2,propertyName:"Test Mastercoin"};
+  var mastercoin ={propertyid:1,name:"Mastercoin"};
+  var bitcoin = {propertyid:0,name:"Bitcoin"};
+  var testMastercoin = {propertyid:2,name:"Test Mastercoin"};
   
   $scope.setEcosystem = function(){
     availableDesiredCurrencies=$scope.ecosystem == 1 ? [mastercoin,bitcoin]:[testMastercoin];
     propertiesService.list($scope.ecosystem).then(function(result){
       availableDesiredCurrencies = availableDesiredCurrencies.concat(result.data.properties).sort(function(a, b) {
-          var currencyA = a.propertyName.toUpperCase();
-          var currencyB = b.propertyName.toUpperCase();
+          var currencyA = a.name.toUpperCase();
+          var currencyB = b.name.toUpperCase();
           return (currencyA < currencyB) ? -1 : (currencyA > currencyB) ? 1 : 0;
       });
       var availableTokens = availableDesiredCurrencies.filter(function(currency){
@@ -119,7 +119,7 @@ function CrowdsaleIssuanceController($scope, propertiesService){
   };
   
   $scope.formatCurrencyDisplay = function(currencyDesired){
-    return currencyDesired.propertyName + " (" + currencyDesired.currencyId + ")";
+    return currencyDesired.name + " (" + currencyDesired.propertyid + ")";
   };
   
   // Initialize the form
