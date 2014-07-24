@@ -1,8 +1,8 @@
-<div class="sidecar col-xs-2" ng-controller="SidecarController" ng-init="setView('explorer')">
+<div class="sidecar" ng-controller="SidecarController" ng-init="setView('explorer')">
   <div ng-include="templates['sidecar']"></div>
 </div>
 
-<div class="col-xs-10" ng-controller="AssetDetailsController">
+<div class="col-xs-12" ng-controller="AssetDetailsController">
   <div class="row">
     <div class="col-xs-8">
       <div class="panel panel-default">
@@ -22,7 +22,7 @@
       </div>
       <div class="panel panel-default">
         <div class="panel-body">
-          <h2>Accepted Currency</h2>
+          <h3>Accepted Currency</h3>
           <table class="table">
             <tr ng-repeat="currency in acceptedCurrencies">
               <td>{{currency.name}}</td>
@@ -34,27 +34,42 @@
       </div>
     </div>
     <div class="col-xs-4">
-      <div class="row show-grid">Follow us: L F T G</div>
+      <div class="row show-grid">
+        Follow us: L F T G
+      </div>
       <div class="row show-grid bg-active">
-        <h2><span ng-show="isOwner">Your </span>Active crowdsale</h2>
-        <div id="timerWrapper"></div>
+        <div class="col-xs-12">
+          <h3><span ng-show="isOwner">Your </span>Active crowdsale</h3>
+          <p>
+            Time until closing:
+          </p>
+          <div id="timerWrapper"></div>
+        </div>
       </div>
       <div class="row show-grid">
-        Crowdsale started {{formatedStartDate}} (~{{daysAgo}} days ago)
-      </div>   
-      <div class="row show-grid bg-active">
-        Current early bird bonus: %{{earlyBirdBonus}}
-      </div>      
-      <div class="row show-grid bg-active">
-        <span>{{crowdsale.participanttokens}}</span>
-        <span class="help-block">Tokens already bought by participants</span>
-        <span>{{crowdsale.issuertokens}}</span>
-        <span class="help-block">Tokens created for the issuer (%{{crowdsale.percenttoissuer}})</span>
+        <div class="col-xs-12">
+          Crowdsale started {{formatedStartDate}} (~{{daysAgo}} days ago)
+        </div>
       </div>
       <div class="row show-grid bg-active">
-        <h4>Invested Funds</h4>
-        <span>Estimated total worth invested in this crowdsale:</span>
-        <span>{{estimatedWorth}}</span> Dollars
+        <div class="col-xs-12">
+          Current early bird bonus: <span class="shout">%{{earlyBirdBonus}}</span>
+        </div>
+      </div>
+      <div class="row show-grid bg-active">
+        <div class="col-xs-12">
+          <span>{{crowdsale.participanttokens}}</span>
+          <span class="help-block">Tokens already bought by participants</span>
+          <span>{{crowdsale.issuertokens}}</span>
+          <span class="help-block">Tokens created for the issuer (%{{crowdsale.percenttoissuer}})</span>
+        </div>
+      </div>
+      <div class="row bg-active">
+        <div class="col-xs-12">
+          <h4>Invested Funds</h4>
+          <span>Estimated total worth invested in this crowdsale:</span>
+          <span>{{estimatedWorth}}</span> Dollars
+        </div>
       </div>
     </div>
   </div>
@@ -65,6 +80,6 @@
       <div class="panel-body">
         Invested {{transaction.amountsent}} {{formatedCurrency}} got {{transaction.participanttokens}}
       </div>
-    </panel>
+      </panel>
+    </div>
   </div>
-</div>

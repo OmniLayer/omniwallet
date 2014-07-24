@@ -68,22 +68,22 @@ function AssetDetailsController($route, $scope, $timeout, $element, $compile, pr
           var timerNode = $('<timer end-time='+endtime+'> \
             <span class="countdown-group"> \
               <span class="countdown-number">{{days}}</span> \
-              <span class="countdown-label">day{{daysS}}</span> \
+              <div class="countdown-label">day{{daysS}}</div> \
             </span> \
             : \
             <span class="countdown-group"> \
               <span class="countdown-number">{{hours}}</span> \
-              <span class="countdown-label">hour{{hoursS}}</span> \
+              <div class="countdown-label">hour{{hoursS}}</div> \
             </span> \
             : \
             <span class="countdown-group"> \
               <span class="countdown-number">{{minutes}}</span> \
-              <span class="countdown-label">minute{{minutesS}}</span> \
+              <div class="countdown-label">minute{{minutesS}}</div> \
             </span> \
             : \
             <span class="countdown-group"> \
               <span class="countdown-number">{{seconds}}</span> \
-              <span class="countdown-label">second{{secondsS}}</span> \
+              <div class="countdown-label">second{{secondsS}}</div> \
             </span> \
           </timer>');
           $element.find('#timerWrapper').append(timerNode);
