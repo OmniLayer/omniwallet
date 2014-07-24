@@ -1,4 +1,5 @@
-function AssetDetailsController($route, $scope, propertiesService){
+function AssetDetailsController($route, $scope, propertiesService, userService){
+  $scope.propertyId = $route.current.params.propertyId;
   $scope.property = {
     "name" : "OmpaLoompa",
     "category" : "Testing",
@@ -26,13 +27,15 @@ function AssetDetailsController($route, $scope, propertiesService){
     "tokensissued" : 79.42773456
   };
   
+  $scope.isOwner = userService.getAddressesWithPrivkey().indexOf($scope.crowdsale.issuer) > -1;
+  
   $scope.acceptedCurrencies = [{name:"Test Mastercoin",rate:$scope.crowdsale.tokensperunit}];
   $scope.formatedCurency = "Test Mastercoin";
   var startDate = new Date($scope.crowdsale.starttime*1000);
-  $scope.formatedStartDate = startDate.getLocaleDateString();
+  $scope.formatedStartDate = startDate.toLocaleDateString();
   
   var now = new Date();
-  $scope.daysAgo = (now.getTime() - startDate.getTime()) / (1000*60*60*24);
+  $scope.daysAgo = Math.round((now.getTime() - startDate.getTime()) / (1000*60*60*24));
   $scope.earlyBirdBonus =  (($scope.crowdsale.deadline - (now.getTime()/1000)) / 604800) * $scope.crowdsale.earlybonus;
   $scope.tokensForIssuer = 7.36543;
   $scope.estimatedWorth = "49.675";

@@ -7,7 +7,7 @@
     <div class="col-xs-8">
       <div class="panel panel-default">
         <div class="panel-body">
-          <h1>{{property.name}} <span class="label label-default">#{{property.propertyid}}</span></h1>
+          <h1>{{property.name}} <span class="label label-default">#{{propertyId}}</span></h1>
           <span class="label label-default">{{property.category}} > {{property.subcategory}}</span>
           <p>
             {{property.data}}
@@ -16,7 +16,7 @@
             For more details visit: <a href="{{data.propertyUrl}}">{{property.url}}</a>
           </p>
           <p>
-            Issuance Address: <span class="label label-success">{{property.issuer.substr(0,5)}}...{{property.issuer.substr(-5,5)}</span>
+            Issuance Address: <span class="label label-success">{{property.issuer.substr(0,5)}}...{{property.issuer.substr(-5,5)}}</span>
           </p>
         </div>
       </div>
@@ -37,7 +37,7 @@
       <div class="row">Follow us: L F T G</div>
       <div class="row">
         <h2><span ng-show="isOwner">Your </span>Active crowdsale</h2>
-        <timer end-time="{{crowdsale.deadline * 1000}}">{{days}} days, {{hours}} hours, {{minutes}} minutes, {{seconds}} seconds.</timer>
+        <timer end-time="1420070400000">{{days}} days, {{hours}} hours, {{minutes}} minutes, {{seconds}} seconds.</timer>
       </div>
       <div class="row">
         Crowdsale started {{formatedStartDate}} (~{{daysAgo}} days ago)
