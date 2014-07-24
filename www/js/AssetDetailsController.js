@@ -63,7 +63,7 @@ function AssetDetailsController($route, $scope, propertiesService, userService){
         $scope.estimatedWorth = "0";
       });
       
-      propertiesService.getCrowdsaleHistory($scope.propertyId).then(function(result){
+      propertiesService.getCrowdsaleHistory($scope.propertyId,0,5).then(function(result){
         $scope.history = result.data;
       });
     }
