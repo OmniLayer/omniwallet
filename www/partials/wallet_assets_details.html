@@ -1,0 +1,70 @@
+<div class="sidecar col-xs-2" ng-controller="SidecarController" ng-init="setView('explorer')">
+  <div ng-include="templates['sidecar']"></div>
+</div>
+
+<div class="col-xs-10" ng-controller="AssetDetailsController">
+  <div class="row">
+    <div class="col-xs-8">
+      <div class="panel panel-default">
+        <div class="panel-body">
+          <h1>{{property.name}} <span class="label label-default">#{{property.propertyid}}</span></h1>
+          <span class="label label-default">{{property.category}} > {{property.subcategory}}</span>
+          <p>
+            {{property.data}}
+          </p>
+          <p>
+            For more details visit: <a href="{{data.propertyUrl}}">{{property.url}}</a>
+          </p>
+          <p>
+            Issuance Address: <span class="label label-success">{{property.issuer.substr(0,5)}}...{{property.issuer.substr(-5,5)}</span>
+          </p>
+        </div>
+      </div>
+      <div class="panel panel-default">
+        <div class="panel-body">
+          <h2>Accepted Currency</h2>
+          <table class="table">
+            <tr ng-repeat="currency in acceptedCurrencies">
+              <td>{{currency.name}}</td>
+              <td>Rate</td>
+              <td>{{currency.rate}}</td>
+            </tr>
+          </table>
+        </div>
+      </div>
+    </div>
+    <div class="col-xs-4">
+      <div class="row">Follow us: L F T G</div>
+      <div class="row">
+        <h2><span ng-show="isOwner">Your </span>Active crowdsale</h2>
+        <timer end-time="{{crowdsale.deadline * 1000}}">{{days}} days, {{hours}} hours, {{minutes}} minutes, {{seconds}} seconds.</timer>
+      </div>
+      <div class="row">
+        Crowdsale started {{formatedStartDate}} (~{{daysAgo}} days ago)
+      </div>   
+      <div class="row">
+        Current early bird bonus: %{{earlyBirdBonus}}
+      </div>      
+      <div class="row">
+        <span>{{crowdsale.tokensissued}}</span>
+        <span class="help-block">Tokens already bought by participants</span>
+        <span>{{tokensForIssuer}}</span>
+        <span class="help-block">Tokens created for the issuer (%{{crowdsale.percenttoissuer}})</span>
+      </div>
+      <div class="row">
+        <h4>Invested Funds</h4>
+        <span>Estimated total worth invested in this crowdsale:</span>
+        <span>{{estimatedWorth}}</span> Dollars
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <h2>Crowdsale history</h2>
+    <span>Found {{history.total}} investment transactions</span>
+    <div class="panel" ng-repeat="transaction in history.transactions">
+      <div class="panel-body">
+        Invested {{transaction.amountsent}} {{formatedCurrency}} got {{transaction.participanttokens}}
+      </div>
+    </panel>
+  </div>
+</div>

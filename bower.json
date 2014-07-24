@@ -18,6 +18,7 @@
     "FileSaver": null,
     "big.js": "x.x.x",
     "forge": "https://github.com/digitalbazaar/forge.git#0.2.30",
-    "angular-password-strength": "https://github.com/curtislacy/angular-password-strength.git#Caret-Operator"
+    "angular-password-strength": "https://github.com/curtislacy/angular-password-strength.git#Caret-Operator",
+    "angular-timer": "~1.1.6"
   }
 }
