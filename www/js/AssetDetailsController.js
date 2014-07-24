@@ -63,7 +63,7 @@ function AssetDetailsController($route, $scope, $timeout, $element, $compile, pr
         $scope.estimatedWorth = "0";
         
         // we need to compile the timer dinamically to get the appropiate end-date set.
-        var endtime = $scope.crowdsale.deadline * 1000 - now.getTime();
+        var endtime = $scope.crowdsale.deadline * 1000;
         $timeout(function (){
           var timerNode = $('<timer end-time='+endtime+'> \
             <span class="countdown-group"> \
