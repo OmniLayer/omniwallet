@@ -190,3 +190,7 @@ form.form-search:before {
 .show-grid {
   margin-bottom:15px;
 }
+
+.bg-active {
+  background-color: #eee;
+}
