@@ -138,8 +138,12 @@ def getcrowdsalehistory(property_id):
     
     
     end = start + count if len(crowdsale['participanttransactions']) < start + count else -1
-        
-    return jsonify(crowdsale['participanttransactions'][start:end])
+    
+    response = {
+                "total" : len(crowdsale['participanttransactions']),
+                "transactions" : crowdsale['participanttransactions'][start:end]
+                }
+    return jsonify(response)
 
 @app.route('/info', methods=['POST'])
 def info():
