@@ -223,3 +223,14 @@ form.form-search:before {
   background-color: #ccc;
   border-radius: 2px;
 }
+
+.tag {
+  border: 1px solid #333;
+  background-color: #fff;
+  padding: 3px;
+  border-radius: 2px;
+}
+
+.shout {
+  background-image: url("/assets/img/shout.png");
+}
