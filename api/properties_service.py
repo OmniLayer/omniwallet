@@ -114,7 +114,7 @@ def getcrowdsale(property_id):
         
     return jsonify(crowdsale)
 
-@app.route('/getcrowdsalehistory/<int:property_id>', method=["POST"])
+@app.route('/getcrowdsalehistory/<int:property_id>', methods=["POST"])
 def getcrowdsalehistory(property_id):
     try:
         start = request.form['start']
