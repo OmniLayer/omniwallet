@@ -108,10 +108,14 @@ def getdata(property_id):
 def getcrowdsale(property_id):
     host = RPCHost()
     try:
-        crowdsale = host.call("getcrowdsale_MP", property_id)['result']
+        crowdsale = host.call("getcrowdsale_MP", property_id, True)['result']
     except Exception,e:
         abort(make_response('Error getting crowdsale', 400))
-        
+    
+    history = crowdsale.pop("participanttransactions", [])    
+    crowdsale["participanttokens"] = sum([tx.participanttokens for tx in history])
+    crowdsale["issuertokens"] = sum([tx.issuertokens for tx in history])
+    
     return jsonify(crowdsale)
 
 @app.route('/getcrowdsalehistory/<int:property_id>', methods=["POST"])
