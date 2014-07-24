@@ -141,6 +141,17 @@ server {
                 uwsgi_pass   127.0.0.1:$PORT;
         }
 
+        location = /v1/wallet/redeem { rewrite ^ /v1/wallet/redeem/; }
+        location /v1/wallet/redeem { try_files $uri @flask_multisigredeem_service; }
+        location @flask_multisigredeem_service {
+                include uwsgi_params;
+                uwsgi_param SCRIPT_NAME /v1/wallet/redeem;
+                uwsgi_param UWSGI_MODULE multisigredeem_service;
+                uwsgi_param UWSGI_CALLABLE app;
+                uwsgi_modifier1 30;
+                uwsgi_pass 127.0.0.1:$PORT;
+        }
+
         location = /v1/user/wallet { rewrite ^ /v1/user/wallet/; }
         location /v1/user/wallet { try_files $uri @flask_user_service; }
         location @flask_user_service {
