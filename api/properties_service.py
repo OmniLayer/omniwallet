@@ -61,15 +61,9 @@ def list():
         ecosystem = request.form['ecosystem']
     except KeyError:
         abort(make_response('No field \'ecosystem\' in request, request failed', 400))
-    try:
-        issuer = request.form['issuer_address']
-    except KeyError:
-        issuer = ""
     
        
     data = listProperties(ecosystem)
-    if issuer != "":
-        data = [property for property in data if property["from_address"] == issuer]
     response = {
                 'status' : 'OK',
                 'properties' : data
@@ -129,19 +123,31 @@ def filterProperties( properties ):
     return ['OK',addresses_data]
 
 
-# refactor this to be compatible with mastercored
 def listProperties(ecosystem):
-    import glob
+    #===========================================================================
+    # mastercoin-tools reference
+    # import glob
+    # 
+    # properties = glob.glob(data_dir_root +'/properties/*')
+    # properties_data = []
+    # for property_file in properties:
+    #     if property_file[-5:] == '.json':
+    #         with open(property_file, 'r') as f:
+    #             try:
+    #                 prop = json.loads(f.readline())[0]
+    #                 if prop["formatted_ecosystem"] == int(ecosystem): properties_data.append(prop)
+    #             except ValueError:
+    #                 print 'Error decoding JSON', property_file.split('/')[-1][:-5]        
+    #============================================================================
     
-    properties = glob.glob(data_dir_root +'/properties/*')
-    properties_data = []
-    for property_file in properties:
-        if property_file[-5:] == '.json':
-            with open(property_file, 'r') as f:
-                try:
-                    prop = json.loads(f.readline())[0]
-                    if prop["formatted_ecosystem"] == int(ecosystem): properties_data.append(prop)
-                except ValueError:
-                    print 'Error decoding JSON', property_file.split('/')[-1][:-5]        
-                         
+    host=RPCHost()
+    try:
+        properties_list= host.call("listproperties_MP")['result']
+        properties_data = [ property for property in properties_list if (ecosystem == "1" and property['propertyid'] < 2147483651) or (ecosystem == "2" and property['propertyid'] >= 2147483651)]
+    except Exception,e:
+        #Properties not found
+        properties_data= []  
+    
+    
+    
     return properties_data
