@@ -240,7 +240,7 @@ form.form-search:before {
 
 .shout > span {
   position: absolute;
-  left: 41px;
+  text-align: center;
   top: 41px;
   color: #fff;
 }
