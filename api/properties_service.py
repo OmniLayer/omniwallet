@@ -121,15 +121,19 @@ def getcrowdsale(property_id):
 @app.route('/getcrowdsalehistory/<int:property_id>', methods=["POST"])
 def getcrowdsalehistory(property_id):
     try:
-        start = request.form['start']
+        start = int(request.form['start'])
     except KeyError:
         abort(make_response('No field \'start\' in request, request failed', 400))
+    except ValueError:
+        abort(make_response('Field \'start\' must be an integer, request failed', 400))
         
     try:
-        count = request.form['count']
+        count = int(request.form['count'])
     except KeyError:
         abort(make_response('No field \'count\' in request, request failed', 400))
-    
+    except ValueError:
+        abort(make_response('Field \'count\' must be an integer, request failed', 400))
+        
     host = RPCHost()
     try:
         crowdsale = host.call("getcrowdsale_MP", property_id, True)['result']
