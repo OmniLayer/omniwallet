@@ -21,6 +21,9 @@
     <link rel="stylesheet" href="/bower_components/bootstrap/dist/css/bootstrap-theme.min.css">
     <link rel="stylesheet" href="/theme.css">
 
+    <script src="/socket.io/socket.io.js"></script> 
+    <script> var socket = io(); </script>
+
     <script src="/bower_components/underscore/underscore.js"></script>
     <script src="/bower_components/jquery/dist/jquery.min.js"></script>
     <script src="/bower_components/angular/angular.js"></script>
@@ -28,27 +31,32 @@
     <script src="/bower_components/angular-password-strength/build/angular-password-strength.js"></script>
     <script src="/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
     <script src="/bower_components/angular-bootstrap/ui-bootstrap.min.js"></script>
+    <script src="/bower_components/angular-bootstrap/ui-bootstrap-tpls.min.js"></script>
     <script src="/bower_components/jsrsasign/jsrsasign-latest-all-min.js"></script>
     <script src="/bower_components/forge/js/forge.min.js"></script>
     <script src="/bower_components/bitcoinjs-lib/build/bitcoinjs-lib.js"></script>
     <script src="/bower_components/d3/d3.min.js"></script>
     <script src="/bower_components/sjcl/sjcl.js"></script>
     <script src="/bower_components/FileSaver/FileSaver.js"></script>
-    <script src="/bower_components/big.js/big.min.js"></script> 
+    <script src="/bower_components/big.js/big.min.js"></script>
     <script src="/js/app.js"></script>
     <script src="/js/directive.js"></script>
     <script src="/js/service.js"></script>
     <script src="/js/controller.js"></script>
     <script src="/js/filter.js"></script>
     <script src="/js/LoginController.js"></script>
+    <script src="/js/TransactionGenerationController.js"></script>
+    <script src="/js/ExplorerController.js"></script>
     <script src="/js/WalletAddressesController.js"></script>
     <script src="/js/WalletController.js"></script>
-    <script src="/js/WalletTradeFormController.js"></script>
+    <script src="/js/WalletAssetsFormController.js"></script>
     <script src="/js/WalletSendAssetsController.js"></script>
     <script src="/js/WalletSellAssetsController.js"></script>
     <script src="/js/WalletBuyAssetsController.js"></script>
     <script src="/js/CreateWalletController.js"></script>
     <script src="/js/AssetTypesController.js"></script>
+    <script src="/js/PropertyIssuanceController.js"></script>
+    <script src="/js/CrowdsaleIssuanceController.js"></script>
     <script src="/js/add_address.js"></script>
     <script src="/js/cryptUtil.js"></script>
     <script src="/js/cryptUtilAsync.js"></script>
@@ -59,13 +67,13 @@
          <div class="header">
            <div ng-include="templates['header']"></div> 
          </div>
-         <div class="middle row">
+         <div class="container middle row">
            <div class="alert alert-custom alert-dismissable" ng-show="browser !== 'chrome'">
              <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-             <strong>Browser not supported</strong> Omniwallet currently only supports Chrome, and may not function well on other browsers.
+             Omniwallet recommends the use of Chrome, since the wallet may not yet function perfectly on other browsers.
            </div>
            <div ng-view></div>
-         </div><br/>
+         </div><br/><br />
          <div class="footer">
           <div ng-include="templates['footer']"></div> 
          </div>

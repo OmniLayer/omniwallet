@@ -1,5 +1,5 @@
 import urlparse
-import os, sys
+import os, sys,re
 tools_dir = os.environ.get('TOOLSDIR')
 lib_path = os.path.abspath(tools_dir)
 sys.path.append(lib_path)
@@ -9,6 +9,26 @@ import tempfile
 
 sys.path.append(os.path.abspath("../lib"))
 from stats_backend import StatsBackend
+
+error_codez= {
+ '-1': 'Exception thrown. Contact a developer.',
+ '-2': 'Server is in safe mode. Contact a developer.',
+ '-3': 'Unexpected type. Contact a developer.',
+ '-5': 'Invalid address or key. Contact a developer.',
+ '-7': 'Out of memory. Contact a developer.',
+ '-8': 'Invalid parameter. Contact a developer.',
+ '-20': 'Database error. Contact a developer.',
+ '-22': 'Error parsing transaction. Contact a developer.',
+ '-25': 'General error. Contact a developer.',
+ '-26': 'Transaction rejected by the network. Contact a developer.',
+ '-27': 'Transaction already in chain. Contact a developer.',
+ '1': 'Transaction malformed. Contact a developer.',
+ '16': 'Transaction was invalid. Contact a developer.',
+ '65': 'Transaction sent was under dust limit. Contact a developer.',
+ '66': 'Transaction did not meet fees. Contact a developer.',
+ '69.2': 'Your hair is on fire. Contact a stylist.'
+}
+
 
 def pushtx_response(response_dict):
     expected_fields=['signedTransaction']
@@ -20,10 +40,30 @@ def pushtx_response(response_dict):
             
     signed_tx=response_dict['signedTransaction'][0]
     
-    response_status='OK'
-    pushed=pushtx(signed_tx)
-    response='{"status":"'+response_status+'", "pushed":"'+pushed+'"}'
+    response=pushtxnode(signed_tx)
+    print signed_tx,'\n', response
     return (response, None)
+
+def pushtxnode(signed_tx):
+    import commands, json
+    signed_tx = re.sub(r'\W+', '', signed_tx) #check alphanumeric
+    output=commands.getoutput('bitcoind sendrawtransaction ' +  str(signed_tx) )
+    
+    ret=re.findall('{.+',output)
+    if len(ret) > 0:
+        output=json.loads(ret[0])
+
+        response_status='NOTOK'
+        try:
+            response=json.dumps({"status":response_status, "pushed": error_codez[ str(output['code']) ], "message": output['message'], "code": output['code'] })
+        except KeyError, e:
+            response=json.dumps({"status":response_status, "pushed": str(e), "message": output['message'], "code": output['code'] })
+    else:
+        response_status='OK'
+        response=json.dumps({"status":response_status, "pushed": 'success', "tx": output })
+
+    print response
+    return response
 
 def pushtx(signed_tx):
     info(signed_tx)

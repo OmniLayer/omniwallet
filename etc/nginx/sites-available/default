@@ -18,226 +18,192 @@
 ##
 
 server {
-	listen 80 default_server;
-	listen [::]:80 default_server ipv6only=on;
+        listen 80 default_server;
+        listen [::]:80 default_server ipv6only=on;
 
-       add_header Cache-Control "no-cache,no-store,must-revalidate"; 
-       add_header Pragma "no-cache"; 
-       add_header Expires "0";
+        add_header Cache-Control "no-cache,no-store,must-revalidate"; 
+        add_header Pragma "no-cache"; 
+        add_header Expires "0";
 
-	## Set this to reflect the location of the www directory within the omniwallet repo.
-	root /home/cmlacy/omniwallet/www/;
-	index index.htm index.html;
+        ## Set this to reflect the location of the www directory within the omniwallet repo.
+        root /home/myUser/omniwallet/www/;
+        index index.htm index.html;
 
-	#Re-route nested routed through index
-	location / {
-	    try_files $uri $uri/ /index.html =404;
-	}
+        #Re-route nested routed through index
+        location / {
+            try_files $uri $uri/ /index.html =404;
+        }
 
-	location ~ "^/wallet/$" {
-	    return 301 /wallet/overview;
-	}
+        location ~ "^/wallet/$" {
+            return 301 /wallet/overview;
+        }
 
-	# Make site accessible from http://localhost/
-	server_name localhost;
+        # Make site accessible from http://localhost/
+        server_name localhost;
 
-	location ~ "^/v1/transaction/values.json$" {
-		alias /var/lib/omniwallet/www/values.json;
-	}
+        set $WEBSOCKET_PORT 1091;
+        location /socket.io/ {
+                proxy_pass http://localhost:1091;
+                proxy_http_version 1.1;
+                proxy_set_header Upgrade $http_upgrade;
+                proxy_set_header Connection "upgrade";
+        }
 
-	location ~ "^/v1/system/stats.json$" {
-		alias /var/lib/omniwallet/www/stats.json;
-	}
+        location ~ "^/v1/transaction/values.json$" {
+                alias /var/lib/omniwallet/www/values.json;
+        }
+
+        location ~ "^/v1/system/stats.json$" {
+                alias /var/lib/omniwallet/www/stats.json;
+        }
 
         location ~ "^/v1/system/status.html$" {
                 alias /var/lib/omniwallet/www/status.html;
         }
 
-	location ~ "^/v1/system/revision.json$" {
-		alias /var/lib/omniwallet/www/revision.json;
-	}
+        location ~ "^/v1/system/revision.json$" {
+                alias /var/lib/omniwallet/www/revision.json;
+        }
 
-	location ~ "^/v1/exchange/offers/(.*)$" {
-		alias /var/lib/omniwallet/www/offers/$1;
-	}
+        location ~ "^/v1/exchange/offers/(.*)$" {
+                alias /var/lib/omniwallet/www/offers/$1;
+        }
 
-	location ~ "^/v1/transaction/general/(.*)$" {
-		alias /var/lib/omniwallet/www/general/$1;
-	}
+        location ~ "^/v1/transaction/general/(.*)$" {
+                alias /var/lib/omniwallet/www/general/$1;
+        }
 
-	location ~ "^/v1/transaction/tx/(.*)$" {
-		alias /var/lib/omniwallet/www/tx/$1;
-	}
+        location ~ "^/v1/transaction/tx/(.*)$" {
+                alias /var/lib/omniwallet/www/tx/$1;
+        }
 
-  location ~ "^/v1/property/([0-9]*.json)$" {
-	add_header Access-Control-Allow-Origin *;
-    alias /var/lib/omniwallet/www/properties/properties-$1;
-  }
-  
-  location ~ "^/v1/values/(.*)$" {
-	add_header Access-Control-Allow-Origin *;
-    alias /var/lib/omniwallet/www/values/$1;
-  }
-  location ~ "^/v1/values/history/(.*)$" {
-    alias /var/lib/omniwallet/www/values/history/$1;
-  }
+        location ~ "^/v1/property/([0-9]*.json)$" {
+                add_header Access-Control-Allow-Origin *;
+                alias /var/lib/omniwallet/www/properties/properties-$1;
+        }
 
-	location ~ "^/v1/address/verify/(.*)$" {
-		alias /var/lib/omniwallet/www/mastercoin_verify/addresses/$1;
-	}
+        location ~ "^/v1/values/(.*)$" {
+                add_header Access-Control-Allow-Origin *;
+                alias /var/lib/omniwallet/www/values/$1;
+        }
 
-	location ~ "^/v1/transaction/verify/(.*)$" {
-		alias /var/lib/omniwallet/www/mastercoin_verify/transactions/$1;
-	}
+        location ~ "^/v1/values/history/(.*)$" {
+                alias /var/lib/omniwallet/www/values/history/$1;
+        }
 
-	include uwsgi_params;
+        location ~ "^/v1/address/verify/(.*)$" {
+                alias /var/lib/omniwallet/www/mastercoin_verify/addresses/$1;
+        }
+
+        location ~ "^/v1/transaction/verify/(.*)$" {
+                alias /var/lib/omniwallet/www/mastercoin_verify/transactions/$1;
+        }
+
+        include uwsgi_params;
         uwsgi_param SCRIPT_NAME   $app;
         uwsgi_param UWSGI_MODULE   $app;
         uwsgi_param UWSGI_CALLABLE   "${app}_handler";
 
-	set $PORT 1088;
-    location /v1/address/addr/ {
-	add_header Access-Control-Allow-Origin *;
-        set   $app   get_balance;
-        uwsgi_pass   127.0.0.1:$PORT;
-    }
+        set $PORT 1088;
+        location /v1/address/addr/ {
+                add_header Access-Control-Allow-Origin *;
+                set   $app   get_balance;
+                uwsgi_pass   127.0.0.1:$PORT;
+        }
 
-    location /v1/transaction/validateaddr/ {
-        set   $app   validateaddr;
-        uwsgi_pass   127.0.0.1:$PORT;
-    }
+        location /v1/transaction/validateaddr/ {
+                set   $app   validateaddr;
+                uwsgi_pass   127.0.0.1:$PORT;
+        }
 
-    location /v1/transaction/send/ {
-        set   $app   send;
-        uwsgi_pass   127.0.0.1:$PORT;
-    }
+        location /v1/transaction/send/ {
+                set   $app   send;
+                uwsgi_pass   127.0.0.1:$PORT;
+        }
 
-    location /v1/exchange/sell/ {
-        set   $app   sell;
-        uwsgi_pass   127.0.0.1:$PORT;
-    }
+        location /v1/exchange/sell/ {
+                set   $app   sell;
+                uwsgi_pass   127.0.0.1:$PORT;
+        }
 
-    location /v1/exchange/accept/ {
-        set   $app   accept;
-        uwsgi_pass   127.0.0.1:$PORT;
-	}
+        location /v1/exchange/accept/ {
+                set   $app   accept;
+                uwsgi_pass   127.0.0.1:$PORT;
+        }
 
-	location /v1/transaction/pushtx/ {
-        set   $app   pushtx;
-        uwsgi_pass   127.0.0.1:$PORT;
-	}
+        location /v1/transaction/pushtx/ {
+                set   $app   pushtx;
+                uwsgi_pass   127.0.0.1:$PORT;
+        }
 
-    location /v1/exchange/offers {
-        set   $app   offers;
-        uwsgi_pass   127.0.0.1:$PORT;
-    }
+        location /v1/exchange/offers {
+                set   $app   offers;
+                uwsgi_pass   127.0.0.1:$PORT;
+        }
 
-    location = /v1/user/wallet { rewrite ^ /v1/user/wallet/; }
-    location /v1/user/wallet { try_files $uri @flask_user_service; }
-    location @flask_user_service {
-      include uwsgi_params;
-      uwsgi_param SCRIPT_NAME /v1/user/wallet;
-      uwsgi_param UWSGI_MODULE user_service;
-      uwsgi_param UWSGI_CALLABLE app;
-      uwsgi_modifier1 30;
-      uwsgi_pass 127.0.0.1:$PORT;
-    }
+        location = /v1/user/wallet { rewrite ^ /v1/user/wallet/; }
+        location /v1/user/wallet { try_files $uri @flask_user_service; }
+        location @flask_user_service {
+                include uwsgi_params;
+                uwsgi_param SCRIPT_NAME /v1/user/wallet;
+                uwsgi_param UWSGI_MODULE user_service;
+                uwsgi_param UWSGI_CALLABLE app;
+                uwsgi_modifier1 30;
+                uwsgi_pass 127.0.0.1:$PORT;
+        }
 
-     location = /v1/properties { rewrite ^ /v1/properties/; }
-     location /v1/properties { try_files $uri @flask_properties_service; }
-     location @flask_properties_service {
-       include uwsgi_params;
-       uwsgi_param SCRIPT_NAME /v1/properties;
-       uwsgi_param UWSGI_MODULE properties_service;
-       uwsgi_param UWSGI_CALLABLE app;
-       uwsgi_modifier1 30;
-       uwsgi_pass 127.0.0.1:$PORT;
-     }
+        location = /v1/properties { rewrite ^ /v1/properties/; }
+        location /v1/properties { try_files $uri @flask_properties_service; }
+        location @flask_properties_service {
+                include uwsgi_params;
+                uwsgi_param SCRIPT_NAME /v1/properties;
+                uwsgi_param UWSGI_MODULE properties_service;
+                uwsgi_param UWSGI_CALLABLE app;
+                uwsgi_modifier1 30;
+                uwsgi_pass 127.0.0.1:$PORT;
+        }
 
-    location = /v1/mastercoin_verify { rewrite ^ /v1/mastercoin_verify/; }
-    location /v1/mastercoin_verify { try_files $uri @flask_mastercoin_verify; }
-    location @flask_mastercoin_verify {
-      include uwsgi_params;
-      uwsgi_param SCRIPT_NAME /v1/mastercoin_verify;
-      uwsgi_param UWSGI_MODULE mastercoin_verify;
-      uwsgi_param UWSGI_CALLABLE app;
-      uwsgi_modifier1 30;
-      uwsgi_pass 127.0.0.1:$PORT;
-    }
+        location = /v1/mastercoin_verify { rewrite ^ /v1/mastercoin_verify/; }
+        location /v1/mastercoin_verify { try_files $uri @flask_mastercoin_verify; }
+        location @flask_mastercoin_verify {
+                include uwsgi_params;
+                uwsgi_param SCRIPT_NAME /v1/mastercoin_verify;
+                uwsgi_param UWSGI_MODULE mastercoin_verify;
+                uwsgi_param UWSGI_CALLABLE app;
+                uwsgi_modifier1 30;
+                uwsgi_pass 127.0.0.1:$PORT;
+        }
 
-	# Only for nginx-naxsi used with nginx-naxsi-ui : process denied requests
-	#location /RequestDenied {
-	#	proxy_pass http://127.0.0.1:8080;    
-	#}
+        location = /v1/transaction/getunsigned { rewrite ^ /v1/transaction/getunsigned; }
+        location /v1/transaction/getunsigned { try_files $uri @flask_tx_generate_service; }
+        location @flask_tx_generate_service {
+                include uwsgi_params;
+                uwsgi_param SCRIPT_NAME /v1/transaction/getunsigned;
+                uwsgi_param UWSGI_MODULE tx_generate_service;
+                uwsgi_param UWSGI_CALLABLE app;
+                uwsgi_modifier1 30;
+                uwsgi_pass 127.0.0.1:$PORT;
+        }
 
-	#error_page 404 /404.html;
+        location = /v1/search { rewrite ^ /v1/search; }
+        location /v1/search { try_files $uri @flask_search_service; }
+        location @flask_search_service {
+                include uwsgi_params;
+                uwsgi_param SCRIPT_NAME /v1/search;
+                uwsgi_param UWSGI_MODULE search_service;
+                uwsgi_param UWSGI_CALLABLE app;
+                uwsgi_modifier1 30;
+                uwsgi_pass 127.0.0.1:$PORT;
+        }
 
-	# redirect server error pages to the static page /50x.html
-	#
-	#error_page 500 502 503 504 /50x.html;
-	#location = /50x.html {
-	#	root /usr/share/nginx/html;
-	#}
-
-	# pass the PHP scripts to FastCGI server listening on 127.0.0.1:9000
-	#
-	#location ~ \.php$ {
-	#	fastcgi_split_path_info ^(.+\.php)(/.+)$;
-	#	# NOTE: You should have "cgi.fix_pathinfo = 0;" in php.ini
-	#
-	#	# With php5-cgi alone:
-	#	fastcgi_pass 127.0.0.1:9000;
-	#	# With php5-fpm:
-	#	fastcgi_pass unix:/var/run/php5-fpm.sock;
-	#	fastcgi_index index.php;
-	#	include fastcgi_params;
-	#}
-
-	# deny access to .htaccess files, if Apache's document root
-	# concurs with nginx's one
-	#
-	#location ~ /\.ht {
-	#	deny all;
-	#}
+        location = /v1/blocks { rewrite ^ /v1/blocks/; }
+        location /v1/blocks { try_files $uri @flask_getblocks; }
+        location @flask_getblocks {
+                include uwsgi_params;
+                uwsgi_param SCRIPT_NAME /v1/blocks;
+                uwsgi_param UWSGI_MODULE getblocks;
+                uwsgi_param UWSGI_CALLABLE app;
+                uwsgi_modifier1 30;
+                uwsgi_pass 127.0.0.1:$PORT;
+        }
 }
-
-
-# another virtual host using mix of IP-, name-, and port-based configuration
-#
-#server {
-#	listen 8000;
-#	listen somename:8080;
-#	server_name somename alias another.alias;
-#	root html;
-#	index index.html index.htm;
-#
-#	location / {
-#		try_files $uri $uri/ =404;
-#	}
-#}
-
-
-# HTTPS server
-#
-#server {
-#	listen 443;
-#	server_name localhost;
-#
-#	root html;
-#	index index.html index.htm;
-#
-#	ssl on;
-#	ssl_certificate cert.pem;
-#	ssl_certificate_key cert.key;
-#
-#	ssl_session_timeout 5m;
-#
-#	ssl_protocols SSLv3 TLSv1;
-#	ssl_ciphers ALL:!ADH:!EXPORT56:RC4+RSA:+HIGH:+MEDIUM:+LOW:+SSLv3:+EXP;
-#	ssl_prefer_server_ciphers on;
-#
-#	location / {
-#		try_files $uri $uri/ =404;
-#	}
-#}
-#

@@ -51,10 +51,16 @@ angular.module('omniwallet')
                     if (currencyItem.symbol == 'BTC') {
                       balances[currencyItem.symbol].name = "Bitcoin"
                     }
+		    if (addr.privkey) {
+			hasPrivate=true;
+		    } else {
+			hasPrivate=false;
+		    }
                     balances[currencyItem.symbol].addresses[result.data.address] = {
                       "address": result.data.address,
                       "balance": +value || currencyItem.value,
-                      "value": appraiser.getValue(currencyItem.value, currencyItem.symbol)
+                      "value": appraiser.getValue(currencyItem.value, currencyItem.symbol),
+		      "private": hasPrivate
                     };
                   });
                 }
@@ -147,19 +153,19 @@ angular.module('omniwallet')
     $scope.refresh();
   });
 
-  $scope.openDeleteConfirmForm = function(address) {
+  $scope.openDeleteConfirmForm = function(addritem) {
     var modalInstance = $modal.open({
       templateUrl: '/partials/delete_address_modal.html',
       controller: DeleteBtcAddressModal,
       resolve: {
         address: function() {
-          return address;
+          return addritem;
         }
       }
     });
 
     modalInstance.result.then(function() {
-      $injector.get('userService').removeAddress(address);
+      $injector.get('userService').removeAddress(addritem.address);
       $scope.refresh();
     }, function() {});
   };
@@ -180,7 +186,8 @@ angular.module('omniwallet')
 
 
 var DeleteBtcAddressModal = function($scope, $modalInstance, address) {
-  $scope.address = address;
+  $scope.address = address.address;
+  $scope.private = address.private;
 
   $scope.ok = function() {
     $modalInstance.close();

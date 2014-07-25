@@ -1,6 +1,8 @@
 <div class="col-xs-12" ng-controller="WalletSellAssetsController">
   <div class="row">
-    <h3 class="text-center" >New Sale Offer</h3>
+   <div class="panel-default">
+    <h3 class="text-left panel-body om-title" >New Sale Offer</h3>
+   </div>
     <br>
     <div ng-show="showErrors" class="alert alert-danger">{{error}}</div> 
   </div>
@@ -34,19 +36,25 @@
       <br>
       <div class="input-group">
         <span class="input-group-addon"> Sell Quantity ( {{getDisplayedAbbreviation()}} ): </span>
-          <input name="amount" type="number" ng-model="saleAmount" class="form-control" 
-            placeholder="{{ sendPlaceholderValue }}" step="{{ sendPlaceholderStep }}" min="{{ sendPlaceholderMin }}" required>
+          <input name="amount" type="number" ng-model="saleAmount" class="form-control"
+            step="{{ sendPlaceholderStep }}" min="{{ sendPlaceholderMin }}" required>
           <span class="input-group-addon" > 
             Available: {{ balanceData[0] }} {{ getDisplayedAbbreviation() }}
           </span>
       </div>
       <br>
       <div class="input-group">
-        <span class="input-group-addon"> Unit price per coin ( # BTC for 1 {{ getDisplayedAbbreviation() }}): </span>
-        <input name="ppc" type="number" step="0.01" ng-model="salePricePerCoin" class="form-control" 
-          placeholder="0.10000000" min="0" required>
-        <span class="input-group-addon" > 
-          Total Sale Amount: {{ ( saleAmount || 0) * ( salePricePerCoin || 0) }}
+        <span class="input-group-addon"> Total Bitcoin desired ( # BTC for {{ saleAmount || 0 }} {{ getDisplayedAbbreviation() }}): 
+        <a href=""
+            tooltip="Enter the total # of bitcoins you would want to receive if you sold all {{ saleAmount || 0 }} {{ getDisplayedAbbreviation() }}"
+            tooltip-append-to-body="true"
+            tooltip-placement="top" > <strong>(?)</strong>
+          </a>
+	</span>
+        <input name="ppc" type="number" step="0.00000001" ng-model="salePricePerCoin" class="form-control"
+          placeholder="0.10000000" min=".00005750" required>
+        <span class="input-group-addon"> 
+          Price per coin: {{  (saleAmount && salePricePerCoin) ? (( salePricePerCoin || 0) / ( saleAmount || 0) | number:8) : 0  }}
           BTC</span>
       </div>
       <br>
@@ -56,8 +64,7 @@
           <a href=""
             tooltip="Time in blocks the buyer has to complete his purchase (1 block approx. 10 minutes)"
             tooltip-append-to-body="true"
-            tooltip-placement="left" 
-            tooltip-trigger="click"> <strong>(?)</strong>
+            tooltip-placement="top" > <strong>(?)</strong>
           </a>
         </span>
         <input name="blocks" type="number" step="1" ng-model="saleBlocks" class="form-control" placeholder="10 blocks" min="10" required>

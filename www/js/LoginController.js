@@ -13,13 +13,18 @@ function LoginController($injector, $scope, $http, $location, $modalInstance, $q
 // Helper (Not sure if this can be fixed with providers)
 function Login($injector, $scope, $http, $location, $modalInstance, $q, userService) {
   $scope.loginInProgress = false;
-
+  $scope.login.title == undefined ? $scope.login.title = 'Login' : $scope.login.title;
+  $scope.login.button == undefined ? $scope.login.button = 'Open Wallet' : $scope.login.button;
+  
   $scope.open = function(login) {
     var uuid = login.uuid;
     var asymKey = {};
     var walletKey = '';
     var nonce = 0;
     $scope.loginInProgress = true;
+    $scope.missingUUID = false;
+    $scope.badPassword = false;
+    $scope.serverError = false;
 
     $http.get('/v1/user/wallet/challenge?uuid=' + uuid)
       .then(function(result) {

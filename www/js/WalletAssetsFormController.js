@@ -1,28 +1,37 @@
 WHOLE_UNIT = new Big(0.00000001); //Backend data returns satoshi, use this conversion ratio
 SATOSHI_UNIT = new Big(100000000); //Backend data needs satoshi, use this conversion ratio
 MIN_MINER_FEE = new Big(0.00010000);
-function WalletTradeFormController($scope, userService, walletTradeService) {
+function WalletAssetsFormController($scope, userService, walletTransactionService) {
   // [ Form Validation]
   $scope.showErrors = false;
 
   // [ Template Initialization ]
 
-  $scope.currencyList = userService.getCurrencies(); // [{symbol: 'BTC', addresses:[], name: 'BTC'}, {symbol: 'MSC', addresses:[], name: 'MSC'}, {symbol: 'TMSC', addresses:[], name: 'TMSC'}]
+  $scope.currencyList = userService.getCurrencies().filter(function(currency){
+       return currency.tradable;
+  }); // [{symbol: 'BTC', addresses:[], name: 'BTC'}, {symbol: 'MSC', addresses:[], name: 'MSC'}, {symbol: 'TMSC', addresses:[], name: 'TMSC'}]
   
-  $scope.selectedCoin = $scope.currencyList[0];
-  $scope.currencyList.forEach(function(e, i) {
-    if (e.symbol == "MSC")
-      $scope.selectedCoin = e;
-  });
-
-  $scope.addressList = userService.getAddressesWithPrivkey($scope.selectedCoin.addresses);
-  $scope.selectedAddress = $scope.addressList[0];
+  //Set default if not inherited.
+  if (!$scope.$parent.selectedCoin){
+    $scope.selectedCoin = $scope.currencyList[0];
+    $scope.currencyList.forEach(function(e, i) {
+      if (e.symbol == "MSC")
+        $scope.selectedCoin = e;
+    });
+  }
+  $scope.addressList = $scope.selectedCoin ? userService.getAddressesWithPrivkey($scope.selectedCoin.tradableAddresses) : [];
+  if(!$scope.$parent.selectedAddress)
+    $scope.selectedAddress = $scope.addressList[0] || null;
   $scope.$watch('selectedCoin', function() {
-    $scope.addressList = userService.getAddressesWithPrivkey($scope.selectedCoin.addresses);
-    $scope.selectedAddress = $scope.addressList[0];
+    $scope.addressList = $scope.selectedCoin ? userService.getAddressesWithPrivkey($scope.selectedCoin.tradableAddresses) : [];
+    if(!$scope.$parent.selectedAddress)
+      $scope.selectedAddress = $scope.addressList[0] || null;
     $scope.setBalance();
     $scope.minerFees = +MIN_MINER_FEE.valueOf() // reset miner fees
     $scope.calculateTotal($scope.minerFees);
+  });
+  $scope.$watch('selectedAddress', function() {
+    $scope.setBalance();
   });
   
   $scope.calculateTotal = calculateTotal;
@@ -35,7 +44,8 @@ function WalletTradeFormController($scope, userService, walletTradeService) {
   $scope.amountUnit = 'mtow';
   $scope.balanceData = [0];
   var addrListBal = [];
-  $scope.addressList.forEach(function(e, i) {
+  // fill the addrBalanceList with all the addresses on the wallet for which we've got private keys.
+  userService.getAddressesWithPrivkey().forEach(function(e, i) {
     var balances = [
       {
         symbol: 'MSC',
@@ -53,7 +63,7 @@ function WalletTradeFormController($scope, userService, walletTradeService) {
       address: e,
       balance: balances
     };
-    var promise = walletTradeService.getAddressData(e);
+    var promise = walletTransactionService.getAddressData(e);
     promise.then(function(successData) {
       var successData = successData.data;
       addrListBal[i].balance =  successData.balance;
@@ -65,7 +75,7 @@ function WalletTradeFormController($scope, userService, walletTradeService) {
   });
   
   $scope.setBalance = function() {
-    var coin = $scope.selectedCoin.symbol;
+    var coin = $scope.selectedCoin ? $scope.selectedCoin.symbol : null;
     var address = $scope.selectedAddress;
     $scope.balanceData = [0,0];
     if (address || coin) {
@@ -124,7 +134,7 @@ function WalletTradeFormController($scope, userService, walletTradeService) {
 
   function calculateTotal(minerFees) {
     $scope.mProtocolCost = 0.00025
-    if ($scope.selectedCoin.symbol == 'BTC')
+    if ($scope.selectedCoin && $scope.selectedCoin.symbol == 'BTC')
       $scope.mProtocolCost = 0.0;
     $scope.totalCost = (+new Big(minerFees).plus($scope.mProtocolCost).valueOf()).toFixed(8);
   }

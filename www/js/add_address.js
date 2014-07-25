@@ -31,8 +31,7 @@ angular.module('omniwallet')
     var addr = eckey.getBitcoinAddress().toString();
 
     return addr;
-  }
-  ;
+  };
 
   function encodePrivateKey(key, passphrase) {
 
@@ -41,8 +40,7 @@ angular.module('omniwallet')
     var enc = eckey.getEncryptedFormat(passphrase);
 
     return enc;
-  }
-  ;
+  };
 
   $scope.backupWallet = function() {
     $scope.login = {
@@ -70,13 +68,14 @@ angular.module('omniwallet')
           var key = ecKey.getWalletImportFormat();
           blob.addresses.push({ address: addr, privkey: key });
         }
-      })
+      });
       var exportBlob = new Blob([JSON.stringify(blob)], {
         type: 'application/json;charset=utf-8'
       });
-      saveAs(exportBlob, "wallet.json");
+      fileName=userService.data.wallet.uuid+".json"
+      saveAs(exportBlob, fileName);
     });
-  }
+  };
 
   // Begin Import watch only Form Code
   $scope.openImportWatchOnlyForm = function() {
@@ -98,6 +97,17 @@ angular.module('omniwallet')
   var AddBtcAddressModal = function($scope, $modalInstance) {
     $scope.validate = function(address) {
       return Bitcoin.Address.validate(address);
+    };
+
+    $scope.addressNotListed = function(address) {
+      var addresses = $injector.get('userService').getAllAddresses();
+      for (var i in addresses) {
+        if (addresses[i].address == address) {
+          return false;
+        }
+      }
+
+      return true;
     };
 
     $scope.ok = function(result) {
@@ -202,6 +212,56 @@ angular.module('omniwallet')
   }
   ;
   // Done Create Form Code.
+  // Begin Import Backup Form Code
+  $scope.openImportWalletForm = function() {
+    var modalInstance = $modal.open({
+      templateUrl: '/partials/import_wallet.html',
+      controller: ImportWalletModal
+    });
+
+    modalInstance.result.then(function(result) {
+
+      if (result) {
+        var wallet = JSON.parse(result);
+        
+        wallet.addresses.forEach(function(addr){
+          // Use address as passphrase for now
+          $injector.get('userService').addAddress(
+            addr.address,
+            encodePrivateKey(addr.privkey, addr.address));
+        });
+      }
+      $scope.refresh();
+
+    }, function() {});
+  };
+
+  var ImportWalletModal = function($scope, $modalInstance) {
+    $scope.validate = function(backup) {
+      if (!backup) return false;
+
+      try {
+        var wallet = JSON.parse(backup);
+        wallet.addresses.forEach(function(address){  
+          var eckey = new Bitcoin.ECKey(address.privkey);
+          var addr = eckey.getBitcoinAddress().toString();
+        });
+        return true;
+      } catch (e) {
+        return false;
+      }
+    };
+
+    $scope.ok = function(result) {
+      $modalInstance.close(result);
+    };
+
+    $scope.cancel = function() {
+      $modalInstance.dismiss('cancel');
+    };
+  };
+  // Done Import Import Backup Form Code.
+  
 
 
   $scope.enumerateAddresses = function() {
@@ -209,6 +269,7 @@ angular.module('omniwallet')
     $scope.items = enumerated_addresses.getData().then(function(result) {
       if (result.addresses.length == 0) {
         createBTCAddress();
+	$scope.newAddress=true;
       }
       $scope.addresses = result.addresses;
     });

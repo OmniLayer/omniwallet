@@ -1,5 +1,11 @@
 <div ng-controller="NavigationController" ng-init="getNavData()">
   <div class="navbar navbar-default navbar-fixed-top">
+
+<a class="navbar-brand" href="/"><img src="/assets/img/logo-beta.png" alt="mastercoin"></a>
+        <div class="navbar-header" ng-show="user.loggedIn">
+            <br /><div class="btn btn-default" ng-click="openUUIDmodal()">Wallet ID<br /><small>{{ user.wallet.uuid }}</small></div>
+        </div>
+
       <div class="container">
         <div class="navbar-header">
             <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
@@ -7,13 +13,7 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="/"><img src="/assets/img/logo.png" alt="mastercoin"></a>
         </div>
-
-        <div class="navbar-header" ng-show="user.loggedIn">
-	    <br /><div class="btn btn-default" ng-click="openUUIDmodal()">My Wallet<br /><small>{{ user.wallet.uuid }}</small></div>
-        </div>
-
         <div class="navbar-collapse collapse">
             <ul class="nav navbar-nav navbar-right">
               <li ng-hide="user.loggedIn"><a href="/" ng-click="openCreateModal()">Create Wallet</a></li>

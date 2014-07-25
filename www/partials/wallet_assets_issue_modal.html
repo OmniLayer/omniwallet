@@ -1,0 +1,34 @@
+<div class="modal-body">
+    <h3 class="text-center"> Confirm Property Creation </h3>
+      <h4>You will create this Smart Property:</h4>
+      <ul>
+        <li>Name: {{propertyName}}</li>
+        <li>Description: {{propertyData}}</li>
+        <li>Divisible: {{divisible}}</li>
+        <li>Category: {{propertyCategory}}</li>
+        <li>Subcategory: {{propertySubcategory}}</li>
+        <li>Url: <a href="{{propertyUrl}}" target="_blank">{{propertyUrl}}</a></li>
+        <li>Number of properties: {{numberProperties}}</li>
+        <li>Issuer address: <a href="https://blockchain.info/address/{{selectedAddress}}?sort=0" target="_blank">{{selectedAddress}}</a></li>
+      </ul>
+  <p><br>
+  If the above is correct, please press create my Property.
+  </p>
+<div class="modal-footer">
+    <div class="row">
+    <button ng-disabled="clicked" class="btn btn-primary" ng-click="ok()">Create my Property</button>
+    <button ng-disabled="wating" class="btn btn-warning" ng-click="cancel()">Cancel</button>
+    <img class="" src="/assets/img/34-1.gif" ng-show="waiting">
+    </div>
+      <br>
+    <div class="row">
+      <div ng-show="transactionSuccess">
+        <h4 class="pull-right col-xs-12" style="color:green"> Assets created successfully, 
+        check your transaction <a target="_blank" href="{{url}}">here.</a></h4>
+      </div>
+      <div ng-show="transactionError">
+        <h4 class="col-xs-12" style="color:red;"> Assets could not be created: 
+         {{error}} </h4>
+      </div>
+    </div>
+</div>

@@ -1,8 +1,9 @@
 <div class="modal-body">
-    <h3 class="text-center"> Confirm send </h3>
-    <h3>You're about to make an offer to buy {{ convertSatoshiToDisplayedValue(buyAmount) }} {{ getDisplayedAbbreviation() }} with {{ convertSatoshiToDisplayedValue(minerFees, true) }} in fees </h3>
+    <h3 class="text-center"> Confirm Buy Offer </h3>
+    <h4 class="text-center">You're about to make an offer to buy <span class="text-info">{{ convertSatoshiToDisplayedValue(buyAmount) }} {{ displayedAbbreviation }} </span>
+	with <span class="text-info"> {{ convertSatoshiToDisplayedValue(minerFees, true) }} BTC</span> in fees </h4>
   <p><br>
-  If the above is correct, please press Send Funds.
+  If the above is correct, please press 'Yes, make my offer'.
   If you encounter an error, feel free to click away from the dialog and try again.
   </p>
 </div>

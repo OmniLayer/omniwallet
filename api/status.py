@@ -21,7 +21,7 @@ def main(argv):
     #lblock='Unknown'
     #lblock=commands.getoutput('cat '+DDIR+'/www/revision.json | cut -b 102-109')
     #time=commands.getoutput('TZ="America/Chicago" date')
-    time=commands.getoutput('TZ="GMT" date')
+    time=commands.getoutput('TZ="UTC" date')
 
 
     #STATUSSTREAM="""<h4>Omniwallet Change Log</h4>

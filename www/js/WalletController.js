@@ -3,7 +3,7 @@
 function WalletController($scope, $q, $http, $modal, $location, userService) {
   $scope.uuid = userService.getUUID();
   $scope.loginLink = $location.protocol() + "://" + $location.host() + "/login/" + $scope.uuid;
-  console.log(userService.getAllAddresses());
+  //console.log(userService.getAllAddresses());
 
   $scope.addrList = userService.getAllAddresses().map(function(e, i, a) {
     return e.address;
@@ -82,6 +82,8 @@ function WalletHistoryController($scope, $q, $http, userService, hashExplorer) {
   $scope.getAllData = function getAllData() {
     var transaction_data = [];
     var promises = [];
+    $scope.isLoading = "True";
+
 
     angular.forEach($scope.addresses, function(addrObject) {
       promises.push($http.post('/v1/address/addr/', {
@@ -90,18 +92,17 @@ function WalletHistoryController($scope, $q, $http, userService, hashExplorer) {
       .success(function(data, status, headers, config) {
         delete data.address;
         delete data.balance;
-        angular.forEach(data[0], function(msc_tx, tx_type) {
-          if (msc_tx instanceof Array && msc_tx.length != 0) {
-            //DEBUG console.log(tx_type, msc_tx);
-            transaction_data = transaction_data.concat(msc_tx);
-          }
-        });
 
-        angular.forEach(data[1], function(tmsc_tx, tx_type) {
-          if (tmsc_tx instanceof Array && tmsc_tx.length != 0) {
-            //DEBUG console.log(tx_type, tmsc_tx);
-            transaction_data = transaction_data.concat(tmsc_tx);
-          }
+        var keys = Object.keys(data);
+
+        angular.forEach(keys, function(tx_type) {
+          tx_data = data[ tx_type ];
+          angular.forEach( data[ tx_type ], function( tx_a, idx ) {
+            if (tx_a instanceof Array && tx_a.length != 0) {
+              //DEBUG console.log(tx_type, msc_tx);
+              transaction_data = transaction_data.concat(tx_a);
+            }
+          });
         });
       })
       );
@@ -115,9 +116,43 @@ function WalletHistoryController($scope, $q, $http, userService, hashExplorer) {
       angular.forEach(transaction_data, function(transaction, index) {
         //DEBUG console.log(new Date(Number(transaction.tx_time)))
         transaction_data[index].tx_hash_concat = transaction.tx_hash.substring(0, 22) + '...'
+
+        if(transaction.currency_str == 'Smart Property' && transaction.propertyName != undefined) 
+          transaction.currency_str = transaction.propertyName;
+        if(transaction.currency_str == undefined)
+          transaction.currency_str = transaction.icon_text;
+        if(transaction.tx_type_str == undefined)
+          transaction.tx_type_str = transaction.icon_text;
+
+        var addresses = $scope.addresses.map(function(addrO) { return addrO.address; });
+        var incoming = addresses.indexOf(transaction.to_address);
+
+        if(incoming == -1 && transaction.to_address.length > 32)
+          transaction.color = 'info';
+        if(incoming != -1 && transaction.to_address.length > 32)
+          transaction.color = 'success';
+        if(transaction.to_address.length < 32)
+          transaction.color = 'warning';
+
+        //DEBUG console.log(incoming, 'inc', transaction.to_address, 'hash', transaction.tx_hash, 'color', transaction.color)
+      });
+
+      var hashes = [];
+      var clone = transaction_data.slice(0);
+      transaction_data.forEach(function(tx,idx) { 
+        var foundHash = hashes.indexOf( tx.tx_hash );
+
+        if( foundHash === -1 ) { 
+          hashes.push(tx.tx_hash);
+        } 
+        else {
+          //console.log('found dup', tx.tx_hash, idx);
+          delete transaction_data[idx];
+        }
       });
 
       $scope.history = transaction_data;
+      $scope.isLoading = "False";
     });
   }
 
@@ -127,6 +162,7 @@ function WalletHistoryController($scope, $q, $http, userService, hashExplorer) {
       $scope.getAllData();
       return;
     }
+    $scope.isLoading = "True";
 
     console.log('Addr request 4');
     $http.post('/v1/address/addr/', {
@@ -140,18 +176,16 @@ function WalletHistoryController($scope, $q, $http, userService, hashExplorer) {
       delete data.balance;
 
       var transaction_data = [];
-      angular.forEach(data[0], function(msc_tx, tx_type) {
-        if (msc_tx instanceof Array && msc_tx.length != 0) {
-          //DEBUG console.log(tx_type, msc_tx);
-          transaction_data = transaction_data.concat(msc_tx);
-        }
-      });
+      var keys = Object.keys(data);
 
-      angular.forEach(data[1], function(tmsc_tx, tx_type) {
-        if (tmsc_tx instanceof Array && tmsc_tx.length != 0) {
-          //DEBUG console.log(tx_type, tmsc_tx);
-          transaction_data = transaction_data.concat(tmsc_tx);
-        }
+      angular.forEach(keys, function(tx_type) {
+        tx_data = data[ tx_type ];
+        angular.forEach( data[ tx_type ], function( tx_a, idx ) {
+          if (tx_a instanceof Array && tx_a.length != 0) {
+            //DEBUG console.log(tx_type, msc_tx);
+            transaction_data = transaction_data.concat(tx_a);
+          }
+        });
       });
 
       //sort by date, ascending
@@ -162,9 +196,43 @@ function WalletHistoryController($scope, $q, $http, userService, hashExplorer) {
       angular.forEach(transaction_data, function(transaction, index) {
         //DEBUG console.log(new Date(Number(transaction.tx_time)))
         transaction_data[index].tx_hash_concat = transaction.tx_hash.substring(0, 22) + '...'
+
+        if(transaction.currency_str == 'Smart Property' && transaction.propertyName != undefined) 
+          transaction.currency_str = transaction.propertyName;
+        if(transaction.currency_str == undefined)
+          transaction.currency_str = transaction.icon_text;
+        if(transaction.tx_type_str == undefined)
+          transaction.tx_type_str = transaction.icon_text;
+
+        var addresses = $scope.addresses.map(function(addrO) { return addrO.address; });
+        var incoming = addresses.indexOf(transaction.to_address);
+
+        if(incoming == -1 && transaction.to_address.length > 32)
+          transaction.color = 'info';
+        if(incoming != -1 && transaction.to_address.length > 32)
+          transaction.color = 'success';
+        if(transaction.to_address.length < 32)
+          transaction.color = 'warning';
+
+        //DEBUG console.log(incoming, 'inc', transaction.to_address, 'hash', transaction.tx_hash, 'color', transaction.color)
+      });
+
+      var hashes = [];
+      var clone = transaction_data.slice(0);
+      transaction_data.forEach(function(tx,idx) { 
+        var foundHash = hashes.indexOf( tx.tx_hash );
+
+        if( foundHash === -1 ) { 
+          hashes.push(tx.tx_hash);
+        } 
+        else {
+          //console.log('found dup', tx.tx_hash, idx);
+          delete transaction_data[idx];
+        }
       });
 
       $scope.history = transaction_data;
+      $scope.isLoading = "False";
     });
   }
 }
@@ -231,7 +299,16 @@ function WalletTradeController($scope, $http, $q, userService) {
 function WalletTradeOverviewController($scope, $http, $q, userService, hashExplorer) {
   $scope.setHashExplorer = hashExplorer.setHash.bind(hashExplorer)
   $scope.currencyUnit = 'stom'
-  $scope.selectedTimeframe = "604800"
+  $scope.timeNow = Date.now();
+  $scope.timeAll = $scope.timeNow - 1394834400000;
+  $scope.timeOptions = [
+    {name:'24 Hours', value:'86400'},
+    {name:'1 Week', value:'604800'},
+    {name:'1 Month', value:'2419200'},
+    {name:'3 Month', value:'7257600'},
+    {name:'All', value:$scope.timeAll}
+  ];  
+  $scope.selectedTimeframe = $scope.timeOptions[4].value;
   $scope.global.getData = function(time, currency) {
     $scope.orderbook = []
     var transaction_data = []
@@ -261,6 +338,13 @@ function WalletTradeOverviewController($scope, $http, $q, userService, hashExplo
             tx[key] = tx[key];
           });
         });
+
+        //transaction_data = transaction_data.filter(function(item) {
+        //   var orderType = item.tx_type_str.toLowerCase()
+        //   var orderStatus = item.color.match(/expired|done/gi) || []
+        //   //DEBUG console.log(orderStatus, item.color)
+        //   return (orderType == 'sell offer') && (orderStatus.length == 0)
+        //});
 
         angular.forEach(transaction_data, function(transaction, index) {
           //DEBUG console.log(new Date(Number(transaction.tx_time)))
@@ -336,8 +420,16 @@ function WalletTradePendingController($scope, $http, $q, userService, hashExplor
   //$scope.selectedAddress = userService.getAllAddresses()[ userService.getAllAddresses().length-1 ].address;
   $scope.currencyUnit = 'stom'
   $scope.pendingThinking = true
-  $scope.hasAddressesWithPrivkey = getAddressesWithPrivkey()
-  $scope.selectedCoin = 'BTC'
+  $scope.hasAddressesWithPrivkey = getAddressesWithPrivkey();
+  $scope.selectedAddress = $scope.hasAddressesWithPrivkey[0];
+  userService.getCurrencies().filter(function(currency){
+       return currency.tradable;
+  }).forEach(function(coin){
+    if(coin.symbol=='BTC'){
+      $scope.selectedCoin = coin;    
+    }
+  });
+  
   $scope.selectedTimeframe = "604800"
   $scope.filterData = function(time) {
     var orderbook = JSON.parse($scope.orderBookStorage);
@@ -429,7 +521,12 @@ function WalletTradePendingController($scope, $http, $q, userService, hashExplor
         return (orderType == 'sell offer') && (orderStatus.length == 0)
       });
 
-      transaction_data = filtered_transaction_data
+      angular.forEach(filtered_transaction_data, function(transaction, index) {
+        //DEBUG console.log(new Date(Number(transaction.tx_time)))
+        filtered_transaction_data[index].tx_hash_concat = transaction.tx_hash.substring(0, 22) + '...';
+      });
+
+      transaction_data = filtered_transaction_data;
       //if null, then append simple message
       $scope.orderbook = transaction_data.length != 0 ? transaction_data : [{
             tx_hash: 'No offers/bids found for this timeframe'
@@ -439,25 +536,37 @@ function WalletTradePendingController($scope, $http, $q, userService, hashExplor
       $scope.orderBookStorage = JSON.stringify($scope.orderbook);
     }
     );
-  }
+};
   $scope.purchaseCoin = function(tx) {
     $scope.pendingThinking = false;
-    $scope.buyTransaction = tx
-    $scope.sendTo = tx.to_address
-    $scope.sendAmountPlaceholder = tx.bitcoin_required
-    $scope.selectedAddress = tx.from_address
-  }
-
+    $scope.buyTransaction = tx;
+    $scope.sendTo = tx.to_address;
+    $scope.sendAmount = tx.bitcoin_required;
+    $scope.selectedAddress = tx.from_address;
+    $http.get('/v1/transaction/tx/' + tx.sell_offer_txid + '.json').success(function(data) {
+      var sell_tx = data[0];
+      $http.post('/v1/blocks/getlast',{origin:"blockchain"}).success(function(block){
+        $scope.remainingBlocks = sell_tx.formatted_block_time_limit - (block.height - tx.block);
+      });
+    });
+  };
 
   function getAddressesWithPrivkey() {
-    var addresses = []
+    var addresses = [];
     userService.getAllAddresses().map(function(e, i, a) {
       if (e.privkey && e.privkey.length == 58) {
         addresses.push(e.address);
       }
     }
     );
-    return addresses
+    return addresses;
+  }
+
+  $scope.isCancel=true;
+  $scope.confirmCancel = function(tx) {
+    $scope.selectedAddress = tx.from_address;
+    $scope.selectedCoin_extra = (+tx.currencyId) == 1 ? 'MSC' : 'TMSC';
+    $scope.cancelTrig=!$scope.cancelTrig;
   }
 }
 

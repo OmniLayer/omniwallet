@@ -5,9 +5,10 @@ tools_dir = os.environ.get('TOOLSDIR')
 lib_path = os.path.abspath(tools_dir)
 sys.path.append(lib_path)
 from msc_apps import *
+from debug import *
 
 data_dir_root = os.environ.get('DATADIR')
-
+TIMEOUT='timeout -s 9 60 '
 # Get the Mastercoin balances.  Not that this is also creating the default balance
 # object, and should run before all the other currency checks.
 def get_msc_balances( addr ):
@@ -35,12 +36,14 @@ def get_msc_balances( addr ):
       if balance_data[ i ][ 'value' ] == '0.0':
         balance_data.pop( i )
 
+  #print_debug("got here", 5)
+
   return ( address_data, None )
 
 # Get the Bitcoin balances - this is a different format from the MSC one above.
 def get_btc_balances( addr ):
   balances = { 'symbol': 'BTC', 'divisible': True }
-  out, err = run_command( 'sx balance -j ' + addr )
+  out, err = run_command(TIMEOUT+ 'sx balance -j ' + addr )
   if err != None:
     return None, err
   elif out == '':

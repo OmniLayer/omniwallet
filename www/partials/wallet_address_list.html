@@ -1,14 +1,7 @@
-<div >
-  <br>
-<br>
-  <div class="panel panel-default">
-    <h3 class="text-center panel-body"> My Addresses </h3>
+<div class="om-container">
+  <div class="panel-default">
+    <div class="text-left panel-body om-title">Addresses</div>
   </div>
-  <div class="alert alert-info alert-dismissable">
-    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-      This is where you can go to manage existing addresses, add addresses, or remove addresses.
-  </div>
-
   <div ng-if="balances.invalidAddresses.length" class="alert alert-danger">
      <h3>Invalid Addresses in Your Wallet</h3>
      <table class="table table-striped table-hover table-condensed">
@@ -22,6 +15,7 @@
   <div ng-include="templates['add_address']"></div>
 
   <div ng-if="balances.balances" ng-repeat="currency in balances.balances">
+   <div ng-if="currency.balance>0 || currency.symbol == 'BTC'" >
     <div class="row">
       <div class="col-xs-4">
         <span class="currency-name">{{currency.name ? currency.name : currency.symbol}}</span>
@@ -29,7 +23,7 @@
       <div class="col-xs-3">
           <span ng-if="currency.property_type != undefined && currency.property_type == 1" class="currency-total">{{ currency.balance }} </span>
           <span ng-if="currency.property_type != undefined && currency.property_type == 2" class="currency-total">{{ currency.balance.toFixed(8) }}</span>
-          <span ng-if="currency.property_type == undefined" class="currency-total">{{ currency.balance }} {{ currency.symbol }}</span>
+          <span ng-if="currency.property_type == undefined" class="currency-total">{{ currency.balance.toFixed(8) }} {{ currency.symbol }}</span>
       </div>
       <div class="col-xs-3">
         <span class="currency-value">{{currency.value | currency}}</span>
@@ -46,19 +40,24 @@
         </thead>
         <tbody>
           <tr ng-repeat="item in currency.addresses">
-            <td>{{item.address}}</td>
+            <td ng-show={{item.private}}>{{item.address}} <a href="/about/faq" target="_new"><span class="glyphicon glyphicon-lock" tooltip="Your Wallet has the Private key for this address. (Click for more info)"></span></a></td>
+            <td ng-hide={{item.private}}>{{item.address}}</td>
             <td ng-if="currency.property_type != undefined && currency.property_type == 1" class="currency">{{ item.balance }} </td>
             <td ng-if="currency.property_type != undefined && currency.property_type == 2" class="currency">{{ item.balance.toFixed(8) }}</td>
             <td ng-if="currency.property_type == undefined" class="currency">{{ item.balance}} {{ currency.symbol }}</td>
             <td class="currency">{{item.value | currency}}</td>
             <td>
-                  <button class="btn btn-default" ng-click="openDeleteConfirmForm( item.address )" title="Remove from Wallet">X</button>
+		<div class="dropdown">
+		<a data-toggle="dropdown" href="#" class="btn btn-info btn-xs">Options</a>
+		  <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu9">
+                    <li role="presentation"><a role="menuitem" tabindex="-1" href="#" ng-click="openDeleteConfirmForm( item )" >Remove from Wallet</a></li>
+		  </ul>
               </div>
             </td>
           </tr>
         </tbody>
       </table>
     </div>
-  </div> 
-
+   </div>
+  </div>
 </div>

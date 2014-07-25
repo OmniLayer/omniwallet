@@ -29,7 +29,7 @@ function CreateWalletController($scope, $http, $location, $modalInstance, userSe
       .then(function(result) {
       userService.login(wallet, walletKey, asymKey);
       $modalInstance.close()
-      $location.path('/wallet');
+      $location.path('/wallet/addresses');
     }, function(result) {
       $scope.serverError = true;
     });
