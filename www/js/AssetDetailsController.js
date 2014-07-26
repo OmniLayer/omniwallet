@@ -59,7 +59,7 @@ function AssetDetailsController($route, $scope, $timeout, $element, $compile, pr
         
         var now = new Date();
         $scope.daysAgo = Math.round((now.getTime() - startDate.getTime()) / (1000*60*60*24));
-        $scope.earlyBirdBonus =  (($scope.crowdsale.deadline - (now.getTime()/1000)) / 604800) * $scope.crowdsale.earlybonus;
+        $scope.earlyBirdBonus =  ((($scope.crowdsale.deadline - (now.getTime()/1000)) / 604800) * $scope.crowdsale.earlybonus).toFixed(1);
         $scope.estimatedWorth = "0";
         
         // we need to compile the timer dinamically to get the appropiate end-date set.
