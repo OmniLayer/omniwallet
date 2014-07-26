@@ -224,6 +224,7 @@ form.form-search:before {
   position: absolute;
   text-align: center;
   top: 41px;
-  left:41px;
+  left:24px;
   color: #fff;
+  font-size:large;
 }
