@@ -57,8 +57,8 @@ def calculate_spt_price(sp):
         btcvalue=get_btc_price()
 	#set CryptoNext until api/exchange is live
 	return ((1 / btcvalue['price'])*100000000)
-    elif sp['formatted_transactionType'] == 51:
-        return 1.0/int( sp['numberOfProperties'] )
+    #elif sp['formatted_transactionType'] == 51:
+        #return 1.0/int( sp['numberOfProperties'] )
     else:
         return 0
    

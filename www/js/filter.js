@@ -4,7 +4,23 @@ angular.module('omniwallet')
         return formatCurrencyInFundamentalUnit(item.balance, item.symbol);
       }
     }
-  ]);
+  ])
+  .filter('truncate', [function () {
+      return function (text, length, end) {
+        if (isNaN(length))
+            length = 10;
+
+        if (end === undefined)
+            end = "...";
+
+        if (text === undefined || text.length <= length || text.length - end.length <= length) {
+            return text;
+        }
+        else {
+            return String(text).substring(0, length-end.length) + end;
+        }
+      }
+   }]);
 var conversionFactor = {
   'mtos': 0.00001000, //millibit to satoshi
   'utos': 0.00000100, //microbit to satoshi
@@ -43,4 +59,3 @@ function convertToFundamentalUnit(value, symbol) {
 
   return Math.round(value * conversionFactor[symbol]);
 }
-
