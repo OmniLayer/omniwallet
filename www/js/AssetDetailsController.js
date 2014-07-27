@@ -47,41 +47,37 @@ function AssetDetailsController($route, $scope, $timeout, $element, $compile, pr
     if (format == "elapsed") {
       var now = new Date();
       var off = (now.getTime() / 1000) - blocktime;
-      switch(off){
-        case off < 60:
-          return "Just now";
-          break;
-        case off < 3600:
-          return Math.round(off / 60) + "minutes ago";
-          break;
-        case off < 86400:
-          return Math.round(off / 3600) + "hours ago";
-          break;
-        case off < 604800:
-          return Math.round(off / 86400) + "days ago";
-          break;
-        case off < 2592000:
-          return Math.round(off / 604800) + "weeks ago";
-          break;
-        case off < 31536000:
-          return Math.round(off / 2592000) + "months ago";
-          break;
-        default:
-          return Math.round(off / 31536000) + "years ago";
-          break;
-      }
+      if (off < 60)
+        return "Just now";
+      else if (off < 3600)
+        return Math.round(off / 60) + " minutes ago";
+      else if (off < 86400)
+        return Math.round(off / 3600) + " hours ago";
+      else if (off < 604800)
+        return Math.round(off / 86400) + " days ago";
+      else if (off < 2592000)
+        return Math.round(off / 604800) + " weeks ago";
+      else if (off < 31536000)
+        return Math.round(off / 2592000) + " months ago";
+      else
+        return Math.round(off / 31536000) + " years ago";
+      
     } else {
       return time.toLocaleString();
     }
   };
   
   $scope.formatCurrencyName = function (propertyid) {
-    for(var currency in $scope.acceptedCurrencies){
+    $scope.acceptedCurrencies.forEach(function(currency){
       if(currency.propertyid == propertyid)
         return currency.name;
-    }
+    });
     
     return "Unknown";
+  };
+  
+  $scope.formatTransactionUrl = function (txid) {
+    return "http://blockchain.info/tx/"+txid;
   };
   
   // Load property data into the page

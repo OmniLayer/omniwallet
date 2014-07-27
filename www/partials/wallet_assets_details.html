@@ -106,12 +106,12 @@
     <span>Found {{history.total}} investment transactions</span>
     <div class="panel panel-default" ng-repeat="transaction in history.transactions">
       <div class="panel-body">
-        <div class="row">
+        <div class="row" style="margin-bottom: 15px;">
           <div class="col-xs-4"><h6>{{formatTransactionTime(transaction.blocktime,"elapsed")}}</h6><span style="color: #ccc">{{formatTransactionTime(transaction.blocktime)}}</span></div>
           <div class="col-xs-8">
-            <span class="pull-right">
-              <div class="row"><img src="/assets/img/shouty.png" /> {{transaction.confirmations}} Confirmations</div>
-              <div class="row"><a href="transaction.url">See transaction details</a></div>
+            <span class="pull-right" style="margin-right: 20px;">
+              <div class="row" style="border: 1px solid #ccc;padding: 3px;border-radius: 5px;box-shadow: 0px 3px #ccc;"><img src="/assets/img/shouty.png" /> {{transaction.confirmations}} Confirmations</div>
+              <div class="row"><a href="{{formatTransactionUrl(transaction.txid)}}">See transaction details</a></div>
             </span>
           </div>
         </div>
