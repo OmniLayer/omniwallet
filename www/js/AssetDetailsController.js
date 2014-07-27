@@ -38,6 +38,7 @@ function AssetDetailsController($route, $scope, $timeout, $element, $compile, pr
     total:0,
     transactions:[]
   };
+  $scope.infoMessage = "Get some tokens!";
   
   propertiesService.getProperty($scope.propertyId).then(function(result){
     $scope.property = result.data;
