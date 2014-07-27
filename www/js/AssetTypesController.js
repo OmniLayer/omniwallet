@@ -305,4 +305,3 @@ var CurrencyDetailModal = function($scope, currencySymbol, balances, currencyNam
   $scope.currencyName = currencyName;
 };
 
-
