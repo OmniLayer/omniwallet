@@ -1,4 +1,5 @@
 function AssetDetailsController($route, $scope, $timeout, $element, $compile, propertiesService, userService){
+  // $scope initialization
   $scope.propertyId = $route.current.params.propertyId;
   $scope.property = {
     "name" : "",
@@ -29,7 +30,6 @@ function AssetDetailsController($route, $scope, $timeout, $element, $compile, pr
   
   $scope.isOwner = false;
   $scope.acceptedCurrencies = [];
-  $scope.formatedCurency = "";
   $scope.formatedStartDate = "";
   $scope.daysAgo = 0;
   $scope.earlyBirdBonus =  0;
@@ -40,6 +40,51 @@ function AssetDetailsController($route, $scope, $timeout, $element, $compile, pr
   };
   $scope.infoMessage = "Get some tokens!";
   
+  // Parsing and format functions
+  $scope.formatTransactionTime = function(blocktime, format){
+    format = format || "locale";
+    var time = new Date(blocktime * 1000);
+    if (format == "elapsed") {
+      var now = new Date();
+      var off = (now.getTime() / 1000) - blocktime;
+      switch(off){
+        case off < 60:
+          return "Just now";
+          break;
+        case off < 3600:
+          return Math.round(off / 60) + "minutes ago";
+          break;
+        case off < 86400:
+          return Math.round(off / 3600) + "hours ago";
+          break;
+        case off < 604800:
+          return Math.round(off / 86400) + "days ago";
+          break;
+        case off < 2592000:
+          return Math.round(off / 604800) + "weeks ago";
+          break;
+        case off < 31536000:
+          return Math.round(off / 2592000) + "months ago";
+          break;
+        default:
+          return Math.round(off / 31536000) + "years ago";
+          break;
+      }
+    } else {
+      return time.toLocaleString();
+    }
+  };
+  
+  $scope.formatCurrencyName = function (propertyid) {
+    for(var currency in $scope.acceptedCurrencies){
+      if(currency.propertyid == propertyid)
+        return currency.name;
+    }
+    
+    return "Unknown";
+  };
+  
+  // Load property data into the page
   propertiesService.getProperty($scope.propertyId).then(function(result){
     $scope.property = result.data;
     
@@ -50,9 +95,7 @@ function AssetDetailsController($route, $scope, $timeout, $element, $compile, pr
         
         $scope.isOwner = userService.loggedIn() && userService.getAddressesWithPrivkey().indexOf($scope.crowdsale.issuer) > -1;
         propertiesService.getProperty($scope.crowdsale.propertyiddesired).then(function(result){
-          $scope.acceptedCurrencies = [{name:result.data.name,rate:$scope.crowdsale.tokensperunit}];
-          // this value should come from each investment transaction
-          $scope.formatedCurency = result.data.name;
+          $scope.acceptedCurrencies = [{propertyid:$scope.crowdsale.propertyiddesired,name:result.data.name,rate:$scope.crowdsale.tokensperunit}];
         });
         
         var startDate = new Date($scope.crowdsale.starttime*1000);

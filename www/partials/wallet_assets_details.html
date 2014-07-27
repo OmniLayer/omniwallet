@@ -7,7 +7,7 @@
     <div class="col-xs-8">
       <div class="panel panel-default">
         <div class="panel-body">
-         <div class="row" style="margin-bottom: 10px;"> <div class="col-xs-12"><h2>{{property.name}} <span class="label label-default" style="font-size: 12px;vertical-align: middle;">#{{propertyId}}</span></h2></div></div>
+         <div class="row"> <div class="col-xs-12"><h2>{{property.name}} <span class="label label-default" style="font-size: 12px;vertical-align: middle;">#{{propertyId}}</span></h2></div></div>
          <div class="row" style="margin-bottom: 30px;"> <div class="col-xs-12"><span class="label" style="background-color: #EEE;color: #666;">{{property.category}} > {{property.subcategory}}</span></div></div>
          <div class="row" style="margin-bottom: 30px;">
            <div class="col-xs-12">
@@ -26,7 +26,7 @@
          <div class="row" style="margin-bottom: 20px;">
            <div class="col-xs-12">
             <p>
-              Issuance Address: <span class="label label-success">{{property.issuer.substr(0,5)}}...{{property.issuer.substr(-5,5)}}</span>
+              Issuance Address: <span class="label label-success"><img src="/assets/img/miniomni.png">{{property.issuer.substr(0,5)}}...{{property.issuer.substr(-5,5)}}</span>
             </p>
            </div>
          </div>
@@ -92,7 +92,7 @@
         <div class="col-xs-12">
           <h4 style="color: #ccc">Invested Funds</h4>
         </div>
-        <div class="col-xs-6">
+        <div class="col-xs-7">
           <span>Estimated total worth invested in this crowdsale:</span>
         </div> 
         <div class="col-xs-12" >
@@ -106,7 +106,21 @@
     <span>Found {{history.total}} investment transactions</span>
     <div class="panel panel-default" ng-repeat="transaction in history.transactions">
       <div class="panel-body">
-        Invested {{transaction.amountsent}} {{formatedCurrency}} got {{transaction.participanttokens}}
+        <div class="row">
+          <div class="col-xs-4"><h6>{{formatTransactionTime(transaction.blocktime,"elapsed")}}</h6><span style="color: #ccc">{{formatTransactionTime(transaction.blocktime)}}</span></div>
+          <div class="col-xs-8">
+            <span class="pull-right">
+              <div class="row"><img src="/assets/shouty.png" /> {{transaction.confirmations}} Confirmations</div>
+              <div class="row"><a href="transaction.url">See transaction details</a></div>
+            </span>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-xs-offset-1 col-xs-11">
+            <div><img src="/assets/img/miniomni.png">{{transaction.sendingaddress.substr(0,5)}}...{{transaction.sendingaddress.substr(-5,5)}}</div>
+            Invested {{transaction.amountsent}} {{formatCurrencyName(transaction.propertyid)}} got {{transaction.participanttokens}}
+          </div>
+        </div>
       </div>
     </div>
   </div>

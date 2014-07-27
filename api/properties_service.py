@@ -143,9 +143,21 @@ def getcrowdsalehistory(property_id):
     
     end = start + count if len(crowdsale['participanttransactions']) < start + count else -1
     
+    transactions = crowdsale['participanttransactions'][start:end]
+    
+    for transaction in transactions:
+        try:
+            data = host.call("gettransaction_MP", transaction["txid"])['result']
+            transaction["blocktime"] = data["blocktime"]
+            transaction["confirmations"] = data["confirmations"]
+            transaction["sendingaddress"] = data["sendingaddress"]
+            transaction["propertyid"] = data["propertyid"]
+        except Exception,e:
+            abort(make_response('Error getting tx data', 400))
+    
     response = {
                 "total" : len(crowdsale['participanttransactions']),
-                "transactions" : crowdsale['participanttransactions'][start:end]
+                "transactions" : transactions
                 }
     return jsonify(response)
 
