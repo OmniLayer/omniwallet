@@ -141,7 +141,7 @@ def getcrowdsalehistory(property_id):
         abort(make_response('Error getting crowdsale', 400))
     
     
-    end = start + count if len(crowdsale['participanttransactions']) < start + count else -1
+    end = start + count if len(crowdsale['participanttransactions']) > start + count else -1
     
     transactions = crowdsale['participanttransactions'][start:end]
     
