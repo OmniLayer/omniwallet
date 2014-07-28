@@ -45,7 +45,9 @@ function AssetDetailsController($route, $scope, $timeout, $element, $compile, pr
   $scope.pendingThinking = true;
   $scope.hasAddressesWithPrivkey = false;
   $scope.selectedAddress = "";
-  $scope.selectedCoin = {name:"-- Loading coins --"};    
+  $scope.selectedCoin = {name:"-- Loading coins --"};   
+  $scope.tokenStep = $scope.tokenMin =  0.00000001;
+  $scope.tokenMax = "92233720368.54775807"; 
   
   // Parsing and format functions
   $scope.formatTransactionTime = function(blocktime, format){
@@ -106,6 +108,8 @@ function AssetDetailsController($route, $scope, $timeout, $element, $compile, pr
     
     if(!$scope.property.fixedissuance)
     {
+      $scope.tokenStep = $scope.tokenMin = $scope.property.divisible ? 0.00000001 : 1;
+      $scope.tokenMax = $scope.property.divisible ? "92233720368.54775807" : "9223372036854775807";
       propertiesService.getCrowdsale($scope.propertyId).then(function(result){
         $scope.crowdsale = result.data;
         
