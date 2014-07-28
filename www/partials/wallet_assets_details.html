@@ -183,7 +183,7 @@
           <div class="input-group">
             <span class="input-group-addon"> Amount to send (in {{selectedCoin.symbol}}): </span>
               <input name="amount" type="number" class="form-control" 
-              ng-model="sendAmount">
+              ng-model="sendAmount" step="{{tokenStep}}" min="{{tokenMin}}" max="{{tokenMax}}" ensure-integer ensure-over="sendAmount" ensure-if="!property.divisible">
             <span class="input-group-addon" > 
               Available: {{balanceData[0]}} {{selectedCoin.symbol}}</span>
           </div>
