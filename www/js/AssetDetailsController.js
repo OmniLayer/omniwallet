@@ -88,7 +88,9 @@ function AssetDetailsController($route, $scope, $timeout, $element, $compile, pr
     
     propertiesService.getCrowdsaleHistory($scope.propertyId,$scope.history.transactions.length,5).then(function(result){
       $scope.history.total =  result.data.total;
-      $scope.history.transactions.append(result.data.transactions);
+      for (var i = 0; i < result.data.transactions.length; i++) {
+        $scope.history.transactions.push(result.data.transactions[i]);
+      }
       $scope.history.loading=false;
     });
   };

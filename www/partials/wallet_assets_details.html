@@ -88,7 +88,7 @@
           <span class="help-block">Tokens created for the issuer (%{{crowdsale.percenttoissuer}})</span>
         </div>
       </div>
-      <div class="row bg-active">
+      <div class="row show-grid bg-active">
         <div class="col-xs-12">
           <h4 style="color: #ccc">Invested Funds</h4>
         </div>
@@ -105,7 +105,7 @@
     <h2>Crowdsale history</h2>
     <span>Found {{history.total}} investment transactions</span>
     <div class="scroll">
-      <div class="scroll-body" infinite-scroll='loadHistory()' infinite-scroll-disabled='history.loading' infinite-scroll-distance='1'>
+      <div class="scroll-body" infinite-scroll='loadHistory()' infinite-scroll-disabled='history.loading' infinite-scroll-distance='3'>
         <div class="panel panel-default" ng-repeat="transaction in history.transactions">
           <div class="panel-body">
             <div class="row" style="margin-bottom: 15px;">

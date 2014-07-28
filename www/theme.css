@@ -230,12 +230,12 @@ form.form-search:before {
 }
 
 .scroll{
-    height: 200px;
+    height: 500px;
     overflow: hidden;
 }
 
 .scroll-body{
-    width: 100%;
+    width: 102%;
     overflow: auto;
     height: 100%;
     padding-right: 15px;
