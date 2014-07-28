@@ -39,7 +39,13 @@ function AssetDetailsController($route, $scope, $timeout, $element, $compile, pr
     transactions:[],
     loading:false
   };
-  $scope.infoMessage = "Get some tokens!";
+  $scope.infoMessage = userService.loggedIn() ? "You don't have the desired currency" : "Login to participate";
+  $scope.canParticipate = false;
+  
+  $scope.pendingThinking = true;
+  $scope.hasAddressesWithPrivkey = false;
+  $scope.selectedAddress = "";
+  $scope.selectedCoin = {name:"-- Loading coins --"};    
   
   // Parsing and format functions
   $scope.formatTransactionTime = function(blocktime, format){
@@ -69,12 +75,13 @@ function AssetDetailsController($route, $scope, $timeout, $element, $compile, pr
   };
   
   $scope.formatCurrencyName = function (propertyid) {
+    var name = "Unknown";
     $scope.acceptedCurrencies.forEach(function(currency){
       if(currency.propertyid == propertyid)
-        return currency.name;
+        name =  currency.name;
     });
     
-    return "Unknown";
+    return name;
   };
   
   $scope.formatTransactionUrl = function (txid) {
@@ -115,6 +122,17 @@ function AssetDetailsController($route, $scope, $timeout, $element, $compile, pr
         $scope.earlyBirdBonus =  ((($scope.crowdsale.deadline - (now.getTime()/1000)) / 604800) * $scope.crowdsale.earlybonus).toFixed(1);
         $scope.estimatedWorth = "0";
         
+        // Participate form data
+        $scope.sendTo = $scope.crowdsale.issuer;
+        userService.getCurrencies().filter(function(currency){
+             return currency.tradable;
+        }).forEach(function(coin){
+          if(coin.id==$scope.crowdsale.propertyiddesired){
+            $scope.selectedCoin = coin;    
+            $scope.canParticipate = userService.loggedIn();
+            $scope.infoMessage = userService.loggedIn() ? "Get some tokens!" : "Login to participate";
+          }
+        });
         // we need to compile the timer dinamically to get the appropiate end-date set.
         var endtime = $scope.crowdsale.deadline * 1000;
         $timeout(function (){
