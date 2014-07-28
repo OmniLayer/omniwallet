@@ -10,7 +10,7 @@ function AssetDetailsController($route, $scope, $timeout, $element, $compile, pr
     "divisible" : true,
     "issuer" : "",
     "creationtxid" : "",
-    "fixedissuance" : false,
+    "fixedissuance" : true,
     "totaltokens" : 0
   };
   
@@ -36,7 +36,8 @@ function AssetDetailsController($route, $scope, $timeout, $element, $compile, pr
   $scope.estimatedWorth = "0";
   $scope.history = {
     total:0,
-    transactions:[]
+    transactions:[],
+    loading:false
   };
   $scope.infoMessage = "Get some tokens!";
   
@@ -81,6 +82,16 @@ function AssetDetailsController($route, $scope, $timeout, $element, $compile, pr
   };
   
   // Load property data into the page
+  $scope.loadHistory = function(){
+    if ($scope.history.loading) return;
+    $scope.history.loading=true;
+    
+    propertiesService.getCrowdsaleHistory($scope.propertyId,$scope.history.transactions.length,5).then(function(result){
+      $scope.history.total =  result.data.total;
+      $scope.history.transactions.append(result.data.transactions);
+      $scope.history.loading=false;
+    });
+  };
   propertiesService.getProperty($scope.propertyId).then(function(result){
     $scope.property = result.data;
     
@@ -129,10 +140,6 @@ function AssetDetailsController($route, $scope, $timeout, $element, $compile, pr
           $element.find('#timerWrapper').append(timerNode);
           $compile(timerNode)($scope);
         });
-      });
-      
-      propertiesService.getCrowdsaleHistory($scope.propertyId,0,5).then(function(result){
-        $scope.history = result.data;
       });
     }
   });

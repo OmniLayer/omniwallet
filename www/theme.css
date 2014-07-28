@@ -228,3 +228,15 @@ form.form-search:before {
   color: #fff;
   font-size:large;
 }
+
+.scroll{
+    height: 200px;
+    overflow: hidden;
+}
+
+.scroll-body{
+    width: 100%;
+    overflow: auto;
+    height: 100%;
+    padding-right: 15px;
+}
