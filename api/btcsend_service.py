@@ -42,7 +42,7 @@ def generate_btcsend():
     #the only supported currency is BTC
     currency_id=0
 
-    if 'testnet' in request.form and ( bool(request.form['testnet']) == True):
+    if 'testnet' in request.form and ( bool(int(request.form['testnet'])) == True):
         global testnet
         testnet =True
         global magicbyte
