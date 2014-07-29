@@ -71,7 +71,7 @@
             </div>
             <div class="form-group" style="position: relative">
               <textarea class="form-control" ng-model="propertyData" maxlength="254" ng-maxlength="254" placeholder="Enter Smart Property description." rows="3"></textarea>
-              <div style="position: absolute">{{254 - propertyData.length}} characters left</div>
+              <div style="position: absolute;right: 15px;bottom: 0px;color: #ccc;">{{254 - propertyData.length}} characters left</div>
             </div>
             <!--
             <br ng-hide="isNewProperty">
@@ -122,7 +122,7 @@
               <div class="panel panel-default" ng-repeat="investment in currenciesDesired">
                 <div class="panel-body form-inline">
                   <div class="form-group col-xs-5">
-                    <input name="amount" type="text" ng-model="investment.numberOfTokens" big-number step="{{tokenStep}}" min="{{tokenMin}}" max="{{tokenMax}}" ensure-integer ensure-over="investment.numberOfTokens" ensure-if="!isDivisible()" class="form-control" placeholder="# of tokens" required>
+                    <input name="amount" type="text" ng-model="investment._numberOfTokens" big-number big-number-model="investment.numberOfTokens" step="{{tokenStep}}" min="{{tokenMin}}" max="{{tokenMax}}" ensure-integer ensure-over="investment.numberOfTokens" ensure-if="!isDivisible()" class="form-control" placeholder="# of tokens" required>
                   </div>
                   <div class="form-group col-xs-7">
                     <label>per</label>

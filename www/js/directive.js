@@ -187,7 +187,10 @@ angular.module('omniwallet').directive('d3PieChart', function() {
 }).directive('bigNumber', function() {
   return {
     restrict: 'A',
-    require:'?ngModel',
+    require:"?ngModel",
+    scope:{
+      bigNumberModel:"="
+    },
     link: function(scope, ele, attr, ctrl) {           
                   
       // add a parser that will process each time the value is 
@@ -213,6 +216,7 @@ angular.module('omniwallet').directive('d3PieChart', function() {
           }
           // if it's valid, return the value to the model, 
           // otherwise return undefined.
+          scope.bigNumberModel = number;
           return number;
       });
       
@@ -221,6 +225,7 @@ angular.module('omniwallet').directive('d3PieChart', function() {
       ctrl.$formatters.unshift(function(value) {
           // validate.
           var number=undefined;
+          value=ele.val();
           try{
             number= new Big(value);
             ctrl.$setValidity('invalidValue', true);
@@ -239,7 +244,7 @@ angular.module('omniwallet').directive('d3PieChart', function() {
           }
           
           // return the value or nothing will be written to the DOM.
-          return value;
+          return number || value;
       });
     }
   };
