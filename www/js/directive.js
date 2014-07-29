@@ -174,25 +174,28 @@ angular.module('omniwallet').directive('d3PieChart', function() {
     link: function(scope, ele, attrs) {
       scope.$watch("ensureOver", function(value) {
         if(scope.ensureIf())
-          if (!(typeof value==='number' && (value%1)===0))
-            scope.ensureOver = Math.ceil(value);
+          if (!(typeof value==='number' && (value%1)===0)){
+            if (typeof value == "object")
+              scope.ensureOver = value.round();
+            else
+              scope.ensureOver = Math.ceil(value);
+          }
+            
       });
       scope.$watch("ensureIf", function(value) {
         if(scope.ensureIf())
           if (!(typeof value==='number' && (value%1)===0))
-            scope.ensureOver = Math.ceil(value);
+            if (typeof value == "object")
+              scope.ensureOver = value.round();
+            else
+              scope.ensureOver = Math.ceil(value);
       });
     }
   };
 }).directive('bigNumber', function() {
   return {
     restrict: 'A',
-    require:"?ngModel",
-    scope:{
-      bigNumberModel:"=",
-      ensureIf:'&',
-      ensureOver:'='
-    },
+    require:'?ngModel',
     link: function(scope, ele, attr, ctrl) {           
                   
       // add a parser that will process each time the value is 
@@ -218,7 +221,6 @@ angular.module('omniwallet').directive('d3PieChart', function() {
           }
           // if it's valid, return the value to the model, 
           // otherwise return undefined.
-          scope.bigNumberModel = number;
           return number;
       });
       
@@ -227,7 +229,6 @@ angular.module('omniwallet').directive('d3PieChart', function() {
       ctrl.$formatters.unshift(function(value) {
           // validate.
           var number=undefined;
-          value=ele.val();
           try{
             number= new Big(value);
             ctrl.$setValidity('invalidValue', true);
@@ -248,18 +249,6 @@ angular.module('omniwallet').directive('d3PieChart', function() {
           // return the value or nothing will be written to the DOM.
           return number || value;
       });
-      
-      scope.$watch("ensureOver", function(value) {
-      if(scope.ensureIf())
-        if (!(typeof value==='number' && (value%1)===0))
-          scope.ensureOver = Math.ceil(value);
-      });
-      scope.$watch("ensureIf", function(value) {
-        if(scope.ensureIf())
-          if (!(typeof value==='number' && (value%1)===0))
-            scope.ensureOver = Math.ceil(value);
-      });
-    
     }
   };
 }).directive("fileread", [function () {
