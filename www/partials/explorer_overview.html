@@ -8,7 +8,7 @@
         <div class="input-group col-xs-12">
             <input type="text" name="searchEntry" class="form-control search-query" ng-model="searchQueryText" placeholder="Search for part of a transaction or a full transaction hash" ng-change=" searchForm.searchEntry.$error.pattern == false ? doSearch() : null;" ng-pattern="/^[a-zA-Z0-9]+$/"/>
             <span class="input-group-btn">
-                <input type="click" ng-click="getData()" class="btn btn-primary" value="Clear Search" />
+                <input type="button" ng-click="getData()" class="btn btn-primary" value="Clear Search" />
             </span>
         </div>
             <p class="col-xs-12 label label-danger" ng-if="searchForm.searchEntry.$error.pattern"> You cannot use non-alphanumeric characters while searching. </p>
