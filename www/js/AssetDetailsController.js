@@ -41,6 +41,7 @@ function AssetDetailsController($route, $scope, $timeout, $element, $compile, pr
   };
   $scope.infoMessage = userService.loggedIn() ? "You don't have the desired currency" : "Login to participate";
   $scope.canParticipate = false;
+  $scope.loggedIn = userService.loggedIn();
   
   $scope.pendingThinking = true;
   $scope.hasAddressesWithPrivkey = false;
