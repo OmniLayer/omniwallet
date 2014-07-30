@@ -233,7 +233,7 @@ def listProperties(ecosystem):
     host=RPCHost()
     try:
         properties_list= host.call("listproperties_MP")['result']
-        properties_data = [ property for property in properties_list if (ecosystem == "1" and property['propertyid'] < 2147483651) or (ecosystem == "2" and property['propertyid'] >= 2147483651)]
+        properties_data = [ property for property in properties_list if (ecosystem == "1" and (property['propertyid'] < 2147483651 and property['propertyid'] != 2)) or (ecosystem == "2" and (property['propertyid'] >= 2147483651 or property['propertyid'] == 2))]
     except Exception,e:
         #Properties not found
         properties_data= []  
