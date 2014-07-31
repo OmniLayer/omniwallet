@@ -146,12 +146,19 @@ function NavigationController($scope, $http, $modal, userService) {
   $scope.getNavData = function() {
     console.log('init 0');
   };
-
+  
   $scope.openCreateModal = function() {
-    $modal.open({
+    if (!$scope.modalOpened) {
+      $scope.modalOpened = true;
+      var modalInstance = $modal.open({
       templateUrl: '/partials/wallet_create_modal.html',
       controller: CreateWalletController
-    });
+      });
+      modalInstance.result.then(function(){},
+      function(){
+        $scope.modalOpened = false;
+      });
+    }
   };
 
   $scope.openImportModal = function() {
@@ -161,16 +168,24 @@ function NavigationController($scope, $http, $modal, userService) {
     });
   };
 
-  $scope.openLoginModal = function() {
+  $scope.openLoginModal = function() {  
+      
     $scope.login ={
       title:'Login',
       button:'Open Wallet'
     };
-    $modal.open({
+    if (!$scope.modalOpened) {
+      $scope.modalOpened = true;
+      var modalInstance = $modal.open({
       templateUrl: '/partials/login_modal.html',
       controller: LoginController,
       scope: $scope
-    });
+      });
+      modalInstance.result.then(function(){},
+      function(){
+        $scope.modalOpened = false;
+      });
+    }
   };
 
   $scope.openUUIDmodal = function() {
