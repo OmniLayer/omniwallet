@@ -153,12 +153,11 @@ function NavigationController($scope, $http, $modal, userService) {
       var modalInstance = $modal.open({
       templateUrl: '/partials/wallet_create_modal.html',
       controller: CreateWalletController
-    });
-                modalInstance.result.then(function(){},
-                                function(){
-                                  $scope.modalOpened = false;
-                                }
-                                );
+      });
+      modalInstance.result.then(function(){},
+      function(){
+        $scope.modalOpened = false;
+      });
     }
   };
 
@@ -181,12 +180,11 @@ function NavigationController($scope, $http, $modal, userService) {
       templateUrl: '/partials/login_modal.html',
       controller: LoginController,
       scope: $scope
-    });
-                    modalInstance.result.then(function(){},
-                                function(){
-                                  $scope.modalOpened = false;
-                                }
-                                );
+      });
+      modalInstance.result.then(function(){},
+      function(){
+        $scope.modalOpened = false;
+      });
     }
   };
 
