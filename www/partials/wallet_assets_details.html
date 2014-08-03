@@ -3,7 +3,7 @@
 </div>
 
 <div class="col-xs-12" ng-controller="AssetDetailsController">
-  <div class="row" ng-show="pendingThinking">
+  <div class="row" ng-hide="!pendingThinking">
     <div class="row">
       <div class="col-xs-8">
         <div class="panel panel-default">
@@ -20,14 +20,14 @@
            <div class="row" style="margin-bottom: 20px;">
              <div class="col-xs-12">
               <p>
-                For more details visit: <a href="{{data.propertyUrl}}">{{property.url}}</a>
+                For more details visit: <a href="{{property.url}}">{{property.url}}</a>
               </p>
              </div>
            </div>
            <div class="row" style="margin-bottom: 20px;">
              <div class="col-xs-12">
               <p>
-                Issuance Address: <span class="label label-success"><img src="/assets/img/miniomni.png">{{property.issuer.substr(0,5)}}...{{property.issuer.substr(-5,5)}}</span>
+                Issuance Address: <span class="label label-success"><img src="/assets/img/miniomni.png"><a href="https://blockchain.info/address/{{property.issuer}}?sort=0">{{property.issuer.substr(0,5)}}...{{property.issuer.substr(-5,5)}}</a></span>
               </p>
              </div>
            </div>
@@ -56,10 +56,10 @@
         <div class="row show-grid">
           <span style="color: #ccc;font-size: large;">Share this page:</span>
           <span class="pull-right"> 
-            <a href="#"><img src="/assets/img/social-icons/linkedIn-round.png" /> </a> 
-            <a href="#"><img src="/assets/img/social-icons/facebook-round.png" /> </a> 
-            <a href="#"><img src="/assets/img/social-icons/twitter-round.png" /> </a>
-            <a href="#"><img src="/assets/img/social-icons/gplus-round.png" /> </a>
+            <a href="https://www.linkedin.com/shareArticle?mini=true&url={{shareUrl}}&title=Checkout%20this%20Crowdsale!&summary=&source=" target="_new"><img src="/assets/img/social-icons/linkedIn-round.png" /> </a> 
+            <a href="https://www.facebook.com/sharer/sharer.php?u={{shareUrl}}" target="_new"><img src="/assets/img/social-icons/facebook-round.png" /> </a> 
+            <a href="https://twitter.com/home?status={{shareUrl}}" target="_new"><img src="/assets/img/social-icons/twitter-round.png" /> </a>
+            <a href="https://plus.google.com/share?url={{shareUrl}}" target="_new"><img src="/assets/img/social-icons/gplus-round.png" /> </a>
           </span>
         </div>
         <div class="row show-grid bg-active">
@@ -86,10 +86,10 @@
             <span class="tag">{{crowdsale.participanttokens}}</span>
             <span class="help-block">Tokens already bought by participants</span>
             <span class="tag">{{crowdsale.issuertokens}}</span>
-            <span class="help-block">Tokens created for the issuer (%{{crowdsale.percenttoissuer}})</span>
+            <span class="help-block">Tokens created for the issuer ({{crowdsale.percenttoissuer}}%)</span>
           </div>
         </div>
-        <div class="row show-grid bg-active">
+        <div class="row show-grid bg-active" ng-show="estimatedWorth > 0">
           <div class="col-xs-12">
             <h4 style="color: #ccc">Invested Funds</h4>
           </div>
@@ -106,21 +106,21 @@
       <h2>Crowdsale history</h2>
       <span>Found {{history.total}} investment transactions</span>
       <div class="scroll">
-        <div class="scroll-body" infinite-scroll='loadHistory()' infinite-scroll-disabled='history.loading' infinite-scroll-distance='3'>
-          <div class="panel panel-default" ng-repeat="transaction in history.transactions">
+        <div class="scroll-body" infinite-scroll='loadHistory()' infinite-scroll-disabled='history.loading || history.loaded' infinite-scroll-distance='3'>
+          <div class="panel panel-default" ng-repeat="transaction in history.transactions" style="margin-bottom: 5px;">
             <div class="panel-body">
               <div class="row" style="margin-bottom: 15px;">
                 <div class="col-xs-4"><h6>{{formatTransactionTime(transaction.blocktime,"elapsed")}}</h6><span style="color: #ccc">{{formatTransactionTime(transaction.blocktime)}}</span></div>
                 <div class="col-xs-8">
                   <span class="pull-right" style="margin-right: 20px;">
-                    <div class="row" style="border: 1px solid #ccc;padding: 3px;border-radius: 5px;box-shadow: 0px 3px #ccc;"><img src="/assets/img/shouty.png" /> {{transaction.confirmations}} Confirmations</div>
+                    <div class="row" style="border: 1px solid #ccc;padding: 3px;border-radius: 5px;box-shadow: 0px 3px #ccc; margin-bottom: 5px;" ng-hide="transaction.confirmations > 100"><img src="/assets/img/shouty.png" /> {{transaction.confirmations}} Confirmations</div>
                     <div class="row"><a href="{{formatTransactionUrl(transaction.txid)}}" target="_blank">See transaction details</a></div>
                   </span>
                 </div>
               </div>
               <div class="row">
                 <div class="col-xs-offset-1 col-xs-11">
-                  <div><img src="/assets/img/miniomni.png">{{transaction.sendingaddress.substr(0,5)}}...{{transaction.sendingaddress.substr(-5,5)}}</div>
+                  <div><img src="/assets/img/miniomni.png"><a href="https://blockchain.info/address/{{transaction.sendingaddress}}?sort=0">{{transaction.sendingaddress.substr(0,5)}}...{{transaction.sendingaddress.substr(-5,5)}}</a></div>
                   Invested {{transaction.amountsent}} {{formatCurrencyName(transaction.propertyid)}} got {{transaction.participanttokens}} tokens
                 </div>
               </div>
@@ -166,9 +166,7 @@
                 ng-change="setBalance()" ng-init="setBalance()">
                 <option value=""> -- Choose Address -- </option>
               </select>
-            </div> 
-          <h6 class="text-justify">  
-          Note that we allow you to only make contributions from addresses with a valid private key. </h6>
+            </div>
         </div>
       </div>
         <br>
@@ -183,7 +181,7 @@
           <div class="input-group">
             <span class="input-group-addon"> Amount to send (in {{selectedCoin.symbol}}): </span>
               <input name="amount" type="number" class="form-control" 
-              ng-model="sendAmount" step="{{tokenStep}}" min="{{tokenMin}}" max="{{tokenMax}}" ensure-integer ensure-over="sendAmount" ensure-if="!property.divisible">
+              ng-model="sendAmount" step="{{tokenStep}}" min="{{tokenMin}}" max="{{tokenMax}}" ensure-integer ensure-over="sendAmount" ensure-if="!selectedCoin.divisible">
             <span class="input-group-addon" > 
               Available: {{balanceData[0]}} {{selectedCoin.symbol}}</span>
           </div>

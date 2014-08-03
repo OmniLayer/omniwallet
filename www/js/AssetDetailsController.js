@@ -1,6 +1,7 @@
-function AssetDetailsController($route, $scope, $timeout, $element, $compile, propertiesService, userService){
+function AssetDetailsController($location, $route, $scope, $timeout, $element, $compile, propertiesService, userService){
   // $scope initialization
   $scope.propertyId = $route.current.params.propertyId;
+  $scope.shareUrl = $location.absUrl();
   $scope.property = {
     "name" : "",
     "category" : "",
@@ -37,7 +38,8 @@ function AssetDetailsController($route, $scope, $timeout, $element, $compile, pr
   $scope.history = {
     total:0,
     transactions:[],
-    loading:false
+    loading:false,
+    loaded:false
   };
   $scope.infoMessage = userService.loggedIn() ? "You don't have the desired currency" : "Login to participate";
   $scope.canParticipate = false;
@@ -93,7 +95,7 @@ function AssetDetailsController($route, $scope, $timeout, $element, $compile, pr
   
   // Load property data into the page
   $scope.loadHistory = function(){
-    if ($scope.history.loading) return;
+    if ($scope.history.loading || $scope.history.loaded) return;
     $scope.history.loading=true;
     
     propertiesService.getCrowdsaleHistory($scope.propertyId,$scope.history.transactions.length,5).then(function(result){
@@ -102,17 +104,22 @@ function AssetDetailsController($route, $scope, $timeout, $element, $compile, pr
         $scope.history.transactions.push(result.data.transactions[i]);
       }
       $scope.history.loading=false;
+      if($scope.history.transactions.length == $scope.history.total)
+        $scope.history.loaded = true;
     });
   };
+  
+  // Load and initialize the form
   propertiesService.getProperty($scope.propertyId).then(function(result){
     $scope.property = result.data;
     
     if(!$scope.property.fixedissuance)
     {
-      $scope.tokenStep = $scope.tokenMin = $scope.property.divisible ? 0.00000001 : 1;
-      $scope.tokenMax = $scope.property.divisible ? "92233720368.54775807" : "9223372036854775807";
       propertiesService.getCrowdsale($scope.propertyId).then(function(result){
         $scope.crowdsale = result.data;
+        // format data
+        $scope.crowdsale.participanttokens = new Big($scope.crowdsale.participanttokens.toFixed(8));
+        $scope.crowdsale.issuertokens = new Big($scope.crowdsale.issuertokens.toFixed(8));
         
         $scope.isOwner = userService.loggedIn() && userService.getAddressesWithPrivkey().indexOf($scope.crowdsale.issuer) > -1;
         propertiesService.getProperty($scope.crowdsale.propertyiddesired).then(function(result){
@@ -136,6 +143,8 @@ function AssetDetailsController($route, $scope, $timeout, $element, $compile, pr
             $scope.selectedCoin = coin;    
             $scope.canParticipate = userService.loggedIn();
             $scope.infoMessage = userService.loggedIn() ? "Get some tokens!" : "Login to participate";
+            $scope.tokenStep = $scope.tokenMin = coin.divisible ? 0.00000001 : 1;
+            $scope.tokenMax = coin.divisible ? "92233720368.54775807" : "9223372036854775807";
           }
         });
         // we need to compile the timer dinamically to get the appropiate end-date set.

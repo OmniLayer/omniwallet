@@ -2,7 +2,7 @@ angular.module('omniwallet')
   .filter('cryptocurrency', [function() {
       return function(item) {
         return formatCurrencyInFundamentalUnit(item.balance, item.symbol);
-      }
+      };
     }
   ])
   .filter('truncate', [function () {
@@ -19,8 +19,16 @@ angular.module('omniwallet')
         else {
             return String(text).substring(0, length-end.length) + end;
         }
-      }
-   }]);
+      };
+   }])
+   .filter('crowdsaleDeadline', [function() {
+      return function(seconds) {
+        var deadline = new Date(seconds *1000);
+        var deadlineUTC = new Date(deadline.getTime() + deadline.getTimezoneOffset() * 60000);
+        return deadlineUTC.toLocaleString();
+      };
+    }
+  ]);
 var conversionFactor = {
   'mtos': 0.00001000, //millibit to satoshi
   'utos': 0.00000100, //microbit to satoshi
