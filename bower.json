@@ -18,6 +18,8 @@
     "FileSaver": null,
     "big.js": "x.x.x",
     "forge": "https://github.com/digitalbazaar/forge.git#0.2.30",
+    "numeraljs": "https://github.com/adamwdraper/Numeral-js.git#master",
+    "angular-numeraljs": "https://github.com/sagyeli/angular-numeraljs.git#master",
     "angular-password-strength": "https://github.com/curtislacy/angular-password-strength.git#Caret-Operator"
   }
 }

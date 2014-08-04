@@ -80,7 +80,7 @@
             <th>Amount Remaining</th>
             <th>Cost</th>
             <th>Buyer Fee</th>
-            <th>Payment Window <br /> (Blocks)</th>
+            <th>Payment Window (Blocks)</th>
           </tr>
       </thead>
       <tbody>
@@ -88,15 +88,15 @@
 
       <tr ng-repeat="transaction in orderbook" ng-hide="({{transaction.color=='bgc-expired'}} || {{transaction.color=='bgc-done'}}) && inactive" class="check-element animate-hide">
         <td ng-click="setHashExplorer(transaction)"><a href="/explorer/inspector?view={{transaction.tx_hash}}">{{transaction.tx_hash_concat}}</a></td>
-        <td>{{transaction.formatted_price_per_coin}}</td> 
-        <td ng-show="{{transaction.color == 'bgc-new'}}">{{ (transaction.formatted_amount_available | number: 8) }}</td> 
-        <td ng-show="{{transaction.color == 'bgc-new-accepted'}}">{{ (transaction.formatted_amount_available | number: 8) }}</td> 
-        <td ng-show="{{transaction.color == 'bgc-accepted-done'}}">{{ (transaction.formatted_amount_available | number: 8) }}</td> 
+        <td class="number" title="{{transaction.formatted_price_per_coin}}" ng-bind-html="transaction.formatted_price_per_coin | numeraljs: '0,0.00000000'"></td>
+        <td class="number" ng-show="{{transaction.color == 'bgc-new'}}" title="{{transaction.formatted_amount_available}}" ng-bind-html="transaction.formatted_amount_available | numeraljs: '0,0.00000000'"></td> 
+        <td class="number" ng-show="{{transaction.color == 'bgc-new-accepted'}}" title="{{transaction.formatted_amount_available}}" ng-bind-html="transaction.formatted_amount_available | numeraljs: '0,0.00000000'"></td> 
+        <td class="number" ng-show="{{transaction.color == 'bgc-accepted-done'}}" title="{{transaction.formatted_amount_available}}" ng-bind-html="transaction.formatted_amount_available | numeraljs: '0,0.00000000'"></td> 
         <td ng-show="{{transaction.color == 'bgc-expired'}}">User Ended</td> 
         <td ng-show="{{transaction.color == 'bgc-done'}}">Sold Out!</td> 
-        <td>{{transaction.formatted_bitcoin_amount_desired}}</td> 
-        <td>{{transaction.formatted_fee_required}}</td> 
-        <td>{{transaction.formatted_block_time_limit}}</td> 
+        <td class="number" title="{{transaction.formatted_bitcoin_amount_desired}}" ng-bind-html="transaction.formatted_bitcoin_amount_desired | numeraljs: '0,0.00000000'"></td>
+        <td class="number" title="{{transaction.formatted_fee_required}}" ng-bind-html="transaction.formatted_fee_required | numeraljs: '0,0.00000000'"></td>
+        <td class="number" title="{{transaction.formatted_block_time_limit}}" ng-bind-html="transaction.formatted_block_time_limit | numeraljs: '0,0'"></td>
         <td ng-show="(transaction.tx_hash.length == 64) && transaction.status == null && 
             !(transaction.from_address == selectedAddress)">
         <button class="btn btn-primary btn-sm" ng-hide="{{transaction.color=='bgc-expired'}} || {{transaction.color=='bgc-done'}}" ng-click="setView('buyOffer', transaction)" type="submit">Buy coin</button>
