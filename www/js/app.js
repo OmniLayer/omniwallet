@@ -6,7 +6,8 @@ var app = angular.module('omniwallet', [
   'ui.bootstrap.modal',
   'vr.filters.passwordStrength',
   'timer',
-  'infinite-scroll'
+  'infinite-scroll',
+  'ngNumeraljs'
 ], function($routeProvider, $locationProvider, $httpProvider) {
 
   if (!$httpProvider.defaults.headers.get)
