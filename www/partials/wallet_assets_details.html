@@ -3,7 +3,7 @@
 </div>
 
 <div class="col-xs-12" ng-controller="AssetDetailsController">
-  <div class="row" ng-hide="!pendingThinking">
+  <div class="row" ng-show="pendingThinking">
     <div class="row">
       <div class="col-xs-8">
         <div class="panel panel-default">
@@ -34,7 +34,7 @@
            <div class="row">
             <div class="col-xs-12" style="position: relative;">
               <div class="alert alert-info text-center" style="border-radius: 0px">{{infoMessage}}</div>
-              <button class="btn btn-success btn-lg" ng-click="pendingThinking = false" ng-show="canParticipate" style="position: absolute;top: 0px;right: 20px;margin-top: 15px;font-size: 23px;border-radius: 0px;-webkit-box-shadow: 5px 5px #ccc;-moz-box-shadow: 5px 5px #ccc;box-shadow: 5px 5px #ccc;">Participate</button>
+              <button class="btn btn-success btn-lg" ng-click="participate()" ng-show="canParticipate" style="position: absolute;top: 0px;right: 20px;margin-top: 15px;font-size: 23px;border-radius: 0px;-webkit-box-shadow: 5px 5px #ccc;-moz-box-shadow: 5px 5px #ccc;box-shadow: 5px 5px #ccc;">Participate</button>
             </div>
            </div>
           </div>
@@ -137,7 +137,7 @@
   </div>
   <div class="row" ng-hide="pendingThinking" ng-if="loggedIn">
     <h4>
-      <a ng-click="pendingThinking = true"> <strong> < Go back </strong> </a>
+      <a ng-click="goBack()"> <strong> < Go back </strong> </a>
     </h4>
     <div ng-controller="WalletAssetsFormController">
     <div ng-controller="TransactionGenerationController">

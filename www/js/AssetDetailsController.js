@@ -52,6 +52,13 @@ function AssetDetailsController($location, $route, $scope, $timeout, $element, $
   $scope.tokenStep = $scope.tokenMin =  0.00000001;
   $scope.tokenMax = "92233720368.54775807"; 
   
+  $scope.participate = function(){
+    $scope.pendingThinking = false;
+  };
+  
+  $scope.goBack = function(){
+    $scope.pendingThinking = true;
+  };
   // Parsing and format functions
   $scope.formatTransactionTime = function(blocktime, format){
     format = format || "locale";
