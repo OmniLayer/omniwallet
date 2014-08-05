@@ -350,8 +350,7 @@ angular.module('omniwallet').factory('appraiser', ['$rootScope', '$http', '$q', 
         });
       }
       UpdateLoop();
-    }
-    ;
+    };
     AppraiserService.prototype.updateValues = function(callback) {
       var self = this;
       var requests = [];
@@ -375,6 +374,21 @@ angular.module('omniwallet').factory('appraiser', ['$rootScope', '$http', '$q', 
       });
       $q.all(requests).then(function(responses) {
         callback();
+      });
+    };
+    AppraiserService.prototype.updateValue = function(callback, symbol) {
+      var self = this;
+      $http.get('/v1/values/' + symbol + '.json').then(function(response) {
+        var currency = response.data[0];
+        if (currency.symbol == 'BTC') {
+          // Store these things internally as the value of a satoshi.
+          self.conversions.BTC = currency.price / 100000000;
+        } else {
+          self.conversions[currency.symbol] = currency.price;
+        }
+        callback();
+      }, function(error) {
+        console.log(error);
       });
     };
     AppraiserService.prototype.getValue = function(amount, symbol) {
