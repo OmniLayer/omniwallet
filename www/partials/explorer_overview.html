@@ -8,7 +8,7 @@
         <div class="input-group col-xs-12">
             <input type="text" name="searchEntry" class="form-control search-query" ng-model="searchQueryText" placeholder="Search for part of a transaction or a full transaction hash" ng-change=" searchForm.searchEntry.$error.pattern == false ? doSearch() : null;" ng-pattern="/^[a-zA-Z0-9]+$/"/>
             <span class="input-group-btn">
-                <input type="click" ng-click="getData()" class="btn btn-primary" value="Clear Search" />
+                <input type="button" ng-click="getData()" class="btn btn-primary" value="Clear Search" />
             </span>
         </div>
             <p class="col-xs-12 label label-danger" ng-if="searchForm.searchEntry.$error.pattern"> You cannot use non-alphanumeric characters while searching. </p>
@@ -38,15 +38,14 @@
     </tbody>
 
   <tr ng-repeat="trans in transactions">
-   
     <td ng-click="setHashExplorer(trans)"> 
       <a href="/explorer/inspector?view={{trans.tx_hash}}">
         {{trans.tx_hash_concat}}
       </a>
     </td>
-   <td>{{trans.tx_type_str}}</td>
-   <td>{{trans.accomulated_payment ? trans.accomulated_payment : trans.formatted_amount}}</td>
-   <td>{{trans.block}}</td>
+    <td>{{trans.tx_type_str}}</td>
+    <td class="number" title="{{trans.accomulated_payment ? trans.accomulated_payment : trans.formatted_amount}}" ng-bind-html="trans.accomulated_payment ? trans.accomulated_payment : trans.formatted_amount | numeraljs: '0,0.00000000'"></td>
+    <td>{{trans.block}}</td>
     <td>{{trans.utc_time}}</td>
   </tr>
 </table>
