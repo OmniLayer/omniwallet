@@ -72,7 +72,7 @@ nano install-msc/install-msc.sh
 Install Mastercoin tools:
 ```
 sudo -s
-bash install-msc.sh -os tcp://obelisk.bysh.me:9091
+bash install-msc/install-msc.sh -os tcp://obelisk.bysh.me:9091
 mkdir /var/lib/omniwallet
 chown {user who will run omniwallet} /var/lib/omniwallet
 exit
