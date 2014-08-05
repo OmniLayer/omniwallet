@@ -27,14 +27,17 @@ function HomeCtrl($scope, $templateCache, $injector, $location, $http, $q) {
         result.data.balance.forEach(function(currencyItem) {
           if(currencyItem.divisible)
             var value=new Big(currencyItem.value).times(WHOLE_UNIT).valueOf();
-          balances[currencyItem.symbol] = {
-            "symbol": currencyItem.symbol,
-            "balance": +value || currencyItem.value,
-            "value": appraiser.getValue(currencyItem.value, currencyItem.symbol),
-          };
-          if (currencyItem.symbol == 'BTC') {
-            balances[currencyItem.symbol].name = "Bitcoin";
-          }
+
+          appraiser.updateValue(function() {
+            balances[currencyItem.symbol] = {
+              "symbol": currencyItem.symbol,
+              "balance": +value || currencyItem.value,
+              "value": appraiser.getValue(currencyItem.value, currencyItem.symbol),
+            };
+            if (currencyItem.symbol == 'BTC') {
+              balances[currencyItem.symbol].name = "Bitcoin";
+            }
+          }, currencyItem.symbol);
         });
         $http.get('/v1/transaction/values.json').then(function(result) {
           currencyInfo = result.data;
