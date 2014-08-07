@@ -127,7 +127,8 @@ function CrowdsaleIssuanceController($scope, propertiesService){
   });
   
   $scope.$watch(function(){ return $scope.deadline.getTime() + $scope.earlyBirdBonus;}, function(value){
-    $scope.initialEarlyBirdBonus = (((($scope.deadline.getTime() / 1000) - ((new Date()).getTime() /1000 + 1800)) /604800 ) * $scope.earlyBirdBonus).toFixed(2);
+    var utcNow = new Date((new Date()).getTime() + (new Date()).getTimezoneOffset() * 60000);
+    $scope.initialEarlyBirdBonus = (((($scope.deadline.getTime() / 1000) - (utcNow.getTime() /1000 + 1800)) /604800 ) * $scope.earlyBirdBonus).toFixed(2);
   });
   
   $scope.typeChanged = function(){
