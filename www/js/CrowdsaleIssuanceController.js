@@ -63,13 +63,6 @@ function CrowdsaleIssuanceController($scope, propertiesService){
     });
   };
   
-  $scope.setDeadlineTime=function(time){
-    $scope.deadline.setHours(time.getHours());
-    $scope.deadline.setMinutes(time.getMinutes());
-    $scope.deadline.setSeconds(0);
-  };
-  
-  
   // MULTIPLE CURRENCIES SUPPORT
   $scope.addCurrencyDesired=function(){
     if(availableDesiredCurrencies.length - selectedDesiredCurrencies.length > 0) {
@@ -133,6 +126,11 @@ function CrowdsaleIssuanceController($scope, propertiesService){
     $scope.singleCurrency = count == 1;
   });
   
+  $scope.$watch(function(){ return $scope.deadline.getTime() + $scope.earlyBirdBonus;}, function(value){
+    var utcNow = new Date((new Date()).getTime() + (new Date()).getTimezoneOffset() * 60000);
+    $scope.initialEarlyBirdBonus = (((($scope.deadline.getTime() / 1000) - (utcNow.getTime() /1000 + 1800)) /604800 ) * $scope.earlyBirdBonus).toFixed(2);
+  });
+  
   $scope.typeChanged = function(){
     $scope.tokenStep = $scope.tokenMin = $scope.isDivisible() ? 0.00000001 : 1;
     $scope.tokenMax = $scope.isDivisible() ? "92233720368.54775807" : "9223372036854775807";
@@ -182,7 +180,7 @@ function CrowdsaleIssuanceController($scope, propertiesService){
     $modalScope.propertyUrl= $scope.propertyUrl,
     $modalScope.currenciesDesired=$scope.currenciesDesired,
     $modalScope.deadline=(new Date(Date.UTC($scope.deadline.getFullYear(),$scope.deadline.getMonth(),$scope.deadline.getDate(), $scope.deadline.getHours(), $scope.deadline.getMinutes(), 0, 0))).toUTCString(),
-    $modalScope.earlyBirdBonus=$scope.earlyBirdBonus,
+    $modalScope.earlyBirdBonus= $scope.initialEarlyBirdBonus,
     $modalScope.percentageForIssuer=$scope.percentageForIssuer;
     $modalScope.selectedAddress=$scope.selectedAddress;
   };
@@ -204,8 +202,8 @@ function CrowdsaleIssuanceController($scope, propertiesService){
           number_properties:$scope.isDivisible() ? +$scope.convertDisplayedValue(currency.numberOfTokens) : +currency.numberOfTokens,
           transaction_from: $scope.selectedAddress,
           currency_identifier_desired:currency.selectedCurrency.currencyId,
-          deadline:Date.UTC($scope.deadline.getFullYear(),$scope.deadline.getMonth(),$scope.deadline.getDate(), $scope.deadline.getHours(), $scope.deadline.getMinutes(), 0, 0),
-          earlybird_bonus:$scope.earlyBirdBonus / ((($scope.deadline.getTime() / 1000) - ((new Date()).getTime() /1000)) /604800 ),
+          deadline:Date.UTC($scope.deadline.getFullYear(),$scope.deadline.getMonth(),$scope.deadline.getDate(), $scope.deadline.getHours(), $scope.deadline.getMinutes(), 0, 0) / 1000,
+          earlybird_bonus:$scope.earlyBirdBonus,
           percentage_for_issuer:$scope.percentageForIssuer,
           fee: $scope.convertDisplayedValue($scope.minerFees)
         });
@@ -242,9 +240,11 @@ function CrowdsaleIssuanceController($scope, propertiesService){
     $scope.deadline= new Date();
   };
   
-  var nextMonth = new Date()
+  var nextMonth = new Date();
   nextMonth.setMonth(nextMonth.getMonth() +1);
-  $scope.deadline = nextMonth;
+  var offset = nextMonth.getTimezoneOffset() * 60000;
+  $scope.deadline = new Date(nextMonth.getTime() + offset);
+  $scope.deadlineTime = new Date(nextMonth.getTime() + offset);
 
   $scope.open = function($event) {
     $event.preventDefault();
