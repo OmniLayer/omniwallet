@@ -126,6 +126,10 @@ function CrowdsaleIssuanceController($scope, propertiesService){
     $scope.singleCurrency = count == 1;
   });
   
+  $scope.$watch('earlyBirdBonus', function(value){
+    $scope.initialEarlyBirdBonus = (((($scope.deadline.getTime() / 1000) - ((new Date()).getTime() /1000)) /604800 ) * value).toFixed(2);
+  });
+  
   $scope.typeChanged = function(){
     $scope.tokenStep = $scope.tokenMin = $scope.isDivisible() ? 0.00000001 : 1;
     $scope.tokenMax = $scope.isDivisible() ? "92233720368.54775807" : "9223372036854775807";
@@ -175,7 +179,7 @@ function CrowdsaleIssuanceController($scope, propertiesService){
     $modalScope.propertyUrl= $scope.propertyUrl,
     $modalScope.currenciesDesired=$scope.currenciesDesired,
     $modalScope.deadline=(new Date(Date.UTC($scope.deadline.getFullYear(),$scope.deadline.getMonth(),$scope.deadline.getDate(), $scope.deadline.getHours(), $scope.deadline.getMinutes(), 0, 0))).toUTCString(),
-    $modalScope.earlyBirdBonus=$scope.earlyBirdBonus,
+    $modalScope.earlyBirdBonus= $scope.initialEarlyBirdBonus,
     $modalScope.percentageForIssuer=$scope.percentageForIssuer;
     $modalScope.selectedAddress=$scope.selectedAddress;
   };
@@ -198,7 +202,7 @@ function CrowdsaleIssuanceController($scope, propertiesService){
           transaction_from: $scope.selectedAddress,
           currency_identifier_desired:currency.selectedCurrency.currencyId,
           deadline:Date.UTC($scope.deadline.getFullYear(),$scope.deadline.getMonth(),$scope.deadline.getDate(), $scope.deadline.getHours(), $scope.deadline.getMinutes(), 0, 0) / 1000,
-          earlybird_bonus:$scope.earlyBirdBonus / ((($scope.deadline.getTime() / 1000) - ((new Date()).getTime() /1000)) /604800 ),
+          earlybird_bonus:$scope.earlyBirdBonus,
           percentage_for_issuer:$scope.percentageForIssuer,
           fee: $scope.convertDisplayedValue($scope.minerFees)
         });

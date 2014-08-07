@@ -114,9 +114,10 @@
             </div>
             <div class="form-group">
               <div class="input-group">
-                <span class="input-group-addon">Initial early bird bonus percentage: </span>
+                <span class="input-group-addon">Weekly early bird bonus percentage: </span>
                 <input name="early" type="number" step="1" min="0" max="255" ng-model="earlyBirdBonus" class="form-control" placeholder="For example: 25 (Max 255)" ensure-integer ensure-over="earlyBirdBonus" ensure-if="true" required>
               </div>
+              <p class="help-block" ng-show="earlyBirdBonus > 0">The initial early bird bonus will be {{initialEarlyBirdBonus}}</p>
             </div>
             <div class="form-group">
               <div class="panel panel-default" ng-repeat="investment in currenciesDesired">
