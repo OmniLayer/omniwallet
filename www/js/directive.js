@@ -205,15 +205,15 @@ angular.module('omniwallet').directive('d3PieChart', function() {
           var number=undefined;
           try{
             number= new Big(value);
-            ctrl.$setValidity('invalidValue', true);
+            ctrl.$setValidity('validBigInt', true);
           } catch(e) {
-            ctrl.$setValidity('invalidValue', false);
+            ctrl.$setValidity('validBigInt', false);
           };
           if(number != undefined){
-            var min = number >= new Big(attr.min);
+            var min = number.gte(new Big(attr.min));
             ctrl.$setValidity('minValue', min);
             
-            var max = number <= new Big(attr.max);
+            var max = number.lte(new Big(attr.max));
             ctrl.$setValidity('maxValue', max);
             
             if(!max || !min)
@@ -231,15 +231,15 @@ angular.module('omniwallet').directive('d3PieChart', function() {
           var number=undefined;
           try{
             number= new Big(value);
-            ctrl.$setValidity('invalidValue', true);
+            ctrl.$setValidity('validBigInt', true);
           } catch(e) {
-            ctrl.$setValidity('invalidValue', false);
+            ctrl.$setValidity('validBigInt', false);
           };
           if(number != undefined){
-            var min = number >= new Big(attr.min);
+            var min = number.gte(new Big(attr.min));
             ctrl.$setValidity('minValue', min);
             
-            var max = number <= new Big(attr.max);
+            var max = number.lte(new Big(attr.max));
             ctrl.$setValidity('maxValue', max);
             
             if(!max || !min)
