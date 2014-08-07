@@ -40,7 +40,7 @@
           <br>
           <div class="input-group">
             <span class="input-group-addon"> Amount ( <a href="" tooltip={{getDisplayedAbbreviation()}}  tooltip-append-to-body="true" tooltip-placement="top"><strong>{{ balanceData[0] }} </strong></a>  Available ): </span>
-              <input name="amount" type="number" ng-model="sendAmount" class="form-control" 
+              <input name="amount" type="text" big-number ng-model="sendAmount" class="form-control" 
               placeholder="{{ sendPlaceholderValue }}" step="{{ sendPlaceholderStep }}" min="{{ sendPlaceholderMin }}" required>
             
           </div>
