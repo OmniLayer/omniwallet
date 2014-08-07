@@ -108,16 +108,31 @@
             </div>
             <div class="form-group">
               <div class="input-group">
-                <span class="input-group-addon">Percentage for issuer: </span>
+                <span class="input-group-addon">Percentage for issuer: 
+                  <a href=""
+                    tooltip="You can have this additional percentage created and credited to the issuing address based on each transactions overall investment. Ex: With a 10% percentage to issuer, an investment that creates 100 tokens to a user will also create 10 tokens to issuer."
+                    tooltip-append-to-body="true"
+                    tooltip-placement="top"> <strong>(?)</strong>
+                  </a></span>
                 <input name="percentage" type="number" step="1" min="0" max="255" ng-model="percentageForIssuer" class="form-control" placeholder="For example: 10 (Max 255)" ensure-integer ensure-over="percentageForIssuer" ensure-if="true" required>
               </div>
             </div>
             <div class="form-group">
               <div class="input-group">
-                <span class="input-group-addon">Weekly early bird bonus percentage: </span>
+                <span class="input-group-addon">Weekly early bird bonus percentage: 
+                  <a href=""
+                    tooltip="Bonus percent for investor for each week (7 days) before the deadline (calculated to the second). Ex: With a 10% weekly early bird bonus and a crowdsale that ends in 2 weeks, an investor investing with the 2 week mark will get a ~ 20% bonus. An investor investing with 10 days left will get a ~ 14.286% bonus."
+                    tooltip-append-to-body="true"
+                    tooltip-placement="top"> <strong>(?)</strong>
+                  </a></span>
                 <input name="early" type="number" step="1" min="0" max="255" ng-model="earlyBirdBonus" class="form-control" placeholder="For example: 25 (Max 255)" ensure-integer ensure-over="earlyBirdBonus" ensure-if="true" required>
               </div>
-              <p class="help-block" ng-show="earlyBirdBonus > 0">The initial early bird bonus will be {{initialEarlyBirdBonus}}</p>
+              <p class="help-block" ng-show="earlyBirdBonus > 0">Estimated initial early bird bonus: 
+                <a href=""
+                  tooltip="The estimate total overall Early Bird Bonus. This is based on the crowdsale creation timestamp in the blockchain and is estimated if the crowdsale is accepted within the next ~ 30 minutes."
+                  tooltip-append-to-body="true"
+                  tooltip-placement="top"> <strong>(?)</strong>
+                </a> {{initialEarlyBirdBonus}}%</p>
             </div>
             <div class="form-group">
               <div class="panel panel-default" ng-repeat="investment in currenciesDesired">
