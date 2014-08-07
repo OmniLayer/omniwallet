@@ -110,7 +110,7 @@
               <div class="input-group">
                 <span class="input-group-addon">Percentage for issuer: 
                   <a href=""
-                    tooltip="You can have this additional percentage created and credited to the issuing address based on each transactions overall investment. Ex: With a 10% percentage to issuer, an investment that creates 100 tokens to a user will also create 10 tokens to issuer."
+                    tooltip="Additional percentage created and credited to the issuing address based on the amount created and credited for each investment. Ex: With Percentage to issuer = 10, an investment that credits 100 tokens to an investment will also credit 10 tokens to the issuer."
                     tooltip-append-to-body="true"
                     tooltip-placement="top"> <strong>(?)</strong>
                   </a></span>
@@ -121,7 +121,7 @@
               <div class="input-group">
                 <span class="input-group-addon">Weekly early bird bonus percentage: 
                   <a href=""
-                    tooltip="Bonus percent for investor for each week (7 days) before the deadline (calculated to the second). Ex: With a 10% weekly early bird bonus and a crowdsale that ends in 2 weeks, an investor investing with the 2 week mark will get a ~ 20% bonus. An investor investing with 10 days left will get a ~ 14.286% bonus."
+                    tooltip="Bonus percentage created and credited to each investor for each week (7 days) before the deadline (calculated to the second). Ex: With Weekly early bird bonus percentage = 10, a participant investing 14 days before the deadline will get approx 20% bonus. An investor investing with 10 days left will get approx 14% bonus."
                     tooltip-append-to-body="true"
                     tooltip-placement="top"> <strong>(?)</strong>
                   </a></span>
@@ -129,7 +129,7 @@
               </div>
               <p class="help-block" ng-show="earlyBirdBonus > 0">Estimated initial early bird bonus: 
                 <a href=""
-                  tooltip="The estimate total overall Early Bird Bonus. This is based on the crowdsale creation timestamp in the blockchain and is estimated if the crowdsale is accepted within the next ~ 30 minutes."
+                  tooltip="Estimate based on the crowdsale creation being confirmed in the blockchain within 30 minutes after it was calculated."
                   tooltip-append-to-body="true"
                   tooltip-placement="top"> <strong>(?)</strong>
                 </a> {{initialEarlyBirdBonus}}%</p>
