@@ -210,12 +210,16 @@ angular.module('omniwallet').directive('d3PieChart', function() {
             ctrl.$setValidity('validBigInt', false);
           };
           if(number != undefined){
-            var min = number.gte(new Big(attr.min));
-            ctrl.$setValidity('minValue', min);
-            
-            var max = number.lte(new Big(attr.max));
-            ctrl.$setValidity('maxValue', max);
-            
+            var min = true;
+            if(attr.min){
+              min = number.gte(new Big(attr.min));
+              ctrl.$setValidity('minValue', min);
+            }
+            var max = true;
+            if(attr.max){
+              max = number.lte(new Big(attr.max));
+              ctrl.$setValidity('maxValue', max);
+            }
             if(!max || !min)
               number=undefined;
           }
