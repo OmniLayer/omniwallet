@@ -27,14 +27,17 @@ function HomeCtrl($scope, $templateCache, $injector, $location, $http, $q) {
         result.data.balance.forEach(function(currencyItem) {
           if(currencyItem.divisible)
             var value=new Big(currencyItem.value).times(WHOLE_UNIT).valueOf();
-          balances[currencyItem.symbol] = {
-            "symbol": currencyItem.symbol,
-            "balance": +value || currencyItem.value,
-            "value": appraiser.getValue(currencyItem.value, currencyItem.symbol),
-          };
-          if (currencyItem.symbol == 'BTC') {
-            balances[currencyItem.symbol].name = "Bitcoin";
-          }
+
+          appraiser.updateValue(function() {
+            balances[currencyItem.symbol] = {
+              "symbol": currencyItem.symbol,
+              "balance": +value || currencyItem.value,
+              "value": appraiser.getValue(currencyItem.value, currencyItem.symbol),
+            };
+            if (currencyItem.symbol == 'BTC') {
+              balances[currencyItem.symbol].name = "Bitcoin";
+            }
+          }, currencyItem.symbol);
         });
         $http.get('/v1/transaction/values.json').then(function(result) {
           currencyInfo = result.data;
@@ -146,12 +149,19 @@ function NavigationController($scope, $http, $modal, userService) {
   $scope.getNavData = function() {
     console.log('init 0');
   };
-
+  
   $scope.openCreateModal = function() {
-    $modal.open({
+    if (!$scope.modalOpened) {
+      $scope.modalOpened = true;
+      var modalInstance = $modal.open({
       templateUrl: '/partials/wallet_create_modal.html',
       controller: CreateWalletController
-    });
+      });
+      modalInstance.result.then(function(){},
+      function(){
+        $scope.modalOpened = false;
+      });
+    }
   };
 
   $scope.openImportModal = function() {
@@ -161,16 +171,24 @@ function NavigationController($scope, $http, $modal, userService) {
     });
   };
 
-  $scope.openLoginModal = function() {
+  $scope.openLoginModal = function() {  
+      
     $scope.login ={
       title:'Login',
       button:'Open Wallet'
     };
-    $modal.open({
+    if (!$scope.modalOpened) {
+      $scope.modalOpened = true;
+      var modalInstance = $modal.open({
       templateUrl: '/partials/login_modal.html',
       controller: LoginController,
       scope: $scope
-    });
+      });
+      modalInstance.result.then(function(){},
+      function(){
+        $scope.modalOpened = false;
+      });
+    }
   };
 
   $scope.openUUIDmodal = function() {

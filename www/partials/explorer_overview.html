@@ -38,15 +38,14 @@
     </tbody>
 
   <tr ng-repeat="trans in transactions">
-   
     <td ng-click="setHashExplorer(trans)"> 
       <a href="/explorer/inspector?view={{trans.tx_hash}}">
         {{trans.tx_hash_concat}}
       </a>
     </td>
-   <td>{{trans.tx_type_str}}</td>
-   <td>{{trans.accomulated_payment ? trans.accomulated_payment : trans.formatted_amount}}</td>
-   <td>{{trans.block}}</td>
+    <td>{{trans.tx_type_str}}</td>
+    <td class="number" title="{{trans.accomulated_payment ? trans.accomulated_payment : trans.formatted_amount}}" ng-bind-html="trans.accomulated_payment ? trans.accomulated_payment : trans.formatted_amount | numeraljs: '0,0.00000000'"></td>
+    <td>{{trans.block}}</td>
     <td>{{trans.utc_time}}</td>
   </tr>
 </table>

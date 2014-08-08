@@ -8,8 +8,7 @@
         <div class="currency-name col-xs-8 text-left">
           Estimated Total Value
         </div>
-        <div class="currency-value col-xs-4 text-right">
-          {{total | currency}}
+        <div class="currency-value col-xs-4 text-right number" title="{{currency.balance}}" ng-bind-html="total | numeraljs: '$0,0.00':true">
         </div>
       </row>
       <div class="asset-table">
@@ -20,13 +19,12 @@
               <div class="asset-item col-xs-4 text-left">
                 <span class="text-info" tooltip={{currency.symbol}}><strong>{{(currency.shortname ? currency.shortname : (currency.name ? currency.name : currency.symbol)) | truncate:14}}</strong></span>
               </div>
-              <div class="asset-item col-xs-5 text-right">
-                <span ng-if="currency.property_type != undefined && currency.property_type == 1" class="currency">{{ currency.balance }} </span>
-                <span ng-if="currency.property_type != undefined && currency.property_type == 2" class="currency">{{ currency.balance.toFixed(8) }}</span>
-                <span ng-if="currency.property_type == undefined" class="currency">{{ currency.balance.toFixed(8) }} {{ currency.symbol }}</span>
+              <div class="asset-item col-xs-5 text-left number">
+                <span ng-if="currency.property_type != undefined && currency.property_type == 1" class="currency" title="{{currency.balance}}" ng-bind-html="currency.balance | numeraljs: '0,0'"></span>
+                <span ng-if="currency.property_type != undefined && currency.property_type == 2" class="currency" title="{{currency.balance}}" ng-bind-html="currency.balance | numeraljs: '0,0.00000000'"></span>
+                <span ng-if="currency.property_type == undefined" class="currency" title="{{currency.balance}}"><span ng-bind-html="currency.balance | numeraljs: '0,0.00000000'"></span> {{currency.symbol}}</span>
               </div>
-              <div class="asset-item col-xs-3 text-right">
-                <span>{{currency.value | currency}}</span>
+              <div class="asset-item col-xs-3 text-right number" title="{{currency.value}}" ng-bind-html="currency.value | numeraljs: '$0,0.00':true">
               </div>
             </div>
           </row> 

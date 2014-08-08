@@ -50,7 +50,7 @@ def sell_form_response(response_dict):
             return (None, 'Invalid currency')
 
     #satoshi_price=int( price )
-    bitcoin_amount_desired=int( price * int(amount) )
+    bitcoin_amount_desired=int( to_satoshi( price ) )
 
     #DEBUG info(['early days', seller, amount, satoshi_price, bitcoin_amount_desired, min_buyer_fee, fee, blocks, currency])
     if pubkey != None:
