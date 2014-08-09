@@ -26,7 +26,7 @@ server {
         add_header Expires "0";
 
         ## Set this to reflect the location of the www directory within the omniwallet repo.
-        root /home/myUser/omniwallet/www/;
+        root /home/ubuntu/omniwallet/www/;
         index index.htm index.html;
 
         #Re-route nested routed through index
