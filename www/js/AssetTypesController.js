@@ -207,21 +207,28 @@ angular.module('omniwallet')
         $scope.currencyName = currency.symbol == "BTC" ? "Bitcoin" : currency.symbol == "MSC" ? "Mastercoin" : currency.symbol == "TMSC" ? "Test Mastercoin" : currency.name;
       }
     });
-    var modalInstance = $modal.open({
-      resolve: {
-        currencySymbol: function() {
-          return currencySymbol;
-        },
-        balances: function() {
-          return getAssetBalances(currencySymbol);
-        },
-        currencyName: function() {
-          return $scope.currencyName;
-        }
-      },
-      templateUrl: '/partials/currency_detail_modal.html',
-      controller: CurrencyDetailModal
-    });
+    if (!$scope.modalOpened) {
+      $scope.modalOpened = true;
+      var modalInstance = $modal.open({
+	resolve: {
+	  currencySymbol: function() {
+	    return currencySymbol;
+	  },
+	  balances: function() {
+	    return getAssetBalances(currencySymbol);
+	  },
+	  currencyName: function() {
+	    return $scope.currencyName;
+	  }
+	},
+	templateUrl: '/partials/currency_detail_modal.html',
+	controller: CurrencyDetailModal
+      });
+      modalInstance.result.then(function(){},
+      function(){
+        $scope.modalOpened = false;
+      });
+    }
   };
 
   function updateGraph() {
