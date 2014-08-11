@@ -193,10 +193,17 @@ function NavigationController($scope, $http, $modal, userService) {
   };
 
   $scope.openUUIDmodal = function() {
-    $modal.open({
+    if (!$scope.modalOpened) {
+      $scope.modalOpened = true;
+      var modalInstance = $modal.open({
       templateUrl: '/partials/wallet_uuid_modal.html',
       controller: WalletController
-    });
+      });
+      modalInstance.result.then(function(){},
+      function(){
+        $scope.modalOpened = false;
+      });
+    }
   };
 
   $scope.openNewUUIDmodal = function() {
