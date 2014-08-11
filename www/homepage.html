@@ -24,7 +24,7 @@
                 <span>{{currency.name ? currency.name : currency.symbol}}</span>
               </div>
               <div class="asset-item col-xs-6 text-right number">
-                <span ng-if="currency.property_type != undefined && currency.property_type == 1" class="currency" class="number" title="{{currency.balance}}" ng-bind-html="currency.balance | numeraljs: '0,0.0'"></span>
+                <span ng-if="currency.property_type != undefined && currency.property_type == 1" class="currency" class="number" title="{{currency.balance}}" ng-bind-html="currency.balance | numeraljs: '0,0'"></span>
                 <span ng-if="currency.property_type != undefined && currency.property_type == 2" class="currency" class="number" title="{{currency.balance}}" ng-bind-html="currency.balance | numeraljs: '0,0.00000000'"></span>
                 <span ng-if="currency.property_type == undefined" class="currency" title="{{currency.balance}}"><span ng-bind-html="currency.balance | numeraljs: '0,0.00000000'"></span> {{currency.symbol}}</span>
               </div>
