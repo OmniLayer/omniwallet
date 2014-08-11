@@ -45,7 +45,10 @@ function TransactionGenerationController($scope, $modal, userService, walletTran
                 if(index +1 == transactions.length){
                   $modalScope.waiting = false;
                   $modalScope.transactionSuccess = true;
-                  $modalScope.url = 'http://blockchain.info/address/' + from + '?sort=0';
+                  if(TESTNET)
+                    $modalScope.url = 'http://tbtc.blockr.io/tx/info/' + successData.tx;
+                  else
+                    $modalScope.url = 'http://blockchain.info/address/' + from + '?sort=0';
                 } else {
                   pushOrderedTransactions(transactions,index+1);
                 }

@@ -116,9 +116,20 @@ server {
                 uwsgi_pass   127.0.0.1:$PORT;
         }
 
-        location /v1/transaction/send/ {
-                set   $app   send;
-                uwsgi_pass   127.0.0.1:$PORT;
+        #location /v1/transaction/send/ {
+        #        set   $app   send;
+        #        uwsgi_pass   127.0.0.1:$PORT;
+        #}
+
+        location = /v1/transaction/send { rewrite ^ /v1/transaction/send/; }
+        location /v1/transaction/send { try_files $uri @flask_btcsend_service; }
+        location @flask_btcsend_service {
+                include uwsgi_params;
+                uwsgi_param SCRIPT_NAME /v1/transaction/send;
+                uwsgi_param UWSGI_MODULE btcsend_service;
+                uwsgi_param UWSGI_CALLABLE app;
+                uwsgi_modifier1 30;
+                uwsgi_pass 127.0.0.1:$PORT;
         }
 
         location /v1/exchange/sell/ {
