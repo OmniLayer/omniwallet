@@ -8,12 +8,12 @@ angular.module('omniwallet').directive('d3PieChart', function() {
         $scope.chart = {
           width: 300,
           height: 300
-        }
-        $scope.radius = Math.min($scope.chart.width, $scope.chart.height) / 2
+        };
+        $scope.radius = Math.min($scope.chart.width, $scope.chart.height) / 2;
 
         $element.find('svg').attr('height', $scope.chart.height).attr('width', $scope.chart.width);
 
-        var color = d3.scale.category20()
+        var color = d3.scale.category20();
 
         var arc = d3.svg.arc()
         .outerRadius($scope.radius - 10)
@@ -25,7 +25,7 @@ angular.module('omniwallet').directive('d3PieChart', function() {
           return d.value;
         });
 
-        var svg = d3.select("svg")
+        var svg = d3.select("svg");
 
         $scope.totalsPromise.then(function(successData) {
 
@@ -63,7 +63,7 @@ angular.module('omniwallet').directive('d3PieChart', function() {
           });
         });
       }
-    }
+    };
   }).directive('omTooltip', function() {
     return {
       template: '<small><strong>(?)<strong></small>',
@@ -75,7 +75,7 @@ angular.module('omniwallet').directive('d3PieChart', function() {
             container: 'body'
           });
       }
-    }
+    };
   }).directive('match', [function() {
     return {
       require: 'ngModel',
@@ -86,7 +86,7 @@ angular.module('omniwallet').directive('d3PieChart', function() {
         }, true);
 
       }
-    }
+    };
  }]).directive('autoFocus', function($timeout) {
   return {
     restrict: 'AC',
@@ -167,21 +167,87 @@ angular.module('omniwallet').directive('d3PieChart', function() {
 }).directive('ensureInteger', function() {
   return {
     restrict: 'A',
-    require: 'ngModel',
     scope:{
       ensureIf:'&',
       ensureOver:'='
     },
-    link: function(scope, ele, attrs, ngModel) {
+    link: function(scope, ele, attrs) {
       scope.$watch("ensureOver", function(value) {
         if(scope.ensureIf())
-          if (!(typeof value==='number' && (value%1)===0))
-            scope.ensureOver = Math.ceil(value);
+          if (!(typeof value==='number' && (value%1)===0)){
+            if (typeof value == "object")
+              scope.ensureOver = value.round();
+            else
+              scope.ensureOver = Math.ceil(value);
+          }
+            
       });
       scope.$watch("ensureIf", function(value) {
         if(scope.ensureIf())
           if (!(typeof value==='number' && (value%1)===0))
-            scope.ensureOver = Math.ceil(value);
+            if (typeof value == "object")
+              scope.ensureOver = value.round();
+            else
+              scope.ensureOver = Math.ceil(value);
+      });
+    }
+  };
+}).directive('bigNumber', function() {
+  return {
+    restrict: 'A',
+    require:'?ngModel',
+    link: function(scope, ele, attr, ctrl) {           
+                  
+      // add a parser that will process each time the value is 
+      // parsed into the model when the user updates it.
+      ctrl.$parsers.unshift(function(value) {
+          // test and set the validity after update.
+          var number=undefined;
+          try{
+            number= new Big(value);
+            ctrl.$setValidity('validBigInt', true);
+          } catch(e) {
+            ctrl.$setValidity('validBigInt', false);
+          };
+          if(number != undefined){
+            var min = number.gte(new Big(attr.min));
+            ctrl.$setValidity('minValue', min);
+            
+            var max = number.lte(new Big(attr.max));
+            ctrl.$setValidity('maxValue', max);
+            
+            if(!max || !min)
+              number=undefined;
+          }
+          // if it's valid, return the value to the model, 
+          // otherwise return undefined.
+          return number;
+      });
+      
+      // add a formatter that will process each time the value 
+      // is updated on the DOM element.
+      ctrl.$formatters.unshift(function(value) {
+          // validate.
+          var number=undefined;
+          try{
+            number= new Big(value);
+            ctrl.$setValidity('validBigInt', true);
+          } catch(e) {
+            ctrl.$setValidity('validBigInt', false);
+          };
+          if(number != undefined){
+            var min = number.gte(new Big(attr.min));
+            ctrl.$setValidity('minValue', min);
+            
+            var max = number.lte(new Big(attr.max));
+            ctrl.$setValidity('maxValue', max);
+            
+            if(!max || !min)
+              number=undefined;
+          }
+          
+          // return the value or nothing will be written to the DOM.
+          return number || value;
       });
     }
   };

@@ -10,8 +10,8 @@
       </h4>
       <div class="row">
         <div class="row panel-default">
-         <div class="col-xs-9 text-left panel-body om-title">Start a Crowdsale</div>
-          <div class="col-xs-3" style="padding-top: 20px">
+         <div class="col-xs-8 text-left panel-body om-title">Start a Crowdsale</div>
+         <div class="col-xs-4" style="padding-top: 20px">
           <div class="input-group pull-right">
             <span class="input-group-addon"> Environment: </span>
             <select name="ecosystem" class="form-control" ng-model="ecosystem" ng-change="setEcosystem()" disabled="">
@@ -21,7 +21,6 @@
           </div>
         </div>
        </div>
-        
       </div>
       <div class="row">
         <div class="col-xs-12">
@@ -70,8 +69,9 @@
                 <input name="url" type="url" ng-model="propertyUrl" class="form-control" placeholder="Enter a web address for the user to get more info on the Smart Property" maxlength="255" ng-maxlength="255" >
               </div>
             </div>
-            <div class="form-group">
-              <textarea class="form-control" ng-model="propertyData" maxlength="255" ng-maxlength="255" placeholder="Enter Smart Property description." rows="3"></textarea>
+            <div class="form-group" style="position: relative">
+              <textarea class="form-control" ng-model="propertyData" maxlength="254" ng-maxlength="254" placeholder="Enter Smart Property description." rows="3"></textarea>
+              <div style="position: absolute;right: 15px;bottom: 0px;color: #ccc;">{{254 - propertyData.length}} characters left</div>
             </div>
             <!--
             <br ng-hide="isNewProperty">
@@ -98,7 +98,7 @@
                 </div>
                 <div class="col-xs-6">
                   <div class="col-xs-5">
-                    <timepicker ng-model="deadlineTime" ng-change="setDeadlineTime(deadlineTime)"></timepicker>
+                    <timepicker ng-model="deadline"></timepicker>
                   </div>
                   <div class="col-xs-7" style="padding-top: 45px">
                     UTC
@@ -108,27 +108,44 @@
             </div>
             <div class="form-group">
               <div class="input-group">
-                <span class="input-group-addon">Percentage for issuer: </span>
-                <input name="percentage" type="number" step="0.01" min="0" max="255" ng-model="percentageForIssuer" class="form-control" placeholder="For example: 10 (Max 255)" ensure-integer ensure-over="percentageForIssuer" ensure-if="true" required>
+                <span class="input-group-addon">Percentage for issuer: 
+                  <a href=""
+                    tooltip="Additional percentage created and credited to the issuing address based on the amount created and credited for each investment. Ex: With Percentage to issuer = 10, an investment that credits 100 tokens to an investment will also credit 10 tokens to the issuer."
+                    tooltip-append-to-body="true"
+                    tooltip-placement="top"> <strong>(?)</strong>
+                  </a></span>
+                <input name="percentage" type="number" step="1" min="0" max="255" ng-model="percentageForIssuer" class="form-control" placeholder="For example: 10 (Max 255)" ensure-integer ensure-over="percentageForIssuer" ensure-if="true" required>
               </div>
             </div>
             <div class="form-group">
               <div class="input-group">
-                <span class="input-group-addon">Initial early bird bonus percentage: </span>
-                <input name="early" type="number" step="0.01" min="0" max="255" ng-model="earlyBirdBonus" class="form-control" placeholder="For example: 25 (Max 255)" ensure-integer ensure-over="earlyBirdBonus" ensure-if="true" required>
+                <span class="input-group-addon">Weekly early bird bonus percentage: 
+                  <a href=""
+                    tooltip="Bonus percentage created and credited to each investor for each week (7 days) before the deadline (calculated to the second). Ex: With Weekly early bird bonus percentage = 10, a participant investing 14 days before the deadline will get approx 20% bonus. An investor investing with 10 days left will get approx 14% bonus."
+                    tooltip-append-to-body="true"
+                    tooltip-placement="top"> <strong>(?)</strong>
+                  </a></span>
+                <input name="early" type="number" step="1" min="0" max="255" ng-model="earlyBirdBonus" class="form-control" placeholder="For example: 25 (Max 255)" ensure-integer ensure-over="earlyBirdBonus" ensure-if="true" required>
               </div>
+              <p class="help-block" ng-show="earlyBirdBonus > 0">Estimated initial early bird bonus: 
+                <a href=""
+                  tooltip="Estimate based on the crowdsale creation being confirmed in the blockchain within 30 minutes after it was calculated."
+                  tooltip-append-to-body="true"
+                  tooltip-placement="top"> <strong>(?)</strong>
+                </a> {{initialEarlyBirdBonus}}%</p>
             </div>
             <div class="form-group">
               <div class="panel panel-default" ng-repeat="investment in currenciesDesired">
                 <div class="panel-body form-inline">
                   <div class="form-group col-xs-5">
-                    <input name="amount" type="number" step="{{tokenStep}}" min="{{tokenMin}}" max="{{tokenMax}}" ng-model="investment.numberOfTokens" ensure-integer ensure-over="investment.numberOfTokens" ensure-if="!isDivisible()" class="form-control" placeholder="# of tokens" required>
+                    <input name="amount" type="text" ng-model="investment.numberOfTokens" big-number step="{{tokenStep}}" min="{{tokenMin}}" max="{{tokenMax}}" ensure-integer ensure-over="investment.numberOfTokens" ensure-if="!isDivisible()" class="form-control" placeholder="# of tokens" required>
                   </div>
                   <div class="form-group col-xs-7">
                     <label>per</label>
                     <select class="form-control" name="currencyDesired" ng-model="investment.selectedCurrency"
-                    ng-options="currency as formatCurrencyDisplay(currency) for currency in investment.availableTokens"
-                    ng-change="setAvailableTokens(investment)"></select>
+                      ng-options="currency as formatCurrencyDisplay(currency) for currency in investment.availableTokens"
+                      ng-change="setAvailableTokens(investment)">
+                    </select>
                     <label>invested</label>
                   </div>
                   <button type="button" class="close" aria-hidden="true" ng-hide="singleCurrency" ng-click="removeCurrencyDesired(investment)">
