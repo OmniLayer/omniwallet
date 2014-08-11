@@ -7,7 +7,7 @@
   </p>
 <div class="modal-footer">
     
-    <div class="row" ng-hide="transactionSuccess">
+    <div class="row">
     <input type="checkbox"  ng-model="transactionSuccess">
     <button ng-disabled="clicked" class="btn btn-primary" ng-click="ok()">Yes, send my funds</button>
     <button ng-disabled="wating" class="btn btn-warning" ng-click="cancel()">Cancel</button>
@@ -18,7 +18,6 @@
       <div ng-show="transactionSuccess">
         <h4 class="pull-left" style="color:green"> Funds were sent successfully, 
         check your transaction <a target="_blank" href="{{url}}">here.</a></h4>
-        <a href="/wallet/overview"><button class="btn btn-success" ng-click="cancel()">Close</button></a>
       </div>
       <div ng-show="transactionError">
         <h4 class="col-xs-12" style="color:red;"> Funds could not be sent: 
