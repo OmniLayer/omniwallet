@@ -33,6 +33,7 @@ create table AddressBalances (
 	Address	varchar(64)		/* Bitcoin addresses are 34 chars */
 	, PropertyID integer		
 	, BaseProtocol BaseProtocol	/* initially 'Bitcoin' */
+	, Ecosystem Ecosystem not null
 	, BalanceAvailable numeric(19) not null default 0
 	, BalanceResForOffer numeric(19) not null default 0
 	, BalanceResForAccept numeric(19) not null default 0
@@ -63,6 +64,7 @@ create table Transactions (
 	, BaseProtocol BaseProtocol not null
 	, TxType smallint not null		/* per the MSC spec */
 	, TxVersion smallint not null		/* per the MSC spec */
+	, Ecosystem Ecosystem not null
 	, TxSubmitTime timestamp(0) not null	/* when it was sent */
 	, TxState TxState not null		/* pending, valid, not valid */
 	, TxErrorCode smallint			/* successful? if not, why not? (see ErrorCodes) */		
