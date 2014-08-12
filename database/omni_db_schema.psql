@@ -1,0 +1,159 @@
+create database Omniwallet;
+
+\connect Omniwallet;
+
+/*
+ * Notes:
+ * 1. Need to define Cascade/Restrict behavior for foreign keys to maintain referential integrity
+ * 2. Need to define & flesh out dictionary tables
+ * 3. Need to identify tables & indexes for administrative purposes, e.g. analytics
+ */
+
+create type AddressRole as enum ('participant', 'payee', 'recipient', 'sender');	/* payee received a Send to Owners amount */
+create type BaseProtocol as enum ('Bitcoin');
+create type Ecosystem as enum ('Production', 'Test');
+create type ObjectType as enum ('address', 'property', 'tx_version_type');
+create type TxState as enum ('pending', 'valid', 'not valid');
+
+/* Wallets have addresses with private keys. Objects being watched are in the Following table */
+create table Wallets (
+	WalletID uuid primary key
+	, Created timestamp(0) default CURRENT_TIMESTAMP
+	, LastLogin timestamp(0) default CURRENT_TIMESTAMP
+	, LastBackup timestamp(0) null
+	, WalletBlob text		/* encrypted w/ wallet password */
+	, UserName varchar(32) null	/* (future) encrypted */
+	, Email varchar(64) null	/* (future) encrypted */
+	, Settings JSON null		/* (future) user preferences */
+)
+;
+
+/* Each Balance for each PropertyID (currency) owned by an Address */
+create table AddressBalances (
+	Address	varchar(64)		/* Bitcoin addresses are 34 chars */
+	, PropertyID integer		
+	, BaseProtocol BaseProtocol	/* initially 'Bitcoin' */
+	, BalanceAvailable numeric(19) not null default 0
+	, BalanceResForOffer numeric(19) not null default 0
+	, BalanceResForAccept numeric(19) not null default 0
+	, LastTxHash bytea not null	/* last tx that affected this currency in this address */
+	, primary key (Address, PropertyID, BaseProtocol)
+)
+;
+
+/* Addresses with private keys owned by each Wallet. See Following table for objects watched by a wallet. */
+create table AddressesInWallets (		/* many-to-many */
+	Address varchar(64) not null		/* Address must exist in the AddressBalances table */
+	, PropertyID integer not null		/* needed here for foreign key reference */
+	, BaseProtocol BaseProtocol not null	/* initially 'Bitcoin' */
+	, WalletID uuid				/* WalletID must exist in the Wallets table */
+	, primary key (WalletID, Address, PropertyID, BaseProtocol)
+	, foreign key (WalletID) references Wallets
+	, foreign key (Address, PropertyID, BaseProtocol) references AddressBalances
+)
+;
+
+/* to find the wallets that have a particular address. Do we need this? */
+create index AddressIndex on AddressesInWallets (Address, PropertyID, BaseProtocol)
+;
+
+/* all the transactions we know about; keeping them (forever?) even after an address or wallet is deleted */
+create table Transactions (
+	TxHash bytea not null				/* \x... */
+	, BaseProtocol BaseProtocol not null
+	, TxType smallint not null		/* per the MSC spec */
+	, TxVersion smallint not null		/* per the MSC spec */
+	, TxSubmitTime timestamp(0) not null	/* when it was sent */
+	, TxState TxState not null		/* pending, valid, not valid */
+	, TxErrorCode smallint			/* successful? if not, why not? (see ErrorCodes) */		
+	, TxBlockNumber integer null	
+	, TxBlockSeq integer null	
+	, TxBlockTime timestamp(0) null	
+	, TxMsg	JSON not null			/* the tx message fields */
+	, primary key (TxHash, BaseProtocol)
+)
+;
+
+/* to find transactions by type */
+create index TxTypes on Transactions (TxType, TxVersion, TxHash, BaseProtocol)
+;
+
+/* to find transactions by order in the blockchain */
+create index TxSeq on Transactions (TxBlockNumber, TxBlockSeq, TxHash)
+;
+
+/* to find transactions by time */
+create index TxTime on Transactions (TxBlockTime, TxHash)
+;
+
+/* Addresses that are involved in each transaction, with their role and changes to balances */
+create table AddressesInTxs (					/* many-to-many */
+	Address	varchar(64) not null
+	, PropertyID integer not null	
+	, BaseProtocol BaseProtocol not null			/* initially 'Bitcoin' */
+	, TxHash bytea not null		
+	, AddressRole AddressRole not null		
+	, BalanceAvailableCreditDebit numeric(19) null		/* how much the balance changed, */
+	, BalanceResForOfferCreditDebit numeric(19) null	/* null means that balance wasn’t involved in the tx */
+	, BalanceResForAcceptCreditDebit numeric(19) null	/* as opposed to 0 meaning no change in the balance as a result of the tx */
+	, primary key (Address, TxHash, PropertyID, AddressRole)
+	, foreign key (Address, PropertyID, BaseProtocol) references AddressBalances
+	, foreign key (TxHash, BaseProtocol) references Transactions
+)
+;
+
+/* to find info about addresses affected by a particular transaction */
+create index TxHash on AddressesinTxs (TxHash, PropertyID, BaseProtocol)
+;
+
+/* actions on Smart Properties (and currencies??); 1 row for each New, Update, Cancel action per SP */
+create table PropertyHistory (
+	BaseProtocol BaseProtocol		/* BaseProtocol plus PropertyID uniquely identify a property */
+	, PropertyID integer			/* signed 32-bit, 0 is the base coin in the base protocol, e.g. BTC for Bitcoin */
+	, Issuer varchar(64) not null		/* Address that created it */
+	, Ecosystem Ecosystem not null		/* Production or Test (for now) */
+	, TxHash bytea not null			/*the tx that performed the action */
+	, TxBlockTime timestamp(0) null		/* to identify most recent action on a particular property */
+	, PropertyName varchar(256) null
+	, PropertyType varchar(256) null		
+	, PropertyURL varchar(256) null
+	, NumberOfTokens numeric(19) null	/* for a tx50 */
+	, PropertyData varchar(256) null
+	, CrowdsaleDeadline timestamp(0) null
+	, PropertyCategory varchar(256) null		/* see PropertyCategories - TBD */
+	, PropertySubcategory varchar(256) null		/* see PropertyCategories - TBD */
+	, primary key (PropertyID, BaseProtocol)
+	, foreign key (Issuer, PropertyID, BaseProtocol) references AddressBalances
+	, foreign key (TxHash, BaseProtocol) references Transactions
+)
+;
+
+/* to find Smart Property history by issuing address */
+create index PropHist_Issuer on PropertyHistory (Issuer, PropertyID, BaseProtocol, TxBlockTime)
+;
+
+
+/* A wallet can watch any object - address, SP, tx type (even a blocknumber?) */
+create table Following (			
+	 WalletID uuid			
+	, ObjectType ObjectType
+	, ObjectID varchar(64)	/* works with Addresses initially */
+				/* future - Event, see EventTypes (to generate alerts/notifications) */
+	, primary key (WalletID)
+	, foreign key (WalletID) references Wallets
+)
+;
+
+/* direction-based exchange rates between pairs of properties; can work with fiat currencies as well */
+/* rate for 1 --> 2 not necessarily the same as the reciprocal of rate for 2 --> 1 */
+create table ExchangeRates (			
+	BaseProtocol1 BaseProtocol,	/* see BaseProtocols */
+	PropertyID1 integer,		/* need exchange rates for fiat currencies */
+	BaseProtocol2 BaseProtocol,
+	PropertyID2 integer,			
+	Rate1For2 float,		/* (1 for 2) */		
+	AsOf timestamp(0),
+	Source varchar(256),		/* URL */
+	primary key (PropertyID1, BaseProtocol1, PropertyID2, BaseProtocol2) 
+)
+;
