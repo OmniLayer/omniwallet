@@ -1,11 +1,10 @@
 
-This file contains the proposed queries and actions for the Omniwallet database.
+This file contains proposed SQL that implements queries and actions for the Omniwallet database.
  
 ## Queries	
-1. Get the encrypted Wallet for a Wallet ID
-
+### Get the encrypted Wallet for a Wallet ID
 ```
-select
+Select
 	WalletBlob
 from
 	Wallets
@@ -13,10 +12,9 @@ where
 	WalletID = '\x<walletid>'
 ```
 
-1. Get Addresses and Balances & Values in a Wallet
-
+### Get Addresses and Balances & Values in a Wallet
 ```
-select
+Select
 	ab.Address
 	, ab.PropertyID
 	, ab.BalanceAvailable
@@ -43,10 +41,9 @@ where
 order by
 	PropertyID
 ```
-1. Get All Balances & Values for an Address
-
+### Get All Balances & Values for an Address
 ```
-select
+Select
 	ab.PropertyID
 	, ab.BalanceAvailable
 	, (ab.BalanceAvailable * Rate1For2) ValueAvailable
@@ -66,11 +63,9 @@ where
 order by
 	PropertyID
 ```
-
-1. Get a Balance & Values for an Address & Currency
-
+### Get Balances & Values for an Address & Currency
 ```
-select
+Select
 	ab.PropertyID
 	, ab.BalanceAvailable
 	, (ab.BalanceAvailable * Rate1For2) ValueAvailable
@@ -89,11 +84,9 @@ where
 	and exr.BaseProtocol = ab.BaseProtocol
 	and exr.PropertyID1 = <USD_ID>
 ```
-
-1. Get Transactions for Addresses in a Wallet
-
+### Get Transactions for Addresses in a Wallet
 ```
-select
+Select
 	tx.*
 from
 	AddressesInWallets aiw
@@ -110,11 +103,9 @@ where
 order by
 	TxSubmitTime	/* time submitted, maybe not yet confirmed or valid */
 ```
-
 1. Get Transactions for an Address
-
 ```
-select
+Select
 	tx.*
 from
 	AddressesInTxs ait
@@ -129,36 +120,91 @@ where
 order by
 	TxSubmitTime	/* time submitted, maybe not yet confirmed or valid */
 ```
-
-1. Get Details for a Transaction
-
+### Get Details for a Transaction
 ```
-select
+Select
 	tx.*
 from
 	Transactions tx
 where
 	tx.TxHash = '\x<txhash>'
 ```
-
-1. Get exchange rates
-
+### Get exchange rates
 ```
-select
+Select
 	exr.*
 from
 	ExchangeRates exr
 order by
 	BaseProtocol1, PropertyID1
 ```
-	
 ## Actions
 
-1. Create a Wallet
-1. Remove a Wallet
-1. Login to a Wallet
-1. Change Wallet profile info, e.g. password, username, email
-1. Add an Address to a Wallet
-1. Remove an Address from a Wallet
-1. Create a Wallet Backup
-1. Create a Transaction
+### Create a Wallet
+
+1. Add a record to Wallets 
+2. Add a record to AddressBalances
+3. Add a record to AddressesInWallets
+
+### Mark a Wallet as inactive (logically removed)
+```
+Update
+	Wallets
+set
+	WalletState = 'Inactive'
+	, StateDate = CURRENT_TIMESTAMP
+where
+	WalletID = '\x<walletid>'
+```
+### Login to a Wallet
+
+1. Update the lastlogin time
+2. Get the encrypted wallet blob
+3. Get the latest currency & balance info for all the addresses from MasterCore
+ 1. Foreach address, update AddressBalances if there are new transactions
+4. Get latest transaction history for the addresses (now or on demand?)
+ 1. Update AddressesInTransactions & Transactions if there are new transactions
+```
+Update
+	Wallets
+set
+	LastLogin = CURRENT_TIMESTAMP
+where
+	WalletID = '\x<walletid>'
+	
+Select
+	WalletBlob
+from
+	Wallets
+where
+	WalletID = '\x<walletid>'
+```
+### Add an Address to a Wallet
+
+1. Get the latest currency & balance info for  the address from MasterCore
+ 1. Insert/Update AddressBalances if there are new transactions
+1. Get latest transaction history for the address (now or on demand?)
+ 1. Insert/Update AddressesInTransactions & Transactions if there are new transactions
+1. Insert a record into AddressesInWallets
+3. 
+
+### Remove an Address from a Wallet
+
+1. Remove the address' record from AddressesInWallets
+```
+Delete
+	AddressesInWallets
+where
+	Address = '<address>'
+	and BaseProtocol = 'Bitcoin'
+```
+### Create a Wallet Backup
+
+1. 
+
+### Create a Transaction
+
+1.
+
+### Change Wallet profile info, e.g. password, username, email
+(Future)
