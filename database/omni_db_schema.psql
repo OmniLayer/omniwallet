@@ -14,6 +14,7 @@ create type BaseProtocol as enum ('Bitcoin');
 create type Ecosystem as enum ('Production', 'Test');
 create type ObjectType as enum ('address', 'property', 'tx_version_type');
 create type TxState as enum ('pending', 'valid', 'not valid');
+create type WalletState as enum ('Active', 'Inactive', 'Suspended');
 
 /* Wallets have addresses with private keys. Objects being watched are in the Following table */
 create table Wallets (
@@ -21,6 +22,8 @@ create table Wallets (
 	, Created timestamp(0) default CURRENT_TIMESTAMP
 	, LastLogin timestamp(0) default CURRENT_TIMESTAMP
 	, LastBackup timestamp(0) null
+	, WalletState WalletState not null default 'Active'
+	, WalletStateDate timestamp(0) not null default CURRENT_TIMESTAMP
 	, WalletBlob text		/* encrypted w/ wallet password */
 	, UserName varchar(32) null	/* (future) encrypted */
 	, Email varchar(64) null	/* (future) encrypted */
