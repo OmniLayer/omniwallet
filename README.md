@@ -75,6 +75,10 @@ sudo -s
 bash install-msc/install-msc.sh -os tcp://obelisk.bysh.me:9091
 mkdir /var/lib/omniwallet
 chown {user who will run omniwallet} /var/lib/omniwallet
+cd ~/
+wget https://www.omniwallet.org/assets/snapshots/current.tar.gz
+tar -xzvf current.tar.gz -C /var/lib/omniwallet/
+service nginx start
 exit
 ```
 Start the bitcoin obelisk on a seperated screen (note that the proccess takes few hours for first initialization):
