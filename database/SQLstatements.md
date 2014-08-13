@@ -9,7 +9,7 @@ Select
 from
 	Wallets
 where
-	WalletID = '\x<walletid>'
+	WalletID = '<walletid>'
 ```
 
 ### Get Addresses and Balances & Values in a Wallet
@@ -28,7 +28,7 @@ from
 	, AddressesInWallets aiw
 	, ExchangeRates exr
 where
-	aiw.WalletID = '\x<walletid>'
+	aiw.WalletID = '<walletid>'
 	and aiw.Address = ab.Address
 	and ab.BaseProtocol = 'Bitcoin'
 	and exr.PropertyID2 = ab.PropertyID
@@ -93,7 +93,7 @@ from
 	, AddressesInTxs ait
 	, Transactions tx
 where
-	aiw.WalletID = '\x<walletid>'
+	aiw.WalletID = '<walletid>'
 	and aiw.Address = ait.Address
 	and ait.TxHash = tx.TxHash
 	/*
@@ -154,7 +154,7 @@ set
 	WalletState = 'Inactive'
 	, StateDate = CURRENT_TIMESTAMP
 where
-	WalletID = '\x<walletid>'
+	WalletID = '<walletid>'
 ```
 ### Login to a Wallet
 
@@ -170,14 +170,14 @@ Update
 set
 	LastLogin = CURRENT_TIMESTAMP
 where
-	WalletID = '\x<walletid>'
+	WalletID = '<walletid>'
 	
 Select
 	WalletBlob
 from
 	Wallets
 where
-	WalletID = '\x<walletid>'
+	WalletID = '<walletid>'
 ```
 ### Add an Address to a Wallet
 
