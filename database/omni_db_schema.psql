@@ -18,7 +18,7 @@ create type WalletState as enum ('Active', 'Inactive', 'Suspended');
 
 /* Wallets have addresses with private keys. Objects being watched are in the Following table */
 create table Wallets (
-	WalletID uuid primary key
+	WalletID uuid
 	, Created timestamp(0) default CURRENT_TIMESTAMP
 	, LastLogin timestamp(0) default CURRENT_TIMESTAMP
 	, LastBackup timestamp(0) null
@@ -28,6 +28,8 @@ create table Wallets (
 	, UserName varchar(32) null	/* (future) encrypted */
 	, Email varchar(64) null	/* (future) encrypted */
 	, Settings JSON null		/* (future) user preferences */
+	
+	, primary key (WalletID)
 )
 ;
 
@@ -41,6 +43,7 @@ create table AddressBalances (
 	, BalanceResForOffer numeric(19) not null default 0
 	, BalanceResForAccept numeric(19) not null default 0
 	, LastTxHash bytea not null	/* last tx that affected this currency in this address */
+
 	, primary key (Address, PropertyID, BaseProtocol)
 )
 ;
@@ -51,6 +54,7 @@ create table AddressesInWallets (		/* many-to-many */
 	, PropertyID integer not null		/* needed here for foreign key reference */
 	, BaseProtocol BaseProtocol not null	/* initially 'Bitcoin' */
 	, WalletID uuid				/* WalletID must exist in the Wallets table */
+
 	, primary key (WalletID, Address, PropertyID, BaseProtocol)
 	, foreign key (WalletID) references Wallets
 	, foreign key (Address, PropertyID, BaseProtocol) references AddressBalances
@@ -61,7 +65,7 @@ create table AddressesInWallets (		/* many-to-many */
 create index AddressIndex on AddressesInWallets (Address, PropertyID, BaseProtocol)
 ;
 
-/* all the transactions we know about; keeping them (forever?) even after an address or wallet is deleted */
+/* all the transactions we know about; keeping them (forever?) even after an address or wallet is de-activated */
 create table Transactions (
 	TxHash bytea not null				/* \x... */
 	, BaseProtocol BaseProtocol not null
@@ -75,6 +79,7 @@ create table Transactions (
 	, TxBlockSeq integer null	
 	, TxBlockTime timestamp(0) null	
 	, TxMsg	JSON not null			/* the tx message fields */
+
 	, primary key (TxHash, BaseProtocol)
 )
 ;
@@ -101,6 +106,7 @@ create table AddressesInTxs (					/* many-to-many */
 	, BalanceAvailableCreditDebit numeric(19) null		/* how much the balance changed, */
 	, BalanceResForOfferCreditDebit numeric(19) null	/* null means that balance wasn’t involved in the tx */
 	, BalanceResForAcceptCreditDebit numeric(19) null	/* as opposed to 0 meaning no change in the balance as a result of the tx */
+	
 	, primary key (Address, TxHash, PropertyID, AddressRole)
 	, foreign key (Address, PropertyID, BaseProtocol) references AddressBalances
 	, foreign key (TxHash, BaseProtocol) references Transactions
@@ -127,6 +133,7 @@ create table PropertyHistory (
 	, CrowdsaleDeadline timestamp(0) null
 	, PropertyCategory varchar(256) null		/* see PropertyCategories - TBD */
 	, PropertySubcategory varchar(256) null		/* see PropertyCategories - TBD */
+
 	, primary key (PropertyID, BaseProtocol)
 	, foreign key (Issuer, PropertyID, BaseProtocol) references AddressBalances
 	, foreign key (TxHash, BaseProtocol) references Transactions
@@ -152,13 +159,14 @@ create table Following (
 /* direction-based exchange rates between pairs of properties; can work with fiat currencies as well */
 /* rate for 1 --> 2 not necessarily the same as the reciprocal of rate for 2 --> 1 */
 create table ExchangeRates (			
-	BaseProtocol1 BaseProtocol,	/* see BaseProtocols */
-	PropertyID1 integer,		/* need exchange rates for fiat currencies */
-	BaseProtocol2 BaseProtocol,
-	PropertyID2 integer,			
-	Rate1For2 float,		/* (1 for 2) */		
-	AsOf timestamp(0),
-	Source varchar(256),		/* URL */
-	primary key (PropertyID1, BaseProtocol1, PropertyID2, BaseProtocol2) 
+	BaseProtocol1 BaseProtocol	/* see BaseProtocols */
+	, PropertyID1 integer		/* need exchange rates for fiat currencies */
+	, BaseProtocol2 BaseProtocol
+	, PropertyID2 integer			
+	, Rate1For2 float		/* (1 for 2) */		
+	, AsOf timestamp(0)
+	, Source varchar(256)		/* URL */
+
+	, primary key (PropertyID1, BaseProtocol1, PropertyID2, BaseProtocol2) 
 )
 ;
