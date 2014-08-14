@@ -5,7 +5,8 @@ var app = angular.module('omniwallet', [
   'ui.bootstrap',
   'ui.bootstrap.modal',
   'ngNumeraljs',
-  'vr.filters.passwordStrength'
+  'vr.filters.passwordStrength',
+  'ngIdle'
 ], function($routeProvider, $locationProvider, $httpProvider) {
 
   if (!$httpProvider.defaults.headers.get)
@@ -97,8 +98,12 @@ var app = angular.module('omniwallet', [
   $locationProvider.html5Mode(true).hashPrefix('!');
 });
 
-
-app.config(function() {}).run(function(userService, $location) {
+app.config(function($idleProvider, $keepaliveProvider) {
+  $idleProvider.idleDuration(60); // in seconds
+  // $idleProvider.warningDuration(5); // in seconds
+  // $keepaliveProvider.interval(2); // in seconds
+})
+.run(function(userService, $location, $idle) {
   //Whitelist pages
   whitelisted = ['login', 'about', 'status', 'explorer'];
 
@@ -110,6 +115,8 @@ app.config(function() {}).run(function(userService, $location) {
     }
     $location.path('/');
   }
+
+  $idle.watch();
 });
 
 //app helpers

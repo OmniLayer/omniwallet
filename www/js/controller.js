@@ -90,11 +90,12 @@ function StatsCtrl($scope, $route, $routeParams, $http) {
   });
 }
 
-function Ctrl($scope, $route, $routeParams, $modal, $location, browser) {
+function Ctrl($scope, $route, $routeParams, $modal, $location, browser, userService) {
 
   $scope.$route = $route;
   $scope.$location = $location;
   $scope.browser = browser;
+  $scope.userService = userService;
 
   /*$scope.$on('$locationChangeStart', function(event, next) {
     if (browser === 'chrome') {
@@ -116,6 +117,30 @@ function Ctrl($scope, $route, $routeParams, $modal, $location, browser) {
     'add_address': '/partials/add_address.html',
     'disclaimer': '/partials/disclaimer.html'
   };
+
+  $scope.events = [];
+
+  $scope.$on('$idleStart', function() {
+    
+  });
+
+  $scope.$on('$idleWarn', function(e, countdown) {
+    
+  });
+
+  $scope.$on('$idleTimeout', function() {
+    if (userService.loggedIn()) {
+      location = location.origin + '/login/' + userService.getUUID()
+    }
+  });
+
+  $scope.$on('$idleEnd', function() {
+    
+  });
+
+  $scope.$on('$keepalive', function() {
+    
+  });
 
 }
 
