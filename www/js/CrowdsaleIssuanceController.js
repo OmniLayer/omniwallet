@@ -236,15 +236,15 @@ function CrowdsaleIssuanceController($scope, propertiesService){
   };
   
   // DATEPICKER OPTIONS
+  var nextMonth = new Date();
+  var offset = nextMonth.getTimezoneOffset() * 60000;
+  var minDeadline = new Date((new Date()).getTime() + 1800000 + offset);
   $scope.today = function() {
-    $scope.deadline= new Date();
+    $scope.deadline = minDeadline;
   };
   
-  var nextMonth = new Date();
   nextMonth.setMonth(nextMonth.getMonth() +1);
-  var offset = nextMonth.getTimezoneOffset() * 60000;
   $scope.deadline = new Date(nextMonth.getTime() + offset);
-  $scope.deadlineTime = new Date(nextMonth.getTime() + offset);
 
   $scope.open = function($event) {
     $event.preventDefault();
@@ -260,8 +260,13 @@ function CrowdsaleIssuanceController($scope, propertiesService){
   
   $scope.dateOptions = {
     formatYear: 'yy',
-    startingDay: 1
+    startingDay: 1,
+    minDate:minDeadline
   };
   
   $scope.format = 'dd-MMMM-yyyy';
+  
+  $scope.$watch('deadline', function(value){
+    if (value < minDeadline) $scope.deadline = minDeadline;
+  });
 }
