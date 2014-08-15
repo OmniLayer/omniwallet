@@ -70,7 +70,8 @@
           <div class="input-group">
             <span class="input-group-addon"> Amount to buy ({{ displayedAbbreviation }}): </span>
             <input name="amount" type="number" ng-model="buyAmount" class="form-control"
-            placeholder="{{ sendPlaceholderValue }}" step="{{ sendPlaceholderStep }}" min="{{ sendPlaceholderMin }}" required>
+            placeholder="For example: {{ sendPlaceholderValue }} (Max {{ global['buyOffer'].formatted_amount_available }})" step="{{ sendPlaceholderStep }}" min="{{ sendPlaceholderMin }}" 
+            max="{{ global['buyOffer'].formatted_amount_available }}" required>
             <span class="input-group-addon" > Available to buy: {{ global['buyOffer'].formatted_amount_available }} {{ displayedAbbreviation }} </span>
           </div>
           <br>
