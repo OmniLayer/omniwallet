@@ -90,7 +90,7 @@ create index TxTypes on Transactions (TxType, TxVersion, TxHash, Protocol)
 ;
 
 /* to find transactions by order in the blockchain */
-create index TxSeq on Transactions (TxBlockNumber, TxBlockSeq, TxHash)
+create index TxSeq on Transactions (TxBlockNumber, TxSeqInBlock, TxHash)
 ;
 
 /* to find transactions by time */
