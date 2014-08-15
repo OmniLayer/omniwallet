@@ -19,54 +19,75 @@ You can try out the test builds at [test.omniwallet.org](https://test.omniwallet
 
 ## Ubuntu Setup
 
-Install sx
+Install dependencies:
 ```
-sudo apt-get install git build-essential autoconf libtool libboost-all-dev pkg-config libcurl4-openssl-dev libleveldb-dev libzmq-dev libconfig++-dev libncurses5-dev
-wget http://sx.dyne.org/install-sx.sh
-sudo bash ./install-sx.sh
+sudo apt-get update
+sudo apt-get install git build-essential autoconf libtool libboost-all-dev pkg-config libcurl4-openssl-dev libleveldb-dev libzmq-dev libconfig++-dev libncurses5-dev python-simplejson python-git python-pip libffi-dev uwsgi uwsgi-plugin-python
 ```
-Update ~/.sx.cfg with an obelisk server details.  Don't have one already set up?  Here's how to build one on Rackspace: https://gist.github.com/curtislacy/8424181
+Clone repository:
 ```
-# ~/.sx.cfg Sample file.
-service = "tcp://obelisk.bysh.me:9091"
+git clone https://github.com/mastercoin-MSC/omniwallet
 ```
-Make sure you have python libraries installed - note that we use ``apt-get`` to install python-git.  Pip installs an older, stable version, and we need things that start in beta version 0.3.2.
+Install nginx:
 ```
-sudo apt-get install git python-simplejson python-git python-pip libffi-dev
-sudo pip install -r requirements.txt
-```
-Install nginx, and drop in the config included with this codebase.
-```
-sudo apt-get install uwsgi uwsgi-plugin-python
+cd omniwallet
 sudo -s
+pip install -r requirements.txt
 nginx=stable # use nginx=development for latest development version
 add-apt-repository ppa:nginx/$nginx
-apt-get update 
 apt-get install nginx
-exit
-sudo cp etc/nginx/sites-available/default /etc/nginx/sites-available
+curl -sL https://deb.nodesource.com/setup | bash -
+cp etc/nginx/sites-available/default /etc/nginx/sites-available
 ```
-Find this section near the beginning of /etc/nginx/sites-available/default:
+Find and replace the following section near the beginning of /etc/nginx/sites-available/default:
 ```
-        ## Set this to reflect the location of the www directory within the omniwallet repo.
-        root /home/cmlacy/omniwallet/www/;
-        index index.html index.htm;
-```
-Change the ``root`` directive to reflect the location of your omniwallet codebase (actually the www directory within that codebase).
+nano /etc/nginx/sites-available/default
 
-Make sure you have uglifyjs (Note that there are a couple flavors of this available - you need the ``uglifyjs`` executable, which is included in the ``uglify-js`` NPM module - NOT the ``uglifyjs`` module!
+        ## Set this to reflect the location of the www directory within the omniwallet repo.
+        root /home/myUser/omniwallet/www/; -> "root /{path to project}/omniwallet/www/;
 ```
-sudo npm install -g uglify-js
+Install npm:
 ```
-Run npm install
-```
+apt-get install nodejs
+npm install -g uglify-js
+npm install -g grunt-cli
+chmod -R 777 ~/tmp
+chmod -R 777 ~/.npm
+exit
+npm install grunt
+npm install bower
 npm install
 ```
-Create the parsed blockchain data directory
+Use Mastercoin tools to start a bitcoin obelisk server:
 ```
-sudo mkdir /var/lib/omniwallet
-sudo chown {user who will run omniwallet} /var/lib/omniwallet
+cd node_modules
+git clone https://github.com/mastercoin-MSC/install-msc.git
 ```
+Find and replace the following section near the beginning of install-msc/install-msc.sh:
+```
+nano install-msc/install-msc.sh
+
+        INSTALLDIR=$HOME -> INSTALLDIR="../"
+```
+Install Mastercoin tools:
+```
+sudo -s
+bash install-msc/install-msc.sh -os tcp://obelisk.bysh.me:9091
+mkdir /var/lib/omniwallet
+chown {user who will run omniwallet} /var/lib/omniwallet
+cd ~/
+wget https://www.omniwallet.org/assets/snapshots/current.tar.gz
+tar -xzvf current.tar.gz -C /var/lib/omniwallet/
+service nginx start
+exit
+```
+Start the omni application service manager "app.sh" on a separate screen (note that the proccess takes few hours for first initialization):
+```
+screen -S omni
+cd /{path to project}/omniwallet
+./app.sh
+```
+Hit CTRL+a+d to exit the screen while keeping it active, and use the command ``screen -S omni``.
 
 ## Mac OS X Setup
 
