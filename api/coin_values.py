@@ -13,7 +13,7 @@ data_dir_root = os.environ.get('DATADIR')
 def get_prices():
     
     filename = data_dir_root + '/www/values/BTC.json'
-    btcvalue=get_btc_price(filename)
+    btcvalue=get_btc_price()
     if btcvalue['price'] > 0:
       atomic_json_dump(btcvalue,filename)
       write_history(btcvalue)
