@@ -57,13 +57,13 @@ angular.module('omniwallet')
     });
 
     modalInstance.result.then(function(wallet) {
+      $scope.backupName = wallet.uuid;
+      $scope.exportPrivate = true;
+      $scope.exportWatch = true;
+      $scope.exportInProgress=false;
       var exportModalInstance = $modal.open({
         templateUrl: '/partials/export_wallet.html',
         controller: function($scope, $modalInstance, wallet){
-          $scope.backupName = wallet.uuid;
-          $scope.exportPrivate = true;
-          $scope.exportWatch = true;
-          $scope.exportInProgress=false;
           $scope.exportWallet = function(){
             $scope.exportInProgress=true;
             var walletAddresses = wallet.addresses;
@@ -90,6 +90,7 @@ angular.module('omniwallet')
             $modalInstance.close(fileName);
           };
         },
+        scope: $scope,
         resolve:{
           wallet: function(){
             return wallet;
