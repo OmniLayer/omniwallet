@@ -49,7 +49,7 @@ angular.module('omniwallet')
       title: 'Verify Account',
       button: 'Validate',
       disable: true //disable UUID field in template
-    }
+    };
     var modalInstance = $modal.open({
       templateUrl: '/partials/login_modal.html',
       controller: LoginController,
@@ -57,34 +57,36 @@ angular.module('omniwallet')
     });
 
     modalInstance.result.then(function(wallet) {
-      $scope.backupName = wallet.uuid;
-      $scope.exportPrivate = true;
-      $scope.exportWatch = true;
+      $scope.exportData = {
+        backupName : wallet.uuid,
+        exportPrivate : true,
+        exportWatch : true
+      };
       $scope.exportInProgress=false;
       var exportModalInstance = $modal.open({
         templateUrl: '/partials/export_wallet.html',
         controller: function($scope, $modalInstance, wallet){
-          $scope.exportWallet = function(){
+          $scope.exportWallet = function(exportData){
             $scope.exportInProgress=true;
             var walletAddresses = wallet.addresses;
             var blob = {
               addresses: []
             };
             walletAddresses.forEach(function(obj) {
-              if($scope.exportPrivate && obj.privkey) {
+              if(exportData.exportPrivate && obj.privkey) {
                 var ecKey = Bitcoin.ECKey.decodeEncryptedFormat(obj.privkey, obj.address);
                 var addr = ecKey.getBitcoinAddress().toString();
                 var key = ecKey.getWalletImportFormat();
                 blob.addresses.push({ address: addr, privkey: key });
               }
-              if($scope.exportWatch && !obj.privkey) {
+              if(exportData.exportWatch && !obj.privkey) {
                 blob.addresses.push({ address: obj.address, privkey: "" });
               }
             });
             var exportBlob = new Blob([JSON.stringify(blob)], {
               type: 'application/json;charset=utf-8'
             });
-            fileName=$scope.backupName+".json";
+            fileName=exportData.backupName+".json";
             saveAs(exportBlob, fileName);
             
             $modalInstance.close(fileName);
