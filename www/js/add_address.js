@@ -248,14 +248,18 @@ angular.module('omniwallet')
         
         wallet.addresses.forEach(function(addr){
           // Use address as passphrase for now
-          $injector.get('userService').addAddress(
-            addr.address,
-            encodePrivateKey(addr.privkey, addr.address));
+          if(addr.privkey) 
+            $injector.get('userService').addAddress(
+              addr.address,
+              encodePrivateKey(addr.privkey, addr.address));
+          else
+            $injector.get('userService').addAddress(
+              addr.address);   
         });
       }
       $scope.refresh();
 
-    }, function() {});
+    });
   };
 
   var ImportWalletModal = function($scope, $modalInstance) {
@@ -264,11 +268,17 @@ angular.module('omniwallet')
 
       try {
         var wallet = JSON.parse(backup);
+        var isValid = true;
         wallet.addresses.forEach(function(address){  
-          var eckey = new Bitcoin.ECKey(address.privkey);
-          var addr = eckey.getBitcoinAddress().toString();
+          if(address.privkey){
+            var eckey = new Bitcoin.ECKey(address.privkey);
+            var addr = eckey.getBitcoinAddress().toString();
+            isValid = isValid && Bitcoin.Address.validate(addr);
+          }
+          else
+            isValid = isValid && Bitcoin.Address.validate(address.address);
         });
-        return true;
+        return isValid;
       } catch (e) {
         return false;
       }
