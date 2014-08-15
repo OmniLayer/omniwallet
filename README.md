@@ -81,7 +81,7 @@ tar -xzvf current.tar.gz -C /var/lib/omniwallet/
 service nginx start
 exit
 ```
-Start the bitcoin obelisk on a seperated screen (note that the proccess takes few hours for first initialization):
+Start the omni application service manager "app.sh" on a separate screen (note that the proccess takes few hours for first initialization):
 ```
 screen -S omni
 cd /{path to project}/omniwallet
