@@ -119,17 +119,20 @@ function CrowdsaleIssuanceController($scope, propertiesService){
   $scope.setEcosystem();
   
   $scope.isDivisible=function(){
-    return $scope.propertyType == 2 || $scope.propertyType == 66 || $scope.propertyType == 130
+    return $scope.propertyType == 2 || $scope.propertyType == 66 || $scope.propertyType == 130;
   };
   
   $scope.$watch(function(){ return selectedDesiredCurrencies.length;}, function(count){
     $scope.singleCurrency = count == 1;
   });
   
-  $scope.$watch(function(){ return $scope.deadline.getTime() + $scope.earlyBirdBonus;}, function(value){
-    var utcNow = new Date((new Date()).getTime() + (new Date()).getTimezoneOffset() * 60000);
-    $scope.initialEarlyBirdBonus = (((($scope.deadline.getTime() / 1000) - (utcNow.getTime() /1000 + 1800)) /604800 ) * $scope.earlyBirdBonus).toFixed(2);
-    $scope.initialEarlyBirdBonus = $scope.initialEarlyBirdBonus > 0 ? $scope.initialEarlyBirdBonus : 0.00;
+  $scope.$watch(function(){ return $scope.deadline ? $scope.deadline.getTime() + $scope.earlyBirdBonus : 0;}, function(value){
+    if(value > 0){
+      var utcNow = new Date((new Date()).getTime() + (new Date()).getTimezoneOffset() * 60000);
+      $scope.initialEarlyBirdBonus = (((($scope.deadline.getTime() / 1000) - (utcNow.getTime() /1000 + 1800)) /604800 ) * $scope.earlyBirdBonus).toFixed(2);
+      $scope.initialEarlyBirdBonus = $scope.initialEarlyBirdBonus > 0 ? $scope.initialEarlyBirdBonus : 0.00;
+    } else 
+      $scope.initialEarlyBirdBonus = 0
   });
   
   $scope.typeChanged = function(){
