@@ -215,7 +215,7 @@ function WalletBuyAssetsController($modal, $scope, $http, $q, userService, walle
       // open modal
       var modalInstance = $modal.open({
         templateUrl: '/partials/wallet_buy_modal.html',
-        controller: function($scope, $rootScope, userService, data, prepareBuyTransaction, getUnsignedBuyTransaction, convertSatoshiToDisplayedValue) {
+        controller: function($scope, $modalInstance, $rootScope, userService, data, prepareBuyTransaction, getUnsignedBuyTransaction, convertSatoshiToDisplayedValue) {
           $scope.sendSuccess = false, $scope.sendError = false, $scope.waiting = false, $scope.privKeyPass = {};
           $scope.convertSatoshiToDisplayedValue=convertSatoshiToDisplayedValue,
           $scope.displayedAbbreviation=data.displayedAbbreviation,
@@ -227,6 +227,9 @@ function WalletBuyAssetsController($modal, $scope, $http, $q, userService, walle
             $scope.clicked = true;
             $scope.waiting = true;
             prepareBuyTransaction(data.buyer, data.amt, data.hash, data.fee, $scope.privKeyPass, $scope);
+          };
+          $scope.cancel = function () {
+            $modalInstance.dismiss('cancel');
           };
         },
         resolve: {
