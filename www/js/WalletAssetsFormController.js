@@ -22,6 +22,10 @@ function WalletAssetsFormController($scope, userService, walletTransactionServic
   $scope.addressList = $scope.selectedCoin ? userService.getAddressesWithPrivkey($scope.selectedCoin.tradableAddresses) : [];
   if(!$scope.$parent.selectedAddress)
     $scope.selectedAddress = $scope.addressList[0] || null;
+    
+
+  $scope.amountStep = $scope.amountMin = $scope.selectedCoin.divisible ? 0.00000001 : 1;
+  $scope.amountMax = $scope.selectedCoin.divisible ? "92233720368.54775807" : "9223372036854775807";
   $scope.$watch('selectedCoin', function() {
     $scope.addressList = $scope.selectedCoin ? userService.getAddressesWithPrivkey($scope.selectedCoin.tradableAddresses) : [];
     if(!$scope.$parent.selectedAddress)
@@ -29,6 +33,8 @@ function WalletAssetsFormController($scope, userService, walletTransactionServic
     $scope.setBalance();
     $scope.minerFees = +MIN_MINER_FEE.valueOf() // reset miner fees
     $scope.calculateTotal($scope.minerFees);
+    $scope.amountStep = $scope.amountMin = $scope.selectedCoin.divisible ? 0.00000001 : 1;
+    $scope.amountMax = $scope.selectedCoin.divisible ? "92233720368.54775807" : "9223372036854775807";
   });
   $scope.$watch('selectedAddress', function() {
     $scope.setBalance();
@@ -106,9 +112,8 @@ function WalletAssetsFormController($scope, userService, walletTransactionServic
   $scope.getDisplayedAbbreviation = function () {
     if($scope.selectedCoin.divisible) {
       $scope.sendPlaceholderValue = '1.00000000'
-      $scope.sendPlaceholderStep = $scope.sendPlaceholderMin = '0.00000001'
     } else {
-      $scope.sendPlaceholderValue = $scope.sendPlaceholderStep = $scope.sendPlaceholderMin = '1'
+      $scope.sendPlaceholderValue = '1'
     }
     if ($scope.selectedCoin.symbol.indexOf('SP') == 0) {
       for (var i in $scope.currencyList) {
