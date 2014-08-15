@@ -47,7 +47,7 @@ angular.module('omniwallet')
       uuid: userService.data.wallet.uuid,
       action: 'verify',
       title: 'Verify Account',
-      button: 'Confirm Export',
+      button: 'Validate',
       disable: true //disable UUID field in template
     }
     var modalInstance = $modal.open({
@@ -57,23 +57,43 @@ angular.module('omniwallet')
     });
 
     modalInstance.result.then(function(wallet) {
-      var walletAddresses = userService.data.wallet.addresses;
-      var blob = {
-        addresses: []
-      };
-      walletAddresses.forEach(function(obj) {
-        if(obj.privkey) {
-          var ecKey = Bitcoin.ECKey.decodeEncryptedFormat(obj.privkey, obj.address);
-          var addr = ecKey.getBitcoinAddress().toString();
-          var key = ecKey.getWalletImportFormat();
-          blob.addresses.push({ address: addr, privkey: key });
+      var exportModalInstance = $modal.open({
+        templateUrl: '/partials/export_wallet.html',
+        controller: function($scope, wallet){
+          $scope.backupName = wallet.uuid;
+          $scope.exportPrivate = true;
+          $scope.exportWatch = true;
+          $scope.exportInProgress=false;
+          $scope.exportWallet = function(){
+            $scope.exportInProgress=true;
+            var walletAddresses = wallet.addresses;
+            var blob = {
+              addresses: []
+            };
+            walletAddresses.forEach(function(obj) {
+              if($scope.exportPrivate && obj.privkey) {
+                var ecKey = Bitcoin.ECKey.decodeEncryptedFormat(obj.privkey, obj.address);
+                var addr = ecKey.getBitcoinAddress().toString();
+                var key = ecKey.getWalletImportFormat();
+                blob.addresses.push({ address: addr, privkey: key });
+              }
+              if($scope.exportWatch && !obj.privkey) {
+                blob.addresses.push({ address: obj.address, privkey: "" });
+              }
+            });
+            var exportBlob = new Blob([JSON.stringify(blob)], {
+              type: 'application/json;charset=utf-8'
+            });
+            fileName=$scope.backupName+".json";
+            saveAs(exportBlob, fileName);
+          };
+        },
+        resolve:{
+          wallet: function(){
+            return wallet;
+          }
         }
       });
-      var exportBlob = new Blob([JSON.stringify(blob)], {
-        type: 'application/json;charset=utf-8'
-      });
-      fileName=userService.data.wallet.uuid+".json"
-      saveAs(exportBlob, fileName);
     });
   };
 
