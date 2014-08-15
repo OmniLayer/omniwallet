@@ -308,7 +308,7 @@ function ExplorerInspectorController($scope, $location, $http, hashExplorer) {
     });
   }
 }
-function SidecarController($scope, $http, $modal, $location, userService, balanceService) {
+function SidecarController($rootScope, $scope, $http, $modal, $location, userService, balanceService) {
   $scope.values = {};
   $scope.setView = function(viewName) {
     $scope.view = $scope.sidecarTemplates[viewName];
@@ -327,6 +327,13 @@ function SidecarController($scope, $http, $modal, $location, userService, balanc
   $scope.hasTradableCoins = false;
   $scope.hasBTC = false;
   if (userService.data.loggedIn) checkBalance(getAddressesWithPrivkey());
+  
+  $scope.goToTradePage = function($event){
+    if($location.path() == "/wallet/trade")
+      $rootScope.$broadcast("setView",{view:"tradeInfo"});
+    else
+      $location.path("/wallet/trade");
+  };
   
   $scope.checkSendingEnabled = function($event) {
     var error = "Cannot send anything because ";
