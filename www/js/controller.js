@@ -156,7 +156,8 @@ function NavigationController($scope, $http, $modal, userService) {
       $scope.modalOpened = true;
       var modalInstance = $modal.open({
       templateUrl: '/partials/wallet_create_modal.html',
-      controller: CreateWalletController
+      controller: CreateWalletController,
+      backdrop:'static'
       });
       modalInstance.result.then(function(){},
       function(){
@@ -183,7 +184,8 @@ function NavigationController($scope, $http, $modal, userService) {
       var modalInstance = $modal.open({
       templateUrl: '/partials/login_modal.html',
       controller: LoginController,
-      scope: $scope
+      scope: $scope,
+      backdrop:'static'
       });
       modalInstance.result.then(function(){},
       function(){

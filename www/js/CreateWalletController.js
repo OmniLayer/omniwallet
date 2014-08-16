@@ -1,4 +1,6 @@
 function CreateWalletController($scope, $http, $location, $modalInstance, userService) {
+  $scope.dismiss = $modalInstance.dismiss;
+  
   $scope.createWallet = function(create) {
     var uuid = generateUUID();
     var wallet = {

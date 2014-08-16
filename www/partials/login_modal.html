@@ -1,4 +1,5 @@
 <div class="modal-header text-center">
+  <button type="button" class="close"  ng-click="dismiss('close')"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
   <h3>{{login.title}}</h3>
 </div>
 <form novalidate class="form-group" ng-submit="open(login)">
@@ -18,7 +19,8 @@
   </div>
   <div class="modal-footer" style="text-align:center">
     <div class="col-xs-8 col-xs-push-2">
-      <input type="submit" class="btn btn-primary btn-block" value="{{login.button}}" ng-disabled="loginInProgress" >
+      <input type="submit" class="btn btn-primary btn-block" value="{{login.button}}" ng-disabled="loginInProgress" >        
+      <button type="button" class="btn btn-warning btn-block" ng-disabled="loginInProgress" ng-click="dismiss('close')">Close</button>
       <img ng-show="loginInProgress" src="/assets/img/34-1.gif" alt="loading">
       <div ng-show="missingUUID" style="color:red">Please enter a valid wallet id and password</div>
       <div ng-show="badPassword" style="color:red">Please enter a valid wallet id and password</div>
