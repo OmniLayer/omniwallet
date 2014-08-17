@@ -23,7 +23,7 @@
   <div class="modal-footer" style="text-align:center">
     <div class="col-xs-8 col-xs-push-2">
       <input type="submit" class="btn btn-primary btn-block" value="Confirm Export" ng-disabled="exportInProgress || (!exportData.exportPrivate && !exportData.exportWatch)" >
-      <progressbar ng-show="exportInProgress" style="margin-top:10px" animate="false" value="(exported * 100) / total" type="success" max="100"><b>{{exported}} / {{total}}</b></progressbar>
+      <progressbar ng-show="exportInProgress" style="margin-top:10px" animate="false" value="(exported * 100) / total" type="success" max="100"><b ng-show="exported > 0">{{exported}} / {{total}}</b></progressbar>
       <h4 style="color: green;">{{progressMessage}}</h4>
     </div>
   </div>
