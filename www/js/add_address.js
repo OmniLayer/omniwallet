@@ -78,6 +78,7 @@ angular.module('omniwallet')
                 var addr = ecKey.getBitcoinAddress().toString();
                 var key = ecKey.getWalletImportFormat();
                 blob.addresses.push({ address: addr, privkey: key });
+                $scope.$apply(function(){$scope.progressMessage = "Exported address " + addr;});
               }
               if(exportData.exportWatch && !obj.privkey) {
                 blob.addresses.push({ address: obj.address, privkey: "" });
