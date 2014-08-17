@@ -22,7 +22,7 @@ angular.module('omniwallet')
       }
     };
   })
-  .controller('AddAddressController', function($modal, $injector, $scope, userService, enumerated_addresses) {
+  .controller('AddAddressController', function($modal, $injector, $scope, $timeout, userService, enumerated_addresses) {
 
   function decodeAddressFromPrivateKey(key) {
 
@@ -68,29 +68,49 @@ angular.module('omniwallet')
         controller: function($scope, $modalInstance, wallet){
           $scope.exportWallet = function(exportData){
             $scope.exportInProgress=true;
+            $scope.exported = 0;
             var walletAddresses = wallet.addresses;
+            $scope.total = walletAddresses.length;
             var blob = {
               addresses: []
             };
-            walletAddresses.forEach(function(obj) {
-              if(exportData.exportPrivate && obj.privkey) {
-                var ecKey = Bitcoin.ECKey.decodeEncryptedFormat(obj.privkey, obj.address);
-                var addr = ecKey.getBitcoinAddress().toString();
-                var key = ecKey.getWalletImportFormat();
-                blob.addresses.push({ address: addr, privkey: key });
-                $scope.$apply(function(){$scope.progressMessage = "Exported address " + addr;});
-              }
-              if(exportData.exportWatch && !obj.privkey) {
-                blob.addresses.push({ address: obj.address, privkey: "" });
-              }
-            });
-            var exportBlob = new Blob([JSON.stringify(blob)], {
-              type: 'application/json;charset=utf-8'
-            });
-            fileName=exportData.backupName+".json";
-            saveAs(exportBlob, fileName);
             
-            $modalInstance.close(fileName);
+            var next = function(){
+              $timeout(function(){
+                return exportAddress(walletAddresses[$scope.exported]);
+              },0,false);
+            };
+            
+            var exportAddress = function(obj){
+              if($scope.exported == $scope.total) {
+                var exportBlob = new Blob([JSON.stringify(blob)], {
+                  type: 'application/json;charset=utf-8'
+                });
+                fileName=exportData.backupName+".json";
+                saveAs(exportBlob, fileName);
+                
+                return $modalInstance.dismiss("success");
+              }
+              
+              $scope.$apply(function(){
+                if(exportData.exportPrivate && obj.privkey) {
+                  var ecKey = Bitcoin.ECKey.decodeEncryptedFormat(obj.privkey, obj.address);
+                  var addr = ecKey.getBitcoinAddress().toString();
+                  var key = ecKey.getWalletImportFormat();
+                  blob.addresses.push({ address: addr, privkey: key });
+                  $scope.progressMessage = "Exported trading address " + addr;
+                }
+                if(exportData.exportWatch && !obj.privkey) {
+                  blob.addresses.push({ address: obj.address, privkey: "" });
+                  $scope.progressMessage = "Exported watch address " + addr;
+                }
+                $scope.exported++;
+              });
+              return next();
+            };
+            
+            // Start the loop
+            next();
           };
         },
         scope: $scope,
