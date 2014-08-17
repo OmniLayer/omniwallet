@@ -83,7 +83,7 @@ If you don't have the [Homebrew](http://brew.sh/) package manager installed, use
 ruby -e "$(curl -fsSL https://raw.github.com/Homebrew/homebrew/go/install)"
 ```
 
-# [OS X 10.10 Yosemite Install](http://gilmendes.wordpress.com/2014/07/09/install-nginx-php-fpm-mysql-and-phpmyadmin-on-os-x-yosemite/)
+### [OS X 10.10 Yosemite Install](http://gilmendes.wordpress.com/2014/07/09/install-nginx-php-fpm-mysql-and-phpmyadmin-on-os-x-yosemite/)
 
 Update and upgrade Homebrew formulas
 ```
@@ -211,7 +211,8 @@ npm install
 ```
 Now you are set. Ominiwallet should be accessible on [http://localhost](http://localhost)
 
-[Snow Leopard Install](http://kevinworthington.com/nginx-mac-os-snow-leopard-2-minutes/) (if the above method did not work)
+### [Snow Leopard Install](http://kevinworthington.com/nginx-mac-os-snow-leopard-2-minutes/) (if the above method did not work)
+
 Install sx using Homebrew. We use the --HEAD uption since we need the latest development version. homebrew/versions is needed for gcc48.
 Note that dependencies need to be installed manually to get the head versions. After building libboost, create symbolics links that are missing for boost_thread.
 ```
@@ -266,59 +267,7 @@ sudo make install
 ## Start Nginx
 sudo nginx
 ```
-[Lion Install](http://kevinworthington.com/nginx-for-mac-os-x-lion-in-2-minutes/)
-```
-## DOWNLOADS
-sudo curl -OL h ftp://ftp.csx.cam.ac.uk/pub/software/programming/pcre/pcre-8.13.tar.gz > /usr/local/src/pcre-8.13.tar.gz
-sudo curl -OL h http://nginx.org/download/nginx-1.1.4.tar.gz > /usr/local/src/nginx-1.1.4.tar.gz
-
-## Install PCRE
-sudo mkdir -p /usr/local/src
-cd /usr/local/src
-tar xvzf pcre-8.13.tar.gz
-cd pcre-8.13
-./configure --prefix=/usr/local
-make
-sudo make install
-cd ..
-
-## Install Nginx
-tar xvzf nginx-1.1.4.tar.gz
-cd nginx-1.1.4
-./configure --prefix=/usr/local --with-http_ssl_module
-make
-sudo make install
-
-## Start Nginx
-sudo /usr/local/sbin/nginx
-```
-[Mountain Lion Install](http://kevinworthington.com/nginx-for-mac-os-x-mountain-lion-in-2-minutes/)
-```
-# create, then go into the build directory
-sudo mkdir -p /usr/local/src
-cd /usr/local/src
-
-# download, build, and install pcre
-sudo curl -OL ftp://ftp.csx.cam.ac.uk/pub/software/programming/pcre/pcre-8.31.tar.gz
-sudo tar xvzf pcre-8.31.tar.gz
-cd pcre-8.31
-sudo ./configure --prefix=/usr/local
-sudo make
-sudo make install
-cd ..
-
-# download, build, and install nginx
-sudo curl -OL http://nginx.org/download/nginx-1.3.8.tar.gz
-sudo tar xvzf nginx-1.3.8.tar.gz
-cd nginx-1.3.8
-sudo ./configure --prefix=/usr/local --with-http_ssl_module --with-pcre=../pcre-8.31
-sudo make
-sudo make install
-
-# start nginx
-sudo /usr/local/sbin/nginx
-```
-[Mavericks Install](http://kevinworthington.com/nginx-for-mac-os-x-mavericks-in-2-minutes/)
+### [Mavericks Install](http://kevinworthington.com/nginx-for-mac-os-x-mavericks-in-2-minutes/)
 ```
 # Build Nginx 1.5.7 on Mac OS X Mavericks (10.9)
 # This script was created by Kevin Worthington - http://kevinworthington.com/ - 12 December 2013
@@ -382,6 +331,58 @@ Create the parsed blockchain data directory
 ```
 sudo mkdir /var/lib/omniwallet
 sudo chown {user who will run omniwallet} /var/lib/omniwallet
+```
+### [Mountain Lion Install](http://kevinworthington.com/nginx-for-mac-os-x-mountain-lion-in-2-minutes/)
+```
+# create, then go into the build directory
+sudo mkdir -p /usr/local/src
+cd /usr/local/src
+
+# download, build, and install pcre
+sudo curl -OL ftp://ftp.csx.cam.ac.uk/pub/software/programming/pcre/pcre-8.31.tar.gz
+sudo tar xvzf pcre-8.31.tar.gz
+cd pcre-8.31
+sudo ./configure --prefix=/usr/local
+sudo make
+sudo make install
+cd ..
+
+# download, build, and install nginx
+sudo curl -OL http://nginx.org/download/nginx-1.3.8.tar.gz
+sudo tar xvzf nginx-1.3.8.tar.gz
+cd nginx-1.3.8
+sudo ./configure --prefix=/usr/local --with-http_ssl_module --with-pcre=../pcre-8.31
+sudo make
+sudo make install
+
+# start nginx
+sudo /usr/local/sbin/nginx
+```
+### [Lion Install](http://kevinworthington.com/nginx-for-mac-os-x-lion-in-2-minutes/)
+```
+## DOWNLOADS
+sudo curl -OL h ftp://ftp.csx.cam.ac.uk/pub/software/programming/pcre/pcre-8.13.tar.gz > /usr/local/src/pcre-8.13.tar.gz
+sudo curl -OL h http://nginx.org/download/nginx-1.1.4.tar.gz > /usr/local/src/nginx-1.1.4.tar.gz
+
+## Install PCRE
+sudo mkdir -p /usr/local/src
+cd /usr/local/src
+tar xvzf pcre-8.13.tar.gz
+cd pcre-8.13
+./configure --prefix=/usr/local
+make
+sudo make install
+cd ..
+
+## Install Nginx
+tar xvzf nginx-1.1.4.tar.gz
+cd nginx-1.1.4
+./configure --prefix=/usr/local --with-http_ssl_module
+make
+sudo make install
+
+## Start Nginx
+sudo /usr/local/sbin/nginx
 ```
 
 ## Running
