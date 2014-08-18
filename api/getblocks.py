@@ -17,7 +17,10 @@ def getlast():
         abort(make_response('No field \'origin\' in request, request failed', 400))
         
     if origin == "blockchain":
-        block= requests.get('https://blockchain.info/latestblock')
+      try:
+        block= requests.get('https://blockchain.info/latestblock', timeout=10)
         return jsonify(block.json())
+      except requests.exceptions.RequestException:
+        abort(make_response('Query Timeout in request, request failed', 400))
     else:
         abort(make_response('Unsupported origin', 400))

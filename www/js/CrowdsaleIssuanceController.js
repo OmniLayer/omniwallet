@@ -119,16 +119,20 @@ function CrowdsaleIssuanceController($scope, propertiesService){
   $scope.setEcosystem();
   
   $scope.isDivisible=function(){
-    return $scope.propertyType == 2 || $scope.propertyType == 66 || $scope.propertyType == 130
+    return $scope.propertyType == 2 || $scope.propertyType == 66 || $scope.propertyType == 130;
   };
   
   $scope.$watch(function(){ return selectedDesiredCurrencies.length;}, function(count){
     $scope.singleCurrency = count == 1;
   });
   
-  $scope.$watch(function(){ return $scope.deadline.getTime() + $scope.earlyBirdBonus;}, function(value){
-    var utcNow = new Date((new Date()).getTime() + (new Date()).getTimezoneOffset() * 60000);
-    $scope.initialEarlyBirdBonus = (((($scope.deadline.getTime() / 1000) - (utcNow.getTime() /1000 + 1800)) /604800 ) * $scope.earlyBirdBonus).toFixed(2);
+  $scope.$watch(function(){ return $scope.deadline ? $scope.deadline.getTime() + $scope.earlyBirdBonus : 0;}, function(value){
+    if(value > 0){
+      var utcNow = new Date((new Date()).getTime() + (new Date()).getTimezoneOffset() * 60000);
+      $scope.initialEarlyBirdBonus = (((($scope.deadline.getTime() / 1000) - (utcNow.getTime() /1000 + 1800)) /604800 ) * $scope.earlyBirdBonus).toFixed(2);
+      $scope.initialEarlyBirdBonus = $scope.initialEarlyBirdBonus > 0 ? $scope.initialEarlyBirdBonus : 0.00;
+    } else 
+      $scope.initialEarlyBirdBonus = 0
   });
   
   $scope.typeChanged = function(){
@@ -236,15 +240,15 @@ function CrowdsaleIssuanceController($scope, propertiesService){
   };
   
   // DATEPICKER OPTIONS
+  var nextMonth = new Date();
+  var offset = nextMonth.getTimezoneOffset() * 60000;
+  var minDeadline = new Date((new Date()).getTime() + 1800000 + offset);
   $scope.today = function() {
-    $scope.deadline= new Date();
+    $scope.deadline = minDeadline;
   };
   
-  var nextMonth = new Date();
   nextMonth.setMonth(nextMonth.getMonth() +1);
-  var offset = nextMonth.getTimezoneOffset() * 60000;
   $scope.deadline = new Date(nextMonth.getTime() + offset);
-  $scope.deadlineTime = new Date(nextMonth.getTime() + offset);
 
   $scope.open = function($event) {
     $event.preventDefault();
@@ -260,8 +264,13 @@ function CrowdsaleIssuanceController($scope, propertiesService){
   
   $scope.dateOptions = {
     formatYear: 'yy',
-    startingDay: 1
+    startingDay: 1,
+    minDate:minDeadline
   };
   
   $scope.format = 'dd-MMMM-yyyy';
+  
+  $scope.$watch('deadline', function(value){
+    if (value < minDeadline) $scope.deadline = minDeadline;
+  });
 }
