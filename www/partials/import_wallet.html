@@ -1,7 +1,7 @@
 <div class="modal-header">
   <h3>Import a Wallet Backup</h3>
 </div>
-<form name="bkpentry" class="form-horizontal" style="margin-bottom:20px, margin-top:20px" ng-submit="validate(walletData).then(function(){ok(walletData)},function(reason){progressMessage= reason})">
+<form name="bkpentry" class="form-horizontal" style="margin-bottom:20px, margin-top:20px" ng-submit="startImport()">
   <div class="modal-body">
     <div class="row">
       <div class="form-group col-md-10 col-md-push-1">

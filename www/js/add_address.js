@@ -287,6 +287,9 @@ angular.module('omniwallet')
   };
 
   var ImportWalletModal = function($scope, $modalInstance, $q, $timeout) {
+    $scope.startImport = function(){
+      $scope.validate(walletData).then(function(result){$scope.ok($scope.walletData);},function(reason){$scope.progressMessage= reason;});
+    };
     $scope.validate = function(backup) {
       return $q(function(resolve,reject){
         if (!backup) return reject("No File");
