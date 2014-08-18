@@ -34,7 +34,7 @@
           </div>
         </div>  -->
   </div>
-  <div class="row" ng-controller="WalletTradeOverviewController" ng-init="global.getData();no=false">
+  <div class="row" ng-controller="WalletTradeOverviewController" ng-init="global.getData()">
     <div class="row" >
       <div class="col-xs-9">
         <div class="row">
@@ -57,7 +57,6 @@
           <div class="btn-group btn-group-justified">
             <div class="btn-group">
             <button class="btn btn-primary" ng-click="setView('saleOffer')" type="submit">Start new sale offer</button>
-            <h3 ng-show="no">Test</h3>
             <br><br>
             </div>
           </div>

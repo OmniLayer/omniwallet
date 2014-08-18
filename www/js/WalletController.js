@@ -243,25 +243,10 @@ function WalletTradeController($scope, $http, $q, userService) {
   $scope.global = {
     getData: function() {}
   }
-  //-----
-  $scope.activeCurrencyPair=['MSC','MSC'];
-    $scope.currencyList = userService.getCurrencies().filter(function(currency){
-       return currency.tradable;
-  });
-    $scope.currencySaleList = $scope.currencyList.filter(function(currency){
-    if (currency.symbol == $scope.activeCurrencyPair[1] )
-      $scope.$parent.$parent.selectedCoin = currency;
-    return currency.symbol == $scope.activeCurrencyPair[1];
-  });
-    //-----
   $scope.onTradeView = true
   $scope.history = '/partials/wallet_history.html';
 
   $scope.setView = function(view, data) {
-    if ($scope.currencySaleList.length == 0) {
-      $scope.no = true;
-      //return;
-    }
     if (view != 'tradeInfo')
       $scope.onTradeView = false
     else
