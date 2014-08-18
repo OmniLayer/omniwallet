@@ -286,26 +286,60 @@ angular.module('omniwallet')
     });
   };
 
-  var ImportWalletModal = function($scope, $modalInstance) {
+  var ImportWalletModal = function($scope, $modalInstance, $q, $timeout) {
     $scope.validate = function(backup) {
-      if (!backup) return false;
-
-      try {
-        var wallet = JSON.parse(backup);
-        var isValid = true;
-        wallet.addresses.forEach(function(address){  
-          if(address.privkey){
-            var eckey = new Bitcoin.ECKey(address.privkey);
-            var addr = eckey.getBitcoinAddress().toString();
-            isValid = isValid && Bitcoin.Address.validate(addr);
-          }
-          else
-            isValid = isValid && Bitcoin.Address.validate(address.address);
-        });
-        return isValid;
-      } catch (e) {
-        return false;
-      }
+      return $q(function(resolve,reject){
+        if (!backup) return reject("No File");
+        $scope.processing = true;
+        try {
+          var wallet = JSON.parse(backup);
+          $scope.completed = 0;
+          $scope.total = wallet.addresses.length;
+          
+          var next = function(){
+            $timeout(function(){
+              return validateAddress(wallet.addresses[$scope.completed]);
+            },0,false);
+          };
+          var validated = {
+            addresses : []
+          };
+          
+          var validateAddress = function(address){
+            if($scope.completed == $scope.total){
+              return resolve(validated);
+            }
+            $scope.$apply(function(){
+              var addr = address.address;
+              if(address.privkey){
+                var eckey = new Bitcoin.ECKey(address.privkey);
+                addr = eckey.getBitcoinAddress().toString();
+              }
+              
+              if(Bitcoin.Address.validate(addr)){
+                validated.push(address);
+                $scope.progressMessage = "Validated address " + addr;
+                $scope.progressColor = "green";
+              } else {
+                $scope.progressMessage = "Invalid address " + addr;
+                $scope.progressColor = "red";
+              }
+            });
+            
+            return next();
+          };
+          
+          // Start the loop
+          next();
+            
+          wallet.addresses.forEach(function(address){  
+            
+          });
+          return isValid;
+        } catch (e) {
+          return false;
+        }
+      });
     };
 
     $scope.ok = function(result) {

@@ -1,7 +1,7 @@
 <div class="modal-header">
   <h3>Import a Wallet Backup</h3>
 </div>
-<form name="bkpentry" class="form-horizontal" style="margin-bottom:20px, margin-top:20px" ng-submit="validate(walletData) && ok(walletData)">
+<form name="bkpentry" class="form-horizontal" style="margin-bottom:20px, margin-top:20px" ng-submit="validate(walletData).then(function(){ok(walletData)},function(reason){progressMessage= reason})">
   <div class="modal-body">
     <div class="row">
       <div class="form-group col-md-10 col-md-push-1">
@@ -12,6 +12,8 @@
     </div>
   </div>
   <div class="modal-footer">
-    <input type="submit" class="btn btn-primary" ng-disabled="!validate(walletData)" value="Import Wallet">
+    <input type="submit" class="btn btn-primary" value="Import Wallet">
+    <progressbar ng-show="processing" style="margin-top:10px" animate="false" value="(completed * 100) / total" type="success" max="100"><b ng-show="completed > 0">{{completed}} / {{total}}</b></progressbar>
+    <h4 style="color: green;">{{progressMessage}}</h4>
   </div>
 </form>
