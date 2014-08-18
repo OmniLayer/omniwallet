@@ -36,14 +36,14 @@ create table Wallets (
 
 /* Each Balance for each PropertyID (currency) owned by an Address */
 create table AddressBalances (
-	Address	varchar(64)		/* Bitcoin addresses are 34 chars */
+	Address	varchar(64)			/* Bitcoin addresses are 34 chars */
 	, PropertyID integer		
-	, Protocol Protocol		/* initially 'Bitcoin' */
+	, Protocol Protocol			/* initially 'Bitcoin' or 'Mastercoin' */
 	, Ecosystem Ecosystem null
 	, BalanceAvailable numeric(19) not null default 0
-	, BalanceResForOffer numeric(19) not null default 0
-	, BalanceResForAccept numeric(19) not null default 0
-	, LastTxHash bytea not null	/* last tx that affected this currency in this address */
+	, BalanceResForOffer numeric(19) null	/* may not be used by most addresses */
+	, BalanceResForAccept numeric(19) null	/* may not be used by most addresses */
+	, LastTxHash bytea not null		/* last tx that affected this currency in this address */
 
 	, primary key (Address, PropertyID, Protocol)
 )
@@ -101,7 +101,7 @@ create index TxTime on Transactions (TxBlockTime, TxHash)
 create table AddressesInTxs (					/* many-to-many */
 	Address	varchar(64) not null
 	, PropertyID integer not null	
-	, Protocol Protocol not null				/* initially 'Bitcoin' */
+	, Protocol Protocol not null				/* initially 'Bitcoin' or 'Mastercoin' */
 	, TxHash bytea not null		
 	, AddressRole AddressRole not null		
 	, BalanceAvailableCreditDebit numeric(19) null		/* how much the balance changed, */
