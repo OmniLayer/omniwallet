@@ -14,12 +14,16 @@ def get_prices():
     
     filename = data_dir_root + '/www/values/BTC.json'
     btcvalue=get_btc_price()
-    atomic_json_dump(btcvalue,filename)
-    write_history(btcvalue)
+    if btcvalue['price'] > 0:
+      atomic_json_dump(btcvalue,filename)
+      write_history(btcvalue)
+
     filename = data_dir_root + '/www/values/MSC.json'
     mscvalue=get_msc_price()
-    atomic_json_dump(mscvalue, filename)
-    write_history(mscvalue)
+    if mscvalue['price'] > 0:
+      atomic_json_dump(mscvalue, filename)
+      write_history(mscvalue)
+
     filename = data_dir_root + '/www/values/TMSC.json'
     atomic_json_dump(0, filename)
     for root, _, files in os.walk(data_dir_root + '/www/properties'):
@@ -32,8 +36,10 @@ def get_prices():
                                'symbol' : symbol,
                                'price': calculate_spt_price(sp)
                 }
-                atomic_json_dump(spvalue, data_dir_root + '/www/values/' + symbol + '.json')
-                write_history(spvalue)
+                if spvalue['price'] > 0:
+                  atomic_json_dump(spvalue, data_dir_root + '/www/values/' + symbol + '.json')
+                  write_history(spvalue)
+
 def write_history(value):
     filename = data_dir_root + '/www/values/history/'+value['symbol']+'.json'
     log = None
@@ -55,49 +61,69 @@ def calculate_spt_price(sp):
 	return get_sp3_price() 
     elif sp['currencyId'] == "25":
         btcvalue=get_btc_price()
-	#set CryptoNext until api/exchange is live
-	return ((1 / btcvalue['price'])*100000000)
+        if btcvalue['price'] > 0:
+	  #set CryptoNext until api/exchange is live
+	  return ((1 / btcvalue['price'])*100000000)
+        else:
+          return 0
     #elif sp['formatted_transactionType'] == 51:
         #return 1.0/int( sp['numberOfProperties'] )
     else:
         return 0
    
 def get_btc_price():
-    r= requests.get( 'https://api.bitcoinaverage.com/all' )
-    result_dict = {
-       'symbol' : 'BTC',
-       'price' : r.json()['USD']['averages']['last']
-    }
+    try:
+      r= requests.get( 'https://api.bitcoinaverage.com/all', timeout=15 )  
+      result_dict = {
+         'symbol' : 'BTC',
+         'price' : r.json()['USD']['averages']['last']
+      }
+    except requests.exceptions.RequestException:
+      result_dict = {
+         'symbol' : 'BTC',
+         'price' : 0
+      }
+
     return result_dict
 
 def get_msc_price():
-    r = requests.get( 'https://masterxchange.com/api/trades.php' )
+    try:
+      r = requests.get( 'https://masterxchange.com/api/trades.php', timeout=15 )
     
-    volume = 0;
-    sum = 0;
+      volume = 0;
+      sum = 0;
  
-    for trade in r.json():
-        volume += float( trade['amount'] )
-        sum += float( trade['amount'] ) * float(trade['price'] )
+      for trade in r.json():
+          volume += float( trade['amount'] )
+          sum += float( trade['amount'] ) * float(trade['price'] )
 
-    result_dict = {
-       'symbol' : 'MSC',
-       'price' : sum / volume
-    }
+      result_dict = {
+         'symbol' : 'MSC',
+         'price' : sum / volume
+      }
+    except requests.exceptions.RequestException:
+      result_dict = {
+         'symbol' : 'MSC',
+         'price' : 0
+      }
+
     return result_dict
 
 def get_sp3_price():
     #maidsafe
-    r = requests.get( 'https://masterxchange.com/api/v2/trades.php?currency=maid' )
+    try:
+      r = requests.get( 'https://masterxchange.com/api/v2/trades.php?currency=maid', timeout=15 )
 
-    volume = 0;
-    sum = 0;
+      volume = 0;
+      sum = 0;
 
-    for trade in r.json():
-        volume += float( trade['amount'] )
-        sum += float( trade['amount'] ) * float(trade['price'] )
+      for trade in r.json():
+          volume += float( trade['amount'] )
+          sum += float( trade['amount'] ) * float(trade['price'] )
     #BTC is calculated in satashis in getvalue, so adjust our value here to compensate
-    return "{:.8f}".format( 100000000 * (sum / volume))
+      return "{:.8f}".format( 100000000 * (sum / volume))
+    except requests.exceptions.RequestException:
+      return 0
 
 if __name__ == "__main__":
     get_prices()
