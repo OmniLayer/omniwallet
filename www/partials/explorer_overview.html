@@ -35,8 +35,6 @@
         </tr>
     </thead>
     <tbody>
-    </tbody>
-
   <tr ng-repeat="trans in transactions">
     <td ng-click="setHashExplorer(trans)"> 
       <a href="/explorer/inspector?view={{trans.tx_hash}}">
@@ -48,6 +46,7 @@
     <td>{{trans.block}}</td>
     <td>{{trans.utc_time}}</td>
   </tr>
+  </tbody>
 </table>
 
 </div>

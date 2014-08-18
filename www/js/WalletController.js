@@ -243,7 +243,6 @@ function WalletTradeController($scope, $http, $q, userService) {
   $scope.global = {
     getData: function() {}
   }
-
   $scope.onTradeView = true
   $scope.history = '/partials/wallet_history.html';
 
@@ -256,7 +255,7 @@ function WalletTradeController($scope, $http, $q, userService) {
 
     $scope.global[view] = data;
   }
-
+  
   $scope.tradeTemplates = {
     'tradeInfo': '/partials/wallet_info.html',
     'simpleSend': '/partials/wallet_send.html',

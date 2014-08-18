@@ -147,4 +147,59 @@ function TransformRequest(data) {
 
   return angular.isObject(data) && String(data) !== '[object File]' ? param(data) : data;
 }
-
+app.directive('fixedHeader', ['$timeout', function ($timeout) {
+    return {
+        restrict: 'A',
+        scope: {
+            tableHeight: '@'
+        },
+        link: function ($scope, $elem, $attrs, $ctrl) {
+            // wait for content to load into table and the tbody to be visible
+            $scope.$watch(function () { return $elem.find("tbody").is(':visible') },
+                function (newValue, oldValue) {
+                    if (newValue === true) {
+                        // reset display styles so column widths are correct when measured below
+                        $elem.find('thead, tbody').css('display', '');
+ 
+                        // wrap in $timeout to give table a chance to finish rendering
+                        $timeout(function () {
+                            // set widths of columns
+                            $elem.find('th').each(function (i, thElem) {
+                                thElem = $(thElem);
+ 
+                                var columnWidth = thElem.width();
+                                thElem.width(columnWidth);
+                            });
+                            $elem.find('td').each(function (j, tdElem) {
+                                tdElem = $(tdElem);
+ 
+                                var columnWidth = tdElem.width();
+                                tdElem.width(columnWidth);
+                            });
+ 
+                            // set css styles on thead and tbody
+                            $elem.find('thead').css({
+                                'display': 'block',
+                            });
+ 
+                            $elem.find('tbody').css({
+                                'display': 'block',
+                                'height': $scope.tableHeight || '350px',
+                                'overflow': 'auto'
+                            });
+ 
+                            // reduce width of last column by width of scrollbar
+                            var scrollBarWidth = $elem.find('thead').width() - $elem.find('tbody')[0].clientWidth;
+                            if (scrollBarWidth > 0) {
+                                // for some reason trimming the width by 2px lines everything up better
+                                scrollBarWidth -= 2;
+                                $elem.find('tbody tr:first td:last-child').each(function (i, elem) {
+                                    $(elem).width($(elem).width() - scrollBarWidth);
+                                });
+                            }
+                        });
+                    }
+                });
+        }
+    }
+}]); 
