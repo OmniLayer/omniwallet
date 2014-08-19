@@ -256,6 +256,10 @@ function WalletTradeController($scope, $http, $q, userService) {
 
     $scope.global[view] = data;
   }
+  
+  $scope.$on("setView", function(event, args){
+    $scope.setView(args.view,args.data);
+  });
 
   $scope.tradeTemplates = {
     'tradeInfo': '/partials/wallet_info.html',
