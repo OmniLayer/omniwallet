@@ -14,6 +14,6 @@
   <div class="modal-footer">
     <input type="submit" class="btn btn-primary" value="Import Wallet" ng-disabled="!walletData">
     <progressbar ng-show="processing" style="margin-top:10px" animate="false" value="(completed * 100) / total" type="success" max="100"><b ng-show="completed > 0">{{completed}} / {{total}}</b></progressbar>
-    <h4 style="color: green;">{{progressMessage}}</h4>
+    <h4 style="color: {{progressColor}};">{{progressMessage}}</h4>
   </div>
 </form>

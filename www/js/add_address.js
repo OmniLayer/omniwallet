@@ -295,6 +295,8 @@ angular.module('omniwallet')
         
         var validateAddress = function(address){
           if($scope.completed == $scope.total){
+            $scope.progressMessage = "Validated!";
+            $scope.progressColor = "green";
             return deferred.resolve(validated);
           }
           $scope.$apply(function(){
@@ -334,7 +336,7 @@ angular.module('omniwallet')
         $scope.total = wallet.addresses.length;
         $scope.completed = 0;
         var next = function(){
-          if($scope.completed < $scope.total) $scope.progressMessage="Importing address " + wallet.addresses[$scope.completed].address + " ...";
+          if($scope.completed < $scope.total) $scope.progressMessage="Importing address " + wallet.addresses[$scope.completed].address;
           $timeout(function(){
             return importAddress(wallet.addresses[$scope.completed]);
           },0,false);
