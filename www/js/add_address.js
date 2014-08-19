@@ -291,7 +291,7 @@ angular.module('omniwallet')
       $scope.validate(walletData).then(function(result){$scope.ok(result);},function(reason){$scope.progressMessage= reason;});
     };
     $scope.validate = function(backup) {
-      var deferred = $q.deferred();
+      var deferred = $q.defer();
       
       if (!backup) deferred.reject("No File");
       $scope.processing = true;
@@ -321,13 +321,14 @@ angular.module('omniwallet')
             }
             
             if(Bitcoin.Address.validate(addr)){
-              validated.push(address);
+              validated.addresses.push(address);
               $scope.progressMessage = "Validated address " + addr;
               $scope.progressColor = "green";
             } else {
               $scope.progressMessage = "Invalid address " + addr;
               $scope.progressColor = "red";
             }
+            $scope.completed++;
           });
           
           return next();
@@ -336,7 +337,7 @@ angular.module('omniwallet')
         // Start the loop
         next();
         
-        deferred.info("Validating...");
+        deferred.notify("Validating...");
       } catch (e) {
         deferred.reject("Error during validation:" +e);
       }
