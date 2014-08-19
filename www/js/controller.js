@@ -159,7 +159,11 @@ function NavigationController($scope, $http, $modal, userService) {
       controller: CreateWalletController,
       backdrop:'static'
       });
-      modalInstance.result.then(function(){},
+      modalInstance.result.then(
+      function(){
+        // reset modal status when wallet created successfully
+        $scope.modalOpened = false;
+      },
       function(){
         $scope.modalOpened = false;
       });
@@ -187,7 +191,11 @@ function NavigationController($scope, $http, $modal, userService) {
       scope: $scope,
       backdrop:'static'
       });
-      modalInstance.result.then(function(){},
+      modalInstance.result.then(
+      function(){
+        // reset modal state when user logs in successfully
+        $scope.modalOpened = false;
+      },
       function(){
         $scope.modalOpened = false;
       });
