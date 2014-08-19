@@ -3,5 +3,5 @@
 	    <div ng-include="templates['sidecar']"></div>
 	</div>
 
-	<div class="sidecar col-xs-10" ng-controller="WalletBalancesController" ng-init="refresh()" show-wallet-balances template="{{template}}"></div>
+	<div class="sidecar col-xs-10" ng-controller="WalletBalancesController" ng-init="refresh();modalOpened=false" show-wallet-balances template="{{template}}"></div>
 </div>

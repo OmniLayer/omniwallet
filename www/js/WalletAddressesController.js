@@ -154,20 +154,26 @@ angular.module('omniwallet')
   });
 
   $scope.openDeleteConfirmForm = function(addritem) {
-    var modalInstance = $modal.open({
-      templateUrl: '/partials/delete_address_modal.html',
-      controller: DeleteBtcAddressModal,
-      resolve: {
-        address: function() {
-          return addritem;
-        }
-      }
-    });
-
-    modalInstance.result.then(function() {
-      $injector.get('userService').removeAddress(addritem.address);
-      $scope.refresh();
-    }, function() {});
+    if (!$scope.modalOpened) {
+      $scope.modalOpened = true;
+      var modalInstance = $modal.open({
+	templateUrl: '/partials/delete_address_modal.html',
+	controller: DeleteBtcAddressModal,
+	resolve: {
+	  address: function() {
+	    return addritem;
+	  }
+	}
+      });
+      modalInstance.result.then(function() {
+	$injector.get('userService').removeAddress(addritem.address);
+        $scope.modalOpened=false;
+	$scope.refresh();
+        },
+      function() {
+	    $scope.modalOpened=false;
+      });
+    }
   };
 
   $scope.refresh = function() {

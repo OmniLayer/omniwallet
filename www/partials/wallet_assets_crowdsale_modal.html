@@ -8,7 +8,7 @@
         <li>Category: {{propertyCategory}}</li>
         <li>Subcategory: {{propertySubcategory}}</li>
         <li>Url: <a href="{{propertyUrl}}" target="_blank">{{propertyUrl}}</a></li>
-        <li>Early bird initial bonus: {{earlyBirdBonus}}%</li>
+        <li>Estimated initial early bird bonus: {{earlyBirdBonus}}%</li>
         <li>Percentage for issuer: {{percentageForIssuer}}%</li>
         <li>Deadline: {{deadline}}</li>
         <li>Issuer address: <a href="https://blockchain.info/address/{{selectedAddress}}?sort=0" target="_blank">{{selectedAddress}}</a></li>
@@ -24,7 +24,7 @@
   If the above is correct, please press Start the Crowdsale.
   </p>
 <div class="modal-footer">
-    <div class="row">
+    <div class="row" ng-hide="transactionSuccess">
     <button ng-disabled="clicked" class="btn btn-primary" ng-click="ok()">Start the Crowdsale</button>
     <button ng-disabled="wating" class="btn btn-warning" ng-click="cancel()">Cancel</button>
     <img class="" src="/assets/img/34-1.gif" ng-show="waiting">
@@ -32,8 +32,9 @@
       <br>
     <div class="row">
       <div ng-show="transactionSuccess">
-        <h4 class="pull-right col-xs-12" style="color:green"> Crowdsale started successfully, 
+        <h4 class="pull-left" style="color:green"> Crowdsale started successfully, 
         check your transaction <a target="_blank" href="{{url}}">here.</a></h4>
+        <a href="/wallet/overview"><button class="btn btn-success" ng-click="cancel()">Close</button></a>
       </div>
       <div ng-show="transactionError">
         <h4 class="col-xs-12" style="color:red;"> Crowdsale could not be started: 

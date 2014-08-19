@@ -1,3 +1,6 @@
+<div datepicker-popup="" ng-model="h" hidden></div> <!-- initalize ui.bootstrap.datepicker (bad interaction with ng-route) --> 
+<timepicker ng-model="t" hidden></timepicker> <!-- initalize ui.bootstrap.timepicker (bad interaction with ng-route) -->
+<div tooltip=""></div> <!-- initalize ui.bootstrap.tooltip (bad interaction with ng-route) -->
 <div class="sidecar col-xs-2" ng-controller="SidecarController" ng-init=setView('wallet')>
     <div ng-include="templates['sidecar']"></div>
 </div>
@@ -20,7 +23,7 @@
 
     <h3  ng-init="isLoading=true" ng-show="isLoading" class="text-center">Updating...<img src="/assets/img/34-1.gif"></h3>
     <div ng-hide="isLoading"><br /><br /><br /></div>   
-    <div ng-init="refresh()" show-asset-types template="{{template}}">
+    <div ng-init="refresh();modalOpened=false" show-asset-types template="{{template}}">
 
 
     </div>
