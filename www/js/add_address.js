@@ -264,28 +264,12 @@ angular.module('omniwallet')
       templateUrl: '/partials/import_wallet.html',
       controller: ImportWalletModal
     });
-
-    modalInstance.result.then(function(result) {
-
-      if (result) {
-        var wallet = JSON.parse(result);
-        
-        wallet.addresses.forEach(function(addr){
-          // Use address as passphrase for now
-          if(addr.privkey) 
-            $injector.get('userService').addAddress(
-              addr.address,
-              encodePrivateKey(addr.privkey, addr.address));
-          else
-            $injector.get('userService').addAddress(
-              addr.address);   
-        });
-      }
+    
+    modalInstance.result.then(function(wallet){
       $scope.refresh();
-
     });
   };
-
+  
   var ImportWalletModal = function($scope, $modalInstance, $q, $timeout) {
     $scope.startImport = function(walletData){
       $scope.validate(walletData).then(function(result){$scope.ok(result);},function(reason){$scope.progressMessage= reason;});
@@ -345,8 +329,48 @@ angular.module('omniwallet')
       return deferred.promise;
     };
 
-    $scope.ok = function(result) {
-      $modalInstance.close(result);
+    $scope.ok = function(wallet) {
+      if (wallet) {
+        $scope.total = wallet.addresses.length;
+        $scope.completed = 0;
+        var next = function(){
+          if($scope.completed < $scope.total) $scope.progressMessage="Importing address " + wallet.addresses[$scope.completed].address + " ...";
+          $timeout(function(){
+            return importAddress(wallet.addresses[$scope.completed]);
+          },0,false);
+        };
+        
+        var importAddress = function(addr){
+          $scope.$apply(function(){
+            if($scope.completed == $scope.total){
+              return $modalInstance.close(wallet);
+            }
+            
+            // Use address as passphrase for now
+            if(addr.privkey) 
+              $injector.get('userService').addAddress(
+                addr.address,
+                encodePrivateKey(addr.privkey, addr.address))
+                .then(function(){
+                  $scope.progressMessage="Imported address " + addr.address;
+                  $scope.completed++;
+                  return next();
+                });
+            else
+              $injector.get('userService').addAddress(
+                addr.address)
+                .then(function(){
+                  $scope.progressMessage="Imported address " + addr.address;
+                  $scope.completed++;
+                  return next();
+                });   
+                
+            
+          });
+        };
+        
+        next();
+      }
     };
 
     $scope.cancel = function() {
