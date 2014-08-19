@@ -291,58 +291,57 @@ angular.module('omniwallet')
       $scope.validate(walletData).then(function(result){$scope.ok($scope.walletData);},function(reason){$scope.progressMessage= reason;});
     };
     $scope.validate = function(backup) {
-      return $q(function(resolve,reject){
-        if (!backup) return reject("No File");
-        $scope.processing = true;
-        try {
-          var wallet = JSON.parse(backup);
-          $scope.completed = 0;
-          $scope.total = wallet.addresses.length;
-          
-          var next = function(){
-            $timeout(function(){
-              return validateAddress(wallet.addresses[$scope.completed]);
-            },0,false);
-          };
-          var validated = {
-            addresses : []
-          };
-          
-          var validateAddress = function(address){
-            if($scope.completed == $scope.total){
-              return resolve(validated);
+      var deferred = $q.deferred();
+      
+      if (!backup) deferred.reject("No File");
+      $scope.processing = true;
+      try {
+        var wallet = JSON.parse(backup);
+        $scope.completed = 0;
+        $scope.total = wallet.addresses.length;
+        
+        var next = function(){
+          $timeout(function(){
+            return validateAddress(wallet.addresses[$scope.completed]);
+          },0,false);
+        };
+        var validated = {
+          addresses : []
+        };
+        
+        var validateAddress = function(address){
+          if($scope.completed == $scope.total){
+            return deferred.resolve(validated);
+          }
+          $scope.$apply(function(){
+            var addr = address.address;
+            if(address.privkey){
+              var eckey = new Bitcoin.ECKey(address.privkey);
+              addr = eckey.getBitcoinAddress().toString();
             }
-            $scope.$apply(function(){
-              var addr = address.address;
-              if(address.privkey){
-                var eckey = new Bitcoin.ECKey(address.privkey);
-                addr = eckey.getBitcoinAddress().toString();
-              }
-              
-              if(Bitcoin.Address.validate(addr)){
-                validated.push(address);
-                $scope.progressMessage = "Validated address " + addr;
-                $scope.progressColor = "green";
-              } else {
-                $scope.progressMessage = "Invalid address " + addr;
-                $scope.progressColor = "red";
-              }
-            });
             
-            return next();
-          };
-          
-          // Start the loop
-          next();
-            
-          wallet.addresses.forEach(function(address){  
-            
+            if(Bitcoin.Address.validate(addr)){
+              validated.push(address);
+              $scope.progressMessage = "Validated address " + addr;
+              $scope.progressColor = "green";
+            } else {
+              $scope.progressMessage = "Invalid address " + addr;
+              $scope.progressColor = "red";
+            }
           });
-          return isValid;
-        } catch (e) {
-          return false;
-        }
-      });
+          
+          return next();
+        };
+        
+        // Start the loop
+        next();
+        
+        deferred.info("Validating...");
+      } catch (e) {
+        deferred.reject("Error during validation:" +e);
+      }
+      
+      return deferred.promise;
     };
 
     $scope.ok = function(result) {
