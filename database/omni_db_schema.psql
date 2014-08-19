@@ -20,21 +20,23 @@ create type WalletState as enum ('Active', 'Inactive', 'Suspended');
 /* Wallets have addresses with private keys. Objects being watched are in the Following table */
 create table Wallets (
 	WalletID uuid
-	, Created timestamp(0) default CURRENT_TIMESTAMP
-	, LastLogin timestamp(0) default CURRENT_TIMESTAMP
+	, Created timestamp(0) not null default CURRENT_TIMESTAMP
+	, LastLogin timestamp(0) not null default CURRENT_TIMESTAMP
+	, SessionDuration integer not null default 0		/* check SignedIn field */
 	, LastBackup timestamp(0) null
+	, SignedIn boolean not null default FALSE		/* signed in now? */
 	, WalletState WalletState not null default 'Active'
 	, WalletStateDate timestamp(0) not null default CURRENT_TIMESTAMP
-	, WalletBlob text		/* encrypted w/ wallet password */
-	, UserName varchar(32) null	/* (future) encrypted */
-	, Email varchar(64) null	/* (future) encrypted */
-	, Settings JSON null		/* (future) user preferences */
+	, WalletBlob text					/* encrypted w/ wallet password */
+	, UserName varchar(32) null				/* (future) encrypted */
+	, Email varchar(64) null				/* (future) encrypted */
+	, Settings JSON null					/* (future) user preferences */
 	
 	, primary key (WalletID)
 )
 ;
 
-/* Each Balance for each PropertyID (currency) owned by an Address */
+/* Balances for each PropertyID (currency) owned by an Address */
 create table AddressBalances (
 	Address	varchar(64)			/* Bitcoin addresses are 34 chars */
 	, PropertyID integer		
@@ -43,7 +45,7 @@ create table AddressBalances (
 	, BalanceAvailable numeric(19) not null default 0
 	, BalanceResForOffer numeric(19) null	/* may not be used by most addresses */
 	, BalanceResForAccept numeric(19) null	/* may not be used by most addresses */
-	, LastTxHash bytea not null		/* last tx that affected this currency in this address */
+	, LastTxHash bytea not null		/* last tx that affected this currency for this address */
 
 	, primary key (Address, PropertyID, Protocol)
 )
@@ -94,7 +96,7 @@ create index TxSeq on Transactions (TxBlockNumber, TxSeqInBlock, TxHash)
 ;
 
 /* to find transactions by time */
-create index TxTime on Transactions (TxBlockTime, TxHash)
+create index TxTime on Transactions (TxBlockTime, TxSeqInBlock, TxHash)
 ;
 
 /* Addresses that are involved in each transaction, with their role and changes to balances */
@@ -118,16 +120,17 @@ create table AddressesInTxs (					/* many-to-many */
 create index TxHash on AddressesinTxs (TxHash, PropertyID, Protocol)
 ;
 
-/* actions on Smart Properties (and currencies??); 1 row for each New, Update, Cancel action per SP */
+/* actions on Smart Properties (and currencies??); 1 row for each action on the SP */
 create table PropertyHistory (
 	Protocol Protocol			/* Protocol plus PropertyID uniquely identify a property */
-	, PropertyID integer			/* signed 32-bit, 0 is the base coin in the base protocol, e.g. BTC for Bitcoin */
+	, PropertyID integer			/* signed 32-bit */
 	, Issuer varchar(64) not null		/* Address that created it */
 	, Ecosystem Ecosystem not null		/* Production or Test (for now) */
 	, TxHash bytea not null			/*the tx that performed the action */
-	, TxBlockTime timestamp(0) null		/* to identify most recent action on a particular property */
+	, TxBlockTime timestamp(0) null		/* to identify the  action on a particular property */
 	, PropertyName varchar(256) null
-	, PropertyType varchar(256) null		
+	, PropertyType smallint null		
+	, PrevPropertyID integer null default 0
 	, PropertyURL varchar(256) null
 	, NumberOfTokens numeric(19) null	/* for a tx50 */
 	, PropertyData varchar(256) null
@@ -135,16 +138,15 @@ create table PropertyHistory (
 	, PropertyCategory varchar(256) null		/* see PropertyCategories - TBD */
 	, PropertySubcategory varchar(256) null		/* see PropertyCategories - TBD */
 
-	, primary key (PropertyID, Protocol)
+	, primary key (PropertyID, Protocol, PropertyName)
 	, foreign key (Issuer, PropertyID, Protocol) references AddressBalances
 	, foreign key (TxHash, Protocol) references Transactions
 )
 ;
 
 /* to find Smart Property history by issuing address */
-create index PropHist_Issuer on PropertyHistory (Issuer, PropertyID, Protocol, TxBlockTime)
+create index PropHist_Issuer on PropertyHistory (Issuer, PropertyID, Protocol, PropertyName, TxBlockTime)
 ;
-
 
 /* A wallet can watch any object - address, SP, tx type (even a blocknumber?) */
 create table Following (			
@@ -157,7 +159,7 @@ create table Following (
 )
 ;
 
-/* direction-based exchange rates between pairs of properties; can work with fiat currencies as well */
+/* directional exchange rates between pairs of properties; can work with fiat currencies as well */
 /* rate for 1 --> 2 not necessarily the same as the reciprocal of rate for 2 --> 1 */
 create table ExchangeRates (			
 	Protocol1 Protocol		/* see Protocols */
