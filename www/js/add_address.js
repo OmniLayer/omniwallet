@@ -287,8 +287,8 @@ angular.module('omniwallet')
   };
 
   var ImportWalletModal = function($scope, $modalInstance, $q, $timeout) {
-    $scope.startImport = function(){
-      $scope.validate($scope.walletData).then(function(result){$scope.ok(result);},function(reason){$scope.progressMessage= reason;});
+    $scope.startImport = function(walletData){
+      $scope.validate(walletData).then(function(result){$scope.ok(result);},function(reason){$scope.progressMessage= reason;});
     };
     $scope.validate = function(backup) {
       var deferred = $q.deferred();
