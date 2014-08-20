@@ -100,6 +100,7 @@
         <td ng-show="(transaction.tx_hash.length == 64) && transaction.status == null && !(transaction.from_address == selectedAddress)">
           <button class="btn btn-primary btn-sm" ng-hide="{{transaction.color=='bgc-expired'}} || {{transaction.color=='bgc-done'}} || {{transaction.formatted_amount_available * transaction.formatted_price_per_coin < .00005757}}" ng-click="setView('buyOffer', transaction)" type="submit">Buy coin</button>   
           <td ng-show="transaction.from_address == selectedAddress"> Your offer/purchase </td>
+          <td ng-show="{{transaction.formatted_amount_available * transaction.formatted_price_per_coin < .00005757}}"> Remaining purchase price below network minimum </td>
       </td>
       </tr>
 
