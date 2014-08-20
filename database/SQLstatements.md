@@ -30,9 +30,9 @@ from
 where
 	aiw.WalletID = '<walletid>'
 	and aiw.Address = ab.Address
-	and ab.BaseProtocol = 'Bitcoin'
+	and (ab.Protocol = 'Bitcoin' or ab.Protocol = 'Mastercoin')
 	and exr.PropertyID2 = ab.PropertyID
-	and exr.BaseProtocol = ab.BaseProtocol
+	and exr.Protocol = ab.Protocol
 	and exr.PropertyID1 = <USD_ID>
 	/*
 	 for Production ecosystem add:
@@ -56,9 +56,9 @@ from
 	, ExchangeRates exr
 where
 	ab.Address = '<address>'
-	and ab.BaseProtocol = 'Bitcoin'
+	and (ab.Protocol = 'Bitcoin' or ab.Protocol = 'Mastercoin')
 	and exr.PropertyID2 = ab.PropertyID
-	and exr.BaseProtocol = ab.BaseProtocol
+	and exr.Protocol = ab.Protocol
 	and exr.PropertyID1 = <USD_ID>
 order by
 	PropertyID
@@ -79,7 +79,7 @@ from
 where
 	ab.Address = '<address>'
 	and ab.PropertyID = <propertyid>
-	and ab.BaseProtocol = 'Bitcoin'
+	and (ab.Protocol = 'Bitcoin' or ab.Protocol = 'Mastercoin')
 	and exr.PropertyID2 = ab.PropertyID
 	and exr.BaseProtocol = ab.BaseProtocol
 	and exr.PropertyID1 = <USD_ID>
@@ -158,26 +158,31 @@ where
 ```
 ### Login to a Wallet
 
+0. Make sure the wallet state is "Active"
 1. Update the lastlogin time
 2. Get the encrypted wallet blob
-3. Get the latest currency & balance info for all the addresses from MasterCore
+Are the following steps necessary or is this already done in the background?
+4. Get the latest currency & balance info for all the addresses from MasterCore
  1. Foreach address, update AddressBalances if there are new transactions
-4. Get latest transaction history for the addresses (now or on demand?)
+5. Get latest transaction history for the addresses (now or on demand?)
  1. Update AddressesInTransactions & Transactions if there are new transactions
 ```
 Update
 	Wallets
 set
 	LastLogin = CURRENT_TIMESTAMP
+	, SignedIn = TRUE
 where
-	WalletID = '<walletid>'
+	WalletState = 'Active'
+	and WalletID = '<walletid>'
 	
 Select
 	WalletBlob
 from
 	Wallets
 where
-	WalletID = '<walletid>'
+	WalletState = 'Active'
+	and WalletID = '<walletid>'
 ```
 ### Add an Address to a Wallet
 
@@ -196,7 +201,7 @@ Delete
 	AddressesInWallets
 where
 	Address = '<address>'
-	and BaseProtocol = 'Bitcoin'
+	and (Protocol = 'Bitcoin' or Protocol = 'Mastercoin')
 ```
 ### Create a Wallet Backup
 
