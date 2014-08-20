@@ -185,15 +185,15 @@ app.directive('fixedHeader', ['$timeout', function ($timeout) {
                             $elem.find('tbody').css({
                                 'display': 'block',
                                 'height': $scope.tableHeight || '350px',
-                                'overflow': 'auto'
+                                'overflow': 'auto',
                             });
  
-                            // reduce width of last column by width of scrollbar
                             var scrollBarWidth = $elem.find('thead').width() - $elem.find('tbody')[0].clientWidth;
                             if (scrollBarWidth > 0) {
-                                // for some reason trimming the width by 2px lines everything up better
-                                scrollBarWidth -= 2;
-                                $elem.find('tbody tr:first td:last-child').each(function (i, elem) {
+                                $elem.find('tbody').each(function (i, elem) {
+                                    $(elem).width($(elem).width() + scrollBarWidth);
+                                });
+                                $elem.find('thead').each(function (j, elem) {
                                     $(elem).width($(elem).width() - scrollBarWidth);
                                 });
                             }
