@@ -71,6 +71,7 @@ create index AddressIndex on AddressesInWallets (Address, PropertyID, Protocol)
 create table Transactions (
 	TxHash bytea not null			/* \x... */
 	, Protocol Protocol not null		/* initially 'Bitcoin' or 'Mastercoin' */
+	, TxDBSerialNum serial8 unique		/* db internal identifier for each tx, for faster joins */
 	, TxType smallint not null		/* from the msg for a 'Mastercoin' tx */
 	, TxVersion smallint not null		/* from the msg for a 'Mastercoin' tx, 1(?) for a Bitcoin tx */
 	, Ecosystem Ecosystem null		/* Null for 'Bitcoin'-only tx's */
@@ -83,6 +84,10 @@ create table Transactions (
 
 	, primary key (TxHash, Protocol)
 )
+;
+
+/* to find transactions by the db internal id */
+create index TxDBSerials on Transactions (TxDBSerialNum, TxHash, Protocol)
 ;
 
 /* to find transactions by type */
@@ -99,11 +104,10 @@ create index TxTime on Transactions (TxBlockTime, TxSeqInBlock, TxHash)
 
 /* for the future if we decide to store the tx JSON representation */
 create table TxJSON (
-	TxHash bytea not null			/* \x... */
-	, Protocol Protocol not null		/* initially 'Bitcoin' or 'Mastercoin' */
+	, TxDBSerialNum int8 unique not null	/* db internal identifier for each tx, for faster joins */
 	, TxMsg	JSON not null			/* the tx message fields */
 
-	, primary key (TxHash, Protocol)
+	, primary key (TxDBSerialNum)
 )
 ;
 
@@ -111,21 +115,27 @@ create table TxJSON (
 create table AddressesInTxs (					/* many-to-many */
 	Address	varchar(64) not null
 	, PropertyID integer not null	
-	, Protocol Protocol not null				/* initially 'Bitcoin' or 'Mastercoin' */
-	, TxHash bytea not null		
+	, TxHash bytea not null			/* \x... */
+	, Protocol Protocol not null		/* initially 'Bitcoin' or 'Mastercoin' */
+	, TxDBSerialNum int8 unique not null	/* db internal identifier for each tx, for faster joins */
+	, AddressTxIndex int2 not null		/* position in the input or output list
 	, AddressRole AddressRole not null		
 	, BalanceAvailableCreditDebit numeric(19) null		/* how much the balance changed, */
 	, BalanceResForOfferCreditDebit numeric(19) null	/* null means that balance wasn’t involved in the tx */
 	, BalanceResForAcceptCreditDebit numeric(19) null	/* as opposed to 0 meaning no change in the balance as a result of the tx */
 	
-	, primary key (Address, TxHash, PropertyID, AddressRole)
+	, primary key (Address, TxDBSerialNum, PropertyID, AddressRole)
 	, foreign key (Address, PropertyID, Protocol) references AddressBalances
-	, foreign key (TxHash, Protocol) references Transactions
+	, foreign key (TxDBSerialNum) references Transactions
 )
 ;
 
 /* to find info about addresses affected by a particular transaction */
-create index TxHash on AddressesinTxs (TxHash, PropertyID, Protocol)
+create index TxDBSerial on AddressesinTxs (TxDBSerialNum, PropertyID)
+;
+
+/* to find info about addresses affected by a particular transaction */
+create index TxHash on AddressesinTxs (TxHash, Protocol, PropertyID)
 ;
 
 /* actions on Smart Properties (and currencies??); 1 row for each action on the SP */
@@ -135,6 +145,7 @@ create table PropertyHistory (
 	, Issuer varchar(64) not null		/* Address that created it */
 	, Ecosystem Ecosystem not null		/* Production or Test (for now) */
 	, TxHash bytea not null			/*the tx that performed the action */
+	, TxDBSerialNum int8 unique not null	/* db internal identifier for each tx, for faster joins */
 	, TxBlockTime timestamp(0) null		/* to identify the  action on a particular property */
 	, PropertyName varchar(256) null
 	, PropertyType smallint null		
@@ -149,6 +160,7 @@ create table PropertyHistory (
 	, primary key (PropertyID, Protocol, PropertyName)
 	, foreign key (Issuer, PropertyID, Protocol) references AddressBalances
 	, foreign key (TxHash, Protocol) references Transactions
+	, foreign key (TxDBSerialNum) references Transactions
 )
 ;
 
