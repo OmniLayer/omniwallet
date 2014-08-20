@@ -80,7 +80,6 @@ create table Transactions (
 	, TxBlockNumber integer null	
 	, TxSeqInBlock integer null		/* determined by order of tx's in the block */
 	, TxBlockTime timestamp(0) null	
-	, TxMsg	JSON not null			/* the tx message fields */
 
 	, primary key (TxHash, Protocol)
 )
@@ -96,6 +95,16 @@ create index TxSeq on Transactions (TxBlockNumber, TxSeqInBlock, TxHash)
 
 /* to find transactions by time */
 create index TxTime on Transactions (TxBlockTime, TxSeqInBlock, TxHash)
+;
+
+/* for the future if we decide to store the tx JSON representation */
+create table TxJSON (
+	TxHash bytea not null			/* \x... */
+	, Protocol Protocol not null		/* initially 'Bitcoin' or 'Mastercoin' */
+	, TxMsg	JSON not null			/* the tx message fields */
+
+	, primary key (TxHash, Protocol)
+)
 ;
 
 /* Addresses that are involved in each transaction, with their role and changes to balances */
