@@ -38,9 +38,6 @@ function WalletSendAssetsController($modal, $scope, $http, $q, userService, wall
 
     var required = [coin, address, sendAmount, sendTo, minerFees, totalFeeCost,  balance, btcbalance, $scope.sendForm.$valid, marked];
 
-    if(marked)
-      dustValue = 1; //Remove dust limitation for BTC payments
-
     var error = 'Please ';
     if ($scope.sendForm.$valid == false) {
       error += 'make sure all fields are completely filled, ';
