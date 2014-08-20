@@ -22,7 +22,6 @@ create table Wallets (
 	WalletID uuid
 	, Created timestamp(0) not null default CURRENT_TIMESTAMP
 	, LastLogin timestamp(0) not null default CURRENT_TIMESTAMP
-	, SessionDuration integer not null default 0		/* check SignedIn field */
 	, LastBackup timestamp(0) null
 	, SignedIn boolean not null default FALSE		/* signed in now? */
 	, WalletState WalletState not null default 'Active'
