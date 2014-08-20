@@ -86,7 +86,7 @@
       <tbody>
       </tbody>
 
-      <tr ng-repeat="transaction in orderbook" ng-hide="({{transaction.color=='bgc-expired'}} || {{transaction.color=='bgc-done'}} || {{transaction.formatted_amount_available * transaction.formatted_price_per_coin < .00000001}}) && inactive" class="check-element animate-hide">
+      <tr ng-repeat="transaction in orderbook" ng-hide="({{transaction.color=='bgc-expired'}} || {{transaction.color=='bgc-done'}} || {{transaction.formatted_amount_available * transaction.formatted_price_per_coin < .00005757}}) && inactive" class="check-element animate-hide">
         <td ng-click="setHashExplorer(transaction)"><a href="/explorer/inspector?view={{transaction.tx_hash}}">{{transaction.tx_hash_concat}}</a></td>
         <td class="number" title="{{transaction.formatted_price_per_coin}}" ng-bind-html="transaction.formatted_price_per_coin | numeraljs: '0,0.00000000'"></td>
         <td class="number" ng-show="{{transaction.color == 'bgc-new'}}" title="{{transaction.formatted_amount_available}}" ng-bind-html="transaction.formatted_amount_available | numeraljs: '0,0.00000000'"></td> 
