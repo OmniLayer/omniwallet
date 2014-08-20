@@ -65,7 +65,7 @@
     </div>
 
     <div class="col-xs-4">
-      Filter Inactive/Invalid Offers:<input ng-init="inactive=true" type="checkbox" ng-model="inactive"><br />
+      Filter Inactive Offers:<input ng-init="inactive=true" type="checkbox" ng-model="inactive"><br />
       Time Frame: <select ng-model="selectedTimeframe"  
           ng-change="global.getData(selectedTimeframe)" ng-options="time.value as time.name for time in timeOptions">
       </select>
@@ -100,7 +100,7 @@
         <td ng-show="(transaction.tx_hash.length == 64) && transaction.status == null && !(transaction.from_address == selectedAddress)">
           <button class="btn btn-primary btn-sm" ng-hide="{{transaction.color=='bgc-expired'}} || {{transaction.color=='bgc-done'}} || {{transaction.formatted_amount_available * transaction.formatted_price_per_coin < .00005757}}" ng-click="setView('buyOffer', transaction)" type="submit">Buy coin</button>   
           <td ng-show="transaction.from_address == selectedAddress"> Your offer/purchase </td>
-          <td ng-show="{{transaction.formatted_amount_available * transaction.formatted_price_per_coin < .00005757}}"> Remaining purchase price below network minimum </td>
+          <td ng-show="({{transaction.color == 'bgc-new'}} || {{transaction.color == 'bgc-new-accepted'}} || {{transaction.color == 'bgc-accepted-done'}}) && {{transaction.formatted_amount_available * transaction.formatted_price_per_coin < .00005757}}"> Remaining purchase price below network minimum </td>
       </td>
       </tr>
 
