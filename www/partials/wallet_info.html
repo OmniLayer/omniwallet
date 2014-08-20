@@ -99,7 +99,7 @@
         <td class="number" title="{{transaction.formatted_block_time_limit}}" ng-bind-html="transaction.formatted_block_time_limit | numeraljs: '0,0'"></td>
         <td ng-show="(transaction.tx_hash.length == 64) && transaction.status == null && !(transaction.from_address == selectedAddress)">
           <button class="btn btn-primary btn-sm" ng-hide="{{transaction.color=='bgc-expired'}} || {{transaction.color=='bgc-done'}} || {{transaction.formatted_amount_available * transaction.formatted_price_per_coin < .00005757}}" ng-click="setView('buyOffer', transaction)" type="submit">Buy coin</button>   
-          <button class="btn btn-primary btn-sm disabled" ng-show="({{transaction.color == 'bgc-new'}} || {{transaction.color == 'bgc-new-accepted'}} || {{transaction.color == 'bgc-accepted-done'}}) && {{transaction.formatted_amount_available * transaction.formatted_price_per_coin < .00005757}}" tooltip="Remaining purchase price below network minimum" tooltip-append-to-body="true" tooltip-placement="top" type="submit">Buy Coin</button>
+          <button class="btn btn-primary btn-sm" ng-show="({{transaction.color == 'bgc-new'}} || {{transaction.color == 'bgc-new-accepted'}} || {{transaction.color == 'bgc-accepted-done'}}) && {{transaction.formatted_amount_available * transaction.formatted_price_per_coin < .00005757}}" "onclick="alert('We're sorry. The purchase price for the remaining amount falls below the network minimum and can't be completed.')" type="submit">Buy Coin</button>
           <td ng-show="transaction.from_address == selectedAddress"> Your offer/purchase </td>
       </td>
       </tr>
