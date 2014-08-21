@@ -18,7 +18,7 @@ create type TxState as enum ('pending', 'valid', 'not valid');
 create type WalletState as enum ('Active', 'Inactive', 'Suspended');
 
 /* Wallets have addresses with private keys. Objects being watched are in the Following table */
-create table Wallets (
+create table if not exists Wallets (
 	WalletID uuid
 	, Created timestamp(0) not null default CURRENT_TIMESTAMP
 	, LastLogin timestamp(0) not null default CURRENT_TIMESTAMP
@@ -36,7 +36,7 @@ create table Wallets (
 ;
 
 /* Balances for each PropertyID (currency) owned by an Address */
-create table AddressBalances (
+create table if not exists AddressBalances (
 	Address	varchar(64)			/* Bitcoin addresses are 34 chars */
 	, PropertyID integer		
 	, Protocol Protocol			/* initially 'Bitcoin' or 'Mastercoin' */
@@ -51,7 +51,7 @@ create table AddressBalances (
 ;
 
 /* Addresses with private keys owned by each Wallet. See Following table for objects watched by a wallet. */
-create table AddressesInWallets (		/* many-to-many */
+create table if not exists AddressesInWallets (		/* many-to-many */
 	Address varchar(64) not null		/* Address must exist in the AddressBalances table */
 	, PropertyID integer not null		/* needed here for foreign key reference */
 	, Protocol Protocol not null		/* initially 'Bitcoin' */
@@ -68,7 +68,7 @@ create index AddressIndex on AddressesInWallets (Address, PropertyID, Protocol)
 ;
 
 /* all the transactions we know about; keeping them (forever?) even after an address or wallet is de-activated */
-create table Transactions (
+create table if not exists Transactions (
 	TxHash bytea not null			/* \x... */
 	, Protocol Protocol not null		/* initially 'Bitcoin' or 'Mastercoin' */
 	, TxDBSerialNum serial8 unique		/* db internal identifier for each tx, for faster joins */
@@ -87,7 +87,7 @@ create table Transactions (
 ;
 
 /* to find transactions by the db internal id */
-create index TxDBSerials on Transactions (TxDBSerialNum, TxHash, Protocol)
+create unique index TxDBSerials on Transactions (TxDBSerialNum, TxHash, Protocol)
 ;
 
 /* to find transactions by type */
@@ -103,8 +103,8 @@ create index TxTime on Transactions (TxBlockTime, TxSeqInBlock, TxHash)
 ;
 
 /* for the future if we decide to store the tx JSON representation */
-create table TxJSON (
-	, TxDBSerialNum int8 unique not null	/* db internal identifier for each tx, for faster joins */
+create table if not exists TxJSON (
+	TxDBSerialNum int8 unique not null	/* db internal identifier for each tx, for faster joins */
 	, TxMsg	JSON not null			/* the tx message fields */
 
 	, primary key (TxDBSerialNum)
@@ -112,13 +112,13 @@ create table TxJSON (
 ;
 
 /* Addresses that are involved in each transaction, with their role and changes to balances */
-create table AddressesInTxs (					/* many-to-many */
+create table if not exists AddressesInTxs (					/* many-to-many */
 	Address	varchar(64) not null
 	, PropertyID integer not null	
 	, TxHash bytea not null			/* \x... */
 	, Protocol Protocol not null		/* initially 'Bitcoin' or 'Mastercoin' */
 	, TxDBSerialNum int8 unique not null	/* db internal identifier for each tx, for faster joins */
-	, AddressTxIndex int2 not null		/* position in the input or output list
+	, AddressTxIndex int2 not null		/* position in the input or output list */
 	, AddressRole AddressRole not null		
 	, BalanceAvailableCreditDebit numeric(19) null		/* how much the balance changed, */
 	, BalanceResForOfferCreditDebit numeric(19) null	/* null means that balance wasn’t involved in the tx */
@@ -126,7 +126,7 @@ create table AddressesInTxs (					/* many-to-many */
 	
 	, primary key (Address, TxDBSerialNum, PropertyID, AddressRole)
 	, foreign key (Address, PropertyID, Protocol) references AddressBalances
-	, foreign key (TxDBSerialNum) references Transactions
+	, foreign key (TxDBSerialNum, TxHash, Protocol) references Transactions (TxDBSerialNum, TxHash, Protocol)
 )
 ;
 
@@ -139,7 +139,7 @@ create index TxHash on AddressesinTxs (TxHash, Protocol, PropertyID)
 ;
 
 /* actions on Smart Properties (and currencies??); 1 row for each action on the SP */
-create table PropertyHistory (
+create table if not exists PropertyHistory (
 	Protocol Protocol			/* Protocol plus PropertyID uniquely identify a property */
 	, PropertyID integer			/* signed 32-bit */
 	, Issuer varchar(64) not null		/* Address that created it */
@@ -160,7 +160,7 @@ create table PropertyHistory (
 	, primary key (PropertyID, Protocol, PropertyName)
 	, foreign key (Issuer, PropertyID, Protocol) references AddressBalances
 	, foreign key (TxHash, Protocol) references Transactions
-	, foreign key (TxDBSerialNum) references Transactions
+	, foreign key (TxDBSerialNum, TxHash, Protocol) references Transactions (TxDBSerialNum, TxHash, Protocol)
 )
 ;
 
@@ -169,7 +169,7 @@ create index PropHist_Issuer on PropertyHistory (Issuer, PropertyID, Protocol, P
 ;
 
 /* A wallet can watch any object - address, SP, tx type (even a blocknumber?) */
-create table Following (			
+create table if not exists Following (			
 	 WalletID uuid			
 	, ObjectType ObjectType
 	, ObjectID varchar(64)	/* works with Addresses initially */
@@ -181,7 +181,7 @@ create table Following (
 
 /* directional exchange rates between pairs of properties; can work with fiat currencies as well */
 /* rate for 1 --> 2 not necessarily the same as the reciprocal of rate for 2 --> 1 */
-create table ExchangeRates (			
+create table if not exists ExchangeRates (			
 	Protocol1 Protocol		/* see Protocols */
 	, PropertyID1 integer		/* need exchange rates for fiat currencies */
 	, Protocol2 Protocol
@@ -195,7 +195,7 @@ create table ExchangeRates (
 ;
 
 /* dictionary of known protocols */
-create table Protocols (
+create table if not exists Protocols (
 	Protocol Protocol unique not null
 	, BaseProtocol Protocol not null	/* e.g. Bitcoin is the base of Mastercoin, Protocol = BaseProtocol if a base protocol */
 	, URL varchar(256) null
