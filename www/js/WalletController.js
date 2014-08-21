@@ -434,7 +434,10 @@ function WalletTradePendingController($scope, $http, $q, userService, hashExplor
     }
   });
   
-  $scope.selectedTimeframe = "604800"
+  //Get All data
+  $scope.timeNow = Date.now();
+  $scope.selectedTimeframe = $scope.timeNow - 1394834400000;
+  //$scope.selectedTimeframe = "604800"
   $scope.filterData = function(time) {
     var orderbook = JSON.parse($scope.orderBookStorage);
 
