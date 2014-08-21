@@ -108,6 +108,7 @@ create table if not exists TxJSON (
 	, TxMsg	JSON not null			/* the tx message fields */
 
 	, primary key (TxDBSerialNum)
+	, foreign key (TxDBSerialNum) references Transactions(TxDBSerialNum)
 )
 ;
 
