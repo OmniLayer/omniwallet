@@ -8,9 +8,20 @@ create database Omniwallet;
  * 1. Need to define Cascade/Restrict behavior for foreign keys to maintain referential integrity
  * 2. Need to define & flesh out dictionary tables
  * 3. Need to identify tables & indexes for administrative purposes, e.g. analytics
+ *
+ * All token amounts are stored as 19 digit integers - numeric(19). The PropertyType indicates if the
+ * currency (or smart property) is divisible or indivisible.
  */
 
-create type AddressRole as enum ('participant', 'payee', 'recipient', 'sender');	/* payee received a Send to Owners amount */
+/* 
+ * AddressRole type definitions:
+ *	issuer created a smart property
+ *	participant is an investor in a crowdsale
+ *	payee received a Send to Owners amount
+ *	recipient received a Simple Send
+ *	sender sent a Simple Send
+ */
+create type AddressRole as enum ('issuer', 'participant', 'payee', 'recipient', 'sender');
 create type Protocol as enum ('Bitcoin', 'Mastercoin');
 create type Ecosystem as enum ('Production', 'Test');
 create type ObjectType as enum ('address', 'property', 'tx_version_type');
@@ -116,13 +127,13 @@ create table if not exists TxJSON (
 create table if not exists AddressesInTxs (					/* many-to-many */
 	Address	varchar(64) not null
 	, PropertyID integer not null	
-	, TxHash bytea not null			/* \x... */
-	, Protocol Protocol not null		/* initially 'Bitcoin' or 'Mastercoin' */
-	, TxDBSerialNum int8 unique not null	/* db internal identifier for each tx, for faster joins */
-	, AddressTxIndex int2 not null		/* position in the input or output list */
+	, TxHash bytea not null				/* \x... */
+	, Protocol Protocol not null			/* initially 'Bitcoin' or 'Mastercoin' */
+	, TxDBSerialNum int8 not null default -1	/* db internal identifier for each tx, for faster joins */
+	, AddressTxIndex int2 not null			/* position in the input or output list */
 	, AddressRole AddressRole not null		
 	, BalanceAvailableCreditDebit numeric(19) null		/* how much the balance changed, */
-	, BalanceResForOfferCreditDebit numeric(19) null	/* null means that balance wasn’t involved in the tx */
+	, BalanceResForOfferCreditDebit numeric(19) null	/* null means the balance type wasn’t involved in the tx */
 	, BalanceResForAcceptCreditDebit numeric(19) null	/* as opposed to 0 meaning no change in the balance as a result of the tx */
 	
 	, primary key (Address, TxDBSerialNum, PropertyID, AddressRole)
