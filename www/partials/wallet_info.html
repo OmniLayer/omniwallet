@@ -56,7 +56,7 @@
         <h3> <strong> Sell {{ currAcronyms[ activeCurrencyPair[1] ] }} </strong> </h3>
           <div class="btn-group btn-group-justified">
             <div class="btn-group">
-            <button class="btn btn-primary" ng-click="setView('saleOffer')" type="submit">Start new sale offer</button>
+            <button class="btn btn-primary" ng-click="setView('saleOffer')" type="submit">Start new sell offer</button>
             <br><br>
             </div>
           </div>
@@ -86,7 +86,7 @@
       <tbody>
       </tbody>
 
-      <tr ng-repeat="transaction in orderbook" ng-hide="({{transaction.color=='bgc-expired'}} || {{transaction.color=='bgc-done'}}) && inactive" class="check-element animate-hide">
+      <tr ng-repeat="transaction in orderbook" ng-hide="({{transaction.color=='bgc-expired'}} || {{transaction.color=='bgc-done'}} || {{transaction.formatted_amount_available * transaction.formatted_price_per_coin < .00005757}}) && inactive" class="check-element animate-hide">
         <td ng-click="setHashExplorer(transaction)"><a href="/explorer/inspector?view={{transaction.tx_hash}}">{{transaction.tx_hash_concat}}</a></td>
         <td class="number" title="{{transaction.formatted_price_per_coin}}" ng-bind-html="transaction.formatted_price_per_coin | numeraljs: '0,0.00000000'"></td>
         <td class="number" ng-show="{{transaction.color == 'bgc-new'}}" title="{{transaction.formatted_amount_available}}" ng-bind-html="transaction.formatted_amount_available | numeraljs: '0,0.00000000'"></td> 
@@ -94,14 +94,13 @@
         <td class="number" ng-show="{{transaction.color == 'bgc-accepted-done'}}" title="{{transaction.formatted_amount_available}}" ng-bind-html="transaction.formatted_amount_available | numeraljs: '0,0.00000000'"></td> 
         <td ng-show="{{transaction.color == 'bgc-expired'}}">User Ended</td> 
         <td ng-show="{{transaction.color == 'bgc-done'}}">Sold Out!</td> 
-        <td class="number" title="{{transaction.formatted_bitcoin_amount_desired}}" ng-bind-html="transaction.formatted_bitcoin_amount_desired | numeraljs: '0,0.00000000'"></td>
+        <td class="number" title="{{transaction.formatted_amount_available * transaction.formatted_price_per_coin}}" ng-bind-html="transaction.formatted_amount_available*transaction.formatted_price_per_coin | numeraljs: '0,0.00000000'"></td>
         <td class="number" title="{{transaction.formatted_fee_required}}" ng-bind-html="transaction.formatted_fee_required | numeraljs: '0,0.00000000'"></td>
         <td class="number" title="{{transaction.formatted_block_time_limit}}" ng-bind-html="transaction.formatted_block_time_limit | numeraljs: '0,0'"></td>
-        <td ng-show="(transaction.tx_hash.length == 64) && transaction.status == null && 
-            !(transaction.from_address == selectedAddress)">
-        <button class="btn btn-primary btn-sm" ng-hide="{{transaction.color=='bgc-expired'}} || {{transaction.color=='bgc-done'}}" ng-click="setView('buyOffer', transaction)" type="submit">Buy coin</button>
-        
-        <td ng-show="transaction.from_address == selectedAddress"> Your offer/purchase </td>
+        <td ng-show="(transaction.tx_hash.length == 64) && transaction.status == null && !(transaction.from_address == selectedAddress)">
+          <button class="btn btn-primary btn-sm" ng-hide="{{transaction.color=='bgc-expired'}} || {{transaction.color=='bgc-done'}} || {{transaction.formatted_amount_available * transaction.formatted_price_per_coin < .00005757}}" ng-click="setView('buyOffer', transaction)" type="submit">Accept...</button>   
+          <button class="btn btn-primary btn-sm" ng-show="({{transaction.color == 'bgc-new'}} || {{transaction.color == 'bgc-new-accepted'}} || {{transaction.color == 'bgc-accepted-done'}}) && {{transaction.formatted_amount_available * transaction.formatted_price_per_coin < .00005757}}" onclick="alert('We are sorry. The purchase price for the remaining amount falls below the network minimum and cannot be completed. Please choose a different offer.')" type="submit">Accept...</button>
+          <td ng-show="transaction.from_address == selectedAddress"> Your offer/purchase </td>
       </td>
       </tr>
 

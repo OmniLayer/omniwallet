@@ -27,7 +27,7 @@ function WalletAssetsFormController($scope, userService, walletTransactionServic
     if(!$scope.$parent.selectedAddress)
       $scope.selectedAddress = $scope.addressList[0] || null;
     $scope.setBalance();
-    $scope.minerFees = +MIN_MINER_FEE.valueOf() // reset miner fees
+    $scope.minerFees = +MIN_MINER_FEE.valueOf(); // reset miner fees
     $scope.calculateTotal($scope.minerFees);
   });
   $scope.$watch('selectedAddress', function() {
@@ -100,15 +100,15 @@ function WalletAssetsFormController($scope, userService, walletTransactionServic
         return new Big(satoshi).times(WHOLE_UNIT).toFixed(8);
       else
         return satoshi;
-  }
+  };
 
 
   $scope.getDisplayedAbbreviation = function () {
     if($scope.selectedCoin.divisible) {
-      $scope.sendPlaceholderValue = '1.00000000'
-      $scope.sendPlaceholderStep = $scope.sendPlaceholderMin = '0.00000001'
+      $scope.sendPlaceholderValue = '1.00000000';
+      $scope.sendPlaceholderStep = $scope.sendPlaceholderMin = '0.00000001';
     } else {
-      $scope.sendPlaceholderValue = $scope.sendPlaceholderStep = $scope.sendPlaceholderMin = '1'
+      $scope.sendPlaceholderValue = $scope.sendPlaceholderStep = $scope.sendPlaceholderMin = '1';
     }
     if ($scope.selectedCoin.symbol.indexOf('SP') == 0) {
       for (var i in $scope.currencyList) {
@@ -119,7 +119,7 @@ function WalletAssetsFormController($scope, userService, walletTransactionServic
     }
     else
       return $scope.selectedCoin.symbol;
-  }
+  };
 
   $scope.convertDisplayedValue = function (value) {
       if (value instanceof Array) {
@@ -130,7 +130,7 @@ function WalletAssetsFormController($scope, userService, walletTransactionServic
       } 
       else
           return new Big(value).times(SATOSHI_UNIT).valueOf();
-  }
+  };
 
   function calculateTotal(minerFees) {
     $scope.mProtocolCost = 0.00025

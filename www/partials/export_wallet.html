@@ -1,0 +1,30 @@
+<div class="modal-header text-center">
+  <h3>Export Wallet</h3>
+</div>
+<form novalidate class="form-group" ng-submit="exportWallet(exportData)">
+  <div class="modal-body">
+    <div class="row">
+      <div class="form-group col-xs-10 col-xs-push-1">
+        <label for="inputName">Backup Name</label>
+        <input type="text" class="form-control" ng-model="exportData.backupName" id="inputName" required>
+      </div>
+    </div>
+    <div class="row">
+      <div class="form-group col-xs-10 col-xs-push-1">
+        <label class="checkbox-inline">
+          <input type="checkbox" id="exportPrivate" ng-model="exportData.exportPrivate"> Export Trading Addresses
+        </label>
+        <label class="checkbox-inline">
+          <input type="checkbox" id="exportWatch" ng-model="exportData.exportWatch"> Export Watch Addresses
+        </label>
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer" style="text-align:center">
+    <div class="col-xs-8 col-xs-push-2">
+      <input type="submit" class="btn btn-primary btn-block" value="Confirm Export" ng-disabled="exportInProgress || (!exportData.exportPrivate && !exportData.exportWatch)" >
+      <img ng-show="exportInProgress" src="/assets/img/34-1.gif" alt="loading">
+    </div>
+  </div>
+</form>
+
