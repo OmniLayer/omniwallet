@@ -37,27 +37,30 @@ create table if not exists Wallets (
 	, SignedIn boolean not null default FALSE		/* signed in now? */
 	, WalletState WalletState not null default 'Active'
 	, WalletStateDate timestamp(0) not null default CURRENT_TIMESTAMP
-	, WalletBlob text					/* encrypted w/ wallet password */
+	, WalletBlob text null					/* encrypted w/ wallet password */
 	, UserName varchar(32) null				/* (future) encrypted */
 	, Email varchar(64) null				/* (future) encrypted */
-	, Settings JSON null					/* (future) user preferences */
+	, Settings json null					/* (future) user preferences */
 	
 	, primary key (WalletID)
 )
 ;
 
-/* Balances for each PropertyID (currency) owned by an Address */
+/*
+ * Balances for each PropertyID (currency) owned by an Address
+ * for all addresses we know about, even if they're not in a wallet
+ */
 create table if not exists AddressBalances (
 	Address	varchar(64)				/* Bitcoin addresses are 34 chars */
-	, PropertyID smallint not null default 0	/* Bitcoin */		
 	, Protocol Protocol not null default 'Bitcoin'	/* initially 'Bitcoin' or 'Mastercoin' */
+	, PropertyID smallint not null default 0	/* Bitcoin */		
 	, Ecosystem Ecosystem null
 	, BalanceAvailable numeric(19) not null default 0
 	, BalanceResForOffer numeric(19) null		/* may not be used by most addresses */
 	, BalanceResForAccept numeric(19) null		/* may not be used by most addresses */
 	, LastTxHash bytea null				/* last tx that affected this currency for this address, null if no tx's */
 
-	, primary key (Address, PropertyID, Protocol)
+	, primary key (Address, Protocol, PropertyID)
 )
 ;
 
@@ -66,16 +69,16 @@ create table if not exists AddressesInWallets (		/* many-to-many */
 	Address varchar(64) not null		/* Address must exist in the AddressBalances table */
 	, PropertyID integer not null		/* needed here for foreign key reference */
 	, Protocol Protocol not null		/* initially 'Bitcoin' */
-	, WalletID uuid				/* WalletID must exist in the Wallets table */
+	, WalletID uuid	not null		/* WalletID must exist in the Wallets table */
 
-	, primary key (WalletID, Address, PropertyID, Protocol)
-	, foreign key (WalletID) references Wallets
-	, foreign key (Address, PropertyID, Protocol) references AddressBalances
+	, primary key (WalletID, Address, Protocol, PropertyID)
+	, foreign key (WalletID) references Wallets on delete CASCADE on update CASCADE	/* del/upd rows here if corresponding row is deleted/updated */
+	, foreign key (Address, Protocol, PropertyID) references AddressBalances
 )
 ;
 
-/* to find the wallets that have a particular address. Do we need this? */
-create index AddressIndex on AddressesInWallets (Address, PropertyID, Protocol)
+/* to find the wallets that have a particular address. */
+create index AddressIndex on AddressesInWallets (Address, Protocol, PropertyID)
 ;
 
 /* all the transactions we know about; keeping them (forever?) even after an address or wallet is de-activated */
@@ -116,7 +119,7 @@ create index TxTime on Transactions (TxBlockTime, TxSeqInBlock, TxHash)
 /* for the future if we decide to store the tx JSON representation */
 create table if not exists TxJSON (
 	TxDBSerialNum int8 unique not null	/* db internal identifier for each tx, for faster joins */
-	, TxMsg	JSON not null			/* the tx message fields */
+	, TxMsg	json not null			/* the tx message fields */
 
 	, primary key (TxDBSerialNum)
 	, foreign key (TxDBSerialNum) references Transactions(TxDBSerialNum)
@@ -137,7 +140,7 @@ create table if not exists AddressesInTxs (					/* many-to-many */
 	, BalanceResForAcceptCreditDebit numeric(19) null	/* as opposed to 0 meaning no change in the balance as a result of the tx */
 	
 	, primary key (Address, TxDBSerialNum, PropertyID, AddressRole)
-	, foreign key (Address, PropertyID, Protocol) references AddressBalances
+	, foreign key (Address, Protocol, PropertyID) references AddressBalances
 	, foreign key (TxDBSerialNum, TxHash, Protocol) references Transactions (TxDBSerialNum, TxHash, Protocol)
 )
 ;
@@ -170,7 +173,7 @@ create table if not exists PropertyHistory (
 	, PropertySubcategory varchar(256) null		/* see PropertyCategories - TBD */
 
 	, primary key (PropertyID, Protocol, PropertyName)
-	, foreign key (Issuer, PropertyID, Protocol) references AddressBalances
+	, foreign key (Issuer, Protocol, PropertyID) references AddressBalances (Address, Protocol, PropertyID)
 	, foreign key (TxHash, Protocol) references Transactions
 	, foreign key (TxDBSerialNum, TxHash, Protocol) references Transactions (TxDBSerialNum, TxHash, Protocol)
 )
