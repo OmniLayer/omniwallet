@@ -48,14 +48,14 @@ create table if not exists Wallets (
 
 /* Balances for each PropertyID (currency) owned by an Address */
 create table if not exists AddressBalances (
-	Address	varchar(64)			/* Bitcoin addresses are 34 chars */
-	, PropertyID integer		
-	, Protocol Protocol			/* initially 'Bitcoin' or 'Mastercoin' */
+	Address	varchar(64)				/* Bitcoin addresses are 34 chars */
+	, PropertyID smallint not null default 0	/* Bitcoin */		
+	, Protocol Protocol not null default 'Bitcoin'	/* initially 'Bitcoin' or 'Mastercoin' */
 	, Ecosystem Ecosystem null
 	, BalanceAvailable numeric(19) not null default 0
-	, BalanceResForOffer numeric(19) null	/* may not be used by most addresses */
-	, BalanceResForAccept numeric(19) null	/* may not be used by most addresses */
-	, LastTxHash bytea not null		/* last tx that affected this currency for this address */
+	, BalanceResForOffer numeric(19) null		/* may not be used by most addresses */
+	, BalanceResForAccept numeric(19) null		/* may not be used by most addresses */
+	, LastTxHash bytea null				/* last tx that affected this currency for this address, null if no tx's */
 
 	, primary key (Address, PropertyID, Protocol)
 )
