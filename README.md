@@ -15,9 +15,14 @@ It currently supports Bitcoin and Mastercoin, and will support Mastercoin-derive
 
 For more information see the [Omniwallet announcement](http://blog.mastercoin.org/2014/03/04/introducing-omniwallet-pre-alpha-developers-wanted/).
 
-You can try out the test builds at [test.omniwallet.org](https://test.omniwallet.org/) (WARNING: Omniwallet is not production ready, only use small amounts of BTC and MSC!)
+You can access the beta site at [https://www.omniwallet.org](https://www.omniwallet.org/) (Note: Omniwallet is in active development, make sure you maintain proper backups of all address!)
 
 ## Ubuntu Setup
+
+### Automated Install
+Check out the [Auto Installer Project](https://github.com/mastercoin-MSC/install-omni)
+
+### Manual Install
 
 Install dependencies:
 ```
