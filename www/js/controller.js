@@ -121,11 +121,16 @@ function Ctrl($scope, $route, $routeParams, $modal, $location, browser, userServ
   $scope.events = [];
 
   $scope.$on('$idleStart', function() {
-    
+    if (userService.loggedIn()) {
+      $modal.open({
+        backdrop: 'static',
+        templateUrl: '/partials/idle_warning_modal.html'
+      });
+    }
   });
 
   $scope.$on('$idleWarn', function(e, countdown) {
-    
+    console.log('Idle warn');
   });
 
   $scope.$on('$idleTimeout', function() {

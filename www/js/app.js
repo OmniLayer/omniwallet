@@ -99,8 +99,8 @@ var app = angular.module('omniwallet', [
 });
 
 app.config(function($idleProvider, $keepaliveProvider) {
-  $idleProvider.idleDuration(60 * 10); // 10 minutes
-  // $idleProvider.warningDuration(5); // in seconds
+  $idleProvider.idleDuration(60); // 10 minutes
+  $idleProvider.warningDuration(50); // in seconds
   // $keepaliveProvider.interval(2); // in seconds
 })
 .run(function(userService, $location, $idle) {
