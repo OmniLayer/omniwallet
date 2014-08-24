@@ -3,7 +3,9 @@
 var app = angular.module('omniwallet', [
   'ngRoute',
   'ui.bootstrap',
+  'ui.bootstrap.tpls',
   'ui.bootstrap.modal',
+  'ui.bootstrap.progressbar',
   'ngNumeraljs',
   'vr.filters.passwordStrength'
 ], function($routeProvider, $locationProvider, $httpProvider) {

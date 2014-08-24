@@ -272,7 +272,7 @@ angular.module('omniwallet')
   
   var ImportWalletModal = function($scope, $modalInstance, $q, $timeout) {
     $scope.startImport = function(walletData){
-      $scope.validate(walletData).then(function(result){$scope.ok(result);},function(reason){$scope.progressMessage= reason;});
+      $scope.validate(walletData).then(function(result){$scope.ok(result);},function(reason){$scope.progressMessage= reason;$scope.progressColor = "red";});
     };
     $scope.validate = function(backup) {
       var deferred = $q.defer();
@@ -300,21 +300,26 @@ angular.module('omniwallet')
             return deferred.resolve(validated);
           }
           $scope.$apply(function(){
-            var addr = address.address;
-            if(address.privkey){
-              var eckey = new Bitcoin.ECKey(address.privkey);
-              addr = eckey.getBitcoinAddress().toString();
-            }
-            
-            if(Bitcoin.Address.validate(addr)){
-              validated.addresses.push(address);
-              $scope.progressMessage = "Validated address " + addr;
-              $scope.progressColor = "green";
-            } else {
-              $scope.progressMessage = "Invalid address " + addr;
+            try{
+              var addr = address.address;
+              if(address.privkey){
+                var eckey = new Bitcoin.ECKey(address.privkey);
+                addr = eckey.getBitcoinAddress().toString();
+              }
+              
+              if(Bitcoin.Address.validate(addr)){
+                validated.addresses.push(address);
+                $scope.progressMessage = "Validated address " + addr;
+                $scope.progressColor = "green";
+              } else {
+                $scope.progressMessage = "Invalid address " + addr;
+                $scope.progressColor = "red";
+              }
+              $scope.completed++;
+            } catch (e) {
+              $scope.progressMessage = "Error validating "+addr+": " + e;
               $scope.progressColor = "red";
             }
-            $scope.completed++;
           });
           
           return next();
