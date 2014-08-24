@@ -271,6 +271,8 @@ angular.module('omniwallet')
   };
   
   var ImportWalletModal = function($scope, $modalInstance, $q, $timeout) {
+    $scope.summary = [];
+    $scope.importFinished = false;
     $scope.startImport = function(walletData){
       $scope.validate(walletData).then(function(result){$scope.ok(result);},function(reason){$scope.progressMessage= reason;$scope.progressColor = "red";});
     };
@@ -315,11 +317,12 @@ angular.module('omniwallet')
                 $scope.progressMessage = "Invalid address " + addr;
                 $scope.progressColor = "red";
               }
-              $scope.completed++;
             } catch (e) {
               $scope.progressMessage = "Error validating "+addr+": " + e;
               $scope.progressColor = "red";
             }
+            $scope.summary.push({message:$scope.progressMessage,color:$scope.progressColor});
+            $scope.completed++;
           });
           
           return next();
@@ -350,7 +353,8 @@ angular.module('omniwallet')
         var importAddress = function(addr){
           $scope.$apply(function(){
             if($scope.completed == $scope.total){
-              return $modalInstance.close(wallet);
+              $scope.importFinished = true;
+              $scope.processing = false;
             }
             
             // Use address as passphrase for now
@@ -360,6 +364,9 @@ angular.module('omniwallet')
                 encodePrivateKey(addr.privkey, addr.address))
                 .then(function(){
                   $scope.progressMessage="Imported address " + addr.address;
+                  $scope.progressColor = "green";
+                  
+                  $scope.summary.push({message:$scope.progressMessage,color:$scope.progressColor});
                   $scope.completed++;
                   return next();
                 });
@@ -368,6 +375,9 @@ angular.module('omniwallet')
                 addr.address)
                 .then(function(){
                   $scope.progressMessage="Imported address " + addr.address;
+                  $scope.progressColor = "green";
+                  
+                  $scope.summary.push({message:$scope.progressMessage,color:$scope.progressColor});
                   $scope.completed++;
                   return next();
                 });   
@@ -393,7 +403,7 @@ angular.module('omniwallet')
     $scope.items = enumerated_addresses.getData().then(function(result) {
       if (result.addresses.length == 0) {
         createBTCAddress();
-	$scope.newAddress=true;
+	      $scope.newAddress=true;
       }
       $scope.addresses = result.addresses;
     });
