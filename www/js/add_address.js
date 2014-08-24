@@ -355,6 +355,7 @@ angular.module('omniwallet')
             if($scope.completed == $scope.total){
               $scope.importFinished = true;
               $scope.processing = false;
+              return;
             }
             
             // Use address as passphrase for now
