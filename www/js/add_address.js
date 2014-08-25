@@ -234,6 +234,8 @@ angular.module('omniwallet')
     var encryptedPrivateKey = ecKey.getEncryptedFormat(address);
     $injector.get('userService').addAddress(address, encryptedPrivateKey);
     $scope.refresh();
+    $scope.addedNewAddress = true;
+    $scope.createdAddress = address;
   }
   ;
   // Done Create Form Code.
