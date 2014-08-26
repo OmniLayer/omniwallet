@@ -394,6 +394,10 @@ angular.module('omniwallet')
     $scope.cancel = function() {
       $modalInstance.dismiss('cancel');
     };
+    
+    $scope.close = function() {
+      $modalInstance.dismiss('close');
+    };
   };
   // Done Import Import Backup Form Code.
   
