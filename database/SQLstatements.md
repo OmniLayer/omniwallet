@@ -120,7 +120,7 @@ where
 order by
 	TxSubmitTime	/* time submitted, maybe not yet confirmed or valid */
 ```
-### Get Details for a Transaction
+### Get Details for a Transaction by tx hash
 ```
 Select
 	tx.*
@@ -128,6 +128,15 @@ from
 	Transactions tx
 where
 	tx.TxHash = '\x<txhash>'
+```
+### Get Details for a Transaction by TxDBSerialNum
+```
+Select
+	tx.*
+from
+	Transactions tx
+where
+	tx.TxDBSerialNum = <TxDBSerialNum>
 ```
 ### Get exchange rates
 ```
@@ -145,6 +154,52 @@ order by
 1. Add a record to Wallets 
 2. Add a record to AddressBalances
 3. Add a record to AddressesInWallets
+
+```
+/* Either all 3 steps succeed or none of them do */
+Start Transaction
+
+/* 
+ * all the other columns have appropriate defaults or are nullable when a user creates a wallet & logs in
+ */
+Insert Wallets (
+	WalletID
+	, WalletBlob	/* the encrypted Blob contains the private key for the initial address
+)
+values
+(
+	<WalletID>
+	, <WalletBlob>
+)
+
+/* 
+ * all the other columns have appropriate defaults or are nullable when a user creates a wallet & logs in;
+ * by default, there's a 0 bitcoin available balance for each address
+ */
+Insert AddressBalances
+(
+	Address
+)
+values
+(
+	<Address>
+)
+
+/* 
+ * all the other columns have appropriate defaults or are nullable when a user creates a wallet & logs in;
+ * by default, there's a 0 bitcoin available balance for each address
+ */
+Insert AddressesInWallets
+(
+	Address
+)
+values
+(
+	<Address>
+)
+
+Commit Transaction
+```
 
 ### Mark a Wallet as inactive (logically removed)
 ```
@@ -166,7 +221,12 @@ Are the following steps necessary or is this already done in the background?
  1. Foreach address, update AddressBalances if there are new transactions
 5. Get latest transaction history for the addresses (now or on demand?)
  1. Update AddressesInTransactions & Transactions if there are new transactions
+
+ 
+Update the lastlogin time if the wallet state is "Active"
 ```
+Start Transaction
+
 Update
 	Wallets
 set
@@ -175,15 +235,27 @@ set
 where
 	WalletState = 'Active'
 	and WalletID = '<walletid>'
-	
+```	
+If no rows returned
+then exit
+```
+Commit Transaction /* Rollback should be equivalent because no row was updated */
+```
+
+Get the encrypted wallet blob
+```
 Select
 	WalletBlob
 from
 	Wallets
 where
-	WalletState = 'Active'
 	and WalletID = '<walletid>'
 ```
+Get the latest currency & balance info for all the addresses from MasterCore
+ 1. Foreach address, update AddressBalances if there are new transactions
+```
+```
+
 ### Add an Address to a Wallet
 
 1. Get the latest currency & balance info for  the address from MasterCore
@@ -195,17 +267,39 @@ where
 
 ### Remove an Address from a Wallet
 
-1. Remove the address' record from AddressesInWallets
+1. First, update the encrypted wallet (after the address is removed from the blob by the front-end)
 ```
-Delete
+Start Transaction
+
+Update		/* update the encrypted wallet (after the address is removed from the blob by the front-end) */
+	Wallets
+set
+	WalletBlob = '<walletblob>'
+where
+	and WalletID = '<walletid>'
+```	
+
+2. Then, remove the address' record from AddressesInWallets
+```
+Delete			/* remove the address-wallet association, but leave the address balance & tx history */
 	AddressesInWallets
 where
 	Address = '<address>'
 	and (Protocol = 'Bitcoin' or Protocol = 'Mastercoin')
+	
+Commit Transaction
 ```
-### Create a Wallet Backup
+### Record a Wallet Backup
 
-1. 
+The front-end creates the wallet. The db just captures the time it was done
+```
+Update
+	Wallets
+set
+	LastBackup = CURRENT_TIMESTAMP	/* LastBackup has whole-second precision */
+	
+Commit Transaction
+```
 
 ### Create a Transaction
 
