@@ -56,6 +56,7 @@ create table if not exists AddressBalances (
 	, PropertyID smallint not null default 0	/* Bitcoin */		
 	, Ecosystem Ecosystem null
 	, BalanceAvailable numeric(19) not null default 0
+	, BalanceReserved numeric(19) null
 	, BalanceResForOffer numeric(19) null		/* may not be used by most addresses */
 	, BalanceResForAccept numeric(19) null		/* may not be used by most addresses */
 	, LastTxHash bytea null				/* last tx that affected this currency for this address, null if no tx's */
@@ -136,6 +137,7 @@ create table if not exists AddressesInTxs (					/* many-to-many */
 	, AddressTxIndex int2 not null			/* position in the input or output list */
 	, AddressRole AddressRole not null		
 	, BalanceAvailableCreditDebit numeric(19) null		/* how much the balance changed, */
+	, BalanceReservedCreditDebit numeric(19) null		/* how much the balance changed, */
 	, BalanceResForOfferCreditDebit numeric(19) null	/* null means the balance type wasn’t involved in the tx */
 	, BalanceResForAcceptCreditDebit numeric(19) null	/* as opposed to 0 meaning no change in the balance as a result of the tx */
 	
