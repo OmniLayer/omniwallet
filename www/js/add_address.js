@@ -115,7 +115,8 @@ angular.module('omniwallet')
         $injector.get('userService').addAddress(result.address);
       }
       $scope.refresh();
-
+      $scope.addedNewAddress = true;
+      $scope.createdAddress = result.address;
     }, function() {});
   };
 
@@ -165,7 +166,8 @@ angular.module('omniwallet')
         encodePrivateKey(result.privKey, addr));
       }
       $scope.refresh();
-
+      $scope.addedNewAddress = true;
+      $scope.createdAddress = decodeAddressFromPrivateKey(result.privKey);
     }, function() {});
   };
 

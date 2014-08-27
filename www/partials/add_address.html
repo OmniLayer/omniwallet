@@ -26,8 +26,9 @@
       </div>
     </div>
     <br/>
-        <div ng-show="addedNewAddress" class="col-md-12" ng-style="{color:'green'}">
-            <h4>Successfully added the address:{{createdAddress}}</h4>       
+        <div ng-show="addedNewAddress" class="alert alert-success alert-dismissible" role="alert">
+            <button type="button" class="close" ng-click="addedNewAddress=false"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            <strong>{{createdAddress}}</strong> successfully added to your wallet
         </div>
     </div>
   <div ng-init="newAddress=false" ng-if="newAddress">
