@@ -59,7 +59,7 @@ create table if not exists AddressBalances (
 	, BalanceReserved numeric(19) null
 	, BalanceResForOffer numeric(19) null		/* may not be used by most addresses */
 	, BalanceResForAccept numeric(19) null		/* may not be used by most addresses */
-	, LastTxHash bytea null				/* last tx that affected this currency for this address, null if no tx's */
+	, LastTxHash varchar(96) null				/* last tx that affected this currency for this address, null if no tx's */
 
 	, primary key (Address, Protocol, PropertyID)
 )
@@ -84,7 +84,7 @@ create index AddressIndex on AddressesInWallets (Address, Protocol, PropertyID)
 
 /* all the transactions we know about; keeping them (forever?) even after an address or wallet is de-activated */
 create table if not exists Transactions (
-	TxHash bytea not null			/* \x... */
+	TxHash varchar(96) not null			/* \x... */
 	, Protocol Protocol not null		/* initially 'Bitcoin' or 'Mastercoin' */
 	, TxDBSerialNum serial8 unique		/* db internal identifier for each tx, for faster joins */
 	, TxType smallint not null		/* from the msg for a 'Mastercoin' tx */
@@ -131,7 +131,7 @@ create table if not exists TxJSON (
 create table if not exists AddressesInTxs (					/* many-to-many */
 	Address	varchar(64) not null
 	, PropertyID integer not null	
-	, TxHash bytea not null				/* \x... */
+	, TxHash varchar(96) not null				/* \x... */
 	, Protocol Protocol not null			/* initially 'Bitcoin' or 'Mastercoin' */
 	, TxDBSerialNum int8 not null default -1	/* db internal identifier for each tx, for faster joins */
 	, AddressTxIndex int2 not null			/* position in the input or output list */
@@ -161,7 +161,7 @@ create table if not exists PropertyHistory (
 	, PropertyID integer			/* signed 32-bit */
 	, Issuer varchar(64) not null		/* Address that created it */
 	, Ecosystem Ecosystem not null		/* Production or Test (for now) */
-	, TxHash bytea not null			/*the tx that performed the action */
+	, TxHash varchar(96) not null			/*the tx that performed the action */
 	, TxDBSerialNum int8 unique not null	/* db internal identifier for each tx, for faster joins */
 	, TxBlockTime timestamp(0) null		/* to identify the  action on a particular property */
 	, PropertyName varchar(256) null
