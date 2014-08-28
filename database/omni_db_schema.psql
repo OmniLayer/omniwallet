@@ -82,16 +82,18 @@ create table if not exists AddressesInWallets (		/* many-to-many */
 create index AddressIndex on AddressesInWallets (Address, Protocol, PropertyID)
 ;
 
-/* block header information, from https://en.bitcoin.it/wiki/Protocol_specification */
+/* block header information, from https://en.bitcoin.it/wiki/Protocol_specification & getblock RPC JSON */
 create table if not exists Blocks (
 	BlockNumber integer not null
 	, Protocol Protocol not null		/* initially 'Bitcoin' */
 	, BlockTime timestamp(0) not null	/* timestamp recording when this block was created (Will overflow in 2106) */
 	, Version integer null		/* Block version information, based upon the software version creating this block */
+	, BlockHash varchar(32) null
 	, PrevBlock varchar(32) null	/* hash value of the previous block this block references */
 	, MerkleRoot varchar(32) null	/* reference to a Merkle tree collection which is a hash of all transactions related to this block */
 	, Bits integer null		/* The calculated difficulty target being used for this block */
 	, Nonce integer null		/* The nonce used to generate this block… to allow variations of the header and compute different hashes */
+	, Size integer null
 	, TxCount integer null		/* Number of transaction entries */
 
 	, primary key (BlockTime, BlockNumber, Protocol)
