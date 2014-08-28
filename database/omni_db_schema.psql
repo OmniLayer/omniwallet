@@ -116,7 +116,7 @@ create table if not exists Transactions (
 	, TxBlockNumber integer null	
 	, TxSeqInBlock integer null		/* determined by order of tx's in the block */
 
-	, primary key (TxHash, Protocol)
+	, primary key (TxHash, Protocol, TxBlockNumber)
 )
 ;
 
