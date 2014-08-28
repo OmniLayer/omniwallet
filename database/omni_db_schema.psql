@@ -112,7 +112,7 @@ create table if not exists Transactions (
 	, TxType smallint not null		/* from the msg for a 'Mastercoin' tx */
 	, TxVersion smallint not null		/* from the msg for a 'Mastercoin' tx, 1(?) for a Bitcoin tx */
 	, Ecosystem Ecosystem null		/* Null for 'Bitcoin'-only tx's */
-	, TxSubmitTime timestamp(0) not null	/* when it was sent, use (TxBlocktime - 10 minutes) as estimate */
+	, TxSubmitTime timestamp(0) not null	/* when it was sent, use (Blocktime - 10 minutes) as estimate */
 	, TxState TxState not null		/* pending, valid, not valid */
 	, TxErrorCode smallint			/* successful? if not, why not? (see ErrorCodes) */		
 	, TxBlockNumber integer null	
@@ -132,10 +132,6 @@ create index TxTypes on Transactions (TxType, TxVersion, TxHash, Protocol)
 
 /* to find transactions by order in the blockchain */
 create index TxSeq on Transactions (TxBlockNumber, TxSeqInBlock, TxHash)
-;
-
-/* to find transactions by time */
-create index TxTime on Transactions (TxBlockTime, TxSeqInBlock, TxHash)
 ;
 
 /* for the future if we decide to store the tx JSON representation */
