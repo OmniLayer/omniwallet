@@ -82,9 +82,29 @@ create table if not exists AddressesInWallets (		/* many-to-many */
 create index AddressIndex on AddressesInWallets (Address, Protocol, PropertyID)
 ;
 
+/* block header information, from https://en.bitcoin.it/wiki/Protocol_specification */
+create table if not exists Blocks (
+	BlockNumber integer not null
+	, Protocol Protocol not null		/* initially 'Bitcoin' */
+	, BlockTime timestamp(0) not null	/* timestamp recording when this block was created (Will overflow in 2106) */
+	, Version integer null		/* Block version information, based upon the software version creating this block */
+	, PrevBlock varchar(32) null	/* hash value of the previous block this block references */
+	, MerkleRoot varchar(32) null	/* reference to a Merkle tree collection which is a hash of all transactions related to this block */
+	, Bits integer null		/* The calculated difficulty target being used for this block */
+	, Nonce integer null		/* The nonce used to generate this block… to allow variations of the header and compute different hashes */
+	, TxCount integer null		/* Number of transaction entries */
+
+	, primary key (BlockTime, BlockNumber, Protocol)
+)
+;
+
+/* to find block info by block number */
+create index BlockNumTime on Blocks (BlockNumber, Protocol, BlockTime)
+;
+	
 /* all the transactions we know about; keeping them (forever?) even after an address or wallet is de-activated */
 create table if not exists Transactions (
-	TxHash varchar(96) not null			/* \x... */
+	TxHash varchar(96) not null		/* varchar so we can use LIKE & other string matching  */
 	, Protocol Protocol not null		/* initially 'Bitcoin' or 'Mastercoin' */
 	, TxDBSerialNum serial8 unique		/* db internal identifier for each tx, for faster joins */
 	, TxType smallint not null		/* from the msg for a 'Mastercoin' tx */
@@ -95,7 +115,6 @@ create table if not exists Transactions (
 	, TxErrorCode smallint			/* successful? if not, why not? (see ErrorCodes) */		
 	, TxBlockNumber integer null	
 	, TxSeqInBlock integer null		/* determined by order of tx's in the block */
-	, TxBlockTime timestamp(0) null	
 
 	, primary key (TxHash, Protocol)
 )
@@ -131,7 +150,7 @@ create table if not exists TxJSON (
 create table if not exists AddressesInTxs (					/* many-to-many */
 	Address	varchar(64) not null
 	, PropertyID integer not null	
-	, TxHash varchar(96) not null				/* \x... */
+	, TxHash varchar(96) not null			/* varchar so we can use LIKE & other string matching  */
 	, Protocol Protocol not null			/* initially 'Bitcoin' or 'Mastercoin' */
 	, TxDBSerialNum int8 not null default -1	/* db internal identifier for each tx, for faster joins */
 	, AddressTxIndex int2 not null			/* position in the input or output list */
@@ -161,7 +180,7 @@ create table if not exists PropertyHistory (
 	, PropertyID integer			/* signed 32-bit */
 	, Issuer varchar(64) not null		/* Address that created it */
 	, Ecosystem Ecosystem not null		/* Production or Test (for now) */
-	, TxHash varchar(96) not null			/*the tx that performed the action */
+	, TxHash varchar(96) not null		/*the tx that performed the action */
 	, TxDBSerialNum int8 unique not null	/* db internal identifier for each tx, for faster joins */
 	, TxBlockTime timestamp(0) null		/* to identify the  action on a particular property */
 	, PropertyName varchar(256) null
