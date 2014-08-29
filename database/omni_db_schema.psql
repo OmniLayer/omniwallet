@@ -88,11 +88,11 @@ create table if not exists Blocks (
 	, Protocol Protocol not null		/* initially 'Bitcoin' */
 	, BlockTime timestamp(0) not null	/* timestamp recording when this block was created (Will overflow in 2106) */
 	, Version integer null		/* Block version information, based upon the software version creating this block */
-	, BlockHash varchar(32) null
-	, PrevBlock varchar(32) null	/* hash value of the previous block this block references */
-	, MerkleRoot varchar(32) null	/* reference to a Merkle tree collection which is a hash of all transactions related to this block */
-	, Bits integer null		/* The calculated difficulty target being used for this block */
-	, Nonce integer null		/* The nonce used to generate this block… to allow variations of the header and compute different hashes */
+	, BlockHash varchar(64) null
+	, PrevBlock varchar(64) null	/* hash value of the previous block this block references */
+	, MerkleRoot varchar(64) null	/* reference to a Merkle tree collection which is a hash of all transactions related to this block */
+	, Bits bytea null		/* The calculated difficulty target being used for this block */
+	, Nonce bigint null		/* The nonce used to generate this block… to allow variations of the header and compute different hashes */
 	, Size integer null
 	, TxCount integer null		/* Number of transaction entries */
 
@@ -193,7 +193,6 @@ create table if not exists PropertyHistory (
 
 	, primary key (PropertyID, Protocol, PropertyName)
 	, foreign key (Issuer, Protocol, PropertyID) references AddressBalances (Address, Protocol, PropertyID)
-	, foreign key (TxHash, Protocol) references Transactions
 	, foreign key (TxDBSerialNum, TxHash, Protocol) references Transactions (TxDBSerialNum, TxHash, Protocol)
 )
 ;
