@@ -148,7 +148,6 @@ create table if not exists TxJSON (
 create table if not exists AddressesInTxs (					/* many-to-many */
 	Address	varchar(64) not null
 	, PropertyID integer not null	
-	, TxHash varchar(96) not null			/* varchar so we can use LIKE & other string matching  */
 	, Protocol Protocol not null			/* initially 'Bitcoin' or 'Mastercoin' */
 	, TxDBSerialNum int8 not null default -1	/* db internal identifier for each tx, for faster joins */
 	, AddressTxIndex int2 not null			/* position in the input or output list */
