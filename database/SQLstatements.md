@@ -112,13 +112,13 @@ from
 	, Transactions tx
 where
 	and ait.Address = '<address>'
-	and ait.TxHash = tx.TxHash
+	and ait.TxDBSerialNum = tx.TxDBSerialNum
 	/*
 	 for Production ecosystem add:
 	 and tx.Ecosystem = 'Production'
 	*/
 order by
-	TxSubmitTime	/* time submitted, maybe not yet confirmed or valid */
+	tx.TxSubmitTime	/* time submitted, maybe not yet confirmed or valid */
 ```
 ### Get Details for a Transaction by tx hash
 ```
@@ -127,7 +127,7 @@ Select
 from
 	Transactions tx
 where
-	tx.TxHash = '\x<txhash>'
+	tx.TxHash = '<txhash>'
 ```
 ### Get Details for a Transaction by TxDBSerialNum
 ```
