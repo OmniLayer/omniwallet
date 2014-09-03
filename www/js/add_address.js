@@ -66,6 +66,8 @@ angular.module('omniwallet')
       var exportModalInstance = $modal.open({
         templateUrl: '/partials/export_wallet.html',
         controller: function($scope, $modalInstance, wallet){
+          $scope.summary = [];
+          $scope.exportFinished = false;
           $scope.exportWallet = function(exportData){
             $scope.exportInProgress=true;
             $scope.exported = 0;
@@ -88,8 +90,8 @@ angular.module('omniwallet')
                 });
                 fileName=exportData.backupName+".json";
                 saveAs(exportBlob, fileName);
-                
-                return $modalInstance.dismiss("success");
+                $scope.exportInProgress = false;
+                return $scope.exportFinished = true;
               }
               
               $scope.$apply(function(){
@@ -104,6 +106,7 @@ angular.module('omniwallet')
                   blob.addresses.push({ address: obj.address, privkey: "" });
                   $scope.progressMessage = "Exported watch address " + addr;
                 }
+                $scope.summary.push({color:"green",message: $scope.progressMessage});
                 $scope.exported++;
               });
               return next();
