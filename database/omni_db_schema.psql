@@ -57,9 +57,8 @@ create table if not exists AddressBalances (
 	, Ecosystem Ecosystem null
 	, BalanceAvailable numeric(19) not null default 0
 	, BalanceReserved numeric(19) null
-	, BalanceResForOffer numeric(19) null		/* may not be used by most addresses */
-	, BalanceResForAccept numeric(19) null		/* may not be used by most addresses */
-	, LastTxHash varchar(96) null				/* last tx that affected this currency for this address, null if no tx's */
+	, BalanceAccepted numeric(19) null
+	, LastTxHash varchar(64) null				/* last tx that affected this currency for this address, null if no tx's */
 
 	, primary key (Address, Protocol, PropertyID)
 )
@@ -106,15 +105,15 @@ create index BlockNumTime on Blocks (BlockNumber, Protocol, BlockTime)
 	
 /* all the transactions we know about; keeping them (forever?) even after an address or wallet is de-activated */
 create table if not exists Transactions (
-	TxHash varchar(96) not null		/* varchar so we can use LIKE & other string matching  */
+	TxHash varchar(64) not null		/* varchar so we can use LIKE & other string matching  */
 	, Protocol Protocol not null		/* initially 'Bitcoin' or 'Mastercoin' */
 	, TxDBSerialNum serial8 unique		/* db internal identifier for each tx, for faster joins */
-	, TxType smallint not null		/* from the msg for a 'Mastercoin' tx */
-	, TxVersion smallint not null		/* from the msg for a 'Mastercoin' tx, 1(?) for a Bitcoin tx */
-	, Ecosystem Ecosystem null		/* Null for 'Bitcoin'-only tx's */
-	, TxSubmitTime timestamp(0) not null	/* when it was sent, use (Blocktime - 10 minutes) as estimate */
+	, TxType smallint not null		/* from the RPC result for a 'Mastercoin' tx, 0 for 'Bitcoin' tx's */
+	, TxVersion smallint not null		/* from the RPC result */
+	, Ecosystem Ecosystem null		/* Null for 'Bitcoin' tx's */
+	, TxSubmitTime timestamp(0) null	/* when it was sent, if known */
 	, TxState TxState not null		/* pending, valid, not valid */
-	, TxErrorCode smallint			/* successful? if not, why not? (see ErrorCodes) */		
+	, TxErrorCode smallint null		/* successful? if not, why not? (see ErrorCodes) */		
 	, TxBlockNumber integer null	
 	, TxSeqInBlock integer null		/* determined by order of tx's in the block */
 
@@ -152,11 +151,10 @@ create table if not exists AddressesInTxs (					/* many-to-many */
 	, TxDBSerialNum int8 not null default -1	/* db internal identifier for each tx, for faster joins */
 	, AddressTxIndex int2 not null			/* position in the input or output list */
 	, AddressRole AddressRole not null		
-	, BalanceAvailableCreditDebit numeric(19) null		/* how much the balance changed, */
-	, BalanceReservedCreditDebit numeric(19) null		/* how much the balance changed, */
-	, BalanceResForOfferCreditDebit numeric(19) null	/* null means the balance type wasn’t involved in the tx */
-	, BalanceResForAcceptCreditDebit numeric(19) null	/* as opposed to 0 meaning no change in the balance as a result of the tx */
-	
+	, BalanceAvailableCreditDebit numeric(19) null		/* how much the balance changed */
+	, BalanceReservedCreditDebit numeric(19) null		/* how much the balance changed */
+	, BalanceAcceptedCreditDebit numeric(19) null		/* how much the balance changed */
+
 	, primary key (Address, TxDBSerialNum, PropertyID, AddressRole)
 	, foreign key (Address, Protocol, PropertyID) references AddressBalances
 	, foreign key (TxDBSerialNum, TxHash, Protocol) references Transactions (TxDBSerialNum, TxHash, Protocol)
@@ -177,7 +175,7 @@ create table if not exists PropertyHistory (
 	, PropertyID integer			/* signed 32-bit */
 	, Issuer varchar(64) not null		/* Address that created it */
 	, Ecosystem Ecosystem not null		/* Production or Test (for now) */
-	, TxHash varchar(96) not null		/*the tx that performed the action */
+	, TxHash varchar(64) not null		/*the tx that performed the action */
 	, TxDBSerialNum int8 unique not null	/* db internal identifier for each tx, for faster joins */
 	, TxBlockTime timestamp(0) null		/* to identify the  action on a particular property */
 	, PropertyName varchar(256) null
