@@ -31,7 +31,7 @@
       <button type="button" class="btn btn-warning" ng-disabled="exportInProgress" ng-click="close()" ng-hide="exportFinished">Cancel</button>
       <button type="button" class="btn btn-success" ng-click="close()" ng-show="exportFinished">Close</button>
       <progressbar ng-show="exportInProgress" style="margin-top:10px" animate="false" value="(exported * 100) / total" type="success" max="100"><b ng-show="exported > 0">{{exported}} / {{total}}</b></progressbar>
-      <h4 style="color: {{progressColor}};">{{progressMessage}}</h4>
+      <h4  ng-hide="exportFinished" style="color: {{progressColor}};">{{progressMessage}}</h4>
     </div>
   </div>
 </form>
