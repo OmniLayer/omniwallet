@@ -95,18 +95,25 @@ angular.module('omniwallet')
               }
               
               $scope.$apply(function(){
-                if(exportData.exportPrivate && obj.privkey) {
-                  var ecKey = Bitcoin.ECKey.decodeEncryptedFormat(obj.privkey, obj.address);
-                  var addr = ecKey.getBitcoinAddress().toString();
-                  var key = ecKey.getWalletImportFormat();
-                  blob.addresses.push({ address: addr, privkey: key });
-                  $scope.progressMessage = "Exported trading address " + addr;
+                try{
+                  if(exportData.exportPrivate && obj.privkey) {
+                    var ecKey = Bitcoin.ECKey.decodeEncryptedFormat(obj.privkey, obj.address);
+                    var addr = ecKey.getBitcoinAddress().toString();
+                    var key = ecKey.getWalletImportFormat();
+                    blob.addresses.push({ address: addr, privkey: key });
+                    $scope.progressMessage = "Exported trading address " + addr;
+                    $scope.progressColor = "green";
+                  }
+                  if(exportData.exportWatch && !obj.privkey) {
+                    blob.addresses.push({ address: obj.address, privkey: "" });
+                    $scope.progressMessage = "Exported watch address " + addr;
+                    $scope.progressColor = "green";
+                  }
+                } catch (e) {
+                  $scope.progressMessage = "Error exporting "+addr+": " + e;
+                  $scope.progressColor = "red";
                 }
-                if(exportData.exportWatch && !obj.privkey) {
-                  blob.addresses.push({ address: obj.address, privkey: "" });
-                  $scope.progressMessage = "Exported watch address " + addr;
-                }
-                $scope.summary.push({color:"green",message: $scope.progressMessage});
+                $scope.summary.push({color:$scope.progressColor,message: $scope.progressMessage});
                 $scope.exported++;
               });
               return next();
