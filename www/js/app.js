@@ -37,7 +37,7 @@ var app = angular.module('omniwallet', [
   $routeProvider.when('/wallet/:page?', {
       templateUrl: function(route) {
         //new views added here
-        var availableViews = ['overview', 'addresses', 'trade', 'history', 'send', 'pending'];
+        var availableViews = ['overview', 'addresses', 'trade', 'history', 'send', 'myoffers'];
 
         var viewFound = availableViews.indexOf(route.page);
         if (viewFound == -1)
@@ -147,4 +147,58 @@ function TransformRequest(data) {
 
   return angular.isObject(data) && String(data) !== '[object File]' ? param(data) : data;
 }
-
+app.directive('fixedHeader', ['$timeout', function ($timeout) {
+    return {
+        restrict: 'A',
+        scope: {
+            tableHeight: '@'
+        },
+        link: function ($scope, $elem, $attrs, $ctrl) {
+            // wait for content to load into table and the tbody to be visible
+            $scope.$watch(function () { return $elem.find("tbody").is(':visible') },
+                function (newValue, oldValue) {
+                    if (newValue === true) {
+                        // wrap in $timeout to give table a chance to finish rendering
+                        $timeout(function () {
+                            // reset display styles so column widths are correct when measured below
+                            $elem.find('thead, tbody').css('display', '');
+                            // set widths of columns
+                            $elem.find('th').each(function (i, thElem) {
+                                thElem = $(thElem);
+ 
+                                var columnWidth = thElem.width();
+                                thElem.width(columnWidth);
+                            });
+                            $elem.find('td').each(function (j, tdElem) {
+                                tdElem = $(tdElem);
+ 
+                                var columnWidth = tdElem.width();
+                                tdElem.width(columnWidth);
+                            });
+ 
+                            // set css styles on thead and tbody
+                            $elem.find('thead').css({
+                                'display': 'block',
+                            });
+ 
+                            $elem.find('tbody').css({
+                                'display': 'block',
+                                'height': $scope.tableHeight || '350px',
+                                'overflow': 'auto',
+                            });
+ 
+                            var scrollBarWidth = $elem.find('thead').width() - $elem.find('tbody')[0].clientWidth;
+                            if (scrollBarWidth > 0) {
+                                $elem.find('tbody').each(function (i, elem) {
+                                    $(elem).width($(elem).width() + scrollBarWidth);
+                                });
+                                $elem.find('thead').each(function (j, elem) {
+                                    $(elem).width($(elem).width() - scrollBarWidth);
+                                });
+                            }
+                        });
+                    }
+                });
+        }
+    }
+}]);

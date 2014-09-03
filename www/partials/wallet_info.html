@@ -72,7 +72,7 @@
     </div>
     <h3 ng-show="orderbook.length == 0" class="text-center">Loading...<img src="/assets/img/34-1.gif"></h3>
     <br /><small><h4 ng-hide="orderbook.length == 0"><span class="text-info text-center"> {{orderbook.length}} Total Transacations </span></h4></small>
-    <table ng-hide="orderbook.length == 0" class="table table-striped table-hover table-condensed">
+    <table ng-hide="orderbook.length == 0" class="table table-striped table-hover table-condensed" fixed-header>
       <thead>
           <tr>
             <th>Transaction hash</th>
@@ -81,11 +81,10 @@
             <th>Cost</th>
             <th>Buyer Fee</th>
             <th>Payment Window (Blocks)</th>
+            <th></th>
           </tr>
       </thead>
       <tbody>
-      </tbody>
-
       <tr ng-repeat="transaction in orderbook" ng-hide="({{transaction.color=='bgc-expired'}} || {{transaction.color=='bgc-done'}} || {{transaction.formatted_amount_available * transaction.formatted_price_per_coin < .00005757}}) && inactive" class="check-element animate-hide">
         <td ng-click="setHashExplorer(transaction)"><a href="/explorer/inspector?view={{transaction.tx_hash}}">{{transaction.tx_hash_concat}}</a></td>
         <td class="number" title="{{transaction.formatted_price_per_coin}}" ng-bind-html="transaction.formatted_price_per_coin | numeraljs: '0,0.00000000'"></td>
@@ -103,7 +102,7 @@
           <td ng-show="transaction.from_address == selectedAddress"> Your offer/purchase </td>
       </td>
       </tr>
-
+      </tbody>
     </table>  
     
   </div>
