@@ -122,6 +122,15 @@ angular.module('omniwallet')
             // Start the loop
             next();
           };
+          
+          
+          $scope.cancel = function() {
+            $modalInstance.dismiss('cancel');
+          };
+          
+          $scope.close = function() {
+            $modalInstance.dismiss('close');
+          };
         },
         scope: $scope,
         resolve:{

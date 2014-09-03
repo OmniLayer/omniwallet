@@ -18,7 +18,7 @@
   </div>
   <div class="modal-footer">
     <input type="submit" class="btn btn-primary" value="Import Wallet" ng-disabled="!walletData || processing" ng-hide="importFinished">
-    <button type="button" class="btn btn-warning" ng-disabled="processing" ng-click="close()" ng-hide="importFinished">Cancel</button>
+    <button type="button" class="btn btn-warning" ng-disabled="processing" ng-click="cancel()" ng-hide="importFinished">Cancel</button>
     <button type="button" class="btn btn-success" ng-click="close()" ng-show="importFinished">Close</button>
     <progressbar ng-show="processing" style="margin-top:10px" animate="false" value="(completed * 100) / total" type="success" max="100"><b ng-show="completed > 0">{{completed}} / {{total}}</b></progressbar>
     <h4  ng-hide="importFinished" style="color: {{progressColor}};">{{progressMessage}}</h4>
