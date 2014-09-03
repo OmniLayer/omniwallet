@@ -98,12 +98,13 @@ where
 	and ait.TxHash = tx.TxHash
 	/*
 	 for Production ecosystem add:
+	 and ait.Protocol = 'Mastercoin'
 	 and tx.Ecosystem = 'Production'
 	*/
 order by
-	TxSubmitTime	/* time submitted, maybe not yet confirmed or valid */
+	tx.TxSubmitTime	/* time submitted, maybe not yet confirmed or valid */
 ```
-1. Get Transactions for an Address
+### Get Transactions record(s) for an Address
 ```
 Select
 	tx.*
@@ -115,12 +116,13 @@ where
 	and ait.TxDBSerialNum = tx.TxDBSerialNum
 	/*
 	 for Production ecosystem add:
+	 and ait.Protocol = 'Mastercoin'
 	 and tx.Ecosystem = 'Production'
 	*/
 order by
 	tx.TxSubmitTime	/* time submitted, maybe not yet confirmed or valid */
 ```
-### Get Details for a Transaction by tx hash
+### Get Transactions record(s) for a tx hash
 ```
 Select
 	tx.*
@@ -129,7 +131,7 @@ from
 where
 	tx.TxHash = '<txhash>'
 ```
-### Get Details for a Transaction by TxDBSerialNum
+### Get Transactions record(s) for a TxDBSerialNum
 ```
 Select
 	tx.*
@@ -137,6 +139,46 @@ from
 	Transactions tx
 where
 	tx.TxDBSerialNum = <TxDBSerialNum>
+```
+### Get Transactions record(s) for an Address
+```
+Select
+	tx.*
+from
+	AddressesInTxs ait
+	, Transactions tx
+where
+	and ait.Address = '<address>'
+	and ait.TxDBSerialNum = tx.TxDBSerialNum
+	/*
+	 for Production ecosystem add:
+	 and ait.Protocol = 'Mastercoin'
+	 and tx.Ecosystem = 'Production'
+	*/
+order by
+	tx.TxSubmitTime	/* time submitted, maybe not yet confirmed or valid */
+```
+### Get AddressesInTxs record(s) for a tx hash
+```
+Select
+	ait.*
+from
+	AddressesInTxs ait
+	, Transactions tx
+where
+	tx.TxHash = '<txhash>'
+	and ait.TxDBSerialNum = tx.TxDBSerialNum
+```
+### Get AddressesInTxs record(s) for a TxDBSerialNum
+```
+Select
+	*
+from
+	AddressesInTxs
+where
+	TxDBSerialNum = <TxDBSerialNum>
+order by
+	PropertyID
 ```
 ### Get exchange rates
 ```
