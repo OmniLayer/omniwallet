@@ -122,24 +122,25 @@ create table if not exists Transactions (
 ;
 
 /* to find transactions by the db internal id */
-create unique index TxDBSerials on Transactions (TxDBSerialNum, TxHash, Protocol)
+create unique index TxDBSerials on Transactions (TxDBSerialNum, Protocol)
 ;
 
-/* to find transactions by type */
-create index TxTypes on Transactions (TxType, TxVersion, TxHash, Protocol)
+/* to find transactions by type & version */
+create index TxTypes on Transactions (TxType, TxVersion, Protocol)
 ;
 
 /* to find transactions by order in the blockchain */
-create index TxSeq on Transactions (TxBlockNumber, TxSeqInBlock, TxHash)
+create index TxSeq on Transactions (TxBlockNumber, TxSeqInBlock)
 ;
 
-/* for the future if we decide to store the tx JSON representation */
+/* data that is specific to the particular transaction type, as a JSON object */
 create table if not exists TxJSON (
-	TxDBSerialNum int8 unique not null	/* db internal identifier for each tx, for faster joins */
-	, TxMsg	json not null			/* the tx message fields */
+	TxDBSerialNum int8 not null		/* db internal identifier for each tx, for faster joins */
+	, Protocol Protocol not null		/* initially 'Bitcoin' or 'Mastercoin' */
+	, TxData json not null			/* the tx message fields */
 
-	, primary key (TxDBSerialNum)
-	, foreign key (TxDBSerialNum) references Transactions(TxDBSerialNum)
+	, primary key (TxDBSerialNum, Protocol)
+	, foreign key (TxDBSerialNum, Protocol) references Transactions(TxDBSerialNum, Protocol)
 )
 ;
 
@@ -150,6 +151,7 @@ create table if not exists AddressesInTxs (					/* many-to-many */
 	, Protocol Protocol not null			/* initially 'Bitcoin' or 'Mastercoin' */
 	, TxDBSerialNum int8 not null default -1	/* db internal identifier for each tx, for faster joins */
 	, AddressTxIndex int2 not null			/* position in the input or output list */
+	, LinkedTxDBSerialNum int8 not null default -1	/* tx with the associated output for inputs, or with the associated input for outputs */
 	, AddressRole AddressRole not null		
 	, BalanceAvailableCreditDebit numeric(19) null		/* how much the balance changed */
 	, BalanceReservedCreditDebit numeric(19) null		/* how much the balance changed */
@@ -157,7 +159,7 @@ create table if not exists AddressesInTxs (					/* many-to-many */
 
 	, primary key (Address, TxDBSerialNum, PropertyID, AddressRole)
 	, foreign key (Address, Protocol, PropertyID) references AddressBalances
-	, foreign key (TxDBSerialNum, TxHash, Protocol) references Transactions (TxDBSerialNum, TxHash, Protocol)
+	, foreign key (TxDBSerialNum, Protocol) references Transactions (TxDBSerialNum, Protocol)
 )
 ;
 
@@ -166,8 +168,33 @@ create index TxDBSerial on AddressesinTxs (TxDBSerialNum, PropertyID)
 ;
 
 /* to find info about addresses affected by a particular transaction */
-create index TxHash on AddressesinTxs (TxHash, Protocol, PropertyID)
+create index TxHash on AddressesinTxs (TxHash, Protocol)
 ;
+
+/* "temporary" table for pre-populating the LinkedTxDBSerialNum field when doing bulk loads of AddressesInTxs */
+create table if not exists ToLinkAddressesInTxs (		/* many-to-many */
+	Address	varchar(64) not null
+	, PropertyID integer not null	
+	, Protocol Protocol not null			/* initially 'Bitcoin' or 'Mastercoin' */
+	, TxDBSerialNum int8 not null default -1	/* db internal identifier for each tx, for faster joins */
+	, AddressTxIndex int2 not null			/* position in the input or output list */
+	, LinkedTxDBSerialNum int8 not null default -1	/* tx with the associated output for inputs, or with the associated input for outputs */
+	, AddressRole AddressRole not null
+	, ThisTxHash varchar(64)
+	, LinkedTxHash varchar(64)
+
+	, primary key (Address, TxDBSerialNum, PropertyID, AddressRole)
+)
+;
+
+/* to find info about addresses affected by a particular transaction */
+create index TxDBSerial on ToLinkAddressesInTxs (TxDBSerialNum, PropertyID)
+;
+
+/* to find info about addresses affected by a particular transaction */
+create index TxHash on ToLinkAddressesInTxs (TxHash, Protocol)
+;
+
 
 /* actions on Smart Properties (and currencies??); 1 row for each action on the SP */
 create table if not exists PropertyHistory (
@@ -190,7 +217,7 @@ create table if not exists PropertyHistory (
 
 	, primary key (PropertyID, Protocol, PropertyName)
 	, foreign key (Issuer, Protocol, PropertyID) references AddressBalances (Address, Protocol, PropertyID)
-	, foreign key (TxDBSerialNum, TxHash, Protocol) references Transactions (TxDBSerialNum, TxHash, Protocol)
+	, foreign key (TxDBSerialNum, TxHash, Protocol) references Transactions (TxDBSerialNum, Protocol)
 )
 ;
 
