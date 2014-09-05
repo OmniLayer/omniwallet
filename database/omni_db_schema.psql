@@ -31,8 +31,8 @@ create type WalletState as enum ('Active', 'Inactive', 'Suspended');
 /* Wallets have addresses with private keys. Objects being watched are in the Following table */
 create table if not exists Wallets (
 	WalletID uuid
-	, Created timestamp(0) not null default CURRENT_TIMESTAMP
-	, LastLogin timestamp(0) not null default CURRENT_TIMESTAMP
+	, Created timestamp(0) null 
+	, LastLogin timestamp(0) null 
 	, LastBackup timestamp(0) null
 	, SignedIn boolean not null default FALSE		/* signed in now? */
 	, WalletState WalletState not null default 'Active'
