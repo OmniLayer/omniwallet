@@ -15,13 +15,15 @@ create database Omniwallet;
 
 /* 
  * AddressRole type definitions:
+ *	buyer accepted a DEx sell offer
  *	issuer created a smart property
  *	participant is an investor in a crowdsale
  *	payee received a Send to Owners amount
  *	recipient received a Simple Send
+ *	seller created a DEx sell offer
  *	sender sent a Simple Send
  */
-create type AddressRole as enum ('issuer', 'participant', 'payee', 'recipient', 'sender');
+create type AddressRole as enum ('buyer', 'issuer', 'participant', 'payee', 'recipient', 'seller', 'sender');
 create type Protocol as enum ('Bitcoin', 'Mastercoin');
 create type Ecosystem as enum ('Production', 'Test');
 create type ObjectType as enum ('address', 'property', 'tx_version_type');
