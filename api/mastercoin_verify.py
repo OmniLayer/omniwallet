@@ -11,6 +11,7 @@ data_dir_root = os.environ.get('DATADIR')
 app = Flask(__name__)
 app.debug = True
 
+#TODO COnversion
 @app.route('/properties')
 def properties():
   prop_glob = glob.glob(data_dir_root + '/properties/*.json')
@@ -28,7 +29,6 @@ def properties():
 def addresses():
   currency_id = request.args.get('currency_id')
   response = []
-  #addr_glob = glob.glob(data_dir_root + '/addr/*.json')
 
   currency_id = re.sub(r'\D+', '', currency_id) #check alphanumeric
   sqlconn.execute("select * from addressbalances where propertyid=" + str(currency_id))
