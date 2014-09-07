@@ -1,15 +1,33 @@
 <div class="modal-body">
-    <h3 class="text-center"> Confirm send </h3>
-    <h3>You're about to send {{convertSatoshiToDisplayedValue(sendAmount)}} {{getDisplayedAbbreviation()}} and {{convertSatoshiToDisplayedValue(totalCost, true)}} BTC in transaction costs to {{sendTo}}</h3>
+    <div>
+    <div class="text-left modal-title">Confirm send
+    <button ng-style="{float:'right'}" ng-disabled="wating" class="btn btn-xs" ng-click="cancel()">cancel | <span class="glyphicon glyphicon-remove"></span></button>
+    </div>    
+    </div>
   <p><br>
-  If the above is correct, please press Send Funds.
-  If you encounter an error, feel free to click away from the dialog and try again.
+  <table>
+    <tr>
+        <td ng-style="{color:'gray'}" width="100px">Token:</td>   <td>{{getDisplayedAbbreviation()}}</td>
+    </tr>
+    <tr>
+        <td ng-style="{color:'gray'}">Amount:</td>   <td>{{convertSatoshiToDisplayedValue(sendAmount)}}</td>
+    </tr>
+    <tr>
+        <td ng-style="{color:'gray'}">From:</td>   <td>*</td>
+    </tr>
+    <tr>
+        <td ng-style="{color:'gray'}">To:</td>   <td>{{sendTo}}</td>
+    </tr>
+  </table>
+  <br>
+    <hr>
+    <h6 ng-style="{color:'gray'}">Transaction fee: {{convertSatoshiToDisplayedValue(totalCost, true)}} Bitcoins
   </p>
-<div class="modal-footer">
+<div class="modal-footer" ng-init="mouseOver=false;">
     <div class="row" ng-hide=transactionSuccess>
-    <button ng-disabled="clicked" class="btn btn-primary" ng-click="ok()">Yes, send my funds</button>
-    <button ng-disabled="wating" class="btn btn-warning" ng-click="cancel()">Cancel</button>
-    <img class="" src="/assets/img/34-1.gif" ng-show="waiting">
+    <button ng-disabled="clicked" class="btn btn-lg send-btn" ng-click="ok()" ng-mouseenter="mouseOver=true;" ng-mouseout="mouseOver=false;">
+    <img class="send-img" src="/assets/img/SendIcon_normal.png"><img class="" src="/assets/img/omni_spinner_ver1.gif" ng-show="waiting">&nbsp; Send those funds
+    </button>
     </div>
       <br>
     <div class="row">

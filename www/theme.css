@@ -43,6 +43,22 @@ body {
   font-size:300%;
   color:lightgray;
 }
+.modal-title{
+  font-size:36px;
+  color:#636363;
+  padding-left:0px;
+}
+.send-btn{
+  font-size:32px;
+  font-weight: bold;
+  color: #44b8ef;
+}
+.send-btn:hover{
+  color: #2e508f;
+}
+.send-btn:hover .send-img{
+  content: url("/assets/img/SendIcon_roll.png");
+}
 .left {
   position: absolute;
   margin-top: 125px;

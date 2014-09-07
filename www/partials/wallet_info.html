@@ -55,23 +55,31 @@
       <br/>
       <br/>
       <br/>
-      <div class="col-xs-9">
-        <div ng-show="showNoCoinAlert" class="alert alert-danger alert-dismissible" role="alert">
-          <button type="button" class="close" ng-click="hideNoCoinAlert();"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-          <h3>You Don't have {{ currAcronyms[ activeCurrencyPair[1] ] }} to sell</h3>
+        <div>
+        <table>
+          <tr>
+            <td></td>
+            <td><h3> <strong> Sell {{ currAcronyms[ activeCurrencyPair[1] ] }} </strong> </h3></td>
+          </tr>
+          <tr>
+            <td>
+              <div>
+              <div ng-show="showNoCoinAlert" class="alert alert-danger alert-dismissible" role="alert">
+               <button type="button" class="close" ng-click="hideNoCoinAlert();"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+               Sorry, you don't have any {{ currAcronyms[ activeCurrencyPair[1] ] }}'s available to sell
+              </div>
+              </div>
+            </td>
+            <td>
+              <div class="btn-group btn-group-justified">
+                <div class="btn-group">
+                 <button class="btn btn-primary" ng-click="setView('saleOffer')" type="submit">Start new sell offer</button>
+                </div>
+              </div>
+            </td>
+          </tr>
+        </table>
         </div>
-        </div>
-      <div class="col-xs-3">
-        
-        <h3> <strong> Sell {{ currAcronyms[ activeCurrencyPair[1] ] }} </strong> </h3>
-          <div class="btn-group btn-group-justified">
-            <div class="btn-group">
-            <button class="btn btn-primary" ng-click="setView('saleOffer')" type="submit">Start new sell offer</button>
-            <br><br>
-            </div>
-          </div>
-      </div>
-
     </div>
 
     <div class="col-xs-4">
