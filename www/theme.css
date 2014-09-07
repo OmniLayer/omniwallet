@@ -66,7 +66,34 @@ a {
 .footer .navbar-nav > li {
   padding-top: 0;
 }
-
+.send-title{
+  padding-left: 0;
+  font-size: 36px;
+  color: #636363;
+}
+.send-btn{
+  background-color: #f5f2f2;
+  color: #44b8ef;
+  font-size: 32px;
+}
+.send-btn:hover{
+  color: #2e508f;
+}
+.send-btn:hover .send-img{
+  content: url("/assets/img/SendIcon_roll.png");
+}
+.description-title{
+  font-size: 18px;
+  color: #b8b7b7;
+}
+.description-text{
+  font-size: 18px;
+  color: #696969;
+}
+.send-fee{
+  font-size: 16px;
+  color:#c6c6c6;
+}
 input[type=number]::-webkit-inner-spin-button,
 input[type=number]::-webkit-outer-spin-button {
     -webkit-appearance: none;
