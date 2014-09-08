@@ -82,6 +82,12 @@ a {
 .send-btn:hover .send-img{
   content: url("/assets/img/SendIcon_roll.png");
 }
+.send-cancel{
+  background-color: #ebebeb;
+  color:#636363;
+  font-size: 15px;
+  font-weight: bold;
+}
 .description-title{
   font-size: 18px;
   color: #b8b7b7;
@@ -93,6 +99,9 @@ a {
 .send-fee{
   font-size: 16px;
   color:#c6c6c6;
+}
+.footer-div{
+  padding-bottom: 0px;
 }
 input[type=number]::-webkit-inner-spin-button,
 input[type=number]::-webkit-outer-spin-button {

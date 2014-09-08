@@ -34,6 +34,7 @@ function WalletSendAssetsController($modal, $scope, $http, $q, userService, wall
     var coin = $scope.selectedCoin.symbol;
     var address = $scope.selectedAddress;
     var sendTo = $scope.sendTo;
+    
     var marked = $scope.marked;
 
     var required = [coin, address, sendAmount, sendTo, minerFees, totalFeeCost,  balance, btcbalance, $scope.sendForm.$valid, marked];
@@ -76,6 +77,7 @@ function WalletSendAssetsController($modal, $scope, $http, $q, userService, wall
     $modalScope.sendAmount=  $scope.selectedCoin.divisible ? +$scope.convertDisplayedValue($scope.sendAmount) : +$scope.sendAmount,
     $modalScope.minerFees= +$scope.convertDisplayedValue($scope.minerFees),
     $modalScope.sendTo= $scope.sendTo;
+    $modalScope.sendFrom= $scope.selectedAddress;
     $modalScope.totalCost= +$scope.convertDisplayedValue($scope.totalCost);
   };
   
