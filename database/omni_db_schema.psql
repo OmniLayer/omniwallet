@@ -215,7 +215,8 @@ create table if not exists SmartProperties (
 
 	, primary key (PropertyID, Protocol)
 	, foreign key (Issuer, Protocol, PropertyID) references AddressBalances (Address, Protocol, PropertyID)
-	, foreign key (TxDBSerialNum, Protocol) references Transactions (TxDBSerialNum, Protocol)
+	, foreign key (CreateTxDBSerialNum, Protocol) references Transactions (TxDBSerialNum, Protocol)
+	, foreign key (LastTxDBSerialNum, Protocol) references Transactions (TxDBSerialNum, Protocol)
 )
 ;
 
