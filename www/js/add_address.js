@@ -84,17 +84,17 @@ angular.module('omniwallet')
             };
             
             var exportAddress = function(obj){
-              if($scope.exported == $scope.total) {
-                var exportBlob = new Blob([JSON.stringify(blob)], {
-                  type: 'application/json;charset=utf-8'
-                });
-                fileName=exportData.backupName+".json";
-                saveAs(exportBlob, fileName);
-                $scope.exportInProgress = false;
-                return $scope.exportFinished = true;
-              }
-              
               $scope.$apply(function(){
+                if($scope.exported == $scope.total) {
+                  var exportBlob = new Blob([JSON.stringify(blob)], {
+                    type: 'application/json;charset=utf-8'
+                  });
+                  fileName=exportData.backupName+".json";
+                  saveAs(exportBlob, fileName);
+                  $scope.exportInProgress = false;
+                  return $scope.exportFinished = true;
+                }
+              
                 try{
                   if(exportData.exportPrivate && obj.privkey) {
                     var ecKey = Bitcoin.ECKey.decodeEncryptedFormat(obj.privkey, obj.address);
@@ -315,12 +315,13 @@ angular.module('omniwallet')
         };
         
         var validateAddress = function(address){
-          if($scope.completed == $scope.total){
-            $scope.progressMessage = "Validated!";
-            $scope.progressColor = "green";
-            return deferred.resolve(validated);
-          }
           $scope.$apply(function(){
+            if($scope.completed == $scope.total){
+              $scope.progressMessage = "Validated!";
+              $scope.progressColor = "green";
+              return deferred.resolve(validated);
+            }
+
             try{
               var addr = address.address;
               if(address.privkey){
