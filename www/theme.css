@@ -43,6 +43,11 @@ body {
   font-size:300%;
   color:lightgray;
 }
+.missing-dex-alert{
+  margin-top: 0px;
+  margin-bottom: 0px;
+  padding-top: 10px;
+}
 .left {
   position: absolute;
   margin-top: 125px;
