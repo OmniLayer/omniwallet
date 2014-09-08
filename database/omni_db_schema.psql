@@ -197,34 +197,44 @@ create index TxDBSerial on ToLinkAddressesInTxs (TxDBSerialNum, PropertyID)
 create index TxHash on ToLinkAddressesInTxs (TxHash, Protocol)
 ;
 
-
-/* actions on Smart Properties (and currencies??); 1 row for each action on the SP */
-create table if not exists PropertyHistory (
-	Protocol Protocol			/* Protocol plus PropertyID uniquely identify a property */
-	, PropertyID bigint			/* signed 32-bit */
-	, Issuer varchar(64) not null		/* Address that created it */
-	, Ecosystem Ecosystem not null		/* Production or Test (for now) */
-	, TxHash varchar(64) not null		/*the tx that performed the action */
-	, TxDBSerialNum int8 unique not null	/* db internal identifier for each tx, for faster joins */
-	, TxBlockTime timestamp(0) null		/* to identify the  action on a particular property */
+/* current state of Smart Properties (and currencies??); 1 row for each SP */
+create table if not exists SmartProperties (
+	Protocol Protocol				/* Protocol plus PropertyID uniquely identify a property */
+	, PropertyID bigint				/* signed 64-bit, to store unsigned 32 bit values */
+	, Issuer varchar(64) not null			/* Address that created it */
+	, Ecosystem Ecosystem null			/* Production or Test (for now) */
+	, CreateTxDBSerialNum int8 unique not null	/* the tx that created this SP, for faster joins */
+	, LastTxDBSerialNum int8 unique not null	/* the last tx that updated this SP, for faster joins */
 	, PropertyName varchar(256) null
 	, PropertyType smallint null		
 	, PrevPropertyID bigint null default 0
-	, PropertyURL varchar(256) null
-	, NumberOfTokens numeric(19) null	/* for a tx50 */
-	, PropertyData varchar(256) null
-	, CrowdsaleDeadline timestamp(0) null
+	, PropertyServiceURL varchar(256) null
 	, PropertyCategory varchar(256) null		/* see PropertyCategories - TBD */
 	, PropertySubcategory varchar(256) null		/* see PropertyCategories - TBD */
+	, PropertyData json null			/* with the current data for this SP, varies by SP type */
 
-	, primary key (PropertyID, Protocol, PropertyName)
+	, primary key (PropertyID, Protocol)
 	, foreign key (Issuer, Protocol, PropertyID) references AddressBalances (Address, Protocol, PropertyID)
-	, foreign key (TxDBSerialNum, TxHash, Protocol) references Transactions (TxDBSerialNum, Protocol)
+	, foreign key (TxDBSerialNum, Protocol) references Transactions (TxDBSerialNum, Protocol)
 )
 ;
 
-/* to find Smart Property history by issuing address */
-create index PropHist_Issuer on PropertyHistory (Issuer, PropertyID, Protocol, PropertyName, TxBlockTime)
+/* to find Smart Properties by issuing address */
+create unique index SP_Issuer on SmartProperties (Issuer, PropertyID, Protocol)
+;
+
+/* the list of transactions that affected each SP */
+create table if not exists PropertyHistory (
+	Protocol Protocol not null		/* Protocol plus PropertyID uniquely identify a property */
+	, PropertyID bigint not null		/* signed 64-bit, to store unsigned 32 bit values */
+	, TxDBSerialNum int8 not null		/* the tx that affected this SP, for faster joins */
+
+	, primary key (PropertyID, Protocol)
+)
+;
+
+/* to find Smart Properties by TxDBSerialNum */
+create index SP_Issuer on SmartProperties (TxDBSerialNum)
 ;
 
 /* A wallet can watch any object - address, SP, tx type (even a blocknumber?) */
