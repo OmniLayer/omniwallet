@@ -70,11 +70,13 @@ a {
   padding-left: 0;
   font-size: 36px;
   color: #636363;
+  font-family: 'Gudea', sans-serif;
 }
 .send-btn{
   background-color: #f5f2f2;
   color: #44b8ef;
   font-size: 32px;
+  font-family: 'Gudea', sans-serif;
 }
 .send-btn:hover{
   color: #2e508f;
@@ -87,18 +89,22 @@ a {
   color:#636363;
   font-size: 15px;
   font-weight: bold;
+  font-family: 'Gudea', sans-serif;
 }
 .description-title{
   font-size: 18px;
   color: #b8b7b7;
+  font-family: 'Gudea', sans-serif;
 }
 .description-text{
   font-size: 18px;
   color: #696969;
+  font-family: 'Gudea', sans-serif;
 }
 .send-fee{
   font-size: 16px;
   color:#c6c6c6;
+  font-family: 'Gudea', sans-serif;
 }
 .footer-div{
   padding-bottom: 0px;
