@@ -55,12 +55,12 @@ create table if not exists Wallets (
 create table if not exists AddressBalances (
 	Address	varchar(64)				/* Bitcoin addresses are 34 chars */
 	, Protocol Protocol not null default 'Bitcoin'	/* initially 'Bitcoin' or 'Mastercoin' */
-	, PropertyID smallint not null default 0	/* Bitcoin */		
+	, PropertyID bigint not null default 0		/* Bitcoin */		
 	, Ecosystem Ecosystem null
 	, BalanceAvailable numeric(19) not null default 0
 	, BalanceReserved numeric(19) null
 	, BalanceAccepted numeric(19) null
-	, LastTxHash varchar(64) null				/* last tx that affected this currency for this address, null if no tx's */
+	, LastTxHash varchar(64) null			/* last tx that affected this currency for this address, null if no tx's */
 
 	, primary key (Address, Protocol, PropertyID)
 )
@@ -69,7 +69,7 @@ create table if not exists AddressBalances (
 /* Addresses with private keys owned by each Wallet. See Following table for objects watched by a wallet. */
 create table if not exists AddressesInWallets (		/* many-to-many */
 	Address varchar(64) not null		/* Address must exist in the AddressBalances table */
-	, PropertyID integer not null		/* needed here for foreign key reference */
+	, PropertyID bigint not null		/* needed here for foreign key reference */
 	, Protocol Protocol not null		/* initially 'Bitcoin' */
 	, WalletID uuid	not null		/* WalletID must exist in the Wallets table */
 
@@ -149,7 +149,7 @@ create table if not exists TxJSON (
 /* Addresses that are involved in each transaction, with their role and changes to balances */
 create table if not exists AddressesInTxs (					/* many-to-many */
 	Address	varchar(64) not null
-	, PropertyID integer not null	
+	, PropertyID bigint not null	
 	, Protocol Protocol not null			/* initially 'Bitcoin' or 'Mastercoin' */
 	, TxDBSerialNum int8 not null default -1	/* db internal identifier for each tx, for faster joins */
 	, AddressTxIndex int2 not null			/* position in the input or output list */
@@ -176,7 +176,7 @@ create index TxHash on AddressesinTxs (TxHash, Protocol)
 /* "temporary" table for pre-populating the LinkedTxDBSerialNum field when doing bulk loads of AddressesInTxs */
 create table if not exists ToLinkAddressesInTxs (		/* many-to-many */
 	Address	varchar(64) not null
-	, PropertyID integer not null	
+	, PropertyID bigint not null	
 	, Protocol Protocol not null			/* initially 'Bitcoin' or 'Mastercoin' */
 	, TxDBSerialNum int8 not null default -1	/* db internal identifier for each tx, for faster joins */
 	, AddressTxIndex int2 not null			/* position in the input or output list */
@@ -201,7 +201,7 @@ create index TxHash on ToLinkAddressesInTxs (TxHash, Protocol)
 /* actions on Smart Properties (and currencies??); 1 row for each action on the SP */
 create table if not exists PropertyHistory (
 	Protocol Protocol			/* Protocol plus PropertyID uniquely identify a property */
-	, PropertyID integer			/* signed 32-bit */
+	, PropertyID bigint			/* signed 32-bit */
 	, Issuer varchar(64) not null		/* Address that created it */
 	, Ecosystem Ecosystem not null		/* Production or Test (for now) */
 	, TxHash varchar(64) not null		/*the tx that performed the action */
@@ -209,7 +209,7 @@ create table if not exists PropertyHistory (
 	, TxBlockTime timestamp(0) null		/* to identify the  action on a particular property */
 	, PropertyName varchar(256) null
 	, PropertyType smallint null		
-	, PrevPropertyID integer null default 0
+	, PrevPropertyID bigint null default 0
 	, PropertyURL varchar(256) null
 	, NumberOfTokens numeric(19) null	/* for a tx50 */
 	, PropertyData varchar(256) null
@@ -242,9 +242,9 @@ create table if not exists Following (
 /* rate for 1 --> 2 not necessarily the same as the reciprocal of rate for 2 --> 1 */
 create table if not exists ExchangeRates (			
 	Protocol1 Protocol		/* see Protocols */
-	, PropertyID1 integer		/* need exchange rates for fiat currencies */
+	, PropertyID1 bigint		/* need exchange rates for fiat currencies */
 	, Protocol2 Protocol
-	, PropertyID2 integer			
+	, PropertyID2 bigint			
 	, Rate1For2 float		/* (1 for 2) */		
 	, AsOf timestamp(0)
 	, Source varchar(256)		/* URL */
