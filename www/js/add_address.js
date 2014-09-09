@@ -115,8 +115,9 @@ angular.module('omniwallet')
                 }
                 $scope.summary.push({color:$scope.progressColor,message: $scope.progressMessage});
                 $scope.exported++;
+                
+                return next();
               });
-              return next();
             };
             
             // Start the loop
@@ -343,9 +344,10 @@ angular.module('omniwallet')
             }
             $scope.summary.push({message:$scope.progressMessage,color:$scope.progressColor});
             $scope.completed++;
+            
+            return next();
           });
           
-          return next();
         };
         
         // Start the loop
