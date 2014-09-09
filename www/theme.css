@@ -46,7 +46,8 @@ body {
 .missing-dex-alert{
   margin-top: 0px;
   margin-bottom: 0px;
-  padding-top: 10px;
+  padding-top: 6px;
+  padding-bottom:6px;
 }
 .left {
   position: absolute;
@@ -126,7 +127,7 @@ form.form-search:before {
     z-index: 1000;
 }
 .alert {
-    margin-top: 20px;
+    
 }
 .alert-custom {
     background-color: #faa732;

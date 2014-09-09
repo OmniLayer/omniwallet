@@ -62,9 +62,9 @@
           <h3> <strong> Sell {{ currAcronyms[ activeCurrencyPair[1] ] }} </strong> </h3>
         </div>
         <div class="col-xs-9">
-          <div ng-show="showNoCoinAlert" class="alert-danger alert-dismissible missing-dex-alert" role="alert">
+          <div ng-show="showNoCoinAlert" class="alert alert-danger alert-dismissible missing-dex-alert" role="alert">
             <button type="button" class="close" ng-click="hideNoCoinAlert();"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-            You Don't have {{ currAcronyms[ activeCurrencyPair[1] ] }} to sell
+            Sorry, you don't have any {{ currAcronyms[ activeCurrencyPair[1] ] }}'s available to sell
           </div>
         </div>
         <div class="col-xs-3">
