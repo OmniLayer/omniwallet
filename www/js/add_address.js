@@ -106,11 +106,11 @@ angular.module('omniwallet')
                   }
                   if(exportData.exportWatch && !obj.privkey) {
                     blob.addresses.push({ address: obj.address, privkey: "" });
-                    $scope.progressMessage = "Exported watch address " + addr;
+                    $scope.progressMessage = "Exported watch address " + obj.address;
                     $scope.progressColor = "green";
                   }
                 } catch (e) {
-                  $scope.progressMessage = "Error exporting "+addr+": " + e;
+                  $scope.progressMessage = "Error exporting "+obj.address+": " + e;
                   $scope.progressColor = "red";
                 }
                 $scope.summary.push({color:$scope.progressColor,message: $scope.progressMessage});
