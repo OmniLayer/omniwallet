@@ -150,7 +150,7 @@ function WalletSellAssetsController($modal, $scope, $http, $q, userService, wall
   }
 
   $scope.validateSaleForm = function() {
-    var dustValue = 5430;
+    var dustValue = 5757;
     var minerMinimum = 10000;
     var nonZeroValue = 1;
     var cancelFees = (5757*3);
