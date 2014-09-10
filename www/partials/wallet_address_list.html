@@ -47,11 +47,11 @@
             <td ng-if="currency.property_type == undefined" class="currency number" title="{{item.balance}}"><span ng-bind-html="item.balance | numeraljs: '0,0.00000000'"></span> {{currency.symbol}}</td>
             <td class="currency number" title="{{item.value}}" ng-bind-html="item.value | numeraljs: '$0,0.00':true"></td>
             <td>
-		<div class="dropdown">
-		<a data-toggle="dropdown" href="#" class="btn btn-info btn-xs">Options</a>
-		  <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu9">
-                    <li role="presentation"><a role="menuitem" tabindex="-1" href="#" ng-click="openDeleteConfirmForm( item )" >Remove from Wallet</a></li>
-		  </ul>
+          		<div class="dropdown">
+          		<a data-toggle="dropdown" href="#" class="btn btn-info btn-xs">Options</a>
+          		  <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu9">
+                              <li role="presentation"><a role="menuitem" tabindex="-1" href="#" ng-click="openDeleteConfirmForm( item )" >Remove from Wallet</a></li>
+          		  </ul>
               </div>
             </td>
           </tr>

@@ -30,6 +30,7 @@ function CreateWalletController($scope, $http, $location, $modalInstance, userSe
       })
       .then(function(result) {
       userService.login(wallet, walletKey, asymKey);
+      ga('send', 'event', 'button', 'click', 'Create Wallet');
       $modalInstance.close()
       $location.path('/wallet/addresses');
     }, function(result) {
