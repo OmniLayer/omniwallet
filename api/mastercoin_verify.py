@@ -14,13 +14,26 @@ app.debug = True
 #TODO COnversion
 @app.route('/properties')
 def properties():
-  prop_glob = glob.glob(data_dir_root + '/properties/*.json')
+  sqlconn.execute("select * from smartproperties")
+  ROWS= sqlconn.fetchall()
+
+  def dehexify(hex_str):
+      temp_str=[]
+      for let in hex_str:
+          if ord(let) < 128:
+              temp_str.append(let)
+          else:
+              temp_str.append('?')
+      return ''.join(temp_str)
 
   response = []
-  for property_file in prop_glob:
-    with open(property_file, 'r') as f:
-      prop = json.load(f)[0]
-      response.append({ 'currencyID': prop['currencyId'], 'name': prop['propertyName'] })
+  for sprow in ROWS:
+      print sprow
+      res = {
+          'currencyID': sprow[1],
+          'name': dehexify(sprow[6]) 
+      }
+      response.append(res)
 
   json_response = json.dumps( sorted(response, key=lambda x:  int(x['currencyID']) ))
   return json_response
