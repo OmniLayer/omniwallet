@@ -169,10 +169,6 @@ create table if not exists AddressesInTxs (					/* many-to-many */
 create index TxDBSerial on AddressesinTxs (TxDBSerialNum, PropertyID)
 ;
 
-/* to find info about addresses affected by a particular transaction */
-create index TxHash on AddressesinTxs (TxHash, Protocol)
-;
-
 /* "temporary" table for pre-populating the LinkedTxDBSerialNum field when doing bulk loads of AddressesInTxs */
 create table if not exists ToLinkAddressesInTxs (		/* many-to-many */
 	Address	varchar(64) not null
@@ -190,11 +186,11 @@ create table if not exists ToLinkAddressesInTxs (		/* many-to-many */
 ;
 
 /* to find info about addresses affected by a particular transaction */
-create index TxDBSerial on ToLinkAddressesInTxs (TxDBSerialNum, PropertyID)
+create index TxDBSerialLink on ToLinkAddressesInTxs (TxDBSerialNum, PropertyID)
 ;
 
 /* to find info about addresses affected by a particular transaction */
-create index TxHash on ToLinkAddressesInTxs (TxHash, Protocol)
+create index ThisTxHash on ToLinkAddressesInTxs (ThisTxHash, Protocol)
 ;
 
 /* current state of Smart Properties (and currencies??); 1 row for each SP */
@@ -235,7 +231,7 @@ create table if not exists PropertyHistory (
 ;
 
 /* to find Smart Properties by TxDBSerialNum */
-create index SP_Issuer on SmartProperties (TxDBSerialNum)
+create index TxDBSerialNumHist on PropertyHistory (TxDBSerialNum)
 ;
 
 /* A wallet can watch any object - address, SP, tx type (even a blocknumber?) */
