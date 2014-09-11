@@ -140,8 +140,8 @@ angular.module('omniwallet')
 
     $scope.isLoading = true;
     $scope.items = asset_types_data.getData().then(function(balances) {
-      $scope.balances = balances;
-
+    $scope.balances = balances;
+    
       var total = 0;
       for (var k in balances.balances) {
         if (typeof balances.balances[k].value == 'number')
@@ -162,7 +162,9 @@ angular.module('omniwallet')
     });
   }
 
-
+  $scope.getBitcoinValue = function(){
+    return appraiser.getValue(100000000,"BTC");
+  }
   function getAssetBalances(currencySymbol) {
     var deferred = $q.defer();
     var wallet = $injector.get('userService').getWallet();
