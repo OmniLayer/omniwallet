@@ -266,16 +266,17 @@ create table if not exists ActiveSales (
       , AmountAvailable numeric(19) not null            /* Amount available for sale that can be accepted */
       , AmountDesired numeric(19) not null              /* If total amountavailable where purchased, this would be cost */
       , MinimumFee numeric(19) not null                 /* Min fee buyer has to pay */
-      , PropertyIdSelling bigint not null                  /* Property ID for sale  */
-      , PropertyIdDesired bigint not null default 0        /* Defaults to 0 for btc for now, allows MetaDEx support ? */
+      , PropertyIdSelling bigint not null               /* Property ID for sale  */
+      , PropertyIdDesired bigint not null default 0     /* Defaults to 0 for btc for now, allows MetaDEx support ? */
       , Seller varchar(64) not null                     /* Sellers address */
-      , TimeLimit int not null                          /* Block time buyer has to pay for any accepts */
+      , TimeLimit smallint not null                     /* Block time buyer has to pay for any accepts */
       , LinkedTxDBSerialNum int8 not null default -1	/* tx with the associated sale information */
       , UnitPrice numeric(19) not null                  /* Amount of PropertyIdDesired per one token of PropertyIdSelling */
+      , Active small int default 1                      /* Active 1, not 0 .  other states ?  */
 )
 ;
 
-create table if not exists SaleOffers (
+create table if not exists SaleAccepts (
         Buyer varchar(64) not null                     /* Buyers address */
       , AmountAccepted numeric(19) not null            /* amount accepted by uyer */
       , LinkedTxDBSerialNum int8 not null              /* tx with the associated accept offer */
@@ -283,7 +284,6 @@ create table if not exists SaleOffers (
       , Block int not null                             /* Block the accept was received in */
       , DExState DExState not null                     /* unpaid, paid-partial, paid-complete */
       , Expired int default 0                          /* 1 for expired 0 for active */
-
 )
 ;
 
