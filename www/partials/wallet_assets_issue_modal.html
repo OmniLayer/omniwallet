@@ -15,7 +15,7 @@
   If the above is correct, please press create my Property.
   </p>
 <div class="modal-footer">
-    <div class="row">
+    <div class="row" ng-hide="transactionSuccess">
     <button ng-disabled="clicked" class="btn btn-primary" ng-click="ok()">Create my Property</button>
     <button ng-disabled="wating" class="btn btn-warning" ng-click="cancel()">Cancel</button>
     <img class="" src="/assets/img/34-1.gif" ng-show="waiting">
@@ -23,8 +23,9 @@
       <br>
     <div class="row">
       <div ng-show="transactionSuccess">
-        <h4 class="pull-right col-xs-12" style="color:green"> Assets created successfully, 
+        <h4 class="pull-left" style="color:green"> Assets created successfully, 
         check your transaction <a target="_blank" href="{{url}}">here.</a></h4>
+        <a href="/wallet/overview"><button class="btn btn-success" ng-click="cancel()">Close</button></a>
       </div>
       <div ng-show="transactionError">
         <h4 class="col-xs-12" style="color:red;"> Assets could not be created: 

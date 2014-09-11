@@ -1,4 +1,4 @@
-<div ng-controller="AddAddressController" ng-init="enumerateAddresses()" class="panel row">
+<div ng-controller="AddAddressController" ng-init="enumerateAddresses();addedNewAddress=false;createdAddress=''" class="panel row">
 <div class="col-md-12">
     <div class="col-md-4 text-left">
       <div class="dropdown">
@@ -13,7 +13,7 @@
       </div>
     </div>
     <div class="col-md-4 text-center">
-      <button class="btn btn-default" ng-click="createBTCAddress()">Create New BTC Address</button>
+      <button class="btn btn-default" ng-click="createBTCAddress()">Create New BTC Address</button>  
     </div>
     <div class="col-md-4 text-right">
       <div class="dropdown">
@@ -25,7 +25,12 @@
         </ul>
       </div>
     </div>
-</div>
+    <br/>
+        <div ng-show="addedNewAddress" class="alert alert-success alert-dismissible" role="alert">
+            <button type="button" class="close" ng-click="addedNewAddress=false"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            <strong>{{createdAddress}}</strong> successfully added to your wallet
+        </div>
+    </div>
   <div ng-init="newAddress=false" ng-if="newAddress">
     <div ng-controller="NavigationController" ng-init="openNewUUIDmodal()">
     </div>

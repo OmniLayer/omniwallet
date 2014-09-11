@@ -156,9 +156,14 @@ function NavigationController($scope, $http, $modal, userService) {
       $scope.modalOpened = true;
       var modalInstance = $modal.open({
       templateUrl: '/partials/wallet_create_modal.html',
-      controller: CreateWalletController
+      controller: CreateWalletController,
+      backdrop:'static'
       });
-      modalInstance.result.then(function(){},
+      modalInstance.result.then(
+      function(){
+        // reset modal status when wallet created successfully
+        $scope.modalOpened = false;
+      },
       function(){
         $scope.modalOpened = false;
       });
@@ -183,9 +188,14 @@ function NavigationController($scope, $http, $modal, userService) {
       var modalInstance = $modal.open({
       templateUrl: '/partials/login_modal.html',
       controller: LoginController,
-      scope: $scope
+      scope: $scope,
+      backdrop:'static'
       });
-      modalInstance.result.then(function(){},
+      modalInstance.result.then(
+      function(){
+        // reset modal state when user logs in successfully
+        $scope.modalOpened = false;
+      },
       function(){
         $scope.modalOpened = false;
       });
@@ -308,7 +318,7 @@ function ExplorerInspectorController($scope, $location, $http, hashExplorer) {
     });
   }
 }
-function SidecarController($scope, $http, $modal, $location, userService, balanceService) {
+function SidecarController($rootScope, $scope, $http, $modal, $location, userService, balanceService) {
   $scope.values = {};
   $scope.setView = function(viewName) {
     $scope.view = $scope.sidecarTemplates[viewName];
@@ -327,6 +337,13 @@ function SidecarController($scope, $http, $modal, $location, userService, balanc
   $scope.hasTradableCoins = false;
   $scope.hasBTC = false;
   if (userService.data.loggedIn) checkBalance(getAddressesWithPrivkey());
+  
+  $scope.goToTradePage = function($event){
+    if($location.path() == "/wallet/trade")
+      $rootScope.$broadcast("setView",{view:"tradeInfo"});
+    else
+      $location.path("/wallet/trade");
+  };
   
   $scope.checkSendingEnabled = function($event) {
     var error = "Cannot send anything because ";
