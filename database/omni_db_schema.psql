@@ -30,6 +30,7 @@ create type ObjectType as enum ('address', 'property', 'tx_version_type');
 create type TxState as enum ('pending', 'valid', 'not valid');
 create type WalletState as enum ('Active', 'Inactive', 'Suspended');
 create type DExState as enum ('unpaid', 'paid-partial', 'paid-complete')
+create type OfferState as enum ('active', 'cancelled', 'updated', 'sold')
 
 /* Wallets have addresses with private keys. Objects being watched are in the Following table */
 create table if not exists Wallets (
@@ -261,7 +262,7 @@ create table if not exists ExchangeRates (
 )
 ;
 
-create table if not exists ActiveSales (
+create table if not exists ActiveOffers (
         AmountAccepted numeric(19) not null             /* Amount available that has been accepted but not purchased */
       , AmountAvailable numeric(19) not null            /* Amount available for sale that can be accepted */
       , AmountDesired numeric(19) not null              /* If total amountavailable where purchased, this would be cost */
@@ -272,11 +273,11 @@ create table if not exists ActiveSales (
       , TimeLimit smallint not null                     /* Block time buyer has to pay for any accepts */
       , LinkedTxDBSerialNum int8 not null default -1	/* tx with the associated sale information */
       , UnitPrice numeric(19) not null                  /* Amount of PropertyIdDesired per one token of PropertyIdSelling */
-      , Active small int default 1                      /* Active 1, not 0 .  other states ?  */
+      , OfferState OfferState not null                  /* active, cancelled, updated, soldout  */
 )
 ;
 
-create table if not exists SaleAccepts (
+create table if not exists OfferAccepts (
         Buyer varchar(64) not null                     /* Buyers address */
       , AmountAccepted numeric(19) not null            /* amount accepted by uyer */
       , LinkedTxDBSerialNum int8 not null              /* tx with the associated accept offer */
