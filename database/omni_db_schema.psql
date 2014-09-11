@@ -29,6 +29,7 @@ create type Ecosystem as enum ('Production', 'Test');
 create type ObjectType as enum ('address', 'property', 'tx_version_type');
 create type TxState as enum ('pending', 'valid', 'not valid');
 create type WalletState as enum ('Active', 'Inactive', 'Suspended');
+create type DExState as enum ('unpaid', 'paid-partial', 'paid-complete')
 
 /* Wallets have addresses with private keys. Objects being watched are in the Following table */
 create table if not exists Wallets (
@@ -257,6 +258,32 @@ create table if not exists ExchangeRates (
 	, Source varchar(256)		/* URL */
 
 	, primary key (PropertyID1, Protocol1, PropertyID2, Protocol2) 
+)
+;
+
+create table if not exists ActiveSales (
+        AmountAccepted numeric(19) not null             /* Amount available that has been accepted but not purchased */
+      , AmountAvailable numeric(19) not null            /* Amount available for sale that can be accepted */
+      , AmountDesired numeric(19) not null              /* If total amountavailable where purchased, this would be cost */
+      , MinimumFee numeric(19) not null                 /* Min fee buyer has to pay */
+      , PropertyIdSelling bigint not null                  /* Property ID for sale  */
+      , PropertyIdDesired bigint not null default 0        /* Defaults to 0 for btc for now, allows MetaDEx support ? */
+      , Seller varchar(64) not null                     /* Sellers address */
+      , TimeLimit int not null                          /* Block time buyer has to pay for any accepts */
+      , LinkedTxDBSerialNum int8 not null default -1	/* tx with the associated sale information */
+      , UnitPrice numeric(19) not null                  /* Amount of PropertyIdDesired per one token of PropertyIdSelling */
+)
+;
+
+create table if not exists SaleOffers (
+        Buyer varchar(64) not null                     /* Buyers address */
+      , AmountAccepted numeric(19) not null            /* amount accepted by uyer */
+      , LinkedTxDBSerialNum int8 not null              /* tx with the associated accept offer */
+      , SaleTxDbSerialNum int8 not null                /* tx the offer is actually accepting against */
+      , Block int not null                             /* Block the accept was received in */
+      , DExState DExState not null                     /* unpaid, paid-partial, paid-complete */
+      , Expired int default 0                          /* 1 for expired 0 for active */
+
 )
 ;
 
