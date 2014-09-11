@@ -3,13 +3,13 @@
 </div>
 <form novalidate class="form-group" ng-submit="exportWallet(exportData)">
   <div class="modal-body">
-    <div class="row">
+    <div class="row" ng-hide="exportFinished">
       <div class="form-group col-xs-10 col-xs-push-1">
         <label for="inputName">Backup Name</label>
         <input type="text" class="form-control" ng-model="exportData.backupName" id="inputName" required>
       </div>
     </div>
-    <div class="row">
+    <div class="row" ng-hide="exportFinished">
       <div class="form-group col-xs-10 col-xs-push-1">
         <label class="checkbox-inline">
           <input type="checkbox" id="exportPrivate" ng-model="exportData.exportPrivate"> Export Trading Addresses
@@ -19,11 +19,19 @@
         </label>
       </div>
     </div>
+    <div class="row" ng-show="exportFinished">
+      <ul>
+        <li ng-repeat="item in summary" style="color: {{item.color}};">{{item.message}}</li>
+      </ul>
+    </div>  
   </div>
   <div class="modal-footer" style="text-align:center">
     <div class="col-xs-8 col-xs-push-2">
-      <input type="submit" class="btn btn-primary btn-block" value="Confirm Export" ng-disabled="exportInProgress || (!exportData.exportPrivate && !exportData.exportWatch)" >
-      <img ng-show="exportInProgress" src="/assets/img/34-1.gif" alt="loading">
+      <input type="submit" class="btn btn-primary" value="Confirm Export" ng-disabled="exportInProgress || (!exportData.exportPrivate && !exportData.exportWatch)"  ng-hide="exportFinished">
+      <button type="button" class="btn btn-warning" ng-disabled="exportInProgress" ng-click="cancel()" ng-hide="exportFinished">Cancel</button>
+      <button type="button" class="btn btn-success" ng-click="close()" ng-show="exportFinished">Close</button>
+      <progressbar ng-show="exportInProgress" style="margin-top:10px" animate="false" value="(exported * 100) / total" type="success" max="100"><b ng-show="exported > 0">{{exported}} / {{total}}</b></progressbar>
+      <h4  ng-hide="exportFinished" style="color: {{progressColor}};">{{progressMessage}}</h4>
     </div>
   </div>
 </form>

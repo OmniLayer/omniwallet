@@ -38,6 +38,12 @@ server {
             return 301 /wallet/overview;
         }
 
+        #Limit Perl Access per phil's recommendation
+        if ($http_user_agent ~ "libwww-perl.*"){
+            return 403;
+            break;
+        }
+
         # Make site accessible from http://localhost/
         server_name localhost;
 

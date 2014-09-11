@@ -22,7 +22,7 @@ angular.module('omniwallet')
       }
     };
   })
-  .controller('AddAddressController', function($modal, $injector, $scope, userService, enumerated_addresses) {
+  .controller('AddAddressController', function($modal, $injector, $scope, $timeout, userService, enumerated_addresses) {
 
   function decodeAddressFromPrivateKey(key) {
 
@@ -66,30 +66,71 @@ angular.module('omniwallet')
       var exportModalInstance = $modal.open({
         templateUrl: '/partials/export_wallet.html',
         controller: function($scope, $modalInstance, wallet){
+          $scope.summary = [];
+          $scope.exportFinished = false;
           $scope.exportWallet = function(exportData){
             $scope.exportInProgress=true;
+            $scope.exported = 0;
             var walletAddresses = wallet.addresses;
+            $scope.total = walletAddresses.length;
             var blob = {
               addresses: []
             };
-            walletAddresses.forEach(function(obj) {
-              if(exportData.exportPrivate && obj.privkey) {
-                var ecKey = Bitcoin.ECKey.decodeEncryptedFormat(obj.privkey, obj.address);
-                var addr = ecKey.getBitcoinAddress().toString();
-                var key = ecKey.getWalletImportFormat();
-                blob.addresses.push({ address: addr, privkey: key });
-              }
-              if(exportData.exportWatch && !obj.privkey) {
-                blob.addresses.push({ address: obj.address, privkey: "" });
-              }
-            });
-            var exportBlob = new Blob([JSON.stringify(blob)], {
-              type: 'application/json;charset=utf-8'
-            });
-            fileName=exportData.backupName+".json";
-            saveAs(exportBlob, fileName);
             
-            $modalInstance.close(fileName);
+            var next = function(){
+              $timeout(function(){
+                return exportAddress(walletAddresses[$scope.exported]);
+              },0,false);
+            };
+            
+            var exportAddress = function(obj){
+              $scope.$apply(function(){
+                if($scope.exported == $scope.total) {
+                  var exportBlob = new Blob([JSON.stringify(blob)], {
+                    type: 'application/json;charset=utf-8'
+                  });
+                  fileName=exportData.backupName+".json";
+                  saveAs(exportBlob, fileName);
+                  $scope.exportInProgress = false;
+                  return $scope.exportFinished = true;
+                }
+              
+                try{
+                  if(exportData.exportPrivate && obj.privkey) {
+                    var ecKey = Bitcoin.ECKey.decodeEncryptedFormat(obj.privkey, obj.address);
+                    var addr = ecKey.getBitcoinAddress().toString();
+                    var key = ecKey.getWalletImportFormat();
+                    blob.addresses.push({ address: addr, privkey: key });
+                    $scope.progressMessage = "Exported trading address " + addr;
+                    $scope.progressColor = "green";
+                  }
+                  if(exportData.exportWatch && !obj.privkey) {
+                    blob.addresses.push({ address: obj.address, privkey: "" });
+                    $scope.progressMessage = "Exported watch address " + obj.address;
+                    $scope.progressColor = "green";
+                  }
+                } catch (e) {
+                  $scope.progressMessage = "Error exporting "+obj.address+": " + e;
+                  $scope.progressColor = "red";
+                }
+                $scope.summary.push({color:$scope.progressColor,message: $scope.progressMessage});
+                $scope.exported++;
+                
+                return next();
+              });
+            };
+            
+            // Start the loop
+            next();
+          };
+          
+          
+          $scope.cancel = function() {
+            $modalInstance.dismiss('cancel');
+          };
+          
+          $scope.close = function() {
+            $modalInstance.dismiss('close');
           };
         },
         scope: $scope,
@@ -115,7 +156,8 @@ angular.module('omniwallet')
         $injector.get('userService').addAddress(result.address);
       }
       $scope.refresh();
-
+      $scope.addedNewAddress = true;
+      $scope.createdAddress = result.address;
     }, function() {});
   };
 
@@ -165,7 +207,8 @@ angular.module('omniwallet')
         encodePrivateKey(result.privKey, addr));
       }
       $scope.refresh();
-
+      $scope.addedNewAddress = true;
+      $scope.createdAddress = decodeAddressFromPrivateKey(result.privKey);
     }, function() {});
   };
 
@@ -234,6 +277,8 @@ angular.module('omniwallet')
     var encryptedPrivateKey = ecKey.getEncryptedFormat(address);
     $injector.get('userService').addAddress(address, encryptedPrivateKey);
     $scope.refresh();
+    $scope.addedNewAddress = true;
+    $scope.createdAddress = address;
   }
   ;
   // Done Create Form Code.
@@ -243,56 +288,141 @@ angular.module('omniwallet')
       templateUrl: '/partials/import_wallet.html',
       controller: ImportWalletModal
     });
-
-    modalInstance.result.then(function(result) {
-
-      if (result) {
-        var wallet = JSON.parse(result);
-        
-        wallet.addresses.forEach(function(addr){
-          // Use address as passphrase for now
-          if(addr.privkey) 
-            $injector.get('userService').addAddress(
-              addr.address,
-              encodePrivateKey(addr.privkey, addr.address));
-          else
-            $injector.get('userService').addAddress(
-              addr.address);   
-        });
-      }
+    
+    modalInstance.result.then(function(wallet){
       $scope.refresh();
-
     });
   };
-
-  var ImportWalletModal = function($scope, $modalInstance) {
+  
+  var ImportWalletModal = function($scope, $modalInstance, $q, $timeout) {
+    $scope.summary = [];
+    $scope.importFinished = false;
+    $scope.startImport = function(walletData){
+      $scope.validate(walletData).then(function(result){$scope.ok(result);},function(reason){$scope.progressMessage= reason;$scope.progressColor = "red";});
+    };
     $scope.validate = function(backup) {
-      if (!backup) return false;
-
+      var deferred = $q.defer();
+      
+      if (!backup) deferred.reject("No File");
+      $scope.processing = true;
       try {
         var wallet = JSON.parse(backup);
-        var isValid = true;
-        wallet.addresses.forEach(function(address){  
-          if(address.privkey){
-            var eckey = new Bitcoin.ECKey(address.privkey);
-            var addr = eckey.getBitcoinAddress().toString();
-            isValid = isValid && Bitcoin.Address.validate(addr);
-          }
-          else
-            isValid = isValid && Bitcoin.Address.validate(address.address);
-        });
-        return isValid;
+        $scope.completed = 0;
+        $scope.total = wallet.addresses.length;
+        
+        var next = function(){
+          $timeout(function(){
+            return validateAddress(wallet.addresses[$scope.completed]);
+          },0,false);
+        };
+        var validated = {
+          addresses : []
+        };
+        
+        var validateAddress = function(address){
+          $scope.$apply(function(){
+            if($scope.completed == $scope.total){
+              $scope.progressMessage = "Validated!";
+              $scope.progressColor = "green";
+              return deferred.resolve(validated);
+            }
+
+            try{
+              var addr = address.address;
+              if(address.privkey){
+                var eckey = new Bitcoin.ECKey(address.privkey);
+                addr = eckey.getBitcoinAddress().toString();
+              }
+              
+              if(Bitcoin.Address.validate(addr)){
+                validated.addresses.push(address);
+                $scope.progressMessage = "Validated address " + addr;
+                $scope.progressColor = "green";
+              } else {
+                $scope.progressMessage = "Invalid address " + addr;
+                $scope.progressColor = "red";
+              }
+            } catch (e) {
+              $scope.progressMessage = "Error validating "+addr+": " + e;
+              $scope.progressColor = "red";
+            }
+            $scope.summary.push({message:$scope.progressMessage,color:$scope.progressColor});
+            $scope.completed++;
+            
+            return next();
+          });
+          
+        };
+        
+        // Start the loop
+        next();
+        
+        deferred.notify("Validating...");
       } catch (e) {
-        return false;
+        deferred.reject("Error during validation:" +e);
       }
+      
+      return deferred.promise;
     };
 
-    $scope.ok = function(result) {
-      $modalInstance.close(result);
+    $scope.ok = function(wallet) {
+      if (wallet) {
+        $scope.total = wallet.addresses.length;
+        $scope.completed = 0;
+        var next = function(){
+          if($scope.completed < $scope.total) $scope.progressMessage="Importing address " + wallet.addresses[$scope.completed].address;
+          $timeout(function(){
+            return importAddress(wallet.addresses[$scope.completed]);
+          },0,false);
+        };
+        
+        var importAddress = function(addr){
+          $scope.$apply(function(){
+            if($scope.completed == $scope.total){
+              $scope.importFinished = true;
+              $scope.processing = false;
+              return;
+            }
+            
+            // Use address as passphrase for now
+            if(addr.privkey) 
+              $injector.get('userService').addAddress(
+                addr.address,
+                encodePrivateKey(addr.privkey, addr.address))
+                .then(function(){
+                  $scope.progressMessage="Imported address " + addr.address;
+                  $scope.progressColor = "green";
+                  
+                  $scope.summary.push({message:$scope.progressMessage,color:$scope.progressColor});
+                  $scope.completed++;
+                  return next();
+                });
+            else
+              $injector.get('userService').addAddress(
+                addr.address)
+                .then(function(){
+                  $scope.progressMessage="Imported address " + addr.address;
+                  $scope.progressColor = "green";
+                  
+                  $scope.summary.push({message:$scope.progressMessage,color:$scope.progressColor});
+                  $scope.completed++;
+                  return next();
+                });   
+                
+            
+          });
+        };
+        
+        next();
+      }
     };
 
     $scope.cancel = function() {
       $modalInstance.dismiss('cancel');
+    };
+    
+    $scope.close = function() {
+      $modalInstance.dismiss('close');
     };
   };
   // Done Import Import Backup Form Code.
@@ -304,7 +434,7 @@ angular.module('omniwallet')
     $scope.items = enumerated_addresses.getData().then(function(result) {
       if (result.addresses.length == 0) {
         createBTCAddress();
-	$scope.newAddress=true;
+	      $scope.newAddress=true;
       }
       $scope.addresses = result.addresses;
     });
