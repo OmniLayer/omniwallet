@@ -1,0 +1,280 @@
+create database Omniwallet;
+
+/* psql command to use the newly created database */
+\connect Omniwallet;
+
+/*
+ * Notes:
+ * 1. Need to define Cascade/Restrict behavior for foreign keys to maintain referential integrity
+ * 2. Need to define & flesh out dictionary tables
+ * 3. Need to identify tables & indexes for administrative purposes, e.g. analytics
+ *
+ * All token amounts are stored as 19 digit integers - numeric(19). The PropertyType indicates if the
+ * currency (or smart property) is divisible or indivisible.
+ */
+
+/* 
+ * AddressRole type definitions:
+ *	buyer accepted a DEx sell offer
+ *	issuer created a smart property
+ *	participant is an investor in a crowdsale
+ *	payee received a Send to Owners amount
+ *	recipient received a Simple Send
+ *	seller created a DEx sell offer
+ *	sender sent a Simple Send
+ */
+create type AddressRole as enum ('buyer', 'issuer', 'participant', 'payee', 'recipient', 'seller', 'sender');
+create type Protocol as enum ('Bitcoin', 'Mastercoin');
+create type Ecosystem as enum ('Production', 'Test');
+create type ObjectType as enum ('address', 'property', 'tx_version_type');
+create type TxState as enum ('pending', 'valid', 'not valid');
+create type WalletState as enum ('Active', 'Inactive', 'Suspended');
+
+/* Wallets have addresses with private keys. Objects being watched are in the Following table */
+create table if not exists Wallets (
+	WalletID uuid
+	, Created timestamp(0) null 
+	, LastLogin timestamp(0) null 
+	, LastBackup timestamp(0) null
+	, IsSignedIn boolean not null default FALSE		/* signed in now? */
+	, WalletState WalletState not null default 'Active'
+	, WalletStateDate timestamp(0) not null default CURRENT_TIMESTAMP
+	, WalletBlob text null					/* encrypted w/ wallet password */
+	, UserName varchar(32) null				/* (future) encrypted */
+	, Email varchar(64) null				/* (future) encrypted */
+	, Settings json null					/* (future) user preferences */
+	
+	, primary key (WalletID)
+)
+;
+
+/*
+ * Balances for each PropertyID (currency) owned by an Address
+ * for all addresses we know about, even if they're not in a wallet
+ */
+create table if not exists AddressBalances (
+	Address	varchar(64)				/* Bitcoin addresses are 34 chars */
+	, Protocol Protocol not null default 'Bitcoin'	/* initially 'Bitcoin' or 'Mastercoin' */
+	, PropertyID bigint not null default 0		/* Bitcoin */		
+	, Ecosystem Ecosystem null
+	, BalanceAvailable numeric(19) not null default 0
+	, BalanceReserved numeric(19) null
+	, BalanceAccepted numeric(19) null
+	, LastTxHash varchar(64) null			/* last tx that affected this currency for this address, null if no tx's */
+
+	, primary key (Address, Protocol, PropertyID)
+)
+;
+
+/* Addresses with private keys owned by each Wallet. See Following table for objects watched by a wallet. */
+create table if not exists AddressesInWallets (		/* many-to-many */
+	Address varchar(64) not null		/* Address must exist in the AddressBalances table */
+	, PropertyID bigint not null		/* needed here for foreign key reference */
+	, Protocol Protocol not null		/* initially 'Bitcoin' */
+	, WalletID uuid	not null		/* WalletID must exist in the Wallets table */
+
+	, primary key (WalletID, Address, Protocol, PropertyID)
+	, foreign key (WalletID) references Wallets on delete CASCADE on update CASCADE	/* del/upd rows here if corresponding row is deleted/updated */
+	, foreign key (Address, Protocol, PropertyID) references AddressBalances
+)
+;
+
+/* to find the wallets that have a particular address. */
+create index AddressIndex on AddressesInWallets (Address, Protocol, PropertyID)
+;
+
+/* block header information, from https://en.bitcoin.it/wiki/Protocol_specification & getblock RPC JSON */
+create table if not exists Blocks (
+	BlockNumber integer not null
+	, Protocol Protocol not null		/* initially 'Bitcoin' */
+	, BlockTime timestamp(0) not null	/* timestamp recording when this block was created (Will overflow in 2106) */
+	, Version integer null		/* Block version information, based upon the software version creating this block */
+	, BlockHash varchar(64) null
+	, PrevBlock varchar(64) null	/* hash value of the previous block this block references */
+	, MerkleRoot varchar(64) null	/* reference to a Merkle tree collection which is a hash of all transactions related to this block */
+	, Bits bytea null		/* The calculated difficulty target being used for this block */
+	, Nonce bigint null		/* The nonce used to generate this block… to allow variations of the header and compute different hashes */
+	, Size integer null
+	, TxCount integer null		/* Number of transaction entries */
+
+	, primary key (BlockTime, BlockNumber, Protocol)
+)
+;
+
+/* to find block info by block number */
+create index BlockNumTime on Blocks (BlockNumber, Protocol, BlockTime)
+;
+	
+/* all the transactions we know about; keeping them (forever?) even after an address or wallet is de-activated */
+create table if not exists Transactions (
+	TxHash varchar(64) not null		/* varchar so we can use LIKE & other string matching  */
+	, Protocol Protocol not null		/* initially 'Bitcoin' or 'Mastercoin' */
+	, TxDBSerialNum serial8 unique		/* db internal identifier for each tx, for faster joins */
+	, TxType smallint not null		/* from the RPC result for a 'Mastercoin' tx, 0 for 'Bitcoin' tx's */
+	, TxVersion smallint not null		/* from the RPC result */
+	, Ecosystem Ecosystem null		/* Null for 'Bitcoin' tx's */
+	, TxSubmitTime timestamp(0) null	/* when it was sent, if known */
+	, TxState TxState not null		/* pending, valid, not valid */
+	, TxErrorCode smallint null		/* successful? if not, why not? (see ErrorCodes) */		
+	, TxBlockNumber integer null	
+	, TxSeqInBlock integer null		/* determined by order of tx's in the block */
+
+	, primary key (TxHash, Protocol, TxBlockNumber)
+)
+;
+
+/* to find transactions by the db internal id */
+create unique index TxDBSerials on Transactions (TxDBSerialNum, Protocol)
+;
+
+/* to find transactions by type & version */
+create index TxTypes on Transactions (TxType, TxVersion, Protocol)
+;
+
+/* to find transactions by order in the blockchain */
+create index TxSeq on Transactions (TxBlockNumber, TxSeqInBlock)
+;
+
+/* data that is specific to the particular transaction type, as a JSON object */
+create table if not exists TxJSON (
+	TxDBSerialNum int8 not null		/* db internal identifier for each tx, for faster joins */
+	, Protocol Protocol not null		/* initially 'Bitcoin' or 'Mastercoin' */
+	, TxData json not null			/* the tx message fields */
+
+	, primary key (TxDBSerialNum, Protocol)
+	, foreign key (TxDBSerialNum, Protocol) references Transactions(TxDBSerialNum, Protocol)
+)
+;
+
+/* Addresses that are involved in each transaction, with their role and changes to balances */
+create table if not exists AddressesInTxs (					/* many-to-many */
+	Address	varchar(64) not null
+	, PropertyID bigint not null	
+	, Protocol Protocol not null			/* initially 'Bitcoin' or 'Mastercoin' */
+	, TxDBSerialNum int8 not null default -1	/* db internal identifier for each tx, for faster joins */
+	, AddressTxIndex int2 not null			/* position in the input or output list */
+	, LinkedTxDBSerialNum int8 not null default -1	/* tx with the associated output for inputs, or with the associated input for outputs */
+	, AddressRole AddressRole not null		
+	, BalanceAvailableCreditDebit numeric(19) null		/* how much the balance changed */
+	, BalanceReservedCreditDebit numeric(19) null		/* how much the balance changed */
+	, BalanceAcceptedCreditDebit numeric(19) null		/* how much the balance changed */
+
+	, primary key (Address, TxDBSerialNum, PropertyID, AddressRole)
+	, foreign key (Address, Protocol, PropertyID) references AddressBalances
+	, foreign key (TxDBSerialNum, Protocol) references Transactions (TxDBSerialNum, Protocol)
+)
+;
+
+/* to find info about addresses affected by a particular transaction */
+create index TxDBSerial on AddressesinTxs (TxDBSerialNum, PropertyID)
+;
+
+/* "temporary" table for pre-populating the LinkedTxDBSerialNum field when doing bulk loads of AddressesInTxs */
+create table if not exists ToLinkAddressesInTxs (		/* many-to-many */
+	Address	varchar(64) not null
+	, PropertyID bigint not null	
+	, Protocol Protocol not null			/* initially 'Bitcoin' or 'Mastercoin' */
+	, TxDBSerialNum int8 not null default -1	/* db internal identifier for each tx, for faster joins */
+	, AddressTxIndex int2 not null			/* position in the input or output list */
+	, LinkedTxDBSerialNum int8 not null default -1	/* tx with the associated output for inputs, or with the associated input for outputs */
+	, AddressRole AddressRole not null
+	, ThisTxHash varchar(64)
+	, LinkedTxHash varchar(64)
+
+	, primary key (Address, TxDBSerialNum, PropertyID, AddressRole)
+)
+;
+
+/* to find info about addresses affected by a particular transaction */
+create index TxDBSerialLink on ToLinkAddressesInTxs (TxDBSerialNum, PropertyID)
+;
+
+/* to find info about addresses affected by a particular transaction */
+create index ThisTxHash on ToLinkAddressesInTxs (ThisTxHash, Protocol)
+;
+
+/* current state of Smart Properties (and currencies??); 1 row for each SP */
+create table if not exists SmartProperties (
+	Protocol Protocol				/* Protocol plus PropertyID uniquely identify a property */
+	, PropertyID bigint				/* signed 64-bit, to store unsigned 32 bit values */
+	, Issuer varchar(64) not null			/* Address that created it */
+	, Ecosystem Ecosystem null			/* Production or Test (for now) */
+	, CreateTxDBSerialNum int8 unique not null	/* the tx that created this SP, for faster joins */
+	, LastTxDBSerialNum int8 unique not null	/* the last tx that updated this SP, for faster joins */
+	, PropertyName varchar(256) null
+	, PropertyType smallint null		
+	, PrevPropertyID bigint null default 0
+	, PropertyServiceURL varchar(256) null
+	, PropertyCategory varchar(256) null		/* see PropertyCategories - TBD */
+	, PropertySubcategory varchar(256) null		/* see PropertyCategories - TBD */
+	, PropertyData json null			/* with the current data for this SP, varies by SP type */
+
+	, primary key (PropertyID, Protocol)
+	, foreign key (Issuer, Protocol, PropertyID) references AddressBalances (Address, Protocol, PropertyID)
+	, foreign key (CreateTxDBSerialNum, Protocol) references Transactions (TxDBSerialNum, Protocol)
+	, foreign key (LastTxDBSerialNum, Protocol) references Transactions (TxDBSerialNum, Protocol)
+)
+;
+
+/* to find Smart Properties by issuing address */
+create unique index SP_Issuer on SmartProperties (Issuer, PropertyID, Protocol)
+;
+
+/* the list of transactions that affected each SP */
+create table if not exists PropertyHistory (
+	Protocol Protocol not null		/* Protocol plus PropertyID uniquely identify a property */
+	, PropertyID bigint not null		/* signed 64-bit, to store unsigned 32 bit values */
+	, TxDBSerialNum int8 not null		/* the tx that affected this SP, for faster joins */
+
+	, primary key (PropertyID, Protocol)
+)
+;
+
+/* to find Smart Properties by TxDBSerialNum */
+create index TxDBSerialNumHist on PropertyHistory (TxDBSerialNum)
+;
+
+/* A wallet can watch any object - address, SP, tx type (even a blocknumber?) */
+create table if not exists Following (			
+	 WalletID uuid			
+	, ObjectType ObjectType
+	, ObjectID varchar(64)	/* works with Addresses initially */
+				/* future - Event, see EventTypes (to generate alerts/notifications) */
+	, primary key (WalletID)
+	, foreign key (WalletID) references Wallets
+)
+;
+
+/* directional exchange rates between pairs of properties; can work with fiat currencies as well */
+/* rate for 1 --> 2 not necessarily the same as the reciprocal of rate for 2 --> 1 */
+create table if not exists ExchangeRates (			
+	Protocol1 Protocol		/* see Protocols */
+	, PropertyID1 bigint		/* need exchange rates for fiat currencies */
+	, Protocol2 Protocol
+	, PropertyID2 bigint			
+	, Rate1For2 float		/* (1 for 2) */		
+	, AsOf timestamp(0)
+	, Source varchar(256)		/* URL */
+
+	, primary key (PropertyID1, Protocol1, PropertyID2, Protocol2) 
+)
+;
+
+/* dictionary of known protocols */
+create table if not exists Protocols (
+	Protocol Protocol unique not null
+	, BaseProtocol Protocol not null	/* e.g. Bitcoin is the base of Mastercoin, Protocol = BaseProtocol if a base protocol */
+	, URL varchar(256) null
+)
+;
+
+/* Load the initial known protocols */
+insert into Protocols values (
+	'Bitcoin', 'Bitcoin', 'http://bitcoin.org'
+)
+; 
+
+insert into Protocols values (
+	'Mastercoin', 'Bitcoin', 'http://mastercoin.org'
+)
+;
