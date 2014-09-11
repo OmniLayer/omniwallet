@@ -391,6 +391,9 @@ angular.module('omniwallet').factory('appraiser', ['$rootScope', '$http', '$q', 
           callback();
         }, function(error) {
           console.log(error);
+
+          self.conversions[symbol] = 0;
+          callback();
         });
       }
       else {
