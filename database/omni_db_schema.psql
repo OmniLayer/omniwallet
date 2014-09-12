@@ -29,8 +29,8 @@ create type Ecosystem as enum ('Production', 'Test');
 create type ObjectType as enum ('address', 'property', 'tx_version_type');
 create type TxState as enum ('pending', 'valid', 'not valid');
 create type WalletState as enum ('Active', 'Inactive', 'Suspended');
-create type DExState as enum ('unpaid', 'paid-partial', 'paid-complete')
-create type OfferState as enum ('active', 'cancelled', 'replaced', 'sold')
+create type DExState as enum ('unpaid', 'paid-partial', 'paid-complete');
+create type OfferState as enum ('active', 'cancelled', 'replaced', 'sold');
 
 /* Wallets have addresses with private keys. Objects being watched are in the Following table */
 create table if not exists Wallets (
