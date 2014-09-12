@@ -13,8 +13,7 @@ TIMEOUT='timeout -s 9 60 '
 # Get the Mastercoin balances.  Not that this is also creating the default balance
 # object, and should run before all the other currency checks.
 def get_msc_balances( addr ):
-  #filename = data_dir_root + '/www/addr/' + addr + '.json'
-  
+  #TODO move functionality for individual currencies into /tx/ endpoint (sent, received, total reserved balances, etc.)
   addr = re.sub(r'\W+', '', addr) #check alphanumeric
   sqlconn.execute("select * from addressbalances ab, smartproperties sp where ab.address='"+addr+"' and ab.propertyid=sp.propertyid")
   ROWS= sqlconn.fetchall()
@@ -23,8 +22,8 @@ def get_msc_balances( addr ):
   for balrow in ROWS:
       cID = str(int(balrow[2])) #currency id
       sym_t = ('BTC' if cID == '0' else ('MSC' if cID == '1' else ('TMSC' if cID == '2' else 'SP' + cID) ) ) #symbol template
-      divi = balrow[-1]['divisible'] 
-      res = { 'symbol' : sym_t, 'divisible' : divi  } #TODO set divisible to real value!!
+      divi = json.loads(balrow[-1])['divisible']  #Divisibility
+      res = { 'symbol' : sym_t, 'divisible' : divi  }
       res['value'] = ('%.8f' % float(balrow[4])).rstrip('0').rstrip('.')
       #res['reserved_balance'] = ('%.8f' % float(balrow[5])).rstrip('0').rstrip('.')
       address_data['balance'].append(res)
@@ -32,10 +31,12 @@ def get_msc_balances( addr ):
   if 0 >= len(ROWS):
     return ( None, '{ "status": "NOT FOUND: ' + addr + '" }' )
 
+  #Dead code
   #if type(balance_data[i]['value']) != type(0): #if not int convert (divisible property)
   #    balance_data[ i ][ 'divisible' ] = True
   #    balance_data[ i ][ 'value' ] = int( round( float( balance_data[ i ][ 'value' ]) * 100000000 ))
-
+  
+  #Dead code
   #for i in xrange( 0, len( balance_data )):
   #  if balance_data[ i ][ 'value' ] == '0.0':
   #    balance_data.pop( i )
