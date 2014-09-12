@@ -9,9 +9,61 @@ from debug import *
 
 data_dir_root = os.environ.get('DATADIR')
 TIMEOUT='timeout -s 9 60 '
+
 # Get the Mastercoin balances.  Not that this is also creating the default balance
 # object, and should run before all the other currency checks.
 def get_msc_balances( addr ):
+
+    host=RPCHost()
+    try:
+        address_data=host.call("getallbalancesforaddress_MP", addr)
+    except Exception,e:
+        #Address not found
+        address_data={ 'result': 
+        [ 
+            { 
+              'balance': 0.0, 
+              'propertyid': 0
+            }
+        ] }
+
+    address_data['balance']=address_data.pop('result')
+    address_data['address']=str(addr)
+    balance_data = address_data[ 'balance' ]
+
+    #Convert to the implimented format
+    for i in xrange(0,len( balance_data )):
+      balance_data[i][ 'value' ] = balance_data[i]['balance']     
+
+      if balance_data[ i ][ 'propertyid' ] == 0:
+        balance_data[i][ 'symbol' ] = "BTC"
+      elif balance_data[ i ][ 'propertyid' ] == 1:
+        balance_data[i][ 'symbol' ] = "MSC"
+      elif balance_data[ i ][ 'propertyid' ] == 2:
+        balance_data[i][ 'symbol' ] = "TMSC"
+      else:
+        balance_data[i][ 'symbol' ] = "SP"+str(balance_data[ i ][ 'propertyid' ])
+
+    # Once the data's been loaded, remove the BTC entry since we're going to
+    #    use sx's BTC balances directly.
+    for i in xrange(0,len( balance_data )):
+      balance_data[i][ 'divisible' ] = False
+      if balance_data[ i ][ 'symbol' ] == 'BTC':
+        balance_data.pop( i )
+        break
+      else:
+        if type(balance_data[i]['value']) != type(0): #if not int convert (divisible property)
+            balance_data[ i ][ 'divisible' ] = True
+            balance_data[ i ][ 'value' ] = int( round( float( balance_data[ i ][ 'value' ]) * 100000000 ))
+
+    for i in xrange( 0, len( balance_data )):
+      if balance_data[ i ][ 'balance' ] == '0.0':
+        balance_data.pop( i )
+
+    return ( address_data, None )
+
+#Old get balances that used local files = deprecated
+def get_msc_balances2( addr ):
   filename = data_dir_root + '/www/addr/' + addr + '.json'
 
   if not os.path.exists(filename):
@@ -76,7 +128,7 @@ def get_balance_response(request_dict):
     address_data[ 'balance' ] = []
 
   bitcoin_balances, err = get_btc_balances( addr )
-
+ 
   if err == None:
     for i in xrange(0,len( bitcoin_balances )):
       address_data[ 'balance' ].append( bitcoin_balances[i] )
