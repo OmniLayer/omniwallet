@@ -16,14 +16,15 @@ def get_msc_balances( addr ):
   #filename = data_dir_root + '/www/addr/' + addr + '.json'
   
   addr = re.sub(r'\W+', '', addr) #check alphanumeric
-  sqlconn.execute("select * from addressbalances where address='"+addr+"'")
+  sqlconn.execute("select * from addressbalances ab, smartproperties sp where ab.address='"+addr+"' and ab.propertyid=sp.propertyid")
   ROWS= sqlconn.fetchall()
 
   address_data = { 'address' : addr, 'balance': [] }
   for balrow in ROWS:
       cID = str(int(balrow[2])) #currency id
       sym_t = ('BTC' if cID == '0' else ('MSC' if cID == '1' else ('TMSC' if cID == '2' else 'SP' + cID) ) ) #symbol template
-      res = { 'symbol' : sym_t, 'divisible' : True  } #TODO set divisible to real value!!
+      divi = balrow[-1]['divisible'] 
+      res = { 'symbol' : sym_t, 'divisible' : divi  } #TODO set divisible to real value!!
       res['value'] = ('%.8f' % float(balrow[4])).rstrip('0').rstrip('.')
       #res['reserved_balance'] = ('%.8f' % float(balrow[5])).rstrip('0').rstrip('.')
       address_data['balance'].append(res)
