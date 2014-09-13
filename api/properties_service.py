@@ -2,6 +2,9 @@ import urlparse
 import os, sys, re
 from flask import Flask, request, jsonify, abort, json, make_response
 from msc_apps import *
+import psycopg2, psycopg2.extras
+ 
+sqlconn = sql_connect()
 
 tools_dir = os.environ.get('TOOLSDIR')
 lib_path = os.path.abspath(tools_dir)
@@ -57,19 +60,24 @@ def subcategories():
 
 @app.route('/list', methods=['POST'])
 def list():
+    query = "ecosystem="
     try:
-        ecosystem = request.form['ecosystem']
+        ecosystem = int(re.sub(r'[1,2]', '', request.form['ecosystem']))
+        valid_values = [1,2]
+        if ecosystem not in valid_values:
+            abort(make_response('Field \'ecosystem\' invalid value, request failed', 400))
+        query += str(ecosystem)
     except KeyError:
         abort(make_response('No field \'ecosystem\' in request, request failed', 400))
     try:
-        issuer = request.form['issuer_address']
+        issuer = re.sub(r'\D+', '', request.form['issuer_address']) #check alphanumeric
+        query += " AND issuer=" + str(issuer)
     except KeyError:
         issuer = ""
     
-       
-    data = listProperties(ecosystem)
-    if issuer != "":
-        data = [property for property in data if property["from_address"] == issuer]
+    sqlconn.execute("select * from smartproperties where " + str(query))
+    data= sqlconn.fetchall()
+
     response = {
                 'status' : 'OK',
                 'properties' : data
