@@ -281,7 +281,8 @@ create table if not exists ActiveOffers (
 
 create table if not exists OfferAccepts (
         Buyer varchar(64) not null                     /* Buyers address */
-      , AmountAccepted numeric(19) not null            /* amount accepted by uyer */
+      , AmountAccepted numeric(19) not null            /* amount accepted by buyer */
+      , AmountPurchased numeric(19) not null default 0 /* amount user has purchsed/paid for so far */
       , LinkedTxDBSerialNum int8 not null              /* tx with the associated accept offer */
       , SaleTxDbSerialNum int8 not null                /* tx the offer is actually accepting against */
       , Block int not null                             /* Block the accept was received in */
