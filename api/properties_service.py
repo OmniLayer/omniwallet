@@ -60,24 +60,31 @@ def subcategories():
 
 @app.route('/list', methods=['POST'])
 def list():
-    query = "ecosystem="
+    query = "ecosystem='"
     try:
-        ecosystem = int(re.sub(r'[1,2]', '', request.form['ecosystem']))
+        value = int(re.sub(r'\D+', '', request.form['ecosystem']))
         valid_values = [1,2]
-        if ecosystem not in valid_values:
+        if value not in valid_values:
             abort(make_response('Field \'ecosystem\' invalid value, request failed', 400))
-        query += str(ecosystem)
+        
+        ecosystem = "Production" if value == 1 else "Test" 
+        query += ecosystem +"'"
     except KeyError:
         abort(make_response('No field \'ecosystem\' in request, request failed', 400))
+    except ValueError:
+        abort(make_response('Field \'ecosystem\' invalid value, request failed', 400))
     try:
         issuer = re.sub(r'\D+', '', request.form['issuer_address']) #check alphanumeric
-        query += " AND issuer=" + str(issuer)
+        query += " AND issuer='" + str(issuer) + "'"
     except KeyError:
         issuer = ""
     
     sqlconn.execute("select * from smartproperties where " + str(query))
-    data= sqlconn.fetchall()
-
+    ROWS= sqlconn.fetchall()
+    data=[]
+    for property in ROWS:
+        data.append({"currencyId":property[1],"propertyName":property[6]}) #get the json representation
+        
     response = {
                 'status' : 'OK',
                 'properties' : data
@@ -135,21 +142,3 @@ def filterProperties( properties ):
                     print 'Error decoding JSON', address_file.split('/')[-1][:-5]
     
     return ['OK',addresses_data]
-
-
-# refactor this to be compatible with mastercored
-def listProperties(ecosystem):
-    import glob
-    
-    properties = glob.glob(data_dir_root +'/properties/*')
-    properties_data = []
-    for property_file in properties:
-        if property_file[-5:] == '.json':
-            with open(property_file, 'r') as f:
-                try:
-                    prop = json.loads(f.readline())[0]
-                    if prop["formatted_ecosystem"] == int(ecosystem): properties_data.append(prop)
-                except ValueError:
-                    print 'Error decoding JSON', property_file.split('/')[-1][:-5]        
-                         
-    return properties_data
