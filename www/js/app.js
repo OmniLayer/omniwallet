@@ -106,11 +106,11 @@ var app = angular.module('omniwallet', [
 });
 
 app.config(function($idleProvider, $keepaliveProvider) {
-  $idleProvider.idleDuration(60); // 10 minutes
-  $idleProvider.warningDuration(50); // in seconds
-  // $keepaliveProvider.interval(2); // in seconds
+  $idleProvider.idleDuration(8 * 60);
+  // $idleProvider.warningDuration(10);
+  // $keepaliveProvider.interval(2);
 })
-.run(function(userService, $location, $idle) {
+.run(function(userService, $location) {
   //Whitelist pages
   whitelisted = ['login', 'about', 'status', 'explorer'];
 
@@ -122,8 +122,6 @@ app.config(function($idleProvider, $keepaliveProvider) {
     }
     $location.path('/');
   }
-
-  $idle.watch();
 });
 
 //app helpers

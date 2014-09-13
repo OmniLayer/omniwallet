@@ -124,6 +124,37 @@ function Ctrl($scope, $route, $routeParams, $modal, $location, browser, userServ
     if (userService.loggedIn()) {
       $modal.open({
         backdrop: 'static',
+        controller: function ($injector, $scope, $http, $location, $modalInstance, $interval) {
+          $scope.idleEndTime = 120;
+          $scope.idleEndTimeFormatted = '2 minutes';
+
+          $scope.cancel = function () {
+            $modalInstance.dismiss('cancel');
+          };
+          
+          var timer = $interval(function () {
+            $scope.idleEndTime--;
+            if ($scope.idleEndTime === 0) {
+              $interval.cancel(timer);
+              location = location.origin + '/login/' + userService.getUUID()
+            }
+
+            var info = [
+              parseInt($scope.idleEndTime / 60) + ' minutes',
+              ($scope.idleEndTime % 60) + ' seconds',
+            ]
+            $scope.idleEndTimeFormatted = info.join(' and ');
+          }, 1000);
+
+          $modalInstance.result.then(
+            function () {
+              $interval.cancel(timer);
+            },
+            function () {
+              $interval.cancel(timer);
+            }
+          );
+        },
         templateUrl: '/partials/idle_warning_modal.html'
       });
     }
@@ -134,9 +165,9 @@ function Ctrl($scope, $route, $routeParams, $modal, $location, browser, userServ
   });
 
   $scope.$on('$idleTimeout', function() {
-    if (userService.loggedIn()) {
+    /*if (userService.loggedIn()) {
       location = location.origin + '/login/' + userService.getUUID()
-    }
+    }*/
   });
 
   $scope.$on('$idleEnd', function() {
