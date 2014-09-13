@@ -265,6 +265,7 @@ create table if not exists ExchangeRates (
 create table if not exists ActiveOffers (
         AmountAccepted numeric(19) not null             /* Amount available that has been accepted but not purchased */
       , AmountAvailable numeric(19) not null            /* Amount available for sale that can be accepted */
+      , TotalSelling numeric(19) not null               /* Total Amount put up for sale regardless of current accepts/sales */
       , AmountDesired numeric(19) not null              /* If total amountavailable where purchased, this would be cost */
       , MinimumFee numeric(19) not null                 /* Min fee buyer has to pay */
       , PropertyIdSelling bigint not null               /* Property ID for sale  */
