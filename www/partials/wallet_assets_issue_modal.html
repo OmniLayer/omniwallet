@@ -1,26 +1,47 @@
 <div class="modal-body">
-    <h3 class="text-center"> Confirm Property Creation </h3>
-      <h4>You will create this Smart Property:</h4>
-      <ul>
-        <li>Name: {{propertyName}}</li>
-        <li>Description: {{propertyData}}</li>
-        <li>Divisible: {{divisible}}</li>
-        <li>Category: {{propertyCategory}}</li>
-        <li>Subcategory: {{propertySubcategory}}</li>
-        <li>Url: <a href="{{propertyUrl}}" target="_blank">{{propertyUrl}}</a></li>
-        <li>Number of properties: {{numberProperties}}</li>
-        <li>Issuer address: <a href="https://blockchain.info/address/{{selectedAddress}}?sort=0" target="_blank">{{selectedAddress}}</a></li>
-      </ul>
-  <p><br>
-  If the above is correct, please press create my Property.
-  </p>
-<div class="modal-footer">
-    <div class="row" ng-hide="transactionSuccess">
-    <button ng-disabled="clicked" class="btn btn-primary" ng-click="ok()">Create my Property</button>
-    <button ng-disabled="wating" class="btn btn-warning" ng-click="cancel()">Cancel</button>
-    <img class="" src="/assets/img/34-1.gif" ng-show="waiting">
-    </div>
-      <br>
+    <div class="text-left col-xs-9 send-title">Confirm Property Creation</div><div class="text-right"><button ng-disabled="wating" class="btn btn-xs send-cancel" ng-click="cancel()">cancel | <span class="glyphicon glyphicon-remove"></span></button></div>
+    <br>
+    <table>
+    <tr><td height="30px"></td></tr>
+    <tr>
+        <td width="126px" height="30px" class="description-title">Name:</td><td class="description-text">{{propertyName}}</td>
+    </tr>
+    
+    <tr>
+        <td width="126px" height="30px" class="description-title">Category:</td><td class="description-text">{{propertyCategory}}</td>
+    </tr>
+    
+    <tr>
+        <td width="126px" height="30px" class="description-title">Subcategory:</td><td class="description-text">{{propertySubcategory}}</td>
+    </tr>
+    
+    <tr>
+        <td width="126px" height="30px" class="description-title">Url:</td><td class="description-text"><a href="{{propertyUrl}}" target="_blank">{{propertyUrl}}</a></td>
+    </tr>
+    
+    <tr>
+        <td width="126px" height="30px" class="description-title">Description:</td><td class="description-text">{{propertyData}}</td>
+    </tr>
+    </table>
+  <br><br>
+    <table>
+    <tr>
+        <td width="186px" height="30px" class="description-title">Number of properties:</td><td class="description-text">{{numberProperties}} <span class="description-title">({{divisible}})</span></td>
+    </tr>
+    
+    <tr>
+        <td width="186px" height="30px" class="description-title">Issuer address:</td><td class="description-text"><a href="https://blockchain.info/address/{{selectedAddress}}?sort=0" target="_blank">{{selectedAddress}}</a></td>
+    </tr>
+    </table>
+    <hr>
+      <span class="send-fee">Creation cost: {{convertSatoshiToDisplayedValue(totalCost, true)}} bitcoins</span>
+<div class="modal-footer">   
+    <br>
+    <div class="row" ng-hide=transactionSuccess>
+    <button ng-disabled="clicked" class="btn btn-lg send-btn" ng-click="ok()" style="padding-bottom: 6px;">  
+     <img class="create-property-img" style="padding-bottom: 5px;"> Create Property
+    </button> 
+    
     <div class="row">
       <div ng-show="transactionSuccess">
         <h4 class="pull-left" style="color:green"> Assets created successfully, 

@@ -79,13 +79,15 @@ function PropertyIssuanceController($scope, propertiesService){
     $modalScope.convertSatoshiToDisplayedValue=  $scope.convertSatoshiToDisplayedValue,
     $modalScope.getDisplayedAbbreviation=  $scope.getDisplayedAbbreviation,
     $modalScope.numberProperties=  $scope.numberProperties,
-    $modalScope.divisible=  $scope.isDivisible() ? 'Yes' : 'No',
+    $modalScope.divisible=  $scope.isDivisible() ? 'divisible' : 'indivisible',
     $modalScope.propertyName= $scope.propertyName,
     $modalScope.propertyCategory= $scope.propertyCategory,
     $modalScope.propertySubcategory= $scope.propertySubcategory,
     $modalScope.propertyUrl= $scope.propertyUrl;
     $modalScope.propertyData= $scope.propertyData;
     $modalScope.selectedAddress= $scope.selectedAddress;
+    $modalScope.minerFees= +$scope.convertDisplayedValue($scope.minerFees);
+    $modalScope.totalCost= +$scope.convertDisplayedValue($scope.totalCost);
   };
   
   transactionGenerationController.generateData = function(){

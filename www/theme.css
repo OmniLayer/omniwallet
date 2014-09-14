@@ -66,6 +66,9 @@ a {
 .footer .navbar-nav > li {
   padding-top: 0;
 }
+.modal-body{
+  background-color: #fcfbfb;
+}
 .send-title{
   padding-left: 0;
   font-size: 36px;
@@ -77,12 +80,30 @@ a {
   color: #44b8ef;
   font-size: 32px;
   font-family: 'Gudea', sans-serif;
+  border-width: 1px;
+  border-color: #e8e7e7
 }
+
 .send-btn:hover{
   color: #2e508f;
 }
-.send-btn:hover .send-img{
-  content: url("/assets/img/SendIcon_roll.png");
+.send-btn:hover .send-img-roll{
+  display: inline;
+}
+.send-btn:hover .send-img-normal{
+  display: none;
+}
+.send-img-normal{
+  display: inline;
+}
+.send-img-roll{
+  display: none;
+}
+.create-property-img{
+  content: url("/assets/img/Smart_normal.png");
+}
+.send-btn:hover .create-property-img{
+  content: url("/assets/img/Smart_roll.png");
 }
 .send-cancel{
   background-color: #ebebeb;
@@ -90,20 +111,23 @@ a {
   font-size: 15px;
   font-weight: bold;
   font-family: 'Gudea', sans-serif;
+  margin-top: 16px;
 }
 .description-title{
   font-size: 18px;
   color: #b8b7b7;
   font-family: 'Gudea', sans-serif;
+  font-weight: bold;
 }
 .description-text{
   font-size: 18px;
   color: #696969;
   font-family: 'Gudea', sans-serif;
+  font-weight: bold;
 }
 .send-fee{
   font-size: 16px;
-  color:#c6c6c6;
+  color:#c4c4c4;
   font-family: 'Gudea', sans-serif;
 }
 .footer-div{
