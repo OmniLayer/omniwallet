@@ -17,7 +17,7 @@ app.debug = True
 HEXSPACE_SECOND='21'
 
 @app.route('/<int:tx_type>', methods=['POST'])
-def generate_assets(tx_type):
+def generate_tx(tx_type):
 
     #update this to support more transactions
     supported_transactions = [50,51, 0]
@@ -25,7 +25,7 @@ def generate_assets(tx_type):
     if tx_type not in supported_transactions:
         return jsonify({ 'status': 400, 'data': 'Unsupported transaction type '+str(tx_type) })
     
-    expected_fields=['transaction_version', 'transaction_from','pubkey','fee']
+    expected_fields=['transaction_version', 'transaction_from','pubkey','fee','use_armory']
 
     print "Form ",request.form
 
@@ -47,7 +47,8 @@ def generate_assets(tx_type):
         try:
             tx50bytes = prepare_txbytes(txdata)
             packets = construct_packets( tx50bytes[0], tx50bytes[1], request.form['transaction_from'] )
-            unsignedhex = build_transaction( request.form['fee'], request.form['pubkey'], packets[0], packets[1], packets[2], request.form['transaction_from'] )
+            unsignedhex = build_transaction( request.form['fee'], request.form['pubkey'], packets[0], packets[1], packets[2], request.form['transaction_from'], request.form['use_armory'] )
+            
             #DEBUG print tx50bytes, packets, unsignedhex
             return jsonify({ 'status': 200, 'unsignedhex': unsignedhex[0] , 'sourceScript': unsignedhex[1] });
         except Exception as e:
@@ -57,7 +58,7 @@ def generate_assets(tx_type):
         try:
             tx51bytes = prepare_txbytes(txdata)
             packets = construct_packets( tx51bytes[0], tx51bytes[1], request.form['transaction_from'])
-            unsignedhex= build_transaction( request.form['fee'], request.form['pubkey'], packets[0], packets[1], packets[2], request.form['transaction_from'] )
+            unsignedhex= build_transaction( request.form['fee'], request.form['pubkey'], packets[0], packets[1], packets[2], request.form['transaction_from'], request.form['use_armory'] )
             #DEBUG print tx51bytes, packets, unsignedhex
             return jsonify({ 'status': 200, 'unsignedhex': unsignedhex[0] , 'sourceScript': unsignedhex[1] });
         except Exception as e:
@@ -67,7 +68,7 @@ def generate_assets(tx_type):
         try:
             tx0bytes = prepare_txbytes(txdata)
             packets = construct_packets( tx0bytes[0], tx0bytes[1], request.form['transaction_from'])
-            unsignedhex= build_transaction( request.form['fee'], request.form['pubkey'], packets[0], packets[1], packets[2], request.form['transaction_from'], request.form['transaction_to'])
+            unsignedhex= build_transaction( request.form['fee'], request.form['pubkey'], packets[0], packets[1], packets[2], request.form['transaction_from'], request.form['transaction_to'], request.form['use_armory'] )
             #DEBUG print tx0bytes, packets, unsignedhex
             return jsonify({ 'status': 200, 'unsignedhex': unsignedhex[0] , 'sourceScript': unsignedhex[1] });
         except Exception as e:
@@ -355,7 +356,7 @@ def construct_packets(byte_stream, total_bytes, from_address):
     #DEBUG print final_packets 
     return [final_packets,total_packets,total_outs]
     
-def build_transaction(miner_fee_satoshis, pubkey,final_packets, total_packets, total_outs, from_address, to_address=None):
+def build_transaction(miner_fee_satoshis, pubkey,final_packets, total_packets, total_outs, from_address, to_address=None, use_armory=False):
     print 'pubkey', request.form['pubkey'], len(request.form['pubkey']) 
     if len(request.form['pubkey']) < 100:
       print "Compressed Key, using hexspace 21"
@@ -557,4 +558,16 @@ def build_transaction(miner_fee_satoshis, pubkey,final_packets, total_packets, t
 
     unsigned_hex=''.join(hex_transaction).lower()
 
-    return [unsigned_hex, prevout_script]
+    if(use_armory):
+        sys.path.append("/usr/lib/armory/")
+        from armoryengine.ALL import *
+        #Translate raw txn
+        pytx = PyTx()
+        print("Encoding raw txn: %s" % unsigned_hex)
+        binTxn = hex_to_binary(unsigned_hex)
+        pytx.unserialize(binTxn)
+        tx = PyTxDistProposal(pytx)
+        print("\n\nOutput is:\n%s" % tx.serializeAscii())  
+        return [tx.serializeAscii(), prevout_script]  
+    else:
+        return [unsigned_hex, prevout_script]
