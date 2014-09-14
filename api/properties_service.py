@@ -2,6 +2,9 @@ import urlparse
 import os, sys, re
 from flask import Flask, request, jsonify, abort, json, make_response
 from msc_apps import *
+import psycopg2, psycopg2.extras
+ 
+sqlconn = sql_connect()
 
 tools_dir = os.environ.get('TOOLSDIR')
 lib_path = os.path.abspath(tools_dir)
@@ -57,19 +60,31 @@ def subcategories():
 
 @app.route('/list', methods=['POST'])
 def list():
+    query = "ecosystem='"
     try:
-        ecosystem = request.form['ecosystem']
+        value = int(re.sub(r'\D+', '', request.form['ecosystem']))
+        valid_values = [1,2]
+        if value not in valid_values:
+            abort(make_response('Field \'ecosystem\' invalid value, request failed', 400))
+        
+        ecosystem = "Production" if value == 1 else "Test" 
+        query += ecosystem +"'"
     except KeyError:
         abort(make_response('No field \'ecosystem\' in request, request failed', 400))
+    except ValueError:
+        abort(make_response('Field \'ecosystem\' invalid value, request failed', 400))
     try:
-        issuer = request.form['issuer_address']
+        issuer = re.sub(r'\D+', '', request.form['issuer_address']) #check alphanumeric
+        query += " AND issuer='" + str(issuer) + "'"
     except KeyError:
         issuer = ""
     
-       
-    data = listProperties(ecosystem)
-    if issuer != "":
-        data = [property for property in data if property["from_address"] == issuer]
+    sqlconn.execute("select * from smartproperties where PropertyID not in (1,2) AND " + str(query))
+    ROWS= sqlconn.fetchall()
+    data=[]
+    for property in ROWS:
+        data.append({"currencyId":property[1],"propertyName":property[6]}) #get the json representation
+        
     response = {
                 'status' : 'OK',
                 'properties' : data
@@ -127,21 +142,3 @@ def filterProperties( properties ):
                     print 'Error decoding JSON', address_file.split('/')[-1][:-5]
     
     return ['OK',addresses_data]
-
-
-# refactor this to be compatible with mastercored
-def listProperties(ecosystem):
-    import glob
-    
-    properties = glob.glob(data_dir_root +'/properties/*')
-    properties_data = []
-    for property_file in properties:
-        if property_file[-5:] == '.json':
-            with open(property_file, 'r') as f:
-                try:
-                    prop = json.loads(f.readline())[0]
-                    if prop["formatted_ecosystem"] == int(ecosystem): properties_data.append(prop)
-                except ValueError:
-                    print 'Error decoding JSON', property_file.split('/')[-1][:-5]        
-                         
-    return properties_data
