@@ -148,7 +148,7 @@ angular.module('omniwallet').factory('userService', ['$rootScope', '$http', '$in
         service.data.walletMetadata = {};
       },
 
-      addAddress: function(address, privKey) {
+      addAddress: function(address, privKey, offline) {
         for (var i in service.data.wallet.addresses) {
           if (service.data.wallet.addresses[i].address == address) {
             if(privKey)
@@ -159,8 +159,10 @@ angular.module('omniwallet').factory('userService', ['$rootScope', '$http', '$in
 
         service.data.wallet.addresses.push({
           "address": address,
-          "privkey": privKey
+          "privkey": privKey,
+          "offline": offline 
         });
+        
         service.data.loggedIn = true;
         return service.saveSession().then(function(){
           service.updateCurrencies();
