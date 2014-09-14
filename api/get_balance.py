@@ -22,7 +22,7 @@ def get_msc_balances( addr ):
   for balrow in ROWS:
       cID = str(int(balrow[2])) #currency id
       sym_t = ('BTC' if cID == '0' else ('MSC' if cID == '1' else ('TMSC' if cID == '2' else 'SP' + cID) ) ) #symbol template
-      divi = json.loads(balrow[-1])['divisible']  #Divisibility
+      divi = balrow[-1]['divisible'] if type(balrow[-1]) == type({}) else json.loads(balrow[-1])['divisible']  #Divisibility
       res = { 'symbol' : sym_t, 'divisible' : divi  }
       res['value'] = ('%.8f' % float(balrow[4])).rstrip('0').rstrip('.')
       #res['reserved_balance'] = ('%.8f' % float(balrow[5])).rstrip('0').rstrip('.')
