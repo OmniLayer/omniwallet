@@ -2,7 +2,6 @@ function WalletSendAssetsController($modal, $scope, $http, $q, userService, wall
   $scope.walletAssets =  $scope.$parent.$parent;
   var transactionGenerationController = $scope.$parent;
 
-
   transactionGenerationController.validateTransactionData = function(){
     var dustValue = 5757;
     var minerMinimum = 10000;
@@ -21,7 +20,7 @@ function WalletSendAssetsController($modal, $scope, $http, $q, userService, wall
       delete convertToSatoshi[ convertToSatoshi.indexOf( $scope.sendAmount ) ];
       delete convertToSatoshi[ convertToSatoshi.indexOf( $scope.balanceData[0] ) ];
     }
-
+  
     var convertedValues = $scope.convertDisplayedValue( convertToSatoshi );
 
     var minerFees = +convertedValues[0];
@@ -66,7 +65,39 @@ function WalletSendAssetsController($modal, $scope, $http, $q, userService, wall
     
     return error;
   };
-  
+    
+  transactionGenerationController.changeValue = function(){
+    $scope.value = $scope.sendAmount*$scope.bitcoinValue;
+    $scope.value = $scope.filterNumber($scope.value,6);
+  }
+  transactionGenerationController.changeAmount = function(){
+    $scope.sendAmount = $scope.value/$scope.bitcoinValue;
+    $scope.sendAmount = $scope.filterNumber($scope.sendAmount,6);
+  }
+  $scope.filterNumber = function(num, digits){
+    if (!isNaN(num)) {
+      num = num.toString();
+      var filteredNumber = "", i = 0;
+      while(num[i]!='.' && i<num.length){
+        filteredNumber += num[i];
+        i++;
+      }
+      if (i!=num.length) {
+        filteredNumber += num[i];
+      }     
+      i++;
+      if ((num.length-i) < digits) {
+        digits = num.length-i;
+      }
+      for (var j = 1; j<=digits;j++) {
+        filteredNumber += num[i];
+        i++
+      }
+      filteredNumber = parseFloat(filteredNumber);
+      return filteredNumber;
+    }
+    return num;
+  }
   transactionGenerationController.modalTemplateUrl = '/partials/wallet_send_modal.html';
   
   transactionGenerationController.setModalScope = function($modalScope){
