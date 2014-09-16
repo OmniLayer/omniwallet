@@ -124,9 +124,27 @@ function Ctrl($scope, $route, $routeParams, $modal, $location, browser, userServ
     if (userService.loggedIn()) {
       $modal.open({
         backdrop: 'static',
-        controller: function ($injector, $scope, $http, $location, $modalInstance, $interval) {
-          $scope.idleEndTime = 120;
-          $scope.idleEndTimeFormatted = '2 minutes';
+        controller: function ($injector, $scope, $http, $location, $modalInstance, $interval, $idle) {
+          $idle.unwatch();
+
+          var idleEndTimeFormat = function (idleEndTime) {
+            var info = [
+              (idleEndTime >= 60 ? parseInt(idleEndTime / 60) + ' minute' + (parseInt(idleEndTime / 60) > 1 ? 's' : '') : undefined),
+              (idleEndTime % 60 > 0  ? (idleEndTime % 60) + ' second' + (idleEndTime % 60 > 1 ? 's' : '') : undefined),
+            ]
+
+            var i = info.length;
+            while (i--) {
+              if (!info[i]) {
+                info.splice(i, 1);
+              }
+            }
+
+            return info.length > 0 ? 'in ' + info.join(' and ') : 'now';
+          };
+
+          $scope.idleEndTime = $idle._options().warningDuration;
+          $scope.idleEndTimeFormatted = idleEndTimeFormat($scope.idleEndTime);
 
           $scope.cancel = function () {
             $modalInstance.dismiss('cancel');
@@ -139,18 +157,16 @@ function Ctrl($scope, $route, $routeParams, $modal, $location, browser, userServ
               location = location.origin + '/login/' + userService.getUUID()
             }
 
-            var info = [
-              parseInt($scope.idleEndTime / 60) + ' minutes',
-              ($scope.idleEndTime % 60) + ' seconds',
-            ]
-            $scope.idleEndTimeFormatted = info.join(' and ');
+            $scope.idleEndTimeFormatted = idleEndTimeFormat($scope.idleEndTime);
           }, 1000);
 
           $modalInstance.result.then(
             function () {
+              $idle.watch();
               $interval.cancel(timer);
             },
             function () {
+              $idle.watch();
               $interval.cancel(timer);
             }
           );
