@@ -260,8 +260,7 @@ function NavigationController($scope, $http, $modal, userService) {
     });
   };
 
-  $scope.openLoginModal = function() {  
-      
+  $scope.openLoginModal = function() {        
     $scope.login ={
       title:'Login',
       button:'Open Wallet'
