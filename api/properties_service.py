@@ -78,8 +78,8 @@ def list():
         query += " AND issuer='" + str(issuer) + "'"
     except KeyError:
         issuer = ""
-    
-    sqlconn.execute("select * from smartproperties where PropertyID not in (1,2) AND " + str(query))
+        
+    sqlconn.execute("select * from smartproperties where PropertyID > 2 AND " + str(query))
     ROWS= sqlconn.fetchall()
     data=[]
     for property in ROWS:
