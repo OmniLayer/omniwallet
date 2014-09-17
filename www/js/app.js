@@ -27,7 +27,8 @@ var app = angular.module('omniwallet', [
           view = '/partials/wallet_assets_' + route.page + '.html';
         else
           view = '/partials/explorer_assets.html';
-        
+
+        ga('send', 'event', 'button', 'click', route.page);
         return view;
       }
     }).otherwise({
@@ -45,6 +46,8 @@ var app = angular.module('omniwallet', [
 
         var view = '/partials/wallet_' + route.page + '.html';
         //DEBUG console.log(view, route.page, view == '/wallet_addresses.html')
+
+        ga('send', 'event', 'button', 'click', route.page);
         return view
       }
     }).otherwise({
@@ -61,6 +64,8 @@ var app = angular.module('omniwallet', [
 
         var view = '/partials/explorer_' + route.page + '.html';
         //DEBUG console.log(view, route.page, view == '/wallet_addresses.html')
+
+        ga('send', 'event', 'button', 'click', route.page);
         return view
       }
     }).otherwise({
@@ -77,6 +82,8 @@ var app = angular.module('omniwallet', [
 
         var view = '/partials/about_' + route.page + '.html';
         //DEBUG console.log(view, route.page, view == '/wallet_addresses.html')
+
+        ga('send', 'event', 'button', 'click', route.page);
         return view
       }
     }).when('/', {

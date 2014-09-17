@@ -248,19 +248,47 @@ function WalletTradeController($scope, $http, $q, userService) {
   $scope.history = '/partials/wallet_history.html';
 
   $scope.setView = function(view, data) {
-    if (view != 'tradeInfo')
-      $scope.onTradeView = false
+    if (view != 'tradeInfo'){
+      if (view == 'saleOffer') {
+        if ($scope.hasCoins) {
+          $scope.onSaleView = true;
+          $scope.saleView = $scope.tradeTemplates[view];
+          $scope.onTradeView = false;
+        }
+        else
+        {
+          $scope.showNoCoinAlert = true;
+        }
+      }
+      else
+      {
+        $scope.tradeView = $scope.tradeTemplates[view];
+        $scope.onSaleView = false;
+        $scope.onTradeView = false;
+        $scope.showNoCoinAlert = false;
+      }
+    }
     else
-      $scope.onTradeView = true
-    $scope.tradeView = $scope.tradeTemplates[view]
-
+    {
+      $scope.tradeView = $scope.tradeTemplates[view];
+      $scope.onTradeView = true;
+      $scope.onSaleView = false;
+      $scope.showNoCoinAlert = false;
+    }
     $scope.global[view] = data;
   }
-  
+  $scope.hideNoCoinAlert = function()
+  {
+    $scope.showNoCoinAlert = false;
+  }
   $scope.$on("setView", function(event, args){
     $scope.setView(args.view,args.data);
   });
-
+  
+  $scope.setHasCoins = function(hideForm)
+  {
+    $scope.hasCoins = !hideForm;
+  }
   $scope.tradeTemplates = {
     'tradeInfo': '/partials/wallet_info.html',
     'simpleSend': '/partials/wallet_send.html',
@@ -287,6 +315,9 @@ function WalletTradeController($scope, $http, $q, userService) {
       $scope.activeCurrencyPair = currencyPair
 
     $scope.global.getData();
+    var random = Math.random();
+    $scope.saleView = '/partials/wallet_sale.html?r='+random;
+    $scope.showNoCoinAlert = false;
   }
   $scope.isActiveCurrencyPair = function(currencyPair) {
     if (angular.equals(currencyPair, $scope.activeCurrencyPair))
