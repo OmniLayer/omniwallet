@@ -1,14 +1,13 @@
 <div class="sidecar col-xs-2" ng-controller="SidecarController" ng-init=setView('wallet')>
     <div ng-include="templates['sidecar']"></div>
 </div>
-<div ng-controller="AssetTypesController" ng-init="bitcoinValue=getBitcoinValue();">
-<div ng-controller="WalletAssetsFormController">
+<div ng-controller="WalletAssetsFormController" ng-init="bitcoinValue=getBitcoinValue();">
   <div ng-controller="TransactionGenerationController">
   <div class="col-xs-10" ng-controller="WalletSendAssetsController">
-
     <div class="row">
      <div class="panel-default">
        <div class="text-left panel-body om-title">Send</div>
+       Dollars: {{bitcoinValue}}
      </div>    
       <div ng-show="showErrors" class="alert alert-danger"> <strong> {{error}} </strong> </div> 
       <form name="sendForm" ng-submit="validateForm()">
@@ -45,14 +44,14 @@
 	    <input id="amount" name="amount" type="number" ng-model="sendAmount" class="form-control" ng-change="changeValue()" value="sendAmount"
 	    placeholder="{{ sendPlaceholderValue }}" step="{{ sendPlaceholderStep }}" min="{{ sendPlaceholderMin }}" required>
 	    
-	    <span ng-show="$parent.selectedCoin.symbol == 'BTC'" class="input-group-addon"> Value ( <strong>{{ balanceData[0]*bitcoinValue |number:4}} $</strong>  Available ): </span>
+	    <span ng-show="$parent.selectedCoin.symbol == 'BTC'" class="input-group-addon"> Value ( <strong>{{ balanceData[0]*bitcoinValue |number:2}} $</strong>  Available ): </span>
 	    <input ng-show="$parent.selectedCoin.symbol == 'BTC'" id="value" name="value" type="number" ng-model="value" class="form-control" ng-change="changeAmount()" value="value"
 	    placeholder="{{ sendPlaceholderValue }}" step="{{ sendPlaceholderStep }}" min="{{ sendPlaceholderMin }}" required>	
           </div>
           <br ng-hide="$parent.selectedCoin.symbol == 'BTC'">
           <div class="input-group" style="width: 15%;" ng-hide="$parent.selectedCoin.symbol == 'BTC'">
             <span class="input-group-addon" style="padding: 0.65em;"> MasterProtocol Transaction Cost: 
-    	 <a href=""
+		<a href=""
                 tooltip="MasterProtocol Transactions require additional BTC. This is used when encoding/sending the Masterprotocol Transaction."
                 tooltip-append-to-body="true"
                 tooltip-placement="top"> <strong>(?)</strong>
@@ -83,5 +82,4 @@
       </form>
     </div>    
   </div>
-</div>
 </div>

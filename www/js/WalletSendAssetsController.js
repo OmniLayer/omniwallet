@@ -2,6 +2,23 @@ WHOLE_UNIT = new Big(0.00000001);
 function WalletSendAssetsController($modal, $scope, $http, $q, userService, walletTransactionService) {
   $scope.walletAssets =  $scope.$parent.$parent;
   var transactionGenerationController = $scope.$parent;
+
+  $scope.changeValue = function(){
+    $scope.value = $scope.sendAmount*$scope.bitcoinValue;
+    $scope.value = new Big($scope.value).toFixed(8);
+    $scope.value = parseFloat($scope.value);  
+  }
+  
+  $scope.changeAmount = function(){
+    $scope.sendAmount = $scope.value/$scope.bitcoinValue;
+    $scope.sendAmount = new Big($scope.sendAmount).toFixed(8);
+    $scope.sendAmount = parseFloat($scope.sendAmount);
+  }
+  
+  $scope.resetAmountAndValue = function(){
+    $scope.sendAmount = 0;
+    $scope.value = 0;
+  }
   
   transactionGenerationController.validateTransactionData = function(){
     var dustValue = 5757;
@@ -66,17 +83,6 @@ function WalletSendAssetsController($modal, $scope, $http, $q, userService, wall
     
     return error;
   };
-    
-  transactionGenerationController.changeValue = function(){
-    $scope.value = $scope.sendAmount*$scope.bitcoinValue;
-    $scope.value = new Big($scope.value).toFixed(8);
-    $scope.value = parseFloat($scope.value);  
-  }
-  transactionGenerationController.changeAmount = function(){
-    $scope.sendAmount = $scope.value/$scope.bitcoinValue;
-    $scope.sendAmount = new Big($scope.sendAmount).toFixed(8);
-    $scope.sendAmount = parseFloat($scope.sendAmount);
-  }
 
   transactionGenerationController.modalTemplateUrl = '/partials/wallet_send_modal.html';
   
@@ -91,6 +97,7 @@ function WalletSendAssetsController($modal, $scope, $http, $q, userService, wall
     $modalScope.bitcoinValue = $scope.bitcoinValue;
     $modalScope.getBitcoinValue = $scope.getBitcoinValue;
     $modalScope.setBitcoinValue = $scope.setBitcoinValue;
+    $modalScope.resetAmountAndValue = $scope.resetAmountAndValue;
   };
   
 

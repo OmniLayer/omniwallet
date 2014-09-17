@@ -127,8 +127,9 @@ function TransactionGenerationController($scope, $modal, userService, walletTran
             else{
               $scope.waiting = false;
               $scope.transactionError = true;
-              $scope.error = 'The btc value has changed, check agian your transaction';
+              $scope.error = 'The btc value has changed, check again your transaction';
               $scope.setBitcoinValue($scope.getBitcoinValue());
+              $scope.resetAmountAndValue();
             }
           };
           
