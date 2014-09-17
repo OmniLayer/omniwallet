@@ -119,9 +119,17 @@ function TransactionGenerationController($scope, $modal, userService, walletTran
           setModalScope($scope);
           
           $scope.ok = function() {
-            $scope.clicked = true;
-            $scope.waiting = true;
-            prepareTransaction(data.transactionType, data.transactionData, data.from, $scope);
+            if ($scope.bitcoinValue == $scope.getBitcoinValue()) {
+              $scope.clicked = true;
+              $scope.waiting = true;
+              prepareTransaction(data.transactionType, data.transactionData, data.from, $scope);
+            }
+            else{
+              $scope.waiting = false;
+              $scope.transactionError = true;
+              $scope.error = 'The btc value has changed, check agian your transaction';
+              $scope.setBitcoinValue($scope.getBitcoinValue());
+            }
           };
           
           $scope.cancel = function () {

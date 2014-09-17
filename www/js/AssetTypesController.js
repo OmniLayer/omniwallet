@@ -165,6 +165,9 @@ angular.module('omniwallet')
   $scope.getBitcoinValue = function(){
     return appraiser.getValue(100000000,"BTC");
   }
+  $scope.setBitcoinValue = function(value){
+    $scope.bitcoinValue = value;
+  }
   function getAssetBalances(currencySymbol) {
     var deferred = $q.defer();
     var wallet = $injector.get('userService').getWallet();

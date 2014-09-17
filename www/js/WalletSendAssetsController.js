@@ -1,7 +1,8 @@
+WHOLE_UNIT = new Big(0.00000001);
 function WalletSendAssetsController($modal, $scope, $http, $q, userService, walletTransactionService) {
   $scope.walletAssets =  $scope.$parent.$parent;
   var transactionGenerationController = $scope.$parent;
-
+  
   transactionGenerationController.validateTransactionData = function(){
     var dustValue = 5757;
     var minerMinimum = 10000;
@@ -68,36 +69,15 @@ function WalletSendAssetsController($modal, $scope, $http, $q, userService, wall
     
   transactionGenerationController.changeValue = function(){
     $scope.value = $scope.sendAmount*$scope.bitcoinValue;
-    $scope.value = $scope.filterNumber($scope.value,6);
+    $scope.value = new Big($scope.value).toFixed(8);
+    $scope.value = parseFloat($scope.value);  
   }
   transactionGenerationController.changeAmount = function(){
     $scope.sendAmount = $scope.value/$scope.bitcoinValue;
-    $scope.sendAmount = $scope.filterNumber($scope.sendAmount,6);
+    $scope.sendAmount = new Big($scope.sendAmount).toFixed(8);
+    $scope.sendAmount = parseFloat($scope.sendAmount);
   }
-  $scope.filterNumber = function(num, digits){
-    if (!isNaN(num)) {
-      num = num.toString();
-      var filteredNumber = "", i = 0;
-      while(num[i]!='.' && i<num.length){
-        filteredNumber += num[i];
-        i++;
-      }
-      if (i!=num.length) {
-        filteredNumber += num[i];
-      }     
-      i++;
-      if ((num.length-i) < digits) {
-        digits = num.length-i;
-      }
-      for (var j = 1; j<=digits;j++) {
-        filteredNumber += num[i];
-        i++
-      }
-      filteredNumber = parseFloat(filteredNumber);
-      return filteredNumber;
-    }
-    return num;
-  }
+
   transactionGenerationController.modalTemplateUrl = '/partials/wallet_send_modal.html';
   
   transactionGenerationController.setModalScope = function($modalScope){
@@ -108,6 +88,9 @@ function WalletSendAssetsController($modal, $scope, $http, $q, userService, wall
     $modalScope.minerFees= +$scope.convertDisplayedValue($scope.minerFees),
     $modalScope.sendTo= $scope.sendTo;
     $modalScope.totalCost= +$scope.convertDisplayedValue($scope.totalCost);
+    $modalScope.bitcoinValue = $scope.bitcoinValue;
+    $modalScope.getBitcoinValue = $scope.getBitcoinValue;
+    $modalScope.setBitcoinValue = $scope.setBitcoinValue;
   };
   
 

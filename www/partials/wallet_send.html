@@ -45,7 +45,7 @@
 	    <input id="amount" name="amount" type="number" ng-model="sendAmount" class="form-control" ng-change="changeValue()" value="sendAmount"
 	    placeholder="{{ sendPlaceholderValue }}" step="{{ sendPlaceholderStep }}" min="{{ sendPlaceholderMin }}" required>
 	    
-	    <span ng-show="$parent.selectedCoin.symbol == 'BTC'" class="input-group-addon"> Value ( <strong>{{ balanceData[0]*bitcoinValue }} $</strong>  Available ): </span>
+	    <span ng-show="$parent.selectedCoin.symbol == 'BTC'" class="input-group-addon"> Value ( <strong>{{ balanceData[0]*bitcoinValue |number:4}} $</strong>  Available ): </span>
 	    <input ng-show="$parent.selectedCoin.symbol == 'BTC'" id="value" name="value" type="number" ng-model="value" class="form-control" ng-change="changeAmount()" value="value"
 	    placeholder="{{ sendPlaceholderValue }}" step="{{ sendPlaceholderStep }}" min="{{ sendPlaceholderMin }}" required>	
           </div>
