@@ -122,6 +122,8 @@ function Ctrl($scope, $route, $routeParams, $modal, $location, browser, userServ
 
   $scope.$on('$idleStart', function() {
     if (userService.loggedIn()) {
+      var originalTitle = document.title;
+
       $modal.open({
         backdrop: 'static',
         controller: function ($injector, $scope, $http, $location, $modalInstance, $interval, $idle) {
@@ -145,6 +147,7 @@ function Ctrl($scope, $route, $routeParams, $modal, $location, browser, userServ
 
           $scope.idleEndTime = $idle._options().warningDuration;
           $scope.idleEndTimeFormatted = idleEndTimeFormat($scope.idleEndTime);
+          document.title = 'Omniwallet\u2122 - Session time out ' + $scope.idleEndTimeFormatted;
 
           $scope.cancel = function () {
             $modalInstance.dismiss('cancel');
@@ -158,14 +161,17 @@ function Ctrl($scope, $route, $routeParams, $modal, $location, browser, userServ
             }
 
             $scope.idleEndTimeFormatted = idleEndTimeFormat($scope.idleEndTime);
+            document.title = 'Omniwallet\u2122 - Session time out ' + $scope.idleEndTimeFormatted;
           }, 1000);
 
           $modalInstance.result.then(
             function () {
+              document.title = originalTitle;
               $idle.watch();
               $interval.cancel(timer);
             },
             function () {
+              document.title = originalTitle;
               $idle.watch();
               $interval.cancel(timer);
             }
