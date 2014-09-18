@@ -1,5 +1,6 @@
 import urlparse
 import os, sys, re
+import time
 from flask import Flask, request, jsonify, abort, json, make_response
 from msc_apps import *
 import psycopg2, psycopg2.extras
@@ -13,6 +14,8 @@ data_dir_root = os.environ.get('DATADIR')
 
 app = Flask(__name__)
 app.debug = True
+
+HISTORY_COUNT_CACHE = {}
 
 @app.route('/categories', methods=['POST'])
 def categories():
@@ -125,6 +128,49 @@ def getdata(property_id):
     sqlconn.execute("select PropertyData from smartproperties where PropertyID="+str(property_id))
     property=sqlconn.fetchone()
     return jsonify(property[0])
+
+@app.route('/gethistory/<int:property_id>', methods=["POST"])
+def gethistory(property_id):
+    try:
+        start = int(request.form['start'])
+    except KeyError:
+        abort(make_response('No field \'start\' in request, request failed', 400))
+    except ValueError:
+        abort(make_response('Field \'start\' must be an integer, request failed', 400))
+        
+    try:
+        count = int(request.form['count'])
+    except KeyError:
+        abort(make_response('No field \'count\' in request, request failed', 400))
+    except ValueError:
+        abort(make_response('Field \'count\' must be an integer, request failed', 400))
+
+    
+    transactions_query = "select txjson.txdata as data from propertyhistory ph, txjson where ph.txdbserialnum =txjson.txdbserialnum and ph.propertyid="+str(property_id)+" order by ph.txdbserialnum LIMIT "+str(count)+" OFFSET "+str(start) + ";"
+    total_query = "select count(*) as total from propertyhistory where propertyid ="+str(property_id)+" group by propertyid"
+    
+    try:
+        cache=HISTORY_COUNT_CACHE[str(property_id)]
+        if(time.time()-cache[1] > 6000000):
+            sqlconn.execute(total_query)
+            total=sqlconn.fetchone()[0]
+            HISTORY_COUNT_CACHE[str(property_id)] = (total, time.time())
+        else:
+            total=cache[0]    
+    except KeyError:
+        sqlconn.execute(total_query)
+        total=sqlconn.fetchone()[0]
+        HISTORY_COUNT_CACHE[str(property_id)] = (total, time.time())
+    
+    sqlconn.execute(transactions_query)
+    ROWS=sqlconn.fetchall()
+    transactions=[row[0] for row in ROWS]
+    
+    response = {
+                "total" : total,
+                "transactions" : transactions
+                }
+    return jsonify(response)
 
 
 
