@@ -18,31 +18,21 @@ def offers_response(response_dict):
         if len(response_dict[field]) != 1:
             return (None, 'Multiple values for field '+field)
     
-    #DEBUG     info(['dict',response_dict])        
     if response_dict['type'][0].upper() == "TIME":
-        if 'time' in response_dict:
-            time = int(response_dict['time'][0])
-        else:
-            time = 86400
-        data = filterOffersByTime( response_dict , time  )
+        time = int(response_dict['time'][0]) if 'time' in response_dict else 86400
+        data = filterOffersByTime( response_dict['currencyType'][0] , time  )
     else:
         address_arr = json.loads(response_dict['address'][0])
-        if 'offerType' not in response_dict: response_dict['offerType'][0] = 'OFFER' #Input checks
-        if type(address_arr) == type([]):
-            data = filterOffers(address_arr,response_dict['currencyType'][0].upper(), response_dict['offerType'][0].upper())
-        else:
-            data = { 'ERR': 'Address field must be a list or array type' }
+        data = filterOffers(address_arr) if type( address_arr ) == type( [] ) else { 'ERR': 'Address field must be a list or array type' } 
     
     response_status='OK'
     response='{"status":"'+response_status+'", "data":'+ str(json.dumps(data)) +'}'
     
-    #DEBUG print response
     return (response, None)
 
-def filterOffersByTime( request_data , time_seconds=86400):
+def filterOffersByTime( currency_type , time_seconds):
     #filter by currency
-    ct = request_data['currencyType'][0]
-    currency = '1' if ct == 'MSC' else '2'
+    currency = ('1' if currency_type == 'MSC' else '2')
 
     atleast_now = int( str( int(time.time() - time_seconds) ) + '000' )
 
@@ -55,26 +45,48 @@ def filterOffersByTime( request_data , time_seconds=86400):
     return sorted(response, key=lambda x:  int(x['tx_time']) )
     
 def mapSchema(row):
+  print row
   rawdata = row[-1]
-  response = {
-    'action': -1, #don't have this data
-    'block': str(row[-5]),
-    'currencyId': str(rawdata['propertyid']),
-    'currency_str': 'Mastercoin' if str(rawdata['propertyid']) == '1' else 'Test Mastercoin',
-    'formatted_amount': str(rawdata['amount']),
-    'formatted_amount_available': str( row[1] / Decimal(1e8) ),
-    'formatted_bitcoin_amount_desired': str( row[2] / Decimal(1e8) ),
-    'formatted_block_time_limit': str(rawdata['timelimit']),
-    'formatted_fee_required': str(rawdata['feerequired']),
-    'formatted_price_per_coin': str( Decimal( rawdata['bitcoindesired'] ) / Decimal( rawdata['amount'] ) ),
-    'from_address': rawdata['sendingaddress'],
-    'tx_type_str': "Sell offer" if row[-11] == 20 else 'Sell accept',
-    'color': "bgc-new", #TODO fix
-    'invalid': False if rawdata['valid'] == True else True,
-    'to_address': "sell offer" if row[-11] == 20 else 'TODO', #TODO fix
-    'tx_hash': rawdata['txid'],
-    'tx_time': str(rawdata['blocktime']) + '000'
-  }
+
+  #We only map tx21 and tx22
+  if row[-11] == 20:
+    response = {
+      'action': -1, #don't have this data
+      'block': str(row[-5]),
+      'currencyId': str(rawdata['propertyid']),
+      'currency_str': 'Mastercoin' if str(rawdata['propertyid']) == '1' else 'Test Mastercoin',
+      'formatted_amount': str(rawdata['amount']),
+      'formatted_amount_available': str( row[1] / Decimal(1e8) ),
+      'formatted_bitcoin_amount_desired': str( row[2] / Decimal(1e8) ),
+      'formatted_block_time_limit': str(rawdata['timelimit']),
+      'formatted_fee_required': str(rawdata['feerequired']),
+      'formatted_price_per_coin': str( Decimal( rawdata['bitcoindesired'] ) / Decimal( rawdata['amount'] ) ),
+      'from_address': rawdata['sendingaddress'],
+      'tx_type_str': "Sell offer",
+      'color': "bgc-new", #TODO fix
+      'invalid': False if rawdata['valid'] == True else True,
+      'to_address': "sell offer",
+      'tx_hash': rawdata['txid'],
+      'tx_time': str(rawdata['blocktime']) + '000'
+    }
+  else:
+    response = {
+      'block': str(row[-5]),
+      'currencyId': str(rawdata['propertyid']),
+      'currency_str': 'Mastercoin' if str(rawdata['propertyid']) == '1' else 'Test Mastercoin',
+      'formatted_amount': str(rawdata['amount']),
+      'formatted_amount_available': str( row[1] / Decimal(1e8) ),
+      'formatted_bitcoin_amount_desired': str( row[2] / Decimal(1e8) ),
+      #'formatted_fee_required': str(rawdata['feerequired']),
+      #'formatted_price_per_coin': str( Decimal( rawdata['bitcoindesired'] ) / Decimal( rawdata['amount'] ) ),
+      'from_address': rawdata['sendingaddress'],
+      'tx_type_str': 'Sell accept',
+      'color': "bgc-new", #TODO fix
+      #'invalid': False if rawdata['valid'] == True else True,
+      'to_address': 'TODO', #TODO fix
+      'tx_hash': rawdata['txid'],
+      'tx_time': str(rawdata['blocktime']) + '000'
+    }
 
   #keys that might be useful later
   #bitcoin_amount_desired: "00000000002625a0"
@@ -85,68 +97,61 @@ def mapSchema(row):
   
   return response
 
-def filterOffers(addresses,currencytype, offertype):
-    # currencyType   =  TMSC or MSC
-    # offerType      =  SELL, ACCEPT or BOTH
-    
-    #DEBUG info(['addr',addresses])
+def genQs(prefix, tbl_abbr, field, array):
+    qs = '(' + tbl_abbr + '.' + field + '=\'' + array[0] + '\' '
+    for entry in array[1:]:
+      entry = re.sub(r'\W+', '', entry) #check alphanumeric
+      qs += prefix + ' ' + tbl_abbr + '.' + field + '=\'' + entry +'\' '
+    return qs + ') '
+
+def filterOffers(addresses):
+    #Returns all *ACTIVE* accepts and offers for a given address
     offers = {}
-    for address in addresses:
-        offers[address] = {}
-        #get list of all offers by address
-        try:
-            datadir = data_dir_root + '/addr'
-            filepath =  datadir + '/' + address + '.json'
-            f=open( filepath , 'r' )
-            allOffers = json.loads(f.readline())
-        except IOError:
-            offers[address] = 'ADDRESS_NOT_FOUND'
-            continue
-        
+    
+    #Query all active offers
+    qs = genQs('or', 'ao', 'seller', addresses)
 
-        #filter by currency
-        #1 is TMSC 
-        #0 is MSC
-        if currencytype == 'MSC':   #only need MSC so del TMSC
-            del allOffers['1']
-        elif currencytype == 'TMSC':  #only need TMSC so del MSC
-            del allOffers['0']
-        elif currencytype == 'BOTH':
-            pass
+    query= "select * from activeoffers ao, " + \
+           "transactions t, txjson txj where " + qs + \
+           "and offerstate='active' and ao.createtxdbserialnum=t.txdbserialnum " + \
+           "and ao.createtxdbserialnum=txj.txdbserialnum"
+    sqlconn.execute(query)
+    ROWS= sqlconn.fetchall()
 
-        #filter by offer type
-        #accept_tx are offers accepted
-        #bought_tx are offers bought
-        #offer_tx are offers of sale
-        #sold_tx are offers sold
-        #recieved and sent tx are simple send
-        #exodus tx is not related to offers
+    print query
 
-        accept_tx = { 'TMSC': [], 'MSC': [] }
-        bought_tx = { 'TMSC': [], 'MSC': [] }
-        offer_tx =  { 'TMSC': [], 'MSC': [] }
-        sold_tx =   { 'TMSC': [], 'MSC': [] }
+    for row in ROWS:
+      print row
+      address = row[-1]['sendingaddress']
+      currency = 'MSC' if row[-1]['propertyid'] == 1 else 'TMSC'
 
+      if address not in offers: offers[ address ] = {}
+      if 'offer_tx' not in offers[ address ]: offers[ address ]['offer_tx'] = {}
+      
+      offers[ address ]['offer_tx'][ currency ] = mapSchema(row)
+      #only one active offer per address
 
-        for key in allOffers:
-            keystr = 'MSC' if key == '0' else 'TMSC'
-            if isinstance(allOffers[key],dict) and int(key) < 2:
-                if offertype == 'BOTH':
-                    accept_tx[ keystr ] += allOffers[key]['accept_transactions']
-                    bought_tx[ keystr ] += allOffers[key]['bought_transactions']
-                    offer_tx[ keystr ] += allOffers[key]['offer_transactions']
-                    sold_tx[ keystr ] += allOffers[key]['sold_transactions']
-                elif offertype == 'ACCEPT': #accept_tx
-                    accept_tx[ keystr ] += allOffers[key]['accept_transactions']
-                    bought_tx[ keystr ] += allOffers[key]['bought_transactions']
-                elif offertype == 'SELL': #offer_tx
-                    offer_tx[ keystr ] += allOffers[key]['offer_transactions']
-                    sold_tx[ keystr ] += allOffers[key]['sold_transactions']
-        
-        offers[address]['accept_tx'] = accept_tx
-        offers[address]['bought_tx'] = bought_tx
-        offers[address]['offer_tx'] = offer_tx
-        offers[address]['sold_tx'] = sold_tx
+    #Query all active accepts
+    qs = genQs('or', 'oa', 'buyer', addresses)
+    query= "select * from offeraccepts oa, " + \
+           "transactions t, txjson txj where " + qs + \
+           "and expiredstate='f' and oa.linkedtxdbserialnum=t.txdbserialnum " + \
+           "and oa.linkedtxdbserialnum=txj.txdbserialnum"
+    sqlconn.execute(query)
+    ROWS= sqlconn.fetchall()
+
+    print query
+
+    for row in ROWS:
+      print row
+      address = row[-1]['referenceaddress']
+      currency = 'MSC' if row[-1]['propertyid'] == 1 else 'TMSC'
+
+      if address not in offers: offers[ address ] = {}
+      if 'accept_tx' not in offers[ address ]: offers[ address ]['accept_tx'] = {}
+
+      offers[ address ]['accept_tx'][ currency ] = mapSchema(row)
+      #only one active offer per address
 
     return offers
 
