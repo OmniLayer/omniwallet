@@ -1,10 +1,13 @@
 import urlparse
 import os, sys, tempfile, json
+import glob,time
 tools_dir = os.environ.get('TOOLSDIR')
 lib_path = os.path.abspath(tools_dir)
 sys.path.append(lib_path)
 from msc_apps import *
+from decimal import *
 
+sqlconn = sql_connect()
 data_dir_root = os.environ.get('DATADIR')
 
 def offers_response(response_dict):
@@ -16,11 +19,7 @@ def offers_response(response_dict):
             return (None, 'Multiple values for field '+field)
     
     #DEBUG     info(['dict',response_dict])        
-    if response_dict['type'][0].upper() == "TRANSACTIONBID":
-        data = filterTransactionBid(response_dict['transaction'][0], response_dict['validityStatus'][0].upper() )
-    elif response_dict['type'][0].upper() == "TRANSACTION":
-        data = filterTransaction(response_dict['transaction'][0] )
-    elif response_dict['type'][0].upper() == "TIME":
+    if response_dict['type'][0].upper() == "TIME":
         if 'time' in response_dict:
             time = int(response_dict['time'][0])
         else:
@@ -28,6 +27,7 @@ def offers_response(response_dict):
         data = filterOffersByTime( response_dict , time  )
     else:
         address_arr = json.loads(response_dict['address'][0])
+        if 'offerType' not in response_dict: response_dict['offerType'][0] = 'OFFER' #Input checks
         if type(address_arr) == type([]):
             data = filterOffers(address_arr,response_dict['currencyType'][0].upper(), response_dict['offerType'][0].upper())
         else:
@@ -40,49 +40,50 @@ def offers_response(response_dict):
     return (response, None)
 
 def filterOffersByTime( request_data , time_seconds=86400):
-    import glob
-    import time
-
-    ct = request_data['currencyType'][0]
-    ot = request_data['orderType'][0] if request_data.has_key('orderType') else 'OFFER'
-
-    otLookup = { 'OFFER': 'Sell offer', 'ACCEPT': 'Sell accept' }
-    #for each file in /tx
-    #    extract timestamp
-    #    compare it to within the time given
-    #    make sure its a sell offer
-    #    if so, add to array
-    #    pass back array
-
     #filter by currency
-    #data is from /tx so using 'currencyId' key to identify
-    if ct == 'MSC':
-        currency = '00000001'
-    else:
-        currency = '00000002'
+    ct = request_data['currencyType'][0]
+    currency = '1' if ct == 'MSC' else '2'
 
-    atleast_now = int( str( int(time.time() - time_seconds) ) + '000'  )
-    transactions = glob.glob(data_dir_root + '/www/tx/*')
+    atleast_now = int( str( int(time.time() - time_seconds) ) + '000' )
 
-    transaction_data = []
-    for transaction in transactions:
-        if transaction[-5:] == '.json':
-          with open( transaction , 'r' ) as f:
-            tx = json.loads(f.readline())[0]
-            
-            #filtering begins here
-            if tx['invalid'] == False and tx.has_key('currencyId'):
-                if int(tx['tx_time']) >= (atleast_now-time_seconds) and \
-                   str(tx['currencyId']) == currency and \
-                   str(tx['tx_type_str']) == otLookup[ot]:
-                    #DEBUG info(['hash', tx['tx_hash']])
-                    #DEBUG info(['test', tx['currencyId'], currency])
-                    #DEBUG info([tx['tx_type_str'], otLookup[ot]])
-                    #DEBUG info(['tx time ', time.ctime( int(str( tx['tx_time'] )[:-3]) ) ])
-                    #DEBUG info(['now time - time_s ', time.ctime( int(str(atleast_now-time_seconds)[:-3]) ) ])
-                    transaction_data.append(tx)
+    #TODO get inactive offers?
+    sqlconn.execute("select * from activeoffers ao, transactions t, txjson tj where ao.propertyidselling=" + currency + " and ao.lasttxdbserialnum=-1 and ao.createtxdbserialnum=t.txdbserialnum and ao.createtxdbserialnum=tj.txdbserialnum")
+    ROWS= sqlconn.fetchall()
+
+    response = [ mapSchema(row) for row in ROWS if int(mapSchema(row)['tx_time']) > atleast_now ]
+
+    return sorted(response, key=lambda x:  int(x['tx_time']) )
     
-    return transaction_data
+def mapSchema(row):
+  rawdata = row[-1]
+  response = {
+    'action': -1, #don't have this data
+    'block': str(row[-5]),
+    'currencyId': str(rawdata['propertyid']),
+    'currency_str': 'Mastercoin' if str(rawdata['propertyid']) == '1' else 'Test Mastercoin',
+    'formatted_amount': str(rawdata['amount']),
+    'formatted_amount_available': str( row[1] / Decimal(1e8) ),
+    'formatted_bitcoin_amount_desired': str( row[2] / Decimal(1e8) ),
+    'formatted_block_time_limit': str(rawdata['timelimit']),
+    'formatted_fee_required': str(rawdata['feerequired']),
+    'formatted_price_per_coin': str( Decimal( rawdata['bitcoindesired'] ) / Decimal( rawdata['amount'] ) ),
+    'from_address': rawdata['sendingaddress'],
+    'tx_type_str': "Sell offer" if row[-11] == 20 else 'Sell accept',
+    'color': "bgc-new", #TODO fix
+    'invalid': False if rawdata['valid'] == True else True,
+    'to_address': "sell offer" if row[-11] == 20 else 'TODO', #TODO fix
+    'tx_hash': rawdata['txid'],
+    'tx_time': str(rawdata['blocktime']) + '000'
+  }
+
+  #keys that might be useful later
+  #bitcoin_amount_desired: "00000000002625a0"
+  #block_time_limit: "0f"
+  #index: "884"
+  #icon: "selloffer"
+  #icon_text: "Sell offer done"
+  
+  return response
 
 def filterOffers(addresses,currencytype, offertype):
     # currencyType   =  TMSC or MSC
@@ -148,45 +149,6 @@ def filterOffers(addresses,currencytype, offertype):
         offers[address]['sold_tx'] = sold_tx
 
     return offers
-
-def filterTransactionBid(transaction,validitystatus):
-    # validityStatus =  VALID, INVALID, EXPIRED or ANY
-    
-    #get transaction data
-    try:
-        datadir = data_dir_root + '/bids'
-        filepath =  datadir + '/bids-' + transaction + '.json'
-        f=open( filepath , 'r' )
-        transactionData = json.loads(f.readline())
-    except IOError:
-        return 'TRANSACTION_NOT_FOUND'
-
-    #filter by validity status
-    #offer.invalid == true then offer invalid
-    #offer.payment_expired == true then offer invaid
-    validitystruct = []
-    if validitystatus != 'ANY':
-        for offer in transactionData:
-            if validitystatus == 'INVALID' and str(offer['invalid']).upper() == 'TRUE':
-                validitystruct.append(offer)
-            elif validitystatus == 'EXPIRED' and str(offer['payment_expired']).upper() == 'TRUE':
-                validitystruct.append(offer)
-            elif validitystatus == 'VALID' and str(offer['invalid']).upper() == 'FALSE' and str(offer['payment_expired']).upper() == 'FALSE':
-                validitystruct.append(offer);
-        return validitystruct
-    else:
-        return transactionData
-
-def filterTransaction(transaction):
-    #get transaction data
-    try:
-        datadir = data_dir_root + '/tx'
-        filepath =  datadir + '/' + transaction + '.json'
-        f=open( filepath , 'r' )
-        transactionData = json.loads(f.readline())
-        return transactionData
-    except IOError:
-        return 'TRANSACTION_NOT_FOUND'
 
 def offers_handler(environ, start_response):
     return general_handler(environ, start_response, offers_response)
