@@ -79,7 +79,7 @@ def list():
     except KeyError:
         issuer = ""
     
-    sqlconn.execute("select * from smartproperties where PropertyID not in (1,2) AND " + str(query))
+    sqlconn.execute("select * from smartproperties where PropertyID > 2 AND " + str(query) + " ORDER BY PropertyName,PropertyID")
     ROWS= sqlconn.fetchall()
     data=[]
     for property in ROWS:
@@ -91,6 +91,42 @@ def list():
                 }
 
     return jsonify(response)
+
+@app.route('/listactivecrowdsales', methods=['POST'])
+def listcrowdsales():
+    query = "ecosystem='"
+    try:
+        value = int(re.sub(r'\D+', '', request.form['ecosystem']))
+        valid_values = [1,2]
+        if value not in valid_values:
+            abort(make_response('Field \'ecosystem\' invalid value, request failed', 400))
+        
+        ecosystem = "Production" if value == 1 else "Test" 
+        query += ecosystem +"'"
+    except KeyError:
+        abort(make_response('No field \'ecosystem\' in request, request failed', 400))
+    except ValueError:
+        abort(make_response('Field \'ecosystem\' invalid value, request failed', 400))
+
+    
+    sqlconn.execute("select PropertyData from smartproperties where PropertyData::json->>'fixedissuance'='false' AND PropertyData::json->>'active'='true' AND " + str(query) + " ORDER BY PropertyName,PropertyID")
+    ROWS= sqlconn.fetchall()
+    data=[row[0] for row in ROWS]
+    
+    response = {
+                'status' : 'OK',
+                'crowdsales' : data
+                }
+
+    return jsonify(response)
+
+@app.route('/getdata/<int:property_id>')
+def getdata(property_id):
+    sqlconn.execute("select PropertyData from smartproperties where PropertyID="+str(property_id))
+    property=sqlconn.fetchone()
+    return jsonify(property[0])
+
+
 
 @app.route('/info', methods=['POST'])
 def info():
