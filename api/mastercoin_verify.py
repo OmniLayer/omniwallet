@@ -43,20 +43,26 @@ def addresses():
   response = []
 
   currency_id = re.sub(r'\D+', '', currency_id) #check alphanumeric
-  sqlconn.execute("select * from addressbalances where propertyid=" + str(currency_id))
+  #sqlconn.execute("select address,balanceavailable,balancereserved, from addressbalances ab,  where propertyid=" + str(currency_id))
+  sqlconn.execute("select address,balanceavailable,balancereserved,sp.propertytype from addressbalances ab, smartproperties sp where ab.propertyid=sp.propertyid and sp.propertyid=" + str(currency_id))
   ROWS= sqlconn.fetchall()
 
   for addrrow in ROWS:
       res = {
           'address': addrrow[0]
       }
+      divisible=addrrow[3]
 
       if currency_id == '0': #BTC
-        res['balance'] = ('%.8f' % float(addrrow[4])).rstrip('0').rstrip('.')
+        res['balance'] = ('%.8f' % float(addrrow[1])).rstrip('0').rstrip('.')
         response.append(res)
       else:
-        res['balance'] = ('%.8f' % float(addrrow[4])).rstrip('0').rstrip('.')
-        res['reserved_balance'] = ('%.8f' % float(addrrow[5])).rstrip('0').rstrip('.')
+        if divisible:
+          res['balance'] = ('%.8f' % float(addrrow[1])).rstrip('0').rstrip('.')
+          res['reserved_balance'] = ('%.8f' % float(addrrow[2])).rstrip('0').rstrip('.')
+        else:
+          res['balance'] = ('%.8f' % float(addrrow[1]/10000000)).rstrip('0').rstrip('.')
+          res['reserved_balance'] = ('%.8f' % float(addrrow[2]/10000000)).rstrip('0').rstrip('.')
         response.append(res)
 
   json_response = json.dumps(response)
