@@ -83,10 +83,10 @@ server {
                 alias /var/lib/omniwallet/www/tx/$1;
         }
 
-        location ~ "^/v1/property/([0-9]*.json)$" {
-                add_header Access-Control-Allow-Origin *;
-                alias /var/lib/omniwallet/www/properties/properties-$1;
-        }
+        #location ~ "^/v1/property/([0-9]*.json)$" {
+        #        add_header Access-Control-Allow-Origin *;
+        #        alias /var/lib/omniwallet/www/properties/properties-$1;
+        #}
 
         location ~ "^/v1/values/(.*)$" {
                 add_header Access-Control-Allow-Origin *;
@@ -97,13 +97,13 @@ server {
                 alias /var/lib/omniwallet/www/values/history/$1;
         }
 
-        location ~ "^/v1/address/verify/(.*)$" {
-                alias /var/lib/omniwallet/www/mastercoin_verify/addresses/$1;
-        }
+        #location ~ "^/v1/address/verify/(.*)$" {
+        #        alias /var/lib/omniwallet/www/mastercoin_verify/addresses/$1;
+        #}
 
-        location ~ "^/v1/transaction/verify/(.*)$" {
-                alias /var/lib/omniwallet/www/mastercoin_verify/transactions/$1;
-        }
+        #location ~ "^/v1/transaction/verify/(.*)$" {
+        #        alias /var/lib/omniwallet/www/mastercoin_verify/transactions/$1;
+        #}
 
         include uwsgi_params;
         uwsgi_param SCRIPT_NAME   $app;
@@ -117,10 +117,10 @@ server {
                 uwsgi_pass   127.0.0.1:$PORT;
         }
 
-        location /v1/transaction/validateaddr/ {
-                set   $app   validateaddr;
-                uwsgi_pass   127.0.0.1:$PORT;
-        }
+        #location /v1/transaction/validateaddr/ {
+        #        set   $app   validateaddr;
+        #        uwsgi_pass   127.0.0.1:$PORT;
+        #}
 
         location /v1/transaction/send/ {
                 set   $app   send;
@@ -164,6 +164,17 @@ server {
                 include uwsgi_params;
                 uwsgi_param SCRIPT_NAME /v1/properties;
                 uwsgi_param UWSGI_MODULE properties_service;
+                uwsgi_param UWSGI_CALLABLE app;
+                uwsgi_modifier1 30;
+                uwsgi_pass 127.0.0.1:$PORT;
+        }
+
+        location = /v1/property { rewrite ^ /v1/property/; }
+        location /v1/property { try_files $uri @flask_property_service; }
+        location @flask_property_service {
+                include uwsgi_params;
+                uwsgi_param SCRIPT_NAME /v1/property;
+                uwsgi_param UWSGI_MODULE property_service;
                 uwsgi_param UWSGI_CALLABLE app;
                 uwsgi_modifier1 30;
                 uwsgi_pass 127.0.0.1:$PORT;

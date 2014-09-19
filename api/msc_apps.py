@@ -1,5 +1,5 @@
 import urlparse
-import os, sys, pybitcointools, bitcoinrpc, getpass
+import os, sys, pybitcointools, bitcoinrpc, getpass, psycopg2, psycopg2.extras
 tools_dir = os.environ.get('TOOLSDIR')
 lib_path = os.path.abspath(tools_dir)
 sys.path.append(lib_path)
@@ -41,6 +41,36 @@ def getRPCconn():
             response='{"error": "Connection to bitcoind server unavailable. Please try agian in 5 minutes"}'
             return response
     return conn
+
+def sql_connect():
+    global con
+    USER=getpass.getuser()
+    try:
+      with open('/home/'+USER+'/.omni/sql.conf') as fp:
+        DBPORT="5432"
+        for line in fp:
+          #print line
+          if line.split('=')[0] == "sqluser":
+            DBUSER=line.split('=')[1].strip()
+          elif line.split('=')[0] == "sqlpassword":
+            DBPASS=line.split('=')[1].strip()
+          elif line.split('=')[0] == "sqlconnect":
+            DBHOST=line.split('=')[1].strip()
+          elif line.split('=')[0] == "sqlport":
+            DBPORT=line.split('=')[1].strip()
+          elif line.split('=')[0] == "sqldatabase":
+            DBNAME=line.split('=')[1].strip()
+    except IOError as e:
+      response='{"error": "Unable to load sql config file. Please Notify Site Administrator"}'
+      return response
+
+    try:     
+        con = psycopg2.connect(database=DBNAME, user=DBUSER, password=DBPASS, host=DBHOST, port=DBPORT)
+        cur = con.cursor(cursor_factory=psycopg2.extras.DictCursor)
+    	return cur
+    except psycopg2.DatabaseError, e:
+        print 'Error %s' % e    
+        sys.exit(1)
 
 def response_with_error(start_response, environ, response_body):
     headers = [('Content-type', 'application/json')]
