@@ -1,5 +1,5 @@
 <div class="modal-body">
-    <div class="text-left col-xs-7 send-title">Confirm send</div><div class="text-right"><button ng-disabled="wating" class="btn btn-xs send-cancel" ng-click="cancel()">cancel | <span class="glyphicon glyphicon-remove"></span></button></div>
+    <div class="text-left col-xs-7 modal-title">Confirm send</div><div class="text-right"><button ng-disabled="wating" class="btn btn-xs modal-cancel-btn" ng-click="cancel()">cancel | <span class="glyphicon glyphicon-remove"></span></button></div>
   <table>
     <tr><td height="30px"></td></tr>
     <tr>
@@ -23,8 +23,8 @@
 <div class="modal-footer footer-div">
     <br>
     <div class="row" ng-hide=transactionSuccess>
-    <button ng-disabled="clicked" class="btn btn-lg send-btn" ng-click="ok()">  
-    <img src="/assets/img/SendIcon_normal.png" class="send-img-normal"><img src="/assets/img/SendIcon_roll.png" class="send-img-roll"> Send funds
+    <button ng-disabled="clicked" class="btn btn-lg modal-action-btn" ng-click="ok()">  
+    <img src="/assets/img/SendIcon_normal.png" class="action-img-normal"><img src="/assets/img/SendIcon_roll.png" class="action-img-roll"> Send funds
     </button>
     <img class="" src="/assets/img/34-1.gif" ng-show="waiting">
     </div>

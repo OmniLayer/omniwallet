@@ -69,13 +69,13 @@ a {
 .modal-body{
   background-color: #fcfbfb;
 }
-.send-title{
+.modal-title{
   padding-left: 0;
   font-size: 36px;
   color: #636363;
   font-family: 'Gudea', sans-serif;
 }
-.send-btn{
+.modal-action-btn{
   background-color: #f5f2f2;
   color: #44b8ef;
   font-size: 32px;
@@ -84,28 +84,22 @@ a {
   border-color: #e8e7e7
 }
 
-.send-btn:hover{
+.modal-action-btn:hover{
   color: #2e508f;
 }
-.send-btn:hover .send-img-roll{
+.modal-action-btn:hover .action-img-roll{
   display: inline;
 }
-.send-btn:hover .send-img-normal{
+.modal-action-btn:hover .action-img-normal{
   display: none;
 }
-.send-img-normal{
+.action-img-normal{
   display: inline;
 }
-.send-img-roll{
+.action-img-roll{
   display: none;
 }
-.create-property-img{
-  content: url("/assets/img/Smart_normal.png");
-}
-.send-btn:hover .create-property-img{
-  content: url("/assets/img/Smart_roll.png");
-}
-.send-cancel{
+.modal-cancel-btn{
   background-color: #ebebeb;
   color:#636363;
   font-size: 15px;

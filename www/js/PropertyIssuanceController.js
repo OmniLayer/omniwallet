@@ -4,7 +4,6 @@ function PropertyIssuanceController($scope, propertiesService){
     if (e.symbol == "BTC")
       $scope.walletAssets.selectedCoin = e;
   });
-  
   var transactionGenerationController = $scope.$parent;
   $scope.ecosystem = 2;
   $scope.propertyType = 2;
@@ -19,7 +18,6 @@ function PropertyIssuanceController($scope, propertiesService){
     $scope.subcategories=[];
     $scope.loadCategories();
   };
-  
   $scope.loadCategories=function(){
     propertiesService.loadCategories($scope.ecosystem).then(function(result){  
       $scope.categories=result.data.categories.sort();
@@ -85,9 +83,11 @@ function PropertyIssuanceController($scope, propertiesService){
     $modalScope.propertySubcategory= $scope.propertySubcategory,
     $modalScope.propertyUrl= $scope.propertyUrl;
     $modalScope.propertyData= $scope.propertyData;
+    $modalScope.propertyDataPrev = $scope.propertyDataPrev;
     $modalScope.selectedAddress= $scope.selectedAddress;
     $modalScope.minerFees= +$scope.convertDisplayedValue($scope.minerFees);
     $modalScope.totalCost= +$scope.convertDisplayedValue($scope.totalCost);
+    $modalScope.expanded = false;
   };
   
   transactionGenerationController.generateData = function(){
