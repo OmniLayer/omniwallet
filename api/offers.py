@@ -45,11 +45,12 @@ def filterOffersByTime( currency_type , time_seconds):
     return sorted(response, key=lambda x:  int(x['tx_time']) )
     
 def mapSchema(row):
-  print row
+  #print row, 'row'
   rawdata = row[-1]
 
   #We only map tx21 and tx22
   if row[-11] == 20:
+    ppc = str( Decimal( rawdata['bitcoindesired'] ) / Decimal( rawdata['amount'] ) )
     response = {
       'action': -1, #don't have this data
       'block': str(row[-5]),
@@ -61,6 +62,7 @@ def mapSchema(row):
       'formatted_block_time_limit': str(rawdata['timelimit']),
       'formatted_fee_required': str(rawdata['feerequired']),
       'formatted_price_per_coin': str( Decimal( rawdata['bitcoindesired'] ) / Decimal( rawdata['amount'] ) ),
+      'bitcoin_required': str( Decimal( ppc ) * Decimal( rawdata['amount'] ) ),
       'from_address': rawdata['sendingaddress'],
       'tx_type_str': "Sell offer",
       'color': "bgc-new", #TODO fix
@@ -70,20 +72,25 @@ def mapSchema(row):
       'tx_time': str(rawdata['blocktime']) + '000'
     }
   else:
+    sellofferdata = getsell(str(row[3]))
+    #print sellofferdata, 'selldat'
+    ppc = str( Decimal( sellofferdata[-1]['bitcoindesired'] ) / Decimal( sellofferdata[-1]['amount'] ) )
     response = {
       'block': str(row[-5]),
+      'status': 'valid', #TODO
       'currencyId': str(rawdata['propertyid']),
       'currency_str': 'Mastercoin' if str(rawdata['propertyid']) == '1' else 'Test Mastercoin',
       'formatted_amount': str(rawdata['amount']),
-      'formatted_amount_available': str( row[1] / Decimal(1e8) ),
-      'formatted_bitcoin_amount_desired': str( row[2] / Decimal(1e8) ),
-      #'formatted_fee_required': str(rawdata['feerequired']),
-      #'formatted_price_per_coin': str( Decimal( rawdata['bitcoindesired'] ) / Decimal( rawdata['amount'] ) ),
+      #'formatted_amount_available': str( row[1] / Decimal(1e8) ),
+      #'formatted_bitcoin_amount_desired': str( row[2] / Decimal(1e8) ),
+      'formatted_price_per_coin': ppc,
+      'bitcoin_required': str( Decimal( ppc ) * Decimal( rawdata['amount'] ) ),
+      'payment_expired': False,
       'from_address': rawdata['sendingaddress'],
       'tx_type_str': 'Sell accept',
       'color': "bgc-new", #TODO fix
-      #'invalid': False if rawdata['valid'] == True else True,
-      'to_address': 'TODO', #TODO fix
+      'invalid': False if rawdata['valid'] == True else True,
+      'to_address': rawdata['referenceaddress'],
       'tx_hash': rawdata['txid'],
       'tx_time': str(rawdata['blocktime']) + '000'
     }
@@ -96,6 +103,17 @@ def mapSchema(row):
   #icon_text: "Sell offer done"
   
   return response
+
+def getsell(txdbserialnum):
+
+    query= "select * from activeoffers ao, " + \
+           "transactions t, txjson txj where ao.createtxdbserialnum=" + txdbserialnum + \
+           " and t.txdbserialnum= " + txdbserialnum + \
+           " and txj.txdbserialnum= " + txdbserialnum
+    sqlconn.execute(query)
+    ROWS= sqlconn.fetchall()
+    
+    return ROWS[0]
 
 def genQs(prefix, tbl_abbr, field, array):
     qs = '(' + tbl_abbr + '.' + field + '=\'' + array[0] + '\' '
@@ -118,10 +136,9 @@ def filterOffers(addresses):
     sqlconn.execute(query)
     ROWS= sqlconn.fetchall()
 
-    print query
+    #print query
 
     for row in ROWS:
-      print row
       address = row[-1]['sendingaddress']
       currency = 'MSC' if row[-1]['propertyid'] == 1 else 'TMSC'
 
@@ -140,10 +157,9 @@ def filterOffers(addresses):
     sqlconn.execute(query)
     ROWS= sqlconn.fetchall()
 
-    print query
+    #print query
 
     for row in ROWS:
-      print row
       address = row[-1]['referenceaddress']
       currency = 'MSC' if row[-1]['propertyid'] == 1 else 'TMSC'
 
