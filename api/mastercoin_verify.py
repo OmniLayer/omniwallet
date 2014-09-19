@@ -58,11 +58,11 @@ def addresses():
         response.append(res)
       else:
         if divisible:
-          res['balance'] = ('%.8f' % float(addrrow[1])).rstrip('0').rstrip('.')
-          res['reserved_balance'] = ('%.8f' % float(addrrow[2])).rstrip('0').rstrip('.')
-        else:
           res['balance'] = ('%.8f' % float(addrrow[1]/10000000)).rstrip('0').rstrip('.')
           res['reserved_balance'] = ('%.8f' % float(addrrow[2]/10000000)).rstrip('0').rstrip('.')
+        else:
+          res['balance'] = ('%.8f' % float(addrrow[1])).rstrip('0').rstrip('.')
+          res['reserved_balance'] = ('%.8f' % float(addrrow[2])).rstrip('0').rstrip('.')
         response.append(res)
 
   json_response = json.dumps(response)
