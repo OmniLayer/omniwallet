@@ -28,10 +28,9 @@ def properties():
 
   response = []
   for sprow in ROWS:
-      print sprow
       res = {
           'currencyID': sprow[1],
-          'name': dehexify(sprow[6]) 
+          'name': dehexify(sprow[-1]['name']) 
       }
       response.append(res)
 
