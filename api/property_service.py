@@ -19,7 +19,7 @@ def getproperty(prop_id):
     sqlconn.execute("select * from transactions t, smartproperties sp where sp.createtxdbserialnum = t.txdbserialnum and sp.propertyid=" + str(property_) )
     ROWS= sqlconn.fetchall()
 
-    print property_, ROWS[0]
+    #print property_, ROWS[0]
 
     def dehexify(hex_str):
         temp_str=[]
