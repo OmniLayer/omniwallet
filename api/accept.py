@@ -89,14 +89,20 @@ def prepare_accept_tx_for_signing(buyer, amount, tx_hash, min_btc_fee=10000):
     satoshi_amount=int( amount )
 
     # read json of orig tx to get tx details
-    sell_offer_tx_dict_list=load_dict_from_file(data_dir_root + '/tx/'+tx_hash+'.json', all_list=True)
-    sell_offer_tx_dict=sell_offer_tx_dict_list[0]
+
+    sqlconn = sql_connect()
+    query= "select * from activeoffers ao, " + \
+           "transactions t, txjson txj where t.txhash=\'" + tx_hash + "\' "\
+           "and ao.createtxdbserialnum=t.txdbserialnum " + \
+           "and ao.createtxdbserialnum=txj.txdbserialnum"
+    sqlconn.execute(query)
+    ROWS = sqlconn.fetchall()
+
     # sanity check
-    try:
-        if sell_offer_tx_dict['tx_type_str'] != "Sell offer":
-            error('cannot accept non sell offer tx '+tx_hash)
-    except KeyError:
-        error('no field tx_type_str in tx '+tx_hash)
+    if len(ROWS) == 0:
+       error('no sell offer found for tx '+tx_hash)
+
+    sell_offer_tx_dict=mapSchema( sqlconn.fetchall()[0] )
 
     try:
         seller=sell_offer_tx_dict['from_address']
@@ -201,6 +207,19 @@ def prepare_accept_tx_for_signing(buyer, amount, tx_hash, min_btc_fee=10000):
     return_dict={'transaction':tx, 'sourceScript':prevout_script}
     return return_dict
 
+def mapSchema(row):
+  rawdata = row[-1]
+
+  #print row
+  response = {
+    'currencyId': rawdata['propertyid'],
+    'formatted_amount_available': str( row[1] ),
+    'formatted_bitcoin_amount_desired': str( row[2] ),
+    'formatted_fee_required': str(row[3]),
+    'from_address': rawdata['sendingaddress'],
+  }
+
+  return response
 
 def accept_handler(environ, start_response):
     return general_handler(environ, start_response, accept_form_response)
