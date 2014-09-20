@@ -69,13 +69,13 @@ server {
                 alias /var/lib/omniwallet/www/offers/$1;
         }
 
-        location ~ "^/v1/transaction/general/(.*)$" {
-                alias /var/lib/omniwallet/www/general/$1;
-        }
+        #location ~ "^/v1/transaction/general/(.*)$" {
+        #        alias /var/lib/omniwallet/www/general/$1;
+        #}
 
-        location ~ "^/v1/transaction/tx/(.*)$" {
-                alias /var/lib/omniwallet/www/tx/$1;
-        }
+        #location ~ "^/v1/transaction/tx/(.*)$" {
+        #        alias /var/lib/omniwallet/www/tx/$1;
+        #}
 
         #location ~ "^/v1/property/([0-9]*.json)$" {
         #        add_header Access-Control-Allow-Origin *;
@@ -169,6 +169,17 @@ server {
                 include uwsgi_params;
                 uwsgi_param SCRIPT_NAME /v1/property;
                 uwsgi_param UWSGI_MODULE property_service;
+                uwsgi_param UWSGI_CALLABLE app;
+                uwsgi_modifier1 30;
+                uwsgi_pass 127.0.0.1:$PORT;
+        }
+
+        location = /v1/transaction { rewrite ^ /v1/transaction; }
+        location /v1/transaction { try_files $uri @flask_transaction_service; }
+        location @flask_transaction_service {
+                include uwsgi_params;
+                uwsgi_param SCRIPT_NAME /v1/transaction;
+                uwsgi_param UWSGI_MODULE transaction_service;
                 uwsgi_param UWSGI_CALLABLE app;
                 uwsgi_modifier1 30;
                 uwsgi_pass 127.0.0.1:$PORT;
