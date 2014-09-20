@@ -106,7 +106,9 @@ def gettransaction(hash_id):
       # 20 - Dex Sell - subaction, bitcoindesired, timelimit
       # 22 - Dex Accepts - referenceaddress 
     
-      if txType == 20:
+      cancel = 'True' if txJson['subaction'] == 'Cancel' else 'False'
+
+      if txType == 20 and not cancel:
         sqlconn.execute("select * from transactions t, activeoffers ao, txjson txj where t.txhash=\'" + str(transaction_) + "\' and t.txdbserialnum = ao.createtxdbserialnum and t.txdbserialnum=txj.txdbserialnum")
         ROWS= sqlconn.fetchall()
         row = ROWS[0]
@@ -122,6 +124,12 @@ def gettransaction(hash_id):
         ret['formatted_price_per_coin'] = '%.8f' % ppc
         ret['bitcoin_required'] = '%.8f' % ( Decimal( ppc ) * Decimal( mpData['amount'] ) )
         ret['subaction'] = mpData['subaction']
+
+      if txType == 20 and cancel:
+        ret['formatted_block_time_limit'] = str(txJson['timelimit'])
+        ret['formatted_fee_required'] = str(txJson['feerequired'])
+        ret['subaction'] = txJson['subaction']
+        ret['tx_type_str'] = 'Sell cancel'
 
       if txType == 22:
         sqlconn.execute("select * from transactions t, offeraccepts oa, txjson txj where t.txhash=\'" + str(transaction_) + "\' and t.txdbserialnum = oa.linkedtxdbserialnum and t.txdbserialnum=txj.txdbserialnum")
@@ -139,6 +147,12 @@ def gettransaction(hash_id):
         ret['purchases'] = txJson['purchases']
         ret['currencyId'] = '0'
         ret['currency_str'] = 'Bitcoin'
+        ret['tx_type_str'] = 'Dex Purchase'
+        
+        payment = 0
+        for each in ret['purchases']:
+           payment += float(each['amountpaid'])
+        ret['accomulated_payment'] = payment
 
       if txType == -51:
         ret['purchasepropertyid'] = txJson['purchasedpropertyid']
