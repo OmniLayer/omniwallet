@@ -10,6 +10,37 @@ sqlconn = sql_connect()
 app = Flask(__name__)
 app.debug = True
 
+@app.route('/general/<currency_page>')
+def getcurrencyrecent(currency_page):
+    try:
+        currency_ = str(re.sub(r'\W+', '', currency_page.split('.')[0] ) ) #check alphanumeric
+    except ValueError:
+        abort(make_response('This endpoint only consumes valid input', 400))
+
+    lookup_currency = { 'MSC': '1', 'TMSC': '2', 'BTC': '0' }
+
+    c_symbol = currency_.split('_')[0]
+    c_page = currency_.split('_')[1]
+
+    if c_symbol[:2] == 'SP': c_id = c_symbol[2:]
+    else: c_id = lookup_currency[ c_symbol ] 
+
+    #Do we even need per-currency pagination?
+    #sqlconn.execute("select * from transactions t, txjson txj where t.txdbserialnum = txj.txdbserialnum and txj.txdata::json->>'propertyid' = \'" + c_id + "\' order by t.txblocknumber DESC limit 10;")
+    sqlconn.execute("select * from transactions t, txjson txj where t.txdbserialnum = txj.txdbserialnum order by t.txblocknumber DESC limit 10;")
+    ROWS= sqlconn.fetchall()
+
+    response = []
+    if len(ROWS) > 0:
+      for currencyrow in ROWS:
+        res = requests.get('http://localhost/v1/transaction/tx/' + currencyrow[0] + '.json').json()[0]
+        response.append(res)
+
+    
+    return json.dumps(response)
+    #Input will be CURRENCY_PAGE ex. MSC_0001, SP50_4999, etc. up to 4 digits of pagination
+    
+
 @app.route('/tx/<hash_id>')
 def gettransaction(hash_id):
     try:
@@ -106,30 +137,31 @@ def gettransaction(hash_id):
       # 20 - Dex Sell - subaction, bitcoindesired, timelimit
       # 22 - Dex Accepts - referenceaddress 
     
-      cancel = 'True' if txJson['subaction'] == 'Cancel' else 'False'
+      if txType == 20:
+        cancel = 'True' if txJson['subaction'] == 'Cancel' else 'False'
 
-      if txType == 20 and not cancel:
-        sqlconn.execute("select * from transactions t, activeoffers ao, txjson txj where t.txhash=\'" + str(transaction_) + "\' and t.txdbserialnum = ao.createtxdbserialnum and t.txdbserialnum=txj.txdbserialnum")
-        ROWS= sqlconn.fetchall()
-        row = ROWS[0]
-        mpData = ROWS[0][-1]
+        if not cancel:
+          sqlconn.execute("select * from transactions t, activeoffers ao, txjson txj where t.txhash=\'" + str(transaction_) + "\' and t.txdbserialnum = ao.createtxdbserialnum and t.txdbserialnum=txj.txdbserialnum")
+          ROWS= sqlconn.fetchall()
+          row = ROWS[0]
+          mpData = ROWS[0][-1]
 
-        ppc = Decimal( mpData['bitcoindesired'] ) / Decimal( mpData['amount'] )
-        ret['amount_available'] = str(row[12])
-        ret['formatted_amount_available'] = '%.8f' % ( Decimal(row[12]) / Decimal(1e8) )
-        ret['bitcoin_amount_desired'] = str(row[13])
-        ret['formatted_bitcoin_amount_desired'] = '%.8f' % ( Decimal(row[13]) / Decimal(1e8) )
-        ret['formatted_block_time_limit'] = str(mpData['timelimit'])
-        ret['formatted_fee_required'] = str(mpData['feerequired'])
-        ret['formatted_price_per_coin'] = '%.8f' % ppc
-        ret['bitcoin_required'] = '%.8f' % ( Decimal( ppc ) * Decimal( mpData['amount'] ) )
-        ret['subaction'] = mpData['subaction']
+          ppc = Decimal( mpData['bitcoindesired'] ) / Decimal( mpData['amount'] )
+          ret['amount_available'] = str(row[12])
+          ret['formatted_amount_available'] = '%.8f' % ( Decimal(row[12]) / Decimal(1e8) )
+          ret['bitcoin_amount_desired'] = str(row[13])
+          ret['formatted_bitcoin_amount_desired'] = '%.8f' % ( Decimal(row[13]) / Decimal(1e8) )
+          ret['formatted_block_time_limit'] = str(mpData['timelimit'])
+          ret['formatted_fee_required'] = str(mpData['feerequired'])
+          ret['formatted_price_per_coin'] = '%.8f' % ppc
+          ret['bitcoin_required'] = '%.8f' % ( Decimal( ppc ) * Decimal( mpData['amount'] ) )
+          ret['subaction'] = mpData['subaction']
 
-      if txType == 20 and cancel:
-        ret['formatted_block_time_limit'] = str(txJson['timelimit'])
-        ret['formatted_fee_required'] = str(txJson['feerequired'])
-        ret['subaction'] = txJson['subaction']
-        ret['tx_type_str'] = 'Sell cancel'
+        if cancel:
+          ret['formatted_block_time_limit'] = str(txJson['timelimit'])
+          ret['formatted_fee_required'] = str(txJson['feerequired'])
+          ret['subaction'] = txJson['subaction']
+          ret['tx_type_str'] = 'Sell cancel'
 
       if txType == 22:
         sqlconn.execute("select * from transactions t, offeraccepts oa, txjson txj where t.txhash=\'" + str(transaction_) + "\' and t.txdbserialnum = oa.linkedtxdbserialnum and t.txdbserialnum=txj.txdbserialnum")
