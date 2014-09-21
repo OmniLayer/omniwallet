@@ -10,6 +10,24 @@ sqlconn = sql_connect()
 app = Flask(__name__)
 app.debug = True
 
+@app.route('/address', methods=['POST'])
+def getaddress():
+    try:
+        address = str(re.sub(r'\W+', '', request.form['addr'] ) ) #check alphanumeric
+    except ValueError:
+        abort(make_response('This endpoint only consumes valid input', 400))
+
+    sqlconn.execute("select * from transactions t, txjson txj where t.txdbserialnum = txj.txdbserialnum and txj.txdata::json->>'sendingaddress' = \'" + address + "\' order by t.txblocknumber DESC;")
+    ROWS= sqlconn.fetchall()
+
+    response = { 'address': {}, 'balance': {}, '0' : { 'transactions': [] } } #To preserve compatability, 'currID': {'txdata'}
+    if len(ROWS) > 0:
+      for addrrow in ROWS:
+        res = requests.get('http://localhost/v1/transaction/tx/' + addrrow[0] + '.json').json()[0]
+        response['0']['transactions'].append(res)
+
+    return json.dumps(response)
+
 @app.route('/general/<currency_page>')
 def getcurrencyrecent(currency_page):
     try:
@@ -83,6 +101,7 @@ def gettransaction(hash_id):
       "from_address": txJson['sendingaddress'], 
       "transactionType": txData[3], 
       "transactionVersion": txData[4],
+      "to_address": str("(null)"), 
       "confirms": txJson['confirmations'],
       "tx_hash": txData[0], 
       "tx_time": str(txJson['blocktime']) + '000',
@@ -97,6 +116,9 @@ def gettransaction(hash_id):
       ret['divisible'] = txJson['divisible']
       ret['fee'] = txJson['fee']
       ret['tx_type_str'] = txJson['type']
+
+    if txType == 0 and txValid:
+        ret['to_address'] = txJson['referenceaddress']
 
     if (txType == 50 or txType == 51 or txType == 54) and txValid:
 
