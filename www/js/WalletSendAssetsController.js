@@ -19,6 +19,7 @@ function WalletSendAssetsController($modal, $scope, $http, $q, userService, wall
     $scope.sendAmount = 0;
     $scope.value = 0;
   }
+  $scope.validate
   
   transactionGenerationController.validateTransactionData = function(){
     var dustValue = 5757;
@@ -98,6 +99,7 @@ function WalletSendAssetsController($modal, $scope, $http, $q, userService, wall
     $modalScope.getBitcoinValue = $scope.getBitcoinValue;
     $modalScope.setBitcoinValue = $scope.setBitcoinValue;
     $modalScope.resetAmountAndValue = $scope.resetAmountAndValue;
+    $modalScope.selectedCoinSymbol = $scope.walletAssets.selectedCoin.symbol;
   };
   
 
@@ -115,6 +117,61 @@ function WalletSendAssetsController($modal, $scope, $http, $q, userService, wall
         marker: $scope.marked
       }
     }; 
+  };
+   transactionGenerationController.validateForm = function() {
+    
+    var error = $scope.validateTransactionData();
+      
+    if (error.length < 8) {
+      $scope.$parent.showErrors = false;
+      // open modal
+      var modalInstance = $modal.open({
+        templateUrl: $scope.modalTemplateUrl,
+        controller: function($scope, $modalInstance, data, prepareTransaction, setModalScope, convertSatoshiToDisplayedValue, getDisplayedAbbreviation) {
+          setModalScope($scope);
+          
+          $scope.ok = function() {
+            if (($scope.bitcoinValue == $scope.getBitcoinValue())||$scope.selectedCoinSymbol != 'BTC') {
+              $scope.clicked = true;
+              $scope.waiting = true;
+              prepareTransaction(data.transactionType, data.transactionData, data.from, $scope);
+            }
+            else{
+              $scope.waiting = false;
+              $scope.transactionError = true;
+              $scope.error = 'The btc value has changed, check again your transaction';
+              $scope.setBitcoinValue($scope.getBitcoinValue());
+              $scope.resetAmountAndValue();
+            }
+          };
+          
+          $scope.cancel = function () {
+            $modalInstance.dismiss('cancel');
+          };
+        },
+        resolve: {
+          data: function() {
+            return $scope.generateData();
+          },
+          prepareTransaction: function() {
+              return $scope.prepareTransaction;
+          },
+          setModalScope: function(){
+            return $scope.setModalScope;
+          },
+          convertSatoshiToDisplayedValue: function() {
+            return $scope.convertSatoshiToDisplayedValue;
+          },
+          getDisplayedAbbreviation: function() {
+            return $scope.getDisplayedAbbreviation;
+          }
+        }
+      });
+    } else {
+      error += 'and try again.';
+      $scope.error = error;
+      $scope.$parent.showErrors = true;
+    }
   };
 };
 
