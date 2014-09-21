@@ -61,104 +61,20 @@ def list():
         ecosystem = request.form['ecosystem']
     except KeyError:
         abort(make_response('No field \'ecosystem\' in request, request failed', 400))
+    try:
+        issuer = request.form['issuer_address']
+    except KeyError:
+        issuer = ""
     
        
     data = listProperties(ecosystem)
+    if issuer != "":
+        data = [property for property in data if property["from_address"] == issuer]
     response = {
                 'status' : 'OK',
                 'properties' : data
                 }
 
-    return jsonify(response)
-
-@app.route('/listactivecrowdsales', methods=['POST'])
-def listcrowdsales():
-    try:
-        ecosystem = request.form['ecosystem']
-    except KeyError:
-        abort(make_response('No field \'ecosystem\' in request, request failed', 400))
-    
-       
-    host = RPCHost()
-    try:
-        list = host.call("getactivecrowdsales_MP")['result']
-        data = [ crowdsale for crowdsale in list if (ecosystem == "1" and crowdsale['propertyid'] < 2147483651) or (ecosystem == "2" and crowdsale['propertyid'] >= 2147483651)]
-    except Exception,e:
-        #Properties not found
-        data= []  
-        
-    response = {
-                'status' : 'OK',
-                'crowdsales' : data
-                }
-
-    return jsonify(response)
-
-@app.route('/getdata/<int:property_id>')
-def getdata(property_id):
-    host = RPCHost()
-    try:
-        property = host.call("getproperty_MP", property_id)['result']
-    except Exception,e:
-        abort(make_response('Error getting property', 400))
-        
-    return jsonify(property)
-
-@app.route('/getcrowdsale/<int:property_id>')
-def getcrowdsale(property_id):
-    host = RPCHost()
-    try:
-        crowdsale = host.call("getcrowdsale_MP", property_id, True)['result']
-    except Exception,e:
-        abort(make_response('Error getting crowdsale', 400))
-    
-    history = crowdsale.pop("participanttransactions", [])    
-    crowdsale["participanttokens"] = sum([tx["participanttokens"] for tx in history])
-    crowdsale["issuertokens"] = sum([tx["issuertokens"] for tx in history])
-    
-    return jsonify(crowdsale)
-
-@app.route('/getcrowdsalehistory/<int:property_id>', methods=["POST"])
-def getcrowdsalehistory(property_id):
-    try:
-        start = int(request.form['start'])
-    except KeyError:
-        abort(make_response('No field \'start\' in request, request failed', 400))
-    except ValueError:
-        abort(make_response('Field \'start\' must be an integer, request failed', 400))
-        
-    try:
-        count = int(request.form['count'])
-    except KeyError:
-        abort(make_response('No field \'count\' in request, request failed', 400))
-    except ValueError:
-        abort(make_response('Field \'count\' must be an integer, request failed', 400))
-        
-    host = RPCHost()
-    try:
-        crowdsale = host.call("getcrowdsale_MP", property_id, True)['result']
-    except Exception,e:
-        abort(make_response('Error getting crowdsale', 400))
-    
-    
-    end = start + count if len(crowdsale['participanttransactions']) > start + count else len(crowdsale['participanttransactions'])
-    
-    transactions = crowdsale['participanttransactions'][start:end]
-    
-    for transaction in transactions:
-        try:
-            data = host.call("gettransaction_MP", transaction["txid"])['result']
-            transaction["blocktime"] = data["blocktime"]
-            transaction["confirmations"] = data["confirmations"]
-            transaction["sendingaddress"] = data["sendingaddress"]
-            transaction["propertyid"] = data["propertyid"]
-        except Exception,e:
-            abort(make_response('Error getting tx data', 400))
-    
-    response = {
-                "total" : len(crowdsale['participanttransactions']),
-                "transactions" : transactions
-                }
     return jsonify(response)
 
 @app.route('/info', methods=['POST'])
@@ -213,31 +129,19 @@ def filterProperties( properties ):
     return ['OK',addresses_data]
 
 
+# refactor this to be compatible with mastercored
 def listProperties(ecosystem):
-    #===========================================================================
-    # mastercoin-tools reference
-    # import glob
-    # 
-    # properties = glob.glob(data_dir_root +'/properties/*')
-    # properties_data = []
-    # for property_file in properties:
-    #     if property_file[-5:] == '.json':
-    #         with open(property_file, 'r') as f:
-    #             try:
-    #                 prop = json.loads(f.readline())[0]
-    #                 if prop["formatted_ecosystem"] == int(ecosystem): properties_data.append(prop)
-    #             except ValueError:
-    #                 print 'Error decoding JSON', property_file.split('/')[-1][:-5]        
-    #============================================================================
+    import glob
     
-    host=RPCHost()
-    try:
-        properties_list= host.call("listproperties_MP")['result']
-        properties_data = [ property for property in properties_list if (ecosystem == "1" and (property['propertyid'] < 2147483651 and property['propertyid'] != 2)) or (ecosystem == "2" and (property['propertyid'] >= 2147483651 or property['propertyid'] == 2))]
-    except Exception,e:
-        #Properties not found
-        properties_data= []  
-    
-    
-    
+    properties = glob.glob(data_dir_root +'/properties/*')
+    properties_data = []
+    for property_file in properties:
+        if property_file[-5:] == '.json':
+            with open(property_file, 'r') as f:
+                try:
+                    prop = json.loads(f.readline())[0]
+                    if prop["formatted_ecosystem"] == int(ecosystem): properties_data.append(prop)
+                except ValueError:
+                    print 'Error decoding JSON', property_file.split('/')[-1][:-5]        
+                         
     return properties_data
