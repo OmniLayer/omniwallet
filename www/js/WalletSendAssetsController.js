@@ -77,6 +77,7 @@ function WalletSendAssetsController($modal, $scope, $http, $q, userService, wall
     $modalScope.minerFees= +$scope.convertDisplayedValue($scope.minerFees),
     $modalScope.sendTo= $scope.sendTo;
     $modalScope.totalCost= +$scope.convertDisplayedValue($scope.totalCost);
+    $modalScope.signOffline= $scope.walletAssets.selectedAddress.offline;
   };
   
 

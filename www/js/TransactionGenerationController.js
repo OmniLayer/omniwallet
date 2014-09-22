@@ -20,76 +20,80 @@ function TransactionGenerationController($scope, $modal, userService, walletTran
           $modalScope.transactionError = true;
           $modalScope.error = 'Error preparing transaction: ' + successData.error || successData.data; /* Backwards compatibility for mastercoin-tools send API */
         } else {
-        var unsignedTransaction = successData.unsignedhex || successData.transaction; /* Backwards compatibility for mastercoin-tools send API */
-
-          try {
-            var bytes = Bitcoin.Util.hexToBytes(unsignedTransaction);
-            var transaction = Bitcoin.Transaction.deserialize(bytes);
-            var script = parseScript(successData.sourceScript);
-  
-            transaction.ins.forEach(function(input) {
-              input.script = script;
-            });
-  
-            //DEBUG console.log('before',transaction, Bitcoin.Util.bytesToHex(transaction.serialize()));
-            var signedSuccess = transaction.signWithKey(privKey);
-  
-            var finalTransaction = Bitcoin.Util.bytesToHex(transaction.serialize());
-  
-            //Showing the user the transaction hash doesn't work right now
-            //var transactionHash = Bitcoin.Util.bytesToHex(transaction.getHash().reverse());
-  
-            walletTransactionService.pushSignedTransaction(finalTransaction).then(function(successData) {
-              var successData = successData.data;
-              if (successData.pushed.match(/submitted|success/gi) != null) {
-                if(index +1 == transactions.length){
-                  $modalScope.waiting = false;
-                  $modalScope.transactionSuccess = true;
-                  $modalScope.url = 'http://blockchain.info/address/' + from + '?sort=0';
+          var unsignedTransaction = successData.unsignedhex || successData.transaction; /* Backwards compatibility for mastercoin-tools send API */
+          if($modalScope.signOffline){
+            $modalScope.unsignedTransaction = unsignedTransaction;
+            $modalScope.readyToSign = true;
+          } else {
+            try {
+              var bytes = Bitcoin.Util.hexToBytes(unsignedTransaction);
+              var transaction = Bitcoin.Transaction.deserialize(bytes);
+              var script = parseScript(successData.sourceScript);
+    
+              transaction.ins.forEach(function(input) {
+                input.script = script;
+              });
+    
+              //DEBUG console.log('before',transaction, Bitcoin.Util.bytesToHex(transaction.serialize()));
+              var signedSuccess = transaction.signWithKey(privKey);
+    
+              var finalTransaction = Bitcoin.Util.bytesToHex(transaction.serialize());
+    
+              //Showing the user the transaction hash doesn't work right now
+              //var transactionHash = Bitcoin.Util.bytesToHex(transaction.getHash().reverse());
+    
+              walletTransactionService.pushSignedTransaction(finalTransaction).then(function(successData) {
+                var successData = successData.data;
+                if (successData.pushed.match(/submitted|success/gi) != null) {
+                  if(index +1 == transactions.length){
+                    $modalScope.waiting = false;
+                    $modalScope.transactionSuccess = true;
+                    $modalScope.url = 'http://blockchain.info/address/' + from + '?sort=0';
+                  } else {
+                    pushOrderedTransactions(transactions,index+1);
+                  }
                 } else {
-                  pushOrderedTransactions(transactions,index+1);
+                  $modalScope.waiting = false;
+                  $modalScope.transactionError = true;
+                  $modalScope.error = successData.pushed; //Unspecified error, show user
                 }
-              } else {
+              }, function(errorData) {
                 $modalScope.waiting = false;
                 $modalScope.transactionError = true;
-                $modalScope.error = successData.pushed; //Unspecified error, show user
-              }
-            }, function(errorData) {
-              $modalScope.waiting = false;
-              $modalScope.transactionError = true;
-              if (errorData.message)
-                $modalScope.error = 'Server error: ' + errorData.message;
-              else 
-                if (errorData.data)
-                  $modalScope.error = 'Server error: ' + errorData.data;
-                else
-                  $modalScope.error = 'Unknown Server Error';
-              console.error(errorData);
-            });
-  
-            //DEBUG console.log(addressData, privKey, bytes, transaction, script, signedSuccess, finalTransaction );
-            function parseScript(script) {
-              var newScript = new Bitcoin.Script();
-              var s = script.split(" ");
-              for (var i = 0; i < s.length; i++) {
-                if (Bitcoin.Opcode.map.hasOwnProperty(s[i])) {
-                  newScript.writeOp(Bitcoin.Opcode.map[s[i]]);
-                } else {
-                  newScript.writeBytes(Bitcoin.Util.hexToBytes(s[i]));
+                if (errorData.message)
+                  $modalScope.error = 'Server error: ' + errorData.message;
+                else 
+                  if (errorData.data)
+                    $modalScope.error = 'Server error: ' + errorData.data;
+                  else
+                    $modalScope.error = 'Unknown Server Error';
+                console.error(errorData);
+              });
+    
+              //DEBUG console.log(addressData, privKey, bytes, transaction, script, signedSuccess, finalTransaction );
+              function parseScript(script) {
+                var newScript = new Bitcoin.Script();
+                var s = script.split(" ");
+                for (var i = 0; i < s.length; i++) {
+                  if (Bitcoin.Opcode.map.hasOwnProperty(s[i])) {
+                    newScript.writeOp(Bitcoin.Opcode.map[s[i]]);
+                  } else {
+                    newScript.writeBytes(Bitcoin.Util.hexToBytes(s[i]));
+                  }
                 }
+                return newScript;
               }
-              return newScript;
+            } catch (e) {
+              $modalScope.sendError = true;
+              if (e.message)
+                $modalScope.error = 'Error sending transaction: ' + e.message;
+              else 
+                if (e.data) 
+                  $modalScope.error = 'Error sending transaction: ' + e.data;
+                else
+                  $modalScope.error = 'Unknown error sending transaction';
+              console.error(e);
             }
-          } catch (e) {
-            $modalScope.sendError = true;
-            if (e.message)
-              $modalScope.error = 'Error sending transaction: ' + e.message;
-            else 
-              if (e.data) 
-                $modalScope.error = 'Error sending transaction: ' + e.data;
-              else
-                $modalScope.error = 'Unknown error sending transaction';
-            console.error(e);
           }
         }
       }, function(errorData) {
