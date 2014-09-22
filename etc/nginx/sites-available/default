@@ -68,7 +68,8 @@ server {
         }
 
         location ~ "^/v1/system/revision.json$" {
-                alias /var/lib/omniwallet/www/revision.json;
+                #alias /var/lib/omniwallet/www/revision.json;
+                 rewrite ^ /v1/system/revision;
         }
 
         location ~ "^/v1/exchange/offers/(.*)$" {
@@ -234,4 +235,16 @@ server {
                 uwsgi_modifier1 30;
                 uwsgi_pass 127.0.0.1:$PORT;
         }
+
+        location = /v1/system { rewrite ^ /v1/system; }
+        location /v1/system { try_files $uri @flask_stats_service; }
+        location @flask_stats_service {
+                include uwsgi_params;
+                uwsgi_param SCRIPT_NAME /v1/system;
+                uwsgi_param UWSGI_MODULE stats_service;
+                uwsgi_param UWSGI_CALLABLE app;
+                uwsgi_modifier1 30;
+                uwsgi_pass 127.0.0.1:$PORT;
+        }
+
 }
