@@ -183,7 +183,7 @@ angular.module('omniwallet').factory('userService', ['$rootScope', '$http', '$in
       
       getAddressesWithPrivkey: function(addressFilter) {
         var addresses = service.data.wallet.addresses.filter(function(e) {
-          return e.privkey && e.privkey.length == 58;
+          return (e.privkey && e.privkey.length == 58) || e.offline;
         }).map(function(e){
           return e.address;
         });
@@ -266,14 +266,14 @@ angular.module('omniwallet').factory('userService', ['$rootScope', '$http', '$in
             $injector.get('balanceService').balance(service.data.wallet.addresses[i].address).then(function(result) {
               result.data.balance.forEach(function(balanceItem) {
                 var address = service.data.wallet.addresses[i];
-                var tradable = address.privkey && address.privkey.length == 58 && balanceItem.value > 0;
+                var tradable = ((address.privkey && address.privkey.length == 58) || address.offline) && balanceItem.value > 0;
                 var currency = null;
                 for (var j = 0; j < service.data.walletMetadata.currencies.length; j++) {
                   var currencyItem = service.data.walletMetadata.currencies[j];
                   if (currencyItem.symbol == balanceItem.symbol) {
                     currency = currencyItem;
                     if (currency.addresses().indexOf(service.data.wallet.addresses[i].address) == -1){
-                     balanceItem.value > 0 ? currency.tradableAddresses.push(service.data.wallet.addresses[i].address) : currency.watchAddresses.push(service.data.wallet.addresses[i].address) ;
+                     tradable ? currency.tradableAddresses.push(service.data.wallet.addresses[i].address) : currency.watchAddresses.push(service.data.wallet.addresses[i].address) ;
                      currency.tradable = currency.tradable || tradable;
                     }
                     break;
@@ -286,8 +286,8 @@ angular.module('omniwallet').factory('userService', ['$rootScope', '$http', '$in
                         id: propertyID,
                         symbol: balanceItem.symbol,
                         divisible: balanceItem.divisible,
-                        tradableAddresses: balanceItem.value > 0 ? [service.data.wallet.addresses[i].address] : [],
-                        watchAddresses: balanceItem.value == 0 ? [service.data.wallet.addresses[i].address] : [],
+                        tradableAddresses: tradeable ? [service.data.wallet.addresses[i].address] : [],
+                        watchAddresses: !tradeable ? [service.data.wallet.addresses[i].address] : [],
                         addresses: function(){ return this.tradableAddresses.concat(this.watchAddresses); },
                         tradable:tradable
                       };
@@ -304,8 +304,8 @@ angular.module('omniwallet').factory('userService', ['$rootScope', '$http', '$in
                       name: balanceItem.symbol,
                       symbol: balanceItem.symbol,
                       divisible: balanceItem.divisible,
-                      tradableAddresses: balanceItem.value > 0 ? [service.data.wallet.addresses[i].address] : [],
-                      watchAddresses: balanceItem.value == 0 ? [service.data.wallet.addresses[i].address] : [],
+                      tradableAddresses: tradeable ? [service.data.wallet.addresses[i].address] : [],
+                      watchAddresses: !tradeable ? [service.data.wallet.addresses[i].address] : [],
                       addresses: function(){ return this.tradableAddresses.concat(this.watchAddresses); },
                       tradable:tradable
                     };
@@ -316,9 +316,9 @@ angular.module('omniwallet').factory('userService', ['$rootScope', '$http', '$in
               addCurrencies(i + 1);
             });
           } else {
-	    $injector.get('appraiser').updateValues(function() {
+	           $injector.get('appraiser').updateValues(function() {
                 console.log("Updated Currencies");
-            });
+             });
           }
         };
         addCurrencies(0);

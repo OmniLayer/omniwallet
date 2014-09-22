@@ -69,8 +69,8 @@ function WalletAssetsFormController($scope, userService, walletTransactionServic
       addrListBal[i].balance =  successData.balance;
       $scope.setBalance();
     }, function(errorData) {
-      alert("We have encountered a problem accessing the server ... Please try again in a few minutes");
-      //console.log('Error, no balance data found for ' + e + ' setting defaults...');
+      //alert("We have encountered a problem accessing the server ... Please try again in a few minutes");
+      console.log('Error, no balance data found for ' + e + ' setting defaults...');
     });
   });
   
