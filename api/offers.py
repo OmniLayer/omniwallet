@@ -36,8 +36,7 @@ def filterOffersByTime( currency_type , time_seconds):
 
     atleast_now = int( str( int(time.time() - time_seconds) ) + '000' )
 
-    #TODO get inactive offers?
-    sqlconn.execute("select * from activeoffers ao, transactions t, txjson tj where ao.propertyidselling=" + currency + " and ao.lasttxdbserialnum=-1 and ao.createtxdbserialnum=t.txdbserialnum and ao.createtxdbserialnum=tj.txdbserialnum")
+    sqlconn.execute("select * from activeoffers ao, transactions t, txjson tj where ao.propertyidselling=" + currency + " and ao.createtxdbserialnum=t.txdbserialnum and ao.createtxdbserialnum=tj.txdbserialnum")
     ROWS= sqlconn.fetchall()
 
     response = [ mapSchema(row) for row in ROWS if int(mapSchema(row)['tx_time']) > atleast_now ]
@@ -50,22 +49,24 @@ def mapSchema(row):
 
   #We only map tx21 and tx22
   if row[-11] == 20:
-    ppc = str( Decimal( rawdata['bitcoindesired'] ) / Decimal( rawdata['amount'] ) )
+    #print row
+    ppc = Decimal( rawdata['bitcoindesired'] ) / Decimal( rawdata['amount'] )
+    color = getcolor(row[10]) 
     response = {
       'action': -1, #don't have this data
       'block': str(row[-5]),
       'currencyId': str(rawdata['propertyid']),
       'currency_str': 'Mastercoin' if str(rawdata['propertyid']) == '1' else 'Test Mastercoin',
       'formatted_amount': str(rawdata['amount']),
-      'formatted_amount_available': str( row[1] / Decimal(1e8) ),
-      'formatted_bitcoin_amount_desired': str( row[2] / Decimal(1e8) ),
+      'formatted_amount_available': '%.8f' % ( Decimal(row[1]) / Decimal(1e8) ),
+      'formatted_bitcoin_amount_desired': '%.8f' % ( Decimal(row[2]) / Decimal(1e8) ),
       'formatted_block_time_limit': str(rawdata['timelimit']),
       'formatted_fee_required': str(rawdata['feerequired']),
-      'formatted_price_per_coin': str( Decimal( rawdata['bitcoindesired'] ) / Decimal( rawdata['amount'] ) ),
-      'bitcoin_required': str( Decimal( ppc ) * Decimal( rawdata['amount'] ) ),
+      'formatted_price_per_coin': '%.8f' % ppc,
+      'bitcoin_required': '%.8f' % ( Decimal( ppc ) * Decimal( rawdata['amount'] ) ),
       'from_address': rawdata['sendingaddress'],
       'tx_type_str': "Sell offer",
-      'color': "bgc-new", #TODO fix
+      'color': color,
       'invalid': False if rawdata['valid'] == True else True,
       'to_address': "sell offer",
       'tx_hash': rawdata['txid'],
@@ -73,22 +74,23 @@ def mapSchema(row):
     }
   else:
     sellofferdata = getsell(str(row[3]))
-    #print sellofferdata, 'selldat'
-    ppc = str( Decimal( sellofferdata[-1]['bitcoindesired'] ) / Decimal( sellofferdata[-1]['amount'] ) )
+    ppc = Decimal( sellofferdata[-1]['bitcoindesired'] ) / Decimal( sellofferdata[-1]['amount'] )
+    remaining = Decimal(row[1]) / Decimal(1e8)
     response = {
       'block': str(row[-5]),
-      'status': 'valid', #TODO
+      'status': 'valid' if row[5] == 'unpaid' or row[5] == 'paid-partial' else 'closed',
       'currencyId': str(rawdata['propertyid']),
       'currency_str': 'Mastercoin' if str(rawdata['propertyid']) == '1' else 'Test Mastercoin',
-      'formatted_amount': str(rawdata['amount']),
+      'formatted_amount': '%.8f' % remaining,
+      'sell_tx_hash': sellofferdata[-1]['txid'],
       #'formatted_amount_available': str( row[1] / Decimal(1e8) ),
       #'formatted_bitcoin_amount_desired': str( row[2] / Decimal(1e8) ),
-      'formatted_price_per_coin': ppc,
-      'bitcoin_required': str( Decimal( ppc ) * Decimal( rawdata['amount'] ) ),
+      'formatted_price_per_coin': '%.8f' % ppc,
+      'bitcoin_required': '%.8f' % ( Decimal( ppc ) * Decimal( remaining ) ),
       'payment_expired': False,
       'from_address': rawdata['sendingaddress'],
       'tx_type_str': 'Sell accept',
-      'color': "bgc-new", #TODO fix
+      'color': "bgc-accept", #needed for compatibility
       'invalid': False if rawdata['valid'] == True else True,
       'to_address': rawdata['referenceaddress'],
       'tx_hash': rawdata['txid'],
@@ -103,6 +105,9 @@ def mapSchema(row):
   #icon_text: "Sell offer done"
   
   return response
+
+def getcolor(c):
+  return 'bgc-new' if c == 'active' else 'bgc-expired' if c == 'cancelled' else 'bgc-done' if c == 'sold' else 'bgc-expired'
 
 def getsell(txdbserialnum):
 

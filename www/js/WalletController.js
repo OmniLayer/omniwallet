@@ -86,7 +86,7 @@ function WalletHistoryController($scope, $q, $http, userService, hashExplorer) {
 
 
     angular.forEach($scope.addresses, function(addrObject) {
-      promises.push($http.post('/v1/address/addr/', {
+      promises.push($http.post('/v1/transaction/address', {
         'addr': addrObject.address
       })
       .success(function(data, status, headers, config) {
@@ -165,7 +165,7 @@ function WalletHistoryController($scope, $q, $http, userService, hashExplorer) {
     $scope.isLoading = "True";
 
     console.log('Addr request 4');
-    $http.post('/v1/address/addr/', {
+    $http.post('/v1/transaction/address', {
         'addr': address
       })
       .success(function(data, status, headers, config) {
