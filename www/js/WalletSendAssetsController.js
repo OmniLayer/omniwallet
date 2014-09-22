@@ -139,7 +139,7 @@ function WalletSendAssetsController($modal, $scope, $http, $q, userService, wall
             else{
               $scope.waiting = false;
               $scope.transactionError = true;
-              $scope.error = 'The btc value has changed, check again your transaction';
+              $scope.error = 'The value of BTC has changed. Please check the send details and retry.';
               $scope.setBitcoinValue($scope.getBitcoinValue());
               $scope.resetAmountAndValue();
             }
