@@ -15,9 +15,14 @@ It currently supports Bitcoin and Mastercoin, and will support Mastercoin-derive
 
 For more information see the [Omniwallet announcement](http://blog.mastercoin.org/2014/03/04/introducing-omniwallet-pre-alpha-developers-wanted/).
 
-You can try out the test builds at [test.omniwallet.org](https://test.omniwallet.org/) (WARNING: Omniwallet is not production ready, only use small amounts of BTC and MSC!)
+You can access the beta site at [https://www.omniwallet.org](https://www.omniwallet.org/) (Note: Omniwallet is in active development, make sure you maintain proper backups of all address!)
 
 ## Ubuntu Setup
+
+### Automated Install
+Check out the [Auto Installer Project](https://github.com/mastercoin-MSC/install-omni)
+
+### Manual Install
 
 Install dependencies:
 ```
@@ -80,6 +85,26 @@ wget https://www.omniwallet.org/assets/snapshots/current.tar.gz
 tar -xzvf current.tar.gz -C /var/lib/omniwallet/
 service nginx start
 exit
+```
+Install Bitcoind 
+(note: you only need this if you plan on using the send functionality of the wallet, the explorer and wallet feature will work fine without it)
+```
+sudo add-apt-repository ppa:bitcoin/bitcoin 
+sudo apt-get update
+sudo apt-get install bitcoind
+```
+*Note*: You need to populate $HOME/.bitcoin/bitcoin.conf with rpcssl, rpcuser, rpcpassword, and rpcport, example config:
+```
+server=1
+rpcport=8332
+rpcuser=user
+rpcpassword=pass
+rpcssl=0
+```
+Run Bitcoind
+(note: this should be run in a separate console or computer than the console running app.sh)
+```
+bitcoind -txindex -printtoconsole -checkblocks=1
 ```
 Start the omni application service manager "app.sh" on a separate screen (note that the proccess takes few hours for first initialization):
 ```

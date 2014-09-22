@@ -7,7 +7,7 @@
   <h4 ng-hide="onTradeView">
     <a ng-click="setView('tradeInfo')"> <strong> < Go back </strong> </a>
   </h4>
-  
-  <div ng-include="tradeView" ng-controller="WalletAssetsFormController"></div>
+  <div ng-include="tradeView" ng-hide="onSaleView" ng-controller="WalletAssetsFormController"></div>
+  <div ng-include="saleView" ng-show="onSaleView" ng-controller="WalletAssetsFormController"></div>
 
 </div>

@@ -151,7 +151,7 @@ angular.module('omniwallet').factory('balanceService', ['$http', '$q', function(
   }
 ]);
 
-angular.module('omniwallet').factory('userService', ['$rootScope', '$http', '$injector', function($rootScope, $http, $injector) {
+angular.module('omniwallet').factory('userService', ['$rootScope', '$http', '$injector', '$q', '$idle', function($rootScope, $http, $injector, $q, $idle) {
     var service = {
       data: {
         walletKey: '',
@@ -171,6 +171,8 @@ angular.module('omniwallet').factory('userService', ['$rootScope', '$http', '$in
         service.data.walletMetadata = walletMetadata || service.data.walletMetadata;
         service.data.loggedIn = true;
         service.UpdateLoop();
+        
+        $idle.watch();
       },
 
       logout: function() {
@@ -181,10 +183,10 @@ angular.module('omniwallet').factory('userService', ['$rootScope', '$http', '$in
 
       addAddress: function(address, privKey) {
         for (var i in service.data.wallet.addresses) {
-          if (service.data.wallet.addresses[i].address == address && privKey) {
-            service.data.wallet.addresses[i].privkey = privKey;
-            service.saveSession();
-            return;
+          if (service.data.wallet.addresses[i].address == address) {
+            if(privKey)
+              service.data.wallet.addresses[i].privkey = privKey;
+            return service.saveSession();
           }
         }
 
@@ -193,8 +195,9 @@ angular.module('omniwallet').factory('userService', ['$rootScope', '$http', '$in
           "privkey": privKey
         });
         service.data.loggedIn = true;
-        service.saveSession();
-        service.updateCurrencies();
+        return service.saveSession().then(function(){
+          service.updateCurrencies();
+        });
       },
 
       getAddress: function(address) {
@@ -358,7 +361,7 @@ angular.module('omniwallet').factory('userService', ['$rootScope', '$http', '$in
       },
 
       saveSession: function() {
-        service.updateWallet().then(function(result) {
+        return service.updateWallet().then(function(result) {
           console.log("Success saving");
         }, function(result) {
           console.log('Failure saving');
@@ -408,19 +411,29 @@ angular.module('omniwallet').factory('appraiser', ['$rootScope', '$http', '$q', 
       });
     };
     AppraiserService.prototype.updateValue = function(callback, symbol) {
-      var self = this;
-      $http.get('/v1/values/' + symbol + '.json').then(function(response) {
-        var currency = response.data[0];
-        if (currency.symbol == 'BTC') {
-          // Store these things internally as the value of a satoshi.
-          self.conversions.BTC = currency.price / 100000000;
-        } else {
-          self.conversions[currency.symbol] = currency.price;
-        }
-        callback();
-      }, function(error) {
-        console.log(error);
-      });
+      var self = this;      
+      if (symbol === 'BTC' || this.conversions.BTC) {
+        $http.get('/v1/values/' + symbol + '.json').then(function(response) {
+          var currency = response.data[0];
+          if (currency.symbol == 'BTC') {
+            // Store these things internally as the value of a satoshi.
+            self.conversions.BTC = currency.price / 100000000;
+          } else if (currency.symbol) {
+            self.conversions[currency.symbol] = currency.price;
+          }
+          callback();
+        }, function(error) {
+          console.log(error);
+
+          self.conversions[symbol] = 0;
+          callback();
+        });
+      }
+      else {
+	this.updateValue(function() {
+          self.updateValue(callback, symbol);
+	}, 'BTC');
+      }
     };
     AppraiserService.prototype.getValue = function(amount, symbol) {
       if (symbol == 'BTC') {

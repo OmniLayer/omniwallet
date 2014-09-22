@@ -1,17 +1,26 @@
 <div class="modal-header">
   <h3>Import a Wallet Backup</h3>
 </div>
-<form name="bkpentry" class="form-horizontal" style="margin-bottom:20px, margin-top:20px" ng-submit="validate(walletData) && ok(walletData)">
+<form name="bkpentry" class="form-horizontal" style="margin-bottom:20px, margin-top:20px" ng-submit="startImport(walletData)">
   <div class="modal-body">
-    <div class="row">
+    <div class="row" ng-hide="importFinished">
       <div class="form-group col-md-10 col-md-push-1">
         <label class="control-label">Enter backup file:</label>
         <input type="file" name="privkey" class="form-control" fileread="walletData" placeholder="enter your backup file in json format" ng-model="walletData" ng-required="true">
         <span style="color:red" ng-show="privkeyentry.walletData.$dirty && !validate(walletData)">Must be a valid Omnicore backup file.</span>
       </div>
     </div>
+    <div class="row" ng-show="importFinished">
+      <ul>
+        <li ng-repeat="item in summary" style="color: {{item.color}};">{{item.message}}</li>
+      </ul>
+    </div>  
   </div>
   <div class="modal-footer">
-    <input type="submit" class="btn btn-primary" ng-disabled="!validate(walletData)" value="Import Wallet">
+    <input type="submit" class="btn btn-primary" value="Import Wallet" ng-disabled="!walletData || processing" ng-hide="importFinished">
+    <button type="button" class="btn btn-warning" ng-disabled="processing" ng-click="cancel()" ng-hide="importFinished">Cancel</button>
+    <button type="button" class="btn btn-success" ng-click="close()" ng-show="importFinished">Close</button>
+    <progressbar ng-show="processing" style="margin-top:10px" animate="false" value="(completed * 100) / total" type="success" max="100"><b ng-show="completed > 0">{{completed}} / {{total}}</b></progressbar>
+    <h4  ng-hide="importFinished" style="color: {{progressColor}};">{{progressMessage}}</h4>
   </div>
 </form>

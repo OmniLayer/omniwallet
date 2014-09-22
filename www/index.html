@@ -6,7 +6,7 @@
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
     <meta http-equiv="Pragma" content="no-cache" />
     <meta http-equiv="Expires" content="0" />
-    <meta name="description" content="The Master Protocol&#8482; is leading the Bitcoin 2.0 revolution by providing an exciting decentralized technology platform.">
+    <meta name="Description" content="Omniwallet&#8482; is a cryptocurrency web wallet that combines security, usability and meta-currency support.">
 
     <title> Omniwallet&#8482; - The Next Generation Wallet </title>
 
@@ -22,7 +22,9 @@
     <link rel="stylesheet" href="/bower_components/bootstrap/dist/css/bootstrap-theme.min.css">
     <link rel="stylesheet" href="/theme.css">
 
-    <script src="/socket.io/socket.io.js"></script> 
+    <script src="/config.js"></script>
+
+    <script src="/socket.io/socket.io.js"></script>
     <script> var socket = io(); </script>
 
     <script src="/bower_components/underscore/underscore.js"></script>
@@ -31,6 +33,7 @@
     <script src="/bower_components/angular-route/angular-route.js"></script>
     <script src="/bower_components/numeraljs/numeral.js"></script>
     <script src="/bower_components/angular-numeraljs/src/angular-numeraljs.js"></script>
+    <script src="/bower_components/angular-idle/src/angular-idle.js"></script>
     <script src="/bower_components/angular-password-strength/build/angular-password-strength.js"></script>
     <script src="/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
     <script src="/bower_components/angular-bootstrap/ui-bootstrap.min.js"></script>
@@ -74,12 +77,14 @@
            <div ng-include="templates['header']"></div> 
          </div>
          <div class="container middle row">
-           <div class="alert alert-custom alert-dismissable" ng-show="browser !== 'chrome'">
-             <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-             Omniwallet recommends the use of Chrome, since the wallet may not yet function perfectly on other browsers.
+           <div class="info info-custom info-dismissable" ng-hide="true">
+             <button type="button" class="close" data-dismiss="info" aria-hidden="true">&times;</button>
+             Omniwallet&#8482; is a cryptocurrency web wallet that combines security, usability and meta-currency support.
            </div>
+         </div>
            <div ng-view></div>
-         </div><br/><br />
+         <br/><br />
+          <div class="row"></div>
          <div class="footer">
           <div ng-include="templates['footer']"></div> 
          </div>

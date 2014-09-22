@@ -12,6 +12,8 @@ function LoginController($injector, $scope, $http, $location, $modalInstance, $q
 
 // Helper (Not sure if this can be fixed with providers)
 function Login($injector, $scope, $http, $location, $modalInstance, $q, userService) {
+  $scope.dismiss = $modalInstance.dismiss;
+  
   $scope.loginInProgress = false;
   $scope.login.title == undefined ? $scope.login.title = 'Login' : $scope.login.title;
   $scope.login.button == undefined ? $scope.login.button = 'Open Wallet' : $scope.login.button;

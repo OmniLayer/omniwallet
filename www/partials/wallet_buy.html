@@ -1,7 +1,7 @@
 <div class="col-xs-12" ng-controller="WalletBuyAssetsController">
   <div class="row">
     <div class="panel-default">
-      <h3 class="text-left panel-body om-title" >Accept Order</h3>
+      <h3 class="text-left panel-body om-title" >Accept Offer</h3>
     </div>
     <br>
     <div ng-show="showErrors" class="alert alert-danger">
@@ -68,11 +68,11 @@
           <br>
 
           <div class="input-group">
-            <span class="input-group-addon"> Amount to buy ({{ displayedAbbreviation }}): </span>
+            <span class="input-group-addon"> Amount to accept ({{ displayedAbbreviation }}): </span>
             <input name="amount" type="number" ng-model="buyAmount" class="form-control"
             placeholder="For example: {{ sendPlaceholderValue }} (Max {{ global['buyOffer'].formatted_amount_available }})" step="{{ sendPlaceholderStep }}" min="{{ sendPlaceholderMin }}" 
             max="{{ global['buyOffer'].formatted_amount_available }}" required>
-            <span class="input-group-addon" > Available to buy: {{ global['buyOffer'].formatted_amount_available }} {{ displayedAbbreviation }} </span>
+            <span class="input-group-addon" > Available to accept: {{ global['buyOffer'].formatted_amount_available }} {{ displayedAbbreviation }} </span>
           </div>
           <br>
 

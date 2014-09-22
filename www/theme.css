@@ -43,6 +43,12 @@ body {
   font-size:300%;
   color:lightgray;
 }
+.missing-dex-alert{
+  margin-top: 0px;
+  margin-bottom: 0px;
+  padding-top: 6px;
+  padding-bottom:6px;
+}
 .left {
   position: absolute;
   margin-top: 125px;
@@ -121,7 +127,7 @@ form.form-search:before {
     z-index: 1000;
 }
 .alert {
-    margin-top: 20px;
+    
 }
 .alert-custom {
     background-color: #faa732;
