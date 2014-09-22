@@ -21,9 +21,13 @@
     
     <tr>
         <td width="126px" height="30px" class="description-title" style="vertical-align: top;">Description:</td><td class="description-text">
-        <div style="width: 400px;overflow-wrap: break-word;">
-            <div id="expandedData" class="collapse out">{{propertyData}}</div>
-            <br><button ng-click="expanded=!expanded;" data-toggle="collapse" data-target="#expandedData"><img src="/assets/img/Expand_collapse.png"><span ng-hide="expanded"> expand</span><span ng-show="expanded"> collapse</span></button></div>
+            <div class="expandable-div" ng-class="{'expanded-div':expanded, 'collapsed-div':!expanded}">
+                {{propertyData}}
+            </div>
+        <div>
+            <div class="horizontal-line"></div>
+            <button ng-click="expanded=!expanded;"><img src="/assets/img/Expand_collapse.png"><span ng-hide="expanded"> expand</span><span ng-show="expanded"> collapse</span></button>
+        </div>
         </td>
     </tr>
     </table>

@@ -124,8 +124,28 @@ a {
   color:#c4c4c4;
   font-family: 'Gudea', sans-serif;
 }
+.expandable-div{
+  height: auto;
+  width: 400px;
+  overflow: hidden;
+  transition: 1.0s;
+  -webkit-transition: 1.0s;
+  word-wrap: break-word;
+}
+.expanded-div{
+  max-height: 200px;
+}	
+.collapsed-div{
+  max-height: 40px;
+}
 .footer-div{
   padding-bottom: 0px;
+}
+.horizontal-line{
+  width: 400px;
+  height: 5px;
+  background-image:url('/assets/img/line.png');
+  background-repeat: repeat;
 }
 input[type=number]::-webkit-inner-spin-button,
 input[type=number]::-webkit-outer-spin-button {
