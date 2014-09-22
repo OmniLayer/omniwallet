@@ -9,13 +9,10 @@ app.debug = True
 def revision():
   ROWS=dbSelect("select blocknumber, blocktime from blocks order by blocknumber desc limit 1")
 
-  response = []
-  for datarow in ROWS:
-      res = {
-          'last_block': datarow[0],
-          'last_parsed': datarow[1] 
+  response = {
+          'last_block': ROWS[0][0],
+          'last_parsed': ROWS[0][1] 
       }
-      response.append(res)
 
-  json_response = json.dumps( sorted(response, key=lambda x:  int(x['last_block']) ))
+  json_response = json.dumps( response)
   return json_response
