@@ -554,7 +554,7 @@ function WalletTradePendingController($scope, $http, $q, userService, hashExplor
 
       $scope.filtered_sells = filtered_transaction_data.filter(function(item) {
         var orderType = item.tx_type_str.toLowerCase()
-        var orderStatus = item.color.match(/expired/gi) || []
+        var orderStatus = item.color.match(/(done|expired|invalid)/gi) || []
         //DEBUG console.log(orderStatus, item.color)
         return (orderType == 'sell offer') && (orderStatus.length == 0)
       });
