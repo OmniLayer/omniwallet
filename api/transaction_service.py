@@ -16,7 +16,7 @@ def getaddress():
     except ValueError:
         abort(make_response('This endpoint only consumes valid input', 400))
 
-    ROWS=dbSelect("select * from transactions t, txjson txj where t.txdbserialnum = txj.txdbserialnum and txj.txdata::json->>'sendingaddress' =%s order by t.txblocknumber DESC", [address])
+    ROWS=dbSelect("select * from transactions t, addressesintxs atx where t.txdbserialnum = atx.txdbserialnum and atx.address=%s order by t.txblocknumber DESC", [address])
 
     response = { 'address': {}, 'balance': {}, '0' : { 'transactions': [] } } #To preserve compatability, 'currID': {'txdata'}
     if len(ROWS) > 0:
