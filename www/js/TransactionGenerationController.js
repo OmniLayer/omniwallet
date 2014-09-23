@@ -119,9 +119,9 @@ function TransactionGenerationController($scope, $modal, userService, walletTran
           setModalScope($scope);
           
           $scope.ok = function() {
-            $scope.clicked = true;
-            $scope.waiting = true;
-            prepareTransaction(data.transactionType, data.transactionData, data.from, $scope);
+              $scope.clicked = true;
+              $scope.waiting = true;
+              prepareTransaction(data.transactionType, data.transactionData, data.from, $scope);
           };
           
           $scope.cancel = function () {
