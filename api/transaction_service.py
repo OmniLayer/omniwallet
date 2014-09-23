@@ -2,10 +2,9 @@ import urlparse
 import os, sys, re
 from flask import Flask, request, jsonify, abort, json, make_response
 from msc_apps import *
-import psycopg2, psycopg2.extras
+from sqltools import *
 from decimal import Decimal
 
-sqlconn = sql_connect()
 
 app = Flask(__name__)
 app.debug = True
@@ -17,8 +16,7 @@ def getaddress():
     except ValueError:
         abort(make_response('This endpoint only consumes valid input', 400))
 
-    sqlconn.execute("select * from transactions t, txjson txj where t.txdbserialnum = txj.txdbserialnum and txj.txdata::json->>'sendingaddress' = \'" + address + "\' order by t.txblocknumber DESC;")
-    ROWS= sqlconn.fetchall()
+    ROWS=dbSelect("select * from transactions t, txjson txj where t.txdbserialnum = txj.txdbserialnum and txj.txdata::json->>'sendingaddress' =%s order by t.txblocknumber DESC", [address])
 
     response = { 'address': {}, 'balance': {}, '0' : { 'transactions': [] } } #To preserve compatability, 'currID': {'txdata'}
     if len(ROWS) > 0:
@@ -45,8 +43,7 @@ def getcurrencyrecent(currency_page):
 
     #Do we even need per-currency pagination?
     #sqlconn.execute("select * from transactions t, txjson txj where t.txdbserialnum = txj.txdbserialnum and txj.txdata::json->>'propertyid' = \'" + c_id + "\' order by t.txblocknumber DESC limit 10;")
-    sqlconn.execute("select * from transactions t, txjson txj where t.txdbserialnum = txj.txdbserialnum order by t.txblocknumber DESC limit 10;")
-    ROWS= sqlconn.fetchall()
+    ROWS=dbSelect("select * from transactions t, txjson txj where t.txdbserialnum = txj.txdbserialnum order by t.txblocknumber DESC limit 10;")
 
     response = []
     if len(ROWS) > 0:
@@ -66,8 +63,7 @@ def gettransaction(hash_id):
     except ValueError:
         abort(make_response('This endpoint only consumes valid input', 400))
 
-    sqlconn.execute("select * from transactions t, txjson txj where t.txdbserialnum = txj.txdbserialnum and t.txhash=\'" + str(transaction_) + "\'")
-    ROWS= sqlconn.fetchall()
+    ROWS=dbSelect("select * from transactions t, txjson txj where t.txdbserialnum = txj.txdbserialnum and t.txhash=%s", [transaction_])
 
     if len(ROWS) < 1:
       return json.dumps([])
@@ -127,8 +123,7 @@ def gettransaction(hash_id):
       # category, amountraised, closedearly, propertyiddesired, maxtokens, percenttoissuer, earlybonus, active, data, url,  tokensissued, starttime
       # 54 - Create Property Manual - propertyname, (getgrants), category, totaltokens, url, [issuances], subcategory, data
       
-      sqlconn.execute("select * from transactions t, smartproperties sp where t.txhash=\'" + str(transaction_) + "\' and t.txdbserialnum = sp.createtxdbserialnum")
-      ROWS= sqlconn.fetchall()
+      ROWS=dbSelect("select * from transactions t, smartproperties sp where t.txhash=%s and t.txdbserialnum = sp.createtxdbserialnum", [transaction_])
       mpData = ROWS[0][-1]
 
       ret['previous_property_id'] = "(null)" #TODO FIXME
@@ -163,8 +158,8 @@ def gettransaction(hash_id):
         cancel = 'True' if txJson['subaction'] == 'Cancel' else 'False'
 
         if not cancel:
-          sqlconn.execute("select * from transactions t, activeoffers ao, txjson txj where t.txhash=\'" + str(transaction_) + "\' and t.txdbserialnum = ao.createtxdbserialnum and t.txdbserialnum=txj.txdbserialnum")
-          ROWS= sqlconn.fetchall()
+          ROWS=dbSelect("select * from transactions t, activeoffers ao, txjson txj where t.txhash=%s "
+                        "and t.txdbserialnum = ao.createtxdbserialnum and t.txdbserialnum=txj.txdbserialnum", [transaction_])
           row = ROWS[0]
           mpData = ROWS[0][-1]
 
@@ -186,8 +181,8 @@ def gettransaction(hash_id):
           ret['tx_type_str'] = 'Sell cancel'
 
       if txType == 22:
-        sqlconn.execute("select * from transactions t, offeraccepts oa, txjson txj where t.txhash=\'" + str(transaction_) + "\' and t.txdbserialnum = oa.linkedtxdbserialnum and t.txdbserialnum=txj.txdbserialnum")
-        ROWS= sqlconn.fetchall()
+        ROWS=dbSelect("select * from transactions t, offeraccepts oa, txjson txj where t.txhash=%s " 
+                      "and t.txdbserialnum = oa.linkedtxdbserialnum and t.txdbserialnum=txj.txdbserialnum", [transaction_])
         mpData = ROWS[0][-1]
 
         ret['to_address'] = mpData['referenceaddress']
