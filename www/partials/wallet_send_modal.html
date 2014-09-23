@@ -24,7 +24,7 @@
         <h4 class="pull-left" style="color:green;">Your transaction was generated successfully, now save the text above and sign it on your Armory offline computer. Come back with the signed text to broadcast it.  
           </h4>
         <button ng-click="saveUnsigned(unsignedTransaction)" class="btn btn-success" ng-hide="saved">Save</button>
-        <button ng-click="close()" class="btn" ng-class="{btn-danger:unsaved,btn-success:saved}"
+        <button ng-click="close()" class="btn" ng-class="{'btn-danger':unsaved,'btn-success':saved}">Close</button>
       </div>
       <div ng-show="transactionSuccess">
         <h4 class="pull-left" style="color:green"> Funds were sent successfully, 
