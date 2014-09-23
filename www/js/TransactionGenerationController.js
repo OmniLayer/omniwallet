@@ -23,7 +23,9 @@ function TransactionGenerationController($scope, $modal, userService, walletTran
           var unsignedTransaction = successData.unsignedhex || successData.transaction; /* Backwards compatibility for mastercoin-tools send API */
           if($modalScope.signOffline){
             $modalScope.unsignedTransaction = unsignedTransaction;
+            $modalScope.waiting = false;
             $modalScope.readyToSign = true;
+            $modalScope.unsaved=true;
           } else {
             try {
               var bytes = Bitcoin.Util.hexToBytes(unsignedTransaction);
@@ -128,8 +130,21 @@ function TransactionGenerationController($scope, $modal, userService, walletTran
             prepareTransaction(data.transactionType, data.transactionData, data.from, $scope);
           };
           
+          $scope.saveUnsigned = function(unsignedHex){
+            var exportBlob = new Blob([unsignedHex], {
+              type: 'application/json;charset=utf-8'
+            });
+            fileName="tx"+(new Date).getTime()+".json";
+            saveAs(exportBlob, fileName);
+            $scope.saved=true;
+          };
+          
           $scope.cancel = function () {
             $modalInstance.dismiss('cancel');
+          };
+          
+          $scope.close = function () {
+            $modalInstance.dismiss('close');
           };
         },
         resolve: {

@@ -3,16 +3,29 @@
     <h3>You're about to send {{convertSatoshiToDisplayedValue(sendAmount)}} {{getDisplayedAbbreviation()}} and {{convertSatoshiToDisplayedValue(totalCost, true)}} BTC in transaction costs to {{sendTo}}</h3>
   <p><br>
   If the above is correct, please press Send Funds.
-  If you encounter an error, feel free to click away from the dialog and try again.
+  If you encounter an error, cancel and try again.
   </p>
+  <p ng-show="signOffline">
+    You will need to sign this transaction offline and come back to broadcast it and finish the send.
+  </p>
+  <div collapse="!readyToSign">
+    {{unsignedTransaction}}
+  </div>
+</div>
 <div class="modal-footer">
-    <div class="row" ng-hide=transactionSuccess>
-    <button ng-disabled="clicked" class="btn btn-primary" ng-click="ok()">Yes, send my funds</button>
-    <button ng-disabled="wating" class="btn btn-warning" ng-click="cancel()">Cancel</button>
-    <img class="" src="/assets/img/34-1.gif" ng-show="waiting">
+    <div class="row" ng-hide="transactionSuccess || readyToSign">
+      <button ng-disabled="clicked" class="btn btn-primary" ng-click="ok()">Yes, send my funds</button>
+      <button ng-disabled="wating" class="btn btn-warning" ng-click="cancel()">Cancel</button>
+      <img class="" src="/assets/img/34-1.gif" ng-show="waiting">
     </div>
       <br>
     <div class="row">
+      <div ng-show="readyToSign">
+        <h4 class="pull-left" style="color:green;">Your transaction was generated successfully, now save the text above and sign it on your Armory offline computer. Come back with the signed text to broadcast it.  
+          </h4>
+        <button ng-click="saveUnsigned(unsignedTransaction)" class="btn btn-success" ng-hide="saved">Save</button>
+        <button ng-click="close()" class="btn" ng-class="{btn-danger:unsaved,btn-success:saved}"
+      </div>
       <div ng-show="transactionSuccess">
         <h4 class="pull-left" style="color:green"> Funds were sent successfully, 
         check your transaction <a target="_blank" href="{{url}}">here.</a></h4>
