@@ -286,8 +286,8 @@ angular.module('omniwallet').factory('userService', ['$rootScope', '$http', '$in
                         id: propertyID,
                         symbol: balanceItem.symbol,
                         divisible: balanceItem.divisible,
-                        tradableAddresses: tradeable ? [service.data.wallet.addresses[i].address] : [],
-                        watchAddresses: !tradeable ? [service.data.wallet.addresses[i].address] : [],
+                        tradableAddresses: tradable ? [service.data.wallet.addresses[i].address] : [],
+                        watchAddresses: !tradable ? [service.data.wallet.addresses[i].address] : [],
                         addresses: function(){ return this.tradableAddresses.concat(this.watchAddresses); },
                         tradable:tradable
                       };
@@ -304,8 +304,8 @@ angular.module('omniwallet').factory('userService', ['$rootScope', '$http', '$in
                       name: balanceItem.symbol,
                       symbol: balanceItem.symbol,
                       divisible: balanceItem.divisible,
-                      tradableAddresses: tradeable ? [service.data.wallet.addresses[i].address] : [],
-                      watchAddresses: !tradeable ? [service.data.wallet.addresses[i].address] : [],
+                      tradableAddresses: tradable ? [service.data.wallet.addresses[i].address] : [],
+                      watchAddresses: !tradable ? [service.data.wallet.addresses[i].address] : [],
                       addresses: function(){ return this.tradableAddresses.concat(this.watchAddresses); },
                       tradable:tradable
                     };
