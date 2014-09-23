@@ -51,16 +51,22 @@ angular.module('omniwallet')
                     if (currencyItem.symbol == 'BTC') {
                       balances[currencyItem.symbol].name = "Bitcoin"
                     }
-		    if (addr.privkey) {
-			hasPrivate=true;
-		    } else {
-			hasPrivate=false;
-		    }
+            		    if (addr.privkey) {
+            			   hasPrivate=true;
+            		    } else {
+            			   hasPrivate=false;
+            		    }
+            		    if (addr.offline) {
+                     isOffline=true;
+                    } else {
+                     isOffline=false;
+                    }
                     balances[currencyItem.symbol].addresses[result.data.address] = {
                       "address": result.data.address,
                       "balance": +value || currencyItem.value,
                       "value": appraiser.getValue(currencyItem.value, currencyItem.symbol),
-		      "private": hasPrivate
+		                  "private": hasPrivate,
+		                  "offline": isOffline
                     };
                   });
                 }
