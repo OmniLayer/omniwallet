@@ -1,3 +1,4 @@
+import smtplib
 import os
 import base64
 import werkzeug.security as ws
@@ -7,6 +8,11 @@ from Crypto.PublicKey import RSA
 from flask import Flask, request, jsonify, abort, json
 from simplekv.fs import FilesystemStore
 from uuid import UUID
+from email.MIMEMultipart import MIMEMultipart
+from email.MIMEBase import MIMEBase
+from email.MIMEText import MIMEText
+from email.Utils import COMMASPACE, formatdate
+from email import Encoders
 
 ACCOUNT_CREATION_DIFFICULTY = '0400'
 LOGIN_DIFFICULTY = '0400'
@@ -17,6 +23,8 @@ data_dir_root = os.environ.get('DATADIR')
 
 store_dir = data_dir_root + '/sessions/'
 session_store = FilesystemStore(store_dir) # TODO: Need to roll this into a SessionInterface so multiple services can hit it easily
+
+emailFrom = "no-reply@omniwallet.org"
 
 app = Flask(__name__)
 app.debug = True
@@ -62,6 +70,7 @@ def create():
     print 'UUID not in session'
     abort(403)
 
+  email = request.form['email'] if 'email' in request.form else None
   nonce = request.form['nonce']
   public_key = request.form['public_key'].encode('UTF-8')
   wallet = request.form['wallet']
@@ -79,6 +88,20 @@ def create():
   session_store.delete(session_pow_challenge)
   session_public_key = session + "_public_key"
   session_store.put(session_public_key, public_key)
+
+  if email is not None:
+    msg = MIMEMultipart()
+    msg['From'] = emailFrom
+    msg['To'] = email
+    msg['Subject'] = "Omniwallet backup file"
+    part = MIMEBase('application', "octet-stream")
+    part.set_payload(wallet)
+    Encoders.encode_base64(part)
+    part.add_header('Content-Disposition', 'attachment; filename="%s.json"' % uuid)
+    msg.attach(part)
+    smtp = smtplib.SMTP('localhost')
+    smtp.sendmail(emailFrom, email, msg.as_string())
+    smtp.close()
 
   return ""
 
