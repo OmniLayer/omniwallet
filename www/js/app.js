@@ -5,7 +5,8 @@ var app = angular.module('omniwallet', [
   'ui.bootstrap',
   'ui.bootstrap.modal',
   'ngNumeraljs',
-  'vr.filters.passwordStrength'
+  'vr.filters.passwordStrength',
+  'ngIdle'
 ], function($routeProvider, $locationProvider, $httpProvider) {
 
   if (!$httpProvider.defaults.headers.get)
@@ -27,7 +28,8 @@ var app = angular.module('omniwallet', [
           view = '/partials/wallet_assets_' + route.page + '.html';
         else
           view = '/partials/explorer_assets.html';
-        
+
+        ga('send', 'event', 'button', 'click', route.page);
         return view;
       }
     }).otherwise({
@@ -45,6 +47,8 @@ var app = angular.module('omniwallet', [
 
         var view = '/partials/wallet_' + route.page + '.html';
         //DEBUG console.log(view, route.page, view == '/wallet_addresses.html')
+
+        ga('send', 'event', 'button', 'click', route.page);
         return view
       }
     }).otherwise({
@@ -61,6 +65,8 @@ var app = angular.module('omniwallet', [
 
         var view = '/partials/explorer_' + route.page + '.html';
         //DEBUG console.log(view, route.page, view == '/wallet_addresses.html')
+
+        ga('send', 'event', 'button', 'click', route.page);
         return view
       }
     }).otherwise({
@@ -77,6 +83,8 @@ var app = angular.module('omniwallet', [
 
         var view = '/partials/about_' + route.page + '.html';
         //DEBUG console.log(view, route.page, view == '/wallet_addresses.html')
+
+        ga('send', 'event', 'button', 'click', route.page);
         return view
       }
     }).when('/', {
@@ -97,8 +105,12 @@ var app = angular.module('omniwallet', [
   $locationProvider.html5Mode(true).hashPrefix('!');
 });
 
-
-app.config(function() {}).run(function(userService, $location) {
+app.config(function($idleProvider, $keepaliveProvider) {
+  $idleProvider.idleDuration(config.idleDuration);
+  $idleProvider.warningDuration(config.idleWarningDuration);
+  // $keepaliveProvider.interval(2);
+})
+.run(function(userService, $location) {
   //Whitelist pages
   whitelisted = ['login', 'about', 'status', 'explorer'];
 

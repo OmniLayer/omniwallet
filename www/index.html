@@ -22,7 +22,9 @@
     <link rel="stylesheet" href="/bower_components/bootstrap/dist/css/bootstrap-theme.min.css">
     <link rel="stylesheet" href="/theme.css">
 
-    <script src="/socket.io/socket.io.js"></script> 
+    <script src="/config.js"></script>
+
+    <script src="/socket.io/socket.io.js"></script>
     <script> var socket = io(); </script>
 
     <script src="/bower_components/underscore/underscore.js"></script>
@@ -31,6 +33,7 @@
     <script src="/bower_components/angular-route/angular-route.js"></script>
     <script src="/bower_components/numeraljs/numeral.js"></script>
     <script src="/bower_components/angular-numeraljs/src/angular-numeraljs.js"></script>
+    <script src="/bower_components/angular-idle/src/angular-idle.js"></script>
     <script src="/bower_components/angular-password-strength/build/angular-password-strength.js"></script>
     <script src="/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
     <script src="/bower_components/angular-bootstrap/ui-bootstrap.min.js"></script>
@@ -78,6 +81,7 @@
          </div>
            <div ng-view></div>
          <br/><br />
+          <div class="row"></div>
          <div class="footer">
           <div ng-include="templates['footer']"></div> 
          </div>

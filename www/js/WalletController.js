@@ -86,7 +86,7 @@ function WalletHistoryController($scope, $q, $http, userService, hashExplorer) {
 
 
     angular.forEach($scope.addresses, function(addrObject) {
-      promises.push($http.post('/v1/address/addr/', {
+      promises.push($http.post('/v1/transaction/address', {
         'addr': addrObject.address
       })
       .success(function(data, status, headers, config) {
@@ -165,7 +165,7 @@ function WalletHistoryController($scope, $q, $http, userService, hashExplorer) {
     $scope.isLoading = "True";
 
     console.log('Addr request 4');
-    $http.post('/v1/address/addr/', {
+    $http.post('/v1/transaction/address', {
         'addr': address
       })
       .success(function(data, status, headers, config) {
@@ -248,19 +248,47 @@ function WalletTradeController($scope, $http, $q, userService) {
   $scope.history = '/partials/wallet_history.html';
 
   $scope.setView = function(view, data) {
-    if (view != 'tradeInfo')
-      $scope.onTradeView = false
+    if (view != 'tradeInfo'){
+      if (view == 'saleOffer') {
+        if ($scope.hasCoins) {
+          $scope.onSaleView = true;
+          $scope.saleView = $scope.tradeTemplates[view];
+          $scope.onTradeView = false;
+        }
+        else
+        {
+          $scope.showNoCoinAlert = true;
+        }
+      }
+      else
+      {
+        $scope.tradeView = $scope.tradeTemplates[view];
+        $scope.onSaleView = false;
+        $scope.onTradeView = false;
+        $scope.showNoCoinAlert = false;
+      }
+    }
     else
-      $scope.onTradeView = true
-    $scope.tradeView = $scope.tradeTemplates[view]
-
+    {
+      $scope.tradeView = $scope.tradeTemplates[view];
+      $scope.onTradeView = true;
+      $scope.onSaleView = false;
+      $scope.showNoCoinAlert = false;
+    }
     $scope.global[view] = data;
   }
-  
+  $scope.hideNoCoinAlert = function()
+  {
+    $scope.showNoCoinAlert = false;
+  }
   $scope.$on("setView", function(event, args){
     $scope.setView(args.view,args.data);
   });
-
+  
+  $scope.setHasCoins = function(hideForm)
+  {
+    $scope.hasCoins = !hideForm;
+  }
   $scope.tradeTemplates = {
     'tradeInfo': '/partials/wallet_info.html',
     'simpleSend': '/partials/wallet_send.html',
@@ -287,6 +315,9 @@ function WalletTradeController($scope, $http, $q, userService) {
       $scope.activeCurrencyPair = currencyPair
 
     $scope.global.getData();
+    var random = Math.random();
+    $scope.saleView = '/partials/wallet_sale.html?r='+random;
+    $scope.showNoCoinAlert = false;
   }
   $scope.isActiveCurrencyPair = function(currencyPair) {
     if (angular.equals(currencyPair, $scope.activeCurrencyPair))
@@ -370,54 +401,6 @@ function WalletTradeOverviewController($scope, $http, $q, userService, hashExplo
     );
   }
 }
-
-function WalletTradeHistoryController($scope, $http, $q, userService, hashExplorer) {
-  $scope.setHashExplorer = hashExplorer.setHash.bind(hashExplorer)
-  $scope.selectedAddress = userService.getAllAddresses()[0].address;
-  $scope.addresses = userService.getAllAddresses();
-  $scope.pairs = getPairs()
-  $scope.currPair = $scope.pairs[0] //TMSC-to-BTC
-
-  function getPairs() {
-    return ['TMSC/BTC', 'MSC/BTC']
-  }
-
-  $scope.getData = function getData(address) {
-    var transaction_data = []
-    var postData = {
-      type: 'ADDRESS',
-      address: JSON.stringify([address]),
-      currencyType: $scope.currPair.split('/')[0],
-      offerType: 'BOTH'
-    };
-    $http.post('/v1/exchange/offers', postData).success(function(offerSuccess) {
-      if (offerSuccess.data != "ADDRESS_NOT_FOUND") {
-        var dataLength = 0;
-        Object.keys(offerSuccess.data).forEach(function(e, i, a) {
-          dataLength += offerSuccess.data[e].length;
-        })
-        if (dataLength != 0) {
-          var type_offer = Object.keys(offerSuccess.data);
-
-          angular.forEach(type_offer, function(offerType) {
-            //DEBUG console.log(offerType, offerSuccess.data[offerType])
-            angular.forEach(offerSuccess.data[offerType], function(offer) {
-              transaction_data.push(offer)
-            });
-          })
-        } else transaction_data.push({
-            tx_hash: 'No offers/bids found for this pair/address, why not make one?'
-          })
-      } else transaction_data.push({
-          tx_hash: 'No offers/bids found for this pair/address, why not make one?'
-        })
-      $scope.orderbook = transaction_data;
-    }
-    );
-  }
-
-}
-
 
 function WalletTradePendingController($scope, $http, $q, userService, hashExplorer) {
   $scope.setHashExplorer = hashExplorer.setHash.bind(hashExplorer)

@@ -38,6 +38,12 @@ server {
             return 301 /wallet/overview;
         }
 
+        #Limit Perl Access per phil's recommendation
+        if ($http_user_agent ~ "libwww-perl.*"){
+            return 403;
+            break;
+        }
+
         # Make site accessible from http://localhost/
         server_name localhost;
 
@@ -62,20 +68,21 @@ server {
         }
 
         location ~ "^/v1/system/revision.json$" {
-                alias /var/lib/omniwallet/www/revision.json;
+                #alias /var/lib/omniwallet/www/revision.json;
+                 rewrite ^ /v1/system/revision;
         }
 
         location ~ "^/v1/exchange/offers/(.*)$" {
                 alias /var/lib/omniwallet/www/offers/$1;
         }
 
-        location ~ "^/v1/transaction/general/(.*)$" {
-                alias /var/lib/omniwallet/www/general/$1;
-        }
+        #location ~ "^/v1/transaction/general/(.*)$" {
+        #        alias /var/lib/omniwallet/www/general/$1;
+        #}
 
-        location ~ "^/v1/transaction/tx/(.*)$" {
-                alias /var/lib/omniwallet/www/tx/$1;
-        }
+        #location ~ "^/v1/transaction/tx/(.*)$" {
+        #        alias /var/lib/omniwallet/www/tx/$1;
+        #}
 
         #location ~ "^/v1/property/([0-9]*.json)$" {
         #        add_header Access-Control-Allow-Origin *;
@@ -174,6 +181,17 @@ server {
                 uwsgi_pass 127.0.0.1:$PORT;
         }
 
+        location = /v1/transaction { rewrite ^ /v1/transaction; }
+        location /v1/transaction { try_files $uri @flask_transaction_service; }
+        location @flask_transaction_service {
+                include uwsgi_params;
+                uwsgi_param SCRIPT_NAME /v1/transaction;
+                uwsgi_param UWSGI_MODULE transaction_service;
+                uwsgi_param UWSGI_CALLABLE app;
+                uwsgi_modifier1 30;
+                uwsgi_pass 127.0.0.1:$PORT;
+        }
+
         location = /v1/mastercoin_verify { rewrite ^ /v1/mastercoin_verify/; }
         location /v1/mastercoin_verify { try_files $uri @flask_mastercoin_verify; }
         location @flask_mastercoin_verify {
@@ -217,4 +235,16 @@ server {
                 uwsgi_modifier1 30;
                 uwsgi_pass 127.0.0.1:$PORT;
         }
+
+        location = /v1/system { rewrite ^ /v1/system; }
+        location /v1/system { try_files $uri @flask_stats_service; }
+        location @flask_stats_service {
+                include uwsgi_params;
+                uwsgi_param SCRIPT_NAME /v1/system;
+                uwsgi_param UWSGI_MODULE stats_service;
+                uwsgi_param UWSGI_CALLABLE app;
+                uwsgi_modifier1 30;
+                uwsgi_pass 127.0.0.1:$PORT;
+        }
+
 }

@@ -16,10 +16,10 @@ def getproperty(prop_id):
     except ValueError:
         abort(make_response('This endpoint only consumes valid input', 400))
 
-    sqlconn.execute("select * from transactions t, smartproperties sp where sp.createtxdbserialnum = t.txdbserialnum and sp.propertyid=" + str(property_) )
+    sqlconn.execute("select * from txjson txj, transactions t, smartproperties sp where sp.createtxdbserialnum = txj.txdbserialnum and sp.createtxdbserialnum = t.txdbserialnum and sp.propertyid=" + str(property_) )
     ROWS= sqlconn.fetchall()
 
-    print property_, ROWS[0]
+    #print property_, ROWS[0]
 
     def dehexify(hex_str):
         temp_str=[]
@@ -29,11 +29,13 @@ def getproperty(prop_id):
             else:
                 temp_str.append('?')
         return ''.join(temp_str)
-                   
+                 
+    txJson = ROWS[0][:3]
+    ROWS = [ ROWS[0][3:] ]
+  
     txData = ROWS[0][:-1]
     mpData = ROWS[0][-1]
-    
-    #TODO FIXME Need to dehexify property* fields
+
     txType = txData[3]
 
     #map tx 50,51, and 54 data into this data blob
@@ -44,17 +46,17 @@ def getproperty(prop_id):
       "ecosystem": '1' if txData[5] == 'Production' else '2', 
       "from_address": txData[13], 
       "previous_property_id": "(null)", #TODO FIXME
-      "propertyCategory": mpData['category'], 
-      "propertyData": mpData['data'], 
-      "propertyName": mpData['name'], 
-      "propertySubcategory": mpData['subcategory'], 
-      "propertyUrl": mpData['url'], 
+      "propertyCategory": dehexify( mpData['category'] ), 
+      "propertyData": dehexify( mpData['data'] ), 
+      "propertyName": dehexify( mpData['name'] ), 
+      "propertySubcategory": dehexify( mpData['subcategory'] ), 
+      "propertyUrl": dehexify( mpData['url'] ), 
       "propertyType": '0002' if mpData['divisible'] == True else '0001', 
       "formatted_property_type": int('0002' if mpData['divisible'] == True else '0001'), 
       "transactionType": txData[3], 
       "transactionVersion": txData[4], 
       "tx_hash": txData[0], 
-      "tx_time": '(null)' #TODO FIXME
+      "tx_time": txJson[-1]['blocktime']
     }
 
     if txType == 50: ret['numberOfProperties'] = mpData['totaltokens']; 
