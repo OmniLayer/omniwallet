@@ -44,14 +44,8 @@ angular.module('omniwallet').factory('propertiesService',['$http',function($http
       return promise;
     },
     
-    getCrowdsale:function(propertyId){
-      var url = '/v1/properties/getcrowdsale/'+propertyId;
-      var promise = $http.get(url);
-      return promise;
-    },
-    
-    getCrowdsaleHistory:function(propertyId,from,count){
-      var url = '/v1/properties/getcrowdsalehistory/'+propertyId;
+    getHistory:function(propertyId,from,count){
+      var url = '/v1/properties/gethistory/'+propertyId;
       var data = {
         start: from,
         count: count

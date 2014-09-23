@@ -105,7 +105,7 @@ function AssetDetailsController($location, $route, $scope, $timeout, $element, $
     if ($scope.history.loading || $scope.history.loaded) return;
     $scope.history.loading=true;
     
-    propertiesService.getCrowdsaleHistory($scope.propertyId,$scope.history.transactions.length,5).then(function(result){
+    propertiesService.getHistory($scope.propertyId,$scope.history.transactions.length,5).then(function(result){
       $scope.history.total =  result.data.total;
       for (var i = 0; i < result.data.transactions.length; i++) {
         $scope.history.transactions.push(result.data.transactions[i]);
@@ -120,69 +120,65 @@ function AssetDetailsController($location, $route, $scope, $timeout, $element, $
   propertiesService.getProperty($scope.propertyId).then(function(result){
     $scope.property = result.data;
     
-    if(!$scope.property.fixedissuance)
-    {
-      propertiesService.getCrowdsale($scope.propertyId).then(function(result){
-        $scope.crowdsale = result.data;
-        // format data
-        $scope.crowdsale.participanttokens = new Big($scope.crowdsale.participanttokens.toFixed(8));
-        $scope.crowdsale.issuertokens = new Big($scope.crowdsale.issuertokens.toFixed(8));
-        
-        $scope.isOwner = userService.loggedIn() && userService.getAddressesWithPrivkey().indexOf($scope.crowdsale.issuer) > -1;
-        propertiesService.getProperty($scope.crowdsale.propertyiddesired).then(function(result){
-          $scope.acceptedCurrencies = [{propertyid:$scope.crowdsale.propertyiddesired,name:result.data.name,rate:$scope.crowdsale.tokensperunit}];
-        });
-        
-        var startDate = new Date($scope.crowdsale.starttime*1000);
-        $scope.formatedStartDate = startDate.toLocaleDateString();
-        
-        var now = new Date();
-        $scope.daysAgo = Math.round((now.getTime() - startDate.getTime()) / (1000*60*60*24));
-        $scope.earlyBirdBonus =  ((($scope.crowdsale.deadline - (now.getTime()/1000)) / 604800) * $scope.crowdsale.earlybonus).toFixed(1);
-        $scope.estimatedWorth = "0";
-        
-        // Participate form data
-        $scope.sendTo = $scope.crowdsale.issuer;
-        userService.getCurrencies().filter(function(currency){
-             return currency.tradable;
-        }).forEach(function(coin){
-          if(coin.id==$scope.crowdsale.propertyiddesired){
-            $scope.selectedCoin = coin;    
-            $scope.canParticipate = userService.loggedIn();
-            $scope.infoMessage = userService.loggedIn() ? "Get some tokens!" : "Login to participate";
-            $scope.tokenStep = $scope.tokenMin = coin.divisible ? 0.00000001 : 1;
-            $scope.tokenMax = coin.divisible ? "92233720368.54775807" : "9223372036854775807";
-          }
-        });
-        // we need to compile the timer dinamically to get the appropiate end-date set.
-        var endtime = $scope.crowdsale.deadline * 1000;
-        $timeout(function (){
-          var timerNode = $('<timer end-time='+endtime+'> \
-            <span class="countdown-group"> \
-              <span class="countdown-number">{{days}}</span> \
-              <div class="countdown-label">day{{daysS}}</div> \
-            </span> \
-            : \
-            <span class="countdown-group"> \
-              <span class="countdown-number">{{hours}}</span> \
-              <div class="countdown-label">hour{{hoursS}}</div> \
-            </span> \
-            : \
-            <span class="countdown-group"> \
-              <span class="countdown-number">{{minutes}}</span> \
-              <div class="countdown-label">minute{{minutesS}}</div> \
-            </span> \
-            : \
-            <span class="countdown-group"> \
-              <span class="countdown-number">{{seconds}}</span> \
-              <div class="countdown-label">second{{secondsS}}</div> \
-            </span> \
-          </timer>');
-          $element.find('#timerWrapper').append(timerNode);
-          $compile(timerNode)($scope);
-        });
-      });
-    }
+    $scope.crowdsale = result.data;
+    // format data
+    $scope.crowdsale.participanttokens = new Big($scope.crowdsale.tokensissued);
+    var totalTokens = new Big($scope.crowdsale.totaltokens);
+    $scope.crowdsale.issuertokens = totalTokens.minus($scope.crowdsale.participanttokens);
+    
+    $scope.isOwner = userService.loggedIn() && userService.getAddressesWithPrivkey().indexOf($scope.crowdsale.issuer) > -1;
+    propertiesService.getProperty($scope.crowdsale.propertyiddesired).then(function(result){
+      $scope.acceptedCurrencies = [{propertyid:$scope.crowdsale.propertyiddesired,name:result.data.name,rate:$scope.crowdsale.tokensperunit}];
+    });
+    
+    var startDate = new Date($scope.crowdsale.starttime*1000);
+    $scope.formatedStartDate = startDate.toLocaleDateString();
+    
+    var now = new Date();
+    $scope.daysAgo = Math.round((now.getTime() - startDate.getTime()) / (1000*60*60*24));
+    $scope.earlyBirdBonus =  ((($scope.crowdsale.deadline - (now.getTime()/1000)) / 604800) * $scope.crowdsale.earlybonus).toFixed(1);
+    $scope.estimatedWorth = "0";
+    
+    // Participate form data
+    $scope.sendTo = $scope.crowdsale.issuer;
+    userService.getCurrencies().filter(function(currency){
+         return currency.tradable;
+    }).forEach(function(coin){
+      if(coin.id==$scope.crowdsale.propertyiddesired){
+        $scope.selectedCoin = coin;    
+        $scope.canParticipate = userService.loggedIn();
+        $scope.infoMessage = userService.loggedIn() ? "Get some tokens!" : "Login to participate";
+        $scope.tokenStep = $scope.tokenMin = coin.divisible ? 0.00000001 : 1;
+        $scope.tokenMax = coin.divisible ? "92233720368.54775807" : "9223372036854775807";
+      }
+    });
+    // we need to compile the timer dinamically to get the appropiate end-date set.
+    var endtime = $scope.crowdsale.deadline * 1000;
+    $timeout(function (){
+      var timerNode = $('<timer end-time='+endtime+'> \
+        <span class="countdown-group"> \
+          <span class="countdown-number">{{days}}</span> \
+          <div class="countdown-label">day{{daysS}}</div> \
+        </span> \
+        : \
+        <span class="countdown-group"> \
+          <span class="countdown-number">{{hours}}</span> \
+          <div class="countdown-label">hour{{hoursS}}</div> \
+        </span> \
+        : \
+        <span class="countdown-group"> \
+          <span class="countdown-number">{{minutes}}</span> \
+          <div class="countdown-label">minute{{minutesS}}</div> \
+        </span> \
+        : \
+        <span class="countdown-group"> \
+          <span class="countdown-number">{{seconds}}</span> \
+          <div class="countdown-label">second{{secondsS}}</div> \
+        </span> \
+      </timer>');
+      $element.find('#timerWrapper').append(timerNode);
+      $compile(timerNode)($scope);
+    });
   });
   
   
