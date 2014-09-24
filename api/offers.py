@@ -130,7 +130,7 @@ def filterOffers(addresses):
     qs = genQs('or', 'ao', 'seller', addresses)
 
     ROWS=dbSelect("select * from activeoffers ao, transactions t, txjson txj where " + qs + \
-                  "and offerstate='active' and ao.createtxdbserialnum=t.txdbserialnum "
+                  " and offerstate='active' and ao.createtxdbserialnum=t.txdbserialnum "
                   "and ao.createtxdbserialnum=txj.txdbserialnum")
 
     #print query
@@ -149,7 +149,7 @@ def filterOffers(addresses):
     qs = genQs('or', 'oa', 'buyer', addresses)
 
     ROWS=dbSelect("select * from offeraccepts oa, transactions t, txjson txj where " + qs + \
-                  "and expiredstate='f' and oa.linkedtxdbserialnum=t.txdbserialnum "
+                  " and expiredstate='f' and oa.linkedtxdbserialnum=t.txdbserialnum "
                   "and oa.linkedtxdbserialnum=txj.txdbserialnum")
 
     #print query
