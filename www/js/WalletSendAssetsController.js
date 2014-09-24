@@ -90,6 +90,7 @@ function WalletSendAssetsController($modal, $scope, $http, $q, userService, wall
   transactionGenerationController.setModalScope = function($modalScope){
     $modalScope.transactionSuccess = false, $modalScope.transactionError = false, $modalScope.waiting = false, $modalScope.privKeyPass = {};
     $modalScope.convertSatoshiToDisplayedValue=  $scope.convertSatoshiToDisplayedValue,
+    $modalScope.convertDisplayedValue = $scope.convertDisplayedValue;
     $modalScope.getDisplayedAbbreviation=  $scope.getDisplayedAbbreviation,
     $modalScope.sendAmount=  $scope.selectedCoin.divisible ? +$scope.convertDisplayedValue($scope.sendAmount) : +$scope.sendAmount,
     $modalScope.minerFees= +$scope.convertDisplayedValue($scope.minerFees),
@@ -100,6 +101,8 @@ function WalletSendAssetsController($modal, $scope, $http, $q, userService, wall
     $modalScope.setBitcoinValue = $scope.setBitcoinValue;
     $modalScope.resetAmountAndValue = $scope.resetAmountAndValue;
     $modalScope.selectedCoinSymbol = $scope.walletAssets.selectedCoin.symbol;
+    $modalScope.value = $scope.value;
+    $modalScope.btcValueChanged = false;
   };
   
 
@@ -140,14 +143,35 @@ function WalletSendAssetsController($modal, $scope, $http, $q, userService, wall
               $scope.waiting = false;
               $scope.transactionError = true;
               $scope.error = 'The value of BTC has changed. Please check the send details and retry.';
-              $scope.setBitcoinValue($scope.getBitcoinValue());
-              $scope.resetAmountAndValue();
+              $scope.btcValueChanged = true;           
             }
           };
           
           $scope.cancel = function () {
             $modalInstance.dismiss('cancel');
           };
+          $scope.goBack = function(){
+            $scope.setBitcoinValue($scope.getBitcoinValue());
+            $scope.resetAmountAndValue();
+            $scope.cancel();
+          }
+          $scope.sendByValue = function(){
+            $scope.sendAmount = $scope.convertDisplayedValue($scope.value/$scope.getBitcoinValue());
+            $scope.btcValueChanged = false;
+            $scope.transactionError = false;
+            $scope.bitcoinValue = $scope.getBitcoinValue();
+            $scope.setBitcoinValue($scope.getBitcoinValue());
+            $scope.resetAmountAndValue();
+          }
+          $scope.sendByAmount = function(){
+            var amount = $scope.convertSatoshiToDisplayedValue($scope.sendAmount);
+            $scope.value = amount*$scope.getBitcoinValue();
+            $scope.btcValueChanged = false;
+            $scope.transactionError = false;
+            $scope.bitcoinValue = $scope.getBitcoinValue();
+            $scope.setBitcoinValue($scope.getBitcoinValue());
+            $scope.resetAmountAndValue();
+          }
         },
         resolve: {
           data: function() {
