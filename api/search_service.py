@@ -5,10 +5,10 @@ from msc_apps import *
 import glob, json
 import requests
 
-tools_dir = os.environ.get('TOOLSDIR')
-lib_path = os.path.abspath(tools_dir)
-sys.path.append(lib_path)
-data_dir_root = os.environ.get('DATADIR')
+#tools_dir = os.environ.get('TOOLSDIR')
+#lib_path = os.path.abspath(tools_dir)
+#sys.path.append(lib_path)
+#data_dir_root = os.environ.get('DATADIR')
 
 app = Flask(__name__)
 app.debug = True
