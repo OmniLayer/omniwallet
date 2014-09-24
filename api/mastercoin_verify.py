@@ -2,11 +2,10 @@ import os
 import glob
 import re
 from flask import Flask, request, jsonify, abort, json
-import psycopg2, psycopg2.extras
+#import psycopg2, psycopg2.extras
 import msc_apps
 
-sqlconn = msc_apps.sql_connect()
-data_dir_root = os.environ.get('DATADIR')
+#data_dir_root = os.environ.get('DATADIR')
 
 app = Flask(__name__)
 app.debug = True
@@ -14,8 +13,7 @@ app.debug = True
 #TODO COnversion
 @app.route('/properties')
 def properties():
-  sqlconn.execute("select * from smartproperties")
-  ROWS= sqlconn.fetchall()
+  ROWS=dbSelect("select * from smartproperties")
 
   def dehexify(hex_str):
       temp_str=[]
@@ -43,9 +41,8 @@ def addresses():
   response = []
 
   currency_id = re.sub(r'\D+', '', currency_id) #check alphanumeric
-  #sqlconn.execute("select address,balanceavailable,balancereserved, from addressbalances ab,  where propertyid=" + str(currency_id))
-  sqlconn.execute("select address,balanceavailable,balancereserved,sp.propertytype from addressbalances ab, smartproperties sp where ab.propertyid=sp.propertyid and sp.propertyid=" + str(currency_id))
-  ROWS= sqlconn.fetchall()
+  ROWS=dbSelect("select address,balanceavailable,balancereserved,sp.propertytype from addressbalances ab, smartproperties sp "
+                "where ab.propertyid=sp.propertyid and sp.propertyid=%s",[currency_id])
 
   for addrrow in ROWS:
       res = {
@@ -80,8 +77,8 @@ def transactions(address=None):
 
   currency_id = re.sub(r'\D+', '', currency_id) #check alphanumeric
 
-  sqlconn.execute("select * from addressesintxs a, transactions t where a.address=\'"+address+"\' and a.txdbserialnum = t.txdbserialnum and a.propertyid=" + str(currency_id))
-  ROWS= sqlconn.fetchall()
+  ROWS=dbSelect("select * from addressesintxs a, transactions t where a.address=%s  and a.txdbserialnum = t.txdbserialnum and a.propertyid=%s",
+                (address, currency_id))
 
   transactions = []
   for txrow in ROWS:

@@ -13,8 +13,6 @@ data_dir_root = os.environ.get('DATADIR')
 app = Flask(__name__)
 app.debug = True
 
-sqlconn = sql_connect()
-
 @app.route('/', methods=['GET'])
 def search():
   if 'query' in request.args:
@@ -22,8 +20,7 @@ def search():
   else:
       return jsonify({ 'status': 400, 'data': 'No query found in request' })
 
-  sqlconn.execute("select * from transactions t, txjson txj where t.txhash ~* \'" + str(query) + "\' and t.txdbserialnum=txj.txdbserialnum")
-  ROWS= sqlconn.fetchall()
+  ROWS=dbSelect("select * from transactions t, txjson txj where t.txhash ~* \'" + str(query) + "\' and t.txdbserialnum=txj.txdbserialnum")
 
   response = []
   if len(ROWS) > 0:
