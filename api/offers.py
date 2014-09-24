@@ -82,7 +82,7 @@ def mapSchema(row):
       'currencyId': str(rawdata['propertyid']),
       'currency_str': 'Mastercoin' if str(rawdata['propertyid']) == '1' else 'Test Mastercoin',
       'formatted_amount': '%.8f' % remaining,
-      'sell_tx_hash': sellofferdata[-1]['txid'],
+      'sell_offer_txid': sellofferdata[-1]['txid'],
       #'formatted_amount_available': str( row[1] / Decimal(1e8) ),
       #'formatted_bitcoin_amount_desired': str( row[2] / Decimal(1e8) ),
       'formatted_price_per_coin': '%.8f' % ppc,
@@ -121,10 +121,10 @@ def getsell(txdbserialnum):
     return ROWS[0]
 
 def genQs(prefix, tbl_abbr, field, array):
-    qs = '(' + tbl_abbr + '.' + field + '=\'' + array[0] + '\' '
+    qs = '(' + tbl_abbr + '.' + field + '=\'' + array[0] + '\' ' # table abbrev "." fieldname = address 
     for entry in array[1:]:
       entry = re.sub(r'\W+', '', entry) #check alphanumeric
-      qs += prefix + ' ' + tbl_abbr + '.' + field + '=\'' + entry +'\' '
+      qs += prefix + ' ' + tbl_abbr + '.' + field + '=\'' + entry +'\' '     # "and/or" table abbrev "." fieldname = next address
     return qs + ') '
 
 def filterOffers(addresses):

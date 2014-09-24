@@ -102,14 +102,14 @@ def prepare_accept_tx_for_signing(buyer, amount, tx_hash, min_btc_fee=10000):
     if len(ROWS) == 0:
        error('no sell offer found for tx '+tx_hash)
 
-    sell_offer_tx_dict=mapSchema( sqlconn.fetchall()[0] )
+    sell_offer_tx_dict=mapSchema( ROWS[0] )
 
     try:
         seller=sell_offer_tx_dict['from_address']
         formatted_amount_available=sell_offer_tx_dict['formatted_amount_available']
         formatted_bitcoin_amount_desired=sell_offer_tx_dict['formatted_bitcoin_amount_desired']
-        formatted_fee_required=to_satoshi(sell_offer_tx_dict['formatted_fee_required'])
-        currency_id=sell_offer_tx_dict['currencyId']
+        formatted_fee_required=sell_offer_tx_dict['formatted_fee_required']
+        currency_id=hex(sell_offer_tx_dict['currencyId'])[2:].zfill(8)
     except KeyError:
         error('missing field on tx '+tx_hash)
 
