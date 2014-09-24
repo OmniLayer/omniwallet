@@ -7,8 +7,7 @@ sys.path.append(lib_path)
 from msc_apps import *
 from decimal import *
 
-sqlconn = sql_connect()
-data_dir_root = os.environ.get('DATADIR')
+#data_dir_root = os.environ.get('DATADIR')
 
 def offers_response(response_dict):
     expected_fields=['type','currencyType']
@@ -36,8 +35,8 @@ def filterOffersByTime( currency_type , time_seconds):
 
     atleast_now = int( str( int(time.time() - time_seconds) ) + '000' )
 
-    sqlconn.execute("select * from activeoffers ao, transactions t, txjson tj where ao.propertyidselling=" + currency + " and ao.createtxdbserialnum=t.txdbserialnum and ao.createtxdbserialnum=tj.txdbserialnum")
-    ROWS= sqlconn.fetchall()
+    ROWS=dbSelect("select * from activeoffers ao, transactions t, txjson tj where ao.propertyidselling=%s and "
+                  "ao.createtxdbserialnum=t.txdbserialnum and ao.createtxdbserialnum=tj.txdbserialnum", [currency])
 
     response = [ mapSchema(row) for row in ROWS if int(mapSchema(row)['tx_time']) > atleast_now ]
 
@@ -111,12 +110,8 @@ def getcolor(c):
 
 def getsell(txdbserialnum):
 
-    query= "select * from activeoffers ao, " + \
-           "transactions t, txjson txj where ao.createtxdbserialnum=" + txdbserialnum + \
-           " and t.txdbserialnum= " + txdbserialnum + \
-           " and txj.txdbserialnum= " + txdbserialnum
-    sqlconn.execute(query)
-    ROWS= sqlconn.fetchall()
+    ROWS=dbSelect("select * from activeoffers ao, transactions t, txjson txj where ao.createtxdbserialnum=%s "
+                  "and t.txdbserialnum=%s  and txj.txdbserialnum=%s ",(txdbserialnum,txdbserialnum,txdbserialnum))
     
     return ROWS[0]
 
@@ -134,12 +129,9 @@ def filterOffers(addresses):
     #Query all active offers
     qs = genQs('or', 'ao', 'seller', addresses)
 
-    query= "select * from activeoffers ao, " + \
-           "transactions t, txjson txj where " + qs + \
-           "and offerstate='active' and ao.createtxdbserialnum=t.txdbserialnum " + \
-           "and ao.createtxdbserialnum=txj.txdbserialnum"
-    sqlconn.execute(query)
-    ROWS= sqlconn.fetchall()
+    ROWS=dbSelect("select * from activeoffers ao, transactions t, txjson txj where " + qs + \
+                  "and offerstate='active' and ao.createtxdbserialnum=t.txdbserialnum "
+                  "and ao.createtxdbserialnum=txj.txdbserialnum")
 
     #print query
 
@@ -155,12 +147,10 @@ def filterOffers(addresses):
 
     #Query all active accepts
     qs = genQs('or', 'oa', 'buyer', addresses)
-    query= "select * from offeraccepts oa, " + \
-           "transactions t, txjson txj where " + qs + \
-           "and expiredstate='f' and oa.linkedtxdbserialnum=t.txdbserialnum " + \
-           "and oa.linkedtxdbserialnum=txj.txdbserialnum"
-    sqlconn.execute(query)
-    ROWS= sqlconn.fetchall()
+
+    ROWS=dbSelect("select * from offeraccepts oa, transactions t, txjson txj where " + qs + \
+                  "and expiredstate='f' and oa.linkedtxdbserialnum=t.txdbserialnum "
+                  "and oa.linkedtxdbserialnum=txj.txdbserialnum")
 
     #print query
 

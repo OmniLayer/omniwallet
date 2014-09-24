@@ -3,8 +3,6 @@ import os, sys, re
 import time
 from flask import Flask, request, jsonify, abort, json, make_response
 from msc_apps import *
-import psycopg2, psycopg2.extras
-from sqltools import *
 
 tools_dir = os.environ.get('TOOLSDIR')
 lib_path = os.path.abspath(tools_dir)
