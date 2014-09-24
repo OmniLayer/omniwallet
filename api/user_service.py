@@ -158,9 +158,6 @@ def failed_challenge(pow_challenge, nonce, difficulty):
   return pow_challenge_response[-len(difficulty):] != difficulty
 
 def write_wallet(uuid, wallet):
-  #filename = data_dir_root + '/wallets/' + uuid + '.json'
-  #with open(filename, 'w') as f:
-    #f.write(wallet)
   ROWS=dbSelect("select walletid from wallets where walletid=%s",[uuid])
   if len(ROWS)==0:
     #doesn't exist insert it
@@ -171,7 +168,7 @@ def write_wallet(uuid, wallet):
     
 def read_wallet(uuid):
   ROWS=dbSelect("select walletblob from wallets where walletid=%s",[uuid])
-  #check if the wallet is in the database and if not insert it
+  #check if the wallet is in the database and if not insert it 
   if len(ROWS)==0:
     filename = data_dir_root + '/wallets/' + uuid + '.json'
     with open(filename, 'r') as f:
