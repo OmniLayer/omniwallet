@@ -4,8 +4,7 @@ import time
 from flask import Flask, request, jsonify, abort, json, make_response
 from msc_apps import *
 import psycopg2, psycopg2.extras
- 
-sqlconn = sql_connect()
+from sqltools import *
 
 tools_dir = os.environ.get('TOOLSDIR')
 lib_path = os.path.abspath(tools_dir)
@@ -63,7 +62,7 @@ def subcategories():
 
 @app.route('/list', methods=['POST'])
 def list():
-    query = "ecosystem='"
+    query = ""
     try:
         value = int(re.sub(r'\D+', '', request.form['ecosystem']))
         valid_values = [1,2]
@@ -71,7 +70,6 @@ def list():
             abort(make_response('Field \'ecosystem\' invalid value, request failed', 400))
         
         ecosystem = "Production" if value == 1 else "Test" 
-        query += ecosystem +"'"
     except KeyError:
         abort(make_response('No field \'ecosystem\' in request, request failed', 400))
     except ValueError:
@@ -82,8 +80,7 @@ def list():
     except KeyError:
         issuer = ""
     
-    sqlconn.execute("select * from smartproperties where PropertyID > 2 AND " + str(query) + " ORDER BY PropertyName,PropertyID")
-    ROWS= sqlconn.fetchall()
+    ROWS= dbSelect("select * from smartproperties where PropertyID > 2 AND ecosystem='%s'%s ORDER BY PropertyName,PropertyID", (ecosystem,query))
     data=[]
     for property in ROWS:
         data.append({"currencyId":property[1],"propertyName":property[6]}) #get the json representation
@@ -97,7 +94,6 @@ def list():
 
 @app.route('/listactivecrowdsales', methods=['POST'])
 def listcrowdsales():
-    query = "ecosystem='"
     try:
         value = int(re.sub(r'\D+', '', request.form['ecosystem']))
         valid_values = [1,2]
@@ -105,15 +101,12 @@ def listcrowdsales():
             abort(make_response('Field \'ecosystem\' invalid value, request failed', 400))
         
         ecosystem = "Production" if value == 1 else "Test" 
-        query += ecosystem +"'"
     except KeyError:
         abort(make_response('No field \'ecosystem\' in request, request failed', 400))
     except ValueError:
         abort(make_response('Field \'ecosystem\' invalid value, request failed', 400))
 
-    
-    sqlconn.execute("select PropertyData from smartproperties where PropertyData::json->>'fixedissuance'='false' AND PropertyData::json->>'active'='true' AND " + str(query) + " ORDER BY PropertyName,PropertyID")
-    ROWS= sqlconn.fetchall()
+    ROWS= dbSelect("select PropertyData from smartproperties where PropertyData::json->>'fixedissuance'='false' AND PropertyData::json->>'active'='true' AND ecosystem='%s' ORDER BY PropertyName,PropertyID", (ecosystem))
     data=[row[0] for row in ROWS]
     
     response = {
@@ -125,8 +118,7 @@ def listcrowdsales():
 
 @app.route('/getdata/<int:property_id>')
 def getdata(property_id):
-    sqlconn.execute("select PropertyData from smartproperties where PropertyID="+str(property_id))
-    property=sqlconn.fetchone()
+    property=dbSelect("select PropertyData from smartproperties where PropertyID=%s",(property_id))[0]
     return jsonify(property[0])
 
 @app.route('/gethistory/<int:property_id>', methods=["POST"])
@@ -146,24 +138,22 @@ def gethistory(property_id):
         abort(make_response('Field \'count\' must be an integer, request failed', 400))
 
     
-    transactions_query = "select txjson.txdata as data from propertyhistory ph, txjson where ph.txdbserialnum =txjson.txdbserialnum and ph.propertyid="+str(property_id)+" order by ph.txdbserialnum LIMIT "+str(count)+" OFFSET "+str(start) + ";"
-    total_query = "select count(*) as total from propertyhistory where propertyid ="+str(property_id)+" group by propertyid"
+    transactions_query = "select txjson.txdata as data from propertyhistory ph, txjson where ph.txdbserialnum =txjson.txdbserialnum and ph.propertyid=%s order by ph.txdbserialnum LIMIT %s OFFSET %s;"
+    total_query = "select count(*) as total from propertyhistory where propertyid =%s group by propertyid"
     
     try:
         cache=HISTORY_COUNT_CACHE[str(property_id)]
         if(time.time()-cache[1] > 6000000):
-            sqlconn.execute(total_query)
-            total=sqlconn.fetchone()[0]
+            total=dbSelect(totalquery,(property_id))[0][0]
             HISTORY_COUNT_CACHE[str(property_id)] = (total, time.time())
         else:
             total=cache[0]    
     except KeyError:
-        sqlconn.execute(total_query)
-        total=sqlconn.fetchone()[0]
+        total=dbSelect(totalquery,(property_id))[0][0]
         HISTORY_COUNT_CACHE[str(property_id)] = (total, time.time())
     
-    sqlconn.execute(transactions_query)
-    ROWS=sqlconn.fetchall()
+    
+    ROWS=dbSelect(transactions_query,(property_id))
     transactions=[row[0] for row in ROWS]
     
     response = {
