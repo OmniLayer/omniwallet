@@ -7,6 +7,8 @@ from Crypto.PublicKey import RSA
 from flask import Flask, request, jsonify, abort, json
 from simplekv.fs import FilesystemStore
 from uuid import UUID
+from sqltools import *
+
 
 ACCOUNT_CREATION_DIFFICULTY = '0400'
 LOGIN_DIFFICULTY = '0400'
@@ -145,10 +147,9 @@ def login():
   session_store.delete(session_pow_challenge)
   session_public_key = session + "_public_key"
   session_store.put(session_public_key, public_key)
+  update_login(uuid)
 
   return wallet_data
-
-
 
 
 # Utility Functions
@@ -157,16 +158,39 @@ def failed_challenge(pow_challenge, nonce, difficulty):
   return pow_challenge_response[-len(difficulty):] != difficulty
 
 def write_wallet(uuid, wallet):
-  filename = data_dir_root + '/wallets/' + uuid + '.json'
-  with open(filename, 'w') as f:
-    f.write(wallet)
-
+  #filename = data_dir_root + '/wallets/' + uuid + '.json'
+  #with open(filename, 'w') as f:
+    #f.write(wallet)
+  ROWS=dbSelect("select walletid from wallets where walletid=%s",[uuid])
+  if len(ROWS)==0:
+    #doesn't exist insert it
+    dbExecute("insert into wallets (walletblob,walletid) values(%s, %s)",(wallet,uuid))
+  else:
+    dbExecute("update wallets set walletblob=%s where walletid=%s",(wallet,uuid))
+  dbCommit()
+    
 def read_wallet(uuid):
-  filename = data_dir_root + '/wallets/' + uuid + '.json'
-  with open(filename, 'r') as f:
-    return f.read()
+  ROWS=dbSelect("select walletblob from wallets where walletid=%s",[uuid])
+  #check if the wallet is in the database and if not insert it
+  if len(ROWS)==0:
+    filename = data_dir_root + '/wallets/' + uuid + '.json'
+    with open(filename, 'r') as f:
+      blob= f.read()
+    write_wallet(uuid,blob)
+    return blob
+  else:
+    return ROWS[0][0]
+
+def update_login(uuid):
+   dbExecute("update wallets set lastlogin=DEFAULT where walletid=%s",[uuid])
+   dbCommit()
 
 def exists(uuid):
   validate_uuid = UUID(uuid)
-  filename = data_dir_root + '/wallets/' + uuid + '.json'
-  return os.path.exists(filename)
+  ROWS=dbSelect("select walletid from wallets where walletid=%s",[uuid])
+  #check the database first then filesystem
+  if len(ROWS)==0:
+   filename = data_dir_root + '/wallets/' + uuid + '.json'
+   return os.path.exists(filename)
+  else:
+    return True
