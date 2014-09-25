@@ -104,7 +104,7 @@ def listcrowdsales():
     except ValueError:
         abort(make_response('Field \'ecosystem\' invalid value, request failed', 400))
 
-    ROWS= dbSelect("select PropertyData from smartproperties where PropertyData::json->>'fixedissuance'='false' AND PropertyData::json->>'active'='true' AND ecosystem='%s' ORDER BY PropertyName,PropertyID", (ecosystem))
+    ROWS= dbSelect("select PropertyData from smartproperties where PropertyData::json->>'fixedissuance'='false' AND PropertyData::json->>'active'='true' AND ecosystem='%s' ORDER BY PropertyName,PropertyID", [ecosystem])
     data=[row[0] for row in ROWS]
     
     response = {
@@ -116,7 +116,7 @@ def listcrowdsales():
 
 @app.route('/getdata/<int:property_id>')
 def getdata(property_id):
-    property=dbSelect("select PropertyData from smartproperties where PropertyID=%s",(property_id))[0]
+    property=dbSelect("select PropertyData from smartproperties where PropertyID=%s",[property_id])[0]
     return jsonify(property[0])
 
 @app.route('/gethistory/<int:property_id>', methods=["POST"])
@@ -142,16 +142,16 @@ def gethistory(property_id):
     try:
         cache=HISTORY_COUNT_CACHE[str(property_id)]
         if(time.time()-cache[1] > 6000000):
-            total=dbSelect(totalquery,(property_id))[0][0]
+            total=dbSelect(totalquery,[property_id])[0][0]
             HISTORY_COUNT_CACHE[str(property_id)] = (total, time.time())
         else:
             total=cache[0]    
     except KeyError:
-        total=dbSelect(totalquery,(property_id))[0][0]
+        total=dbSelect(totalquery,[property_id])[0][0]
         HISTORY_COUNT_CACHE[str(property_id)] = (total, time.time())
     
     
-    ROWS=dbSelect(transactions_query,(property_id))
+    ROWS=dbSelect(transactions_query,[property_id])
     transactions=[row[0] for row in ROWS]
     
     response = {
