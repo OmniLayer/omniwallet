@@ -148,11 +148,13 @@ angular.module('omniwallet').factory('userService', ['$rootScope', '$http', '$in
         service.data.walletMetadata = {};
       },
 
-      addAddress: function(address, privKey, offline) {
+      addAddress: function(address, privKey, pubKey) {
         for (var i in service.data.wallet.addresses) {
           if (service.data.wallet.addresses[i].address == address) {
             if(privKey)
               service.data.wallet.addresses[i].privkey = privKey;
+            if(pubKey)
+              service.data.wallet
             return service.saveSession();
           }
         }
@@ -160,7 +162,7 @@ angular.module('omniwallet').factory('userService', ['$rootScope', '$http', '$in
         service.data.wallet.addresses.push({
           "address": address,
           "privkey": privKey,
-          "offline": offline 
+          "pubkey": pubKey 
         });
         
         service.data.loggedIn = true;
@@ -183,7 +185,7 @@ angular.module('omniwallet').factory('userService', ['$rootScope', '$http', '$in
       
       getAddressesWithPrivkey: function(addressFilter) {
         var addresses = service.data.wallet.addresses.filter(function(e) {
-          return (e.privkey && e.privkey.length == 58) || e.offline;
+          return (e.privkey && e.privkey.length == 58) || e.pubkey;
         }).map(function(e){
           return e.address;
         });
@@ -266,7 +268,7 @@ angular.module('omniwallet').factory('userService', ['$rootScope', '$http', '$in
             $injector.get('balanceService').balance(service.data.wallet.addresses[i].address).then(function(result) {
               result.data.balance.forEach(function(balanceItem) {
                 var address = service.data.wallet.addresses[i];
-                var tradable = ((address.privkey && address.privkey.length == 58) || address.offline) && balanceItem.value > 0;
+                var tradable = ((address.privkey && address.privkey.length == 58) || address.pubkey) && balanceItem.value > 0;
                 var currency = null;
                 for (var j = 0; j < service.data.walletMetadata.currencies.length; j++) {
                   var currencyItem = service.data.walletMetadata.currencies[j];

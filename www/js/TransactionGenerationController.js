@@ -2,9 +2,13 @@ function TransactionGenerationController($scope, $modal, userService, walletTran
   
   $scope.prepareTransaction = function(txType, rawdata, from, $modalScope){
     var addressData = userService.getAddress(from);
-    var privKey = new Bitcoin.ECKey.decodeEncryptedFormat(addressData.privkey, addressData.address); // Using address as temporary password
-    var pubKey = privKey.getPubKeyHex();
-    
+    var pubKey = null;
+    if(addressData.pubkey)
+      pubKey= addressData.pubkey;
+    else{
+      var privKey = new Bitcoin.ECKey.decodeEncryptedFormat(addressData.privkey, addressData.address); // Using address as temporary password
+      pubKey = privKey.getPubKeyHex();
+    }
     var data = rawdata instanceof Array ? rawdata : [rawdata];
 
     pushOrderedTransactions(data,0);
@@ -22,10 +26,13 @@ function TransactionGenerationController($scope, $modal, userService, walletTran
         } else {
           var unsignedTransaction = successData.unsignedhex || successData.transaction; /* Backwards compatibility for mastercoin-tools send API */
           if($modalScope.signOffline){
-            $modalScope.unsignedTransaction = unsignedTransaction;
-            $modalScope.waiting = false;
-            $modalScope.readyToSign = true;
-            $modalScope.unsaved=true;
+            walletTransactionService.prepareForArmory(unsignedTransaction,pubKey).then(function(){
+              $modalScope.unsignedTransaction = unsignedTransaction;
+              $modalScope.waiting = false;
+              $modalScope.readyToSign = true;
+              $modalScope.unsaved=true;  
+            });
+            
           } else {
             try {
               var bytes = Bitcoin.Util.hexToBytes(unsignedTransaction);

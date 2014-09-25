@@ -56,7 +56,7 @@ angular.module('omniwallet')
             		    } else {
             			   hasPrivate=false;
             		    }
-            		    if (addr.offline) {
+            		    if (addr.pubkey) {
                      isOffline=true;
                     } else {
                      isOffline=false;
