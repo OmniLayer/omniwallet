@@ -33,7 +33,7 @@ server {
         gzip            on;
         gzip_min_length 20;
         gzip_proxied    expired no-cache no-store private auth;
-        gzip_types      text/plain application/xml application/x-javascript application/javascript text/css text/javascript;
+        gzip_types      text/plain application/xml application/x-javascript application/javascript text/css text/javascript text/html application/json;
 
         #Re-route nested routed through index
         location / {
