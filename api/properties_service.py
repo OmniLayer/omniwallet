@@ -78,7 +78,7 @@ def list():
     except KeyError:
         issuer = ""
     
-    ROWS= dbSelect("select * from smartproperties where PropertyID > 2 AND ecosystem='%s'%s ORDER BY PropertyName,PropertyID", (ecosystem,query))
+    ROWS= dbSelect("select * from smartproperties where PropertyID > 2 AND ecosystem=%s%s ORDER BY PropertyName,PropertyID", (ecosystem,query))
     data=[]
     for property in ROWS:
         data.append({"currencyId":property[1],"propertyName":property[6]}) #get the json representation
@@ -104,7 +104,7 @@ def listcrowdsales():
     except ValueError:
         abort(make_response('Field \'ecosystem\' invalid value, request failed', 400))
 
-    ROWS= dbSelect("select PropertyData from smartproperties where PropertyData::json->>'fixedissuance'='false' AND PropertyData::json->>'active'='true' AND ecosystem='%s' ORDER BY PropertyName,PropertyID", [ecosystem])
+    ROWS= dbSelect("select PropertyData from smartproperties where PropertyData::json->>'fixedissuance'='false' AND PropertyData::json->>'active'='true' AND ecosystem=%s ORDER BY PropertyName,PropertyID", [ecosystem])
     data=[row[0] for row in ROWS]
     
     response = {
