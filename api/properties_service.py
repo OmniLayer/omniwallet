@@ -151,7 +151,7 @@ def gethistory(property_id):
         HISTORY_COUNT_CACHE[str(property_id)] = (total, time.time())
     
     
-    ROWS=dbSelect(transactions_query,(property_id,start,count))
+    ROWS=dbSelect(transactions_query,(property_id,count,start))
     transactions=[row[0] for row in ROWS]
     
     response = {
