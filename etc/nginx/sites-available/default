@@ -29,6 +29,12 @@ server {
         root /home/myUser/omniwallet/www/;
         index index.htm index.html;
 
+        #enable gzip compression
+        gzip            on;
+        gzip_min_length 20;
+        gzip_proxied    expired no-cache no-store private auth;
+        gzip_types      text/plain application/xml application/x-javascript application/javascript text/css text/javascript;
+
         #Re-route nested routed through index
         location / {
             try_files $uri $uri/ /index.html =404;
