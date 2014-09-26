@@ -220,7 +220,7 @@ function HiddenLoginController($scope, $modal, $location) {
 
 function FailedSaveLoginController($scope, $modal, $location) {
   $scope.open = function() {
-    $scope.uuid = $location.path().replace("/login/", "");
+    $scope.uuid = $location.path().replace("/loginfs/", "");
 
     $modal.open({
       templateUrl: '/partials/login_modal_fs.html',
