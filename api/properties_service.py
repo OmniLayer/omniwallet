@@ -144,12 +144,12 @@ def gethistory(property_id):
     try:
         cache=HISTORY_COUNT_CACHE[str(property_id)]
         if(time.time()-cache[1] > 6000000):
-            total=dbSelect(totalquery,[property_id])[0][0]
+            total=dbSelect(total_query,[property_id])[0][0]
             HISTORY_COUNT_CACHE[str(property_id)] = (total, time.time())
         else:
             total=cache[0]    
     except KeyError:
-        total=dbSelect(totalquery,[property_id])[0][0]
+        total=dbSelect(total_query,[property_id])[0][0]
         HISTORY_COUNT_CACHE[str(property_id)] = (total, time.time())
     
     
