@@ -244,12 +244,9 @@ def write_wallet(uuid, wallet):
     with open(filename, 'w') as f:
       f.write(wallet)
   else:
-    ROWS=dbSelect("select walletid from wallets where walletid=%s",[uuid])
-    if len(ROWS)==0:
-      #doesn't exist insert it
-      dbExecute("insert into wallets (walletblob,walletid) values(%s, %s)",(wallet,uuid))
-    else:
-      dbExecute("update wallets set walletblob=%s where walletid=%s",(wallet,uuid))
+    dbExecute("with upsert as (update wallets set walletblob=%s where walletid=%s returning *) "
+              "insert into wallets (walletblob,walletid) select %s,%s where not exists (select * from upsert)", 
+              (wallet,uuid,wallet,uuid))
     dbCommit()
     
 def read_wallet(uuid):
