@@ -16,7 +16,6 @@ function TransactionGenerationController($scope, $modal, userService, walletTran
     function pushOrderedTransactions(transactions,index){
       var txdata = transactions[index];
       txdata['pubkey'] = pubKey;
-      txdata['use_armory'] = $modalScope.signOffline;
       $scope.TxPromise = walletTransactionService.getUnsignedTransaction(txType,txdata);
       $scope.TxPromise.then(function(successData) {
         var successData = successData.data;
@@ -26,23 +25,25 @@ function TransactionGenerationController($scope, $modal, userService, walletTran
           $modalScope.error = 'Error preparing transaction: ' + successData.error || successData.data; /* Backwards compatibility for mastercoin-tools send API */
         } else {
           var unsignedTransaction = successData.unsignedhex || successData.transaction; /* Backwards compatibility for mastercoin-tools send API */
+
+          var bytes = Bitcoin.Util.hexToBytes(unsignedTransaction);
+          var transaction = Bitcoin.Transaction.deserialize(bytes);
+          var script = parseScript(successData.sourceScript);
+
+          transaction.ins.forEach(function(input) {
+            input.script = script;
+          });
           if($modalScope.signOffline){
-            walletTransactionService.prepareForArmory(unsignedTransaction,pubKey).then(function(){
-              $modalScope.unsignedTransaction = unsignedTransaction;
+            var parsedBytes = transaction.serialize();
+
+            walletTransactionService.getArmoryUnsigned(Bitcoin.Util.bytesToHex(parsedBytes),pubKey).then(function(result){
+              $modalScope.unsignedTransaction = result.data.armoryUnsigned;
               $modalScope.waiting = false;
               $modalScope.readyToSign = true;
               $modalScope.unsaved=true;  
             });    
           } else {
             try {
-              var bytes = Bitcoin.Util.hexToBytes(unsignedTransaction);
-              var transaction = Bitcoin.Transaction.deserialize(bytes);
-              var script = parseScript(successData.sourceScript);
-    
-              transaction.ins.forEach(function(input) {
-                input.script = script;
-              });
-    
               //DEBUG console.log('before',transaction, Bitcoin.Util.bytesToHex(transaction.serialize()));
               var signedSuccess = transaction.signWithKey(privKey);
     

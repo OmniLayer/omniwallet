@@ -61,6 +61,16 @@ angular.module('omniwallet').factory('walletTransactionService',['$http',functio
         return promise;
       } 
     },
+
+    getArmoryUnsigned : function(unsignedHex,pubKey){
+      var url = '/v1/armory/getunsigned';
+      var data = {
+        'unsigned_hex': unsignedHex,
+        'pubkey': pubKey
+      };
+      var promise = $http.post(url, data);
+      return promise;
+    },
     
     validAddress:function(addr) {
       try {

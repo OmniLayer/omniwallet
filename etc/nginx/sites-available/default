@@ -191,6 +191,18 @@ server {
                 uwsgi_pass 127.0.0.1:$PORT;
         }
 
+        location = /v1/armory/getunsigned { rewrite ^ /v1/armory/getunsigned; }
+        location /v1/armory/getunsigned { try_files $uri @flask_armory_service; }
+        location @flask_armory_service {
+                include uwsgi_params;
+                uwsgi_param SCRIPT_NAME /v1/armory/getunsigned;
+                uwsgi_param UWSGI_MODULE armory_service;
+                uwsgi_param UWSGI_CALLABLE app;
+                uwsgi_modifier1 30;
+                uwsgi_pass 127.0.0.1:$PORT;
+        }
+
+
         location = /v1/search { rewrite ^ /v1/search; }
         location /v1/search { try_files $uri @flask_search_service; }
         location @flask_search_service {
