@@ -1,3 +1,4 @@
+WHOLE_UNIT = new Big(0.00000001);
 function WalletSendAssetsController($modal, $scope, $http, $q, userService, walletTransactionService) {
   $scope.walletAssets =  $scope.$parent.$parent;
   var transactionGenerationController = $scope.$parent;
