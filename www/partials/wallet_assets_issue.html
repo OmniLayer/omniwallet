@@ -98,7 +98,7 @@
               <div class="input-group">
                 <span class="input-group-addon"> Miner fees ( BTC ): </span>
                 <input name="fees" type="number" ng-model="minerFees" class="form-control"
-                placeholder="0.0001 suggested minimum" step="0.0001" min="0.0001" required>
+                placeholder="0.0001 suggested minimum" step="0.0001" min="0.0001" ng-change="calculateTotal(minerFees)" required>
                 <span class="input-group-addon" > Available Bitcoin: {{ balanceData[1] }} BTC </span>
               </div>
             </div>
