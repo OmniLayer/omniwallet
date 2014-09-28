@@ -11,7 +11,7 @@
 					Address: {{newAddressData.address}}
 				</span>
 				<span style="color:red" ng-show="addressentry.pubkey.$dirty && !validate(newAddressData)">Must be a valid Bitcoin address</span>
-				<span style="color:red" ng-show="addressentry.pubkey.$dirty && !addressNotListed(newAddressData.address)">Bitcoin address is already listed</span>
+				<span style="color:red" ng-show="addressentry.pubkey.$dirty && !addressNotListed(newAddressData.pubkey)">Bitcoin address is already listed</span>
 			</div>
 		</div>
 	</div>
