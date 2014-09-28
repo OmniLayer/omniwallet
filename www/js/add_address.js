@@ -158,7 +158,7 @@ angular.module('omniwallet')
     modalInstance.result.then(function(result) {
 
       if (result.address) {
-        $injector.get('userService').addAddress(result.address,undefined,true);
+        $injector.get('userService').addAddress(result.address,undefined,result.pubkey);
       }
       $scope.refresh();
       $scope.addedNewAddress = true;
@@ -167,14 +167,20 @@ angular.module('omniwallet')
   };
   
   var AddArmoryAddressModal = function($scope, $modalInstance) {
-    $scope.validate = function(address) {
-      return Bitcoin.Address.validate(address);
+    $scope.validate = function(input) {
+      try{
+        var pubKey = new Bitcoin.ECPubKey.fromHex(input);
+        return Bitcoin.Address.validate(pubKey.getAddress());
+      } catch (e) {
+        return false;
+      }
     };
 
-    $scope.addressNotListed = function(address) {
+    $scope.addressNotListed = function(pubkey) {
       var addresses = $injector.get('userService').getAllAddresses();
+      var pubKey = new Bitcoin.ECPubKey.fromHex(pubkey.getAddress());
       for (var i in addresses) {
-        if (addresses[i].address == address) {
+        if (addresses[i].address == pubKey.get) {
           return false;
         }
       }
@@ -183,10 +189,13 @@ angular.module('omniwallet')
     };
 
     $scope.ok = function(result) {
-      if (Bitcoin.Address.validate(result.address))
+      try{
+        var pubKey = new Bitcoin.ECPubKey.fromHex(input);
+        result.address=pubKey.getAddressss();
         $modalInstance.close(result);
-      else
-        console.log('*** Invalid address: ' + result.address);
+      } catch (e) {
+        console.log('*** Invalid pubkey: ' + result.pubkey);
+      }
     };
 
     $scope.cancel = function() {

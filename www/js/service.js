@@ -154,7 +154,7 @@ angular.module('omniwallet').factory('userService', ['$rootScope', '$http', '$in
             if(privKey)
               service.data.wallet.addresses[i].privkey = privKey;
             if(pubKey)
-              service.data.wallet
+              service.data.wallet.addresses[i].pubkey = pubKey;
             return service.saveSession();
           }
         }

@@ -16,6 +16,7 @@ function TransactionGenerationController($scope, $modal, userService, walletTran
     function pushOrderedTransactions(transactions,index){
       var txdata = transactions[index];
       txdata['pubkey'] = pubKey;
+      txdata['use_armory'] = $modalScope.signOffline;
       $scope.TxPromise = walletTransactionService.getUnsignedTransaction(txType,txdata);
       $scope.TxPromise.then(function(successData) {
         var successData = successData.data;
@@ -31,8 +32,7 @@ function TransactionGenerationController($scope, $modal, userService, walletTran
               $modalScope.waiting = false;
               $modalScope.readyToSign = true;
               $modalScope.unsaved=true;  
-            });
-            
+            });    
           } else {
             try {
               var bytes = Bitcoin.Util.hexToBytes(unsignedTransaction);
