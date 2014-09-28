@@ -28,12 +28,13 @@
         </ul>
       </div>
     </div>
+    </div>
+    <br/>
     <br/>
         <div ng-show="addedNewAddress" class="alert alert-success alert-dismissible" role="alert">
             <button type="button" class="close" ng-click="addedNewAddress=false"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
             <strong>{{createdAddress}}</strong> successfully added to your wallet
         </div>
-    </div>
   <div ng-init="newAddress=false" ng-if="newAddress">
     <div ng-controller="NavigationController" ng-init="openNewUUIDmodal()">
     </div>
