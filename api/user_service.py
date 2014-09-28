@@ -24,7 +24,7 @@ data_dir_root = os.environ.get('DATADIR')
 store_dir = data_dir_root + '/sessions/'
 session_store = FilesystemStore(store_dir) # TODO: Need to roll this into a SessionInterface so multiple services can hit it easily
 
-emailFrom = "no-reply@omniwallet.org"
+email_from = "no-reply@omniwallet.org"
 
 app = Flask(__name__)
 app.debug = True
@@ -89,19 +89,7 @@ def create():
   session_public_key = session + "_public_key"
   session_store.put(session_public_key, public_key)
 
-  if email is not None:
-    msg = MIMEMultipart()
-    msg['From'] = emailFrom
-    msg['To'] = email
-    msg['Subject'] = "Omniwallet backup file"
-    part = MIMEBase('application', "octet-stream")
-    part.set_payload(wallet)
-    Encoders.encode_base64(part)
-    part.add_header('Content-Disposition', 'attachment; filename="%s.json"' % uuid)
-    msg.attach(part)
-    smtp = smtplib.SMTP('localhost')
-    smtp.sendmail(emailFrom, email, msg.as_string())
-    smtp.close()
+  email_wallet(email, wallet, uuid)
 
   return ""
 
@@ -193,3 +181,18 @@ def exists(uuid):
   validate_uuid = UUID(uuid)
   filename = data_dir_root + '/wallets/' + uuid + '.json'
   return os.path.exists(filename)
+
+def email_wallet(user_email, wallet, uuid):
+  if user_email is not None:
+    msg = MIMEMultipart()
+    msg['From'] = email_from
+    msg['To'] = user_email
+    msg['Subject'] = "Omniwallet backup file"
+    part = MIMEBase('application', "octet-stream")
+    part.set_payload(wallet)
+    Encoders.encode_base64(part)
+    part.add_header('Content-Disposition', 'attachment; filename="%s.json"' % uuid)
+    msg.attach(part)
+    smtp = smtplib.SMTP('localhost')
+    smtp.sendmail(email_from, user_email, msg.as_string())
+    smtp.close()
