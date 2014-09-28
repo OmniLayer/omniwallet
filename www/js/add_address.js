@@ -169,8 +169,11 @@ angular.module('omniwallet')
   var AddArmoryAddressModal = function($scope, $modalInstance) {
     $scope.validate = function(input) {
       try{
-        var pubKey = new Bitcoin.ECPubKey.fromHex(input);
-        return Bitcoin.Address.validate(pubKey.getAddress());
+        var address = new Bitcoin.Address.fromPubKey(input);
+        if(Bitcoin.Address.validate(address.toString())){
+          result.address=address.toString();
+          return true
+        }
       } catch (e) {
         return false;
       }
@@ -178,9 +181,9 @@ angular.module('omniwallet')
 
     $scope.addressNotListed = function(pubkey) {
       var addresses = $injector.get('userService').getAllAddresses();
-      var pubKey = new Bitcoin.ECPubKey.fromHex(pubkey.getAddress());
+      var address = new Bitcoin.Address.fromPubKey(pubkey);
       for (var i in addresses) {
-        if (addresses[i].address == pubKey.get) {
+        if (addresses[i].address == address.toString()) {
           return false;
         }
       }
@@ -190,9 +193,10 @@ angular.module('omniwallet')
 
     $scope.ok = function(result) {
       try{
-        var pubKey = new Bitcoin.ECPubKey.fromHex(input);
-        result.address=pubKey.getAddressss();
-        $modalInstance.close(result);
+        var address = new Bitcoin.Address.fromPubKey(result.pubkey);
+        if(Bitcoin.Address.validate(address.toString())){
+          $modalInstance.close(result);
+        }
       } catch (e) {
         console.log('*** Invalid pubkey: ' + result.pubkey);
       }
