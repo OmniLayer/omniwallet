@@ -21,12 +21,12 @@
            
             <tr>
             <td width="126px" height="30px" class="description-title" style="vertical-align: top;">Description:</td><td class="description-text">
-            <div class="expandable-div" ng-class="{'expanded-div':expanded, 'collapsed-div':!expanded}">
+            <div id="expandable-div" class="expandable-div" ng-class="{'expanded-div':expanded, 'collapsed-div':!expanded,'expandable-div-rendered':rendered}" ng-init="setExpandableDiv()">
             {{propertyData}}
             </div>
-            <div>
+            <div ng-show="longText">
             <div class="horizontal-line"></div>
-            <button ng-click="expanded=!expanded;"><img src="/assets/img/Expand_collapse.png"><span ng-hide="expanded"> expand</span><span ng-show="expanded"> collapse</span></button>
+            <button ng-click="expanded=!expanded;rendered=true;"><div ng-hide="expanded"><span class="glyphicon glyphicon-chevron-down"></span> More</div><div ng-show="expanded"><span class="glyphicon glyphicon-chevron-up"></span> Less</div></button>          
             </div>
             </td>
             </tr>

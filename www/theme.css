@@ -133,9 +133,11 @@ a {
   height: auto;
   width: 400px;
   overflow: hidden;
+  word-wrap: break-word;
+}
+.expandable-div-rendered{
   transition: 1.0s;
   -webkit-transition: 1.0s;
-  word-wrap: break-word;
 }
 .expanded-div{
   max-height: 200px;
