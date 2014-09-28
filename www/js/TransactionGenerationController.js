@@ -41,7 +41,18 @@ function TransactionGenerationController($scope, $modal, userService, walletTran
               $modalScope.waiting = false;
               $modalScope.readyToSign = true;
               $modalScope.unsaved=true;  
-            });    
+            }, function(errorData) {
+                $modalScope.waiting = false;
+                $modalScope.transactionError = true;
+                if (errorData.message)
+                  $modalScope.error = 'Server error: ' + errorData.message;
+                else 
+                  if (errorData.data)
+                    $modalScope.error = 'Server error: ' + errorData.data;
+                  else
+                    $modalScope.error = 'Unknown Server Error';
+                console.error(errorData);
+              });    
           } else {
             try {
               //DEBUG console.log('before',transaction, Bitcoin.Util.bytesToHex(transaction.serialize()));
