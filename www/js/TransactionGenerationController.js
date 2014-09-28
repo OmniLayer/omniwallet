@@ -4,7 +4,7 @@ function TransactionGenerationController($scope, $modal, userService, walletTran
     var addressData = userService.getAddress(from);
     var pubKey = null;
     if(addressData.pubkey)
-      pubKey= addressData.pubkey;
+      pubKey= addressData.pubkey.toUpperCase();
     else{
       var privKey = new Bitcoin.ECKey.decodeEncryptedFormat(addressData.privkey, addressData.address); // Using address as temporary password
       pubKey = privKey.getPubKeyHex();
