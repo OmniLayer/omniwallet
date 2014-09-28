@@ -167,11 +167,11 @@ angular.module('omniwallet')
   };
   
   var AddArmoryAddressModal = function($scope, $modalInstance) {
-    $scope.validate = function(input) {
+    $scope.validate = function(newAddress) {
       try{
-        var address = new Bitcoin.Address.fromPubKey(input);
+        var address = new Bitcoin.Address.fromPubKey(newAddress.pubkey);
         if(Bitcoin.Address.validate(address.toString())){
-          $scope.newAddressData.address=address.toString();
+          newAddress.address=address.toString();
           return true
         }
       } catch (e) {
