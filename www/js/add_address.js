@@ -169,7 +169,7 @@ angular.module('omniwallet')
   var AddArmoryAddressModal = function($scope, $modalInstance) {
     $scope.validate = function(newAddress) {
       try{
-        var address = new Bitcoin.Address(Bitcoin.Util.hexToBytes(newAddress.pubkey))
+        var address = new Bitcoin.Address.fromPubKey(Bitcoin.Util.hexToBytes(newAddress.pubkey))
         if(Bitcoin.Address.validate(address.toString())){
           newAddress.address=address.toString();
           return true
@@ -181,7 +181,7 @@ angular.module('omniwallet')
 
     $scope.addressNotListed = function(pubkey) {
       var addresses = $injector.get('userService').getAllAddresses();
-      var address = new Bitcoin.Address(Bitcoin.Util.hexToBytes(pubkey));
+      var address = new Bitcoin.Address.fromPubKey(Bitcoin.Util.hexToBytes(pubkey));
       for (var i in addresses) {
         if (addresses[i].address == address.toString()) {
           return false;
@@ -193,7 +193,7 @@ angular.module('omniwallet')
 
     $scope.ok = function(result) {
       try{
-        var address = new Bitcoin.Address(Bitcoin.Util.hexToBytes(result.pubkey));
+        var address = new Bitcoin.Address.fromPubKey(Bitcoin.Util.hexToBytes(result.pubkey));
         if(Bitcoin.Address.validate(address.toString())){
           $modalInstance.close(result);
         }
