@@ -171,7 +171,7 @@ angular.module('omniwallet')
       try{
         var address = new Bitcoin.Address.fromPubKey(input);
         if(Bitcoin.Address.validate(address.toString())){
-          result.address=address.toString();
+          $scope.newAddressData.address=address.toString();
           return true
         }
       } catch (e) {

@@ -6,7 +6,10 @@
 		<div class="row">
 			<div class="form-group col-md-10 col-md-push-1">
 				<label class="control-label">Enter Public Key (<a href="/about/faq" target="_new">Offline</a>):</label>
-				<input type="text" name="address" class="form-control" placeholder="Enter your offline address public key" ng-model="newAddressData.pubkey" required>
+				<input type="text" name="pubkey" class="form-control" placeholder="Enter your offline address public key" ng-model="newAddressData.pubkey" required>
+				<span ng-show="validate(newAddressData.pubkey) != false)">
+					Address: {{newAddressData.address}}
+				</span>
 				<span style="color:red" ng-show="addressentry.pubkey.$dirty && !validate(newAddressData.pubkey)">Must be a valid Bitcoin address</span>
 				<span style="color:red" ng-show="addressentry.pubkey.$dirty && !addressNotListed(newAddressData.address)">Bitcoin address is already listed</span>
 			</div>
