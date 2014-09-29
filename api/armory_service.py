@@ -22,8 +22,13 @@ def generate_unsigned():
     #Translate raw txn
     pytx = PyTx()
     print("Encoding raw txn: %s" % unsigned_hex)
-    binTxn = hex_to_binary(unsigned_hex)
-    pytx.unserialize(binTxn)
-    tx = PyTxDistProposal(pytx)
-    print("\n\nOutput is:\n%s" % tx.serializeAscii())  
-    return jsonify({'armoryUnsigned':tx.serializeAscii()})  
+    try:
+        unsigned_tx_bin = hex_to_binary(unsigned_tx_hex)
+        pytx = PyTx().unserialize(unsigned_tx_bin)
+        utx = UnsignedTransaction(pytx=pytx, pubKeyMap=hex_to_binary(public_key_hex))
+        unsigned_tx_ascii = utx.serializeAscii()
+    except Exception, e:
+        abort("Error serializing transaction: %s" % e)
+        
+    print("\n\nOutput is:\n%s" % unsigned_tx_ascii)  
+    return jsonify({'armoryUnsigned':unsigned_tx_ascii})  
