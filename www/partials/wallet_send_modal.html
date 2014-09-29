@@ -1,14 +1,31 @@
 <div class="modal-body">
-    <h3 class="text-center"> Confirm send </h3>
-    <h3>You're about to send {{convertSatoshiToDisplayedValue(sendAmount)}} {{getDisplayedAbbreviation()}} and {{convertSatoshiToDisplayedValue(totalCost, true)}} BTC in transaction costs to {{sendTo}}</h3>
-  <p><br>
-  If the above is correct, please press Send Funds.
-  If you encounter an error, feel free to click away from the dialog and try again.
-  </p>
-<div class="modal-footer">
+    <div class="text-left col-xs-7 modal-title">Confirm send</div><div class="text-right"><button ng-disabled="wating" class="btn btn-xs modal-cancel-btn" ng-click="cancel()">cancel | <span class="glyphicon glyphicon-remove"></span></button></div>
+    <table>
+        <tr><td height="30px"></td></tr>
+        <tr>
+        <td width="103px" height="30px" class="description-title">Token:</td><td class="description-text">{{getDisplayedAbbreviation()}}</td>
+        </tr>
+       
+        <tr>
+        <td width="103px" height="30px" class="description-title">Amount:</td><td class="description-text">{{convertSatoshiToDisplayedValue(sendAmount)}}</td>
+        </tr>
+       
+        <tr>
+        <td width="103px" height="30px" class="description-title">From:</td><td class="description-text">{{sendFrom}}</td>
+        </tr>
+       
+        <tr>
+        <td width="103px" height="30px" class="description-title">To:</td><td class="description-text">{{sendTo}}</td>
+        </tr>
+    </table>
+    <hr>
+    <span class="send-fee">Transaction fees: {{convertSatoshiToDisplayedValue(totalCost, true)}} bitcoins</span>
+<div class="modal-footer footer-div">
+ <br>
     <div class="row" ng-hide=transactionSuccess>
-    <button ng-disabled="clicked" class="btn btn-primary" ng-click="ok()">Yes, send my funds</button>
-    <button ng-disabled="wating" class="btn btn-warning" ng-click="cancel()">Cancel</button>
+    <button ng-disabled="clicked" class="btn btn-lg modal-action-btn" ng-click="ok()">
+        <img src="/assets/img/SendIcon_normal.png" class="action-img-normal"><img src="/assets/img/SendIcon_roll.png" class="action-img-roll"> Send funds
+    </button>
     <img class="" src="/assets/img/spinner.gif" ng-show="waiting">
     </div>
       <br>
