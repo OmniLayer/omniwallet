@@ -6,16 +6,16 @@
         <div class="col-xs-offset-2 col-xs-10">
            <div class="input-group col-xs-10">
             <span ng-show="validate(balanceAddress)" class="glyphicon glyphicon-ok green input-group-addon input-group"></span>
-            <input type="text" class="form-control input-group" name="address" id="address" placeholder="Address" ng-model="balanceAddress" ng-change="showResult=false">
+            <input type="text" class="form-control input-group" name="address" id="address" placeholder="Address" ng-model="balanceAddress" ng-change="hasBalances=false">
             <span class="input-group-btn">
-                <input type="button" ng-click="checkBalance(); showResult=true" ng-disabled="validate(balanceAddress) == false" class="btn btn-primary" value="Click!" />
+                <input type="button" ng-click="checkBalance();" ng-disabled="validate(balanceAddress) == false" class="btn btn-primary" value="Click!" />
             </span>
            </div>
            <span class="help-block"><small>Enter a valid Bitcoin Address, e.g. 1EXoDusjGwvnjZUyKkxZ4UHEf77z6A5S4P</small></span>
         </div>
       </div>
     </form>
-    <div ng-if="hasBalances && showResult">
+    <div ng-if="hasBalances">
       <div class="asset-table">
         <div ng-repeat="currency in balances">
           <row class="col-xs-offset-2 col-xs-10">
