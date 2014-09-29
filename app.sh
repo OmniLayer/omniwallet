@@ -20,7 +20,7 @@ echo "Starting app.sh: $(TZ='UTC' date)"
 
 echo "Establishing environment variables..."
 APPDIR=`pwd`
-#TOOLSDIR=$APPDIR/node_modules/mastercoin-tools
+TOOLSDIR=$APPDIR/node_modules/mastercoin-tools
 LOCK_FILE=$DATADIR/msc_cron.lock
 PARSE_LOG=$DATADIR/parsed.log
 VALIDATE_LOG=$DATADIR/validated.log
@@ -31,7 +31,7 @@ ARCHIVE_LOG=$DATADIR/archived.log
 #fi
 
 # Export directories for API scripts to use
-#export TOOLSDIR
+export TOOLSDIR
 export DATADIR
 
 echo "Beginning main run loop..."
