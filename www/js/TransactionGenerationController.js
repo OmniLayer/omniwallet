@@ -190,4 +190,69 @@ function TransactionGenerationController($scope, $modal, userService, walletTran
       $scope.$parent.showErrors = true;
     }
   };
+
+  $scope.broadcastTransaction = function(signedHex){
+    walletTransactionService.getArmoryRaw(signedHex).then(function(result){
+      var finalTransaction = result.rawTransaction;
+    
+      //Showing the user the transaction hash doesn't work right now
+      //var transactionHash = Bitcoin.Util.bytesToHex(transaction.getHash().reverse());
+
+      walletTransactionService.pushSignedTransaction(finalTransaction).then(function(successData) {
+        var successData = successData.data;
+        if (successData.pushed.match(/submitted|success/gi) != null) {
+          $modalScope.waiting = false;
+          $modalScope.transactionSuccess = true;
+          $modalScope.url = 'http://blockchain.info/address/' + from + '?sort=0';
+        } else {
+          $modalScope.waiting = false;
+          $modalScope.transactionError = true;
+          $modalScope.error = successData.pushed; //Unspecified error, show user
+        }
+      }, function(errorData) {
+        $modalScope.waiting = false;
+        $modalScope.transactionError = true;
+        if (errorData.message)
+          $modalScope.error = 'Server error: ' + errorData.message;
+        else 
+          if (errorData.data)
+            $modalScope.error = 'Server error: ' + errorData.data;
+          else
+            $modalScope.error = 'Unknown Server Error';
+        console.error(errorData);
+      });
+    })
+  };
+
+  $scope.showBroadcastTransactionModal =function(){
+    var modalInstance = $modal.open({
+        templateUrl: "/partials/wallet_broadcast_modal.html",
+        controller: function($scope, $modalInstance, setBroadcastScope, broadcastTransaction) {
+          if(setBroadcastScope)
+            setBroadcastScope($scope);
+          
+          $scope.ok = function(signedHex) {
+            $scope.clicked = true;
+            $scope.waiting = true;
+            broadcastTransaction(signedHex);
+          };
+          
+          $scope.cancel = function () {
+            $modalInstance.dismiss('cancel');
+          };
+          
+          $scope.close = function () {
+            $modalInstance.dismiss('close');
+          };
+        },
+        resolve: {
+          broadcastTransaction: function() {
+              return $scope.broadcastTransaction;
+          },
+          setBroadcastScope: function(){
+            return $scope.setBroadcastScope;
+          }
+        }
+      });
+  };
 };

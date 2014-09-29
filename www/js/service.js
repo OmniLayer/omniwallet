@@ -72,6 +72,15 @@ angular.module('omniwallet').factory('walletTransactionService',['$http',functio
       return promise;
     },
     
+    getArmoryRaw : function(signedHex){
+      var url = '/v1/armory/getrawtransaction';
+      var data = {
+        'signed_hex': signedHex
+      };
+      var promise = $http.post(url, data);
+      return promise;
+    },
+
     validAddress:function(addr) {
       try {
         var checkValid = new Bitcoin.Address(addr);

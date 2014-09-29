@@ -50,7 +50,7 @@ def generate_unsigned():
                        'magicbytes': tnet,
                        'p2shscript': '',
                        'txoutscript': o['scriptPubKey']['hex'],
-                       'txoutvalue': int( o['value'] * decimal.Decimal(1e8) ),
+                       'txoutvalue': int( o['value'] * Decimal(1e8) ),
                        'version': 1,
                        'wltlocator': ''}) 
 
@@ -77,3 +77,29 @@ def generate_unsigned():
 
     print("\n\nOutput is:\n%s" % unsigned_tx_ascii)  
     return jsonify({'armoryUnsigned':unsigned_tx_ascii})  
+
+@app.route('/getrawtransaction', methods=['POST'])
+def get_raw():
+  """Converts a signed tx from armory's offline format to a raw hex tx that bitcoind can broadcast/use"""
+  
+  signed_tx_ascii = request.form['signed_hex']
+  print("REQUEST(convert_signed_tx_to_raw_hex) -- signed_tx_ascii:\n'%s'\n" % (signed_tx_ascii,))
+
+  try:
+      utx = UnsignedTransaction()
+      utx.unserializeAscii(signed_tx_ascii)
+  except Exception, e:
+      raise Exception("Could not decode transaction: %s" % e)
+  
+  #see if the tx is signed
+  if not utx.evaluateSigningStatus().canBroadcast:
+      raise Exception("Passed transaction is not signed")
+  
+  try:
+      pytx = utx.getSignedPyTx()
+      raw_tx_bin = pytx.serialize()
+      raw_tx_hex = binary_to_hex(raw_tx_bin)
+  except Exception, e:
+      raise Exception("Could not serialize transaction: %s" % e)
+  
+  return jsonify({'rawTransaction':raw_tx_hex})
