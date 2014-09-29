@@ -95,14 +95,14 @@ server {
         #        alias /var/lib/omniwallet/www/properties/properties-$1;
         #}
 
-        location ~ "^/v1/values/(.*)$" {
-                add_header Access-Control-Allow-Origin *;
-                alias /var/lib/omniwallet/www/values/$1;
-        }
+        #location ~ "^/v1/values/(.*)$" {
+        #        add_header Access-Control-Allow-Origin *;
+        #        alias /var/lib/omniwallet/www/values/$1;
+        #}
 
-        location ~ "^/v1/values/history/(.*)$" {
-                alias /var/lib/omniwallet/www/values/history/$1;
-        }
+        #location ~ "^/v1/values/history/(.*)$" {
+        #        alias /var/lib/omniwallet/www/values/history/$1;
+        #}
 
         #location ~ "^/v1/address/verify/(.*)$" {
         #        alias /var/lib/omniwallet/www/mastercoin_verify/addresses/$1;
@@ -253,4 +253,14 @@ server {
                 uwsgi_pass 127.0.0.1:$PORT;
         }
 
+        location = /v1/values { rewrite ^ /v1/values; }
+        location /v1/values { try_files $uri @flask_values_service; }
+        location @flask_values_service {
+                include uwsgi_params;
+                uwsgi_param SCRIPT_NAME /v1/values;
+                uwsgi_param UWSGI_MODULE values_service;
+                uwsgi_param UWSGI_CALLABLE app;
+                uwsgi_modifier1 30;
+                uwsgi_pass 127.0.0.1:$PORT;
+        }
 }
