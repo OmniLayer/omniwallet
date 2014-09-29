@@ -1,9 +1,9 @@
 import urlparse
 import os, sys
 import json
-tools_dir = os.environ.get('TOOLSDIR')
-lib_path = os.path.abspath(tools_dir)
-sys.path.append(lib_path)
+#tools_dir = os.environ.get('TOOLSDIR')
+#lib_path = os.path.abspath(tools_dir)
+#sys.path.append(lib_path)
 from msc_apps import *
 from debug import *
 

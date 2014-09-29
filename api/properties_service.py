@@ -4,9 +4,9 @@ import time
 from flask import Flask, request, jsonify, abort, json, make_response
 from msc_apps import *
 
-tools_dir = os.environ.get('TOOLSDIR')
-lib_path = os.path.abspath(tools_dir)
-sys.path.append(lib_path)
+#tools_dir = os.environ.get('TOOLSDIR')
+#lib_path = os.path.abspath(tools_dir)
+#sys.path.append(lib_path)
 data_dir_root = os.environ.get('DATADIR')
 
 app = Flask(__name__)
