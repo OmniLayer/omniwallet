@@ -41,14 +41,14 @@ def getCurrentPrice(currency=None):
     pid1=getPropertyid('BTC', protocol1)
     protocol2='Mastercoin'
     #strip off the SP and grab just the numbers
-    pid2=getPropertyid('MSC', protocol2)
+    pid2=1
 
   elif input == 'TMSC':
     protocol1='Bitcoin'
     pid1=getPropertyid('BTC', protocol1)
     protocol2='Mastercoin'
     #strip off the SP and grab just the numbers
-    pid2=getPropertyid('TMSC', protocol2)
+    pid2=2
 
   else:
     return json.dumps([0])
