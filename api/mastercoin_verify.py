@@ -13,7 +13,8 @@ app.debug = True
 #TODO COnversion
 @app.route('/properties')
 def properties():
-  ROWS=dbSelect("select * from smartproperties")
+  #ROWS=dbSelect("select * from smartproperties")
+  ROWS=dbSelect("select propertyname, propertyid, protocol from smartproperties")
 
   def dehexify(hex_str):
       temp_str=[]
@@ -28,7 +29,9 @@ def properties():
   for sprow in ROWS:
       res = {
           'currencyID': sprow[1],
-          'name': dehexify(sprow[-1]['name']) 
+          #'name': dehexify(sprow[-1]['name']) 
+          'name': dehexify(sprow[0]),
+          'Protocol': sprow[2]
       }
       response.append(res)
 
@@ -42,7 +45,7 @@ def addresses():
 
   currency_id = re.sub(r'\D+', '', currency_id) #check alphanumeric
   ROWS=dbSelect("select address,balanceavailable,balancereserved,sp.propertytype from addressbalances ab, smartproperties sp "
-                "where ab.propertyid=sp.propertyid and sp.propertyid=%s",[currency_id])
+                "where ab.propertyid=sp.propertyid and sp.protocol!='Fiat' and sp.propertyid=%s",[currency_id])
 
   for addrrow in ROWS:
       res = {

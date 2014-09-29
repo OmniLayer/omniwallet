@@ -14,7 +14,8 @@ TIMEOUT='timeout -s 9 60 '
 def get_msc_balances( addr ):
   #TODO move functionality for individual currencies into /tx/ endpoint (sent, received, total reserved balances, etc.)
   addr = re.sub(r'\W+', '', addr) #check alphanumeric
-  ROWS=dbSelect("select * from addressbalances ab, smartproperties sp where ab.address=%s and ab.propertyid=sp.propertyid", [addr])
+  ROWS=dbSelect("select * from addressbalances ab, smartproperties sp where ab.address=%s and ab.propertyid=sp.propertyid "
+                "and sp.protocol='Mastercoin'", [addr])
 
   address_data = { 'address' : addr, 'balance': [] }
   for balrow in ROWS:
