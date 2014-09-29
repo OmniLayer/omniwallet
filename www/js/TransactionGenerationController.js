@@ -193,7 +193,7 @@ function TransactionGenerationController($scope, $modal, userService, walletTran
 
   $scope.broadcastTransaction = function(signedHex, $modalScope){
     walletTransactionService.getArmoryRaw(signedHex).then(function(result){
-      var finalTransaction = result.rawTransaction;
+      var finalTransaction = result.data.rawTransaction;
     
       //Showing the user the transaction hash doesn't work right now
       //var transactionHash = Bitcoin.Util.bytesToHex(transaction.getHash().reverse());
