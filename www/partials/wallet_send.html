@@ -74,7 +74,8 @@
             <span class="input-group-addon"> {{ totalCost }} BTC </span>
           </div>
           <br>
-      <input class="btn btn-primary btn-lg col-xs-push-3 col-xs-6" type="submit" value="Send Transaction">
+      <input class="btn btn-primary btn-lg col-xs-push-3 col-xs-3" type="submit" value="Send Transaction">
+      <button class="btn btn-warning btn-lg col-xs-3" ng-disabled="userService.getAddress($scope.walletAssets.selectedAddress).pubkey == undefined" type="button" ng-click="showBroadcastTransactionModal()" value="Broadcast Transaction">
       </form>
     </div>    
   </div>
