@@ -28,7 +28,7 @@ def generate_unsigned():
         utx = UnsignedTransaction(pytx=pytx, pubKeyMap=hex_to_binary(public_key_hex))
         unsigned_tx_ascii = utx.serializeAscii()
     except Exception, e:
-        abort("Error serializing transaction: %s" % e)
-        
+        return jsonify({"status": 502, "error":"Error serializing transaction: %s" % e)
+
     print("\n\nOutput is:\n%s" % unsigned_tx_ascii)  
     return jsonify({'armoryUnsigned':unsigned_tx_ascii})  
