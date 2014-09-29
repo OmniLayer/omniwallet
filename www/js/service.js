@@ -333,7 +333,9 @@ angular.module('omniwallet').factory('userService', ['$rootScope', '$http', '$in
         return service.updateWallet().then(function(result) {
           console.log("Success saving");
         }, function(result) {
-          console.log('Failure saving');
+          console.log("Failure saving");
+          location = location.origin + '/loginfs/' + service.getUUID()
+          service.logout();
         });
       }
     };
