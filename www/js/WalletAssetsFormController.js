@@ -32,6 +32,8 @@ function WalletAssetsFormController($scope, userService, walletTransactionServic
   });
   $scope.$watch('selectedAddress', function() {
     $scope.setBalance();
+    var pubkey = userService.getAddress($scope.selectedAddress).pubkey;
+    $scope.offline = pubkey != undefined && pubkey != "";
   });
   
   $scope.calculateTotal = calculateTotal;
