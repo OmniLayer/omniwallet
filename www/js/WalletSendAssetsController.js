@@ -80,6 +80,9 @@ function WalletSendAssetsController($modal, $scope, $http, $q, userService, wall
     $modalScope.signOffline= $scope.walletAssets.offline;
   };
   
+  transactionGenerationController.setBroadcastModalScope = function($modalScope){
+    $modalScope.broadcastAddress = $scope.walletAssets.selectedAddress;
+  };
 
   transactionGenerationController.generateData = function(){
     return {

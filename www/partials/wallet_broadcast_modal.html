@@ -4,12 +4,13 @@
 <form novalidate class="form-horizontal">
   <div class="modal-body">
     <p>
-      You will need to sign this transaction offline and come back to broadcast it and finish the send.
+      Please copy the signed transaction on the textbox below to broadcastit
     </p>
+    <h6>Broadcasting Address: <h5><strong>{{broadcastAddress}}</strong></h5></h6>
     <div class="control-group">
       <label class="control-label" for="signedtx">Signed Armory Transaction</label>
       <div class="controls">
-        <textarea rows="16" class="form-control" ng-model="transaction.signedHex" id="signedtx">
+        <textarea rows="16" class="form-control" ng-model="transaction.signedHex" id="signedtx"></textarea>
       </div>
     </div>
 </div>
