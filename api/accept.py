@@ -2,10 +2,10 @@ import os
 import sys
 import random
 
-#tools_dir = os.environ.get('TOOLSDIR')
-#lib_path = os.path.abspath(tools_dir)
-#sys.path.append(lib_path)
-#from msc_utils_parsing import *
+tools_dir = os.environ.get('TOOLSDIR')
+lib_path = os.path.abspath(tools_dir)
+sys.path.append(lib_path)
+from msc_utils_parsing import *
 from msc_apps import *
 
 #data_dir_root = os.environ.get('DATADIR')
