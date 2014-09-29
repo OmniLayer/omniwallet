@@ -81,7 +81,7 @@ function WalletSendAssetsController($modal, $scope, $http, $q, userService, wall
     $modalScope.signOffline= $scope.walletAssets.offline;
   };
   
-  transactionGenerationController.setBroadcastModalScope = function($modalScope){
+  transactionGenerationController.setBroadcastScope = function($modalScope){
     $modalScope.broadcastAddress = $scope.walletAssets.selectedAddress;
   };
 
