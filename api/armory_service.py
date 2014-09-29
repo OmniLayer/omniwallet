@@ -1,5 +1,5 @@
 import urlparse
-import os, sys, re, random,pybitcointools, bitcoinrpc, math
+import os, sys, re, random,pybitcointools, bitcoinrpc, math, hashlib
 from decimal import Decimal
 from flask import Flask, request, jsonify, abort, json, make_response
 from msc_apps import *
@@ -13,23 +13,67 @@ from armoryengine.ALL import *
 
 app = Flask(__name__)
 app.debug = True
-
+conn = getRPCconn()
 
 @app.route('/getunsigned', methods=['POST'])
 def generate_unsigned():
     unsigned_hex = request.form['unsigned_hex']
     pubkey = request.form['pubkey']
-    #Translate raw txn
-    pytx = PyTx()
-    print("Encoding raw txn: %s" % unsigned_hex)
+    ripemd160 = hashlib.new('ripemd160')
+    ripemd160.update(hashlib.sha256(hex_to_binary(pubkey)).digest())
+    pubKeyHash = binary_to_hex(ripemd160.digest())
     try:
-        unsigned_tx_bin = hex_to_binary(unsigned_hex)
-        pytx = PyTx().unserialize(unsigned_tx_bin)
-        utx = UnsignedTransaction(pytx=pytx, pubKeyMap=hex_to_binary(pubkey))
-        unsigned_tx_ascii = utx.serializeAscii()
-    except Exception, e:
-        print("Error serializing transaction: %s" % e)
-        abort(500)
+        tnet_ = request.form['testnet']
+    except KeyError, e:
+        tnet_ = 0
+    #Translate raw txn
+    decoded_tx = conn.decoderawtransaction(unsigned_hex)
+    spending_txid= decoded_tx['vin'][0]['txid']
+    spending_tx_raw = conn.getrawtransaction(spending_txid, False)
+    spending_tx_decoded = conn.decoderawtransaction(spending_tx_raw)
+    tnet = 'fabfb5da' if tnet_ else 'f9beb4d9'
+
+    i_vout = -1
+    for each in spending_tx_decoded['vout']:
+      print each['scriptPubKey']['asm'].split(' ')[2], pubKeyHash
+      if each['scriptPubKey']['asm'].split(' ')[2] == pubKeyHash:
+        i_vout = each['n']
+
+    i_k = [{ 'dersighex': '', 'pubkeyhex': pubkey, 'wltlochex': '' }]
+
+    o_k = []
+    for o in decoded_tx['vout']:
+      o_k.append( {    'authdata': '',
+                       'authmethod': 'NONE',
+                       'contribid': '',
+                       'contriblabel': '',
+                       'magicbytes': tnet,
+                       'p2shscript': '',
+                       'txoutscript': o['scriptPubKey']['hex'],
+                       'txoutvalue': int( o['value'] * decimal.Decimal(1e8) ),
+                       'version': 1,
+                       'wltlocator': ''}) 
+
+    json_nosig = {
+    'id': '',
+    'locktimeint': 0, 
+    'magicbytes': tnet,
+    'version': 1,
+    'inputs': [   {   'contribid': '',
+                      'contriblabel': '',
+                      'keys': i_k,
+                      'magicbytes': tnet,
+                      'numkeys': 1,
+                      'p2shscript': '',
+                      'sequence': 4294967295,
+                      'supporttx': spending_tx_raw,
+                      'supporttxoutindex': i_vout,
+                      'version': 1}],
+
+    'outputs': o_k
+    }
+    
+    unsigned_tx_ascii= UnsignedTransaction().fromJSONMap(json_nosig, True).serializeAscii()
 
     print("\n\nOutput is:\n%s" % unsigned_tx_ascii)  
     return jsonify({'armoryUnsigned':unsigned_tx_ascii})  
