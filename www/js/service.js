@@ -406,15 +406,18 @@ angular.module('omniwallet').factory('appraiser', ['$rootScope', '$http', '$q', 
 	}, 'BTC');
       }
     };
-    AppraiserService.prototype.getValue = function(amount, symbol) {
+    AppraiserService.prototype.getValue = function(amount, symbol, divisible) {
       if (symbol == 'BTC') {
         if (this.conversions.BTC)
           return this.conversions.BTC * amount;
         else
           return 'BTC Value Unavailable';
-      } else {
+      } else {        
         if (this.conversions.hasOwnProperty(symbol)) {
-          return this.getValue(this.conversions[symbol] * amount, 'BTC');
+          if (divisible)
+            return this.getValue(this.conversions[symbol] * amount, 'BTC', true);
+          else
+            return this.getValue(this.conversions[symbol] * amount * 100000000, 'BTC', true);
         } else
           return symbol + ' Value Unavailable';
       }
