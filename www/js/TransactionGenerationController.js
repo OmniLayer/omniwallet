@@ -191,7 +191,7 @@ function TransactionGenerationController($scope, $modal, userService, walletTran
     }
   };
 
-  $scope.broadcastTransaction = function(signedHex){
+  $scope.broadcastTransaction = function(signedHex, $modalScope){
     walletTransactionService.getArmoryRaw(signedHex).then(function(result){
       var finalTransaction = result.rawTransaction;
     
@@ -234,7 +234,7 @@ function TransactionGenerationController($scope, $modal, userService, walletTran
           $scope.ok = function(signedHex) {
             $scope.clicked = true;
             $scope.waiting = true;
-            broadcastTransaction(signedHex);
+            broadcastTransaction(signedHex, $scope);
           };
           
           $scope.cancel = function () {
