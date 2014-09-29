@@ -155,6 +155,7 @@ function TransactionGenerationController($scope, $modal, userService, walletTran
             });
             fileName="tx"+(new Date).getTime()+".json";
             saveAs(exportBlob, fileName);
+            $scope.unsaved=false;
             $scope.saved=true;
           };
           
