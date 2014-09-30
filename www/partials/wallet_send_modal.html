@@ -13,7 +13,7 @@
         <tr>
         <td width="103px" height="30px" class="description-title">From:</td><td class="description-text">{{sendFrom}}</td>
         </tr>
-       
+        
         <tr>
         <td width="103px" height="30px" class="description-title">To:</td><td class="description-text">{{sendTo}}</td>
         </tr>
@@ -23,10 +23,19 @@
 <div class="modal-footer footer-div">
  <br>
     <div class="row" ng-hide=transactionSuccess>
-    <button ng-disabled="clicked" class="btn btn-lg modal-action-btn" ng-click="ok()">
-        <img src="/assets/img/SendIcon_normal.png" class="action-img-normal"><img src="/assets/img/SendIcon_roll.png" class="action-img-roll"> Send funds
-    </button>
-    <img class="" src="/assets/img/spinner.gif" ng-show="waiting">
+       <div ng-hide="btcValueChanged"> 
+        <button ng-disabled="clicked" class="btn btn-lg modal-action-btn" ng-click="ok()">
+            <img src="/assets/img/SendIcon_normal.png" class="action-img-normal"><img src="/assets/img/SendIcon_roll.png" class="action-img-roll"> Send funds
+        </button>
+        <img class="" src="/assets/img/spinner.gif" ng-show="waiting">
+       </div>
+    </div>
+    <div class="row text-left" ng-show="btcValueChanged">
+        <p class="description-text">choose what do you want to do:</p>
+        <br>
+        <button class="btn btn-lg modal-action-btn" ng-click="sendByValue()" style="font-size: 15px;">Send ${{value}}</button>
+        <button class="btn btn-lg modal-action-btn" ng-click="sendByAmount()" style="font-size: 15px;">Send {{convertSatoshiToDisplayedValue(sendAmount)}} BTC</button>
+        <button class="btn btn-lg modal-action-btn" ng-click="goBack()" style="font-size: 15px;">Go back and change the amount.</button>
     </div>
       <br>
     <div class="row">
