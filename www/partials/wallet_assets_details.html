@@ -93,18 +93,18 @@
         </div>
         <div class="row show-grid bg-active" ng-show="!property.fixedissuance">
           <div class="col-xs-12">
-            <span class="tag" ng-if="!property.divisible">{{crowdsale.participanttokens | numeraljs: '0,0'}}</span>
-            <span class="tag" ng-if="property.divisible">{{crowdsale.participanttokens | numeraljs: '0,0.00000000'}}</span>
+            <div class="tag" ng-if="!property.divisible" ng-bind-html="crowdsale.participanttokens.toString() | numeraljs: '0,0'"></div>
+            <div class="tag" ng-if="property.divisible" ng-bind-html="crowdsale.participanttokens.toString() | numeraljs: '0,0.00000000'"></div>
             <span class="help-block">Tokens already bought by participants</span>
-            <span class="tag" ng-if="!property.divisible">{{crowdsale.issuertokens | numeraljs: '0,0'}}</span>
-            <span class="tag" ng-if="property.divisible">{{crowdsale.issuertokens | numeraljs: '0,0.00000000'}}</span>
+            <div class="tag" ng-if="!property.divisible" ng-bind-html="crowdsale.issuertokens.toString() | numeraljs: '0,0'"></div>
+            <div class="tag" ng-if="property.divisible" ng-bind-html="crowdsale.issuertokens.toString() | numeraljs: '0,0.00000000'"></div>
             <span class="help-block">Tokens created for the issuer ({{crowdsale.percenttoissuer}}%)</span>
           </div>
         </div>
         <div class="row show-grid bg-active" ng-show="property.fixedissuance">
           <div class="col-xs-12">
-            <span class="tag" ng-if="!property.divisible">{{property.totaltokens | numeraljs: '0,0'}}</span>
-            <span class="tag" ng-if="property.divisible">{{property.totaltokens | numeraljs: '0,0.00000000'}}</span>
+            <div class="tag" ng-if="!property.divisible" ng-bind-html="property.totaltokens | numeraljs: '0,0'"></div>
+            <div class="tag" ng-if="property.divisible" ng-bind-html="property.totaltokens | numeraljs: '0,0.00000000'"></div>
             <span class="help-block">Total tokens</span>
           </div>
         </div>
@@ -141,9 +141,9 @@
               <div class="row">
                 <div class="col-xs-offset-1 col-xs-11">
                   <div><img src="/assets/img/miniomni.png"><a href="https://blockchain.info/address/{{transaction.sendingaddress}}?sort=0">{{transaction.sendingaddress.substr(0,5)}}...{{transaction.sendingaddress.substr(-5,5)}}</a></div>
-                  <div ng-if="!property.divisible">Invested {{transaction.amount | numeraljs: '0,0'}} {{formatCurrencyName(transaction.propertyid)}} got {{transaction.purchasedtokens}} {{transaction.purchasedpropertyname}} tokens.
+                  <div ng-if="!property.divisible">Invested <span ng-bind-html="transaction.amount | numeraljs: '0,0'"></span> {{formatCurrencyName(transaction.propertyid)}} got <span ng-bind-html="transaction.purchasedtokens | numeraljs: '0,0'"></span> {{transaction.purchasedpropertyname}} tokens.
                   </div>
-                  <div ng-if="property.divisible">Invested {{transaction.amount | numeraljs: '0,0.00000000'}} {{formatCurrencyName(transaction.propertyid)}} got {{transaction.purchasedtokens}} {{transaction.purchasedpropertyname}} tokens.
+                  <div ng-if="property.divisible">Invested <span ng-bind-html="transaction.amount | numeraljs: '0,0.00000000'"></span> {{formatCurrencyName(transaction.propertyid)}} got <span ng-bind-html="transaction.purchasedtokens | numeraljs: '0,0.00000000'"></span> {{transaction.purchasedpropertyname}} tokens.
                   </div>
                 </div>
               </div>
