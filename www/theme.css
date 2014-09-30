@@ -267,3 +267,20 @@ form.form-search:before {
     height: 100%;
     padding-right: 25px;
 }
+
+.panel-asset-history{
+  margin-bottom: 5px;
+  border-width: 5px;
+}
+.panel-asset-history-purchase{
+  border-color:lightgray;
+  color:lightgray;
+}
+.panel-asset-history-close{
+  border-color:darkgray;
+  color:darkgray;
+}
+.panel-asset-history-create{
+  border-color:lightgreen;
+  color:lightgreen;
+}

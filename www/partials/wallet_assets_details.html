@@ -107,8 +107,9 @@
       <span>Found {{history.total}} investment transactions</span>
       <div class="scroll">
         <div class="scroll-body" infinite-scroll='loadHistory()' infinite-scroll-disabled='history.loading || history.loaded' infinite-scroll-distance='3'>
-          <div class="panel panel-default" ng-repeat="transaction in history.transactions" style="margin-bottom: 5px;">
-            <div class="panel-body">
+          <div class="panel panel-asset-history" ng-repeat="transaction in history.transactions" style="margin-bottom: 5px;"
+            ng-class="{panel-asset-history-purchase: transaction.type == 'Close Crowdsale', panel-asset-history-close: transaction.type == 'Close Crowdsale', panel-asset-history-create: transaction.type.indexOf('Create Property') > -1}">
+            <div ng-if="transaction.type == 'Crowdsale Purchase'" class="panel-body">
               <div class="row" style="margin-bottom: 15px;">
                 <div class="col-xs-4"><h6>{{formatTransactionTime(transaction.blocktime,"elapsed")}}</h6><span style="color: #ccc">{{formatTransactionTime(transaction.blocktime)}}</span></div>
                 <div class="col-xs-8">
@@ -121,7 +122,24 @@
               <div class="row">
                 <div class="col-xs-offset-1 col-xs-11">
                   <div><img src="/assets/img/miniomni.png"><a href="https://blockchain.info/address/{{transaction.sendingaddress}}?sort=0">{{transaction.sendingaddress.substr(0,5)}}...{{transaction.sendingaddress.substr(-5,5)}}</a></div>
-                  Invested {{transaction.amountsent}} {{formatCurrencyName(transaction.propertyid)}} got {{transaction.participanttokens}} tokens
+                  Invested {{transaction.amount}} {{formatCurrencyName(transaction.propertyid)}} got {{transaction.purchasedtokens}} {{transaction.purchasedpropertyname}} tokens.
+                </div>
+              </div>
+            </div>
+            <div ng-if="transaction.type.indexOf('Create Property') > -1" class="panel-body">
+              <div class="row" style="margin-bottom: 15px;">
+                <div class="col-xs-4"><h6>{{formatTransactionTime(transaction.blocktime,"elapsed")}}</h6><span style="color: #ccc">{{formatTransactionTime(transaction.blocktime)}}</span></div>
+                <div class="col-xs-8">
+                  <h5>Crowdsale was created</h5>
+                </div>
+              </div>
+            </div>
+            <div ng-if="transaction.type == 'Close Crowdsale'" class="panel-body">
+              <div class="row" style="margin-bottom: 15px;">
+                <div class="col-xs-4"><h6>{{formatTransactionTime(transaction.blocktime,"elapsed")}}</h6><span style="color: #ccc">{{formatTransactionTime(transaction.blocktime)}}</span></div>
+                <div class="col-xs-8">
+                  <img src="/assets/img/assets-history-icons/close.png" alt="{{transaction.type}}">
+                  <h5>Crowdsale was closed from further participation</h5>
                 </div>
               </div>
             </div>
