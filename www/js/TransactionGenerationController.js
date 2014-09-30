@@ -140,9 +140,9 @@ function TransactionGenerationController($scope, $modal, userService, walletTran
       // open modal
       var modalInstance = $modal.open({
         templateUrl: $scope.modalTemplateUrl,
-        controller: function($scope, $modalInstance, data, prepareTransaction, setModalScope, convertSatoshiToDisplayedValue, getDisplayedAbbreviation) {
+        controller: function($scope, $modalInstance, data, prepareTransaction, setModalScope, walletAssets) {
           setModalScope($scope);
-          
+          $scope.signOffline= walletAssets.offline;
           $scope.ok = function() {
             $scope.clicked = true;
             $scope.waiting = true;
@@ -177,11 +177,8 @@ function TransactionGenerationController($scope, $modal, userService, walletTran
           setModalScope: function(){
             return $scope.setModalScope;
           },
-          convertSatoshiToDisplayedValue: function() {
-            return $scope.convertSatoshiToDisplayedValue;
-          },
-          getDisplayedAbbreviation: function() {
-            return $scope.getDisplayedAbbreviation;
+          walletAssets: function() {
+            return $scope.$parent;
           }
         }
       });

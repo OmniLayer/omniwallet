@@ -78,7 +78,6 @@ function WalletSendAssetsController($modal, $scope, $http, $q, userService, wall
     $modalScope.sendTo= $scope.sendTo;
     $modalScope.sendFrom= $scope.selectedAddress;
     $modalScope.totalCost= +$scope.convertDisplayedValue($scope.totalCost);
-    $modalScope.signOffline= $scope.walletAssets.offline;
   };
   
   transactionGenerationController.setBroadcastScope = function($modalScope){

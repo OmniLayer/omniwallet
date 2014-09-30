@@ -20,32 +20,35 @@
     </table>
     <hr>
     <span class="send-fee">Transaction fees: {{convertSatoshiToDisplayedValue(totalCost, true)}} bitcoins</span>
-    <hr>
-    <p ng-show="signOffline" class="text-warning">
-      You will need to sign this transaction offline and come back to broadcast it and finish the send.
-    </p>
-    <pre collapse="!readyToSign">{{unsignedTransaction}}</pre>
+    <div ng-if="signOffline">
+      <hr>
+      <p class="text-warning">
+        You will need to sign this transaction offline and come back to broadcast it and finish the send.
+      </p>
+      <pre collapse="!readyToSign">{{unsignedTransaction}}</pre>
+    </div>
 </div>
 <div class="modal-footer footer-div">
  <br>
     <div class="row" ng-hide="transactionSuccess || readyToSign">
-    <button ng-disabled="clicked" class="btn btn-lg modal-action-btn" ng-click="ok()">
-        <img src="/assets/img/SendIcon_normal.png" class="action-img-normal"><img src="/assets/img/SendIcon_roll.png" class="action-img-roll"> Send funds
-    </button>
-    <img class="" src="/assets/img/spinner.gif" ng-show="waiting">
+      <button ng-disabled="clicked" class="btn btn-lg modal-action-btn" ng-click="ok()">
+          <img src="/assets/img/SendIcon_normal.png" class="action-img-normal"><img src="/assets/img/SendIcon_roll.png" class="action-img-roll"> Send funds
+      </button>
+      <img class="" src="/assets/img/spinner.gif" ng-show="waiting">
     </div>
-      <br>
     <div class="row">
       <div ng-show="readyToSign">
         <h4 class="pull-left" style="color:green;">Your transaction was generated successfully, now save the text above and sign it on your Armory offline computer. Come back with the signed text to broadcast it.  
           </h4>
         <button ng-click="saveUnsigned(unsignedTransaction)" class="btn btn-success" ng-hide="saved">Save</button>
-        <button ng-click="close()" class="btn" ng-class="{'btn-danger':unsaved,'btn-success':saved}">Close</button>
+        <a href="/wallet/overview">
+          <button ng-click="close()" class="btn" ng-class="{'btn-danger':unsaved,'btn-success':saved}">Close</button>
+        </a>
       </div>
       <div ng-show="transactionSuccess">
         <h4 class="pull-left" style="color:green"> Funds were sent successfully, 
         check your transaction <a target="_blank" href="{{url}}">here.</a></h4>
-        <a href="/wallet/overview"><button class="btn btn-success" ng-click="cancel()">Close</button></a>
+        <a href="/wallet/overview"><button class="btn btn-success" ng-click="close()">Close</button></a>
       </div>
       <div ng-show="transactionError">
         <h4 class="col-xs-12" style="color:red;"> Funds could not be sent: 
