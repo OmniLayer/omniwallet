@@ -130,7 +130,7 @@
             ng-class="{'panel-asset-history-purchase': transaction.isParticipation, 'panel-asset-history-close': transaction.isClose, 'panel-asset-history-create': transaction.isCreate}">
             <div ng-if="transaction.isParticipation" class="panel-body">
               <div class="row">
-                <div class="col-xs-4"><h6>{{formatTransactionTime(transaction.blocktime,"elapsed")}}</h6><span class="text-muted">{{formatTransactionTime(transaction.blocktime)}}</span></div>
+                <div class="col-xs-4"><h6 class="text-black">{{formatTransactionTime(transaction.blocktime,"elapsed")}}</h6><span class="text-muted">{{formatTransactionTime(transaction.blocktime)}}</span></div>
                 <div class="col-xs-8">
                   <span class="assets-history-badge">
                     <div class="row badge" ng-hide="transaction.confirmations > 100"><img src="/assets/img/shouty.png" /> {{transaction.confirmations}} Confirmations</div>
@@ -150,7 +150,7 @@
             </div>
             <div ng-if="transaction.isCreate" class="panel-body">
               <div class="row">
-                <div class="col-xs-4"><h6>{{formatTransactionTime(transaction.blocktime,"elapsed")}}</h6><span class="text-muted">{{formatTransactionTime(transaction.blocktime)}}</span></div>
+                <div class="col-xs-4"><h6 class="text-black">{{formatTransactionTime(transaction.blocktime,"elapsed")}}</h6><span class="text-muted">{{formatTransactionTime(transaction.blocktime)}}</span></div>
                 <div class="col-xs-8">
                   <h5>Crowdsale was created</h5>
                 </div>
@@ -158,7 +158,7 @@
             </div>
             <div ng-if="transaction.isClose" class="panel-body">
               <div class="row">
-                <div class="col-xs-4"><h6>{{formatTransactionTime(transaction.blocktime,"elapsed")}}</h6><span class="text-muted">{{formatTransactionTime(transaction.blocktime)}}</span></div>
+                <div class="col-xs-4"><h6 class="text-black">{{formatTransactionTime(transaction.blocktime,"elapsed")}}</h6><span class="text-muted">{{formatTransactionTime(transaction.blocktime)}}</span></div>
                 <div class="col-xs-8">
                   <img src="/assets/img/assets-history-icons/close.png" alt="{{transaction.type}}">
                   <h5>Crowdsale was closed from further participation</h5>
