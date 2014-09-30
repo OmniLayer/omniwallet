@@ -1,7 +1,7 @@
 WHOLE_UNIT = new Big(0.00000001); //Backend data returns satoshi, use this conversion ratio
 SATOSHI_UNIT = new Big(100000000); //Backend data needs satoshi, use this conversion ratio
 MIN_MINER_FEE = new Big(0.00010000);
-function WalletAssetsFormController($scope, userService, walletTransactionService) {
+function WalletAssetsFormController($scope, $injector, userService, walletTransactionService) {
   // [ Form Validation]
   $scope.showErrors = false;
 
@@ -120,7 +120,14 @@ function WalletAssetsFormController($scope, userService, walletTransactionServic
     else
       return $scope.selectedCoin.symbol;
   };
-
+  
+  $scope.getBitcoinValue = function(){
+    var appraiser = $injector.get('appraiser');
+    return appraiser.getValue(100000000,"BTC");
+  }
+  $scope.setBitcoinValue = function(value){
+    $scope.bitcoinValue = value;
+  } 
   $scope.convertDisplayedValue = function (value) {
       if (value instanceof Array) {
         value.forEach(function(e, i, a) {
