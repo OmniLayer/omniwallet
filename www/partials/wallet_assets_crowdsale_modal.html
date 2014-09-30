@@ -23,14 +23,30 @@
   <p><br>
   If the above is correct, please press Start the Crowdsale.
   </p>
+  <div ng-if="signOffline">
+    <hr>
+    <p class="text-warning">
+      You will need to sign this transaction offline and come back to broadcast it and finish the send.
+    </p>
+    <pre collapse="!readyToSign">{{unsignedTransaction}}</pre>
+  </div>
+</div>
 <div class="modal-footer">
-    <div class="row" ng-hide="transactionSuccess">
+    <div class="row" ng-hide="transactionSuccess || readyToSign">
     <button ng-disabled="clicked" class="btn btn-primary" ng-click="ok()">Start the Crowdsale</button>
     <button ng-disabled="wating" class="btn btn-warning" ng-click="cancel()">Cancel</button>
     <img class="" src="/assets/img/spinner.gif" ng-show="waiting">
     </div>
       <br>
     <div class="row">
+      <div ng-show="readyToSign">
+        <h4 class="pull-left" style="color:green;">Your transaction was generated successfully, now save the text above and sign it on your Armory offline computer. Come back with the signed text to broadcast it.  
+          </h4>
+        <button ng-click="saveUnsigned(unsignedTransaction)" class="btn btn-success" ng-hide="saved">Save</button>
+        <a href="/wallet/overview">
+          <button ng-click="close()" class="btn" ng-class="{'btn-danger':unsaved,'btn-success':saved}">Close</button>
+        </a>
+      </div>
       <div ng-show="transactionSuccess">
         <h4 class="pull-left" style="color:green"> Crowdsale started successfully, 
         check your transaction <a target="_blank" href="{{url}}">here.</a></h4>
