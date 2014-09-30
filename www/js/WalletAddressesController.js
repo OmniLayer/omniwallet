@@ -163,23 +163,85 @@ angular.module('omniwallet')
     if (!$scope.modalOpened) {
       $scope.modalOpened = true;
       var modalInstance = $modal.open({
-	templateUrl: '/partials/delete_address_modal.html',
-	controller: DeleteBtcAddressModal,
-	resolve: {
-	  address: function() {
-	    return addritem;
-	  }
-	}
+        templateUrl: '/partials/delete_address_modal.html',
+        controller: DeleteBtcAddressModal,
+        resolve: {
+          address: function() {
+            return addritem;
+          }
+        }
       });
       modalInstance.result.then(function() {
-	$injector.get('userService').removeAddress(addritem.address);
+	      $injector.get('userService').removeAddress(addritem.address);
         $scope.modalOpened=false;
-	$scope.refresh();
+	      $scope.refresh();
         },
-      function() {
-	    $scope.modalOpened=false;
+        function() {
+  	     $scope.modalOpened=false;
       });
     }
+  };
+
+  $scope.broadcastTransaction = function(signedHex, $modalScope){
+    var walletTransactionService = $injector.get('walletTransactionService');
+    walletTransactionService.getArmoryRaw(signedHex).then(function(result){
+      var finalTransaction = result.data.rawTransaction;
+    
+      //Showing the user the transaction hash doesn't work right now
+      //var transactionHash = Bitcoin.Util.bytesToHex(transaction.getHash().reverse());
+
+      walletTransactionService.pushSignedTransaction(finalTransaction).then(function(successData) {
+        var successData = successData.data;
+        if (successData.pushed.match(/submitted|success/gi) != null) {
+          $modalScope.waiting = false;
+          $modalScope.transactionSuccess = true;
+          $modalScope.url = 'http://blockchain.info/address/' + from + '?sort=0';
+        } else {
+          $modalScope.waiting = false;
+          $modalScope.transactionError = true;
+          $modalScope.error = successData.pushed; //Unspecified error, show user
+        }
+      }, function(errorData) {
+        $modalScope.waiting = false;
+        $modalScope.transactionError = true;
+        if (errorData.message)
+          $modalScope.error = 'Server error: ' + errorData.message;
+        else 
+          if (errorData.data)
+            $modalScope.error = 'Server error: ' + errorData.data;
+          else
+            $modalScope.error = 'Unknown Server Error';
+        console.error(errorData);
+      });
+    })
+  };
+
+  $scope.openBroadcastTransactionForm =function(address){
+    var modalInstance = $modal.open({
+        templateUrl: "/partials/wallet_broadcast_modal.html",
+        controller: function($scope, $modalInstance, broadcastTransaction) {
+          $scope.broadcastAddress = address;
+          
+          $scope.ok = function(signedHex) {
+            $scope.clicked = true;
+            $scope.waiting = true;
+            broadcastTransaction(signedHex, $scope);
+          };
+          
+          $scope.cancel = function () {
+            $modalInstance.dismiss('cancel');
+          };
+          
+          $scope.close = function () {
+            $modalInstance.dismiss('close');
+          };
+        },
+        resolve: {
+          broadcastTransaction: function() {
+              return $scope.broadcastTransaction;
+          }
+        }
+      });
   };
 
   $scope.refresh = function() {
