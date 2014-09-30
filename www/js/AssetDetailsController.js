@@ -26,7 +26,9 @@ function AssetDetailsController($location, $route, $scope, $timeout, $element, $
     "starttime" : 0,
     "deadline" : 0,
     "amountraised" : 0,
-    "tokensissued" : 0
+    "tokensissued" : 0,
+    "issuertokens" : 0,
+    "participanttokens" : 0
   };
   
   $scope.isOwner = false;
