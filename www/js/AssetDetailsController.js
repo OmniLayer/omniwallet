@@ -122,7 +122,7 @@ function AssetDetailsController($location, $route, $scope, $timeout, $element, $
   // Load and initialize the form
   propertiesService.getProperty($scope.propertyId).then(function(result){
     $scope.property = result.data;
-    if(!$scope.property.fixedissuance)
+    if(!$scope.property.fixedissuance){
       $scope.crowdsale = result.data;
       // format data
       $scope.crowdsale.participanttokens = new Big($scope.crowdsale.tokensissued);
@@ -188,9 +188,5 @@ function AssetDetailsController($location, $route, $scope, $timeout, $element, $
         });
       }
     }
-    
-    
   });
-  
-  
 }
