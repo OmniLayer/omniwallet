@@ -153,7 +153,7 @@ def gettransaction(hash_id):
       # 22 - Dex Accepts - referenceaddress 
     
       if txType == 20:
-        cancel = 'True' if txJson['subaction'] == 'Cancel' else 'False'
+        cancel = True if txJson['subaction'] == 'Cancel' else False
 
         if not cancel:
           ROWS=dbSelect("select * from transactions t, activeoffers ao, txjson txj where t.txhash=%s "
