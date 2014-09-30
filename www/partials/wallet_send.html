@@ -47,7 +47,7 @@
 	    <input ng-show="walletAssets.selectedCoin.symbol == 'BTC'" id="value" name="value" type="number" ng-model="value" class="form-control" ng-change="changeAmount()" value="value"
 	    placeholder="{{ sendPlaceholderValue }}" step="{{ sendPlaceholderStep }}" min="{{ sendPlaceholderMin }}" required>          
           </div>
-          < <br ng-hide="walletAssets.selectedCoin.symbol == 'BTC'">
+          <br ng-hide="walletAssets.selectedCoin.symbol == 'BTC'">
 	  <div class="input-group" style="width: 15%;" ng-hide="walletAssets.selectedCoin.symbol == 'BTC'">
             <span class="input-group-addon" style="padding: 0.65em;"> MasterProtocol Transaction Cost: 
     	 <a href=""
