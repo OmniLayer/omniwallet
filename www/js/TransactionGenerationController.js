@@ -30,6 +30,12 @@ function TransactionGenerationController($scope, $modal, userService, walletTran
           var transaction = Bitcoin.Transaction.deserialize(bytes);
           var script = parseScript(successData.sourceScript);
 
+          if(transaction.ins.length == 0){
+            $modalScope.waiting = false;
+            $modalScope.transactionError = true;
+            $modalScope.error = 'Error: Not enough inputs in the address!';
+          }
+             
           transaction.ins.forEach(function(input) {
             input.script = script;
           });
