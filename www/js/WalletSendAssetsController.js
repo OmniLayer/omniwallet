@@ -156,6 +156,8 @@ function WalletSendAssetsController($modal, $scope, $http, $q, userService, wall
         }
         $scope.sendByValue = function(){
           $scope.sendAmount = $scope.convertDisplayedValue($scope.value/$scope.getBitcoinValue());
+          $scope.sendAmount = new Big(parseInt($scope.sendAmount)).toFixed(0);
+          data.transactionData.amount_to_transfer = $scope.sendAmount;
           $scope.btcValueChanged = false;
           $scope.transactionError = false;
           $scope.bitcoinValue = $scope.getBitcoinValue();
@@ -174,19 +176,19 @@ function WalletSendAssetsController($modal, $scope, $http, $q, userService, wall
     },
     resolve: {
     data: function() {
-      return $scope.generateData();
+      return transactionGenerationController.generateData();
     },
     prepareTransaction: function() {
-      return $scope.prepareTransaction;
+      return transactionGenerationController.prepareTransaction;
     },
     setModalScope: function(){
-      return $scope.setModalScope;
+      return transactionGenerationController.setModalScope;
     },
     convertSatoshiToDisplayedValue: function() {
-      return $scope.convertSatoshiToDisplayedValue;
+      return transactionGenerationController.convertSatoshiToDisplayedValue;
     },
     getDisplayedAbbreviation: function() {
-      return $scope.getDisplayedAbbreviation;
+      return transactionGenerationController.getDisplayedAbbreviation;
     }
     }
     });
