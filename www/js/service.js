@@ -251,9 +251,16 @@ angular.module('omniwallet').factory('userService', ['$rootScope', '$http', '$in
       },
 
       getTradableAddresses: function(addressFilter, offlineSupport){
-        if(offlineSupport)
-          return service.getAddressesWithPrivkey(addressFilter).concat(service.getAddressesWithPubkey(addressFilter));
-        else
+        if(offlineSupport){
+            var errors = ['You have no addresses with a balance on the selected coin!','Could not find any addresses with attached private keys!']
+            var addresses = service.getAddressesWithPrivkey(addressFilter).concat(service.getAddressesWithPubkey(addressFilter)).filter(function(element){
+              return errors.indexOf(element) === -1;
+            });
+            if (addresses.length == 0)
+              addresses = ['Could not find any tradable addresses!'];
+            
+            return addresses;
+        }else
           return service.getAddressesWithPrivkey(addressFilter);
       },
 

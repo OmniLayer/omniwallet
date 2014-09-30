@@ -54,32 +54,34 @@ function WalletAssetsFormController($scope, userService, walletTransactionServic
   var addrListBal = [];
   // fill the addrBalanceList with all the addresses on the wallet for which we've got private keys.
   userService.getAddressesWithPrivkey().concat(userService.getAddressesWithPubkey()).forEach(function(e, i) {
-    var balances = [
-      {
-        symbol: 'MSC',
-        value: '0'
-      },
-      {
-        symbol: 'TMSC',
-        value: '0'
-      },
-      {
-        symbol: 'BTC',
-        value: '0'
-      }];
-    addrListBal[i] = {
-      address: e,
-      balance: balances
-    };
-    var promise = walletTransactionService.getAddressData(e);
-    promise.then(function(successData) {
-      var successData = successData.data;
-      addrListBal[i].balance =  successData.balance;
-      $scope.setBalance();
-    }, function(errorData) {
-      //alert("We have encountered a problem accessing the server ... Please try again in a few minutes");
-      console.log('Error, no balance data found for ' + e + ' setting defaults...');
-    });
+    if(Bitcoin.Address.validate(e)){
+      var balances = [
+        {
+          symbol: 'MSC',
+          value: '0'
+        },
+        {
+          symbol: 'TMSC',
+          value: '0'
+        },
+        {
+          symbol: 'BTC',
+          value: '0'
+        }];
+      addrListBal[i] = {
+        address: e,
+        balance: balances
+      };
+      var promise = walletTransactionService.getAddressData(e);
+      promise.then(function(successData) {
+        var successData = successData.data;
+        addrListBal[i].balance =  successData.balance;
+        $scope.setBalance();
+      }, function(errorData) {
+        //alert("We have encountered a problem accessing the server ... Please try again in a few minutes");
+        console.log('Error, no balance data found for ' + e + ' setting defaults...');
+      });
+    }
   });
   
   $scope.setBalance = function() {
