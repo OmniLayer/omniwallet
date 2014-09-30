@@ -393,9 +393,9 @@ function WalletTradeOverviewController($scope, $http, $q, userService, hashExplo
         transaction_data.sort(function(a, b) {
           return a.formatted_price_per_coin - b.formatted_price_per_coin
         }); // sort cheapest; sort most recent (b.tx_time - a.tx_time)
-        transaction_data.length == 0 ? transaction_data.push({ tx_hash_concat: 'No offers/bids found for this timeframe' }) : transaction_data;
+        transaction_data.length == 0 ? transaction_data.push({ tx_hash_concat: 'No offers/bids found for this timeframe', tx_hash: 'No offers/bids found for this timeframe'  }) : transaction_data;
       } else 
-          transaction_data.push({ tx_hash_concat: 'No offers/bids found for this timeframe' })
+          transaction_data.push({ tx_hash_concat: 'No offers/bids found for this timeframe', tx_hash: 'No offers/bids found for this timeframe' })
       $scope.orderbook = transaction_data;
     }
     );
