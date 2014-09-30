@@ -5,15 +5,13 @@ from msc_apps import *
 import glob, json
 import requests
 
-tools_dir = os.environ.get('TOOLSDIR')
-lib_path = os.path.abspath(tools_dir)
-sys.path.append(lib_path)
-data_dir_root = os.environ.get('DATADIR')
+#tools_dir = os.environ.get('TOOLSDIR')
+#lib_path = os.path.abspath(tools_dir)
+#sys.path.append(lib_path)
+#data_dir_root = os.environ.get('DATADIR')
 
 app = Flask(__name__)
 app.debug = True
-
-sqlconn = sql_connect()
 
 @app.route('/', methods=['GET'])
 def search():
@@ -22,8 +20,7 @@ def search():
   else:
       return jsonify({ 'status': 400, 'data': 'No query found in request' })
 
-  sqlconn.execute("select * from transactions t, txjson txj where t.txhash ~* \'" + str(query) + "\' and t.txdbserialnum=txj.txdbserialnum")
-  ROWS= sqlconn.fetchall()
+  ROWS=dbSelect("select * from transactions t, txjson txj where t.txhash ~* \'" + str(query) + "\' and t.txdbserialnum=txj.txdbserialnum")
 
   response = []
   if len(ROWS) > 0:

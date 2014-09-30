@@ -2,10 +2,7 @@ import urlparse
 import os, sys, re
 from flask import Flask, request, jsonify, abort, json, make_response
 from msc_apps import *
-import psycopg2, psycopg2.extras
  
-sqlconn = sql_connect()
-
 app = Flask(__name__)
 app.debug = True
 
@@ -16,8 +13,8 @@ def getproperty(prop_id):
     except ValueError:
         abort(make_response('This endpoint only consumes valid input', 400))
 
-    sqlconn.execute("select * from txjson txj, transactions t, smartproperties sp where sp.createtxdbserialnum = txj.txdbserialnum and sp.createtxdbserialnum = t.txdbserialnum and sp.propertyid=" + str(property_) )
-    ROWS= sqlconn.fetchall()
+    ROWS=dbSelect("select * from txjson txj, transactions t, smartproperties sp where sp.createtxdbserialnum = txj.txdbserialnum "
+                  "and sp.createtxdbserialnum = t.txdbserialnum and sp.propertyid=%s",[property_])
 
     #print property_, ROWS[0]
 

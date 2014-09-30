@@ -374,12 +374,12 @@ function WalletTradeOverviewController($scope, $http, $q, userService, hashExplo
           });
         });
 
-        //transaction_data = transaction_data.filter(function(item) {
-        //   var orderType = item.tx_type_str.toLowerCase()
-        //   var orderStatus = item.color.match(/expired|done/gi) || []
-        //   //DEBUG console.log(orderStatus, item.color)
-        //   return (orderType == 'sell offer') && (orderStatus.length == 0)
-        //});
+        transaction_data = transaction_data.filter(function(item) {
+           var orderType = item.tx_type_str.toLowerCase()
+           var orderStatus = item.color.match(/invalid|expired|done/gi) || []
+           //DEBUG console.log(orderStatus, item.color)
+           return (orderType == 'sell offer') && (orderStatus.length == 0)
+        });
 
         angular.forEach(transaction_data, function(transaction, index) {
           //DEBUG console.log(new Date(Number(transaction.tx_time)))
@@ -393,9 +393,9 @@ function WalletTradeOverviewController($scope, $http, $q, userService, hashExplo
         transaction_data.sort(function(a, b) {
           return a.formatted_price_per_coin - b.formatted_price_per_coin
         }); // sort cheapest; sort most recent (b.tx_time - a.tx_time)
-        transaction_data.length == 0 ? transaction_data.push({ tx_hash_concat: 'No offers/bids found for this timeframe' }) : transaction_data;
+        transaction_data.length == 0 ? transaction_data.push({ tx_hash_concat: 'No offers/bids found for this timeframe', tx_hash: 'No offers/bids found for this timeframe'  }) : transaction_data;
       } else 
-          transaction_data.push({ tx_hash_concat: 'No offers/bids found for this timeframe' })
+          transaction_data.push({ tx_hash_concat: 'No offers/bids found for this timeframe', tx_hash: 'No offers/bids found for this timeframe' })
       $scope.orderbook = transaction_data;
     }
     );
@@ -506,7 +506,7 @@ function WalletTradePendingController($scope, $http, $q, userService, hashExplor
 
       $scope.filtered_sells = filtered_transaction_data.filter(function(item) {
         var orderType = item.tx_type_str.toLowerCase()
-        var orderStatus = item.color.match(/expired/gi) || []
+        var orderStatus = item.color.match(/(done|expired|invalid)/gi) || []
         //DEBUG console.log(orderStatus, item.color)
         return (orderType == 'sell offer') && (orderStatus.length == 0)
       });

@@ -2,7 +2,6 @@ import urlparse
 import os, sys, re
 from flask import Flask, request, jsonify, abort, json, make_response
 from msc_apps import *
-from sqltools import *
 from decimal import Decimal
 
 
@@ -42,7 +41,6 @@ def getcurrencyrecent(currency_page):
     else: c_id = lookup_currency[ c_symbol ] 
 
     #Do we even need per-currency pagination?
-    #sqlconn.execute("select * from transactions t, txjson txj where t.txdbserialnum = txj.txdbserialnum and txj.txdata::json->>'propertyid' = \'" + c_id + "\' order by t.txblocknumber DESC limit 10;")
     ROWS=dbSelect("select * from transactions t, txjson txj where t.txdbserialnum = txj.txdbserialnum order by t.txblocknumber DESC limit 10;")
 
     response = []

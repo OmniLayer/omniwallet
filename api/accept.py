@@ -8,7 +8,7 @@ sys.path.append(lib_path)
 from msc_utils_parsing import *
 from msc_apps import *
 
-data_dir_root = os.environ.get('DATADIR')
+#data_dir_root = os.environ.get('DATADIR')
 
 
 def accept_form_response(response_dict):
@@ -90,13 +90,8 @@ def prepare_accept_tx_for_signing(buyer, amount, tx_hash, min_btc_fee=10000):
 
     # read json of orig tx to get tx details
 
-    sqlconn = sql_connect()
-    query= "select * from activeoffers ao, " + \
-           "transactions t, txjson txj where t.txhash=\'" + tx_hash + "\' "\
-           "and ao.createtxdbserialnum=t.txdbserialnum " + \
-           "and ao.createtxdbserialnum=txj.txdbserialnum"
-    sqlconn.execute(query)
-    ROWS = sqlconn.fetchall()
+    ROWS = dbSelect("select * from activeoffers ao, transactions t, txjson txj where t.txhash=%s "
+                    "and ao.createtxdbserialnum=t.txdbserialnum and ao.createtxdbserialnum=txj.txdbserialnum", [txhash] )
 
     # sanity check
     if len(ROWS) == 0:

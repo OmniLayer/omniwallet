@@ -1,13 +1,12 @@
 import urlparse
 import os, sys
 import json
-tools_dir = os.environ.get('TOOLSDIR')
-lib_path = os.path.abspath(tools_dir)
-sys.path.append(lib_path)
+#tools_dir = os.environ.get('TOOLSDIR')
+#lib_path = os.path.abspath(tools_dir)
+#sys.path.append(lib_path)
 from msc_apps import *
 from debug import *
 
-sqlconn = sql_connect()
 
 TIMEOUT='timeout -s 9 60 '
 # Get the Mastercoin balances.  Not that this is also creating the default balance
@@ -15,8 +14,8 @@ TIMEOUT='timeout -s 9 60 '
 def get_msc_balances( addr ):
   #TODO move functionality for individual currencies into /tx/ endpoint (sent, received, total reserved balances, etc.)
   addr = re.sub(r'\W+', '', addr) #check alphanumeric
-  sqlconn.execute("select * from addressbalances ab, smartproperties sp where ab.address='"+addr+"' and ab.propertyid=sp.propertyid")
-  ROWS= sqlconn.fetchall()
+  ROWS=dbSelect("select * from addressbalances ab, smartproperties sp where ab.address=%s and ab.propertyid=sp.propertyid "
+                "and sp.protocol='Mastercoin'", [addr])
 
   address_data = { 'address' : addr, 'balance': [] }
   for balrow in ROWS:

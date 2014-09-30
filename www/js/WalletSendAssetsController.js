@@ -53,7 +53,7 @@ function WalletSendAssetsController($modal, $scope, $http, $q, userService, wall
     }
     if (coin == 'BTC') {
       if (sendAmount < dustValue)
-        error += 'make sure your send amount is at least 0.00005430 BTC if sending BTC, ';
+        error += 'make sure your send amount is at least 0.00005757 BTC if sending BTC, ';
       if (minerFees < minerMinimum)
         error += 'make sure your fee entry is at least 0.0001 BTC to cover miner costs, ';
     }
@@ -76,6 +76,7 @@ function WalletSendAssetsController($modal, $scope, $http, $q, userService, wall
     $modalScope.sendAmount=  $scope.selectedCoin.divisible ? +$scope.convertDisplayedValue($scope.sendAmount) : +$scope.sendAmount,
     $modalScope.minerFees= +$scope.convertDisplayedValue($scope.minerFees),
     $modalScope.sendTo= $scope.sendTo;
+    $modalScope.sendFrom= $scope.selectedAddress;
     $modalScope.totalCost= +$scope.convertDisplayedValue($scope.totalCost);
   };
   
