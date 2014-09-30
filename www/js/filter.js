@@ -28,7 +28,18 @@ angular.module('omniwallet')
         return deadlineUTC.toLocaleString();
       };
     }
+  ]).filter('crowdsaleStatus', [function() {
+      return function(active) {
+        return active ? "Active" : "Finished";
+      };
+    }
+  ]).filter('assetIssuedType', [function() {
+      return function(fixedissuance) {
+        return fixedissuance ? "Property" : "Crowdsale";
+      };
+    }
   ]);
+
 var conversionFactor = {
   'mtos': 0.00001000, //millibit to satoshi
   'utos': 0.00000100, //microbit to satoshi

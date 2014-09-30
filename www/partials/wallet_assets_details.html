@@ -42,13 +42,13 @@
            </div>
            <div class="row">
             <div class="col-xs-12 standout">
-              <div class="alert alert-standout text-center" ng-class="{'alert-info':info, 'alert-danger':error}">{{infoMessage}}</div>
+              <div class="alert alert-standout text-center" ng-class="{'alert-info':standoutInfo, 'alert-danger':standoutError}">{{infoMessage}}</div>
               <button class="btn btn-success btn-lg btn-standout" ng-click="participate()" ng-show="canParticipate" >Participate</button>
             </div>
            </div>
           </div>
         </div>
-        <div class="panel panel-default">
+        <div ng-show="!property.fixedissuance" class="panel panel-default">
           <div class="panel-body">
             <h3>Accepted Currency</h3>
             <table class="table">
@@ -74,29 +74,35 @@
         </div>
         <div class="row show-grid bg-active">
           <div class="col-xs-12">
-            <h3><span ng-show="isOwner">Your </span>Active crowdsale</h3>
-            <p>
+            <h3><span ng-show="isOwner">Your </span>{{crowdsale.active | crowdsaleStatus}} crowdsale</h3>
+            <p ng-show="crowdsale.active">
               Time until closing:
             </p>
             <div id="timerWrapper"></div>
           </div>
         </div>
-        <div class="row show-grid">
+        <div class="row show-grid"  ng-show="!property.fixedissuance">
           <div class="col-xs-12">
             Crowdsale started {{formatedStartDate}} (~{{daysAgo}} days ago)
           </div>
         </div>
-        <div class="row show-grid bg-active">
+        <div class="row show-grid bg-active" ng-show="!property.fixedissuance && crowdsale.active" >
           <div class="col-xs-12">
             <span class="pull-left shout-label" >Current early bird bonus:</span> <div class="shout pull-right"><span>+{{earlyBirdBonus}}%</span></div>
           </div>
         </div>
-        <div class="row show-grid bg-active">
+        <div class="row show-grid bg-active" ng-show="!property.fixedissuance">
           <div class="col-xs-12">
             <span class="tag">{{crowdsale.participanttokens}}</span>
             <span class="help-block">Tokens already bought by participants</span>
             <span class="tag">{{crowdsale.issuertokens}}</span>
             <span class="help-block">Tokens created for the issuer ({{crowdsale.percenttoissuer}}%)</span>
+          </div>
+        </div>
+        <div class="row show-grid bg-active" ng-show="property.fixedissuance">
+          <div class="col-xs-12">
+            <span class="tag">{{property.totaltokens}}</span>
+            <span class="help-block">Total tokens</span>
           </div>
         </div>
         <div class="row show-grid bg-active" ng-show="estimatedWorth > 0">
@@ -112,9 +118,9 @@
         </div>
       </div>
     </div>
-    <div class="row" ng-if="!$scope.property.fixedissuance">
-      <h2>Crowdsale history</h2>
-      <span>Found {{history.total}} investment transactions</span>
+    <div class="row">
+      <h2>{{property.fixedissuance | assetIssuedType}} history</h2>
+      <span>Found {{history.total}} transactions</span>
       <div class="scroll">
         <div class="scroll-body" infinite-scroll='loadHistory()' infinite-scroll-disabled='history.loading || history.loaded' infinite-scroll-distance='3'>
           <div class="panel panel-asset-history" ng-repeat="transaction in history.transactions" 
