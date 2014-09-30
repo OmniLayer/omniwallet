@@ -14,6 +14,7 @@ def getCurrentPrice(currency=None):
   #cleanse our input name
   pattern=re.compile('[\W_]+')
   input=pattern.sub('', currency.split('.')[0]).upper()
+  currency=None
 
   if input[:2].upper() == "SP":
     protocol1='Bitcoin'
@@ -24,10 +25,12 @@ def getCurrentPrice(currency=None):
 
   elif len(input) == 6:
     #double currency, return btc using second currency
+    base=input[:3]
+    currency=input[3:]
     protocol1='Fiat'
-    pid1=getPropertyid(input[3:], protocol1)
+    pid1=getPropertyid(currency, protocol1)
     protocol2='Bitcoin'
-    pid2=getPropertyid('BTC', protocol2)
+    pid2=getPropertyid(base, protocol2)
 
   elif input == 'BTC':
     #default to USD
@@ -64,9 +67,15 @@ def getCurrentPrice(currency=None):
                  'symbol': input
                }]
   else:
-    response = [{ 'price': ROWS[0][0],
-                 'symbol': input
-               }]
+    if currency==None:
+      response = [{ 'price': ROWS[0][0],
+                   'symbol': input
+                 }]
+    else:
+      response = [{ 'price': ROWS[0][0],
+                   'symbol': base,
+                   'currency': currency
+                 }]
 
   json_response = json.dumps(response)
   return json_response
@@ -90,6 +99,7 @@ def history(currency=None):
   #cleanse our input name
   pattern=re.compile('[\W_]+')
   input=pattern.sub('', currency.split('.')[0]).upper()
+  currency=None
 
   if input[:2].upper() == "SP":
     protocol1='Bitcoin'
@@ -100,10 +110,12 @@ def history(currency=None):
 
   elif len(input) == 6:
     #double currency, return btc using second currency
+    base=input[:3]
+    currency=input[3:]
     protocol1='Fiat'
-    pid1=getPropertyid(input[3:], protocol1)
+    pid1=getPropertyid(currency, protocol1)
     protocol2='Bitcoin'
-    pid2=getPropertyid('BTC', protocol2)
+    pid2=getPropertyid(base, protocol2)
 
   elif input == 'BTC':
     #default to USD
@@ -143,11 +155,19 @@ def history(currency=None):
                }]
   else:
     for time in ROWS:
-      item = {'timestamp': time[1],
-              'value': {'price': time[0],
-                        'symbol': input
-                       }
-             }
+      if currency==None:
+        item = {'timestamp': time[1],
+                'value': {'price': time[0],
+                          'symbol': input
+                         }
+               }
+      else:
+        item = {'timestamp': time[1],
+                'value': {'price': time[0],
+                          'symbol': base,
+                          'currency': currency
+                         }
+               }
       response.append(item)
 
   json_response = json.dumps(response)
