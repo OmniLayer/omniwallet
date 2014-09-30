@@ -256,6 +256,10 @@ form.form-search:before {
   font-size:large;
 }
 
+.shout-label{
+
+}
+
 .scroll{
     height: 500px;
     overflow: hidden;
@@ -283,4 +287,41 @@ form.form-search:before {
 .panel-asset-history-create{
   border-color:lightgreen;
   color:lightgreen;
+}
+.badge{
+  border: 1px solid #ccc;
+  padding: 3px;
+  border-radius: 5px;
+  box-shadow: 0px 3px #ccc;
+  margin-bottom: 5px;
+}
+.standout{
+  position: relative;
+}
+.btn-standout{
+  position: absolute;
+  top: 0px;
+  right: 20px;
+  margin-top: 15px;
+  font-size: 23px;
+  border-radius: 0px;
+  -webkit-box-shadow: 5px 5px #ccc;
+  -moz-box-shadow: 5px 5px #ccc;
+  box-shadow: 5px 5px #ccc; 
+}
+.alert-standout{
+  border-radius: 0px;
+}
+.assets-history-badge{
+  float:right!important;
+  padding-right: 15px;
+}
+.label-asset-id{
+  font-size: 12px;
+  vertical-align: middle;
+  background-color: #999;
+}
+.label-asset-category{
+  background-color: #EEE;
+  color: #666;
 }
