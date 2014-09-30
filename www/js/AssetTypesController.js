@@ -261,14 +261,12 @@ angular.module('omniwallet')
         var appraiser = $injector.get('appraiser');
         var data = [],
           keys = Object.keys($scope.totals);
-        console.log($scope);
         keys.forEach(function(e, i) {
           var ptype = $scope.balances.balances[e].property_type;
           if (ptype == 1) { 
             divisible=false } else {
             divisible=true }
           var value = appraiser.getValue($scope.totals[e], keys[i], divisible);
-          console.log(e,$scope.totals[e], value);          
           if (typeof value == 'number' && value > 0) {
             data.push({
               value: value,
