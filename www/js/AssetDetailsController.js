@@ -45,7 +45,8 @@ function AssetDetailsController($location, $route, $scope, $timeout, $element, $
   $scope.canParticipate = false;
   $scope.loggedIn = userService.loggedIn();
   $scope.standoutError = $scope.loggedIn;
-  
+  $scope.standoutInfo = !$scope.standoutError;
+
   $scope.pendingThinking = true;
   $scope.hasAddressesWithPrivkey = false;
   $scope.selectedAddress = "";
@@ -111,7 +112,11 @@ function AssetDetailsController($location, $route, $scope, $timeout, $element, $
     propertiesService.getHistory($scope.propertyId,$scope.history.transactions.length,5).then(function(result){
       $scope.history.total =  result.data.total;
       for (var i = 0; i < result.data.transactions.length; i++) {
-        $scope.history.transactions.push(result.data.transactions[i]);
+        var tx = result.data.transactions[i];
+        tx.isParticipation = tx.type == 'Crowdsale Purchase';
+        tx.isClose = tx.type == 'Close Crowdsale';
+        tx.isCreate = tx.type.indexOf('Create Property') > -1;
+        $scope.history.transactions.push(tx);
       }
       $scope.history.loading=false;
       if($scope.history.transactions.length == $scope.history.total)
@@ -150,8 +155,8 @@ function AssetDetailsController($location, $route, $scope, $timeout, $element, $
         }).forEach(function(coin){
           if(coin.id==$scope.crowdsale.propertyiddesired){
             $scope.selectedCoin = coin;    
-            $scope.canParticipate = userService.loggedIn();
-            $scope.infoMessage = userService.loggedIn() ? "Get some tokens!" : "Login to participate";
+            $scope.canParticipate = true;
+            $scope.infoMessage = "Get some tokens!";
             $scope.standoutError = false;
             $scope.standoutInfo = true
             $scope.tokenStep = $scope.tokenMin = coin.divisible ? 0.00000001 : 1;
