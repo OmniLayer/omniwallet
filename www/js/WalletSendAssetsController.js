@@ -1,7 +1,8 @@
 function WalletSendAssetsController($modal, $scope, $http, $q, userService, walletTransactionService) {
   $scope.walletAssets =  $scope.$parent.$parent;
   var transactionGenerationController = $scope.$parent;
-
+  // Enable the transaction for offline wallets
+  $scope.walletAssets.offlineSupport=true;
 
   transactionGenerationController.validateTransactionData = function(){
     var dustValue = 5757;

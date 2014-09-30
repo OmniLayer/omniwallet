@@ -13,7 +13,8 @@ function CrowdsaleIssuanceController($scope, propertiesService){
     if (e.symbol == "BTC")
       $scope.walletAssets.selectedCoin = e;
   });
-  
+  // Enable the transaction for offline wallets
+  $scope.walletAssets.offlineSupport=true;
   var transactionGenerationController = $scope.$parent;
   $scope.ecosystem = 2;
   $scope.propertyType = 2;

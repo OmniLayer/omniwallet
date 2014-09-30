@@ -206,7 +206,7 @@ angular.module('omniwallet').factory('userService', ['$rootScope', '$http', '$in
       
       getAddressesWithPrivkey: function(addressFilter) {
         var addresses = service.data.wallet.addresses.filter(function(e) {
-          return (e.privkey && e.privkey.length == 58) || e.pubkey;
+          return (e.privkey && e.privkey.length == 58);
         }).map(function(e){
           return e.address;
         });
@@ -225,6 +225,36 @@ angular.module('omniwallet').factory('userService', ['$rootScope', '$http', '$in
         }
         
         return addresses;
+      },
+
+      getAddressesWithPubkey: function(addressFilter) {
+        var addresses = service.data.wallet.addresses.filter(function(e) {
+          return e.pubkey != undefined;
+        }).map(function(e){
+          return e.address;
+        });
+        
+        if (addresses.length == 0)
+          addresses = ['Could not find any addresses with attached private keys!'];
+        else {
+          
+          if(addressFilter){
+            addresses = addresses.filter(function(e) {
+              return addressFilter.indexOf(e) > -1;
+            });
+            if (addresses.length == 0)
+              addresses = ['You have no addresses with a balance on the selected coin!'];
+          }
+        }
+        
+        return addresses;
+      },
+
+      getTradableAddresses: function(addressFilter, offlineSupport){
+        if(offlineSupport)
+          return service.getAddressesWithPrivkey(addressFilter).concat(service.getAddressesWithPubkey(addressFilter));
+        else
+          return service.getAddressesWithPrivkey(addressFilter);
       },
 
       getCurrencies: function() {

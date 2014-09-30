@@ -19,16 +19,14 @@ function WalletAssetsFormController($scope, userService, walletTransactionServic
         $scope.selectedCoin = e;
     });
   }
-  $scope.addressList = $scope.selectedCoin ? userService.getAddressesWithPrivkey($scope.selectedCoin.tradableAddresses) : [];
+  $scope.addressList = $scope.selectedCoin ? userService.getTradableAddresses($scope.selectedCoin.tradableAddresses, $scope.offlineSupport) : [];
   if(!$scope.$parent.selectedAddress)
     $scope.selectedAddress = $scope.addressList[0] || null;
   $scope.$watch('selectedCoin', function() {
-    $scope.addressList = $scope.selectedCoin ? userService.getAddressesWithPrivkey($scope.selectedCoin.tradableAddresses) : [];
-    if(!$scope.$parent.selectedAddress)
-      $scope.selectedAddress = $scope.addressList[0] || null;
-    $scope.setBalance();
-    $scope.minerFees = +MIN_MINER_FEE.valueOf(); // reset miner fees
-    $scope.calculateTotal($scope.minerFees);
+    updateData()
+  });
+  $scope.$watch('offlineSupport', function() {
+    updateData()
   });
   $scope.$watch('selectedAddress', function() {
     $scope.setBalance();
@@ -36,6 +34,14 @@ function WalletAssetsFormController($scope, userService, walletTransactionServic
     $scope.offline = pubkey != undefined && pubkey != "";
   });
   
+  var updateData = function(){
+    $scope.addressList = $scope.selectedCoin ? userService.getTradableAddresses($scope.selectedCoin.tradableAddresses, $scope.offlineSupport) : [];
+    if(!$scope.$parent.selectedAddress)
+      $scope.selectedAddress = $scope.addressList[0] || null;
+    $scope.setBalance();
+    $scope.minerFees = +MIN_MINER_FEE.valueOf(); // reset miner fees
+    $scope.calculateTotal($scope.minerFees);
+  }
   $scope.calculateTotal = calculateTotal;
 
   $scope.minerFees = +MIN_MINER_FEE.valueOf(); //set default miner fees
@@ -47,7 +53,7 @@ function WalletAssetsFormController($scope, userService, walletTransactionServic
   $scope.balanceData = [0];
   var addrListBal = [];
   // fill the addrBalanceList with all the addresses on the wallet for which we've got private keys.
-  userService.getAddressesWithPrivkey().forEach(function(e, i) {
+  userService.getAddressesWithPrivkey().concat(userService.getAddressesWithPubkey()).forEach(function(e, i) {
     var balances = [
       {
         symbol: 'MSC',
