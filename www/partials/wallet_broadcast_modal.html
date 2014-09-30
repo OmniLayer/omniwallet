@@ -24,7 +24,7 @@
     <div class="row">
       <div ng-show="transactionSuccess">
         <h4 class="pull-left" style="color:green"> Transaction broadcasted successfully <a target="_blank" href="{{url}}">here.</a></h4>
-        <a href="/wallet/overview"><button class="btn btn-success" ng-click="close()">Close</button></a>
+        <button class="btn btn-success" ng-click="close()">Close</button>
       </div>
       <div ng-show="transactionError">
         <h4 class="col-xs-12" style="color:red;"> Transaction failed to broadcast: 

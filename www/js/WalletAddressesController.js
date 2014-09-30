@@ -182,7 +182,7 @@ angular.module('omniwallet')
     }
   };
 
-  $scope.broadcastTransaction = function(signedHex, $modalScope){
+  $scope.broadcastTransaction = function(signedHex, from, $modalScope){
     var walletTransactionService = $injector.get('walletTransactionService');
     walletTransactionService.getArmoryRaw(signedHex).then(function(result){
       var finalTransaction = result.data.rawTransaction;
@@ -219,13 +219,13 @@ angular.module('omniwallet')
   $scope.openBroadcastTransactionForm =function(address){
     var modalInstance = $modal.open({
         templateUrl: "/partials/wallet_broadcast_modal.html",
-        controller: function($scope, $modalInstance, broadcastTransaction) {
+        controller: function($scope, $modalInstance, address, broadcastTransaction) {
           $scope.broadcastAddress = address;
           
           $scope.ok = function(signedHex) {
             $scope.clicked = true;
             $scope.waiting = true;
-            broadcastTransaction(signedHex, $scope);
+            broadcastTransaction(signedHex, address, $scope);
           };
           
           $scope.cancel = function () {
@@ -239,6 +239,8 @@ angular.module('omniwallet')
         resolve: {
           broadcastTransaction: function() {
               return $scope.broadcastTransaction;
+          }, address: function(){
+            return address;
           }
         }
       });
