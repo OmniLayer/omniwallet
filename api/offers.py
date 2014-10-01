@@ -136,8 +136,10 @@ def filterOffers(addresses):
     #print query
 
     for row in ROWS:
-      address = row[-1]['sendingaddress']
-      currency = 'MSC' if row[-1]['propertyid'] == 1 else 'TMSC'
+      jsondata=json.loads(row[-1])
+
+      address = jsondata['sendingaddress']
+      currency = 'MSC' if jsondata['propertyid'] == 1 else 'TMSC'
 
       if address not in offers: offers[ address ] = {}
       if 'offer_tx' not in offers[ address ]: offers[ address ]['offer_tx'] = {}
@@ -155,8 +157,9 @@ def filterOffers(addresses):
     #print query
 
     for row in ROWS:
-      address = row[-1]['referenceaddress']
-      currency = 'MSC' if row[-1]['propertyid'] == 1 else 'TMSC'
+      jsondata=json.loads(row[-1])
+      address = jsondata['referenceaddress']
+      currency = 'MSC' if jsondata['propertyid'] == 1 else 'TMSC'
 
       if address not in offers: offers[ address ] = {}
       if 'accept_tx' not in offers[ address ]: offers[ address ]['accept_tx'] = {}
