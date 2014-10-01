@@ -93,7 +93,7 @@ def gettransaction(hash_id):
       "block": txData[9],
       "ecosystem": '1' if txData[5] == 'Production' else '2', 
       "from_address": txJson['sendingaddress'], 
-      # "transactionType": txData[3],  # remove the number for now
+      "transactionType": txData[3],
       "transactionVersion": txData[4],
       "to_address": str("(null)"), 
       "confirms": txJson['confirmations'],
@@ -109,7 +109,7 @@ def gettransaction(hash_id):
       ret['formatted_amount'] = txJson['amount']
       ret['divisible'] = txJson['divisible']
       ret['fee'] = txJson['fee']
-      ret['transactionType'] = txJson['type']
+      ret['tx_type_str'] = txJson['type']
 
     if txType == 0 and txValid:
         ret['to_address'] = txJson['referenceaddress']
@@ -176,7 +176,7 @@ def gettransaction(hash_id):
           ret['formatted_block_time_limit'] = str(txJson['timelimit'])
           ret['formatted_fee_required'] = str(txJson['feerequired'])
           ret['subaction'] = txJson['subaction']
-          ret['transactionType'] = 'Sell cancel'
+          ret['tx_type_str'] = 'Sell cancel'
 
       if txType == 22:
         ROWS=dbSelect("select * from transactions t, offeraccepts oa, txjson txj where t.txhash=%s " 
@@ -194,7 +194,7 @@ def gettransaction(hash_id):
         ret['purchases'] = txJson['purchases']
         ret['currencyId'] = '0'
         ret['currency_str'] = 'Bitcoin'
-        ret['transactionType'] = 'Dex Purchase'
+        ret['tx_type_str'] = 'Dex Purchase'
         
         payment = 0
         for each in ret['purchases']:
