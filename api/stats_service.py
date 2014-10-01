@@ -16,3 +16,15 @@ def revision():
 
   json_response = json.dumps( response)
   return json_response
+
+
+@app.route('/stats')
+def stats():
+  ROWS=dbSelect("select count(walletid) from wallets where walletstate='Active'")
+
+  response = {
+          'amount_of_wallets': ROWS[0][0]
+      }
+
+  json_response = json.dumps( response)
+  return json_response

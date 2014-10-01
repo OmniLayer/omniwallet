@@ -22,13 +22,6 @@ echo "Establishing environment variables..."
 APPDIR=`pwd`
 TOOLSDIR=$APPDIR/node_modules/mastercoin-tools
 LOCK_FILE=$DATADIR/msc_cron.lock
-PARSE_LOG=$DATADIR/parsed.log
-VALIDATE_LOG=$DATADIR/validated.log
-ARCHIVE_LOG=$DATADIR/archived.log
-
-#if [ ! -d $DATADIR/tx ]; then
-#  cp -r $TOOLSDIR/www/tx $DATADIR/tx
-#fi
 
 # Export directories for API scripts to use
 export TOOLSDIR
@@ -77,7 +70,7 @@ do
     mkdir -p wallets sessions www
 
     echo "Updating Stats/Status File"
-    $PYTHONBIN $APPDIR/api/stats.py
+    #$PYTHONBIN $APPDIR/api/stats.py
     $PYTHONBIN $APPDIR/api/status.py -o $APPDIR -d $DATADIR
 
     # unlock

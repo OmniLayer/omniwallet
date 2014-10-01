@@ -66,7 +66,9 @@ server {
         }
 
         location ~ "^/v1/system/stats.json$" {
-                alias /var/lib/omniwallet/www/stats.json;
+                #alias /var/lib/omniwallet/www/stats.json;
+                 rewrite ^ /v1/system/stats;
+
         }
 
         location ~ "^/v1/system/status.html$" {
