@@ -35,11 +35,11 @@ angular.module('omniwallet')
                     balances[currencyItem.symbol] = {
                       "symbol": currencyItem.symbol,
                       "balance": +value || currencyItem.value,
-                      "value": appraiser.getValue(currencyItem.value, currencyItem.symbol),
+                      "value": appraiser.getValue(currencyItem.value, currencyItem.symbol, currencyItem.divisible),
                     };
                   } else {
                     balances[currencyItem.symbol].balance += +value || currencyItem.value;
-                    balances[currencyItem.symbol].value += appraiser.getValue(currencyItem.value, currencyItem.symbol);
+                    balances[currencyItem.symbol].value += appraiser.getValue(currencyItem.value, currencyItem.symbol, currencyItem.divisible);
                   }
 		  //console.log(balances);
                   if (currencyItem.symbol == 'BTC') {
@@ -183,7 +183,7 @@ angular.module('omniwallet')
               balances.push({
                 "address": addr,
                 "balance": +value || item.value,
-                "value": appraiser.getValue(item.value, currencySymbol)
+                "value": appraiser.getValue(item.value, currencySymbol, item.divisible)
               });
 
             }
@@ -262,7 +262,11 @@ angular.module('omniwallet')
         var data = [],
           keys = Object.keys($scope.totals);
         keys.forEach(function(e, i) {
-          var value = appraiser.getValue($scope.totals[e], keys[i]);
+          var ptype = $scope.balances.balances[e].property_type;
+          if (ptype == 1) { 
+            divisible=false } else {
+            divisible=true }
+          var value = appraiser.getValue($scope.totals[e], keys[i], divisible);
           if (typeof value == 'number' && value > 0) {
             data.push({
               value: value,

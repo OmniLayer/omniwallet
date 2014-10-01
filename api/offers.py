@@ -1,11 +1,13 @@
 import urlparse
 import os, sys, tempfile, json
-tools_dir = os.environ.get('TOOLSDIR')
-lib_path = os.path.abspath(tools_dir)
-sys.path.append(lib_path)
+import glob,time
+#tools_dir = os.environ.get('TOOLSDIR')
+#lib_path = os.path.abspath(tools_dir)
+#sys.path.append(lib_path)
 from msc_apps import *
+from decimal import *
 
-data_dir_root = os.environ.get('DATADIR')
+#data_dir_root = os.environ.get('DATADIR')
 
 def offers_response(response_dict):
     expected_fields=['type','currencyType']
@@ -15,178 +17,154 @@ def offers_response(response_dict):
         if len(response_dict[field]) != 1:
             return (None, 'Multiple values for field '+field)
     
-    #DEBUG     info(['dict',response_dict])        
-    if response_dict['type'][0].upper() == "TRANSACTIONBID":
-        data = filterTransactionBid(response_dict['transaction'][0], response_dict['validityStatus'][0].upper() )
-    elif response_dict['type'][0].upper() == "TRANSACTION":
-        data = filterTransaction(response_dict['transaction'][0] )
-    elif response_dict['type'][0].upper() == "TIME":
-        if 'time' in response_dict:
-            time = int(response_dict['time'][0])
-        else:
-            time = 86400
-        data = filterOffersByTime( response_dict , time  )
+    if response_dict['type'][0].upper() == "TIME":
+        time = int(response_dict['time'][0]) if 'time' in response_dict else 86400
+        data = filterOffersByTime( response_dict['currencyType'][0] , time  )
     else:
         address_arr = json.loads(response_dict['address'][0])
-        if type(address_arr) == type([]):
-            data = filterOffers(address_arr,response_dict['currencyType'][0].upper(), response_dict['offerType'][0].upper())
-        else:
-            data = { 'ERR': 'Address field must be a list or array type' }
+        data = filterOffers(address_arr) if type( address_arr ) == type( [] ) else { 'ERR': 'Address field must be a list or array type' } 
     
     response_status='OK'
     response='{"status":"'+response_status+'", "data":'+ str(json.dumps(data)) +'}'
     
-    #DEBUG print response
     return (response, None)
 
-def filterOffersByTime( request_data , time_seconds=86400):
-    import glob
-    import time
-
-    ct = request_data['currencyType'][0]
-    ot = request_data['orderType'][0] if request_data.has_key('orderType') else 'OFFER'
-
-    otLookup = { 'OFFER': 'Sell offer', 'ACCEPT': 'Sell accept' }
-    #for each file in /tx
-    #    extract timestamp
-    #    compare it to within the time given
-    #    make sure its a sell offer
-    #    if so, add to array
-    #    pass back array
-
+def filterOffersByTime( currency_type , time_seconds):
     #filter by currency
-    #data is from /tx so using 'currencyId' key to identify
-    if ct == 'MSC':
-        currency = '00000001'
-    else:
-        currency = '00000002'
+    currency = ('1' if currency_type == 'MSC' else '2')
 
-    atleast_now = int( str( int(time.time() - time_seconds) ) + '000'  )
-    transactions = glob.glob(data_dir_root + '/www/tx/*')
+    atleast_now = int( str( int(time.time() - time_seconds) ) + '000' )
 
-    transaction_data = []
-    for transaction in transactions:
-        if transaction[-5:] == '.json':
-          with open( transaction , 'r' ) as f:
-            tx = json.loads(f.readline())[0]
-            
-            #filtering begins here
-            if tx['invalid'] == False and tx.has_key('currencyId'):
-                if int(tx['tx_time']) >= (atleast_now-time_seconds) and \
-                   str(tx['currencyId']) == currency and \
-                   str(tx['tx_type_str']) == otLookup[ot]:
-                    #DEBUG info(['hash', tx['tx_hash']])
-                    #DEBUG info(['test', tx['currencyId'], currency])
-                    #DEBUG info([tx['tx_type_str'], otLookup[ot]])
-                    #DEBUG info(['tx time ', time.ctime( int(str( tx['tx_time'] )[:-3]) ) ])
-                    #DEBUG info(['now time - time_s ', time.ctime( int(str(atleast_now-time_seconds)[:-3]) ) ])
-                    transaction_data.append(tx)
+    ROWS=dbSelect("select * from activeoffers ao, transactions t, txjson tj where ao.propertyidselling=%s and "
+                  "ao.createtxdbserialnum=t.txdbserialnum and ao.createtxdbserialnum=tj.txdbserialnum", [currency])
+
+    response = [ mapSchema(row) for row in ROWS if int(mapSchema(row)['tx_time']) > atleast_now ]
+
+    return sorted(response, key=lambda x:  int(x['tx_time']) )
     
-    return transaction_data
+def mapSchema(row):
+  #print row, 'row'
+  rawdata = row[-1]
 
-def filterOffers(addresses,currencytype, offertype):
-    # currencyType   =  TMSC or MSC
-    # offerType      =  SELL, ACCEPT or BOTH
+  #We only map tx21 and tx22
+  if row[-11] == 20:
+    #print row
+    ppc = Decimal( rawdata['bitcoindesired'] ) / Decimal( rawdata['amount'] )
+    color = getcolor(row[10]) 
+    response = {
+      'action': -1, #don't have this data
+      'block': str(row[-5]),
+      'currencyId': str(rawdata['propertyid']),
+      'currency_str': 'Mastercoin' if str(rawdata['propertyid']) == '1' else 'Test Mastercoin',
+      'formatted_amount': str(rawdata['amount']),
+      'formatted_amount_available': '%.8f' % ( Decimal(row[1]) / Decimal(1e8) ),
+      'formatted_bitcoin_amount_desired': '%.8f' % ( Decimal(row[2]) / Decimal(1e8) ),
+      'formatted_block_time_limit': str(rawdata['timelimit']),
+      'formatted_fee_required': str(rawdata['feerequired']),
+      'formatted_price_per_coin': '%.8f' % ppc,
+      'bitcoin_required': '%.8f' % ( Decimal( ppc ) * Decimal( rawdata['amount'] ) ),
+      'from_address': rawdata['sendingaddress'],
+      'tx_type_str': "Sell offer",
+      'color': color,
+      'invalid': False if rawdata['valid'] == True else True,
+      'to_address': "sell offer",
+      'tx_hash': rawdata['txid'],
+      'tx_time': str(rawdata['blocktime']) + '000'
+    }
+  else:
+    sellofferdata = getsell(str(row[3]))
+    ppc = Decimal( sellofferdata[-1]['bitcoindesired'] ) / Decimal( sellofferdata[-1]['amount'] )
+    remaining = Decimal(row[1]) / Decimal(1e8)
+    response = {
+      'block': str(row[-5]),
+      'status': 'valid' if row[5] == 'unpaid' or row[5] == 'paid-partial' else 'closed',
+      'currencyId': str(rawdata['propertyid']),
+      'currency_str': 'Mastercoin' if str(rawdata['propertyid']) == '1' else 'Test Mastercoin',
+      'formatted_amount': '%.8f' % remaining,
+      'sell_offer_txid': sellofferdata[-1]['txid'],
+      #'formatted_amount_available': str( row[1] / Decimal(1e8) ),
+      #'formatted_bitcoin_amount_desired': str( row[2] / Decimal(1e8) ),
+      'formatted_price_per_coin': '%.8f' % ppc,
+      'bitcoin_required': '%.8f' % ( Decimal( ppc ) * Decimal( remaining ) ),
+      'payment_expired': False,
+      'from_address': rawdata['sendingaddress'],
+      'tx_type_str': 'Sell accept',
+      'color': "bgc-accept", #needed for compatibility
+      'invalid': False if rawdata['valid'] == True else True,
+      'to_address': rawdata['referenceaddress'],
+      'tx_hash': rawdata['txid'],
+      'tx_time': str(rawdata['blocktime']) + '000'
+    }
+
+  #keys that might be useful later
+  #bitcoin_amount_desired: "00000000002625a0"
+  #block_time_limit: "0f"
+  #index: "884"
+  #icon: "selloffer"
+  #icon_text: "Sell offer done"
+  
+  return response
+
+def getcolor(c):
+  return 'bgc-new' if c == 'active' else 'bgc-expired' if c == 'cancelled' else 'bgc-done' if c == 'sold' else 'bgc-expired'
+
+def getsell(txdbserialnum):
+
+    ROWS=dbSelect("select * from activeoffers ao, transactions t, txjson txj where ao.createtxdbserialnum=%s "
+                  "and t.txdbserialnum=%s  and txj.txdbserialnum=%s ",(txdbserialnum,txdbserialnum,txdbserialnum))
     
-    #DEBUG info(['addr',addresses])
+    return ROWS[0]
+
+def genQs(prefix, tbl_abbr, field, array):
+    qs = '(' + tbl_abbr + '.' + field + '=\'' + array[0] + '\' ' # table abbrev "." fieldname = address 
+    for entry in array[1:]:
+      entry = re.sub(r'\W+', '', entry) #check alphanumeric
+      qs += prefix + ' ' + tbl_abbr + '.' + field + '=\'' + entry +'\' '     # "and/or" table abbrev "." fieldname = next address
+    return qs + ') '
+
+def filterOffers(addresses):
+    #Returns all *ACTIVE* accepts and offers for a given address
     offers = {}
-    for address in addresses:
-        offers[address] = {}
-        #get list of all offers by address
-        try:
-            datadir = data_dir_root + '/addr'
-            filepath =  datadir + '/' + address + '.json'
-            f=open( filepath , 'r' )
-            allOffers = json.loads(f.readline())
-        except IOError:
-            offers[address] = 'ADDRESS_NOT_FOUND'
-            continue
-        
+    
+    #Query all active offers
+    qs = genQs('or', 'ao', 'seller', addresses)
 
-        #filter by currency
-        #1 is TMSC 
-        #0 is MSC
-        if currencytype == 'MSC':   #only need MSC so del TMSC
-            del allOffers['1']
-        elif currencytype == 'TMSC':  #only need TMSC so del MSC
-            del allOffers['0']
-        elif currencytype == 'BOTH':
-            pass
+    ROWS=dbSelect("select * from activeoffers ao, transactions t, txjson txj where " + qs + \
+                  " and offerstate='active' and ao.createtxdbserialnum=t.txdbserialnum "
+                  "and ao.createtxdbserialnum=txj.txdbserialnum")
 
-        #filter by offer type
-        #accept_tx are offers accepted
-        #bought_tx are offers bought
-        #offer_tx are offers of sale
-        #sold_tx are offers sold
-        #recieved and sent tx are simple send
-        #exodus tx is not related to offers
+    #print query
 
-        accept_tx = { 'TMSC': [], 'MSC': [] }
-        bought_tx = { 'TMSC': [], 'MSC': [] }
-        offer_tx =  { 'TMSC': [], 'MSC': [] }
-        sold_tx =   { 'TMSC': [], 'MSC': [] }
+    for row in ROWS:
+      address = row[-1]['sendingaddress']
+      currency = 'MSC' if row[-1]['propertyid'] == 1 else 'TMSC'
 
+      if address not in offers: offers[ address ] = {}
+      if 'offer_tx' not in offers[ address ]: offers[ address ]['offer_tx'] = {}
+      
+      offers[ address ]['offer_tx'][ currency ] = mapSchema(row)
+      #only one active offer per address
 
-        for key in allOffers:
-            keystr = 'MSC' if key == '0' else 'TMSC'
-            if isinstance(allOffers[key],dict) and int(key) < 2:
-                if offertype == 'BOTH':
-                    accept_tx[ keystr ] += allOffers[key]['accept_transactions']
-                    bought_tx[ keystr ] += allOffers[key]['bought_transactions']
-                    offer_tx[ keystr ] += allOffers[key]['offer_transactions']
-                    sold_tx[ keystr ] += allOffers[key]['sold_transactions']
-                elif offertype == 'ACCEPT': #accept_tx
-                    accept_tx[ keystr ] += allOffers[key]['accept_transactions']
-                    bought_tx[ keystr ] += allOffers[key]['bought_transactions']
-                elif offertype == 'SELL': #offer_tx
-                    offer_tx[ keystr ] += allOffers[key]['offer_transactions']
-                    sold_tx[ keystr ] += allOffers[key]['sold_transactions']
-        
-        offers[address]['accept_tx'] = accept_tx
-        offers[address]['bought_tx'] = bought_tx
-        offers[address]['offer_tx'] = offer_tx
-        offers[address]['sold_tx'] = sold_tx
+    #Query all active accepts
+    qs = genQs('or', 'oa', 'buyer', addresses)
+
+    ROWS=dbSelect("select * from offeraccepts oa, transactions t, txjson txj where " + qs + \
+                  " and expiredstate='f' and oa.linkedtxdbserialnum=t.txdbserialnum "
+                  "and oa.linkedtxdbserialnum=txj.txdbserialnum")
+
+    #print query
+
+    for row in ROWS:
+      address = row[-1]['referenceaddress']
+      currency = 'MSC' if row[-1]['propertyid'] == 1 else 'TMSC'
+
+      if address not in offers: offers[ address ] = {}
+      if 'accept_tx' not in offers[ address ]: offers[ address ]['accept_tx'] = {}
+
+      offers[ address ]['accept_tx'][ currency ] = mapSchema(row)
+      #only one active offer per address
 
     return offers
-
-def filterTransactionBid(transaction,validitystatus):
-    # validityStatus =  VALID, INVALID, EXPIRED or ANY
-    
-    #get transaction data
-    try:
-        datadir = data_dir_root + '/bids'
-        filepath =  datadir + '/bids-' + transaction + '.json'
-        f=open( filepath , 'r' )
-        transactionData = json.loads(f.readline())
-    except IOError:
-        return 'TRANSACTION_NOT_FOUND'
-
-    #filter by validity status
-    #offer.invalid == true then offer invalid
-    #offer.payment_expired == true then offer invaid
-    validitystruct = []
-    if validitystatus != 'ANY':
-        for offer in transactionData:
-            if validitystatus == 'INVALID' and str(offer['invalid']).upper() == 'TRUE':
-                validitystruct.append(offer)
-            elif validitystatus == 'EXPIRED' and str(offer['payment_expired']).upper() == 'TRUE':
-                validitystruct.append(offer)
-            elif validitystatus == 'VALID' and str(offer['invalid']).upper() == 'FALSE' and str(offer['payment_expired']).upper() == 'FALSE':
-                validitystruct.append(offer);
-        return validitystruct
-    else:
-        return transactionData
-
-def filterTransaction(transaction):
-    #get transaction data
-    try:
-        datadir = data_dir_root + '/tx'
-        filepath =  datadir + '/' + transaction + '.json'
-        f=open( filepath , 'r' )
-        transactionData = json.loads(f.readline())
-        return transactionData
-    except IOError:
-        return 'TRANSACTION_NOT_FOUND'
 
 def offers_handler(environ, start_response):
     return general_handler(environ, start_response, offers_response)

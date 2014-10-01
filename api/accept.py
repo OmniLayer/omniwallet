@@ -8,7 +8,7 @@ sys.path.append(lib_path)
 from msc_utils_parsing import *
 from msc_apps import *
 
-data_dir_root = os.environ.get('DATADIR')
+#data_dir_root = os.environ.get('DATADIR')
 
 
 def accept_form_response(response_dict):
@@ -89,21 +89,22 @@ def prepare_accept_tx_for_signing(buyer, amount, tx_hash, min_btc_fee=10000):
     satoshi_amount=int( amount )
 
     # read json of orig tx to get tx details
-    sell_offer_tx_dict_list=load_dict_from_file(data_dir_root + '/tx/'+tx_hash+'.json', all_list=True)
-    sell_offer_tx_dict=sell_offer_tx_dict_list[0]
+
+    ROWS = dbSelect("select * from activeoffers ao, transactions t, txjson txj where t.txhash=%s "
+                    "and ao.createtxdbserialnum=t.txdbserialnum and ao.createtxdbserialnum=txj.txdbserialnum", [txhash] )
+
     # sanity check
-    try:
-        if sell_offer_tx_dict['tx_type_str'] != "Sell offer":
-            error('cannot accept non sell offer tx '+tx_hash)
-    except KeyError:
-        error('no field tx_type_str in tx '+tx_hash)
+    if len(ROWS) == 0:
+       error('no sell offer found for tx '+tx_hash)
+
+    sell_offer_tx_dict=mapSchema( ROWS[0] )
 
     try:
         seller=sell_offer_tx_dict['from_address']
         formatted_amount_available=sell_offer_tx_dict['formatted_amount_available']
         formatted_bitcoin_amount_desired=sell_offer_tx_dict['formatted_bitcoin_amount_desired']
-        formatted_fee_required=to_satoshi(sell_offer_tx_dict['formatted_fee_required'])
-        currency_id=sell_offer_tx_dict['currencyId']
+        formatted_fee_required=sell_offer_tx_dict['formatted_fee_required']
+        currency_id=hex(sell_offer_tx_dict['currencyId'])[2:].zfill(8)
     except KeyError:
         error('missing field on tx '+tx_hash)
 
@@ -201,6 +202,19 @@ def prepare_accept_tx_for_signing(buyer, amount, tx_hash, min_btc_fee=10000):
     return_dict={'transaction':tx, 'sourceScript':prevout_script}
     return return_dict
 
+def mapSchema(row):
+  rawdata = row[-1]
+
+  #print row
+  response = {
+    'currencyId': rawdata['propertyid'],
+    'formatted_amount_available': str( row[1] ),
+    'formatted_bitcoin_amount_desired': str( row[2] ),
+    'formatted_fee_required': str(row[3]),
+    'from_address': rawdata['sendingaddress'],
+  }
+
+  return response
 
 def accept_handler(environ, start_response):
     return general_handler(environ, start_response, accept_form_response)
