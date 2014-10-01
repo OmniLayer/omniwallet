@@ -31,7 +31,7 @@ def getproperty(prop_id):
     ROWS = [ ROWS[0][3:] ]
   
     txData = ROWS[0][:-1]
-    mpData = ROWS[0][-1]
+    mpData = json.loads(ROWS[0][-1])
 
     txType = txData[3]
 
