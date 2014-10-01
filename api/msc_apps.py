@@ -84,7 +84,7 @@ def isDivisibleProperty(ptype):
   #66: Divisible currency when replacing a previous property
   #129: Indivisible tokens when appending a previous property
   #130: Divisible currency when appending a previous property
-  if ptype == 2 or pytpe == 66 or ptype == 130:
-    return true
+  if ptype == 2 or ptype == 66 or ptype == 130:
+    return True
   else:
-    return false
+    return False
