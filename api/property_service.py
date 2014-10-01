@@ -27,7 +27,8 @@ def getproperty(prop_id):
                 temp_str.append('?')
         return ''.join(temp_str)
                  
-    txJson = ROWS[0][:3]
+    dbtxJson = ROWS[0][:3]
+    txJson=json.loads(dbtxJson[-1])
     ROWS = [ ROWS[0][3:] ]
   
     txData = ROWS[0][:-1]
@@ -53,7 +54,7 @@ def getproperty(prop_id):
       "transactionType": txData[3], 
       "transactionVersion": txData[4], 
       "tx_hash": txData[0], 
-      "tx_time": txJson[-1]['blocktime']
+      "tx_time": txJson['blocktime']
     }
 
     if txType == 50: ret['numberOfProperties'] = mpData['totaltokens']; 
