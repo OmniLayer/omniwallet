@@ -75,7 +75,7 @@ def gettransaction(hash_id):
                 temp_str.append('?')
         return ''.join(temp_str)
                  
-    txJson = ROWS[0][-1]
+    txJson = json.loads(ROWS[0][-1])
     txData = ROWS[0][:-1]
 
     txType = ROWS[0][3]
