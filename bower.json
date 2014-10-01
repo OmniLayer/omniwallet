@@ -18,9 +18,11 @@
     "FileSaver": null,
     "big.js": "x.x.x",
     "forge": "https://github.com/digitalbazaar/forge.git#0.2.30",
+    "angular-password-strength": "https://github.com/curtislacy/angular-password-strength.git#Caret-Operator",
+    "angular-timer": "~1.1.6",
+    "ngInfiniteScroll":"1.0.0",
     "numeraljs": "https://github.com/adamwdraper/Numeral-js.git#master",
     "angular-numeraljs": "https://github.com/sagyeli/angular-numeraljs.git#master",
-    "angular-password-strength": "https://github.com/curtislacy/angular-password-strength.git#Caret-Operator",
     "angular-idle": "https://github.com/hackedbychinese/ng-idle.git#master"
   }
 }
