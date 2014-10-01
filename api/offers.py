@@ -44,7 +44,7 @@ def filterOffersByTime( currency_type , time_seconds):
     
 def mapSchema(row):
   #print row, 'row'
-  rawdata = row[-1]
+  rawdata = json.loads(row[-1])
 
   #We only map tx21 and tx22
   if row[-11] == 20:
