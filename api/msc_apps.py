@@ -1,9 +1,11 @@
 import urlparse
 import os, sys, pybitcointools, bitcoinrpc, getpass
+#import psycopg2, psycopg2.extras
 tools_dir = os.environ.get('TOOLSDIR')
 lib_path = os.path.abspath(tools_dir)
 sys.path.append(lib_path)
 from msc_utils_obelisk import *
+from sqltools import *
 
 http_status = '200 OK'
 
@@ -73,3 +75,16 @@ def general_handler(environ, start_response, response_dict_to_response_func):
         headers = [('Content-type', 'application/json')]
         start_response(http_status, headers)
         return response
+
+
+def isDivisibleProperty(ptype):
+  #1: New Indivisible tokens
+  #2: New Divisible currency
+  #65: Indivisible tokens when replacing a previous property
+  #66: Divisible currency when replacing a previous property
+  #129: Indivisible tokens when appending a previous property
+  #130: Divisible currency when appending a previous property
+  if ptype == 2 or ptype == 66 or ptype == 130:
+    return True
+  else:
+    return False
