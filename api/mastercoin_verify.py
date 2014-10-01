@@ -51,7 +51,8 @@ def addresses():
       res = {
           'address': addrrow[0]
       }
-      divisible=addrrow[3]
+      #convert property type to true/false for divisibility calculations
+      divisible=isDivisibleProperty(addrrow[3])
 
       if currency_id == '0': #BTC
         res['balance'] = ('%.8f' % float(addrrow[1])).rstrip('0').rstrip('.')
