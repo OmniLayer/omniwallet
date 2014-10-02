@@ -76,7 +76,12 @@ def mapSchema(row):
     }
   else:
     sellofferdata = getsell(str(row[3]))
-    ppc = Decimal( sellofferdata[-1]['bitcoindesired'] ) / Decimal( sellofferdata[-1]['amount'] )
+    try:
+      selljson=json.loads(sellofferdata[-1])
+    except TypeError:
+      selljson=sellofferdata[-1]
+    
+    ppc = Decimal( selljson['bitcoindesired'] ) / Decimal( selljson['amount'] )
     remaining = Decimal(row[1]) / Decimal(1e8)
     response = {
       'block': str(row[-5]),
@@ -84,7 +89,7 @@ def mapSchema(row):
       'currencyId': str(rawdata['propertyid']),
       'currency_str': 'Mastercoin' if str(rawdata['propertyid']) == '1' else 'Test Mastercoin',
       'formatted_amount': '%.8f' % remaining,
-      'sell_offer_txid': sellofferdata[-1]['txid'],
+      'sell_offer_txid': selljson['txid'],
       #'formatted_amount_available': str( row[1] / Decimal(1e8) ),
       #'formatted_bitcoin_amount_desired': str( row[2] / Decimal(1e8) ),
       'formatted_price_per_coin': '%.8f' % ppc,
