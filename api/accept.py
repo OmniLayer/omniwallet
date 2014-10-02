@@ -12,7 +12,6 @@ from msc_apps import *
 
 
 def accept_form_response(response_dict):
-    print response_dict
     expected_fields = ('buyer', 'amount', 'tx_hash', 'fee')
     for field in expected_fields:
         if field not in response_dict:
