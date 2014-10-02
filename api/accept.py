@@ -91,7 +91,7 @@ def prepare_accept_tx_for_signing(buyer, amount, tx_hash, min_btc_fee=10000):
     # read json of orig tx to get tx details
 
     ROWS = dbSelect("select * from activeoffers ao, transactions t, txjson txj where t.txhash=%s "
-                    "and ao.createtxdbserialnum=t.txdbserialnum and ao.createtxdbserialnum=txj.txdbserialnum", [txhash] )
+                    "and ao.createtxdbserialnum=t.txdbserialnum and ao.createtxdbserialnum=txj.txdbserialnum", [tx_hash] )
 
     # sanity check
     if len(ROWS) == 0:
@@ -203,7 +203,10 @@ def prepare_accept_tx_for_signing(buyer, amount, tx_hash, min_btc_fee=10000):
     return return_dict
 
 def mapSchema(row):
-  rawdata = row[-1]
+  try:
+    rawdata = json.loads(row[-1])
+  except TypeError:
+    rawdata = row[-1]
 
   #print row
   response = {

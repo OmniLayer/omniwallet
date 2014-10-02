@@ -75,7 +75,10 @@ def gettransaction(hash_id):
                 temp_str.append('?')
         return ''.join(temp_str)
                  
-    txJson = json.loads(ROWS[0][-1])
+    try:
+      txJson = json.loads(ROWS[0][-1])
+    except TypeError:
+      txJson = ROWS[0][-1]
     txData = ROWS[0][:-1]
 
     txType = ROWS[0][3]
@@ -122,7 +125,10 @@ def gettransaction(hash_id):
       # 54 - Create Property Manual - propertyname, (getgrants), category, totaltokens, url, [issuances], subcategory, data
       
       ROWS=dbSelect("select * from transactions t, smartproperties sp where t.txhash=%s and t.txdbserialnum = sp.createtxdbserialnum", [transaction_])
-      mpData = json.loads(ROWS[0][-1])
+      try:
+        mpData = json.loads(ROWS[0][-1])
+      except TypeError:
+        mpData = ROWS[0][-1]
 
       ret['previous_property_id'] = "(null)" #TODO FIXME
 
@@ -159,7 +165,10 @@ def gettransaction(hash_id):
           ROWS=dbSelect("select * from transactions t, activeoffers ao, txjson txj where t.txhash=%s "
                         "and t.txdbserialnum = ao.createtxdbserialnum and t.txdbserialnum=txj.txdbserialnum", [transaction_])
           row = ROWS[0]
-          mpData = json.loads(ROWS[0][-1])
+          try:
+            mpData = json.loads(ROWS[0][-1])
+          except TypeError:
+            mpData = ROWS[0][-1]
 
           ppc = Decimal( mpData['bitcoindesired'] ) / Decimal( mpData['amount'] )
           ret['amount_available'] = str(row[12])
@@ -181,7 +190,10 @@ def gettransaction(hash_id):
       if txType == 22:
         ROWS=dbSelect("select * from transactions t, offeraccepts oa, txjson txj where t.txhash=%s " 
                       "and t.txdbserialnum = oa.linkedtxdbserialnum and t.txdbserialnum=txj.txdbserialnum", [transaction_])
-        mpData = json.loads(ROWS[0][-1])
+        try:
+          mpData = json.loads(ROWS[0][-1])
+        except TypeError:
+          mpData = ROWS[0][-1]
 
         ret['to_address'] = mpData['referenceaddress']
 

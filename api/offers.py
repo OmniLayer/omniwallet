@@ -44,7 +44,10 @@ def filterOffersByTime( currency_type , time_seconds):
     
 def mapSchema(row):
   #print row, 'row'
-  rawdata = json.loads(row[-1])
+  try:
+    rawdata = json.loads(row[-1])
+  except TypeError:
+    rawdata = row[-1]
 
   #We only map tx21 and tx22
   if row[-11] == 20:
@@ -136,7 +139,10 @@ def filterOffers(addresses):
     #print query
 
     for row in ROWS:
-      jsondata=json.loads(row[-1])
+      try:
+        jsondata=json.loads(row[-1])
+      except TypeError:
+        jsondata=row[-1]
 
       address = jsondata['sendingaddress']
       currency = 'MSC' if jsondata['propertyid'] == 1 else 'TMSC'
@@ -157,7 +163,10 @@ def filterOffers(addresses):
     #print query
 
     for row in ROWS:
-      jsondata=json.loads(row[-1])
+      try:
+        jsondata=json.loads(row[-1])
+      except TypeError:
+        jsondata=row[-1]
       address = jsondata['referenceaddress']
       currency = 'MSC' if jsondata['propertyid'] == 1 else 'TMSC'
 
