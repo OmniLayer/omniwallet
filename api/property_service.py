@@ -28,11 +28,18 @@ def getproperty(prop_id):
         return ''.join(temp_str)
                  
     dbtxJson = ROWS[0][:3]
-    txJson=json.loads(dbtxJson[-1])
+    try:
+      txJson=json.loads(dbtxJson[-1])
+    except TypeError:
+      txJson=dbtxJson[-1]
+
     ROWS = [ ROWS[0][3:] ]
   
     txData = ROWS[0][:-1]
-    mpData = json.loads(ROWS[0][-1])
+    try:
+      mpData = json.loads(ROWS[0][-1])
+    except TypeError:
+      mpData = ROWS[0][-1]
 
     txType = txData[3]
 
