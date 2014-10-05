@@ -37,6 +37,7 @@
         <td>{{transaction.tx_type_str}}</td>
         <td ng-show="transaction.color=='info'" class="number" title="-{{transaction.formatted_amount}}" ng-bind-html="transaction.formatted_amount | numeraljs: '-0,0.00000000'"></td>
         <td ng-show="transaction.color=='success'" class="number" title="{{transaction.formatted_amount}}" ng-bind-html="transaction.formatted_amount | numeraljs: '0,0.00000000'"></td>
+        <td ng-show="transaction.color=='warning'" class="number" title="{{transaction.formatted_amount}}" ng-bind-html="transaction.formatted_amount | numeraljs: '0,0.00000000'"></td>
         <td>{{transaction.tx_time | date:'dd MMM HH:mma Z'}}</td>
       </tr>
     </table>

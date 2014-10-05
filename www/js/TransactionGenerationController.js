@@ -146,47 +146,8 @@ function TransactionGenerationController($scope, $modal, userService, walletTran
       // open modal
       var modalInstance = $modal.open({
         templateUrl: $scope.modalTemplateUrl,
-        controller: function($scope, $modalInstance, data, prepareTransaction, setModalScope, walletAssets) {
-          setModalScope($scope);
-          $scope.signOffline= walletAssets.offline;
-          $scope.ok = function() {
-            $scope.clicked = true;
-            $scope.waiting = true;
-            prepareTransaction(data.transactionType, data.transactionData, data.from, $scope);
-          };
-          
-          $scope.saveUnsigned = function(unsignedHex){
-            var exportBlob = new Blob([unsignedHex], {
-              type: 'application/json;charset=utf-8'
-            });
-            fileName="tx"+(new Date).getTime()+".json";
-            saveAs(exportBlob, fileName);
-            $scope.unsaved=false;
-            $scope.saved=true;
-          };
-          
-          $scope.cancel = function () {
-            $modalInstance.dismiss('cancel');
-          };
-          
-          $scope.close = function () {
-            $modalInstance.dismiss('close');
-          };
-        },
-        resolve: {
-          data: function() {
-            return $scope.generateData();
-          },
-          prepareTransaction: function() {
-              return $scope.prepareTransaction;
-          },
-          setModalScope: function(){
-            return $scope.setModalScope;
-          },
-          walletAssets: function() {
-            return $scope.$parent;
-          }
-        }
+        controller: $scope.modalController,
+        resolve: $scope.modalFactory
       });
     } else {
       error += 'and try again.';
@@ -195,5 +156,47 @@ function TransactionGenerationController($scope, $modal, userService, walletTran
     }
   };
 
-  
+  $scope.modalController = function($scope, $modalInstance, data, prepareTransaction, setModalScope, walletAssets) {
+    setModalScope($scope);
+    $scope.signOffline= walletAssets.offline;
+    
+    $scope.ok = function() {
+      $scope.clicked = true;
+      $scope.waiting = true;
+      prepareTransaction(data.transactionType, data.transactionData, data.from, $scope);
+    };
+    
+    $scope.saveUnsigned = function(unsignedHex){
+      var exportBlob = new Blob([unsignedHex], {
+        type: 'application/json;charset=utf-8'
+      });
+      fileName="tx"+(new Date).getTime()+".tx";
+      saveAs(exportBlob, fileName);
+      $scope.unsaved=false;
+      $scope.saved=true;
+    };
+    
+    $scope.cancel = function () {
+      $modalInstance.dismiss('cancel');
+    };
+    
+    $scope.close = function () {
+      $modalInstance.dismiss('close');
+    };
+  }
+
+  $scope.modalFactory = {
+    data: function() {
+      return $scope.generateData();
+    },
+    prepareTransaction: function() {
+        return $scope.prepareTransaction;
+    },
+    setModalScope: function(){
+      return $scope.setModalScope;
+    },
+    walletAssets: function() {
+      return $scope.$parent;
+    }
+  }
 };

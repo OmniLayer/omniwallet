@@ -51,7 +51,10 @@ def pushtxnode(signed_tx):
     
     ret=re.findall('{.+',output)
     if len(ret) > 0:
-        output=json.loads(ret[0])
+        try:
+          output=json.loads(ret[0])
+        except TypeError:
+          output=ret[0]
 
         response_status='NOTOK'
         try:

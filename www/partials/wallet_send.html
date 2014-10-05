@@ -1,7 +1,7 @@
 <div class="sidecar col-xs-2" ng-controller="SidecarController" ng-init=setView('wallet')>
     <div ng-include="templates['sidecar']"></div>
 </div>
-<div ng-controller="WalletAssetsFormController">
+<div ng-controller="WalletAssetsFormController" ng-init="bitcoinValue=getBitcoinValue()">
   <div ng-controller="TransactionGenerationController">
   <div class="col-xs-10" ng-controller="WalletSendAssetsController">
     <div class="row">
@@ -39,13 +39,12 @@
           </div>
           <br>
           <div class="input-group">
-            <span class="input-group-addon"> Amount ( <a href="" tooltip={{getDisplayedAbbreviation()}}  tooltip-append-to-body="true" tooltip-placement="top"><strong>{{ balanceData[0] }} </strong></a>  Available ): </span>
-              <input name="amount" type="number" ng-model="sendAmount" class="form-control" 
-              placeholder="{{ sendPlaceholderValue }}" step="{{ sendPlaceholderStep }}" min="{{ sendPlaceholderMin }}" required>
-            
+            <span class="input-group-addon"> Amount ( <strong>{{ balanceData[0] }} {{getDisplayedAbbreviation()}}</strong> Available ): </span>
+            <input name="amount" type="number" ng-model="sendAmount" class="form-control" value="sendAmount"
+            placeholder="{{ sendPlaceholderValue }}" step="{{ sendPlaceholderStep }}" min="{{ sendPlaceholderMin }}" required>
           </div>
-          <br ng-hide="$parent.selectedCoin.symbol == 'BTC'">
-          <div class="input-group" style="width: 15%;" ng-hide="$parent.selectedCoin.symbol == 'BTC'">
+          <br ng-hide="walletAssets.selectedCoin.symbol == 'BTC'">
+	  <div class="input-group" style="width: 15%;" ng-hide="walletAssets.selectedCoin.symbol == 'BTC'">
             <span class="input-group-addon" style="padding: 0.65em;"> MasterProtocol Transaction Cost: 
     	 <a href=""
                 tooltip="MasterProtocol Transactions require additional BTC. This is used when encoding/sending the Masterprotocol Transaction."

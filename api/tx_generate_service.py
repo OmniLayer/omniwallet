@@ -6,10 +6,10 @@ from msc_apps import *
 
 #conn = bitcoinrpc.connect_to_local()
 conn = getRPCconn()
-tools_dir = os.environ.get('TOOLSDIR')
-lib_path = os.path.abspath(tools_dir)
-sys.path.append(lib_path)
-data_dir_root = os.environ.get('DATADIR')
+#tools_dir = os.environ.get('TOOLSDIR')
+#lib_path = os.path.abspath(tools_dir)
+#sys.path.append(lib_path)
+#data_dir_root = os.environ.get('DATADIR')
 
 app = Flask(__name__)
 app.debug = True
