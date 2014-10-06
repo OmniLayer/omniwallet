@@ -1,26 +1,56 @@
 <div class="modal-body">
-    <h3 class="text-center"> Confirm Property Creation </h3>
-      <h4>You will create this Smart Property:</h4>
-      <ul>
-        <li>Name: {{propertyName}}</li>
-        <li>Description: {{propertyData}}</li>
-        <li>Divisible: {{divisible}}</li>
-        <li>Category: {{propertyCategory}}</li>
-        <li>Subcategory: {{propertySubcategory}}</li>
-        <li>Url: <a href="{{propertyUrl}}" target="_blank">{{propertyUrl}}</a></li>
-        <li>Number of properties: {{numberProperties}}</li>
-        <li>Issuer address: <a href="https://blockchain.info/address/{{selectedAddress}}?sort=0" target="_blank">{{selectedAddress}}</a></li>
-      </ul>
-  <p><br>
-  If the above is correct, please press create my Property.
-  </p>
+    <div class="text-left col-xs-9 modal-title">Confirm Property Creation</div><div class="text-right"><button ng-disabled="wating" class="btn btn-xs modal-cancel-btn" ng-click="cancel()">cancel | <span class="glyphicon glyphicon-remove"></span></button></div>
+     <br>
+        <table>
+            <tr><td height="30px"></td></tr>
+            <tr>
+            <td width="126px" height="30px" class="description-title">Name:</td><td class="description-text">{{propertyName}}</td>
+            </tr>
+           
+            <tr>
+            <td width="126px" height="30px" class="description-title">Category:</td><td class="description-text">{{propertyCategory}}</td>
+            </tr>
+           
+            <tr>
+            <td width="126px" height="30px" class="description-title">Subcategory:</td><td class="description-text">{{propertySubcategory}}</td>
+            </tr>
+           
+            <tr>
+            <td width="126px" height="30px" class="description-title">Url:</td><td class="description-text"><a href="{{propertyUrl}}" target="_blank">{{propertyUrl}}</a></td>
+            </tr>
+           
+            <tr>
+            <td width="126px" height="30px" class="description-title" style="vertical-align: top;">Description:</td><td class="description-text">
+            <div id="expandable-div" class="expandable-div" ng-class="{'expanded-div':expanded, 'collapsed-div':!expanded,'expandable-div-rendered':rendered}" ng-init="setExpandableDiv()">
+            {{propertyData}}
+            </div>
+            <div ng-show="longText">
+            <div class="horizontal-line"></div>
+            <button ng-click="expanded=!expanded;rendered=true;"><div ng-hide="expanded"><span class="glyphicon glyphicon-chevron-down"></span> More</div><div ng-show="expanded"><span class="glyphicon glyphicon-chevron-up"></span> Less</div></button>          
+            </div>
+            </td>
+            </tr>
+        </table>
+        <br><br>
+        <table>
+            <tr>
+            <td width="186px" height="30px" class="description-title">Number of properties:</td><td class="description-text">{{numberProperties}} <span class="description-title">({{divisible}})</span></td>
+            </tr>
+           
+            <tr>
+            <td width="186px" height="30px" class="description-title">Issuer address:</td><td class="description-text"><a href="https://blockchain.info/address/{{selectedAddress}}?sort=0" target="_blank">{{selectedAddress}}</a></td>
+            </tr>
+        </table>
+        <hr>
+        <span class="send-fee">Creation cost: {{convertSatoshiToDisplayedValue(totalCost, true)}} bitcoins</span>
 <div class="modal-footer">
-    <div class="row" ng-hide="transactionSuccess">
-    <button ng-disabled="clicked" class="btn btn-primary" ng-click="ok()">Create my Property</button>
-    <button ng-disabled="wating" class="btn btn-warning" ng-click="cancel()">Cancel</button>
-    <img class="" src="/assets/img/34-1.gif" ng-show="waiting">
+    <br>
+    <div class="row" ng-hide=transactionSuccess>
+    <button ng-disabled="clicked" class="btn btn-lg modal-action-btn" ng-click="ok()" style="padding-bottom: 6px;">
+    <img src="/assets/img/Smart_normal.png" class="action-img-normal"><img src="/assets/img/Smart_roll.png" class="action-img-roll"> Create Property
+    </button>
+    <img class="" src="/assets/img/spinner.gif" ng-show="waiting">
     </div>
-      <br>
     <div class="row">
       <div ng-show="transactionSuccess">
         <h4 class="pull-left" style="color:green"> Assets created successfully, 

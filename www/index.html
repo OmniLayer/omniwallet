@@ -22,8 +22,10 @@
     <link rel="stylesheet" href="/bower_components/bootstrap/dist/css/bootstrap-theme.min.css">
     <link rel="stylesheet" href="/theme.css">
 
-    <script src="/config.js"></script>
+    <script src="/js/config.js"></script>
 
+    <link href='https://fonts.googleapis.com/css?family=Gudea:400,400italic,700' rel='stylesheet' type='text/css'>
+    
     <script src="/socket.io/socket.io.js"></script>
     <script> var socket = io(); </script>
 
@@ -66,6 +68,18 @@
     <script src="/js/add_address.js"></script>
     <script src="/js/cryptUtil.js"></script>
     <script src="/js/cryptUtilAsync.js"></script>
+    <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+      ga('create', 'UA-53639435-1', 'auto');
+      ga('set', 'anonymizeIp', true);
+      ga('set', 'forceSSL', true);
+      ga('send', 'pageview');
+    </script>
+
   </head>
   <body>
     <div id="wrap">
