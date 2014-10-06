@@ -115,36 +115,8 @@ function TransactionGenerationController($scope, $modal, userService, walletTran
       // open modal
       var modalInstance = $modal.open({
         templateUrl: $scope.modalTemplateUrl,
-        controller: function($scope, $modalInstance, data, prepareTransaction, setModalScope, convertSatoshiToDisplayedValue, getDisplayedAbbreviation) {
-          setModalScope($scope);
-          
-          $scope.ok = function() {
-            $scope.clicked = true;
-            $scope.waiting = true;
-            prepareTransaction(data.transactionType, data.transactionData, data.from, $scope);
-          };
-          
-          $scope.cancel = function () {
-            $modalInstance.dismiss('cancel');
-          };
-        },
-        resolve: {
-          data: function() {
-            return $scope.generateData();
-          },
-          prepareTransaction: function() {
-              return $scope.prepareTransaction;
-          },
-          setModalScope: function(){
-            return $scope.setModalScope;
-          },
-          convertSatoshiToDisplayedValue: function() {
-            return $scope.convertSatoshiToDisplayedValue;
-          },
-          getDisplayedAbbreviation: function() {
-            return $scope.getDisplayedAbbreviation;
-          }
-        }
+        controller: $scope.modalController,
+        resolve: $scope.modalFactory
       });
     } else {
       error += 'and try again.';
@@ -152,4 +124,36 @@ function TransactionGenerationController($scope, $modal, userService, walletTran
       $scope.$parent.showErrors = true;
     }
   };
+
+  $scope.modalController = function($scope, $modalInstance, data, prepareTransaction, setModalScope, convertSatoshiToDisplayedValue, getDisplayedAbbreviation) {
+    setModalScope($scope);
+    
+    $scope.ok = function() {
+      $scope.clicked = true;
+      $scope.waiting = true;
+      prepareTransaction(data.transactionType, data.transactionData, data.from, $scope);
+    };
+    
+    $scope.cancel = function () {
+      $modalInstance.dismiss('cancel');
+    };
+  }
+
+  $scope.modalFactory = {
+    data: function() {
+      return $scope.generateData();
+    },
+    prepareTransaction: function() {
+        return $scope.prepareTransaction;
+    },
+    setModalScope: function(){
+      return $scope.setModalScope;
+    },
+    convertSatoshiToDisplayedValue: function() {
+      return $scope.convertSatoshiToDisplayedValue;
+    },
+    getDisplayedAbbreviation: function() {
+      return $scope.getDisplayedAbbreviation;
+    }
+  }
 };
