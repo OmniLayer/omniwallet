@@ -1,9 +1,9 @@
 <div ng-controller="NavigationController" ng-init="getNavData();modalOpened=false">
   <div class="navbar navbar-default navbar-fixed-top">
 
-<a class="navbar-brand" href="/"><img src="/assets/img/logo-beta.png" alt="mastercoin"></a>
+  <a class="navbar-brand" href="/"><img src="/assets/img/logo-beta.png" alt="mastercoin"></a>
         <div class="navbar-header" ng-show="user.loggedIn">
-            <br /><div class="btn btn-default" ng-click="openUUIDmodal()">Wallet ID<br /><small>{{ user.wallet.uuid }}</small></div>
+            <br /><div class="btn btn-default"><a href="/wallet/overview">My Wallet</a><br /></div>
         </div>
 
       <div class="container">
@@ -16,13 +16,19 @@
         </div>
         <div class="navbar-collapse collapse">
             <ul class="nav navbar-nav navbar-right">
+              <li><a href="/explorer/overview"><img src="/assets/img/Explore-magnifier.png" alt="Explore">Explore</a></li>
+              <li class="divider-vertical"></li>
+              <li><a href="/Books">Order Books</a></li>
+              <li class="divider-vertical"></li>
               <li ng-hide="user.loggedIn"><a href="/" ng-click="openCreateModal()">Create Wallet</a></li>
-              <li ng-hide="user.loggedIn"><a href="/" ng-click="openLoginModal()">Login</a></li>
-              <li ng-show="user.loggedIn"><a href="/wallet/overview">My Wallet</a></li>
-              <li><a href="/explorer/overview">Explorer</a></li>
-              <li><a href="/about">About</a></li>
-              <li><a href="/status">Status</a></li>
-              <li ng-show="user.loggedIn"><a href="/" ng-click="logout()">Logout</a></li>
+              <li ng-show="user.loggedIn"><a href="/" ng-click="openPendingOrdersModal()"><img src="/assets/img/Pending-Orders.png" alt="Pending Orders"></a></li>
+              <li ng-show="user.loggedIn"><a href="/" ng-click="openNotificationsModal()"><img src="/assets/img/Notifications.png" alt="Notifications"></a></li>
+              <li class="divider-vertical"></li>
+              <li ng-hide="user.loggedIn"><a href="/" ng-click="openLoginModal()">Log in</a></li>
+              <li class="divider-vertical"></li>
+              <li><a href="/about"><img src="/assets/img/About.png" alt="About"></a></li>
+              <li class="divider-vertical"></li>
+              <li ng-show="user.loggedIn"><a href="/" ng-click="openSettingsModal()"><img src="/assets/img/Settings.png" alt="Settings"></a></li>
             </ul>
         </div>
       </div>
