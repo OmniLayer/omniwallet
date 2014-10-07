@@ -53,13 +53,20 @@ function WalletSendAssetsController($modal, $scope, $http, $q, userService, wall
     var marked = $scope.marked;
 
     var required = [coin, address, sendAmount, sendTo, minerFees, totalFeeCost,  balance, btcbalance, $scope.sendForm.$valid, marked];
-    walletAssets.selectedCoin;
+
     var error = 'Please ';
     if ($scope.sendForm.$valid == false) {
       error += 'make sure all fields are completely filled, ';
     }
-    if ((sendAmount+minerFees <= balance) == false) {
-      error += 'make sure you aren\'t sending more tokens than you own, ';
+    if (coin == 'BTC') {
+        if ((sendAmount+minerFees <= balance) == false) {
+        error += 'make sure you aren\'t sending more tokens than you own, ';
+      }
+    }
+    else {
+        if ((sendAmount <= balance) == false) {
+        error += 'make sure you aren\'t sending more tokens than you own, ';
+      }
     }
     if ((totalFeeCost <= btcbalance) == false) {
       error += 'make sure you have enough Bitcoin to cover your transaction costs, ';
