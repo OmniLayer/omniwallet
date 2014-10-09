@@ -126,9 +126,8 @@ function WalletSendAssetsController($modal, $scope, $http, $q, userService, wall
     }; 
   };
 
-  // THIS SHOULD BE REFACTORED TO AVOID DUPLICATED CODE
-  transactionGenerationController.modalController = function($scope, $modalInstance, data, prepareTransaction, setModalScope, convertSatoshiToDisplayedValue, getDisplayedAbbreviation) {
-    setModalScope($scope);
+  transactionGenerationController.modalController = function($scope, $modalInstance, data, prepareTransaction, setModalScope, walletAssets) {
+    transactionGenerationController.modalBaseController($scope, $modalInstance, data, prepareTransaction, setModalScope, walletAssets);
 
     $scope.ok = function() {
       if (($scope.bitcoinValue == $scope.getBitcoinValue())||$scope.selectedCoinSymbol != 'BTC') {
@@ -143,30 +142,13 @@ function WalletSendAssetsController($modal, $scope, $http, $q, userService, wall
         $scope.btcValueChanged = true;
       }
     };
-   
-    $scope.saveUnsigned = function(unsignedHex){
-      var exportBlob = new Blob([unsignedHex], {
-        type: 'application/json;charset=utf-8'
-      });
-      fileName="tx"+(new Date).getTime()+".tx";
-      saveAs(exportBlob, fileName);
-      $scope.unsaved=false;
-      $scope.saved=true;
-    };
-    
-    $scope.cancel = function () {
-      $modalInstance.dismiss('cancel');
-    };
-    
-    $scope.close = function () {
-      $modalInstance.dismiss('close');
-    };
 
     $scope.goBack = function(){
       $scope.setBitcoinValue($scope.getBitcoinValue());
       $scope.resetAmountAndValue();
       $scope.cancel();
     }
+
     $scope.sendByValue = function(){
       $scope.sendAmount = $scope.convertDisplayedValue($scope.value/$scope.getBitcoinValue());
       $scope.sendAmount = new Big(parseInt($scope.sendAmount)).toFixed(0);
@@ -177,6 +159,7 @@ function WalletSendAssetsController($modal, $scope, $http, $q, userService, wall
       $scope.setBitcoinValue($scope.getBitcoinValue());
       $scope.resetAmountAndValue();
     }
+
     $scope.sendByAmount = function(){
      var amount = $scope.convertSatoshiToDisplayedValue($scope.sendAmount);
       $scope.value = amount*$scope.getBitcoinValue();

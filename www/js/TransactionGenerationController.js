@@ -147,7 +147,7 @@ function TransactionGenerationController($scope, $modal, userService, walletTran
       var modalInstance = $modal.open({
         templateUrl: $scope.modalTemplateUrl,
         controller: $scope.modalController,
-        resolve: $scope.modalFactory
+        resolve: angular.extend($scope.modalFactory, $scope.baseFactory)
       });
     } else {
       error += 'and try again.';
@@ -156,7 +156,7 @@ function TransactionGenerationController($scope, $modal, userService, walletTran
     }
   };
 
-  $scope.modalController = function($scope, $modalInstance, data, prepareTransaction, setModalScope, walletAssets) {
+  $scope.modalBaseController = function($scope, $modalInstance, data, prepareTransaction, setModalScope, walletAssets) {
     setModalScope($scope);
     $scope.signOffline= walletAssets.offline;
     
@@ -183,9 +183,10 @@ function TransactionGenerationController($scope, $modal, userService, walletTran
     $scope.close = function () {
       $modalInstance.dismiss('close');
     };
-  }
+  };
 
-  $scope.modalFactory = {
+
+  $scope.baseFactory = {
     data: function() {
       return $scope.generateData();
     },
@@ -198,5 +199,11 @@ function TransactionGenerationController($scope, $modal, userService, walletTran
     walletAssets: function() {
       return $scope.$parent;
     }
-  }
+  };
+
+  $scope.modalController = function($scope, $modalInstance, data, prepareTransaction, setModalScope, walletAssets) {
+    $scope.modalBaseController($scope, $modalInstance, data, prepareTransaction, setModalScope, walletAssets);
+  };
+   
+  $scope.modalFactory = {};
 };
