@@ -29,6 +29,12 @@ server {
         root /home/myUser/omniwallet/www/;
         index index.htm index.html;
 
+        #enable gzip compression
+        gzip            on;
+        gzip_min_length 20;
+        gzip_proxied    expired no-cache no-store private auth;
+        gzip_types      text/plain application/xml application/x-javascript application/javascript text/css text/javascript text/html application/json;
+
         #Re-route nested routed through index
         location / {
             try_files $uri $uri/ /index.html =404;
@@ -60,7 +66,9 @@ server {
         }
 
         location ~ "^/v1/system/stats.json$" {
-                alias /var/lib/omniwallet/www/stats.json;
+                #alias /var/lib/omniwallet/www/stats.json;
+                 rewrite ^ /v1/system/stats;
+
         }
 
         location ~ "^/v1/system/status.html$" {
@@ -68,42 +76,43 @@ server {
         }
 
         location ~ "^/v1/system/revision.json$" {
-                alias /var/lib/omniwallet/www/revision.json;
+                #alias /var/lib/omniwallet/www/revision.json;
+                 rewrite ^ /v1/system/revision;
         }
 
         location ~ "^/v1/exchange/offers/(.*)$" {
                 alias /var/lib/omniwallet/www/offers/$1;
         }
 
-        location ~ "^/v1/transaction/general/(.*)$" {
-                alias /var/lib/omniwallet/www/general/$1;
-        }
+        #location ~ "^/v1/transaction/general/(.*)$" {
+        #        alias /var/lib/omniwallet/www/general/$1;
+        #}
 
-        location ~ "^/v1/transaction/tx/(.*)$" {
-                alias /var/lib/omniwallet/www/tx/$1;
-        }
+        #location ~ "^/v1/transaction/tx/(.*)$" {
+        #        alias /var/lib/omniwallet/www/tx/$1;
+        #}
 
-        location ~ "^/v1/property/([0-9]*.json)$" {
-                add_header Access-Control-Allow-Origin *;
-                alias /var/lib/omniwallet/www/properties/properties-$1;
-        }
+        #location ~ "^/v1/property/([0-9]*.json)$" {
+        #        add_header Access-Control-Allow-Origin *;
+        #        alias /var/lib/omniwallet/www/properties/properties-$1;
+        #}
 
-        location ~ "^/v1/values/(.*)$" {
-                add_header Access-Control-Allow-Origin *;
-                alias /var/lib/omniwallet/www/values/$1;
-        }
+        #location ~ "^/v1/values/(.*)$" {
+        #        add_header Access-Control-Allow-Origin *;
+        #        alias /var/lib/omniwallet/www/values/$1;
+        #}
 
-        location ~ "^/v1/values/history/(.*)$" {
-                alias /var/lib/omniwallet/www/values/history/$1;
-        }
+        #location ~ "^/v1/values/history/(.*)$" {
+        #        alias /var/lib/omniwallet/www/values/history/$1;
+        #}
 
-        location ~ "^/v1/address/verify/(.*)$" {
-                alias /var/lib/omniwallet/www/mastercoin_verify/addresses/$1;
-        }
+        #location ~ "^/v1/address/verify/(.*)$" {
+        #        alias /var/lib/omniwallet/www/mastercoin_verify/addresses/$1;
+        #}
 
-        location ~ "^/v1/transaction/verify/(.*)$" {
-                alias /var/lib/omniwallet/www/mastercoin_verify/transactions/$1;
-        }
+        #location ~ "^/v1/transaction/verify/(.*)$" {
+        #        alias /var/lib/omniwallet/www/mastercoin_verify/transactions/$1;
+        #}
 
         include uwsgi_params;
         uwsgi_param SCRIPT_NAME   $app;
@@ -117,10 +126,10 @@ server {
                 uwsgi_pass   127.0.0.1:$PORT;
         }
 
-        location /v1/transaction/validateaddr/ {
-                set   $app   validateaddr;
-                uwsgi_pass   127.0.0.1:$PORT;
-        }
+        #location /v1/transaction/validateaddr/ {
+        #        set   $app   validateaddr;
+        #        uwsgi_pass   127.0.0.1:$PORT;
+        #}
 
         location /v1/transaction/send/ {
                 set   $app   send;
@@ -169,6 +178,28 @@ server {
                 uwsgi_pass 127.0.0.1:$PORT;
         }
 
+        location = /v1/property { rewrite ^ /v1/property/; }
+        location /v1/property { try_files $uri @flask_property_service; }
+        location @flask_property_service {
+                include uwsgi_params;
+                uwsgi_param SCRIPT_NAME /v1/property;
+                uwsgi_param UWSGI_MODULE property_service;
+                uwsgi_param UWSGI_CALLABLE app;
+                uwsgi_modifier1 30;
+                uwsgi_pass 127.0.0.1:$PORT;
+        }
+
+        location = /v1/transaction { rewrite ^ /v1/transaction; }
+        location /v1/transaction { try_files $uri @flask_transaction_service; }
+        location @flask_transaction_service {
+                include uwsgi_params;
+                uwsgi_param SCRIPT_NAME /v1/transaction;
+                uwsgi_param UWSGI_MODULE transaction_service;
+                uwsgi_param UWSGI_CALLABLE app;
+                uwsgi_modifier1 30;
+                uwsgi_pass 127.0.0.1:$PORT;
+        }
+
         location = /v1/mastercoin_verify { rewrite ^ /v1/mastercoin_verify/; }
         location /v1/mastercoin_verify { try_files $uri @flask_mastercoin_verify; }
         location @flask_mastercoin_verify {
@@ -208,6 +239,28 @@ server {
                 include uwsgi_params;
                 uwsgi_param SCRIPT_NAME /v1/blocks;
                 uwsgi_param UWSGI_MODULE getblocks;
+                uwsgi_param UWSGI_CALLABLE app;
+                uwsgi_modifier1 30;
+                uwsgi_pass 127.0.0.1:$PORT;
+        }
+
+        location = /v1/system { rewrite ^ /v1/system; }
+        location /v1/system { try_files $uri @flask_stats_service; }
+        location @flask_stats_service {
+                include uwsgi_params;
+                uwsgi_param SCRIPT_NAME /v1/system;
+                uwsgi_param UWSGI_MODULE stats_service;
+                uwsgi_param UWSGI_CALLABLE app;
+                uwsgi_modifier1 30;
+                uwsgi_pass 127.0.0.1:$PORT;
+        }
+
+        location = /v1/values { rewrite ^ /v1/values; }
+        location /v1/values { try_files $uri @flask_values_service; }
+        location @flask_values_service {
+                include uwsgi_params;
+                uwsgi_param SCRIPT_NAME /v1/values;
+                uwsgi_param UWSGI_MODULE values_service;
                 uwsgi_param UWSGI_CALLABLE app;
                 uwsgi_modifier1 30;
                 uwsgi_pass 127.0.0.1:$PORT;

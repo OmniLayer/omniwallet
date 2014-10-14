@@ -40,12 +40,12 @@ angular.module('omniwallet')
                       balances[currencyItem.symbol] = {
                         "symbol": currencyItem.symbol,
                         "balance": +value || currencyItem.value,
-                        "value": appraiser.getValue(currencyItem.value, currencyItem.symbol),
+                        "value": appraiser.getValue(currencyItem.value, currencyItem.symbol, currencyItem.divisible),
                         "addresses": {}
                       };
                     } else {
                       balances[currencyItem.symbol].balance += +value || currencyItem.value;
-                      balances[currencyItem.symbol].value += appraiser.getValue(currencyItem.value, currencyItem.symbol);
+                      balances[currencyItem.symbol].value += appraiser.getValue(currencyItem.value, currencyItem.symbol, currencyItem.divisible);
                     }
 
                     if (currencyItem.symbol == 'BTC') {
@@ -59,7 +59,7 @@ angular.module('omniwallet')
                     balances[currencyItem.symbol].addresses[result.data.address] = {
                       "address": result.data.address,
                       "balance": +value || currencyItem.value,
-                      "value": appraiser.getValue(currencyItem.value, currencyItem.symbol),
+                      "value": appraiser.getValue(currencyItem.value, currencyItem.symbol, currencyItem.divisible),
 		      "private": hasPrivate
                     };
                   });

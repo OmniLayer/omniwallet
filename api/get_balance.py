@@ -1,42 +1,44 @@
 import urlparse
 import os, sys
 import json
-tools_dir = os.environ.get('TOOLSDIR')
-lib_path = os.path.abspath(tools_dir)
-sys.path.append(lib_path)
+#tools_dir = os.environ.get('TOOLSDIR')
+#lib_path = os.path.abspath(tools_dir)
+#sys.path.append(lib_path)
 from msc_apps import *
 from debug import *
 
-data_dir_root = os.environ.get('DATADIR')
+
 TIMEOUT='timeout -s 9 60 '
 # Get the Mastercoin balances.  Not that this is also creating the default balance
 # object, and should run before all the other currency checks.
 def get_msc_balances( addr ):
-  filename = data_dir_root + '/www/addr/' + addr + '.json'
+  #TODO move functionality for individual currencies into /tx/ endpoint (sent, received, total reserved balances, etc.)
+  addr = re.sub(r'\W+', '', addr) #check alphanumeric
+  ROWS=dbSelect("select * from addressbalances ab, smartproperties sp where ab.address=%s and ab.propertyid=sp.propertyid "
+                "and sp.protocol='Mastercoin'", [addr])
 
-  if not os.path.exists(filename):
-    return ( None, '{ "status": "NOT FOUND: ' + filename + '" }' )
+  address_data = { 'address' : addr, 'balance': [] }
+  for balrow in ROWS:
+      cID = str(int(balrow[2])) #currency id
+      sym_t = ('BTC' if cID == '0' else ('MSC' if cID == '1' else ('TMSC' if cID == '2' else 'SP' + cID) ) ) #symbol template
+      divi = balrow[-1]['divisible'] if type(balrow[-1]) == type({}) else json.loads(balrow[-1])['divisible']  #Divisibility
+      res = { 'symbol' : sym_t, 'divisible' : divi  }
+      res['value'] = ('%.8f' % float(balrow[4])).rstrip('0').rstrip('.')
+      #res['reserved_balance'] = ('%.8f' % float(balrow[5])).rstrip('0').rstrip('.')
+      address_data['balance'].append(res)
 
-  with open(filename, 'r') as f:
-    address_data = json.load(f)
-    # Once the data's been loaded, remove the BTC entry since we're going to 
-    #    use sx's BTC balances directly.
-    balance_data = address_data[ 'balance' ]
-    for i in xrange(0,len( balance_data )):
-      balance_data[i][ 'divisible' ] = False
-      if balance_data[ i ][ 'symbol' ] == 'BTC':
-        balance_data.pop( i )
-        break
-      else:
-        if type(balance_data[i]['value']) != type(0): #if not int convert (divisible property)
-            balance_data[ i ][ 'divisible' ] = True
-            balance_data[ i ][ 'value' ] = int( round( float( balance_data[ i ][ 'value' ]) * 100000000 ))
+  if 0 >= len(ROWS):
+    return ( None, '{ "status": "NOT FOUND: ' + addr + '" }' )
 
-    for i in xrange( 0, len( balance_data )):
-      if balance_data[ i ][ 'value' ] == '0.0':
-        balance_data.pop( i )
-
-  #print_debug("got here", 5)
+  #Dead code
+  #if type(balance_data[i]['value']) != type(0): #if not int convert (divisible property)
+  #    balance_data[ i ][ 'divisible' ] = True
+  #    balance_data[ i ][ 'value' ] = int( round( float( balance_data[ i ][ 'value' ]) * 100000000 ))
+  
+  #Dead code
+  #for i in xrange( 0, len( balance_data )):
+  #  if balance_data[ i ][ 'value' ] == '0.0':
+  #    balance_data.pop( i )
 
   return ( address_data, None )
 
