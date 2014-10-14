@@ -188,7 +188,7 @@ function WalletBuyAssetsController($modal, $scope, $http, $q, userService, walle
     var address = $scope.selectedAddress;
     var saleHash = $scope.buySaleID;
     
-    var totalCost = $scope.convertToSatoshi(transaction.formatted_price_per_coin * $scope.convertSatoshiToDisplayedValue(buyAmount));
+    var totalCost = $scope.convertDisplayedValue(transaction.formatted_price_per_coin * $scope.convertSatoshiToDisplayedValue(buyAmount));
     
     var required = [coin, address, buyAmount, minerFees, balance, btcbalance, $scope.buyForm.$valid];
     console.log(required);
