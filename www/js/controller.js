@@ -32,7 +32,7 @@ function HomeCtrl($scope, $templateCache, $injector, $location, $http, $q) {
             balances[currencyItem.symbol] = {
               "symbol": currencyItem.symbol,
               "balance": +value || currencyItem.value,
-              "value": appraiser.getValue(currencyItem.value, currencyItem.symbol),
+              "value": appraiser.getValue(currencyItem.value, currencyItem.symbol, currencyItem.divisible),
             };
             if (currencyItem.symbol == 'BTC') {
               balances[currencyItem.symbol].name = "Bitcoin";
