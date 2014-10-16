@@ -20,7 +20,8 @@ def getaddress():
     response = { 'address': {}, 'balance': {}, '0' : { 'transactions': [] } } #To preserve compatability, 'currID': {'txdata'}
     if len(ROWS) > 0:
       for addrrow in ROWS:
-        res = requests.get('http://localhost/v1/transaction/tx/' + addrrow[0] + '.json').json()[0]
+        #res = requests.get('http://localhost/v1/transaction/tx/' + addrrow[0] + '.json').json()[0]
+        res = json.loads(gettransaction(addrrow[0]))[0]
         response['0']['transactions'].append(res)
 
     return json.dumps(response)
@@ -46,7 +47,8 @@ def getcurrencyrecent(currency_page):
     response = []
     if len(ROWS) > 0:
       for currencyrow in ROWS:
-        res = requests.get('http://localhost/v1/transaction/tx/' + currencyrow[0] + '.json').json()[0]
+        #res = requests.get('http://localhost/v1/transaction/tx/' + currencyrow[0] + '.json').json()[0]
+        res = json.loads(gettransaction(currencyrow[0]))[0]
         response.append(res)
 
     
