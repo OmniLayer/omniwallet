@@ -42,6 +42,7 @@ do
         DEBUGLEVEL=`cat $DATADIR/debug.level`
     else
         DEBUGLEVEL=0
+    fi
     export DEBUGLEVEL
 
     ps cax | grep uwsgi > /dev/null
