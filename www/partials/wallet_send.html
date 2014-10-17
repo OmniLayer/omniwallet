@@ -1,7 +1,7 @@
 <div class="sidecar col-xs-2" ng-controller="SidecarController" ng-init=setView('wallet')>
     <div ng-include="templates['sidecar']"></div>
 </div>
-<div ng-controller="WalletAssetsFormController" ng-init="bitcoinValue=getBitcoinValue()">
+<div ng-controller="WalletAssetsFormController" ng-init="bitcoinValue=400">
   <div ng-controller="TransactionGenerationController">
   <div class="col-xs-10" ng-controller="WalletSendAssetsController">
     <div class="row">

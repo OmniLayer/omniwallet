@@ -140,9 +140,9 @@ function WalletSendAssetsController($modal, $scope, $http, $q, userService, wall
           }
           else{
             $scope.waiting = false;
-            $scope.transactionError = true;
-            $scope.error = 'The value of BTC has changed. Please check the send details and retry.';
             $scope.btcValueChanged = true;
+            $scope.newBtcAmount = new Big($scope.value/$scope.getBitcoinValue()).toFixed(8);
+            $scope.newValue = parseFloat(new Big($scope.convertSatoshiToDisplayedValue($scope.sendAmount)*$scope.getBitcoinValue()).toFixed(8));
           }
         };
        
@@ -151,7 +151,7 @@ function WalletSendAssetsController($modal, $scope, $http, $q, userService, wall
         };
         $scope.goBack = function(){
           $scope.setBitcoinValue($scope.getBitcoinValue());
-          $scope.resetAmountAndValue();
+          //$scope.resetAmountAndValue();
           $scope.cancel();
         }
         $scope.sendByValue = function(){

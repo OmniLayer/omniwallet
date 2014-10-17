@@ -7,7 +7,7 @@
         </tr>
        
         <tr>
-        <td width="103px" height="30px" class="description-title">Amount:</td><td class="description-text">{{convertSatoshiToDisplayedValue(sendAmount)}}</td>
+        <td width="103px" height="30px" class="description-title">Amount:</td><td class="description-text">{{convertSatoshiToDisplayedValue(sendAmount)}} (${{value}})</td>
         </tr>
        
         <tr>
@@ -31,11 +31,14 @@
        </div>
     </div>
     <div class="row text-left" ng-show="btcValueChanged">
-        <p class="description-text">choose what do you want to do:</p>
+        <p class="description-text">The value of BTC has changed, Please check the details and choose what you want to do:</p>
         <br>
-        <button class="btn btn-lg modal-action-btn" ng-click="sendByValue()" style="font-size: 15px;">Send ${{value}}</button>
-        <button class="btn btn-lg modal-action-btn" ng-click="sendByAmount()" style="font-size: 15px;">Send {{convertSatoshiToDisplayedValue(sendAmount)}} BTC</button>
+        <center>
+        <button class="btn btn-lg modal-action-btn" ng-click="sendByValue()" style="font-size: 15px;" tooltip="{{newBtcAmount}} BTC">Send ${{value}}</button>
+        <button class="btn btn-lg modal-action-btn" ng-click="sendByAmount()" style="font-size: 15px; margin-left: 0px;" tooltip="${{newValue}}">Send {{convertSatoshiToDisplayedValue(sendAmount)}} BTC</button>
+        <br>
         <button class="btn btn-lg modal-action-btn" ng-click="goBack()" style="font-size: 15px;">Go back and change the amount.</button>
+        </center>
     </div>
       <br>
     <div class="row">
