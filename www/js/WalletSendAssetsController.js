@@ -142,13 +142,11 @@ function WalletSendAssetsController($modal, $scope, $http, $q, userService, wall
         $scope.btcValueChanged = true;
       }
     };
-
     $scope.goBack = function(){
       $scope.setBitcoinValue($scope.getBitcoinValue());
       $scope.resetAmountAndValue();
       $scope.cancel();
     }
-
     $scope.sendByValue = function(){
       $scope.sendAmount = $scope.convertDisplayedValue($scope.value/$scope.getBitcoinValue());
       $scope.sendAmount = new Big(parseInt($scope.sendAmount)).toFixed(0);
@@ -159,7 +157,6 @@ function WalletSendAssetsController($modal, $scope, $http, $q, userService, wall
       $scope.setBitcoinValue($scope.getBitcoinValue());
       $scope.resetAmountAndValue();
     }
-
     $scope.sendByAmount = function(){
      var amount = $scope.convertSatoshiToDisplayedValue($scope.sendAmount);
       $scope.value = amount*$scope.getBitcoinValue();
