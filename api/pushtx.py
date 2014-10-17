@@ -50,12 +50,15 @@ def pushtxnode(signed_tx):
     #output=commands.getoutput('bitcoind sendrawtransaction ' +  str(signed_tx) )
     output=sendrawtransaction(str(signed_tx))
 
-    ret=re.findall('{.+',output)
-    if len(ret) > 0:
+    ret=re.findall('{.+',str(output))
+    if 'code' in ret[0]:
         try:
           output=json.loads(ret[0])
         except TypeError:
           output=ret[0]
+        except ValueError:
+          #reverse the single/double quotes and strip leading u in output to make it json compatible
+          output=json.loads(ret[0].replace("'",'"').replace('u"','"'))
 
         response_status='NOTOK'
         try:
@@ -64,7 +67,7 @@ def pushtxnode(signed_tx):
             response=json.dumps({"status":response_status, "pushed": str(e), "message": output['message'], "code": output['code'] })
     else:
         response_status='OK'
-        response=json.dumps({"status":response_status, "pushed": 'success', "tx": output })
+        response=json.dumps({"status":response_status, "pushed": 'success', "tx": output['result'] })
 
     print response
     return response
