@@ -156,7 +156,7 @@ function TransactionGenerationController($scope, $modal, userService, walletTran
     }
   };
 
-  $scope.modalBaseController = function($scope, $modalInstance, data, prepareTransaction, setModalScope, walletAssets) {
+  var modalBaseController = $scope.modalBaseController = function($scope, $modalInstance, data, prepareTransaction, setModalScope, walletAssets) {
     setModalScope($scope);
     $scope.signOffline= walletAssets.offline;
     
@@ -202,7 +202,7 @@ function TransactionGenerationController($scope, $modal, userService, walletTran
   };
 
   $scope.modalController = function($scope, $modalInstance, data, prepareTransaction, setModalScope, walletAssets) {
-    $scope.modalBaseController($scope, $modalInstance, data, prepareTransaction, setModalScope, walletAssets);
+    modalBaseController($scope, $modalInstance, data, prepareTransaction, setModalScope, walletAssets);
   };
    
   $scope.modalFactory = {};
