@@ -20,13 +20,14 @@
     </div>
     <hr>
     <span class="send-fee">Transaction fees: {{convertSatoshiToDisplayedValue(totalCost, true)}} bitcoins</span>
+    <hr>
   </div>
-  <hr>
   <div collapse="!readyToSign">
     <div class="modal-row">
       <div class="description-title">From:</div><span class="description-text">{{sendFrom}}</span>
     </div>
     <pre>{{unsignedTransaction}}</pre>
+    <hr>
   </div>
   <div ng-if="signOffline">
     <p class="text-warning">
