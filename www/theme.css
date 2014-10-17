@@ -112,11 +112,22 @@ a {
   font-family: 'Gudea', sans-serif;
   margin-top: 16px;
 }
+
+/* MODAL WINDOWS STYLES */
+.modal-header-row{
+  margin-bottom: 30px;
+}
+.modal-row{
+  margin-bottom: 5px;
+}
 .description-title{
   font-size: 18px;
   color: #b8b7b7;
   font-family: 'Gudea', sans-serif;
   font-weight: bold;
+  float: left;
+  width: 103px;
+  height:30px;
 }
 .description-text{
   font-size: 18px;

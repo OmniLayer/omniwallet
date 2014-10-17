@@ -1,33 +1,39 @@
 <div class="modal-body">
+  <div class="modal-header-row">
     <div class="text-left col-xs-7 modal-title">Confirm send</div><div class="text-right"><button ng-disabled="wating" class="btn btn-xs modal-cancel-btn" ng-click="cancel()">cancel | <span class="glyphicon glyphicon-remove"></span></button></div>
-    <table>
-        <tr><td height="30px"></td></tr>
-        <tr>
-        <td width="103px" height="30px" class="description-title">Token:</td><td class="description-text">{{getDisplayedAbbreviation()}}</td>
-        </tr>
-       
-        <tr>
-        <td width="103px" height="30px" class="description-title">Amount:</td><td class="description-text">{{convertSatoshiToDisplayedValue(sendAmount)}}</td>
-        </tr>
-       
-        <tr>
-        <td width="103px" height="30px" class="description-title">From:</td><td class="description-text">{{sendFrom}}</td>
-        </tr>
-        
-        <tr>
-        <td width="103px" height="30px" class="description-title">To:</td><td class="description-text">{{sendTo}}</td>
-        </tr>
-    </table>
+  </div>
+  <div collapse="readyToSign">
+    <div class="modal-row">
+      <div class="description-title">Token:</div><span class="description-text">{{getDisplayedAbbreviation()}}</span>
+    </div>
+   
+    <div class="modal-row">
+      <div class="description-title">Amount:</div><span class="description-text">{{convertSatoshiToDisplayedValue(sendAmount)}}</span>
+    </div>
+   
+    <div class="modal-row">
+      <div class="description-title">From:</div><span class="description-text">{{sendFrom}}</span>
+    </div>
+    
+    <div class="modal-row">
+      <div class="description-title">To:</div><span class="description-text">{{sendTo}}</span>
+    </div>
     <hr>
     <span class="send-fee">Transaction fees: {{convertSatoshiToDisplayedValue(totalCost, true)}} bitcoins</span>
-    <hr>
-    <div ng-if="signOffline">
-      <hr>
-      <p class="text-warning">
-        You will need to sign this transaction offline and come back to broadcast it and finish the send.
-      </p>
-      <pre collapse="!readyToSign">{{unsignedTransaction}}</pre>
+  </div>
+  <hr>
+  <div collapse="!readyToSign">
+    <div class="modal-row">
+      <div class="description-title">From:</div><span class="description-text">{{sendFrom}}</span>
     </div>
+    <pre>{{unsignedTransaction}}</pre>
+  </div>
+  <div ng-if="signOffline">
+    <p class="text-warning">
+      You will need to sign this transaction offline and come back to broadcast it and finish the send.
+    </p>
+    <hr>
+  </div>
 </div>
 <div class="modal-footer footer-div">
  <br>
