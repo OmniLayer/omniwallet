@@ -14,11 +14,6 @@ function WalletSendAssetsController($modal, $scope, $http, $q, userService, wall
     $scope.sendAmount = parseFloat($scope.sendAmount);
   }
  
-  $scope.resetAmountAndValue = function(){
-    $scope.sendAmount = 0;
-    $scope.value = 0;
-  }
- 
   transactionGenerationController.validateTransactionData = function(){
     var dustValue = 5757;
     var minerMinimum = 10000;
@@ -98,7 +93,7 @@ function WalletSendAssetsController($modal, $scope, $http, $q, userService, wall
     $modalScope.bitcoinValue = $scope.bitcoinValue;
     $modalScope.getBitcoinValue = $scope.getBitcoinValue;
     $modalScope.setBitcoinValue = $scope.setBitcoinValue;
-    $modalScope.resetAmountAndValue = $scope.resetAmountAndValue;
+    $modalScope.changeValue = $scope.changeValue;
     $modalScope.selectedCoinSymbol = $scope.walletAssets.selectedCoin.symbol;
     $modalScope.value = $scope.value;
     $modalScope.btcValueChanged = false;
@@ -143,7 +138,7 @@ function WalletSendAssetsController($modal, $scope, $http, $q, userService, wall
     };
     $scope.goBack = function(){
       $scope.setBitcoinValue($scope.getBitcoinValue());
-      //$scope.resetAmountAndValue();
+      $scope.changeValue();
       $scope.cancel();
     };
     $scope.sendByValue = function(){
@@ -154,7 +149,7 @@ function WalletSendAssetsController($modal, $scope, $http, $q, userService, wall
       $scope.transactionError = false;
       $scope.bitcoinValue = $scope.getBitcoinValue();
       $scope.setBitcoinValue($scope.getBitcoinValue());
-      $scope.resetAmountAndValue();
+      $scope.changeValue();
     };
     $scope.sendByAmount = function(){
       var amount = $scope.convertSatoshiToDisplayedValue($scope.sendAmount);
@@ -163,7 +158,7 @@ function WalletSendAssetsController($modal, $scope, $http, $q, userService, wall
       $scope.transactionError = false;
       $scope.bitcoinValue = $scope.getBitcoinValue();
       $scope.setBitcoinValue($scope.getBitcoinValue());
-      $scope.resetAmountAndValue();
+      $scope.changeValue();
     };
   };
 };
