@@ -47,8 +47,9 @@ def pushtx_response(response_dict):
 def pushtxnode(signed_tx):
     import commands, json
     signed_tx = re.sub(r'\W+', '', signed_tx) #check alphanumeric
-    output=commands.getoutput('bitcoind sendrawtransaction ' +  str(signed_tx) )
-    
+    #output=commands.getoutput('bitcoind sendrawtransaction ' +  str(signed_tx) )
+    output=sendrawtransaction(str(signed_tx))
+
     ret=re.findall('{.+',output)
     if len(ret) > 0:
         try:
