@@ -170,7 +170,7 @@ function TransactionGenerationController($scope, $modal, userService, walletTran
       var exportBlob = new Blob([unsignedHex], {
         type: 'application/json;charset=utf-8'
       });
-      fileName="tx"+(new Date).getTime()+".tx";
+      fileName="tx"+(new Date).getTime()+"unsigned.tx";
       saveAs(exportBlob, fileName);
       $scope.unsaved=false;
       $scope.saved=true;
