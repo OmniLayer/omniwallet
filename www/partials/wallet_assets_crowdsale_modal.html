@@ -4,23 +4,23 @@
    </div>
    <div collapse="readyToSign">
     <div class="modal-row">
-            <div class="description-title">Name:</div><span class="description-text">{{propertyName}}</span>
+            <div class="description-title-large">Name:</div><span class="description-text">{{propertyName}}</span>
     </div>
    
     <div class="modal-row">
-        <div class="description-title">Category:</div><span class="description-text">{{propertyCategory}}</span>
+        <div class="description-title-large">Category:</div><span class="description-text">{{propertyCategory}}</span>
     </div>
    
     <div class="modal-row">
-        <div class="description-title">Subcategory:</div><span class="description-text">{{propertySubcategory}}</span>
+        <div class="description-title-large">Subcategory:</div><span class="description-text">{{propertySubcategory}}</span>
     </div>
    
     <div class="modal-row">
-        <div class="description-title">Url:</div><span class="description-text"><a href="{{propertyUrl}}" target="_blank">{{propertyUrl}}</a></span>
+        <div class="description-title-large">Url:</div><span class="description-text"><a href="{{propertyUrl}}" target="_blank">{{propertyUrl}}</a></span>
     </div>
    
     <div class="modal-row">
-        <div class="description-title" style="vertical-align: top;">Description:</div>
+        <div class="description-title-large" style="vertical-align: top;">Description:</div>
         <span class="description-text">
             <div id="expandable-div" class="expandable-div" ng-class="{'expanded-div':expanded, 'collapsed-div':!expanded,'expandable-div-rendered':rendered}" ng-init="setExpandableDiv()">
             {{propertyData}}
@@ -34,13 +34,13 @@
   </div>
   <div collapse="readyToSign">
     <br><br>
-    <div class="modal-row"><div class="description-title">Estimated initial early bird bonus:</div><span class="description-text">{{earlyBirdBonus}}%</span></div>
-    <div class="modal-row"><div class="description-title">Percentage for issuer:</div><span class="description-text">{{percentageForIssuer}}%</span></div>
-    <div class="modal-row"><div class="description-title">Deadline:</div><span class="description-text">{{deadline}}</span></div>
-    <div class="modal-row"><div class="description-title">Issuer address:</div><span class="description-text"><a href="https://blockchain.info/address/{{selectedAddress}}?sort=0" target="_blank">{{selectedAddress}}</a></span></div>
-    <div class="modal-row"><div class="description-title">Issuance rates:</div><span class="description-text"> 
+    <div class="modal-row"><div class="description-title-xlarge">Initial early bird bonus:</div><span class="description-text">{{earlyBirdBonus}}%</span></div>
+    <div class="modal-row"><div class="description-title-xlarge">Percentage for issuer:</div><span class="description-text">{{percentageForIssuer}}%</span></div>
+    <div class="modal-row"><div class="description-title-xlarge">Deadline:</div><span class="description-text">{{deadline}}</span></div>
+    <div class="modal-row"><div class="description-title-xlarge">Issuer address:</div><span class="description-text"><a href="https://blockchain.info/address/{{selectedAddress}}?sort=0" target="_blank">{{selectedAddress}}</a></span></div>
+    <div class="modal-row"><div class="description-title-xlarge">Issuance rates:</div><span class="description-text"> 
       <ul>
-        <li ng-repeat="currency in currenciesDesired">
+        <li ng-repeat="currency in currenciesDesired" class="description-text">
           {{currency.numberOfTokens}} tokens per {{currency.selectedCurrency.propertyName}} ({{currency.selectedCurrency.currencyId}}) invested
         </li>
       </ul>

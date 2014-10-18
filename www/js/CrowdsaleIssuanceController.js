@@ -188,6 +188,26 @@ function CrowdsaleIssuanceController($scope, propertiesService){
     $modalScope.earlyBirdBonus= $scope.initialEarlyBirdBonus,
     $modalScope.percentageForIssuer=$scope.percentageForIssuer;
     $modalScope.selectedAddress=$scope.selectedAddress;
+    $modalScope.minerFees= +$scope.convertDisplayedValue($scope.minerFees);
+    $modalScope.totalCost= +$scope.convertDisplayedValue($scope.totalCost);
+    $modalScope.expanded = true;
+    $modalScope.rendered = false;
+    $modalScope.setExpandableDiv = function(){
+      $timeout(function(){
+        $scope.$apply(function(){
+          var offsetHeight = document.getElementById('expandable-div').offsetHeight;
+          var lines = offsetHeight/25;
+          if (lines > 2) {
+            $modalScope.longText = true;
+            $modalScope.expanded = false;
+          }
+          else {
+            $modalScope.longText = false;
+            $modalScope.expanded = true;
+          } 
+        });   
+      },0,false);  
+    }
   };
   
   transactionGenerationController.generateData = function(){

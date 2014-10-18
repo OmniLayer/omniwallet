@@ -129,9 +129,33 @@ a {
   width: 103px;
   height:30px;
 }
+.description-title-large{
+  font-size: 18px;
+  color: #b8b7b7;
+  font-family: 'Gudea', sans-serif;
+  font-weight: bold;
+  float: left;
+  width: 126px;
+  height:30px;
+}
+.description-title-xlarge{
+  font-size: 18px;
+  color: #b8b7b7;
+  font-family: 'Gudea', sans-serif;
+  font-weight: bold;
+  float: left;
+  width: 200px;
+  height:30px;
+}
 .description-text{
   font-size: 18px;
   color: #696969;
+  font-family: 'Gudea', sans-serif;
+  font-weight: bold;
+}
+.description-extra{
+  font-size: 18px;
+  color: #b8b7b7;
   font-family: 'Gudea', sans-serif;
   font-weight: bold;
 }
