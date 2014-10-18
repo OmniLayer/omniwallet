@@ -1,4 +1,4 @@
-function CrowdsaleIssuanceController($scope, propertiesService){
+function CrowdsaleIssuanceController($scope, propertiesService, $timeout){
   /*
   $scope.isNewProperty = true;
   

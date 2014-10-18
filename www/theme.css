@@ -194,7 +194,10 @@ input[type=number]::-webkit-outer-spin-button {
     -webkit-appearance: none;
     margin: 0;
 }
-
+.armory-unsigned{
+  height:300;
+  overflow-y:auto;
+}
 .currency-name, .currency-total, .currency-value {
 	font-weight: bold;
 	font-size: 1.5em;
