@@ -170,7 +170,7 @@ function TransactionGenerationController($scope, $modal, userService, walletTran
       var exportBlob = new Blob([unsignedHex], {
         type: 'application/json;charset=utf-8'
       });
-      fileName="tx"+(new Date).getTime()+"unsigned.tx";
+      fileName="tx"+(new Date).getTime()+".unsigned.tx";
       saveAs(exportBlob, fileName);
       $scope.unsaved=false;
       $scope.saved=true;
@@ -182,6 +182,69 @@ function TransactionGenerationController($scope, $modal, userService, walletTran
     
     $scope.close = function () {
       $modalInstance.dismiss('close');
+    };
+
+    $scope.openBroadcastTransactionForm = function(address){
+      $modalInstance.dismiss('close');
+      var broadcastModalInstance = $modal.open({
+        templateUrl: "/partials/wallet_broadcast_modal.html",
+        controller: function($scope, $modalInstance, address, broadcastTransaction) {
+          $scope.broadcastAddress = address;
+          
+          $scope.ok = function(signedHex) {
+            $scope.clicked = true;
+            $scope.waiting = true;
+            broadcastTransaction(signedHex, address, $scope);
+          };
+          
+          $scope.cancel = function () {
+            $modalInstance.dismiss('cancel');
+          };
+          
+          $scope.close = function () {
+            $modalInstance.dismiss('close');
+          };
+        },
+        resolve: {
+          broadcastTransaction: function() {
+              return function(signedHex, from, $modalScope){
+                  var walletTransactionService = $injector.get('walletTransactionService');
+                  walletTransactionService.getArmoryRaw(signedHex).then(function(result){
+                    var finalTransaction = result.data.rawTransaction;
+                  
+                    //Showing the user the transaction hash doesn't work right now
+                    //var transactionHash = Bitcoin.Util.bytesToHex(transaction.getHash().reverse());
+
+                    walletTransactionService.pushSignedTransaction(finalTransaction).then(function(successData) {
+                      var successData = successData.data;
+                      if (successData.pushed.match(/submitted|success/gi) != null) {
+                        $modalScope.waiting = false;
+                        $modalScope.transactionSuccess = true;
+                        $modalScope.url = 'http://blockchain.info/address/' + from + '?sort=0';
+                      } else {
+                        $modalScope.waiting = false;
+                        $modalScope.transactionError = true;
+                        $modalScope.error = successData.pushed; //Unspecified error, show user
+                      }
+                    }, function(errorData) {
+                      $modalScope.waiting = false;
+                      $modalScope.transactionError = true;
+                      if (errorData.message)
+                        $modalScope.error = 'Server error: ' + errorData.message;
+                      else 
+                        if (errorData.data)
+                          $modalScope.error = 'Server error: ' + errorData.data;
+                        else
+                          $modalScope.error = 'Unknown Server Error';
+                      console.error(errorData);
+                    });
+                  })
+                };
+          }, address: function(){
+            return address;
+          }
+        }
+      });
     };
   };
 
