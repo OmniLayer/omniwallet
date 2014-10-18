@@ -1,12 +1,14 @@
-<div ng-controller="WalletController" class="modal-body">      
+<div class="modal-header">
+  <h3>My Wallet Details</h3>
+</div>
+<div class="modal-body" ng-controller="WalletController">
+<div class="alert alert-info">
+      <center><strong>Welcome!</strong></center>We have created your wallet and added a new address to get you started.<br />
+            <small>(Access this information at anytime by clicking the 'My Wallet' Button in the upper left hand corner)</small>
+</div>
     <div class="row">
             <div class="form-group col-xs-10 col-xs-push-1">
-	      <span style="text-align: left"><strong><h3>Welcome!</h3></strong>We have created your wallet and added a new address to get you started.<br /></span>
-	    <div style="padding-left: 0px;" class="text-center panel-body"><div style="color: #696969; font-size: 18px;"><div class="col-xs-3" style="
-    padding-left: 0px;
-    padding-right: 0px;
-    padding-top: 7px;
-    text-align: left;">Wallet ID: </div><div class="col-xs-9" style="border-width: 1px;border-color: #dedede;border-style: solid;padding-top: 6px;padding-bottom: 6px; font-size: 15px;">{{ uuid }}</div></div></h3>        
+	    <h3 class="text-center panel-body">Wallet ID: <br /><small>{{ uuid }}</small></h3>        
           <strong> Make sure you save your Wallet ID. You need this to login to your wallet</strong>
      </div>
     </div>
