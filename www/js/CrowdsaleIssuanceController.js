@@ -1,13 +1,5 @@
 function CrowdsaleIssuanceController($scope, propertiesService, $timeout, $injector){
-  /*
-  $scope.isNewProperty = true;
-  
-  $scope.checkPropertyType = function(){
-    if ($scope.propertyType != 1 && $scope.propertyType != 2)
-      $scope.isNewProperty = false;
-    else
-      $scope.isNewProperty = true;
-  };*/
+
   $scope.walletAssets = $scope.$parent.$parent;
   $scope.walletAssets.currencyList.forEach(function(e, i) {
     if (e.symbol == "BTC")
@@ -269,6 +261,7 @@ function CrowdsaleIssuanceController($scope, propertiesService, $timeout, $injec
           }
         }
       });
+    };
   };
   
   transactionGenerationController.generateData = function(){

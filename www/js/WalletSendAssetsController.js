@@ -164,6 +164,7 @@ function WalletSendAssetsController($modal, $scope, $http, $q, userService, wall
           }
         }
       });
+    };
   };
 
   transactionGenerationController.generateData = function(){

@@ -167,6 +167,7 @@ function PropertyIssuanceController($scope, propertiesService, $timeout, $inject
           }
         }
       });
+    };
   };
 
 
