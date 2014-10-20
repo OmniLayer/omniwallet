@@ -1,3 +1,4 @@
+import socket
 import smtplib
 import os
 import base64
@@ -29,7 +30,8 @@ data_dir_root = os.environ.get('DATADIR')
 store_dir = data_dir_root + '/sessions/'
 session_store = FilesystemStore(store_dir) # TODO: Need to roll this into a SessionInterface so multiple services can hit it easily
 
-email_from = "no-reply@omniwallet.org"
+email_domain = socket.gethostname()
+email_from = "noreply@"+str(email_domain)
 
 app = Flask(__name__)
 app.debug = True
@@ -118,7 +120,7 @@ def create():
       print 'UUID already exists'
       abort(403)
 
-    write_wallet(uuid, wallet)
+    write_wallet(uuid, wallet, email)
     dbExecute("update sessions set pchallenge=NULL, timestamp=DEFAULT, pubkey=%s where sessionid=%s",(public_key, session))
     dbCommit()
 
@@ -250,15 +252,15 @@ def failed_challenge(pow_challenge, nonce, difficulty):
   pow_challenge_response = ws.hashlib.sha256(pow_challenge + nonce).hexdigest()
   return pow_challenge_response[-len(difficulty):] != difficulty
 
-def write_wallet(uuid, wallet):
+def write_wallet(uuid, wallet, email=None):
   if LOCALDEVBYPASSDB:
     filename = data_dir_root + '/wallets/' + uuid + '.json'
     with open(filename, 'w') as f:
       f.write(wallet)
   else:
     dbExecute("with upsert as (update wallets set walletblob=%s where walletid=%s returning *) "
-              "insert into wallets (walletblob,walletid) select %s,%s where not exists (select * from upsert)", 
-              (wallet,uuid,wallet,uuid))
+              "insert into wallets (walletblob,walletid,email) select %s,%s,%s where not exists (select * from upsert)", 
+              (wallet,uuid,wallet,uuid,email))
     dbCommit()
     
 def read_wallet(uuid):
@@ -299,15 +301,36 @@ def exists(uuid):
 
 def email_wallet(user_email, wallet, uuid):
   if user_email is not None:
-    msg = MIMEMultipart()
+    msg = MIMEMultipart('alternative')
     msg['From'] = email_from
     msg['To'] = user_email
-    msg['Subject'] = "Omniwallet backup file"
-    part = MIMEBase('application', "octet-stream")
-    part.set_payload(wallet)
-    Encoders.encode_base64(part)
-    part.add_header('Content-Disposition', 'attachment; filename="%s.json"' % uuid)
-    msg.attach(part)
+    msg['Subject'] = "Welcome to Omniwallet"
+
+    text = ('Welcome to Omniwallet\n'
+            'This email contains important information about your new Omniwallet. Be sure to keep this safe and stored seperately from your password\n\n'
+            'Wallet Id: '+str(uuid)+'\n'
+            'Login Link: https://'+str(email_domain)+'/login/'+str(uuid)  )
+
+    html = ('<html><head></head>'
+            '<h3>Welcome to Omniwallet</h3>'
+            '<body><p>'
+            'This email contains important information about your new Omniwallet. Be sure to keep this safe and stored seperately from your password<br><br>'
+            '<b>Wallet Id:</b> '+str(uuid)+'<br>'
+            '<b>Login Link:</b> <a href="https://'+str(email_domain)+'/login/'+str(uuid)+'">https://'+str(email_domain)+'/login/'+str(uuid)+'<br>'
+            '</p></body></html>'  )
+
+    part1 = MIMEText(text, 'plain')
+    part2 = MIMEText(html, 'html')
+    msg.attach(part1)
+    msg.attach(part2)
+
+    wfile = MIMEBase('application', 'octet-stream')
+    wfile.set_payload(wallet)
+    Encoders.encode_base64(wfile)
+    wfile.add_header('Content-Disposition', 'attachment', filename=uuid+'.json')
+    msg.attach(wfile)
     smtp = smtplib.SMTP('localhost')
     smtp.sendmail(email_from, user_email, msg.as_string())
     smtp.close()
+
+
