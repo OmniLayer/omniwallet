@@ -253,11 +253,12 @@ form.form-search:before {
   position: absolute;
   bottom: 0;
   width: 100%;
-  background-color: #F9F9F9
-  transition: height 0.5s;
   -moz-box-shadow: 0px 3px 1px #DADADA;
   -webkit-box-shadow: 0px 3px 1px #DADADA;
   box-shadow: inset 0px 3px 1px #DADADA;
+}
+#footer .nav > li > a:hover, #footer .nav > li > a:focus {
+  background-color: transparent;
 }
 .footer .navbar-nav > li {
   padding-top: 0;
@@ -265,12 +266,13 @@ form.form-search:before {
 .footer-div{
   padding-bottom: 0px;
 }
+.footer-top-row{
+  background-color: #F9F9F9;
+}
 .footer-bottom-row{
   background-color: #0060B6;
 }
-#footer .nav > li > a:hover, #footer .nav > li > a:focus {
-  background-color: transparent;
-}
+
 
 i.icon-uservoice {
   background-image: url("/assets/img/footer-icons/uservoice.png");
@@ -466,7 +468,9 @@ i.icon-info_decoration{
 
 .footer-expanded .footer-header{
   color: #818181;
+  transition: height 1s;
 }
 .footer-hidden .footer-header{
   color: #D1D1D1;
+  transition: height 1s;
 }
