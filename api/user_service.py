@@ -1,4 +1,3 @@
-import smtplib
 import os
 import base64
 import werkzeug.security as ws
@@ -8,11 +7,6 @@ from Crypto.PublicKey import RSA
 from flask import Flask, request, jsonify, abort, json
 from simplekv.fs import FilesystemStore
 from uuid import UUID
-from email.MIMEMultipart import MIMEMultipart
-from email.MIMEBase import MIMEBase
-from email.MIMEText import MIMEText
-from email.Utils import COMMASPACE, formatdate
-from email import Encoders
 from sqltools import *
 
 #For wallets and session store you can switch between disk and the database
@@ -28,8 +22,6 @@ data_dir_root = os.environ.get('DATADIR')
 
 store_dir = data_dir_root + '/sessions/'
 session_store = FilesystemStore(store_dir) # TODO: Need to roll this into a SessionInterface so multiple services can hit it easily
-
-email_from = "no-reply@omniwallet.org"
 
 app = Flask(__name__)
 app.debug = True
@@ -77,7 +69,6 @@ def create():
   uuid = str(validate_uuid)
   session = ws.hashlib.sha256(SESSION_SECRET + uuid).hexdigest()
 
-  email = request.form['email'] if 'email' in request.form else None
   nonce = request.form['nonce']
   public_key = request.form['public_key'].encode('UTF-8')
   wallet = request.form['wallet']
@@ -121,9 +112,6 @@ def create():
     write_wallet(uuid, wallet)
     dbExecute("update sessions set pchallenge=NULL, timestamp=DEFAULT, pubkey=%s where sessionid=%s",(public_key, session))
     dbCommit()
-
-  email_wallet(email, wallet, uuid)
-
   return ""
 
 
@@ -292,22 +280,7 @@ def exists(uuid):
     ROWS=dbSelect("select walletid from wallets where walletid=%s",[uuid])
     #check the database first then filesystem
     if len(ROWS)==0:
-      filename = data_dir_root + '/wallets/' + uuid + '.json'
-      return os.path.exists(filename)
+     filename = data_dir_root + '/wallets/' + uuid + '.json'
+     return os.path.exists(filename)
     else:
       return True
-
-def email_wallet(user_email, wallet, uuid):
-  if user_email is not None:
-    msg = MIMEMultipart()
-    msg['From'] = email_from
-    msg['To'] = user_email
-    msg['Subject'] = "Omniwallet backup file"
-    part = MIMEBase('application', "octet-stream")
-    part.set_payload(wallet)
-    Encoders.encode_base64(part)
-    part.add_header('Content-Disposition', 'attachment; filename="%s.json"' % uuid)
-    msg.attach(part)
-    smtp = smtplib.SMTP('localhost')
-    smtp.sendmail(email_from, user_email, msg.as_string())
-    smtp.close()
