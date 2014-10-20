@@ -403,14 +403,16 @@ i.icon-info_decoration{
   background-position: 0pt;
   width: 77px;
   height: 96px;
+  overflow: hidden;
+  disabled: disabled;
 }
 
 .divider-vertical-small {
-  height: 18px;
-  margin: 0 9px;
-  border-right: 1px solid #ffffff;
-  border-left: 1px solid #f2f2f2;
+  height: 32px;
+  margin-top: 9px;
+  border-left: 1px solid #004C94;
 }
+
 .footer-header {
   padding-left: 14px;
   padding-top: 20px;
