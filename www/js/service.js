@@ -61,7 +61,26 @@ angular.module('omniwallet').factory('walletTransactionService',['$http',functio
         return promise;
       } 
     },
+
+    getArmoryUnsigned : function(unsignedHex,pubKey){
+      var url = '/v1/armory/getunsigned';
+      var data = {
+        'unsigned_hex': unsignedHex,
+        'pubkey': pubKey
+      };
+      var promise = $http.post(url, data);
+      return promise;
+    },
     
+    getArmoryRaw : function(signedHex){
+      var url = '/v1/armory/getrawtransaction';
+      var data = {
+        'signed_hex': signedHex
+      };
+      var promise = $http.post(url, data);
+      return promise;
+    },
+
     validAddress:function(addr) {
       try {
         var checkValid = new Bitcoin.Address(addr);
@@ -150,19 +169,23 @@ angular.module('omniwallet').factory('userService', ['$rootScope', '$http', '$in
         service.data.walletMetadata = {};
       },
 
-      addAddress: function(address, privKey) {
+      addAddress: function(address, privKey, pubKey) {
         for (var i in service.data.wallet.addresses) {
           if (service.data.wallet.addresses[i].address == address) {
             if(privKey)
               service.data.wallet.addresses[i].privkey = privKey;
+            if(pubKey)
+              service.data.wallet.addresses[i].pubkey = pubKey;
             return service.saveSession();
           }
         }
 
         service.data.wallet.addresses.push({
           "address": address,
-          "privkey": privKey
+          "privkey": privKey,
+          "pubkey": pubKey 
         });
+        
         service.data.loggedIn = true;
         return service.saveSession().then(function(){
           service.updateCurrencies();
@@ -183,7 +206,7 @@ angular.module('omniwallet').factory('userService', ['$rootScope', '$http', '$in
       
       getAddressesWithPrivkey: function(addressFilter) {
         var addresses = service.data.wallet.addresses.filter(function(e) {
-          return e.privkey && e.privkey.length == 58;
+          return (e.privkey && e.privkey.length == 58);
         }).map(function(e){
           return e.address;
         });
@@ -202,6 +225,43 @@ angular.module('omniwallet').factory('userService', ['$rootScope', '$http', '$in
         }
         
         return addresses;
+      },
+
+      getAddressesWithPubkey: function(addressFilter) {
+        var addresses = service.data.wallet.addresses.filter(function(e) {
+          return e.pubkey != undefined;
+        }).map(function(e){
+          return e.address;
+        });
+        
+        if (addresses.length == 0)
+          addresses = ['Could not find any addresses with attached private keys!'];
+        else {
+          
+          if(addressFilter){
+            addresses = addresses.filter(function(e) {
+              return addressFilter.indexOf(e) > -1;
+            });
+            if (addresses.length == 0)
+              addresses = ['You have no addresses with a balance on the selected coin!'];
+          }
+        }
+        
+        return addresses;
+      },
+
+      getTradableAddresses: function(addressFilter, offlineSupport){
+        if(offlineSupport){
+            var errors = ['You have no addresses with a balance on the selected coin!','Could not find any addresses with attached private keys!']
+            var addresses = service.getAddressesWithPrivkey(addressFilter).concat(service.getAddressesWithPubkey(addressFilter)).filter(function(element){
+              return errors.indexOf(element) === -1;
+            });
+            if (addresses.length == 0)
+              addresses = ['Could not find any tradable addresses!'];
+            
+            return addresses;
+        }else
+          return service.getAddressesWithPrivkey(addressFilter);
       },
 
       getCurrencies: function() {
@@ -266,14 +326,14 @@ angular.module('omniwallet').factory('userService', ['$rootScope', '$http', '$in
             $injector.get('balanceService').balance(service.data.wallet.addresses[i].address).then(function(result) {
               result.data.balance.forEach(function(balanceItem) {
                 var address = service.data.wallet.addresses[i];
-                var tradable = address.privkey && address.privkey.length == 58 && balanceItem.value > 0;
+                var tradable = ((address.privkey && address.privkey.length == 58) || address.pubkey) && balanceItem.value > 0;
                 var currency = null;
                 for (var j = 0; j < service.data.walletMetadata.currencies.length; j++) {
                   var currencyItem = service.data.walletMetadata.currencies[j];
                   if (currencyItem.symbol == balanceItem.symbol) {
                     currency = currencyItem;
                     if (currency.addresses().indexOf(service.data.wallet.addresses[i].address) == -1){
-                     balanceItem.value > 0 ? currency.tradableAddresses.push(service.data.wallet.addresses[i].address) : currency.watchAddresses.push(service.data.wallet.addresses[i].address) ;
+                     tradable ? currency.tradableAddresses.push(service.data.wallet.addresses[i].address) : currency.watchAddresses.push(service.data.wallet.addresses[i].address) ;
                      currency.tradable = currency.tradable || tradable;
                     }
                     break;
@@ -286,8 +346,8 @@ angular.module('omniwallet').factory('userService', ['$rootScope', '$http', '$in
                         id: propertyID,
                         symbol: balanceItem.symbol,
                         divisible: balanceItem.divisible,
-                        tradableAddresses: balanceItem.value > 0 ? [service.data.wallet.addresses[i].address] : [],
-                        watchAddresses: balanceItem.value == 0 ? [service.data.wallet.addresses[i].address] : [],
+                        tradableAddresses: tradable ? [service.data.wallet.addresses[i].address] : [],
+                        watchAddresses: !tradable ? [service.data.wallet.addresses[i].address] : [],
                         addresses: function(){ return this.tradableAddresses.concat(this.watchAddresses); },
                         tradable:tradable
                       };
@@ -304,8 +364,8 @@ angular.module('omniwallet').factory('userService', ['$rootScope', '$http', '$in
                       name: balanceItem.symbol,
                       symbol: balanceItem.symbol,
                       divisible: balanceItem.divisible,
-                      tradableAddresses: balanceItem.value > 0 ? [service.data.wallet.addresses[i].address] : [],
-                      watchAddresses: balanceItem.value == 0 ? [service.data.wallet.addresses[i].address] : [],
+                      tradableAddresses: tradable ? [service.data.wallet.addresses[i].address] : [],
+                      watchAddresses: !tradable ? [service.data.wallet.addresses[i].address] : [],
                       addresses: function(){ return this.tradableAddresses.concat(this.watchAddresses); },
                       tradable:tradable
                     };
@@ -316,9 +376,9 @@ angular.module('omniwallet').factory('userService', ['$rootScope', '$http', '$in
               addCurrencies(i + 1);
             });
           } else {
-	    $injector.get('appraiser').updateValues(function() {
+	           $injector.get('appraiser').updateValues(function() {
                 console.log("Updated Currencies");
-            });
+             });
           }
         };
         addCurrencies(0);
