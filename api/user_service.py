@@ -316,7 +316,7 @@ def welcome_email(user_email, wallet, uuid):
 
 
     html = ('<html><head></head>'
-            '<h2>Welcome to Omniwallet</h2>'
+            '<img src="https://'+str(email_domain)+'/assets/img/logo.png"><h2>Welcome to Omniwallet</h2>'
             '<body><p>'
             'This email contains important information about your new Omniwallet. Be sure to keep this safe and stored seperately from your password<br><br>'
             '<b>Wallet Id:</b> '+str(uuid)+'<br>'
