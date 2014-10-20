@@ -124,7 +124,7 @@ def create():
     dbExecute("update sessions set pchallenge=NULL, timestamp=DEFAULT, pubkey=%s where sessionid=%s",(public_key, session))
     dbCommit()
 
-  email_wallet(email, wallet, uuid)
+  welcome_email(email, wallet, uuid)
 
   return ""
 
@@ -299,7 +299,8 @@ def exists(uuid):
     else:
       return True
 
-def email_wallet(user_email, wallet, uuid):
+
+def welcome_email(user_email, wallet, uuid):
   if user_email is not None:
     msg = MIMEMultipart('alternative')
     msg['From'] = email_from
@@ -312,9 +313,48 @@ def email_wallet(user_email, wallet, uuid):
             'Login Link: https://'+str(email_domain)+'/login/'+str(uuid)  )
 
     html = ('<html><head></head>'
-            '<h3>Welcome to Omniwallet</h3>'
+            '<h2>Welcome to Omniwallet</h2>'
             '<body><p>'
             'This email contains important information about your new Omniwallet. Be sure to keep this safe and stored seperately from your password<br><br>'
+            '<b>Wallet Id:</b> '+str(uuid)+'<br>'
+            '<b>Login Link:</b> <a href="https://'+str(email_domain)+'/login/'+str(uuid)+'">https://'+str(email_domain)+'/login/'+str(uuid)+'<br>'
+            '</p></body></html>'  )
+
+    part1 = MIMEText(text, 'plain')
+    part2 = MIMEText(html, 'html')
+    msg.attach(part1)
+    msg.attach(part2)
+
+    #wfile = MIMEBase('application', 'octet-stream')
+    #wfile.set_payload(wallet)
+    #Encoders.encode_base64(wfile)
+    #wfile.add_header('Content-Disposition', 'attachment', filename=uuid+'.json')
+    #msg.attach(wfile)
+    smtp = smtplib.SMTP('localhost')
+    smtp.sendmail(email_from, user_email, msg.as_string())
+    smtp.close()
+
+
+def email_wallet(user_email, wallet, uuid):
+  if user_email is not None:
+    msg = MIMEMultipart('alternative')
+    msg['From'] = email_from
+    msg['To'] = user_email
+    msg['Subject'] = "Omniwallet Backup File"
+
+    text = ('Omniwallet Backup File\n'
+            'This email contains an encrypted back of your wallet files. \n'
+            'With this file you can import your wallet into any server running the Omniwallet software\n'
+            'Be sure to keep this safe and stored seperately from your password\n\n'
+            'Wallet Id: '+str(uuid)+'\n'
+            'Login Link: https://'+str(email_domain)+'/login/'+str(uuid)  )
+
+    html = ('<html><head></head>'
+            '<img src="https://'+str(email_domain)+'/assets/img/logo.png"><h2>Omniwallet Backup File</h2>'
+            '<body><p>'
+            'This email contains an encrypted back of your wallet files.<br>'
+            'With this file you can import your wallet into any server running the Omniwallet software.<br>'
+            'Be sure to keep this safe and stored seperately from your password<br><br>'
             '<b>Wallet Id:</b> '+str(uuid)+'<br>'
             '<b>Login Link:</b> <a href="https://'+str(email_domain)+'/login/'+str(uuid)+'">https://'+str(email_domain)+'/login/'+str(uuid)+'<br>'
             '</p></body></html>'  )
