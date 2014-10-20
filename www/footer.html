@@ -1,27 +1,55 @@
-<br />
-<br />
-<div id="footer" class="navbar navbar-default navbar-fixed-bottom panel-footer">
-  <div class="navbar-collapse collapse">
-    <div class="nav navbar-nav navbar-left col-md-5">
-      <div class="text-muted credit"><a href="http://www.mastercoin.org">&copy; Mastercoin Foundation 2014.</a></div>
-      <div class="text-muted credit">Omniwallet&#8482; is a cryptocurrency wallet for Mastercoin, which is a based on Bitcoin technology and is leading the way in the Bitcoin 2.0 revolution.</div>
-      <div><class="text-left"><a href="/about/omniwallet" class="text-danger">This Wallet is under development. Read More...</a></div>
-
+<div id="footer" class="container-fluid navbar navbar-fixed-bottom">
+  <div class="row" ng-mouseover="">
+    <div class="col-xs-3">
+      <ul class="navbar nav-stacked">
+        <li class="footer-header">More info</li>
+        <li class="footer-content"><a href="/about">About Omni Wallet</a></li>
+        <li class="footer-content"><a href="#">Can't log in?</a></li>
+        <li class="footer-content"><a href="#">Terms of use</a></li>
+        <li class="footer-content"><a href="/about/faq">F.A.Q.</a></li>
+      </ul>
     </div>
-    <div class="col-md-2 col-md-offset-2 text-muted">
-      <b> Contact Us</b><br />
-      <small>
-           <a href="/about/contact" target="_new"> Github, Chat, Email, Forums</a> <br />
-           We welcome feedback.</small>
+    <div class="col-xs-2">
+      <ul class="navbar nav-stacked">
+        <li class="footer-header">Follow us</li>
+        <li class="footer-content"><a href="https://www.facebook.com/groups/523941304389744/"><i class="icon-facebook"></i>Facebook</a></li>
+        <li class="footer-content"><a href="https://twitter.com/omniwallet"><i class="icon-twitter"></i>Twitter</a></li>
+        <li class="footer-content"><a href="#"><i class="icon-google"></i>Google+</a></li>
+      </ul>
     </div>
-
-    <div class="container c-footer-container text-right">
-      <div class="text-muted text-center"><b>Follow us</b></div>
-      <ul class="nav navbar-nav navbar-right">
-        <li class="icons"><a href="https://www.facebook.com/groups/523941304389744/" target="_blank" class="facebook"></a></li>
-        <li class="icons"><a href="https://twitter.com/omniwallet" target="_blank" class="twitter"></a></li>
-        <li class="icons"><a href="http://www.reddit.com/r/omniwallet" target="_blank" class="reddit"></a></li>
+    <div class="col-xs-4">
+      <ul class="navbar nav-stacked">
+        <li class="footer-header">Spread the word</li>
+        <li class="footer-content"><a href="#">Tell your friends about how awesome the Omni Wallet is</a></li>
+        <li><a class="icon-dudes" href="#"><img src="/assets/img/footer-icons/dudes.png" alt="Tell a friend"></a>
+      </ul>
+    </div>
+    <div class="col-xs-3">
+      <ul class="navbar nav-stacked">
+        <li class="footer-header">Feeling chatty?</li>
+        <li class="footer-content"><a href="#"><i class="icon-ha"></i>Ask a question on our forums</a></li>
+        <li class="footer-content"><a href="#"><i class="icon-email"></i>Mail: info@omniwallet.org</a></li>
+        <li class="footer-suggestions"><a href="#"><i class="icon-uservoice"></i>We welcome your suggestions</a></li>
       </ul>
     </div>
   </div>
+  <div class="row">
+    <div class="col-xs-6">
+      <ol class="breadcrumb">
+        <li class="footer-bottom"><a href="/about/omniwallet"><i class="icon-notif"></i>Omni Wallet is under ongoing development</a></li>
+        <li class="divider-vertical-small"></li>
+        <li class="footer-bottom"><a href="#">Disclaimer</a></li>
+        <li class="divider-vertical-small"></li>
+        <li class="footer-bottom"><a href="#">Terms of use</a></li>
+      </ol>
+    </div>
+    <div class="col-xs-4">
+      <ol class="breadcrumb text-right">
+        <li class="footer-bottom"><a href="#"><i class="icon-github"></i>Open source project</a></li>
+        <li class="divider-vertical-small"></li>
+        <li class="footer-bottom"><a href="#" popover-trigger="mouseenter" popover="Updated {{update-date}}">Version {{version}}</a></li>
+      </ol>
+    </div>
+  </div>
 </div>
+
