@@ -1,3 +1,5 @@
+import socket
+import smtplib
 import os
 import base64
 import werkzeug.security as ws
@@ -7,6 +9,11 @@ from Crypto.PublicKey import RSA
 from flask import Flask, request, jsonify, abort, json
 from simplekv.fs import FilesystemStore
 from uuid import UUID
+from email.MIMEMultipart import MIMEMultipart
+from email.MIMEBase import MIMEBase
+from email.MIMEText import MIMEText
+from email.Utils import COMMASPACE, formatdate
+from email import Encoders
 from sqltools import *
 
 #For wallets and session store you can switch between disk and the database
@@ -22,6 +29,9 @@ data_dir_root = os.environ.get('DATADIR')
 
 store_dir = data_dir_root + '/sessions/'
 session_store = FilesystemStore(store_dir) # TODO: Need to roll this into a SessionInterface so multiple services can hit it easily
+
+email_domain = socket.gethostname()
+email_from = "noreply@"+str(email_domain)
 
 app = Flask(__name__)
 app.debug = True
@@ -69,6 +79,7 @@ def create():
   uuid = str(validate_uuid)
   session = ws.hashlib.sha256(SESSION_SECRET + uuid).hexdigest()
 
+  email = request.form['email'] if 'email' in request.form else None
   nonce = request.form['nonce']
   public_key = request.form['public_key'].encode('UTF-8')
   wallet = request.form['wallet']
@@ -109,9 +120,12 @@ def create():
       print 'UUID already exists'
       abort(403)
 
-    write_wallet(uuid, wallet)
+    write_wallet(uuid, wallet, email)
     dbExecute("update sessions set pchallenge=NULL, timestamp=DEFAULT, pubkey=%s where sessionid=%s",(public_key, session))
     dbCommit()
+
+  welcome_email(email, wallet, uuid)
+
   return ""
 
 
@@ -238,15 +252,15 @@ def failed_challenge(pow_challenge, nonce, difficulty):
   pow_challenge_response = ws.hashlib.sha256(pow_challenge + nonce).hexdigest()
   return pow_challenge_response[-len(difficulty):] != difficulty
 
-def write_wallet(uuid, wallet):
+def write_wallet(uuid, wallet, email=None):
   if LOCALDEVBYPASSDB:
     filename = data_dir_root + '/wallets/' + uuid + '.json'
     with open(filename, 'w') as f:
       f.write(wallet)
   else:
     dbExecute("with upsert as (update wallets set walletblob=%s where walletid=%s returning *) "
-              "insert into wallets (walletblob,walletid) select %s,%s where not exists (select * from upsert)", 
-              (wallet,uuid,wallet,uuid))
+              "insert into wallets (walletblob,walletid,email) select %s,%s,%s where not exists (select * from upsert)", 
+              (wallet,uuid,wallet,uuid,email))
     dbCommit()
     
 def read_wallet(uuid):
@@ -280,7 +294,92 @@ def exists(uuid):
     ROWS=dbSelect("select walletid from wallets where walletid=%s",[uuid])
     #check the database first then filesystem
     if len(ROWS)==0:
-     filename = data_dir_root + '/wallets/' + uuid + '.json'
-     return os.path.exists(filename)
+      filename = data_dir_root + '/wallets/' + uuid + '.json'
+      return os.path.exists(filename)
     else:
       return True
+
+
+def welcome_email(user_email, wallet, uuid):
+  if user_email is not None:
+    msg = MIMEMultipart('alternative')
+    msg['From'] = email_from
+    msg['To'] = user_email
+    msg['Subject'] = "Welcome to Omniwallet"
+
+    text = ('Welcome to Omniwallet\n'
+            'This email contains important information about your new Omniwallet. Be sure to keep this safe and stored seperately from your password\n\n'
+            'Wallet Id: '+str(uuid)+'\n'
+            'Login Link: https://'+str(email_domain)+'/login/'+str(uuid)+'\n\n\n'
+            'Do not Forget Your Password!\n'
+            'WARNING: Forgotten passwords are UNRECOVERABLE and will results in LOSS of ALL of your coins!' )
+
+
+    html = ('<html><head></head>'
+            '<img src="https://'+str(email_domain)+'/assets/img/logo.png"><h2>Welcome to Omniwallet</h2>'
+            '<body><p>'
+            'This email contains important information about your new Omniwallet. Be sure to keep this safe and stored seperately from your password<br><br>'
+            '<b>Wallet Id:</b> '+str(uuid)+'<br>'
+            '<b>Login Link:</b> <a href="https://'+str(email_domain)+'/login/'+str(uuid)+'">https://'+str(email_domain)+'/login/'+str(uuid)+'</a><br><br><br>'
+            '<h3>Do not Forget Your Password!</h3><br>'
+            '<b>WARNING:</b> Forgotten passwords are UNRECOVERABLE and will results in LOSS of ALL funds in your wallet not backed up!<br>'
+            '</p></body></html>'  )
+
+    part1 = MIMEText(text, 'plain')
+    part2 = MIMEText(html, 'html')
+    msg.attach(part1)
+    msg.attach(part2)
+
+    #wfile = MIMEBase('application', 'octet-stream')
+    #wfile.set_payload(wallet)
+    #Encoders.encode_base64(wfile)
+    #wfile.add_header('Content-Disposition', 'attachment', filename=uuid+'.json')
+    #msg.attach(wfile)
+    smtp = smtplib.SMTP('localhost')
+    smtp.sendmail(email_from, user_email, msg.as_string())
+    smtp.close()
+
+
+def email_wallet(user_email, wallet, uuid):
+  if user_email is not None:
+    msg = MIMEMultipart('alternative')
+    msg['From'] = email_from
+    msg['To'] = user_email
+    msg['Subject'] = "Omniwallet Backup File"
+
+    text = ('Omniwallet Backup File\n'
+            'This email contains an encrypted back of your wallet files. \n'
+            'With this file you can import your wallet into any server running the Omniwallet software\n'
+            'Be sure to keep this safe and stored seperately from your password\n\n'
+            'Wallet Id: '+str(uuid)+'\n'
+            'Login Link: https://'+str(email_domain)+'/login/'+str(uuid)+'\n\n\n'
+            'Do not Forget Your Password!\n'
+            'WARNING: Forgotten passwords are UNRECOVERABLE and will results in LOSS of ALL of your coins!' )
+
+    html = ('<html><head></head>'
+            '<img src="https://'+str(email_domain)+'/assets/img/logo.png"><h2>Omniwallet Backup File</h2>'
+            '<body><p>'
+            'This email contains an encrypted back of your wallet files.<br>'
+            'With this file you can import your wallet into any server running the Omniwallet software.<br>'
+            'Be sure to keep this safe and stored seperately from your password<br><br>'
+            '<b>Wallet Id:</b> '+str(uuid)+'<br>'
+            '<b>Login Link:</b> <a href="https://'+str(email_domain)+'/login/'+str(uuid)+'">https://'+str(email_domain)+'/login/'+str(uuid)+'</a><br><br><br>'
+            '<h3>Do not Forget Your Password!</h3><br>'
+            '<b>WARNING:</b> Forgotten passwords are UNRECOVERABLE and will results in LOSS of ALL funds in your wallet not backed up!<br>'
+            '</p></body></html>'  )
+
+    part1 = MIMEText(text, 'plain')
+    part2 = MIMEText(html, 'html')
+    msg.attach(part1)
+    msg.attach(part2)
+
+    wfile = MIMEBase('application', 'octet-stream')
+    wfile.set_payload(wallet)
+    Encoders.encode_base64(wfile)
+    wfile.add_header('Content-Disposition', 'attachment', filename=uuid+'.json')
+    msg.attach(wfile)
+    smtp = smtplib.SMTP('localhost')
+    smtp.sendmail(email_from, user_email, msg.as_string())
+    smtp.close()
+
+
