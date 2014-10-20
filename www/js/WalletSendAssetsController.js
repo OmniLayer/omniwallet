@@ -2,6 +2,8 @@ WHOLE_UNIT = new Big(0.00000001);
 function WalletSendAssetsController($modal, $scope, $http, $q, userService, walletTransactionService) {
   $scope.walletAssets =  $scope.$parent.$parent;
   var transactionGenerationController = $scope.$parent;
+  // Enable the transaction for offline wallets
+  $scope.walletAssets.offlineSupport=true;
 
   $scope.changeValue = function(){
     $scope.value = $scope.sendAmount*$scope.bitcoinValue;
@@ -102,8 +104,9 @@ function WalletSendAssetsController($modal, $scope, $http, $q, userService, wall
     $modalScope.selectedCoinSymbol = $scope.walletAssets.selectedCoin.symbol;
     $modalScope.value = $scope.value;
     $modalScope.btcValueChanged = false;
+
+    
   };
-  
 
   transactionGenerationController.generateData = function(){
     return {
@@ -121,9 +124,8 @@ function WalletSendAssetsController($modal, $scope, $http, $q, userService, wall
     }; 
   };
 
-
-  transactionGenerationController.modalController = function($scope, $modalInstance, data, prepareTransaction, setModalScope, convertSatoshiToDisplayedValue, getDisplayedAbbreviation) {
-    setModalScope($scope);
+  transactionGenerationController.modalController = function($scope, $modalInstance, data, prepareTransaction, setModalScope, walletAssets) {
+    transactionGenerationController.modalBaseController($scope, $modalInstance, data, prepareTransaction, setModalScope, walletAssets);
 
     $scope.ok = function() {
       if (($scope.bitcoinValue == $scope.getBitcoinValue())||$scope.selectedCoinSymbol != 'BTC') {
@@ -137,10 +139,6 @@ function WalletSendAssetsController($modal, $scope, $http, $q, userService, wall
         $scope.error = 'The value of BTC has changed. Please check the send details and retry.';
         $scope.btcValueChanged = true;
       }
-    };
-   
-    $scope.cancel = function () {
-      $modalInstance.dismiss('cancel');
     };
     $scope.goBack = function(){
       $scope.setBitcoinValue($scope.getBitcoinValue());

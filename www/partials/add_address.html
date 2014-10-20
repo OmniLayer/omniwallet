@@ -1,21 +1,24 @@
 <div ng-controller="AddAddressController" ng-init="enumerateAddresses();addedNewAddress=false;createdAddress=''" class="panel row">
 <div class="col-md-12">
-    <div class="col-md-4 text-left">
+    <div class="col-md-3 text-left">
+        <button class="btn btn-default" ng-click="openImportPrivateKeyForm()">Import Address with Private Key</button>
+    </div>
+    <div class="col-md-3 text-center">
+      <button class="btn btn-default" ng-click="createBTCAddress()">Create New BTC Address</button>  
+    </div>
+    <div class="col-md-3 text-center">
       <div class="dropdown">
-        <a data-toggle="dropdown" href="#" class="btn btn-default">Import Address/Private Key</a>
+        <a data-toggle="dropdown" href="#" class="btn btn-default">Add Special</a>
         <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
         <li role="presentation"><a role="menuitem" tabindex="-1" href="#" ng-click="openImportWatchOnlyForm()">Watch Only Address</a></li>
         <li role="presentation" class="divider"></li>
-        <li role="presentation"><a role="menuitem" tabindex="-1" href="#" ng-click="openImportPrivateKeyForm()">Private Key</a></li>
+        <li role="presentation"><a role="menuitem" tabindex="-1" href="#" ng-click="openImportArmoryForm()">Armory Offline Address</a></li>
 <!--        <li role="presentation" class="divider"></li>
         <li role="presentation"><a role="menuitem" tabindex="-1" href="#" ng-click="openImportEncryptedKeyForm()">Encrypted Private Key</a></li>-->
         </ul>
-      </div>
+      </div> 
     </div>
-    <div class="col-md-4 text-center">
-      <button class="btn btn-default" ng-click="createBTCAddress()">Create New BTC Address</button>  
-    </div>
-    <div class="col-md-4 text-right">
+    <div class="col-md-3 text-right">
       <div class="dropdown">
         <a data-toggle="dropdown" href="#" class="btn btn-default">Wallet Options</a>
         <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">

@@ -112,15 +112,50 @@ a {
   font-family: 'Gudea', sans-serif;
   margin-top: 16px;
 }
+
+/* MODAL WINDOWS STYLES */
+.modal-header-row{
+  margin-bottom: 30px;
+}
+.modal-row{
+  margin-bottom: 5px;
+}
 .description-title{
   font-size: 18px;
   color: #b8b7b7;
   font-family: 'Gudea', sans-serif;
   font-weight: bold;
+  float: left;
+  width: 103px;
+  height:30px;
+}
+.description-title-large{
+  font-size: 18px;
+  color: #b8b7b7;
+  font-family: 'Gudea', sans-serif;
+  font-weight: bold;
+  float: left;
+  width: 126px;
+  height:30px;
+}
+.description-title-xlarge{
+  font-size: 18px;
+  color: #b8b7b7;
+  font-family: 'Gudea', sans-serif;
+  font-weight: bold;
+  float: left;
+  width: 200px;
+  height:30px;
 }
 .description-text{
   font-size: 18px;
   color: #696969;
+  font-family: 'Gudea', sans-serif;
+  font-weight: bold;
+}
+.description-extra{
+  font-size: 18px;
+  color: #b8b7b7;
   font-family: 'Gudea', sans-serif;
   font-weight: bold;
 }
@@ -153,13 +188,17 @@ a {
   height: 5px;
   background-image:url('/assets/img/line.png');
   background-repeat: repeat;
+  margin-left: 126px;
 }
 input[type=number]::-webkit-inner-spin-button,
 input[type=number]::-webkit-outer-spin-button {
     -webkit-appearance: none;
     margin: 0;
 }
-
+.armory-unsigned{
+  height:300px;
+  overflow-y:auto;
+}
 .currency-name, .currency-total, .currency-value {
 	font-weight: bold;
 	font-size: 1.5em;
