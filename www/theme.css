@@ -253,15 +253,20 @@ form.form-search:before {
   position: absolute;
   bottom: 0;
   width: 100%;
-  /* Set the fixed height of the footer here */
-  height: 100px;
-  background-color: #f5f5f5;
+  background-color: #F9F9F9
+  transition: height 0.5s;
+  -moz-box-shadow: 0px 3px 1px #DADADA;
+  -webkit-box-shadow: 0px 3px 1px #DADADA;
+  box-shadow: inset 0px 3px 1px #DADADA;
 }
 .footer .navbar-nav > li {
   padding-top: 0;
 }
 .footer-div{
   padding-bottom: 0px;
+}
+.footer-bottom-row{
+  background-color: #0060B6;
 }
 
 i.icon-uservoice {
@@ -388,10 +393,69 @@ i.icon-info_decoration{
 }
 
 .divider-vertical-small {
-height: 18px;
-margin: 0 9px;
-border-right: 1px solid #ffffff;
-border-left: 1px solid #f2f2f2;
+  height: 18px;
+  margin: 0 9px;
+  border-right: 1px solid #ffffff;
+  border-left: 1px solid #f2f2f2;
+}
+.footer-header {
+  padding-left: 14px;
+  padding-top: 20px;
+  padding-bottom: 12px;
+  font-size: 18px;
+  font-family: 'Gudea';
+  font-weight: bold;
 }
 
-.footer-header
+.footer-content {
+  font-size: 16px;
+  color:#d9dadb;
+  font-family: 'Gudea';
+  font-weight: bold;
+}
+.footer-content a:hover{
+  color: #00acdd;
+}
+.footer-content a:active{
+  color: #2e508f;
+}
+
+.footer-suggestions {
+  margin-top: 22px;
+  font-size: 16px;
+  color: #FF9208;
+  font-family: 'Gudea';
+  font-weight: bold;
+}
+.footer-suggestions a:hover{
+  color: #;
+}
+.footer-suggestions a:active{
+  color: #;
+}
+
+.footer-bottom {
+  padding-right: 12px;
+  font-size: 16px;
+  color:#013766;
+  font-family: 'Gudea';
+  font-weight: bold;
+}
+.footer-bottom a:hover{
+  color: #ffffff;
+}
+
+.footer-expanded{
+  height: 255px;
+}
+.footer-hidden{
+  overflow: hidden;
+  height: 50px;
+}
+
+.footer-expanded .footer-header{
+  color: #818181;
+}
+.footer-hidden .footer-header{
+  color: #D1D1D1;
+}

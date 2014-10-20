@@ -1,7 +1,7 @@
-<div id="footer" class="container-fluid navbar navbar-fixed-bottom">
-  <div class="row" ng-mouseover="">
+<div id="footer" class="container navbar navbar-fixed-bottom" ng-mouseenter="expanded=true" ng-mouseleave="expanded=false" ng-init="expanded=false">
+  <div class="row" ng-class="{'footer-expanded':expanded,'footer-hidden':!expanded}">
     <div class="col-xs-3">
-      <ul class="navbar nav-stacked">
+      <ul class="nav nav-stacked">
         <li class="footer-header">More info</li>
         <li class="footer-content"><a href="/about">About Omni Wallet</a></li>
         <li class="footer-content"><a href="#">Can't log in?</a></li>
@@ -10,7 +10,7 @@
       </ul>
     </div>
     <div class="col-xs-2">
-      <ul class="navbar nav-stacked">
+      <ul class="nav nav-stacked">
         <li class="footer-header">Follow us</li>
         <li class="footer-content"><a href="https://www.facebook.com/groups/523941304389744/"><i class="icon-facebook"></i>Facebook</a></li>
         <li class="footer-content"><a href="https://twitter.com/omniwallet"><i class="icon-twitter"></i>Twitter</a></li>
@@ -18,14 +18,14 @@
       </ul>
     </div>
     <div class="col-xs-4">
-      <ul class="navbar nav-stacked">
+      <ul class="nav nav-stacked">
         <li class="footer-header">Spread the word</li>
         <li class="footer-content"><a href="#">Tell your friends about how awesome the Omni Wallet is</a></li>
-        <li><a class="icon-dudes" href="#"><img src="/assets/img/footer-icons/dudes.png" alt="Tell a friend"></a>
+        <li><a class="icon-dudes" href="#"><img src="/assets/img/footer-icons/dudes.png" alt="Tell a friend" class="img-responsive center-block"></a>
       </ul>
     </div>
     <div class="col-xs-3">
-      <ul class="navbar nav-stacked">
+      <ul class="nav nav-stacked">
         <li class="footer-header">Feeling chatty?</li>
         <li class="footer-content"><a href="#"><i class="icon-ha"></i>Ask a question on our forums</a></li>
         <li class="footer-content"><a href="#"><i class="icon-email"></i>Mail: info@omniwallet.org</a></li>
@@ -33,23 +33,22 @@
       </ul>
     </div>
   </div>
-  <div class="row">
+  <div class="row footer-bottom-row">
     <div class="col-xs-6">
-      <ol class="breadcrumb">
+      <ul class="nav navbar-nav">
         <li class="footer-bottom"><a href="/about/omniwallet"><i class="icon-notif"></i>Omni Wallet is under ongoing development</a></li>
         <li class="divider-vertical-small"></li>
         <li class="footer-bottom"><a href="#">Disclaimer</a></li>
         <li class="divider-vertical-small"></li>
         <li class="footer-bottom"><a href="#">Terms of use</a></li>
-      </ol>
+      </ul>
     </div>
-    <div class="col-xs-4">
-      <ol class="breadcrumb text-right">
+    <div class="col-xs-4 col-xs-offset-2">
+      <ul class="nav navbar-nav navbar-right">
         <li class="footer-bottom"><a href="#"><i class="icon-github"></i>Open source project</a></li>
         <li class="divider-vertical-small"></li>
-        <li class="footer-bottom"><a href="#" popover-trigger="mouseenter" popover="Updated {{update-date}}">Version {{version}}</a></li>
-      </ol>
+        <li class="footer-bottom"><a href="#">Version {{version}}</a></li>
+      </ul>
     </div>
   </div>
 </div>
-
