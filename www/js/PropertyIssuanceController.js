@@ -109,11 +109,6 @@ function PropertyIssuanceController($scope, propertiesService, $timeout, $inject
 
     
   };
-
-
-
-
-  };
   
   transactionGenerationController.generateData = function(){
     return {
