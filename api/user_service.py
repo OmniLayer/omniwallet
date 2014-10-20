@@ -310,14 +310,19 @@ def welcome_email(user_email, wallet, uuid):
     text = ('Welcome to Omniwallet\n'
             'This email contains important information about your new Omniwallet. Be sure to keep this safe and stored seperately from your password\n\n'
             'Wallet Id: '+str(uuid)+'\n'
-            'Login Link: https://'+str(email_domain)+'/login/'+str(uuid)  )
+            'Login Link: https://'+str(email_domain)+'/login/'+str(uuid)+'\n\n\n'
+            'Do not Forget Your Password!\n'
+            'WARNING: Forgotten passwords are UNRECOVERABLE and will results in LOSS of ALL of your coins!' )
+
 
     html = ('<html><head></head>'
             '<h2>Welcome to Omniwallet</h2>'
             '<body><p>'
             'This email contains important information about your new Omniwallet. Be sure to keep this safe and stored seperately from your password<br><br>'
             '<b>Wallet Id:</b> '+str(uuid)+'<br>'
-            '<b>Login Link:</b> <a href="https://'+str(email_domain)+'/login/'+str(uuid)+'">https://'+str(email_domain)+'/login/'+str(uuid)+'<br>'
+            '<b>Login Link:</b> <a href="https://'+str(email_domain)+'/login/'+str(uuid)+'">https://'+str(email_domain)+'/login/'+str(uuid)+'<br><br><br>'
+            '<h3>Do not Forget Your Password!</h3><br>'
+            '<b>WARNING:</b> Forgotten passwords are UNRECOVERABLE and will results in LOSS of ALL funds in your wallet not backed up!<br>'
             '</p></body></html>'  )
 
     part1 = MIMEText(text, 'plain')
