@@ -268,13 +268,17 @@ form.form-search:before {
 .footer-bottom-row{
   background-color: #0060B6;
 }
+#footer .nav > li > a:hover, #footer .nav > li > a:focus {
+  background-color: transparent;
+}
 
 i.icon-uservoice {
   background-image: url("/assets/img/footer-icons/uservoice.png");
   background-position: 0pt;
   width: 30px;
   height: 30px; 
-  float: left
+  float: left;
+  margin-right: 5px;
 }
 a:hover i.icon-uservoice{
   background-image: url("/assets/img/footer-icons/uservoice_roll.png")
@@ -288,7 +292,8 @@ i.icon-email {
   background-position: 0pt;
   width: 23px;
   height: 16px; 
-  float: left
+  float: left;
+  margin-right: 5px;
 }
 a:hover i.icon-email{
   background-image: url("/assets/img/footer-icons/email_roll.png")
@@ -303,6 +308,7 @@ i.icon-facebook {
   width: 20px;
   height: 21px;
   float: left; 
+  margin-right: 5px;
 }
 a:hover i.icon-facebook{
   background-image: url("/assets/img/footer-icons/facebook_roll.png")
@@ -316,7 +322,8 @@ i.icon-github {
   background-position: 0pt;
   width: 28px;
   height: 27px; 
-  float: left
+  float: left;
+  margin-right: 5px;
 }
 a:hover i.icon-github{
   background-image: url("/assets/img/footer-icons/gitroll.png")
@@ -327,7 +334,8 @@ i.icon-google {
   background-position: 0pt;
   width: 20px;
   height: 21px; 
-  float: left
+  float: left;
+  margin-right: 5px;
 }
 a:hover i.icon-google{
   background-image: url("/assets/img/footer-icons/google_roll.png")
@@ -341,7 +349,8 @@ i.icon-ha {
   background-position: 0pt;
   width: 24px;
   height: 20px; 
-  float: left
+  float: left;
+  margin-right: 5px;
 }
 a:hover i.icon-ha{
   background-image: url("/assets/img/footer-icons/ha_roll.png")
@@ -355,7 +364,8 @@ i.icon-notif {
   background-position: 0pt;
   width: 27px;
   height: 27px; 
-  float: left
+  float: left;
+  margin-right: 5px;
 }
 a:hover i.icon-notif{
   background-image: url("/assets/img/footer-icons/notif_roll.png")
@@ -366,7 +376,8 @@ i.icon-twitter {
   background-position: 0pt;
   width: 20px;
   height: 21px; 
-  float: left
+  float: left;
+  margin-right: 5px;
 }
 a:hover i.icon-twitter{
   background-image: url("/assets/img/footer-icons/twitter_roll.png")
