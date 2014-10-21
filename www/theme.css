@@ -256,6 +256,7 @@ form.form-search:before {
   -moz-box-shadow: 0px 3px 1px #DADADA;
   -webkit-box-shadow: 0px 3px 1px #DADADA;
   box-shadow: inset 0px 3px 1px #DADADA;
+  transition: height 1s;
 }
 #footer .nav > li > a:hover, #footer .nav > li > a:focus {
   background-color: transparent;
@@ -267,6 +268,9 @@ form.form-search:before {
   padding-bottom: 0px;
 }
 .footer-top-row{
+  background-image: url("/assets/img/footer-icons/info_decoration.png");
+  background-repeat: no-repeat;
+  background-position: 0pt top;
   background-color: #F9F9F9;
 }
 .footer-bottom-row{
@@ -424,7 +428,7 @@ i.icon-info_decoration{
 
 .footer-content {
   font-size: 16px;
-  color:#d9dadb;
+  color: #d9dadb !important;
   font-family: 'Gudea';
   font-weight: bold;
 }
@@ -438,21 +442,21 @@ i.icon-info_decoration{
 .footer-suggestions {
   margin-top: 22px;
   font-size: 16px;
-  color: #FF9208;
+  color: #FF9208 !important;
   font-family: 'Gudea';
   font-weight: bold;
 }
 .footer-suggestions a:hover{
-  color: #;
+  color: #00acdd;
 }
 .footer-suggestions a:active{
-  color: #;
+  color: #2e508f;
 }
 
 .footer-bottom {
   padding-right: 12px;
   font-size: 16px;
-  color:#013766;
+  color: #013766 !important;
   font-family: 'Gudea';
   font-weight: bold;
 }
