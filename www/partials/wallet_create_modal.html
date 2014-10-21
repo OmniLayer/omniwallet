@@ -30,13 +30,24 @@
     </div>
     <div class="row">
       <div class="form-group col-md-10 col-md-push-1">
-        <label class="control-label" for="inputEmail">Email</label>
+        <label class="control-label" for="inputEmail">Email<a href=""
+                popover="We will send you a welcome email containing your unique login link."
+                popover-trigger="mouseenter"
+                popover-placement="top"> <strong>(?)</strong>
+                </a></label>
         <div class="controls">
           <input name="email" type="email" ng-model="create.email" class="form-control" id="inputEmail" placeholder="Enter an email address (optional)">
           <span style="color:red" ng-show="createForm.email.$error.email">Please enter a valid email address</span>
         </div>
       </div>
     </div>
+   <div class="row">
+    <div class="col-md-9 col-md-push-1 alert alert-info alert-dismissable">
+     <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+     <strong>Don't Forget Your Password!</strong><br />
+            WARNING: Forgotten passwords are UNRECOVERABLE and can result in LOSS of ALL of your coins!<br />
+    </div>
+   </div>
   </div>
   <div class="modal-footer">
     <div class="control-group">
