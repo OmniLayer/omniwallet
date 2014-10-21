@@ -21,6 +21,7 @@ function CreateWalletController($scope, $http, $location, $modalInstance, userSe
           url: '/v1/user/wallet/create',
           method: 'POST',
           data: {
+            email: create.email,
             nonce: nonce,
             public_key: asymKey.pubPem,
             uuid: uuid,
