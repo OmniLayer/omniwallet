@@ -5,7 +5,7 @@ function WalletSendAssetsController($modal, $scope, $http, $q, userService, wall
 
   $scope.changeValue = function(){
     $scope.value = $scope.sendAmount*$scope.bitcoinValue;
-    $scope.value = new Big($scope.value).toFixed(8);
+    $scope.value = new Big($scope.value).toFixed(3);
     $scope.value = parseFloat($scope.value);
   }
   $scope.changeAmount = function(){
@@ -86,6 +86,7 @@ function WalletSendAssetsController($modal, $scope, $http, $q, userService, wall
     $modalScope.convertDisplayedValue = $scope.convertDisplayedValue;
     $modalScope.getDisplayedAbbreviation=  $scope.getDisplayedAbbreviation,
     $modalScope.sendAmount=  $scope.selectedCoin.divisible ? +$scope.convertDisplayedValue($scope.sendAmount) : +$scope.sendAmount,
+    $modalScope.sendAmountDisplayed = parseFloat($scope.sendAmount);
     $modalScope.minerFees= +$scope.convertDisplayedValue($scope.minerFees),
     $modalScope.sendTo= $scope.sendTo;
     $modalScope.sendFrom= $scope.selectedAddress;
@@ -94,8 +95,9 @@ function WalletSendAssetsController($modal, $scope, $http, $q, userService, wall
     $modalScope.getBitcoinValue = $scope.getBitcoinValue;
     $modalScope.setBitcoinValue = $scope.setBitcoinValue;
     $modalScope.changeValue = $scope.changeValue;
+    $modalScope.changeAmount = $scope.changeAmount;
     $modalScope.selectedCoinSymbol = $scope.walletAssets.selectedCoin.symbol;
-    $modalScope.value = $scope.value;
+    $modalScope.value = parseFloat(new Big($scope.value).toFixed(3));
     $modalScope.btcValueChanged = false;
   };
   
@@ -129,8 +131,8 @@ function WalletSendAssetsController($modal, $scope, $http, $q, userService, wall
           else{
             $scope.waiting = false;
             $scope.btcValueChanged = true;
-            $scope.newBtcAmount = new Big($scope.value/$scope.getBitcoinValue()).toFixed(8);
-            $scope.newValue = parseFloat(new Big($scope.convertSatoshiToDisplayedValue($scope.sendAmount)*$scope.getBitcoinValue()).toFixed(8));
+            $scope.newBtcAmount = parseFloat(new Big($scope.value/$scope.getBitcoinValue()).toFixed(8));
+            $scope.newValue = parseFloat(new Big($scope.convertSatoshiToDisplayedValue($scope.sendAmount)*$scope.getBitcoinValue()).toFixed(3));
           }
     };      
     $scope.cancel = function () {
@@ -145,15 +147,16 @@ function WalletSendAssetsController($modal, $scope, $http, $q, userService, wall
       $scope.sendAmount = $scope.convertDisplayedValue($scope.value/$scope.getBitcoinValue());
       $scope.sendAmount = new Big(parseInt($scope.sendAmount)).toFixed(0);
       data.transactionData.amount_to_transfer = $scope.sendAmount;
+      $scope.sendAmountDisplayed = parseFloat(new Big($scope.convertSatoshiToDisplayedValue($scope.sendAmount)));
       $scope.btcValueChanged = false;
       $scope.transactionError = false;
       $scope.bitcoinValue = $scope.getBitcoinValue();
       $scope.setBitcoinValue($scope.getBitcoinValue());
-      $scope.changeValue();
+      $scope.changeAmount();
     };
     $scope.sendByAmount = function(){
       var amount = $scope.convertSatoshiToDisplayedValue($scope.sendAmount);
-      $scope.value = amount*$scope.getBitcoinValue();
+      $scope.value = new Big(amount*$scope.getBitcoinValue()).toFixed(3);
       $scope.btcValueChanged = false;
       $scope.transactionError = false;
       $scope.bitcoinValue = $scope.getBitcoinValue();

@@ -7,7 +7,7 @@
         </tr>
        
         <tr>
-        <td width="103px" height="30px" class="description-title">Amount:</td><td class="description-text">{{convertSatoshiToDisplayedValue(sendAmount)}} (${{value}})</td>
+        <td width="103px" height="30px" class="description-title">Amount:</td><td class="description-text">{{sendAmountDisplayed}} <span ng-show="selectedCoinSymbol=='BTC'">(${{value}})</span></td>
         </tr>
        
         <tr>
@@ -34,17 +34,16 @@
         <p class="description-text">The value of BTC has changed, Please check the details and choose what you want to do:</p>
         <br>
         <center>
+        <button class="btn btn-lg modal-action-btn" ng-click="sendByAmount()" style="font-size: 15px; margin-left: 0px;" tooltip="${{newValue}}">Send {{sendAmountDisplayed}} BTC</button>
         <button class="btn btn-lg modal-action-btn" ng-click="sendByValue()" style="font-size: 15px;" tooltip="{{newBtcAmount}} BTC">Send ${{value}}</button>
-        <button class="btn btn-lg modal-action-btn" ng-click="sendByAmount()" style="font-size: 15px; margin-left: 0px;" tooltip="${{newValue}}">Send {{convertSatoshiToDisplayedValue(sendAmount)}} BTC</button>
-        <br>
+        <br><br>
         <button class="btn btn-lg modal-action-btn" ng-click="goBack()" style="font-size: 15px;">Go back and change the amount.</button>
         </center>
     </div>
       <br>
     <div class="row">
       <div ng-show="transactionSuccess">
-        <h4 class="pull-left" style="color:green"> Funds were sent successfully, 
-        check your transaction <a target="_blank" href="{{url}}">here.</a></h4>
+        <h4 class="pull-left" style="color:green"> Your transaction has been submitted, You may check its status <a target="_blank" href="{{url}}">here.</a></h4>
         <a href="/wallet/overview"><button class="btn btn-success" ng-click="cancel()">Close</button></a>
       </div>
       <div ng-show="transactionError">
