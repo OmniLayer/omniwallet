@@ -271,12 +271,16 @@ form.form-search:before {
   -moz-box-shadow: 0px 3px 1px #DADADA;
   -webkit-box-shadow: 0px 3px 1px #DADADA;
   box-shadow: inset 0px 3px 1px #DADADA;
+  -moz-transition: height 1s;
+  -webkit-transition: height 1s;
+  transition: height 1s;
   overflow: hidden;
 }
 .footer-bottom-row{
   background-color: #0060b2;
-  height: 50px;
-  z-index: 1000;
+}
+.footer-bottomleft-row{
+  margin-left: -15px;
 }
 
 i.icon-uservoice {
