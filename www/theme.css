@@ -253,10 +253,6 @@ form.form-search:before {
   position: absolute;
   bottom: 0;
   width: 100%;
-  -moz-box-shadow: 0px 3px 1px #DADADA;
-  -webkit-box-shadow: 0px 3px 1px #DADADA;
-  box-shadow: inset 0px 3px 1px #DADADA;
-  transition: height 1s;
 }
 #footer .nav > li > a:hover, #footer .nav > li > a:focus {
   background-color: transparent;
@@ -272,11 +268,16 @@ form.form-search:before {
   background-repeat: no-repeat;
   background-position: 0pt top;
   background-color: #F9F9F9;
+  -moz-box-shadow: 0px 3px 1px #DADADA;
+  -webkit-box-shadow: 0px 3px 1px #DADADA;
+  box-shadow: inset 0px 3px 1px #DADADA;
+  overflow: hidden;
 }
 .footer-bottom-row{
-  background-color: #0060B6;
+  background-color: #0060b2;
+  height: 50px;
+  z-index: 1000;
 }
-
 
 i.icon-uservoice {
   background-image: url("/assets/img/footer-icons/uservoice.png");
@@ -330,6 +331,7 @@ i.icon-github {
   height: 27px; 
   float: left;
   margin-right: 5px;
+  margin-top: -3px;
 }
 a:hover i.icon-github{
   background-image: url("/assets/img/footer-icons/gitroll.png")
@@ -372,6 +374,7 @@ i.icon-notif {
   height: 27px; 
   float: left;
   margin-right: 5px;
+  margin-top: -3px;
 }
 a:hover i.icon-notif{
   background-image: url("/assets/img/footer-icons/notif_roll.png")
@@ -392,23 +395,15 @@ a:active i.icon-twitter{
   background-image: url("/assets/img/footer-icons/twitter_click.png")
 }
 
-i.icon-dudes {
+i.icon-dudes{
   background-image: url("/assets/img/footer-icons/dudes.png");
   background-position: 0pt;
   width: 175px;
-  height: 102px; 
+  height: 102px;
+  margin-top: 15px;
 }
 a:hover i.icon-dudes{
   background-image: url("/assets/img/footer-icons/dudes_roll.png")
-}
-
-i.icon-info_decoration{
-  background-image: url("/assets/img/footer-icons/info_decoration.png");
-  background-position: 0pt;
-  width: 77px;
-  height: 96px;
-  overflow: hidden;
-  disabled: disabled;
 }
 
 .divider-vertical-small {
@@ -428,9 +423,11 @@ i.icon-info_decoration{
 
 .footer-content {
   font-size: 16px;
-  color: #d9dadb !important;
   font-family: 'Gudea';
   font-weight: bold;
+}
+.footer-content a{
+  color: #d9dadb
 }
 .footer-content a:hover{
   color: #00acdd;
@@ -439,12 +436,14 @@ i.icon-info_decoration{
   color: #2e508f;
 }
 
-.footer-suggestions {
+.footer-suggestions{
   margin-top: 22px;
   font-size: 16px;
-  color: #FF9208 !important;
   font-family: 'Gudea';
   font-weight: bold;
+}
+.footer-suggestions a{
+  color: #FF9300;
 }
 .footer-suggestions a:hover{
   color: #00acdd;
@@ -454,13 +453,30 @@ i.icon-info_decoration{
 }
 
 .footer-bottom {
-  padding-right: 12px;
   font-size: 16px;
-  color: #013766 !important;
   font-family: 'Gudea';
   font-weight: bold;
 }
+.footer-bottom a{
+  color: #013766;
+  text-shadow: none !important;
+}
 .footer-bottom a:hover{
+  color: #ffffff;
+}
+
+.footer-bottom-version{
+  padding-right: 12px;
+  font-size: 16px;
+  font-family: 'Gudea';
+  font-weight: bold;
+}
+.footer-bottom-version a{
+  color: #013766;
+  text-shadow: none !important;
+}
+.footer-bottom-version a:hover{
+  background-color: #004178 !important;
   color: #ffffff;
 }
 
@@ -468,15 +484,12 @@ i.icon-info_decoration{
   height: 255px;
 }
 .footer-hidden{
-  overflow: hidden;
   height: 50px;
 }
 
 .footer-expanded .footer-header{
   color: #818181;
-  transition: height 1s;
 }
 .footer-hidden .footer-header{
   color: #D1D1D1;
-  transition: height 1s;
 }
