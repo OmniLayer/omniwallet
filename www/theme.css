@@ -422,6 +422,7 @@ a:hover i.icon-dudes{
 }
 
 .footer-content {
+  margin-bottom: -13px !important;
   font-size: 16px;
   font-family: 'Gudea';
   font-weight: bold;
@@ -437,7 +438,8 @@ a:hover i.icon-dudes{
 }
 
 .footer-suggestions{
-  margin-top: 22px;
+  margin-top: 36px !important;
+  margin-left: -7px !important;
   font-size: 16px;
   font-family: 'Gudea';
   font-weight: bold;
@@ -462,20 +464,6 @@ a:hover i.icon-dudes{
   text-shadow: none !important;
 }
 .footer-bottom a:hover{
-  color: #ffffff;
-}
-
-.footer-bottom-version{
-  padding-right: 12px;
-  font-size: 16px;
-  font-family: 'Gudea';
-  font-weight: bold;
-}
-.footer-bottom-version a{
-  color: #013766;
-  text-shadow: none !important;
-}
-.footer-bottom-version a:hover{
   background-color: #004178 !important;
   color: #ffffff;
 }
