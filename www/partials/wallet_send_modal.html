@@ -8,7 +8,7 @@
     </div>
    
     <div class="modal-row">
-      <div class="description-title">Amount:</div><span class="description-text">{{convertSatoshiToDisplayedValue(sendAmount)}}</span>
+      <div class="description-title">Amount:</div><span class="description-text">{{sendAmountDisplayed}} <span ng-show="selectedCoinSymbol=='BTC'">(${{value}})</span></span>
     </div>
    
     <div class="modal-row">
@@ -45,11 +45,14 @@
         <img class="" src="/assets/img/spinner.gif" ng-show="waiting">
     </div>
     <div class="row text-left" ng-show="btcValueChanged">
-        <p class="description-text">choose what do you want to do:</p>
+        <p class="description-text">The value of BTC has changed, Please check the details and choose what you want to do:</p>
         <br>
-        <button class="btn btn-lg modal-action-btn" ng-click="sendByValue()" style="font-size: 15px;">Send ${{value}}</button>
-        <button class="btn btn-lg modal-action-btn" ng-click="sendByAmount()" style="font-size: 15px;">Send {{convertSatoshiToDisplayedValue(sendAmount)}} BTC</button>
+        <center>
+        <button class="btn btn-lg modal-action-btn" ng-click="sendByAmount()" style="font-size: 15px; margin-left: 0px;" tooltip="${{newValue}}">Send {{sendAmountDisplayed}} BTC</button>
+        <button class="btn btn-lg modal-action-btn" ng-click="sendByValue()" style="font-size: 15px;" tooltip="{{newBtcAmount}} BTC">Send ${{value}}</button>
+        <br><br>
         <button class="btn btn-lg modal-action-btn" ng-click="goBack()" style="font-size: 15px;">Go back and change the amount.</button>
+        </center>
     </div>
     <div class="row">
       <div ng-show="readyToSign">
@@ -62,8 +65,7 @@
         </a>
       </div>
       <div ng-show="transactionSuccess">
-        <h4 class="pull-left" style="color:green"> Funds were sent successfully, 
-        check your transaction <a target="_blank" href="{{url}}">here.</a></h4>
+        <h4 class="pull-left" style="color:green"> Your transaction has been submitted, You may check its status <a target="_blank" href="{{url}}">here.</a></h4>
         <a href="/wallet/overview"><button class="btn btn-success" ng-click="close()">Close</button></a>
       </div>
       <div ng-show="transactionError">
