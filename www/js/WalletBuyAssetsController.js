@@ -187,7 +187,7 @@ function WalletBuyAssetsController($modal, $scope, $http, $q, userService, walle
     var coin = $scope.selectedCoin;
     var address = $scope.selectedAddress;
     var saleHash = $scope.buySaleID;
-
+    
     var required = [coin, address, buyAmount, minerFees, balance, btcbalance, $scope.buyForm.$valid];
     console.log(required);
     var error = 'Please ';
