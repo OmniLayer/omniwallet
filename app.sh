@@ -38,7 +38,11 @@ do
     touch $LOCK_FILE
 
     #Update debug level
-    DEBUGLEVEL=`cat $DATADIR/debug.level`
+    if [ -e "$DATADIR/debug.level" ]; then
+        DEBUGLEVEL=`cat $DATADIR/debug.level`
+    else
+        DEBUGLEVEL=0
+    fi
     export DEBUGLEVEL
 
     ps cax | grep uwsgi > /dev/null
@@ -53,6 +57,18 @@ do
           uwsgi -s 127.0.0.1:1088 -p 8 -M --vhost --enable-threads --plugin $PYTHONBIN --logto $DATADIR/apps.log &
         fi
         SERVER_PID=$!
+        echo $SERVER_PID > /tmp/omniapp.pid
+        #get snapshot of directory files
+        APISHA=`ls -lR $APPDIR/api | sha1sum`
+    fi
+
+    #check if api files have changed
+    CHECKSHA=`ls -lR $APPDIR/api | sha1sum`
+    #Trigger api reload if changed
+    if [ "$APISHA" != "$CHECKSHA" ]; then
+        uwsgi --reload /tmp/omniapp.pid
+        APISHA=$CHECKSHA
+        echo Api Reloaded
     fi
 
     ps a | grep -v grep | grep "omni-websocket" > /dev/null

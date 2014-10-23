@@ -1,36 +1,88 @@
 <div class="modal-body">
-    <h3 class="text-center"> Confirm Crowdsale Creation </h3>
-      <h4>You'll create a crowdsale with this data:</h4>
+  <div class="modal-header-row">
+      <div class="text-left col-xs-10 modal-title">Confirm Crowdsale Creation</div><div class="text-right"><button ng-disabled="wating" class="btn btn-xs modal-cancel-btn" ng-click="cancel()">cancel | <span class="glyphicon glyphicon-remove"></span></button></div>
+   </div>
+   <div collapse="readyToSign">
+    <div class="modal-row">
+            <div class="description-title-large">Name:</div><span class="description-text">{{propertyName}}</span>
+    </div>
+   
+    <div class="modal-row">
+        <div class="description-title-large">Category:</div><span class="description-text">{{propertyCategory  ||  "&nbsp;"}}</span>
+    </div>
+   
+    <div class="modal-row">
+        <div class="description-title-large">Subcategory:</div><span class="description-text">{{propertySubcategory  ||  "&nbsp;"}}</span>
+    </div>
+   
+    <div class="modal-row">
+        <div class="description-title-large">Url:</div><span class="description-text"><a href="{{propertyUrl}}" target="_blank">{{propertyUrl  ||  "&nbsp;"}}</a></span>
+    </div>
+   
+    <div class="modal-row">
+        <div class="description-title-large" style="vertical-align: top;">Description:</div>
+        <span class="description-text">
+            <div id="expandable-div" class="expandable-div" ng-class="{'expanded-div':expanded, 'collapsed-div':!expanded,'expandable-div-rendered':rendered}" ng-init="setExpandableDiv()">
+            {{propertyData  ||  "&nbsp;"}}
+            </div>
+            <div ng-show="longText">
+            <div class="horizontal-line"></div>
+            <button ng-click="expanded=!expanded;rendered=true;"><div ng-hide="expanded"><span class="glyphicon glyphicon-chevron-down"></span> More</div><div ng-show="expanded"><span class="glyphicon glyphicon-chevron-up"></span> Less</div></button>          
+            </div>
+        </span>
+    </div>
+  </div>
+  <div collapse="readyToSign">
+    <br><br>
+    <div class="modal-row"><div class="description-title-xlarge">Initial early bird bonus:</div><span class="description-text">{{earlyBirdBonus}}%</span></div>
+    <div class="modal-row"><div class="description-title-xlarge">Percentage for issuer:</div><span class="description-text">{{percentageForIssuer}}%</span></div>
+    <div class="modal-row"><div class="description-title-xlarge">Deadline:</div><span class="description-text">{{deadline}}</span></div>
+    <div class="modal-row"><div class="description-title-xlarge">Issuer address:</div><span class="description-text"><a href="https://blockchain.info/address/{{selectedAddress}}?sort=0" target="_blank">{{selectedAddress}}</a></span></div>
+    <div class="modal-row"><div class="description-title-xlarge">Issuance rates:</div><span class="description-text"> 
       <ul>
-        <li>Name: {{propertyName}}</li>
-        <li>Description: {{propertyData}}</li>
-        <li>Divisible: {{divisible}}</li>
-        <li>Category: {{propertyCategory}}</li>
-        <li>Subcategory: {{propertySubcategory}}</li>
-        <li>Url: <a href="{{propertyUrl}}" target="_blank">{{propertyUrl}}</a></li>
-        <li>Estimated initial early bird bonus: {{earlyBirdBonus}}%</li>
-        <li>Percentage for issuer: {{percentageForIssuer}}%</li>
-        <li>Deadline: {{deadline}}</li>
-        <li>Issuer address: <a href="https://blockchain.info/address/{{selectedAddress}}?sort=0" target="_blank">{{selectedAddress}}</a></li>
-        <li>Issuance rates: 
-          <ul>
-            <li ng-repeat="currency in currenciesDesired">
-              {{currency.numberOfTokens}} tokens per {{currency.selectedCurrency.propertyName}} ({{currency.selectedCurrency.currencyId}}) invested
-            </li>
-          </ul>
+        <li ng-repeat="currency in currenciesDesired" class="description-text">
+          {{currency.numberOfTokens}} tokens per {{currency.selectedCurrency.propertyName}} ({{currency.selectedCurrency.currencyId}}) invested
         </li>
       </ul>
-  <p><br>
-  If the above is correct, please press Start the Crowdsale.
-  </p>
+      </span>
+    </div>
+    <hr>
+    <span class="send-fee">Creation cost: {{convertSatoshiToDisplayedValue(totalCost, true)}} bitcoins</span>
+
+    <hr>
+  </div>
+  <div collapse="!readyToSign">
+    <div class="modal-row">
+      <div class="description-title">From:</div><span class="description-text"><a href="https://blockchain.info/address/{{selectedAddress}}?sort=0" target="_blank">{{selectedAddress}}</a></span>
+    </div>
+    <pre class="armory-unsigned">{{unsignedTransaction}}</pre>
+    <hr>
+  </div>
+  <div ng-if="signOffline">
+    <p class="text-warning">
+      You will need to sign this transaction offline and come back to broadcast it and finish the send.
+    </p>
+    <hr>
+  </div>
+</div>
 <div class="modal-footer">
-    <div class="row" ng-hide="transactionSuccess">
-    <button ng-disabled="clicked" class="btn btn-primary" ng-click="ok()">Start the Crowdsale</button>
-    <button ng-disabled="wating" class="btn btn-warning" ng-click="cancel()">Cancel</button>
+    <div class="row" ng-hide="transactionSuccess || readyToSign">
+    <button ng-disabled="clicked" class="btn btn-lg modal-action-btn" ng-click="ok()">
+      <img src="/assets/img/Smart_normal.png" class="action-img-normal"><img src="/assets/img/Smart_roll.png" class="action-img-roll">Start the Crowdsale
+    </button>
     <img class="" src="/assets/img/spinner.gif" ng-show="waiting">
     </div>
       <br>
     <div class="row">
+      <div ng-show="readyToSign">
+        <h4 class="pull-left" style="color:green;">Your transaction was generated successfully, now save the text above and sign it on your Armory offline computer. Come back with the signed text to broadcast it.  
+          </h4>
+        <button ng-click="openBroadcastTransactionForm(selectedAddress)" class="btn btn-warning" ng-if="signOffline">Broadcast</button>
+        <button ng-click="saveUnsigned(unsignedTransaction)" class="btn btn-success" ng-hide="saved">Save</button>
+        <a href="/wallet/overview">
+          <button ng-click="close()" class="btn" ng-class="{'btn-danger':unsaved,'btn-success':saved}">Close</button>
+        </a>
+      </div>
       <div ng-show="transactionSuccess">
         <h4 class="pull-left" style="color:green"> Crowdsale started successfully, 
         check your transaction <a target="_blank" href="{{url}}">here.</a></h4>

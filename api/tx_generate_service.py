@@ -17,7 +17,7 @@ app.debug = True
 HEXSPACE_SECOND='21'
 
 @app.route('/<int:tx_type>', methods=['POST'])
-def generate_assets(tx_type):
+def generate_tx(tx_type):
 
     #update this to support more transactions
     supported_transactions = [50,51, 0]
@@ -47,7 +47,8 @@ def generate_assets(tx_type):
         try:
             tx50bytes = prepare_txbytes(txdata)
             packets = construct_packets( tx50bytes[0], tx50bytes[1], request.form['transaction_from'] )
-            unsignedhex = build_transaction( request.form['fee'], request.form['pubkey'], packets[0], packets[1], packets[2], request.form['transaction_from'] )
+            unsignedhex = build_transaction( request.form['fee'], request.form['pubkey'], packets[0], packets[1], packets[2], request.form['transaction_from'])
+            
             #DEBUG print tx50bytes, packets, unsignedhex
             return jsonify({ 'status': 200, 'unsignedhex': unsignedhex[0] , 'sourceScript': unsignedhex[1] });
         except Exception as e:
@@ -57,7 +58,7 @@ def generate_assets(tx_type):
         try:
             tx51bytes = prepare_txbytes(txdata)
             packets = construct_packets( tx51bytes[0], tx51bytes[1], request.form['transaction_from'])
-            unsignedhex= build_transaction( request.form['fee'], request.form['pubkey'], packets[0], packets[1], packets[2], request.form['transaction_from'] )
+            unsignedhex= build_transaction( request.form['fee'], request.form['pubkey'], packets[0], packets[1], packets[2], request.form['transaction_from'])
             #DEBUG print tx51bytes, packets, unsignedhex
             return jsonify({ 'status': 200, 'unsignedhex': unsignedhex[0] , 'sourceScript': unsignedhex[1] });
         except Exception as e:

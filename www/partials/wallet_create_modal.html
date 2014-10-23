@@ -4,30 +4,50 @@
 </div>
 <form name="createForm" novalidate class="form-horizontal" ng-submit="!createForm.$invalid && createWallet(create)">
   <div class="modal-body">
-<div class="row">
-    <div class="form-group col-md-10 col-md-push-1">
-      <label class="control-label" for="inputPassword">Password</label>
-      <div class="controls">
-        <input name="password" type="password" ng-model="create.password" class="form-control" id="inputPassword" ng-minlength="8" required match="create.repeatPassword" auto-focus="true">
-        <span style="color:red" ng-show="createForm.password.$error.required && createForm.password.$dirty">Required</span>
-        <span style="color:red" ng-show="createForm.password.$dirty && createForm.password.$error.minlength">Password must be at least 8 characters long</span>
-        <span style="color:red" ng-show="createForm.password.$dirty && ((create.password | passwordPercent).replace('%', '') < 70)"><br/>Password strength must be at least 70% <br/>  &nbsp;&nbsp;(Try having at least 2: UpperCase/LowerCase/Numbers/Symbols)</span>
-        <div id="pass-strength" >
-          Strength: {{ create.password | passwordPercent }}
+    <div class="row">
+      <div class="form-group col-md-10 col-md-push-1">
+        <label class="control-label" for="inputPassword">Password</label>
+        <div class="controls">
+          <input name="password" type="password" ng-model="create.password" class="form-control" id="inputPassword" ng-minlength="8" required match="create.repeatPassword" auto-focus="true">
+          <span style="color:red" ng-show="createForm.password.$error.required && createForm.password.$dirty">Required</span>
+          <span style="color:red" ng-show="createForm.password.$dirty && createForm.password.$error.minlength">Password must be at least 8 characters long</span>
+          <span style="color:red" ng-show="createForm.password.$dirty && ((create.password | passwordPercent).replace('%', '') < 70)"><br/>Password strength must be at least 70% <br/>  &nbsp;&nbsp;(Try having at least 2: UpperCase/LowerCase/Numbers/Symbols)</span>
+          <div id="pass-strength" >
+            Strength: {{ create.password | passwordPercent }}
+          </div>
         </div>
       </div>
     </div>
-</div>
-<div class="row">
-    <div class="form-group col-md-10 col-md-push-1">
-      <label class="control-label" for="inputRepeatPassword">Repeat Password</label>
-      <div class="controls">
-        <input name="repeatPassword" type="password" ng-model="create.repeatPassword" class="form-control" id="inputRepeatPassword" required match="create.password">
-        <span style="color:red" ng-show="createForm.repeatPassword.$error.required && createForm.repeatPassword.$dirty">Required</span>
-        <span style="color:red" ng-show="create.password != create.repeatPassword">Passwords do not match!</span>
+    <div class="row">
+      <div class="form-group col-md-10 col-md-push-1">
+        <label class="control-label" for="inputRepeatPassword">Repeat Password</label>
+        <div class="controls">
+          <input name="repeatPassword" type="password" ng-model="create.repeatPassword" class="form-control" id="inputRepeatPassword" required match="create.password">
+          <span style="color:red" ng-show="createForm.repeatPassword.$error.required && createForm.repeatPassword.$dirty">Required</span>
+          <span style="color:red" ng-show="create.password != create.repeatPassword">Passwords do not match!</span>
+        </div>
       </div>
     </div>
-</div>
+    <div class="row">
+      <div class="form-group col-md-10 col-md-push-1">
+        <label class="control-label" for="inputEmail">Email<a href=""
+                popover="We will send you a welcome email containing your unique login link."
+                popover-trigger="mouseenter"
+                popover-placement="top"> <strong>(?)</strong>
+                </a></label>
+        <div class="controls">
+          <input name="email" type="email" ng-model="create.email" class="form-control" id="inputEmail" placeholder="Enter an email address (optional)">
+          <span style="color:red" ng-show="createForm.email.$error.email">Please enter a valid email address</span>
+        </div>
+      </div>
+    </div>
+   <div class="row">
+    <div class="col-md-9 col-md-push-1 alert alert-info alert-dismissable">
+     <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+     <strong>Don't Forget Your Password!</strong><br />
+            WARNING: Forgotten passwords are UNRECOVERABLE and can result in LOSS of ALL of your coins!<br />
+    </div>
+   </div>
   </div>
   <div class="modal-footer">
     <div class="control-group">

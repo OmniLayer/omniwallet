@@ -40,8 +40,9 @@
         </thead>
         <tbody>
           <tr ng-repeat="item in currency.addresses">
-            <td ng-show={{item.private}}>{{item.address}} <a href="/about/faq" target="_new"><span class="glyphicon glyphicon-lock" tooltip="Your Wallet has the Private key for this address. (Click for more info)"></span></a></td>
-            <td ng-hide={{item.private}}>{{item.address}}</td>
+            <td ng-show="{{item.offline}}">{{item.address}} <a href="/about/faq" target="_new"><span class="glyphicon glyphicon-off" tooltip="This is an Armory Offline address. (Click for more info)"></span></a></td>
+            <td ng-show="{{item.private}}">{{item.address}} <a href="/about/faq" target="_new"><span class="glyphicon glyphicon-lock" tooltip="Your Wallet has the Private key for this address. (Click for more info)"></span></a></td>
+            <td ng-hide="{{item.private}} || {{item.offline}}">{{item.address}}</td>
             <td ng-if="currency.property_type != undefined && currency.property_type == 1" class="currency number" title="{{item.balance}}" ng-bind-html="item.balance | numeraljs: '0,0'"></td>
             <td ng-if="currency.property_type != undefined && currency.property_type == 2" class="currency number" title="{{item.balance}}" ng-bind-html="item.balance | numeraljs: '0,0.00000000'"></td>
             <td ng-if="currency.property_type == undefined" class="currency number" title="{{item.balance}}"><span ng-bind-html="item.balance | numeraljs: '0,0.00000000'"></span> {{currency.symbol}}</td>
@@ -51,6 +52,7 @@
           		<a data-toggle="dropdown" href="#" class="btn btn-info btn-xs">Options</a>
           		  <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu9">
                               <li role="presentation"><a role="menuitem" tabindex="-1" href="#" ng-click="openDeleteConfirmForm( item )" >Remove from Wallet</a></li>
+                              <li ng-show="{{item.offline}}" role="presentation"><a role="menuitem" tabindex="-1" href="#" ng-click="openBroadcastTransactionForm(item.address)" >Broadcast Transaction</a></li>
           		  </ul>
               </div>
             </td>
