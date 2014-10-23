@@ -196,6 +196,7 @@ form.form-search:before {
 
 .icons a:hover { background-position: left -34px; }
 
+/* ASSETS DETAILS PAGE */
 .show-grid {
   margin-bottom:15px;
   padding:10px
@@ -302,12 +303,12 @@ form.form-search:before {
   position: absolute;
   top: 0px;
   right: 20px;
-  margin-top: 15px;
+  margin-top: -5px;
   font-size: 23px;
   border-radius: 0px;
-  -webkit-box-shadow: 5px 5px #ccc;
-  -moz-box-shadow: 5px 5px #ccc;
-  box-shadow: 5px 5px #ccc; 
+  -webkit-box-shadow: 1px 1px #ccc,2px 2px #ccc,3px 3px #ccc,4px 4px #ccc,5px 5px #ccc; 
+  -moz-box-shadow: 1px 1px #ccc,2px 2px #ccc,3px 3px #ccc,4px 4px #ccc,5px 5px #ccc; 
+  box-shadow: 1px 1px #ccc,2px 2px #ccc,3px 3px #ccc,4px 4px #ccc,5px 5px #ccc; 
 }
 .alert-standout{
   border-radius: 0px;
