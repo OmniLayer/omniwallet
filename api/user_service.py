@@ -15,6 +15,7 @@ from email.MIMEText import MIMEText
 from email.Utils import COMMASPACE, formatdate
 from email import Encoders
 from sqltools import *
+from recaptcha.client import captcha
 
 #For wallets and session store you can switch between disk and the database
 #Set to 1 to use local storage/file system, Set to 0 to use database
@@ -26,6 +27,7 @@ LOGIN_DIFFICULTY = '0400'
 SERVER_SECRET = 'SoSecret!'
 SESSION_SECRET = 'SuperSecretSessionStuff'
 data_dir_root = os.environ.get('DATADIR')
+RECAPTCHA_PRIVATE = os.environ.get('RECAPTCHA_PRIVATE')
 
 store_dir = data_dir_root + '/sessions/'
 session_store = FilesystemStore(store_dir) # TODO: Need to roll this into a SessionInterface so multiple services can hit it easily
@@ -79,6 +81,16 @@ def create():
   uuid = str(validate_uuid)
   session = ws.hashlib.sha256(SESSION_SECRET + uuid).hexdigest()
 
+  ## validate reCaptcha
+  captcha_response = captcha.submit(request.form['recaptcha_challenge_field'],
+            request.form['recaptcha_response_field'],
+            RECAPTCHA_PRIVATE,
+            request.remote_addr)
+
+  if !captcha_response.is_valid:
+    print 'reCaptcha not valid'
+    abort(403)
+    
   email = request.form['email'] if 'email' in request.form else None
   nonce = request.form['nonce']
   public_key = request.form['public_key'].encode('UTF-8')
