@@ -190,6 +190,8 @@ function WalletBuyAssetsController($modal, $scope, $http, $q, userService, walle
     
     var totalCost = parseFloat($scope.convertDisplayedValue(transaction.formatted_price_per_coin * $scope.convertSatoshiToDisplayedValue(buyAmount)));
     
+    var insufficientBitcoin = false;
+    
     var required = [coin, address, buyAmount, minerFees, balance, btcbalance, $scope.buyForm.$valid];
     console.log(required);
     var error = 'Please ';
@@ -211,7 +213,7 @@ function WalletBuyAssetsController($modal, $scope, $http, $q, userService, walle
       if ((minerFees <= btcbalance) == false)
         error += 'make sure you have enough Bitcoin to cover your fees, ';
       if ((totalCost+minerFees <= btcbalance) == false) {
-        error += 'make sure you have enough Bitcoin to accept the offer, '
+        insufficientBitcoin = true;
       }
     }
     if (error.length < 8) {
@@ -227,6 +229,7 @@ function WalletBuyAssetsController($modal, $scope, $http, $q, userService, walle
           $scope.buyAmount=data.amt,
           $scope.minerFees= data.fee,
           $scope.selectedCoin= data.selectedCoin;
+          $scope.insufficientBitcoin = data.insufficientBitcoin
           
           $scope.ok = function() {
             $scope.clicked = true;
@@ -245,7 +248,8 @@ function WalletBuyAssetsController($modal, $scope, $http, $q, userService, walle
               hash: saleHash,
               fee: minerFees,
               selectedCoin: $scope.selectedCoin,
-              displayedAbbreviation: $scope.displayedAbbreviation
+              displayedAbbreviation: $scope.displayedAbbreviation,
+              insufficientBitcoin: insufficientBitcoin
             };
           },
           prepareBuyTransaction: function() {
