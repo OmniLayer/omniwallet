@@ -115,7 +115,7 @@ app.config(function($idleProvider, $keepaliveProvider, reCAPTCHAProvider) {
   // $keepaliveProvider.interval(2);
 
   // required: please use your own key :)
-  reCAPTCHAProvider.setPublicKey('---KEY---');
+  reCAPTCHAProvider.setPublicKey(config.reCaptchaKey);
 
   // optional: gets passed into the Recaptcha.create call
   reCAPTCHAProvider.setOptions({
