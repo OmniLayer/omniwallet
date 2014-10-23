@@ -323,7 +323,8 @@ function NavigationController($scope, $http, $modal, userService) {
   };
 
   $scope.logout = function() {
-    window.location.reload(false);
+    userService.logout();
+    //window.location.reload(false);
   };
 
   $scope.user = userService.data;
