@@ -7,7 +7,6 @@ function WalletBuyAssetsController($modal, $scope, $http, $q, userService, walle
       $scope.$parent.$parent.selectedAddress = $scope.addressList[0];
     }
   });
-  
   // OInitialize values.
   var transaction = $scope.global['buyOffer'];
   $scope.buySaleID = transaction.tx_hash;
@@ -188,8 +187,8 @@ function WalletBuyAssetsController($modal, $scope, $http, $q, userService, walle
     var address = $scope.selectedAddress;
     var saleHash = $scope.buySaleID;
     
-    var totalCost = parseFloat($scope.convertDisplayedValue(transaction.formatted_price_per_coin * $scope.convertSatoshiToDisplayedValue(buyAmount)));
-    
+    var totalBtcCost = parseFloat($scope.convertDisplayedValue(transaction.formatted_price_per_coin * $scope.convertSatoshiToDisplayedValue(buyAmount)));
+    var totalFeeCost = $scope.convertDisplayedValue($scope.totalCost);
     var insufficientBitcoin = false;
     
     var required = [coin, address, buyAmount, minerFees, balance, btcbalance, $scope.buyForm.$valid];
@@ -210,9 +209,9 @@ function WalletBuyAssetsController($modal, $scope, $http, $q, userService, walle
         error += 'make sure your send amount is non-zero, ';
       if (minerFees < minerMinimum)
         error += 'make sure your fee entry is at least 0.0001 BTC, ';
-      if ((minerFees <= btcbalance) == false)
+      if ((totalFeeCost <= btcbalance) == false)
         error += 'make sure you have enough Bitcoin to cover your fees, ';
-      if ((totalCost+minerFees <= btcbalance) == false) {
+      if ((totalBtcCost+totalFeeCost <= btcbalance) == false) {
         insufficientBitcoin = true;
       }
     }

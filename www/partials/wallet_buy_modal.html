@@ -1,6 +1,6 @@
 <div class="modal-body">
-    <h3 class="text-center"> Confirm Buy Offer </h3>
     <div ng-hide="insufficientBitcoin">
+	<h3 class="text-center"> Confirm Buy Offer </h3>
 	<h4 class="text-center">You're about to make an offer to buy <span class="text-info">{{ convertSatoshiToDisplayedValue(buyAmount) }} {{ displayedAbbreviation }} </span>
 	    with <span class="text-info"> {{ convertSatoshiToDisplayedValue(minerFees, true) }} BTC</span> in fees </h4>
       <p><br>
@@ -9,6 +9,7 @@
       </p>
     </div>
     <div ng-show="insufficientBitcoin">
+	<h3 class="text-center"> Warning: Low BTC Balance </h3>
 	<p>
 	    The buying address does not have sufficient BTC to cover this buy.
 	    You may still continue to accept the buy but you will need to send enough BTC
