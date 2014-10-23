@@ -113,7 +113,7 @@
     <h4 ng-hide="pendingThinking">
       <a ng-click="pendingThinking = true"> <strong> < Go back </strong> </a>
     </h4>
-    <div ng-controller="WalletAssetsFormController">
+    <div ng-controller="WalletAssetsFormController" ng-init="value=0;bitcoinValue=getBitcoinValue()">
     <div ng-controller="TransactionGenerationController">
     <div ng-controller="WalletSendAssetsController">
       <div class="row">
@@ -121,7 +121,7 @@
         <br>
         <div ng-show="showErrors" class="alert alert-danger"> <strong> {{error}} </strong> </div> 
       </div>
-      <form name="sendForm" ng-submit="validateForm()">
+      <form name="sendForm" ng-submit="changeValue();validateForm()">
       <div class="row">
         <div class="col-xs-6">
           <h4 class="text-justify" >Send type of coin:</h4>
@@ -160,10 +160,8 @@
           <br>
           <div class="input-group">
             <span class="input-group-addon"> Amount to send (in {{selectedCoin.symbol}}): </span>
-              <input name="amount" type="number" class="form-control" 
-              placeholder="{{sendAmount}}" ng-disabled="true">
-            <span class="input-group-addon" > 
-              Available: {{balanceData[1]}} {{selectedCoin.symbol}}</span>
+              <input name="amount" type="number" class="form-control" placeholder="{{sendAmount}}" ng-disabled="true">
+            <span class="input-group-addon"> Available: {{balanceData[1]}} {{selectedCoin.symbol}}</span>
           </div>
           <br>
           <div class="input-group">
