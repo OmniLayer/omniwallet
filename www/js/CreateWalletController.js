@@ -10,6 +10,7 @@ function CreateWalletController($scope, $http, $location, $modalInstance, userSe
     var walletKey = ''
     var asymKey = {}
     $scope.validating=true;
+    $scope.serverError = $scope.invalidCaptcha =false;
     $http.get('/v1/user/wallet/challenge?uuid=' + uuid)
       .then(function(result) {
         var data = result.data;
@@ -34,14 +35,18 @@ function CreateWalletController($scope, $http, $location, $modalInstance, userSe
       .then(function(result) {
         if(result.data.error =="InvalidCaptcha"){
           $scope.invalidCaptcha = true;
+          $scope.validating=false;
           Recaptcha.reload();
         }else {
+          $scope.validating=false;
+
           userService.login(wallet, walletKey, asymKey);
           ga('send', 'event', 'button', 'click', 'Create Wallet');
           $modalInstance.close()
           $location.path('/wallet/addresses');
         }
       }, function(result) {
+        $scope.validating=false;
         $scope.serverError = true;
       });
   }
