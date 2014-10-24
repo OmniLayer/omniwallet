@@ -7,7 +7,6 @@ function WalletBuyAssetsController($modal, $scope, $http, $q, userService, walle
       $scope.$parent.$parent.selectedAddress = $scope.addressList[0];
     }
   });
-  
   // OInitialize values.
   var transaction = $scope.global['buyOffer'];
   $scope.buySaleID = transaction.tx_hash;
@@ -188,6 +187,10 @@ function WalletBuyAssetsController($modal, $scope, $http, $q, userService, walle
     var address = $scope.selectedAddress;
     var saleHash = $scope.buySaleID;
     
+    var totalBtcCost = parseFloat($scope.convertDisplayedValue(transaction.formatted_price_per_coin * $scope.convertSatoshiToDisplayedValue(buyAmount)));
+    var totalFeeCost = parseFloat($scope.convertDisplayedValue($scope.totalCost));
+    var insufficientBitcoin = false;
+    
     var required = [coin, address, buyAmount, minerFees, balance, btcbalance, $scope.buyForm.$valid];
     console.log(required);
     var error = 'Please ';
@@ -206,8 +209,11 @@ function WalletBuyAssetsController($modal, $scope, $http, $q, userService, walle
         error += 'make sure your send amount is non-zero, ';
       if (minerFees < minerMinimum)
         error += 'make sure your fee entry is at least 0.0001 BTC, ';
-      if ((minerFees <= btcbalance) == false)
+      if ((totalFeeCost <= btcbalance) == false)
         error += 'make sure you have enough Bitcoin to cover your fees, ';
+      if ((totalBtcCost+totalFeeCost <= btcbalance) == false) {
+        insufficientBitcoin = true;
+      }
     }
     if (error.length < 8) {
       $scope.$parent.showErrors = false;
@@ -222,6 +228,7 @@ function WalletBuyAssetsController($modal, $scope, $http, $q, userService, walle
           $scope.buyAmount=data.amt,
           $scope.minerFees= data.fee,
           $scope.selectedCoin= data.selectedCoin;
+          $scope.insufficientBitcoin = data.insufficientBitcoin
           
           $scope.ok = function() {
             $scope.clicked = true;
@@ -238,9 +245,10 @@ function WalletBuyAssetsController($modal, $scope, $http, $q, userService, walle
               buyer: address,
               amt: buyAmount,
               hash: saleHash,
-              fee: minerFees,
+              fee: totalFeeCost,
               selectedCoin: $scope.selectedCoin,
-              displayedAbbreviation: $scope.displayedAbbreviation
+              displayedAbbreviation: $scope.displayedAbbreviation,
+              insufficientBitcoin: insufficientBitcoin
             };
           },
           prepareBuyTransaction: function() {
