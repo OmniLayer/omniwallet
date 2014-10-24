@@ -82,15 +82,12 @@ def create():
   session = ws.hashlib.sha256(SESSION_SECRET + uuid).hexdigest()
 
   ## validate reCaptcha
-  captcha_response = captcha.submit(request.form['recaptcha_challenge_field'],
-            request.form['recaptcha_response_field'],
-            RECAPTCHA_PRIVATE,
-            request.remote_addr)
+  captcha_response = captcha.submit(request.form['recaptcha_challenge_field'],request.form['recaptcha_response_field'],RECAPTCHA_PRIVATE,request.remote_addr)
 
-  if !captcha_response.is_valid:
+  if not captcha_response.is_valid:
     print 'reCaptcha not valid'
     abort(403)
-    
+
   email = request.form['email'] if 'email' in request.form else None
   nonce = request.form['nonce']
   public_key = request.form['public_key'].encode('UTF-8')
