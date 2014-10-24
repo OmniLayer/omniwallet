@@ -18,18 +18,25 @@ function CreateWalletController($scope, $http, $location, $modalInstance, userSe
         walletKey = CryptUtil.generateSymmetricKey(create.password, data.salt);
         var encryptedWallet = CryptUtil.encryptObject(wallet, walletKey);
         asymKey = CryptUtil.generateAsymmetricPair();
-        return $http({
-          url: '/v1/user/wallet/create',
-          method: 'POST',
-          data: {
+        var createData = {
             email: create.email,
             nonce: nonce,
             public_key: asymKey.pubPem,
             uuid: uuid,
-            wallet: encryptedWallet,
+            wallet: encryptedWallet
+          };
+
+        if(create.captcha){
+          angular.extend(createData, {
             recaptcha_challenge_field:create.captcha.challenge,
             recaptcha_response_field:create.captcha.response
-          }
+          })
+        };
+
+        return $http({
+          url: '/v1/user/wallet/create',
+          method: 'POST',
+          data: createData
         });
       })
       .then(function(result) {
