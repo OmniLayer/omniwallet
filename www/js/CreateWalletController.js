@@ -32,13 +32,14 @@ function CreateWalletController($scope, $http, $location, $modalInstance, userSe
         });
       })
       .then(function(result) {
-        if(result.data.error =="InvalidCaptcha")
+        if(result.data.error =="InvalidCaptcha"){
           $scope.invalidCaptcha = true;
-        else {
-              userService.login(wallet, walletKey, asymKey);
-              ga('send', 'event', 'button', 'click', 'Create Wallet');
-              $modalInstance.close()
-              $location.path('/wallet/addresses');
+          Recaptcha.reload();
+        }else {
+          userService.login(wallet, walletKey, asymKey);
+          ga('send', 'event', 'button', 'click', 'Create Wallet');
+          $modalInstance.close()
+          $location.path('/wallet/addresses');
         }
       }, function(result) {
         $scope.serverError = true;
