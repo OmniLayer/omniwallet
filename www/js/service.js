@@ -265,7 +265,7 @@ angular.module('omniwallet').factory('userService', ['$rootScope', '$http', '$in
       },
 
       getCurrencies: function() {
-        return service.data.walletMetadata.currencies;
+        return service.data.walletMetadata.currencies || [];
       },
 
       getWallet: function() {

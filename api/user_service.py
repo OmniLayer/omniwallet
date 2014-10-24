@@ -15,6 +15,8 @@ from email.MIMEText import MIMEText
 from email.Utils import COMMASPACE, formatdate
 from email import Encoders
 from sqltools import *
+from recaptcha.client import captcha
+import config
 
 #For wallets and session store you can switch between disk and the database
 #Set to 1 to use local storage/file system, Set to 0 to use database
@@ -78,6 +80,20 @@ def create():
   validate_uuid = UUID(request.form['uuid'])
   uuid = str(validate_uuid)
   session = ws.hashlib.sha256(SESSION_SECRET + uuid).hexdigest()
+
+  try:
+    recaptcha_challenge=request.form['recaptcha_challenge_field']
+    recaptcha_response=request.form['recaptcha_response_field']
+    recaptcha_configured = config.RECAPTCHA_PRIVATE is not None
+  except:
+    recaptcha_configured=False
+  ## validate reCaptcha
+  if recaptcha_configured: 
+    captcha_response = captcha.submit(recaptcha_challenge,recaptcha_response,config.RECAPTCHA_PRIVATE,request.remote_addr)
+
+    if not captcha_response.is_valid:
+      print 'reCaptcha not valid'
+      return jsonify({"status": "ERROR", "error":"InvalidCaptcha"})
 
   email = request.form['email'] if 'email' in request.form else None
   nonce = request.form['nonce']

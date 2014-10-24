@@ -75,6 +75,10 @@ a {
 .modal-body{
   background-color: #fcfbfb;
 }
+.captcha-centered{
+  width: 318px;
+  margin:auto;
+}
 .modal-title{
   padding-left: 0;
   font-size: 36px;
