@@ -9,7 +9,7 @@ function CreateWalletController($scope, $http, $location, $modalInstance, userSe
     };
     var walletKey = ''
     var asymKey = {}
-
+    $scope.validating=true;
     $http.get('/v1/user/wallet/challenge?uuid=' + uuid)
       .then(function(result) {
         var data = result.data;

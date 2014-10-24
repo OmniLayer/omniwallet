@@ -2,7 +2,7 @@
   <button type="button" class="close"  ng-click="dismiss('close')"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
   <h3>Create a new Wallet</h3>
 </div>
-<form name="createForm" role="form" novalidate class="form-horizontal" ng-submit="!createForm.$invalid && validating=true && createWallet(create)">
+<form name="createForm" role="form" novalidate class="form-horizontal" ng-submit="!createForm.$invalid  && createWallet(create)">
   <div class="modal-body">
     <div class="row">
       <div class="form-group col-md-10 col-md-push-1">
