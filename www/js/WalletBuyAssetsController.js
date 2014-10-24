@@ -188,7 +188,7 @@ function WalletBuyAssetsController($modal, $scope, $http, $q, userService, walle
     var saleHash = $scope.buySaleID;
     
     var totalBtcCost = parseFloat($scope.convertDisplayedValue(transaction.formatted_price_per_coin * $scope.convertSatoshiToDisplayedValue(buyAmount)));
-    var totalFeeCost = $scope.convertDisplayedValue($scope.totalCost);
+    var totalFeeCost = parseFloat($scope.convertDisplayedValue($scope.totalCost));
     var insufficientBitcoin = false;
     
     var required = [coin, address, buyAmount, minerFees, balance, btcbalance, $scope.buyForm.$valid];
@@ -245,7 +245,7 @@ function WalletBuyAssetsController($modal, $scope, $http, $q, userService, walle
               buyer: address,
               amt: buyAmount,
               hash: saleHash,
-              fee: minerFees,
+              fee: totalFeeCost,
               selectedCoin: $scope.selectedCoin,
               displayedAbbreviation: $scope.displayedAbbreviation,
               insufficientBitcoin: insufficientBitcoin
