@@ -25,7 +25,9 @@ function CreateWalletController($scope, $http, $location, $modalInstance, userSe
             nonce: nonce,
             public_key: asymKey.pubPem,
             uuid: uuid,
-            wallet: encryptedWallet
+            wallet: encryptedWallet,
+            recaptcha_challenge_field:create.captcha.challenge,
+            recaptcha_response_field:create.captcha.response
           }
         });
       })
