@@ -89,7 +89,7 @@ def create():
     recaptcha_configured=False
   ## validate reCaptcha
   if recaptcha_configured: 
-    captcha_response = captcha.submit(recaptcha_challenge,recaptcha_response,RECAPTCHA_PRIVATE,request.remote_addr)
+    captcha_response = captcha.submit(recaptcha_challenge,recaptcha_response,config.RECAPTCHA_PRIVATE,request.remote_addr)
 
     if not captcha_response.is_valid:
       print 'reCaptcha not valid'
