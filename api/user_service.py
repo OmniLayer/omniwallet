@@ -86,7 +86,7 @@ def create():
 
   if not captcha_response.is_valid:
     print 'reCaptcha not valid'
-    abort(403)
+    return jsonify({"status": "ERROR", "error":"InvalidCaptcha"})
 
   email = request.form['email'] if 'email' in request.form else None
   nonce = request.form['nonce']
