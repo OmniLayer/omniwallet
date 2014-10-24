@@ -164,9 +164,9 @@ angular.module('omniwallet').factory('userService', ['$rootScope', '$http', '$in
       },
 
       logout: function() {
-        service.data.loggedIn = false;
         service.data.wallet = {};
         service.data.walletMetadata = {};
+        service.data.loggedIn = false;
       },
 
       addAddress: function(address, privKey, pubKey) {
