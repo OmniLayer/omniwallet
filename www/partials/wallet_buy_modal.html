@@ -1,27 +1,43 @@
 <div class="modal-body">
-    <h3 class="text-center"> Confirm Buy Offer </h3>
-    <h4 class="text-center">You're about to make an offer to buy <span class="text-info">{{ convertSatoshiToDisplayedValue(buyAmount) }} {{ displayedAbbreviation }} </span>
-	with <span class="text-info"> {{ convertSatoshiToDisplayedValue(minerFees, true) }} BTC</span> in fees </h4>
-  <p><br>
-  If the above is correct, please press 'Yes, make my offer'.
-  If you encounter an error, feel free to click away from the dialog and try again.
-  </p>
+    <div ng-hide="insufficientBitcoin">
+	<h3 class="text-center"> Confirm Buy Offer </h3>
+	<h4 class="text-center">You're about to make an offer to buy <span class="text-info">{{ convertSatoshiToDisplayedValue(buyAmount) }} {{ displayedAbbreviation }} </span>
+	    with <span class="text-info"> {{ convertSatoshiToDisplayedValue(minerFees, true) }} BTC</span> in fees </h4>
+      <p><br>
+      If the above is correct, please press 'Yes, make my offer'.
+      If you encounter an error, feel free to click away from the dialog and try again.
+      </p>
+    </div>
+    <div ng-show="insufficientBitcoin">
+	<h3 class="text-center"> Warning: Low BTC Balance </h3>
+	<p>
+	    The buying address does not have sufficient BTC to cover this buy.
+	    You may still continue to accept the buy but you will need to send enough BTC
+	    to the buying address in order to complete your purchase. Do you wish to continue?
+	</p>
+    </div>
 </div>
 <div class="modal-footer">
-    <div class="row" ng-hide="sendSuccess">
-    <button ng-disabled="clicked" class="btn btn-primary" ng-click="ok()">Yes, make my offer</button>
-    <img class="" src="/assets/img/spinner.gif" ng-show="waiting">
+    <div ng-hide="insufficientBitcoin">
+	<div class="row" ng-hide="sendSuccess">
+	<button ng-disabled="clicked" class="btn btn-primary" ng-click="ok()">Yes, make my offer</button>
+	<img class="" src="/assets/img/spinner.gif" ng-show="waiting">
+	</div>
+	  <br>
+	<div class="row">
+	  <div ng-show="sendSuccess" class="text-center">
+	    <h4 class="pull-left" style="color:green">&nbsp; Offer was made successfully, 
+	    check your transaction <a target="_blank" href="{{url}}">here.</a></h4>
+	    <a href="/wallet/overview"><button class="btn btn-success" ng-click="cancel()">Close</button></a>
+	  </div>
+	  <div ng-show="sendError">
+	    <h4 class="col-xs-12" style="color:red;"> Offer could not be made: 
+	     {{error}} </h4>
+	  </div>
+	</div>
     </div>
-      <br>
-    <div class="row">
-      <div ng-show="sendSuccess" class="text-center">
-        <h4 class="pull-left" style="color:green">&nbsp; Offer was made successfully, 
-        check your transaction <a target="_blank" href="{{url}}">here.</a></h4>
-	<a href="/wallet/overview"><button class="btn btn-success" ng-click="cancel()">Close</button></a>
-      </div>
-      <div ng-show="sendError">
-        <h4 class="col-xs-12" style="color:red;"> Offer could not be made: 
-         {{error}} </h4>
-      </div>
+    <div ng-show="insufficientBitcoin">
+	<button class="btn btn-primary" ng-click="insufficientBitcoin=false">Yes</button>
+	<button class="btn btn-warning" ng-click="cancel()">No</button>
     </div>
 </div>
