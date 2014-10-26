@@ -9,7 +9,8 @@ function CreateWalletController($scope, $http, $location, $modalInstance, userSe
     };
     var walletKey = ''
     var asymKey = {}
-
+    $scope.validating=true;
+    $scope.serverError = $scope.invalidCaptcha =false;
     $http.get('/v1/user/wallet/challenge?uuid=' + uuid)
       .then(function(result) {
         var data = result.data;
@@ -17,25 +18,44 @@ function CreateWalletController($scope, $http, $location, $modalInstance, userSe
         walletKey = CryptUtil.generateSymmetricKey(create.password, data.salt);
         var encryptedWallet = CryptUtil.encryptObject(wallet, walletKey);
         asymKey = CryptUtil.generateAsymmetricPair();
-        return $http({
-          url: '/v1/user/wallet/create',
-          method: 'POST',
-          data: {
+        var createData = {
+            email: create.email,
             nonce: nonce,
             public_key: asymKey.pubPem,
             uuid: uuid,
             wallet: encryptedWallet
-          }
+          };
+
+        if(create.captcha){
+          angular.extend(createData, {
+            recaptcha_challenge_field:create.captcha.challenge,
+            recaptcha_response_field:create.captcha.response
+          })
+        };
+
+        return $http({
+          url: '/v1/user/wallet/create',
+          method: 'POST',
+          data: createData
         });
       })
       .then(function(result) {
-      userService.login(wallet, walletKey, asymKey);
-      ga('send', 'event', 'button', 'click', 'Create Wallet');
-      $modalInstance.close()
-      $location.path('/wallet/addresses');
-    }, function(result) {
-      $scope.serverError = true;
-    });
+        if(result.data.error =="InvalidCaptcha"){
+          $scope.invalidCaptcha = true;
+          $scope.validating=false;
+          Recaptcha.reload();
+        }else {
+          $scope.validating=false;
+
+          userService.login(wallet, walletKey, asymKey);
+          ga('send', 'event', 'button', 'click', 'Create Wallet');
+          $modalInstance.close()
+          $location.path('/wallet/addresses');
+        }
+      }, function(result) {
+        $scope.validating=false;
+        $scope.serverError = true;
+      });
   }
 }
 
@@ -51,3 +71,15 @@ function generateUUID() {
 ;
 
 
+function verifyUUID(uuid) {
+  //Check UUID for proper format
+  verify = uuid.match(/^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89a-f][0-9a-f]{3}-[0-9a-f]{12}$/i) || []
+  
+  //Return false if it fails, true if its valid structure
+  if (verify.length == 0) {
+   return false;
+  } else {
+   return true;
+  }
+}
+;

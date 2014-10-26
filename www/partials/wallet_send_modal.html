@@ -1,52 +1,76 @@
 <div class="modal-body">
-    <div class="text-left col-xs-7 modal-title">Confirm send</div><div class="text-right"><button ng-disabled="wating" class="btn btn-xs modal-cancel-btn" ng-click="cancel()">cancel | <span class="glyphicon glyphicon-remove"></span></button></div>
-    <table>
-        <tr><td height="30px"></td></tr>
-        <tr>
-        <td width="103px" height="30px" class="description-title">Token:</td><td class="description-text">{{getDisplayedAbbreviation()}}</td>
-        </tr>
-       
-        <tr>
-        <td width="103px" height="30px" class="description-title">Amount:</td><td class="description-text">{{convertSatoshiToDisplayedValue(sendAmount)}}</td>
-        </tr>
-       
-        <tr>
-        <td width="103px" height="30px" class="description-title">From:</td><td class="description-text">{{sendFrom}}</td>
-        </tr>
-        
-        <tr>
-        <td width="103px" height="30px" class="description-title">To:</td><td class="description-text">{{sendTo}}</td>
-        </tr>
-    </table>
+  <div class="modal-header-row">
+    <div class="text-left col-xs-7 modal-title">Confirm send</div><div class="text-right"><button ng-disabled="wating" class="btn btn-xs modal-cancel-btn" ng-click="cancel()">close | <span class="glyphicon glyphicon-remove"></span></button></div>
+  </div>
+  <div collapse="readyToSign">
+    <div class="modal-row">
+      <div class="description-title">Token:</div><span class="description-text">{{getDisplayedAbbreviation()}}</span>
+    </div>
+   
+    <div class="modal-row">
+      <div class="description-title">Amount:</div><span class="description-text">{{sendAmountDisplayed}} <span ng-show="selectedCoinSymbol=='BTC'">(${{value}})</span></span>
+    </div>
+   
+    <div class="modal-row">
+      <div class="description-title">From:</div><span class="description-text">{{sendFrom}}</span>
+    </div>
+    
+    <div class="modal-row">
+      <div class="description-title">To:</div><span class="description-text">{{sendTo}}</span>
+    </div>
     <hr>
     <span class="send-fee">Transaction fees: {{convertSatoshiToDisplayedValue(totalCost, true)}} bitcoins</span>
+    <hr>
+  </div>
+  <div collapse="!readyToSign">
+    <div class="modal-row">
+      <div class="description-title">From:</div><span class="description-text">{{sendFrom}}</span>
+    </div>
+    <pre class="armory-unsigned">{{unsignedTransaction}}</pre>
+    <hr>
+  </div>
+  <div ng-if="signOffline">
+    <p class="text-warning">
+      You will need to sign this transaction offline and come back to broadcast it and finish the send.
+    </p>
+    <hr>
+  </div>
+</div>
 <div class="modal-footer footer-div">
  <br>
-    <div class="row" ng-hide=transactionSuccess>
-       <div ng-hide="btcValueChanged"> 
+    <div class="row" ng-hide="transactionSuccess || btcValueChanged || readyToSign">
         <button ng-disabled="clicked" class="btn btn-lg modal-action-btn" ng-click="ok()">
             <img src="/assets/img/SendIcon_normal.png" class="action-img-normal"><img src="/assets/img/SendIcon_roll.png" class="action-img-roll"> Send funds
         </button>
         <img class="" src="/assets/img/spinner.gif" ng-show="waiting">
-       </div>
     </div>
     <div class="row text-left" ng-show="btcValueChanged">
-        <p class="description-text">choose what do you want to do:</p>
+        <p class="description-text">The value of BTC has changed, Please check the details and choose what you want to do:</p>
         <br>
-        <button class="btn btn-lg modal-action-btn" ng-click="sendByValue()" style="font-size: 15px;">Send ${{value}}</button>
-        <button class="btn btn-lg modal-action-btn" ng-click="sendByAmount()" style="font-size: 15px;">Send {{convertSatoshiToDisplayedValue(sendAmount)}} BTC</button>
+        <center>
+        <button class="btn btn-lg modal-action-btn" ng-click="sendByAmount()" style="font-size: 15px; margin-left: 0px;" tooltip="${{newValue}}">Send {{sendAmountDisplayed}} BTC</button>
+        <button class="btn btn-lg modal-action-btn" ng-click="sendByValue()" style="font-size: 15px;" tooltip="{{newBtcAmount}} BTC">Send ${{value}}</button>
+        <br><br>
         <button class="btn btn-lg modal-action-btn" ng-click="goBack()" style="font-size: 15px;">Go back and change the amount.</button>
+        </center>
     </div>
-      <br>
     <div class="row">
+      <div ng-show="readyToSign">
+        <h4 class="pull-left" style="color:green;">Your transaction was generated successfully, now save the text above and sign it on your Armory offline computer. Come back with the signed text to broadcast it.  
+          </h4>
+        <button ng-click="openBroadcastTransactionForm(sendFrom)" class="btn btn-warning"  ng-if="signOffline">Broadcast</button>
+        <button ng-click="saveUnsigned(unsignedTransaction)" class="btn btn-success" ng-hide="saved">Save</button>
+        <a href="/wallet/overview">
+          <button ng-click="close()" class="btn" ng-class="{'btn-danger':unsaved,'btn-success':saved}">Close</button>
+        </a>
+      </div>
       <div ng-show="transactionSuccess">
-        <h4 class="pull-left" style="color:green"> Funds were sent successfully, 
-        check your transaction <a target="_blank" href="{{url}}">here.</a></h4>
-        <a href="/wallet/overview"><button class="btn btn-success" ng-click="cancel()">Close</button></a>
+        <h4 class="pull-left" style="color:green"> Your transaction has been submitted, You may check its status <a target="_blank" href="{{url}}">here.</a></h4>
+        <a href="/wallet/overview"><button class="btn btn-success" ng-click="close()">Close</button></a>
       </div>
       <div ng-show="transactionError">
         <h4 class="col-xs-12" style="color:red;"> Funds could not be sent: 
          {{error}} </h4>
       </div>
-    </div>
+    </div><br><br>
 </div>

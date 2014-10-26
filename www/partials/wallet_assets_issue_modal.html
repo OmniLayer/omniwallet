@@ -1,57 +1,83 @@
 <div class="modal-body">
-    <div class="text-left col-xs-9 modal-title">Confirm Property Creation</div><div class="text-right"><button ng-disabled="wating" class="btn btn-xs modal-cancel-btn" ng-click="cancel()">cancel | <span class="glyphicon glyphicon-remove"></span></button></div>
-     <br>
-        <table>
-            <tr><td height="30px"></td></tr>
-            <tr>
-            <td width="126px" height="30px" class="description-title">Name:</td><td class="description-text">{{propertyName}}</td>
-            </tr>
-           
-            <tr>
-            <td width="126px" height="30px" class="description-title">Category:</td><td class="description-text">{{propertyCategory}}</td>
-            </tr>
-           
-            <tr>
-            <td width="126px" height="30px" class="description-title">Subcategory:</td><td class="description-text">{{propertySubcategory}}</td>
-            </tr>
-           
-            <tr>
-            <td width="126px" height="30px" class="description-title">Url:</td><td class="description-text"><a href="{{propertyUrl}}" target="_blank">{{propertyUrl}}</a></td>
-            </tr>
-           
-            <tr>
-            <td width="126px" height="30px" class="description-title" style="vertical-align: top;">Description:</td><td class="description-text">
-            <div id="expandable-div" class="expandable-div" ng-class="{'expanded-div':expanded, 'collapsed-div':!expanded,'expandable-div-rendered':rendered}" ng-init="setExpandableDiv()">
-            {{propertyData}}
+    <div class="modal-header-row">
+        <div class="text-left col-xs-9 modal-title">Confirm Property Creation</div><div class="text-right"><button ng-disabled="wating" class="btn btn-xs modal-cancel-btn" ng-click="cancel()">cancel | <span class="glyphicon glyphicon-remove"></span></button></div>
+     </div>
+        <div collapse="readyToSign">
+            <div class="modal-row">
+                <div class="description-title-large">Name:</div><span class="description-text">{{propertyName}}</span>
             </div>
-            <div ng-show="longText">
-            <div class="horizontal-line"></div>
-            <button ng-click="expanded=!expanded;rendered=true;"><div ng-hide="expanded"><span class="glyphicon glyphicon-chevron-down"></span> More</div><div ng-show="expanded"><span class="glyphicon glyphicon-chevron-up"></span> Less</div></button>          
-            </div>
-            </td>
-            </tr>
-        </table>
-        <br><br>
-        <table>
-            <tr>
-            <td width="186px" height="30px" class="description-title">Number of properties:</td><td class="description-text">{{numberProperties}} <span class="description-title">({{divisible}})</span></td>
-            </tr>
            
-            <tr>
-            <td width="186px" height="30px" class="description-title">Issuer address:</td><td class="description-text"><a href="https://blockchain.info/address/{{selectedAddress}}?sort=0" target="_blank">{{selectedAddress}}</a></td>
-            </tr>
-        </table>
-        <hr>
-        <span class="send-fee">Creation cost: {{convertSatoshiToDisplayedValue(totalCost, true)}} bitcoins</span>
+            <div class="modal-row">
+                <div class="description-title-large">Category:</div><span class="description-text">{{propertyCategory  ||  "&nbsp;"}}</span>
+            </div>
+           
+            <div class="modal-row">
+                <div class="description-title-large">Subcategory:</div><span class="description-text">{{propertySubcategory  ||  "&nbsp;"}}</span>
+            </div>
+           
+            <div class="modal-row">
+                <div class="description-title-large">Url:</div><span class="description-text"><a href="{{propertyUrl}}" target="_blank">{{propertyUrl  ||  "&nbsp;"}}</a></span>
+            </div>
+           
+            <div class="modal-row">
+                <div class="description-title-large" style="vertical-align: top;">Description:</div>
+                <span class="description-text">
+                    <div id="expandable-div" class="expandable-div" ng-class="{'expanded-div':expanded, 'collapsed-div':!expanded,'expandable-div-rendered':rendered}" ng-init="setExpandableDiv()">
+                    {{propertyData  ||  "&nbsp;"}}
+                    </div>
+                    <div ng-show="longText">
+                    <div class="horizontal-line"></div>
+                    <button ng-click="expanded=!expanded;rendered=true;"><div ng-hide="expanded"><span class="glyphicon glyphicon-chevron-down"></span> More</div><div ng-show="expanded"><span class="glyphicon glyphicon-chevron-up"></span> Less</div></button>          
+                    </div>
+                </span>
+            </div>
+        </div>
+        <div collapse="readyToSign">
+            <br><br>
+            <div class="modal-row">
+                <div class="description-title-xlarge">Number of properties:</div><span class="description-text">{{numberProperties}} <span class="description-extra">({{divisible}})</span></span>
+            </div>
+           
+            <div class="modal-row">
+                <div class="description-title-xlarge">Issuer address:</div><span class="description-text"><a href="https://blockchain.info/address/{{selectedAddress}}?sort=0" target="_blank">{{selectedAddress}}</a></span>
+            </div>
+            <hr>
+            <span class="send-fee">Creation cost: {{convertSatoshiToDisplayedValue(totalCost, true)}} bitcoins</span>
+
+            <hr>
+        </div>
+        <div collapse="!readyToSign">
+            <div class="modal-row">
+              <div class="description-title">From:</div><span class="description-text"><a href="https://blockchain.info/address/{{selectedAddress}}?sort=0" target="_blank">{{selectedAddress}}</a></span>
+            </div>
+            <pre class="armory-unsigned">{{unsignedTransaction}}</pre>
+            <hr>
+          </div>
+          <div ng-if="signOffline">
+            <p class="text-warning">
+              You will need to sign this transaction offline and come back to broadcast it and finish the send.
+            </p>
+            <hr>
+          </div>
+</div>
 <div class="modal-footer">
     <br>
-    <div class="row" ng-hide=transactionSuccess>
+    <div class="row" ng-hide="transactionSuccess  || readyToSign">
     <button ng-disabled="clicked" class="btn btn-lg modal-action-btn" ng-click="ok()" style="padding-bottom: 6px;">
     <img src="/assets/img/Smart_normal.png" class="action-img-normal"><img src="/assets/img/Smart_roll.png" class="action-img-roll"> Create Property
     </button>
     <img class="" src="/assets/img/spinner.gif" ng-show="waiting">
     </div>
     <div class="row">
+      <div ng-show="readyToSign">
+        <h4 class="pull-left" style="color:green;">Your transaction was generated successfully, now save the text above and sign it on your Armory offline computer. Come back with the signed text to broadcast it.  
+          </h4>
+        <button ng-click="openBroadcastTransactionForm(selectedAddress)" class="btn btn-warning" ng-if="signOffline">Broadcast</button>
+        <button ng-click="saveUnsigned(unsignedTransaction)" class="btn btn-success" ng-hide="saved">Save</button>
+        <a href="/wallet/overview">
+          <button ng-click="close()" class="btn" ng-class="{'btn-danger':unsaved,'btn-success':saved}">Close</button>
+        </a>
+      </div>
       <div ng-show="transactionSuccess">
         <h4 class="pull-left" style="color:green"> Assets created successfully, 
         check your transaction <a target="_blank" href="{{url}}">here.</a></h4>
