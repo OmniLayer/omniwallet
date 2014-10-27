@@ -4,7 +4,7 @@ html {
 }
 body {
   /* Margin bottom by footer height */
-  margin-bottom: 60px;
+  margin-bottom: 100px;
 }
 
 .brown{color:#9b846b}
@@ -253,6 +253,7 @@ form.form-search:before {
   position: absolute;
   bottom: 0;
   width: 100%;
+  margin-bottom: -100px;
 }
 #footer .nav > li > a:hover, #footer .nav > li > a:focus {
   background-color: transparent;
@@ -271,9 +272,6 @@ form.form-search:before {
   -moz-box-shadow: 0px 3px 1px #DADADA;
   -webkit-box-shadow: 0px 3px 1px #DADADA;
   box-shadow: inset 0px 3px 1px #DADADA;
-  -moz-transition: height 1s;
-  -webkit-transition: height 1s;
-  transition: height 1s;
   overflow: hidden;
 }
 .footer-bottom-row{
@@ -474,9 +472,15 @@ a:hover i.icon-dudes{
 
 .footer-expanded{
   height: 255px;
+  -moz-transition: height 1s ease 0.3s;
+  -webkit-transition: height 1s ease 0.3s;
+  transition: height 1s ease 0.3s;
 }
 .footer-hidden{
   height: 50px;
+  -moz-transition: height 1s;
+  -webkit-transition: height 1s;
+  transition: height 1s;
 }
 
 .footer-expanded .footer-header{
