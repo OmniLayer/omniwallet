@@ -119,7 +119,7 @@ app.config(function($idleProvider, $keepaliveProvider, reCAPTCHAProvider) {
 
   // optional: gets passed into the Recaptcha.create call
   reCAPTCHAProvider.setOptions({
-      theme: 'white'
+      theme: 'clean'
   });
 })
 .run(function(userService, $location) {
