@@ -39,11 +39,12 @@ sudo make install
 ```
 NOTE: If you've recently upgrade from ubuntu 13 to 14 release do not install python-pip with apt-get. Instead:
 ```
+cd
 sudo apt-get remove python-pip
 wget https://raw.github.com/pypa/pip/master/contrib/get-pip.py
 sudo python get-pip.py
 ```
-Clone repository:
+Clone Omni repository:
 ```
 cd
 git clone https://github.com/mastercoin-MSC/omniwallet
