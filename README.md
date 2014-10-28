@@ -27,7 +27,7 @@ Check out the [Auto Installer Project](https://github.com/mastercoin-MSC/install
 Install dependencies:
 ```
 sudo apt-get update
-sudo apt-get install git build-essential autoconf libtool libboost-all-dev pkg-config libcurl4-openssl-dev libleveldb-dev libzmq-dev libconfig++-dev libncurses5-dev python-simplejson python-git python-pip libffi-dev uwsgi uwsgi-plugin-python
+sudo apt-get install git build-essential autoconf libtool libboost-all-dev pkg-config libcurl4-openssl-dev libleveldb-dev libzmq-dev libconfig++-dev libncurses5-dev python-simplejson python-git python-pip libffi-dev libpq-dev uwsgi uwsgi-plugin-python
 ```
 Clone repository:
 ```
@@ -56,7 +56,6 @@ Install npm:
 apt-get install nodejs
 npm install -g uglify-js
 npm install -g grunt-cli
-chmod -R 777 ~/tmp
 chmod -R 777 ~/.npm
 exit
 npm install grunt
