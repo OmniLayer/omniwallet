@@ -337,8 +337,9 @@ span#recaptcha_privacy {
 .orderbooks {
   background-image: url(/assets/img/header/Orderbooks.png);
   background-repeat: no-repeat;
+  background-position: 5px 30.5px;
 }
-.wallet-access {
+#header .navbar-default .navbar-nav>li>a.wallet-access {
   color: #013766;
   font-size:18px;
   font-weight: bold;
@@ -348,11 +349,16 @@ span#recaptcha_privacy {
   background-image: url(/assets/img/header/explore.png);
   width:19px;
   height: 19px;
-  margin-left: 5px;
+  margin-right: 5px;
+  vertical-align: middle;
+  display: inline-block;
 }
-
+#header .navbar-brand img {
+  max-height: 4.5em;
+}
 #header .navbar-nav > li {
-  padding-top: 36.5px;
+  padding-top: 30.5px;
   font-family: Gudea;
   font-size: 16px;
 }
+
