@@ -337,8 +337,8 @@ span#recaptcha_privacy {
 .orderbooks {
   background-image: url(/assets/img/header/Orderbooks.png);
   background-repeat: no-repeat;
-  background-position: 5px 30.5px;
-  margin-left: 15px;
+  background-position: 20px 30.5px;
+  padding-left: 15px;
 }
 .create-wallet {
   max-width: 109px;
