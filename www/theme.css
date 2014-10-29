@@ -340,6 +340,9 @@ span#recaptcha_privacy {
 
 /* HEADER STYLES */
 .orderbooks {
-  background-image: url(/assets/img/header/Orderbooks.png)
+  background-image: url(/assets/img/header/Orderbooks.png);
   background-repeat: no-repeat;
+}
+.wallet-access {
+  color: #013766
 }
