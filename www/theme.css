@@ -337,3 +337,9 @@ span#recaptcha_privacy {
 .icons a.reddit { background: url(/assets/img/social-icons/reddit.png) left top no-repeat; }
 .icons a.facebook { background: url(/assets/img/social-icons/facebook.png) left top no-repeat; }
 .icons a:hover { background-position: left -34px; }
+
+/* HEADER STYLES */
+.orderbooks {
+  background-image: url(/assets/img/header/Orderbooks.png)
+  background-repeat: no-repeat;
+}
