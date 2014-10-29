@@ -345,6 +345,9 @@ span#recaptcha_privacy {
   padding-top: 5px !important;
   text-align: center;
 }
+#header .navbar-default{
+  background-color: #fcfbfb;
+}
 #header .navbar-default .navbar-nav>li>a.wallet-access {
   color: #013766;
   font-size:18px;
@@ -367,30 +370,38 @@ span#recaptcha_privacy {
   font-family: Gudea;
   font-size: 16px;
 }
+#header .navbar-nav>li>a {
+  padding-left: 30px;
+  padding-right: 30px;
+}
+#header .navbar-nav > li:hover {
+  background-color: #edecec;
+  box-shadow: 0px 8px #6ba8e7;
+}
+#header .navbar-nav>li:hover>a {
+  color: #6ba8e7;
+}
 #header .navbar .divider-vertical-lg {
   height: 75px !important;
   margin: 15px 0px;
-  border-right: 1px solid #ffffff;
-  border-left: 1px solid #f2f2f2;
+  border-right: 1px solid #cac9c9;
+  border-left: 1px solid #cac9c9;
 }
 #header .navbar .divider-vertical {
   height: 50px !important;
   margin: 30px 0px;
-  border-right: 1px solid #ffffff;
-  border-left: 1px solid #f2f2f2;
-}
-#header .navbar-nav>li>a {
-  padding-left: 30px;
-  padding-right: 30px;
+  border-right: 1px solid #cac9c9;
+  border-left: 1px solid #cac9c9;
 }
 #header .navbar-right {
   margin-right:15px !important;
 }
 #header>.navbar-default .navbar-nav>.active {
-  background-color: #CCC;
-  box-shadow: 0px 8px #777;
+  background-color: #edecec;
+  box-shadow: 0px 8px #2e508f;
 }
 #header>.navbar-default .navbar-nav>.active>a{
+  color: #2e508f;
   box-shadow: 0px 0px;
   background: transparent;
 }
