@@ -340,6 +340,10 @@ span#recaptcha_privacy {
   background-position: 5px 30.5px;
   margin-left: 15px;
 }
+.create-wallet {
+  max-width: 109px;
+  padding-top: 5px;
+}
 #header .navbar-default .navbar-nav>li>a.wallet-access {
   color: #013766;
   font-size:18px;
@@ -370,7 +374,7 @@ span#recaptcha_privacy {
 }
 #header .navbar .divider-vertical {
   height: 50px;
-  margin: 22.5px 9px;
+  margin: 30px 9px;
   border-right: 1px solid #ffffff;
   border-left: 1px solid #f2f2f2;
 }
@@ -379,5 +383,5 @@ span#recaptcha_privacy {
   padding-right: 30px;
 }
 #header .navbar-right {
-  margin-right:0px !important;
+  margin-right:15px !important;
 }
