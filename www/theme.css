@@ -343,6 +343,7 @@ span#recaptcha_privacy {
 .create-wallet {
   max-width: 109px;
   padding-top: 5px;
+  text-align: center;
 }
 #header .navbar-default .navbar-nav>li>a.wallet-access {
   color: #013766;
