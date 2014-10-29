@@ -20,7 +20,7 @@
         <ul class="nav navbar-nav navbar-right">
           <li><a href="/explorer/overview"><i class="icon-explore"></i>Explore</a></li>
           <li class="divider-vertical-lg"></li>
-          <li class="orderbooks"><a href="/Books">Order Books</a></li>
+          <li class="orderbooks"><a href="/wallet/trade">Order Books</a></li>
           <li class="divider-vertical-lg"></li>
           <li ng-hide="user.loggedIn"><a href="#" ng-click="openCreateModal()" class="wallet-access create-wallet">Create Wallet</a></li>
           <li class="divider-vertical" ng-hide="user.loggedIn"></li>
@@ -31,14 +31,14 @@
           <li><a href="/about"><img src="/assets/img/header/Info_off.png" alt="About"></a></li>
           <li class="divider-vertical-lg" ng-show="user.loggedIn"></li>
           <li ng-show="user.loggedIn">
-            <div class="btn-group" dropdown>
-              <button type="button" class="btn btn-primary dropdown-toggle">
+            <span class="dropdown">
+              <a class="dropdown-toggle">
                 <img src="/assets/img/header/setting_off.png" alt="Settings">
-              </button>
+              </a>
               <ul class="dropdown-menu" role="menu">
-                <li><a href="/logout">Logout</a></li>
+                <li><a href="/" ng-click="logout()">Logout</a></li>
               </ul>
-            </div>
+            </span>
         </ul>
       </div>
     </div>
