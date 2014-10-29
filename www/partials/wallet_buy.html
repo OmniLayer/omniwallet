@@ -86,12 +86,31 @@
             <!-- need to update this to dynamic cost/currency type once metadex launces -->
           </div>
           <br>
-
+          <div class="input-group" style="width: 15%;">
+            <span class="input-group-addon" style="padding: 0.65em;"> MasterProtocol Transaction Cost: 
+            <a href=""
+                tooltip="MasterProtocol Transactions require additional BTC. This is used when encoding/sending the Masterprotocol Transaction."
+                tooltip-append-to-body="true"
+                tooltip-placement="top"> <strong>(?)</strong>
+              </a></span>
+            <span class="input-group-addon"> ~ 0.00025 BTC </span>
+          </div>
+          <br>
           <div class="input-group">
             <span class="input-group-addon"> Miner fees ( BTC ): </span>
             <input name="fees" type="number" ng-model="minerFees" class="form-control"
-            placeholder="0.0001 suggested minimum" step="0.0001" min="0.0001" required>
+            placeholder="0.0001 suggested minimum" step="0.0001" min="0.0001" ng-change="calculateTotal(minerFees)" required>
             <span class="input-group-addon" > Available Bitcoin: {{ balanceData[1] }} BTC </span>
+          </div>
+          <br>
+          <div class="input-group" style="width: 15%;">
+            <span class="input-group-addon" style="padding: 0.65em;"> Total Transaction Cost: 
+    	 <a href=""
+                tooltip="Total transaction cost in BTC. Includes Miners fee and MasterProtocol costs."
+                tooltip-append-to-body="true"
+                tooltip-placement="top"> <strong>(?)</strong>
+              </a></span>
+            <span class="input-group-addon"> {{ totalCost }} BTC </span>
           </div>
         </div>
       </div>

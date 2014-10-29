@@ -6,6 +6,7 @@ lib_path = os.path.abspath(tools_dir)
 sys.path.append(lib_path)
 from msc_utils_obelisk import *
 from sqltools import *
+from rpcclient import *
 
 http_status = '200 OK'
 

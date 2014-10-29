@@ -100,12 +100,17 @@ angular.module('omniwallet')
                     var ecKey = Bitcoin.ECKey.decodeEncryptedFormat(obj.privkey, obj.address);
                     var addr = ecKey.getBitcoinAddress().toString();
                     var key = ecKey.getWalletImportFormat();
-                    blob.addresses.push({ address: addr, privkey: key });
+                    blob.addresses.push({ address: addr, privkey: key, pubkey: obj.pubkey });
                     $scope.progressMessage = "Exported trading address " + addr;
                     $scope.progressColor = "green";
                   }
-                  if(exportData.exportWatch && !obj.privkey) {
-                    blob.addresses.push({ address: obj.address, privkey: "" });
+                  if(exportData.exportWatch && (!obj.privkey && !obj.pubkey)) {
+                    blob.addresses.push({ address: obj.address, privkey: "", pubkey:false });
+                    $scope.progressMessage = "Exported watch address " + obj.address;
+                    $scope.progressColor = "green";
+                  }
+                  if(exportData.exportOffline && (!obj.privkey && obj.pubkey)) {
+                    blob.addresses.push({ address: obj.address, privkey: "", pubkey:true });
                     $scope.progressMessage = "Exported watch address " + obj.address;
                     $scope.progressColor = "green";
                   }
@@ -143,6 +148,64 @@ angular.module('omniwallet')
     });
   };
 
+  // Begin Import armory offline Form Code
+  $scope.openImportArmoryForm = function() {
+    var modalInstance = $modal.open({
+      templateUrl: '/partials/import_armory_offline.html',
+      controller: AddArmoryAddressModal
+    });
+
+    modalInstance.result.then(function(result) {
+
+      if (result.address) {
+        $injector.get('userService').addAddress(result.address,undefined,result.pubkey);
+      }
+      $scope.refresh();
+      $scope.addedNewAddress = true;
+      $scope.createdAddress = result.address;
+    }, function() {});
+  };
+  
+  var AddArmoryAddressModal = function($scope, $modalInstance) {
+    $scope.validate = function(newAddress) {
+      try{
+        var address = new Bitcoin.Address.fromPubKey(Bitcoin.Util.hexToBytes(newAddress.pubkey))
+        if(Bitcoin.Address.validate(address.toString())){
+          newAddress.address=address.toString();
+          return true
+        }
+      } catch (e) {
+        return false;
+      }
+    };
+
+    $scope.addressNotListed = function(pubkey) {
+      var addresses = $injector.get('userService').getAllAddresses();
+      var address = new Bitcoin.Address.fromPubKey(Bitcoin.Util.hexToBytes(pubkey));
+      for (var i in addresses) {
+        if (addresses[i].address == address.toString()) {
+          return false;
+        }
+      }
+
+      return true;
+    };
+
+    $scope.ok = function(result) {
+      try{
+        var address = new Bitcoin.Address.fromPubKey(Bitcoin.Util.hexToBytes(result.pubkey));
+        if(Bitcoin.Address.validate(address.toString())){
+          $modalInstance.close(result);
+        }
+      } catch (e) {
+        console.log('*** Invalid pubkey: ' + result.pubkey);
+      }
+    };
+
+    $scope.cancel = function() {
+      $modalInstance.dismiss('cancel');
+    };
+  };
   // Begin Import watch only Form Code
   $scope.openImportWatchOnlyForm = function() {
     var modalInstance = $modal.open({
@@ -399,7 +462,7 @@ angular.module('omniwallet')
                 });
             else
               $injector.get('userService').addAddress(
-                addr.address)
+                addr.address, undefined, addr.pubkey)
                 .then(function(){
                   $scope.progressMessage="Imported address " + addr.address;
                   $scope.progressColor = "green";

@@ -74,7 +74,7 @@
     </div>
 
     <div class="col-xs-4">
-      Filter Inactive Offers:<input ng-init="inactive=true" type="checkbox" ng-model="inactive"><br />
+      Filter Incompletable Offers:<input ng-init="inactive=true" type="checkbox" ng-model="inactive"><br />
       Time Frame: <select ng-model="selectedTimeframe"  
           ng-change="global.getData(selectedTimeframe)" ng-options="time.value as time.name for time in timeOptions">
       </select>

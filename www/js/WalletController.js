@@ -407,7 +407,7 @@ function WalletTradePendingController($scope, $http, $q, userService, hashExplor
   //$scope.selectedAddress = userService.getAllAddresses()[ userService.getAllAddresses().length-1 ].address;
   $scope.currencyUnit = 'stom'
   $scope.pendingThinking = true
-  $scope.hasAddressesWithPrivkey = getAddressesWithPrivkey();
+  $scope.hasAddressesWithPrivkey = userService.getAddressesWithPrivkey();
   $scope.selectedAddress = $scope.hasAddressesWithPrivkey[0];
   userService.getCurrencies().filter(function(currency){
        return currency.tradable;
@@ -540,17 +540,6 @@ function WalletTradePendingController($scope, $http, $q, userService, hashExplor
       });
     });
   };
-
-  function getAddressesWithPrivkey() {
-    var addresses = [];
-    userService.getAllAddresses().map(function(e, i, a) {
-      if (e.privkey && e.privkey.length == 58) {
-        addresses.push(e.address);
-      }
-    }
-    );
-    return addresses;
-  }
 
   $scope.isCancel=true;
   $scope.confirmCancel = function(tx) {

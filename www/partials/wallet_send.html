@@ -40,8 +40,12 @@
           <br>
           <div class="input-group">
             <span class="input-group-addon"> Amount ( <strong>{{ balanceData[0] }} {{getDisplayedAbbreviation()}}</strong> Available ): </span>
-            <input name="amount" type="number" ng-model="sendAmount" class="form-control" value="sendAmount"
-            placeholder="{{ sendPlaceholderValue }}" step="{{ sendPlaceholderStep }}" min="{{ sendPlaceholderMin }}" required>
+	    <input id="amount" name="amount" type="number" ng-model="sendAmount" class="form-control" ng-change="changeValue()" value="sendAmount"
+	    placeholder="{{ sendPlaceholderValue }}" step="{{ sendPlaceholderStep }}" min="{{ sendPlaceholderMin }}" required>
+	   
+	    <span ng-show="walletAssets.selectedCoin.symbol == 'BTC'" class="input-group-addon"> Value ( <strong>${{ balanceData[0]*bitcoinValue |number:2}}</strong> Available ): </span>
+	    <input ng-show="walletAssets.selectedCoin.symbol == 'BTC'" id="value" name="value" type="number" ng-model="value" class="form-control" ng-change="changeAmount()" value="value"
+	    placeholder="{{ sendPlaceholderValue }}" step="Any" min="{{ sendPlaceholderMin }}">          
           </div>
           <br ng-hide="walletAssets.selectedCoin.symbol == 'BTC'">
 	  <div class="input-group" style="width: 15%;" ng-hide="walletAssets.selectedCoin.symbol == 'BTC'">
@@ -73,7 +77,7 @@
             <span class="input-group-addon"> {{ totalCost }} BTC </span>
           </div>
           <br>
-      <input class="btn btn-primary btn-lg col-xs-push-3 col-xs-6" type="submit" value="Send Transaction">
+      <button class="btn btn-primary btn-lg col-xs-push-3 col-xs-6" type="submit" >Send Transaction</button>
       </form>
     </div>    
   </div>
