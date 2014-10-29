@@ -350,9 +350,9 @@ span#recaptcha_privacy {
   height: 19px;
   margin-left: 5px;
 }
-#header .navbar-brand img {
-  max-height: 3.7em;
-}
+
 #header .navbar-nav > li {
-  padding-top: 5%;
+  padding-top: 36.5px;
+  font-family: Gudea;
+  font-size: 16px;
 }
