@@ -30,15 +30,13 @@
           <li class="divider-vertical-lg"></li>
           <li><a href="/about"><img src="/assets/img/header/Info_off.png" alt="About"></a></li>
           <li class="divider-vertical-lg" ng-show="user.loggedIn"></li>
-          <li ng-show="user.loggedIn">
-            <span class="dropdown">
-              <a class="dropdown-toggle">
-                <img src="/assets/img/header/setting_off.png" alt="Settings">
-              </a>
-              <ul class="dropdown-menu" role="menu">
-                <li><a href="/" ng-click="logout()">Logout</a></li>
-              </ul>
-            </span>
+          <li ng-show="user.loggedIn" class="dropdown">
+            <a href class="dropdown-toggle">
+              <img src="/assets/img/header/setting_off.png" alt="Settings">
+            </a>
+            <ul class="dropdown-menu" role="menu">
+              <li><a href="/" ng-click="logout()">Logout</a></li>
+            </ul>
         </ul>
       </div>
     </div>
