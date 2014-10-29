@@ -19,12 +19,17 @@
         
         <ul class="nav navbar-nav navbar-right">
           <li><a href="/explorer/overview"><i class="icon-explore"></i>Explore</a></li>
+          <li class="divider-vertical-lg"></li>
           <li class="orderbooks"><a href="/Books">Order Books</a></li>
+          <li class="divider-vertical-lg"></li>
           <li ng-hide="user.loggedIn" class="wallet-access"><a href="#" ng-click="openCreateModal()" class="wallet-access">Create Wallet</a></li>
+          <li class="divider-vertical" ng-hide="user.loggedIn"></li>
           <li ng-hide="user.loggedIn"><a href="#" ng-click="openLoginModal()" class="wallet-access">Log in</a></li>
           <li ng-show="user.loggedIn"><a href="#"><img src="/assets/img/header/Orders.png" alt="Pending Orders"></a></li>
           <li ng-show="user.loggedIn"><a href="#"><img src="/assets/img/Notifications.png" alt="Notifications"></a></li>
+          <li class="divider-vertical-lg"></li>
           <li><a href="/about"><img src="/assets/img/header/Info_off.png" alt="About"></a></li>
+          <li class="divider-vertical-lg" ng-show="user.loggedIn"></li>
           <li ng-show="user.loggedIn"><a href="/"><img src="/assets/img/header/settings_off.png" alt="Settings"></a></li>
         </ul>
       </div>

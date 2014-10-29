@@ -338,6 +338,7 @@ span#recaptcha_privacy {
   background-image: url(/assets/img/header/Orderbooks.png);
   background-repeat: no-repeat;
   background-position: 5px 30.5px;
+  margin-left: 15px;
 }
 #header .navbar-default .navbar-nav>li>a.wallet-access {
   color: #013766;
@@ -361,4 +362,22 @@ span#recaptcha_privacy {
   font-family: Gudea;
   font-size: 16px;
 }
-
+#header .navbar .divider-vertical-lg {
+  height: 75px;
+  margin: 15px 9px;
+  border-right: 1px solid #ffffff;
+  border-left: 1px solid #f2f2f2;
+}
+#header .navbar .divider-vertical {
+  height: 50px;
+  margin: 22.5px 9px;
+  border-right: 1px solid #ffffff;
+  border-left: 1px solid #f2f2f2;
+}
+#header .navbar-nav>li>a {
+  padding-left: 30px;
+  padding-right: 30px;
+}
+#header .navbar-right {
+  margin-right:0px !important;
+}
