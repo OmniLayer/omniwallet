@@ -4,7 +4,7 @@ from decimal import Decimal
 from flask import Flask, request, jsonify, abort, json, make_response
 from msc_apps import *
 
-data_dir_root = os.environ.get('DATADIR')
+#data_dir_root = os.environ.get('DATADIR')
 
 app = Flask(__name__)
 app.debug = True

@@ -8,7 +8,8 @@ var app = angular.module('omniwallet', [
   'timer',
   'infinite-scroll',
   'ngNumeraljs',
-  'ngIdle'
+  'ngIdle',
+  'reCAPTCHA'
 ], function($routeProvider, $locationProvider, $httpProvider) {
 
   if (!$httpProvider.defaults.headers.get)
@@ -101,6 +102,9 @@ var app = angular.module('omniwallet', [
     }).when('/login/:uuid', {
       template: '<div ng-controller="HiddenLoginController" ng-init="open()"></div>',
       controller: HiddenLoginController
+    }).when('/loginfs/:uuid', {
+      template: '<div ng-controller="FailedSaveLoginController" ng-init="open()"></div>',
+      controller: FailedSaveLoginController
     }).when('/import', {
       templateUrl: '/partials/wallet_import.html',
     }).when('/status', {
@@ -113,10 +117,18 @@ var app = angular.module('omniwallet', [
   $locationProvider.html5Mode(true).hashPrefix('!');
 });
 
-app.config(function($idleProvider, $keepaliveProvider) {
+app.config(function($idleProvider, $keepaliveProvider, reCAPTCHAProvider) {
   $idleProvider.idleDuration(config.idleDuration);
   $idleProvider.warningDuration(config.idleWarningDuration);
   // $keepaliveProvider.interval(2);
+
+  // required: please use your own key :)
+  reCAPTCHAProvider.setPublicKey(config.reCaptchaKey);
+
+  // optional: gets passed into the Recaptcha.create call
+  reCAPTCHAProvider.setOptions({
+      theme: 'clean'
+  });
 })
 .run(function(userService, $location) {
   //Whitelist pages

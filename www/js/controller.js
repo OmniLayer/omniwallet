@@ -32,7 +32,7 @@ function HomeCtrl($scope, $templateCache, $injector, $location, $http, $q) {
             balances[currencyItem.symbol] = {
               "symbol": currencyItem.symbol,
               "balance": +value || currencyItem.value,
-              "value": appraiser.getValue(currencyItem.value, currencyItem.symbol),
+              "value": appraiser.getValue(currencyItem.value, currencyItem.symbol, currencyItem.divisible),
             };
             if (currencyItem.symbol == 'BTC') {
               balances[currencyItem.symbol].name = "Bitcoin";
@@ -218,6 +218,23 @@ function HiddenLoginController($scope, $modal, $location) {
   }
 }
 
+function FailedSaveLoginController($scope, $modal, $location) {
+  $scope.open = function() {
+    $scope.uuid = $location.path().replace("/loginfs/", "");
+
+    $modal.open({
+      templateUrl: '/partials/login_modal_fs.html',
+      controller: LoginControllerUUID,
+      resolve: {
+        uuid: function() {
+          return $scope.uuid;
+        }
+      }
+    });
+  }
+}
+
+
 function RevisionController($scope, $http, $modal, userService) {
 
   $scope.getData = function() {
@@ -306,7 +323,8 @@ function NavigationController($scope, $http, $modal, userService) {
   };
 
   $scope.logout = function() {
-    window.location.reload(false);
+    userService.logout();
+    //window.location.reload(false);
   };
 
   $scope.user = userService.data;

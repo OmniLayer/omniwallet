@@ -20,6 +20,11 @@ function Login($injector, $scope, $http, $location, $modalInstance, $q, userServ
   
   $scope.open = function(login) {
     var uuid = login.uuid;
+    if ( verifyUUID(uuid) == false ) {
+      $scope.missingUUID = true;
+      return 0;
+    }
+
     var asymKey = {};
     var walletKey = '';
     var nonce = 0;
@@ -79,7 +84,7 @@ function Login($injector, $scope, $http, $location, $modalInstance, $q, userServ
         $scope.loginInProgress = false;
       }
     }, function(result) {
-      if (result.status == 404) {
+      if (result.status == 403) {
         $scope.missingUUID = true;
       } else {
         $scope.serverError = true;

@@ -74,12 +74,12 @@
     </div>
 
     <div class="col-xs-4">
-      Filter Inactive Offers:<input ng-init="inactive=true" type="checkbox" ng-model="inactive"><br />
+      Filter Incompletable Offers:<input ng-init="inactive=true" type="checkbox" ng-model="inactive"><br />
       Time Frame: <select ng-model="selectedTimeframe"  
           ng-change="global.getData(selectedTimeframe)" ng-options="time.value as time.name for time in timeOptions">
       </select>
     </div>
-    <h3 ng-show="orderbook.length == 0" class="text-center">Loading...<img src="/assets/img/34-1.gif"></h3>
+    <h3 ng-show="orderbook.length == 0" class="text-center">Loading...<img src="/assets/img/spinner.gif"></h3>
     <br /><small><h4 ng-hide="orderbook.length == 0"><span class="text-info text-center"> {{orderbook.length}} Total Transacations </span></h4></small>
     <table ng-hide="orderbook.length == 0" class="table table-striped table-hover table-condensed" fixed-header>
       <thead>

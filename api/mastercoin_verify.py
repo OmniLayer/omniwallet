@@ -2,21 +2,38 @@ import os
 import glob
 import re
 from flask import Flask, request, jsonify, abort, json
+#import psycopg2, psycopg2.extras
+from msc_apps import *
 
-data_dir_root = os.environ.get('DATADIR')
+#data_dir_root = os.environ.get('DATADIR')
 
 app = Flask(__name__)
 app.debug = True
 
+#TODO COnversion
 @app.route('/properties')
 def properties():
-  prop_glob = glob.glob(data_dir_root + '/properties/*.json')
+  #ROWS=dbSelect("select * from smartproperties")
+  ROWS=dbSelect("select propertyname, propertyid, protocol from smartproperties")
+
+  def dehexify(hex_str):
+      temp_str=[]
+      for let in hex_str:
+          if ord(let) < 128:
+              temp_str.append(let)
+          else:
+              temp_str.append('?')
+      return ''.join(temp_str)
 
   response = []
-  for property_file in prop_glob:
-    with open(property_file, 'r') as f:
-      prop = json.load(f)[0]
-      response.append({ 'currencyID': prop['currencyId'], 'name': prop['propertyName'] })
+  for sprow in ROWS:
+      res = {
+          'currencyID': sprow[1],
+          #'name': dehexify(sprow[-1]['name']) 
+          'name': dehexify(sprow[0]),
+          'Protocol': sprow[2]
+      }
+      response.append(res)
 
   json_response = json.dumps( sorted(response, key=lambda x:  int(x['currencyID']) ))
   return json_response
@@ -25,28 +42,29 @@ def properties():
 def addresses():
   currency_id = request.args.get('currency_id')
   response = []
-  addr_glob = glob.glob(data_dir_root + '/addr/*.json')
 
-  for address_file in addr_glob:
-    with open(address_file, 'r') as f:
-      addr = json.load(f)
+  currency_id = re.sub(r'\D+', '', currency_id) #check alphanumeric
+  ROWS=dbSelect("select address,balanceavailable,balancereserved,sp.propertytype from addressbalances ab, smartproperties sp "
+                "where ab.propertyid=sp.propertyid and sp.protocol!='Fiat' and sp.propertyid=%s",[currency_id])
+
+  for addrrow in ROWS:
       res = {
-          'address': addr['address']
+          'address': addrrow[0]
       }
+      #convert property type to true/false for divisibility calculations
+      divisible=isDivisibleProperty(addrrow[3])
 
       if currency_id == '0': #BTC
-        btc_balance = [x['value'] for x in addr['balance'] if x['symbol'] == 'BTC'][0]
-        res['balance'] = ('%.8f' % float(btc_balance)).rstrip('0').rstrip('.')
+        res['balance'] = ('%.8f' % float(addrrow[1])).rstrip('0').rstrip('.')
         response.append(res)
       else:
-        adjust_currency_id = currency_id
-        if currency_id == '1' or currency_id == '2':
-          adjust_currency_id = str(int(currency_id) - 1) # Mastercoin-tools is off by one on currency id from the spec
-
-        if adjust_currency_id in addr:
-          res['balance'] = ('%.8f' % float(addr[adjust_currency_id]['balance'])).rstrip('0').rstrip('.')
-          res['reserved_balance'] = ('%.8f' % float(addr[adjust_currency_id]['total_reserved'])).rstrip('0').rstrip('.')
-          response.append(res)
+        if divisible:
+          res['balance'] = ('%.8f' % float(addrrow[1]/100000000)).rstrip('0').rstrip('.')
+          res['reserved_balance'] = ('%.8f' % float(addrrow[2]/100000000)).rstrip('0').rstrip('.')
+        else:
+          res['balance'] = ('%.8f' % float(addrrow[1])).rstrip('0').rstrip('.')
+          res['reserved_balance'] = ('%.8f' % float(addrrow[2])).rstrip('0').rstrip('.')
+        response.append(res)
 
   json_response = json.dumps(response)
   return json_response
@@ -61,48 +79,14 @@ def transactions(address=None):
   if address == None:
     abort(400)
 
-  if not exists(address):
-    abort(404)
+  currency_id = re.sub(r'\D+', '', currency_id) #check alphanumeric
 
-  addr = read(address)
+  ROWS=dbSelect("select * from addressesintxs a, transactions t where a.address=%s  and a.txdbserialnum = t.txdbserialnum and a.propertyid=%s",
+                (address, currency_id))
+
   transactions = []
-  tx_lists = ['accept_transactions', 'bought_transactions', 'exodus_transactions', 'offer_transactions', 'received_transactions', 'sent_transactions', 'sold_transactions']
-
-  if currency_id == '0':
-    return jsonify({ 'address': address, 'transactions': transactions }) # Punt on bitcoin transactions since we don't store them
-
-  if currency_id == '1' or currency_id == '2':
-    currency_id = str(int(currency_id) - 1) # Mastercoin-tools is off by one on currency id from the spec
-
-  if currency_id in addr:
-    for tx_i in tx_lists:
-      for tx in addr[currency_id][tx_i]:
-        transactions.append(tx_clean(tx))
+  for txrow in ROWS:
+      transactions.append(txrow[9])
 
   return jsonify({ 'address': address, 'transactions': transactions })
 
-
-# Utilities
-def tx_clean(tx):
-  clean = {
-      'tx_hash': tx['tx_hash'],
-      'valid': True,
-      'accepted_amount': tx['formatted_amount']
-  }
-
-  if 'bitcoin_required' in tx:
-    clean['bought_amount'] = tx['bitcoin_required']
-
-  return clean
-
-def read(address):
-  if not re.match('^[a-zA-Z0-9_]+$', address):
-    raise ValueError('Non Alphanumeric address')
-
-  filename = data_dir_root + '/addr/' + address + '.json'
-  with open(filename, 'r') as f:
-    return json.load(f)
-
-def exists(address):
-  filename = data_dir_root + '/addr/' + address + '.json'
-  return os.path.exists(filename)
