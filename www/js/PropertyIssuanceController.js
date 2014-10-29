@@ -1,10 +1,11 @@
-function PropertyIssuanceController($scope, propertiesService, $timeout){
+function PropertyIssuanceController($scope, propertiesService, $timeout, $injector, $modal){
   $scope.walletAssets=$scope.$parent.$parent;
   $scope.walletAssets.currencyList.forEach(function(e, i) {
     if (e.symbol == "BTC")
       $scope.walletAssets.selectedCoin = e;
   });
-  
+  // Enable the transaction for offline wallets
+  $scope.walletAssets.offlineSupport=true;
   var transactionGenerationController = $scope.$parent;
   $scope.ecosystem = 2;
   $scope.propertyType = 2;
@@ -105,6 +106,8 @@ function PropertyIssuanceController($scope, propertiesService, $timeout){
         });   
       },0,false);  
     }
+
+    
   };
   
   transactionGenerationController.generateData = function(){

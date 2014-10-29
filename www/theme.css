@@ -92,6 +92,10 @@ border-left-color: #111111;
 .modal-body{
   background-color: #fcfbfb;
 }
+.captcha-centered{
+  width: 318px;
+  margin:auto;
+}
 .modal-title{
   padding-left: 0;
   font-size: 36px;
@@ -129,15 +133,50 @@ border-left-color: #111111;
   font-family: 'Gudea', sans-serif;
   margin-top: 16px;
 }
+
+/* MODAL WINDOWS STYLES */
+.modal-header-row{
+  margin-bottom: 30px;
+}
+.modal-row{
+  margin-bottom: 5px;
+}
 .description-title{
   font-size: 18px;
   color: #b8b7b7;
   font-family: 'Gudea', sans-serif;
   font-weight: bold;
+  float: left;
+  width: 103px;
+  height:30px;
+}
+.description-title-large{
+  font-size: 18px;
+  color: #b8b7b7;
+  font-family: 'Gudea', sans-serif;
+  font-weight: bold;
+  float: left;
+  width: 126px;
+  height:30px;
+}
+.description-title-xlarge{
+  font-size: 18px;
+  color: #b8b7b7;
+  font-family: 'Gudea', sans-serif;
+  font-weight: bold;
+  float: left;
+  width: 200px;
+  height:30px;
 }
 .description-text{
   font-size: 18px;
   color: #696969;
+  font-family: 'Gudea', sans-serif;
+  font-weight: bold;
+}
+.description-extra{
+  font-size: 18px;
+  color: #b8b7b7;
   font-family: 'Gudea', sans-serif;
   font-weight: bold;
 }
@@ -170,13 +209,17 @@ border-left-color: #111111;
   height: 5px;
   background-image:url('/assets/img/line.png');
   background-repeat: repeat;
+  margin-left: 126px;
 }
 input[type=number]::-webkit-inner-spin-button,
 input[type=number]::-webkit-outer-spin-button {
     -webkit-appearance: none;
     margin: 0;
 }
-
+.armory-unsigned{
+  height:300px;
+  overflow-y:auto;
+}
 .currency-name, .currency-total, .currency-value {
 	font-weight: bold;
 	font-size: 1.5em;
@@ -274,7 +317,10 @@ form.form-search:before {
     text-align: left;
     width: 50%;*/
 }
-
+span#recaptcha_privacy {
+    /* hide the privacy policy link to google on recaptcha */
+    display: none;
+}
 /* Social icons (source: http://azmind.com/2012/11/06/social-icons-sprites-35-ready-to-use-icons-psd-png-html-css/) */
 .icons a {
     display: inline-block;
@@ -287,9 +333,7 @@ form.form-search:before {
     -webkit-transition: all .3s;
     -ms-transition: all .3s;
 }
- 
 .icons a.twitter { background: url(/assets/img/social-icons/twitter.png) left top no-repeat; }
 .icons a.reddit { background: url(/assets/img/social-icons/reddit.png) left top no-repeat; }
 .icons a.facebook { background: url(/assets/img/social-icons/facebook.png) left top no-repeat; }
-
 .icons a:hover { background-position: left -34px; }

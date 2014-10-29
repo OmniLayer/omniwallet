@@ -1,0 +1,1 @@
+RECAPTCHA_PRIVATE = None #replace private key text here

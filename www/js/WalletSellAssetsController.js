@@ -185,6 +185,8 @@ function WalletSellAssetsController($modal, $scope, $http, $q, userService, wall
     var address = $scope.selectedAddress;
     var saleBlocks = +$scope.saleBlocks;
 
+    var totalFeeCost = parseFloat($scope.convertDisplayedValue($scope.totalCost));
+    
     var required = [coin, address, saleAmount, saleBlocks, salePricePerCoin, minerFees, buyersFee, balance, btcbalance, $scope.saleForm.$valid];
     
     var error = 'Please ';
@@ -203,7 +205,7 @@ function WalletSellAssetsController($modal, $scope, $http, $q, userService, wall
         error += 'make sure your fee entry is at least 0.0001 BTC, ';
       if ((saleAmount <= balance) == false)
         error += 'make sure you aren\'t putting more coins up for sale than you own, ';
-      if ((minerFees <= btcbalance) == false)
+      if ((totalFeeCost <= btcbalance) == false)
         error += 'make sure you have enough Bitcoin to cover your fees, ';
 
       if (saleBlocks < 1)
@@ -245,7 +247,7 @@ function WalletSellAssetsController($modal, $scope, $http, $q, userService, wall
               amt: saleAmount,
               price: salePricePerCoin,
               buyersfee: buyersFee,
-              fee: minerFees,
+              fee: totalFeeCost,
               blocks: saleBlocks,
               currency: coin,
               selectedCoin: $scope.selectedCoin,

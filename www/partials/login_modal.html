@@ -7,13 +7,13 @@
     <div class="row">
       <div class="form-group col-xs-10 col-xs-push-1">
         <label for="inputUUID">Wallet ID</label>
-        <input type="text" class="form-control" ng-disabled="loginInProgress || login.disable" ng-model="login.uuid" id="inputUUID" value="{{ uuid }}" auto-focus="!login.uuid">
+        <input type="text" class="form-control" ng-disabled="loginInProgress || login.disable" ng-model="login.uuid" id="inputUUID" value="{{ uuid }}">
       </div>
     </div>
     <div class="row">
       <div class="form-group col-xs-10 col-xs-push-1">
         <label for="inputPassword">Password</label>
-        <input type="password" class="form-control" ng-disabled="loginInProgress" ng-model="login.password" id="inputPassword" auto-focus="login.uuid">
+        <input type="password" class="form-control" ng-disabled="loginInProgress" ng-model="login.password" id="inputPassword">
       </div>
     </div>
   </div>

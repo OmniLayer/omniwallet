@@ -19,21 +19,29 @@ function WalletAssetsFormController($scope, $injector, userService, walletTransa
         $scope.selectedCoin = e;
     });
   }
-  $scope.addressList = $scope.selectedCoin ? userService.getAddressesWithPrivkey($scope.selectedCoin.tradableAddresses) : [];
+  $scope.addressList = $scope.selectedCoin ? userService.getTradableAddresses($scope.selectedCoin.tradableAddresses, $scope.offlineSupport) : [];
   if(!$scope.$parent.selectedAddress)
     $scope.selectedAddress = $scope.addressList[0] || null;
   $scope.$watch('selectedCoin', function() {
-    $scope.addressList = $scope.selectedCoin ? userService.getAddressesWithPrivkey($scope.selectedCoin.tradableAddresses) : [];
+    updateData()
+  });
+  $scope.$watch('offlineSupport', function() {
+    updateData()
+  });
+  $scope.$watch('selectedAddress', function() {
+    $scope.setBalance();
+    var pubkey = userService.getAddress($scope.selectedAddress).pubkey;
+    $scope.offline = pubkey != undefined && pubkey != "";
+  });
+  
+  var updateData = function(){
+    $scope.addressList = $scope.selectedCoin ? userService.getTradableAddresses($scope.selectedCoin.tradableAddresses, $scope.offlineSupport) : [];
     if(!$scope.$parent.selectedAddress)
       $scope.selectedAddress = $scope.addressList[0] || null;
     $scope.setBalance();
     $scope.minerFees = +MIN_MINER_FEE.valueOf(); // reset miner fees
     $scope.calculateTotal($scope.minerFees);
-  });
-  $scope.$watch('selectedAddress', function() {
-    $scope.setBalance();
-  });
-  
+  }
   $scope.calculateTotal = calculateTotal;
 
   $scope.minerFees = +MIN_MINER_FEE.valueOf(); //set default miner fees
@@ -45,33 +53,35 @@ function WalletAssetsFormController($scope, $injector, userService, walletTransa
   $scope.balanceData = [0];
   var addrListBal = [];
   // fill the addrBalanceList with all the addresses on the wallet for which we've got private keys.
-  userService.getAddressesWithPrivkey().forEach(function(e, i) {
-    var balances = [
-      {
-        symbol: 'MSC',
-        value: '0'
-      },
-      {
-        symbol: 'TMSC',
-        value: '0'
-      },
-      {
-        symbol: 'BTC',
-        value: '0'
-      }];
-    addrListBal[i] = {
-      address: e,
-      balance: balances
-    };
-    var promise = walletTransactionService.getAddressData(e);
-    promise.then(function(successData) {
-      var successData = successData.data;
-      addrListBal[i].balance =  successData.balance;
-      $scope.setBalance();
-    }, function(errorData) {
-      alert("We have encountered a problem accessing the server ... Please try again in a few minutes");
-      //console.log('Error, no balance data found for ' + e + ' setting defaults...');
-    });
+  userService.getAddressesWithPrivkey().concat(userService.getAddressesWithPubkey()).forEach(function(e, i) {
+    if(Bitcoin.Address.validate(e)){
+      var balances = [
+        {
+          symbol: 'MSC',
+          value: '0'
+        },
+        {
+          symbol: 'TMSC',
+          value: '0'
+        },
+        {
+          symbol: 'BTC',
+          value: '0'
+        }];
+      addrListBal[i] = {
+        address: e,
+        balance: balances
+      };
+      var promise = walletTransactionService.getAddressData(e);
+      promise.then(function(successData) {
+        var successData = successData.data;
+        addrListBal[i].balance =  successData.balance;
+        $scope.setBalance();
+      }, function(errorData) {
+        //alert("We have encountered a problem accessing the server ... Please try again in a few minutes");
+        console.log('Error, no balance data found for ' + e + ' setting defaults...');
+      });
+    }
   });
   
   $scope.setBalance = function() {
