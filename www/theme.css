@@ -63,12 +63,7 @@ body {
 a {
    cursor: pointer;
 }
-.navbar-brand img {
-  max-height: 3.7em;
-}
-.navbar-nav > li {
-  padding-top: 5%;
-}
+
 .footer .navbar-nav > li {
   padding-top: 0;
 }
@@ -344,5 +339,20 @@ span#recaptcha_privacy {
   background-repeat: no-repeat;
 }
 .wallet-access {
-  color: #013766
+  color: #013766;
+  font-size:18px;
+  font-weight: bold;
+}
+.icon-explore {
+  background-repeat: no-repeat;
+  background-image: url(/assets/img/header/explore.png);
+  width:19px;
+  height: 19px;
+  margin-left: 5px;
+}
+#header .navbar-brand img {
+  max-height: 3.7em;
+}
+#header .navbar-nav > li {
+  padding-top: 5%;
 }
