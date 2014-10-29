@@ -342,7 +342,7 @@ span#recaptcha_privacy {
 }
 .create-wallet {
   max-width: 109px;
-  padding-top: 5px;
+  padding-top: 5px !important;
   text-align: center;
 }
 #header .navbar-default .navbar-nav>li>a.wallet-access {
@@ -385,4 +385,18 @@ span#recaptcha_privacy {
 }
 #header .navbar-right {
   margin-right:15px !important;
+}
+#header>.navbar-default .navbar-nav>.active {
+  background-color: #CCC;
+  box-shadow: 0px 8px #777;
+}
+#header>.navbar-default .navbar-nav>.active>a{
+  box-shadow: 0px 0px;
+  background: transparent;
+}
+#header .nav.navbar-nav{
+  height:110px;
+}
+#header .nav.navbar-nav>li{
+  height: 100%
 }
