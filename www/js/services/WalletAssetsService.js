@@ -1,6 +1,6 @@
 angular.module("omniServices")
-	.service("WalletAssets",["$rootScope", "userService", "SATOSHI_UNIT", "MIN_MINER_FEE", "MSC_PROTOCOL_COST",
-		function WalletAssetsService($rootScope, userService, SATOSHI_UNIT, MIN_MINER_FEE, MSC_PROTOCOL_COST){
+	.service("WalletAssets",["$rootScope", "userService", "AddressManager", "SATOSHI_UNIT", "MIN_MINER_FEE", "MSC_PROTOCOL_COST",
+		function WalletAssetsService($rootScope, userService, AddressManager, SATOSHI_UNIT, MIN_MINER_FEE, MSC_PROTOCOL_COST){
 			var self = this;
 
 			self.initialize = function(){
@@ -48,7 +48,7 @@ angular.module("omniServices")
 				      address: e,
 				      balance: balances
 				    };
-				    var promise = walletTransactionService.getAddressData(e);
+				    var promise = AddressManager.getAddressData(e);
 				    promise.then(function(successData) {
 				      var successData = successData.data;
 				      addrListBal[i].balance =  successData.balance;
