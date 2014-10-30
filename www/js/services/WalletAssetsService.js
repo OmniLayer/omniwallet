@@ -1,5 +1,5 @@
 angular.module("omniServices")
-	.service("WalletAssets",["userService", "$rootScope",
+	.service("WalletAssets",["$rootScope", "userService",
 		function WalletAssetsService($rootScope, userService, SATOSHI_UNIT, MIN_MINER_FEE, MSC_PROTOCOL_COST){
 			var self = this;
 
@@ -138,16 +138,25 @@ angular.module("omniServices")
 
 			self.initialize();
 
-			$rootScope.$watch(function(){return self.selectedCoin;}, function() {
+			var updateData = function(){
 			    self.addressList = self.selectedCoin ? userService.getAddressesWithPrivkey(self.selectedCoin.tradableAddresses) : [];
 			    self.selectedAddress = self.addressList[0] || null;
 			    self.setBalance();
 			    self.minerFees = +MIN_MINER_FEE.valueOf(); // reset miner fees
 			    self.calculateTotal(self.minerFees);
+			}
+			
+			$rootScope.$watch(function(){return self.selectedCoin;}, function() {
+			    updateData()
 			});
 
+			$rootScope.$watch(function(){return self.offlineSupport;}, function() {
+			    updateData()
+			});
 			$rootScope.$watch(function(){return self.selectedAddress;}, function() {
 				self.setBalance();
+			    var pubkey = userService.getAddress(self.selectedAddress).pubkey;
+			    self.offline = pubkey != undefined && pubkey != "";
 			});
 		}
 	]);
