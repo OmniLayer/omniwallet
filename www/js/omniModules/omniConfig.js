@@ -1,0 +1,8 @@
+/* Define values that need to be accesible at config and run time as Constant */
+/* Define values that are only needed at run time as Value */
+angular.module("omniConfig", [])
+	.constant("idleDuration", 10 * 60) // 10 minutes
+	.constant("idleWarningDuration", 2 * 60) // 2 minutes
+	.constant("reCaptchaKey", "----KEY----")
+	.value("SATOSHI_UNIT", new Big(100000000)) //Backend data needs satoshi, use this conversion ratio
+	.value("MIN_MINER_FEE",new Big(0.00010000));
