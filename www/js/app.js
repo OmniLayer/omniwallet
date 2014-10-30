@@ -8,7 +8,8 @@ var app = angular.module('omniwallet', [
   'vr.filters.passwordStrength',
   'ngIdle',
   'reCAPTCHA',
-  'omniConfig'
+  'omniConfig',
+  'omniServices'
 ], function($routeProvider, $locationProvider, $httpProvider) {
 
   if (!$httpProvider.defaults.headers.get)
