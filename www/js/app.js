@@ -1,4 +1,13 @@
 //global config goes here
+angular.module("omniConfig", [])
+  .constant("idleDuration", 10 * 60) // 10 minutes
+  .constant("idleWarningDuration", 2 * 60) // 2 minutes
+  .constant("reCaptchaKey", "----KEY----")
+  .value("SATOSHI_UNIT", new Big(100000000)) //Backend data needs satoshi, use this conversion ratio
+  .value("MIN_MINER_FEE", new Big(0.00010000))
+  .value("MSC_PROTOCOL_COST",0.00025);
+//Define Modules here first
+angular.module("omniServices", ["omniConfig"]);
 
 var app = angular.module('omniwallet', [
   'ngRoute',

@@ -1,4 +1,4 @@
-angular.module("omniServices", ["omniConfig"])
+angular.module("omniServices")
 	.service("WalletAssets",["userService", "$rootScope",
 		function WalletAssetsService($rootScope, userService, SATOSHI_UNIT, MIN_MINER_FEE, MSC_PROTOCOL_COST){
 			var self = this;
