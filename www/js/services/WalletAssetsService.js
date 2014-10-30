@@ -1,5 +1,5 @@
 angular.module("omniServices")
-	.service("WalletAssets",["$rootScope", "userService",
+	.service("WalletAssets",["$rootScope", "userService", "SATOSHI_UNIT", "MIN_MINER_FEE", "MSC_PROTOCOL_COST",
 		function WalletAssetsService($rootScope, userService, SATOSHI_UNIT, MIN_MINER_FEE, MSC_PROTOCOL_COST){
 			var self = this;
 
