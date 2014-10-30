@@ -5,4 +5,5 @@ angular.module("omniConfig", [])
 	.constant("idleWarningDuration", 2 * 60) // 2 minutes
 	.constant("reCaptchaKey", "----KEY----")
 	.value("SATOSHI_UNIT", new Big(100000000)) //Backend data needs satoshi, use this conversion ratio
-	.value("MIN_MINER_FEE",new Big(0.00010000));
+	.value("MIN_MINER_FEE", new Big(0.00010000))
+	.value("MSC_PROTOCOL_COST",0.00025)

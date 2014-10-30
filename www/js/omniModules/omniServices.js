@@ -1,10 +1,10 @@
 angular.module("omniServices", ["omniConfig"])
 	.service("WalletAssets",["userService", "$rootScope",
-		function WalletAssetsService($rootScope, userService, SATOSHI_UNIT, MIN_MINER_FEE){
+		function WalletAssetsService($rootScope, userService, SATOSHI_UNIT, MIN_MINER_FEE, MSC_PROTOCOL_COST){
 			var self = this;
 
 			self.initialize = function(){
-				
+
 				self.currencyList = userService.getCurrencies().filter(function(currency){
 				       return currency.tradable;
 				}); // [{symbol: 'BTC', addresses:[], name: 'BTC'}, {symbol: 'MSC', addresses:[], name: 'MSC'}, {symbol: 'TMSC', addresses:[], name: 'TMSC'}]
@@ -19,12 +19,10 @@ angular.module("omniServices", ["omniConfig"])
 				self.addressList = self.selectedCoin ? userService.getAddressesWithPrivkey(self.selectedCoin.tradableAddresses) : [];
 					  
 				self.selectedAddress = self.addressList[0] || null;
-				  
-				self.calculateTotal = calculateTotal;
 
 				self.minerFees = +MIN_MINER_FEE.valueOf(); //set default miner fees
 				
-				self.calculateTotal(self.minerFees);
+				
 
 				// [ Retrieve Balances ]
 				self.currencyUnit = 'stom'; // satoshi to millibitt
@@ -61,14 +59,9 @@ angular.module("omniServices", ["omniConfig"])
 				    });
 				});
 					  
-					  
-
-				function calculateTotal(minerFees) {
-				    self.mProtocolCost = 0.00025
-				    if (self.selectedCoin && self.selectedCoin.symbol == 'BTC')
-				      self.mProtocolCost = 0.0;
-				    self.totalCost = (+new Big(minerFees).plus(self.mProtocolCost).valueOf()).toFixed(8);
-				}
+				
+				self.calculateTotal(self.minerFees);
+				self.setBitcoinValue(self.getBitcoinValue());  				
 			}
 
 			self.setBalance = function() {
@@ -135,6 +128,13 @@ angular.module("omniServices", ["omniConfig"])
 			      else
 			          return new Big(value).times(SATOSHI_UNIT).valueOf();
 			};
+
+			self.calculateTotal=function(minerFees) {
+			    self.mProtocolCost = MSC_PROTOCOL_COST
+			    if (self.selectedCoin && self.selectedCoin.symbol == 'BTC')
+			    	self.mProtocolCost = 0.0;
+			    self.totalCost = (+new Big(minerFees).plus(self.mProtocolCost).valueOf()).toFixed(8);
+			}
 
 			self.initialize();
 
