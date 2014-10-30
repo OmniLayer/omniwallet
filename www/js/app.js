@@ -7,7 +7,8 @@ var app = angular.module('omniwallet', [
   'ngNumeraljs',
   'vr.filters.passwordStrength',
   'ngIdle',
-  'reCAPTCHA'
+  'reCAPTCHA',
+  'omniConfig'
 ], function($routeProvider, $locationProvider, $httpProvider) {
 
   if (!$httpProvider.defaults.headers.get)
@@ -109,13 +110,13 @@ var app = angular.module('omniwallet', [
   $locationProvider.html5Mode(true).hashPrefix('!');
 });
 
-app.config(function($idleProvider, $keepaliveProvider, reCAPTCHAProvider) {
-  $idleProvider.idleDuration(config.idleDuration);
-  $idleProvider.warningDuration(config.idleWarningDuration);
+app.config(function($idleProvider, $keepaliveProvider, reCAPTCHAProvider, idleDuration, idleWarningDuration, reCaptchaKey) {
+  $idleProvider.idleDuration(idleDuration);
+  $idleProvider.warningDuration(idleWarningDuration);
   // $keepaliveProvider.interval(2);
 
   // required: please use your own key :)
-  reCAPTCHAProvider.setPublicKey(config.reCaptchaKey);
+  reCAPTCHAProvider.setPublicKey(reCaptchaKey);
 
   // optional: gets passed into the Recaptcha.create call
   reCAPTCHAProvider.setOptions({
