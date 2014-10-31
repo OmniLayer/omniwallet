@@ -6,15 +6,15 @@ angular.module("omniControllers")
       $scope.walletAssets =  WalletAssets;
       var transactionGenerationController = $scope.$parent;
       // Enable the transaction for offline wallets
-      $scope.walletAssets.offlineSupport=true;
+      WalletAssets.offlineSupport=true;
 
       $scope.changeValue = function(){
-        $scope.value = $scope.sendAmount*$scope.bitcoinValue;
+        $scope.value = $scope.sendAmount*WalletAssets.bitcoinValue;
         $scope.value = new Big($scope.value).toFixed(3);
         $scope.value = parseFloat($scope.value);
       }
       $scope.changeAmount = function(){
-        $scope.sendAmount = $scope.value/$scope.bitcoinValue;
+        $scope.sendAmount = $scope.value/WalletAssets.bitcoinValue;
         $scope.sendAmount = new Big($scope.sendAmount).toFixed(8);
         $scope.sendAmount = parseFloat($scope.sendAmount);
       }
@@ -23,32 +23,32 @@ angular.module("omniControllers")
         var dustValue = 5757;
         var minerMinimum = 10000;
         var nonZeroValue = 1;
-        var divisible = $scope.selectedCoin.divisible; 
+        var divisible = WalletAssets.selectedCoin.divisible; 
 
         var convertToSatoshi = [
-            $scope.minerFees,
+            WalletAssets.minerFees,
             $scope.sendAmount,
-            $scope.balanceData[0], 
-            $scope.balanceData[1],
-            $scope.totalCost
+            WalletAssets.balanceData[0], 
+            WalletAssets.balanceData[1],
+            WalletAssets.totalCost
           ];
 
         if (!divisible) {
           delete convertToSatoshi[ convertToSatoshi.indexOf( $scope.sendAmount ) ];
-          delete convertToSatoshi[ convertToSatoshi.indexOf( $scope.balanceData[0] ) ];
+          delete convertToSatoshi[ convertToSatoshi.indexOf( WalletAssets.balanceData[0] ) ];
         }
 
-        var convertedValues = $scope.convertDisplayedValue( convertToSatoshi );
+        var convertedValues = WalletAssets.convertDisplayedValue( convertToSatoshi );
 
         var minerFees = +convertedValues[0];
         var sendAmount = divisible ? +convertedValues[1] : +$scope.sendAmount;
         var totalFeeCost = +convertedValues[4];
 
-        var balance = divisible ? +convertedValues[2] : +$scope.balanceData[0];
+        var balance = divisible ? +convertedValues[2] : +WalletAssets.balanceData[0];
         var btcbalance = +convertedValues[3];
 
-        var coin = $scope.selectedCoin.symbol;
-        var address = $scope.selectedAddress;
+        var coin = WalletAssets.selectedCoin.symbol;
+        var address = WalletAssets.selectedAddress;
         var sendTo = $scope.sendTo;
         var marked = $scope.marked;
 
@@ -94,21 +94,21 @@ angular.module("omniControllers")
       
       transactionGenerationController.setModalScope = function($modalScope){
         $modalScope.transactionSuccess = false, $modalScope.transactionError = false, $modalScope.waiting = false, $modalScope.privKeyPass = {};
-        $modalScope.convertSatoshiToDisplayedValue=  $scope.convertSatoshiToDisplayedValue,
-        $modalScope.convertDisplayedValue = $scope.convertDisplayedValue;
-        $modalScope.getDisplayedAbbreviation=  $scope.getDisplayedAbbreviation,
-        $modalScope.sendAmount=  $scope.selectedCoin.divisible ? +$scope.convertDisplayedValue($scope.sendAmount) : +$scope.sendAmount,
+        $modalScope.convertSatoshiToDisplayedValue=  WalletAssets.convertSatoshiToDisplayedValue,
+        $modalScope.convertDisplayedValue = WalletAssets.convertDisplayedValue;
+        $modalScope.getDisplayedAbbreviation=  WalletAssets.getDisplayedAbbreviation,
+        $modalScope.sendAmount=  WalletAssets.selectedCoin.divisible ? +WalletAssets.convertDisplayedValue($scope.sendAmount) : +$scope.sendAmount,
         $modalScope.sendAmountDisplayed = parseFloat($scope.sendAmount);
-        $modalScope.minerFees= +$scope.convertDisplayedValue($scope.minerFees),
+        $modalScope.minerFees= +WalletAssets.convertDisplayedValue(WalletAssets.minerFees),
         $modalScope.sendTo= $scope.sendTo;
-        $modalScope.sendFrom= $scope.selectedAddress;
-        $modalScope.totalCost= +$scope.convertDisplayedValue($scope.totalCost);
-        $modalScope.bitcoinValue = $scope.bitcoinValue;
-        $modalScope.getBitcoinValue = $scope.getBitcoinValue;
-        $modalScope.setBitcoinValue = $scope.setBitcoinValue;
+        $modalScope.sendFrom= WalletAssets.selectedAddress;
+        $modalScope.totalCost= +WalletAssets.convertDisplayedValue(WalletAssets.totalCost);
+        $modalScope.bitcoinValue = WalletAssets.bitcoinValue;
+        $modalScope.getBitcoinValue = WalletAssets.getBitcoinValue;
+        $modalScope.setBitcoinValue = WalletAssets.setBitcoinValue;
         $modalScope.changeValue = $scope.changeValue;
         $modalScope.changeAmount = $scope.changeAmount;
-        $modalScope.selectedCoinSymbol = $scope.walletAssets.selectedCoin.symbol;
+        $modalScope.selectedCoinSymbol = WalletAssets.selectedCoin.symbol;
         $modalScope.value = parseFloat(new Big($scope.value).toFixed(3));
         $modalScope.btcValueChanged = false;
 
@@ -117,15 +117,15 @@ angular.module("omniControllers")
 
       transactionGenerationController.generateData = function(){
         return {
-          from:$scope.selectedAddress,
+          from:WalletAssets.selectedAddress,
           transactionType:0,
           transactionData:{
             transaction_version:0,
-            transaction_from: $scope.selectedAddress,
-            currency_identifier:$scope.selectedCoin.id,
-            amount_to_transfer : $scope.selectedCoin.divisible ? +$scope.convertDisplayedValue($scope.sendAmount) : +$scope.sendAmount,
+            transaction_from: WalletAssets.selectedAddress,
+            currency_identifier:WalletAssets.selectedCoin.id,
+            amount_to_transfer : WalletAssets.selectedCoin.divisible ? +WalletAssets.convertDisplayedValue($scope.sendAmount) : +$scope.sendAmount,
             transaction_to: $scope.sendTo,
-            fee: $scope.convertDisplayedValue($scope.minerFees),
+            fee: WalletAssets.convertDisplayedValue(WalletAssets.minerFees),
             marker: $scope.marked
           }
         }; 
