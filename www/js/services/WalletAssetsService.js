@@ -1,7 +1,8 @@
 angular.module("omniServices")
-	.service("WalletAssets",["$rootScope", "userService", "AddressManager", "SATOSHI_UNIT", "MIN_MINER_FEE", "MSC_PROTOCOL_COST",
-		function WalletAssetsService($rootScope, userService, AddressManager, SATOSHI_UNIT, MIN_MINER_FEE, MSC_PROTOCOL_COST){
+	.service("WalletAssets",["$rootScope", "$injector", "userService", "AddressManager", "SATOSHI_UNIT", "MIN_MINER_FEE", "MSC_PROTOCOL_COST",
+		function WalletAssetsService($rootScope, $injector, userService, AddressManager, SATOSHI_UNIT, MIN_MINER_FEE, MSC_PROTOCOL_COST){
 			var self = this;
+			var addrListBal = [];
 
 			self.initialize = function(){
 
@@ -28,8 +29,7 @@ angular.module("omniServices")
 				self.currencyUnit = 'stom'; // satoshi to millibitt
 				self.amountUnit = 'mtow';
 				self.balanceData = [0];
-				var addrListBal = [];
-				// fill the addrBalanceList with all the addresses on the wallet for which we've got private keys.
+				// fill the addrListBal with all the addresses on the wallet for which we've got private keys.
 				userService.getAddressesWithPrivkey().forEach(function(e, i) {
 				    var balances = [
 				      {
