@@ -18,21 +18,19 @@ from sqltools import *
 from recaptcha.client import captcha
 import config
 
-#For wallets and session store you can switch between disk and the database
-#Set to 1 to use local storage/file system, Set to 0 to use database
-LOCALDEVBYPASSDB=0
 
 ACCOUNT_CREATION_DIFFICULTY = '0400'
 LOGIN_DIFFICULTY = '0400'
 
-SERVER_SECRET = 'SoSecret!'
-SESSION_SECRET = 'SuperSecretSessionStuff'
 data_dir_root = os.environ.get('DATADIR')
 
 store_dir = data_dir_root + '/sessions/'
 session_store = FilesystemStore(store_dir) # TODO: Need to roll this into a SessionInterface so multiple services can hit it easily
 
-email_domain = socket.gethostname()
+if DOMAIN is None:
+  email_domain = socket.gethostname()
+else:
+  email_domain = DOMAIN
 email_from = "noreply@"+str(email_domain)
 
 app = Flask(__name__)
