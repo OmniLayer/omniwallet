@@ -28,13 +28,13 @@
                             <div class="col-xs-6">
                                 <div class="input-group">
                                     <span class="input-group-addon"> Currency Id for sale: </span>
-                                    <input name="saleCurrency" type="number" ng-model="saleCurrency" class="form-control" placeholder="Select a currency to sell" step="1" min="1" ensure-integer ensure-over="saleCurrency" ensure-if="true" ng-change="setSelectedCoin(saleCurrency)" required>
+                                    <input name="saleCurrency" type="number" ng-model="saleCurrency" class="form-control" placeholder="Select a currency to sell" step="1" min="1" ensure-integer ensure-over="saleCurrency" ensure-if="true" max="4294967295" required>
                                 </div>
                             </div>
                             <div class="col-xs-6">
                                 <div class="input-group">
                                     <span class="input-group-addon"> Currency Id desired: </span>
-                                    <input name="desiredCurrency" type="number" ng-model="desiredCurrency" class="form-control" placeholder="Select a currency to receive" step="1" min="1" ensure-integer ensure-over="desiredCurrency" ensure-if="true" required>
+                                    <input name="desiredCurrency" type="number" ng-model="desiredCurrency" class="form-control" placeholder="Select a currency to receive" step="1" min="1" ensure-integer ensure-over="desiredCurrency" ensure-if="true" max="4294967295" required>
                                 </div>
 
                             </div>
@@ -45,8 +45,7 @@
                             <div class="col-xs-6">
                                 <div class="input-group">
                                     <span class="input-group-addon"> Amount for sale: </span>
-                                    <input name="saleAmount" type="number" ng-model="walletAssets.minerFees" class="form-control" placeholder="walletAssets.amountPlaceholderValue suggested minimum" step="walletAssets.amountPlaceholderStep" min="walletAssets.amountPlaceholderMin" required>
-                                    <span class="input-group-addon"> Available {{walletAssets.getDisplayedAbbreviation()}}: {{ walletAssets.balanceData[0] }} BTC </span>
+                                    <input name="saleAmount" type="number" ng-model="saleAmount" class="form-control"  required>
                                 </div>
                             </div>
                             <div class="col-xs-6">
