@@ -47,7 +47,7 @@ def generate_tx(tx_type):
         elif request.form[field] == '':
             return jsonify({ 'status': 403, 'data': 'Empty field in request form '+field })
 
-    if 'testnet' in request.form and ( bool(int(request.form['testnet'])) == True):
+    if 'testnet' in request.form and ( bool(request.form['testnet']) == True):
         global testnet
         testnet =True
         global magicbyte
