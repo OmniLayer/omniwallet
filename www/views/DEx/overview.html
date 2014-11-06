@@ -1,15 +1,15 @@
-<div class="sidecar col-xs-2" ng-controller="SidecarController" ng-init="setView('wallet')>"
+<div class="sidecar col-xs-2" ng-controller="SidecarController" ng-init="setView('wallet')">
     <div ng-include="templates['sidecar']"></div>
 </div>
 
-<div class="col-xs-10">
-<div class="panel-default">
-  <div class="text-left panel-body om-title" >
-    DEx Phase 2
-  </div>
-  <div class="row">
-      <a href="/dex/sale" class="btn btn-primary btn-sm" ng-show="isLoggedIn">Sale</a>
+<div class="col-xs-10" ng-controller="DExOverviewController">
+    <div class="panel-default">
+        <div class="text-left panel-body om-title">
+            DEx Phase 2
+        </div>
+        <div class="row">
+            <a href="/dex/sale" class="btn btn-primary btn-sm" ng-show="isLoggedIn">Sale</a>
+        </div>
+
     </div>
-     
-</div>
 </div>
