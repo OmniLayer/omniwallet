@@ -15,9 +15,9 @@ angular.module("omniControllers")
 			$scope.validateDexSaleForm = function(){
 				// TODO: Validations
 				ModalManager.openConfirmationModal({
-					title:"Confirm DEx Sale",
 					dataTemplate: '/views/modals/partials/dex_sale.html',
 					scope: {
+						title:"Confirm DEx Sale",
 						address:WalletAssets.selectedAddress,
 						saleCurrency:$scope.saleCurrency,
 						saleAmount:$scope.saleAmount,
@@ -25,22 +25,18 @@ angular.module("omniControllers")
 						desiredAmount:$scope.desiredAmount,
 						action:$scope.action,
 						totalCost:WalletAssets.totalCost,
+						confirmText: "Create Sale",
 						convertSatoshiToDisplayedValue:WalletAssets.convertSatoshiToDisplayedValue
 					},
-					fromAddress: WalletAssets.selectedAddress,
-					confirmText: "Create Sale",
-					confirm: function(){
-						var data = TransactionManager.prepareData({
-							transaction_version:0,
-							sale_currency_id:$scope.saleCurrency,
-							sale_amount:$scope.saleAmount,
-							desired_currency:$scope.desiredCurrency,
-							desired_amount:$scope.desiredAmount,
-							action:$scope.action,
-						},WalletAssets.selectedAddress)
-
-						return TransactionManager.processTransaction(data,WalletAssets.offline)
-					}
+					transactionData:{
+						transaction_version:0,
+						sale_currency_id:$scope.saleCurrency,
+						sale_amount:$scope.saleAmount,
+						desired_currency:$scope.desiredCurrency,
+						desired_amount:$scope.desiredAmount,
+						action:$scope.action,
+					},
+					transactionManager: $scope.DExSaleTransaction
 				})
 			};
 		}])
