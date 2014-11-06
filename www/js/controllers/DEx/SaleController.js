@@ -31,9 +31,9 @@ angular.module("omniControllers")
 						transaction_version:0,
 						sale_currency_id:$scope.saleCurrency,
 						sale_amount:$scope.saleAmount,
-						desired_currency:$scope.desiredCurrency,
+						desired_currency_id:$scope.desiredCurrency,
 						desired_amount:$scope.desiredAmount,
-						action:$scope.action,
+						action:$scope.action
 					},
 					transactionManager: $scope.DExSaleTransaction
 				})
