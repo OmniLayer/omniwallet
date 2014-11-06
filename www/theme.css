@@ -345,7 +345,9 @@ span#recaptcha_privacy {
   padding-top: 5px !important;
   text-align: center;
 }
-
+#header .nav-icons>a{
+  display: inline-block;
+}
 #header .navbar-default{
   background-color: #fcfbfb;
 }
@@ -382,15 +384,23 @@ span#recaptcha_privacy {
 #header .navbar-nav>li:hover>a {
   color: #6ba8e7;
 }
-#header .navbar .divider-vertical-lg {
+#header .navbar li.divider-vertical-lg {
   height: 75px !important;
   margin: 15px 0px;
   border-right: 1px solid #e6e6e6;
+}
+#header .navbar li:hover.divider-vertical-lg {
+  background-color: transparent;
+  box-shadow: 0px;
 }
 #header .navbar .divider-vertical {
   height: 50px !important;
   margin: 30px 0px;
   border-right: 1px solid #e6e6e6;
+}
+#header .navbar li:hover.divider-vertical {
+  background-color: transparent;
+  box-shadow: 0px;
 }
 #header .navbar-right {
   margin-right:15px !important;
