@@ -1,10 +1,9 @@
 angular.module("omniControllers")
-	.controller("DExSaleController", ["$scope","TransactionManager","WalletAssets","ModalManager", "AccountManager",
-		function DExSaleController($scope, TransactionManager, WalletAssets, ModalManager, AccountManager ){
+	.controller("DExSaleController", ["$scope","TransactionManager","WalletAssets","ModalManager", 
+		function DExSaleController($scope, TransactionManager, WalletAssets, ModalManager ){
 			$scope.walletAssets = WalletAssets;
 
 			$scope.DExSaleTransaction = new TransactionManager(21);
-			$scope.setEcosystem = AccountManager.setEcosystem;
 
 			$scope.setSelectedCoin = function(currencyId){
 				WalletAssets.currencyList.forEach(function(currency){
