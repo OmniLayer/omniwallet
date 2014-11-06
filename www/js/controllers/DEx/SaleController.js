@@ -25,8 +25,7 @@ angular.module("omniControllers")
 						desiredAmount:$scope.desiredAmount,
 						action:$scope.action,
 						totalCost:WalletAssets.totalCost,
-						confirmText: "Create Sale",
-						convertSatoshiToDisplayedValue:WalletAssets.convertSatoshiToDisplayedValue
+						confirmText: "Create Sale"
 					},
 					transactionData:{
 						transaction_version:0,
