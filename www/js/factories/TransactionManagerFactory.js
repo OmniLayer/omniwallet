@@ -1,6 +1,6 @@
 angular.module("omniFactories")
-    .factory("TransactionManager", ["$q", "userService", "TransactionGenerator", 
-        function TransactionManagerFactory($q, userService, TransactionGenerator) {
+    .factory("TransactionManager", ["$q", "userService", "TransactionGenerator", "WalletAssets",
+        function TransactionManagerFactory($q, userService, TransactionGenerator, WalletAssets) {
 
             var TransactionManager = function(txType) {
                 var self = this;
@@ -19,6 +19,8 @@ angular.module("omniFactories")
                         pubKey = privKey.getPubKeyHex();
                     }
                     rawdata['pubkey'] = pubKey;
+                    rawdata['fee']=WalletAssets.minerFees;
+                    rawdata['transaction_from'] = from;
                     return rawdata; // followed by call to pushTransaction(data,pubkey);
                 };
 
