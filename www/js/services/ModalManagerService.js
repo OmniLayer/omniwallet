@@ -9,8 +9,8 @@ angular.module("omniServices")
                     controller: function ConfirmationModalController($scope, $modalInstance, walletAssets, modalConfig, modalManager) {
                         angular.extend($scope, modalConfig.scope);
 
-                        $scope.bodyTemplate = $scope.bodyTemplate || "/views/modals/confirmation.html";
-                        $scope.footerTemplate = $scope.footerTemplate || "/views/modals/partials/confirmation_footer.html";
+                        $scope.bodyTemplate = modalConfig.bodyTemplate || "/views/modals/confirmation.html";
+                        $scope.footerTemplate = modalConfig.footerTemplate || "/views/modals/partials/confirmation_footer.html";
                         $scope.dataTemplate = modalConfig.dataTemplate || "";
 
                         $scope.signOffline = walletAssets.offline;
@@ -18,14 +18,16 @@ angular.module("omniServices")
                         $scope.confirm = function() {
                             $scope.clicked = true;
                             $scope.waiting = true;
-                            modalConfig.confirm().then(function(result){
+                            var data = modalConfig.transactionManager.prepareData(modalConfig.transactionData,walletAssets.selectedAddress);
+
+                            modalConfig.transactionManager.processTransaction(data,walletAssets.offline).then(function(result){
                             	angular.extend($scope,result)
                             }, function(errorData){
                             	angular.extend($scope,errorData)
                             });
                         };
 
-                        $scope.fromAddress = modalConfig.fromAddress;
+                        $scope.fromAddress = walletAssets.selectedAddress;
 
                         $scope.openBroadcastTransactionForm = function(address) {
                             modalManager.openBroadcastTransactionModal(address);
