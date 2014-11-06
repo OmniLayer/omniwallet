@@ -17,9 +17,9 @@ angular.module("omniServices")
 			        self.selectedCoin = e;
 			    });
 					  
-				self.addressList = self.selectedCoin ? userService.getAddressesWithPrivkey(self.selectedCoin.tradableAddresses) : [];
-					  
-				self.selectedAddress = self.addressList[0] || null;
+				self.addressListByCoin = self.selectedCoin ? userService.getTradableAddresses(self.selectedCoin.tradableAddresses,true) : [];
+				self.addressList = userService.getTradableAddresses(null,true);
+				self.selectedAddress = self.addressListByCoin[0] || null;
 
 				self.minerFees = +MIN_MINER_FEE.valueOf(); //set default miner fees
 				
@@ -30,7 +30,7 @@ angular.module("omniServices")
 				self.amountUnit = 'mtow';
 				self.balanceData = [0];
 				// fill the addrListBal with all the addresses on the wallet for which we've got private keys.
-				userService.getAddressesWithPrivkey().forEach(function(e, i) {
+				userService.getAddressesWithPrivkey().concat(userService.getAddressesWithPubkey()).forEach(function(e, i) {
 				    var balances = [
 				      {
 				        symbol: 'MSC',
@@ -137,22 +137,15 @@ angular.module("omniServices")
 			}
 
 			self.initialize();
-
-			var updateData = function(){
-			    self.addressList = self.selectedCoin ? userService.getAddressesWithPrivkey(self.selectedCoin.tradableAddresses) : [];
-			    self.selectedAddress = self.addressList[0] || null;
+			
+			$rootScope.$watch(function(){return self.selectedCoin;}, function() {
+			    self.addressListByCoin = self.selectedCoin ? userService.getTradableAddresses(self.selectedCoin.tradableAddresses) : [];
+			    self.selectedAddress = self.addressListByCoin[0] || null;
 			    self.setBalance();
 			    self.minerFees = +MIN_MINER_FEE.valueOf(); // reset miner fees
 			    self.calculateTotal(self.minerFees);
-			}
-			
-			$rootScope.$watch(function(){return self.selectedCoin;}, function() {
-			    updateData()
 			});
 
-			$rootScope.$watch(function(){return self.offlineSupport;}, function() {
-			    updateData()
-			});
 			$rootScope.$watch(function(){return self.selectedAddress;}, function() {
 				self.setBalance();
 			    var pubkey = userService.getAddress(self.selectedAddress).pubkey;
