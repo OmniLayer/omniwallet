@@ -1,6 +1,7 @@
 //Define Modules here first
 angular.module("omniFactories", ["omniConfig"]);
 angular.module("omniServices", ["omniConfig", "omniFactories"]);
+angular.module("omniControllers", ["omniConfig", "omniFactories", "omniServices"]);
 
 var app = angular.module('omniwallet', [
   'ngRoute',
@@ -12,7 +13,8 @@ var app = angular.module('omniwallet', [
   'reCAPTCHA',
   'omniConfig',
   'omniFactories',
-  'omniServices'
+  'omniServices',
+  'omniControllers'
 ], function($routeProvider, $locationProvider, $httpProvider) {
 
   if (!$httpProvider.defaults.headers.get)
