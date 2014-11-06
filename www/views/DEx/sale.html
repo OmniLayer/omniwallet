@@ -8,15 +8,6 @@
     <div class="row">
         <div class="row panel-default">
             <div class="col-xs-9 text-left panel-body om-title">Create DEx Sale</div>
-            <div class="col-xs-3" style="padding-top: 20px">
-                <div class="input-group pull-right">
-                    <span class="input-group-addon"> Environment: </span>
-                    <select name="ecosystem" class="form-control" ng-model="account.ecosystem" disabled="">
-                        <option value="1"> Production </option>
-                        <option value="2"> Testing </option>
-                    </select>
-                </div>
-            </div>
         </div>
         <div class="row">
             <div class="col-xs-12">
@@ -35,30 +26,35 @@
                     <div class="form-group">
                         <div class="row">
                             <div class="col-xs-6">
-                              <span class="input-group-addon"> Currency Id for sale: </span>
-                              <input name="saleCurrency" type="number" ng-model="saleCurrency" class="form-control" placeholder="Select a currency to sell" step="1" min="1" ensure-integer ensure-over="saleCurrency" ng-change="setSelectedCoin(saleCurrency)" required>
+                                <div class="input-group">
+                                    <span class="input-group-addon"> Currency Id for sale: </span>
+                                    <input name="saleCurrency" type="number" ng-model="saleCurrency" class="form-control" placeholder="Select a currency to sell" step="1" min="1" ensure-integer ensure-over="saleCurrency" ng-change="setSelectedCoin(saleCurrency)" required>
+                                </div>
                             </div>
                             <div class="col-xs-6">
-                              <span class="input-group-addon"> Currency Id desired: </span>
-                              <input name="desiredCurrency" type="number" ng-model="desiredCurrency" class="form-control" placeholder="Select a currency to receive" step="1" min="1" ensure-integer ensure-over="desiredCurrency" required>
+                                <div class="input-group">
+                                    <span class="input-group-addon"> Currency Id desired: </span>
+                                    <input name="desiredCurrency" type="number" ng-model="desiredCurrency" class="form-control" placeholder="Select a currency to receive" step="1" min="1" ensure-integer ensure-over="desiredCurrency" required>
+                                </div>
+
                             </div>
                         </div>
                     </div>
                     <div class="form-group">
                         <div class="row">
-                          <div class="col-xs-6">
-                            <div class="input-group">
-                                <span class="input-group-addon"> Amount for sale: </span>
-                                <input name="saleAmount" type="number" ng-model="walletAssets.minerFees" class="form-control" placeholder="walletAssets.amountPlaceholderValue suggested minimum" step="walletAssets.amountPlaceholderStep" min="walletAssets.amountPlaceholderMin" required>
-                                <span class="input-group-addon"> Available {{walletAssets.getDisplayedAbbreviation()}}: {{ walletAssets.balanceData[0] }} BTC </span>
+                            <div class="col-xs-6">
+                                <div class="input-group">
+                                    <span class="input-group-addon"> Amount for sale: </span>
+                                    <input name="saleAmount" type="number" ng-model="walletAssets.minerFees" class="form-control" placeholder="walletAssets.amountPlaceholderValue suggested minimum" step="walletAssets.amountPlaceholderStep" min="walletAssets.amountPlaceholderMin" required>
+                                    <span class="input-group-addon"> Available {{walletAssets.getDisplayedAbbreviation()}}: {{ walletAssets.balanceData[0] }} BTC </span>
+                                </div>
                             </div>
-                          </div>
-                          <div class="col-xs-6">
-                            <div class="input-group">
-                                <span class="input-group-addon"> Amount desired: </span>
-                                <input name="desiredAmount" type="number" ng-model="desiredAmount" class="form-control" required>
+                            <div class="col-xs-6">
+                                <div class="input-group">
+                                    <span class="input-group-addon"> Amount desired: </span>
+                                    <input name="desiredAmount" type="number" ng-model="desiredAmount" class="form-control" required>
+                                </div>
                             </div>
-                          </div>
                         </div>
                     </div>
                     <div class="form-group">
