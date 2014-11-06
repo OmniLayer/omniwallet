@@ -122,7 +122,7 @@ angular.module("omniFactories")
                                 error: errorData.message ? 'Server error: ' + errorData.message : errorData.data ? 'Server error: ' + errorData.data : 'Unknown Server Error'
                             })
                         });
-                    return deferred;
+                    return deferred.promise;
                 };
 
                 self.parseScript = function(script) {
