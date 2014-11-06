@@ -25,7 +25,7 @@ exodus_address=mainnet_exodus_address
 def generate_tx(tx_type):
 
     #update this to support more transactions
-    supported_transactions = [50,51, 0]
+    supported_transactions = [50,51, 0, 21]
 
     if tx_type not in supported_transactions:
         return jsonify({ 'status': 400, 'data': 'Unsupported transaction type '+str(tx_type) })
@@ -41,6 +41,9 @@ def generate_tx(tx_type):
         expected_fields+=['ecosystem', 'property_type', 'previous_property_id', 'property_category', 'property_subcategory', 'property_name', 'property_url', 'property_data', 'currency_identifier_desired', 'number_properties', 'deadline', 'earlybird_bonus', 'percentage_for_issuer']
     elif tx_type == 0:
         expected_fields+=['currency_identifier', 'amount_to_transfer', 'transaction_to']
+    elif tx_type == 21:
+        expected_fields+=['sale_currency_id','sale_amount','desired_currency_id','desired_amount','action']
+
     for field in expected_fields:
         if field not in request.form:
             return jsonify({ 'status': 403, 'data': 'No field in request form '+field })
@@ -83,6 +86,16 @@ def generate_tx(tx_type):
             packets = construct_packets( tx0bytes[0], tx0bytes[1], request.form['transaction_from'])
             unsignedhex= build_transaction( request.form['fee'], request.form['pubkey'], packets[0], packets[1], packets[2], request.form['transaction_from'], request.form['transaction_to'])
             #DEBUG print tx0bytes, packets, unsignedhex
+            return jsonify({ 'status': 200, 'unsignedhex': unsignedhex[0] , 'sourceScript': unsignedhex[1] });
+        except Exception as e:
+            error=jsonify({ 'status': 502, 'data': 'Unspecified error '+str(e)}) 
+            return error
+    elif tx_type == 21:
+        try:
+            tx21bytes = prepare_txbytes(txdata)
+            packets = construct_packets( tx21bytes[0], tx21bytes[1], request.form['transaction_from'])
+            unsignedhex= build_transaction( request.form['fee'], request.form['pubkey'], packets[0], packets[1], packets[2], request.form['transaction_from'])
+            #DEBUG print tx21bytes, packets, unsignedhex
             return jsonify({ 'status': 200, 'unsignedhex': unsignedhex[0] , 'sourceScript': unsignedhex[1] });
         except Exception as e:
             error=jsonify({ 'status': 502, 'data': 'Unspecified error '+str(e)}) 
@@ -132,6 +145,14 @@ def prepare_txdata(txtype,form):
         elif txtype == 0:
             txdata.append(int(form['currency_identifier']))
             txdata.append(int(form['amount_to_transfer']))
+            
+            return txdata
+        elif txtype == 21:
+            txdata.append(int(form['sale_currency_id']))
+            txdata.append(int(form['sale_amount']))
+            txdata.append(int(form['desired_currency_id']))
+            txdata.append(int(form['desired_amount']))
+            txdata.append(int(form['action']))
             
             return txdata
         return [] #other txes are unimplemented
@@ -268,7 +289,29 @@ def prepare_txbytes(txdata):
                     tx_type_bytes + 
                     currency_id_bytes + 
                     amount_bytes)
-                                                                                                                                         
+    elif txdata[1] == 21:
+        sale_currency_id_bytes = hex(txdata[2])[2:].rstrip('L').rjust(8,"0")  # 4 bytes
+        sale_amount_bytes = hex(txdata[3])[2:].rstrip('L').rjust(16,"0")  # 8 bytes
+        desired_currency_id_bytes = hex(txdata[4])[2:].rstrip('L').rjust(8,"0")  # 4 bytes
+        desired_amount_bytes = hex(txdata[5])[2:].rstrip('L').rjust(16,"0")  # 8 bytes
+        action_bytes = hex(txdata[6])[2:].rstrip('L').rjust(2,"0") # 1 byte
+
+        total_bytes = (len(tx_ver_bytes) + 
+                        len(tx_type_bytes) + 
+                        len(sale_currency_id_bytes) + 
+                        len(sale_amount_bytes) +
+                        len(desired_currency_id_bytes) + 
+                        len(desired_amount_bytes) +
+                        len(action) )/2
+    
+        byte_stream = (tx_ver_bytes + 
+                        tx_type_bytes + 
+                        sale_currency_id_bytes + 
+                        sale_amount_bytes +
+                        desired_currency_id_bytes + 
+                        desired_amount_bytes +
+                        action )  
+
     return [byte_stream, total_bytes]
 
 def construct_packets(byte_stream, total_bytes, from_address):
