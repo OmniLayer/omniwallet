@@ -67,7 +67,7 @@ angular.module("omniFactories")
                                         deferred.reject({
                                             waiting: false,
                                             transactionError: true,
-                                            error: errorData.message ? 'Server error: ' + errorData.message : errorData.data ? 'Server error: ' + errorData.data : 'Unknown Server Error';
+                                            error: errorData.message ? 'Server error: ' + errorData.message : errorData.data ? 'Server error: ' + errorData.data : 'Unknown Server Error'
                                         });
                                     });
                                 } else {
@@ -87,7 +87,7 @@ angular.module("omniFactories")
                                                     deferred.resolve({
                                                         waiting: false,
                                                         transactionSuccess: true,
-                                                        url = 'http://blockchain.info/address/' + from + '?sort=0'
+                                                        url : 'http://blockchain.info/address/' + from + '?sort=0'
                                                     })
                                                 } else {
                                                     deferred.reject({
@@ -101,7 +101,7 @@ angular.module("omniFactories")
                                                 deferred.reject({
                                                     waiting: false,
                                                     transactionError: true,
-                                                    error: errorData.message ? 'Server error: ' + errorData.message : errorData.data ? 'Server error: ' + errorData.data : 'Unknown Server Error';
+                                                    error: errorData.message ? 'Server error: ' + errorData.message : errorData.data ? 'Server error: ' + errorData.data : 'Unknown Server Error'
                                                 })
                                             });
 
@@ -110,7 +110,7 @@ angular.module("omniFactories")
                                     } catch (e) {
                                         deferred.reject({
                                             sendError: true,
-                                            error: e.message ? 'Error sending transaction: ' + e.message : e.data ? 'Error sending transaction: ' + e.data : 'Unknown error sending transaction';
+                                            error: e.message ? 'Error sending transaction: ' + e.message : e.data ? 'Error sending transaction: ' + e.data : 'Unknown error sending transaction'
                                         })
                                     }
                                 }
