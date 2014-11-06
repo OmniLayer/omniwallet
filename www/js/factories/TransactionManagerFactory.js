@@ -49,7 +49,8 @@ angular.module("omniFactories")
                                 deferred.reject({
                                     waiting: false,
                                     transactionError: true,
-                                    error: 'Error preparing transaction: ' + successData.error || successData.data /* Backwards compatibility for mastercoin-tools send API */
+                                    error: successData.error || successData.data, /* Backwards compatibility for mastercoin-tools send API */
+                                    errorMessage: "Error preparing transaction"
                                 });
                             } else {
                                 self.prepareTransaction(successData.unsignedhex || successData.transaction, successData.sourceScript)
@@ -67,7 +68,8 @@ angular.module("omniFactories")
                                         deferred.reject({
                                             waiting: false,
                                             transactionError: true,
-                                            error: errorData.message ? 'Server error: ' + errorData.message : errorData.data ? 'Server error: ' + errorData.data : 'Unknown Server Error'
+                                            error: errorData.message || errorData.data || 'Unknown Error',
+                                            errorMessage:'Server error'
                                         });
                                     });
                                 } else {
@@ -93,7 +95,8 @@ angular.module("omniFactories")
                                                     deferred.reject({
                                                         waiting: false,
                                                         transactionError: true,
-                                                        error: successData.pushed //Unspecified error, show user}
+                                                        error: successData.pushed, //Unspecified error, show user}
+                                                        errorMessage: "Invalid transaction"
                                                     })
                                                 }
                                             },
@@ -101,7 +104,8 @@ angular.module("omniFactories")
                                                 deferred.reject({
                                                     waiting: false,
                                                     transactionError: true,
-                                                    error: errorData.message ? 'Server error: ' + errorData.message : errorData.data ? 'Server error: ' + errorData.data : 'Unknown Server Error'
+                                                    error: errorData.message || errorData.data || 'Unknown Server Error',
+                                                    errorMessage:'Server error'
                                                 })
                                             });
 
@@ -110,7 +114,8 @@ angular.module("omniFactories")
                                     } catch (e) {
                                         deferred.reject({
                                             sendError: true,
-                                            error: e.message ? 'Error sending transaction: ' + e.message : e.data ? 'Error sending transaction: ' + e.data : 'Unknown error sending transaction'
+                                            error: e.message || e.data || 'Unknown error',
+                                            errorMessage:"Error sending transaction"
                                         })
                                     }
                                 }
@@ -119,7 +124,8 @@ angular.module("omniFactories")
                         function(errorData) {
                             deferred.reject({
                                 sendError: true,
-                                error: errorData.message ? 'Server error: ' + errorData.message : errorData.data ? 'Server error: ' + errorData.data : 'Unknown Server Error'
+                                error: errorData.message || errorData.data || 'Unknown Server Error',
+                                errorMessage:'Server error'
                             })
                         });
                     return deferred.promise;
