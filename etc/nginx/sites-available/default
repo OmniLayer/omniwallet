@@ -18,6 +18,11 @@
 ##
 
 server {
+        #uncomment following three lines if you're server is behind a proxied loadbalancer
+        #set_real_ip_from  172.16.0.0/12;
+        #real_ip_header    X-Forwarded-For;
+        #real_ip_recursive on;
+
         listen 80 default_server;
         listen [::]:80 default_server ipv6only=on;
 
@@ -53,13 +58,13 @@ server {
         # Make site accessible from http://localhost/
         server_name localhost;
 
-        set $WEBSOCKET_PORT 1091;
-        location /socket.io/ {
-                proxy_pass http://localhost:1091;
-                proxy_http_version 1.1;
-                proxy_set_header Upgrade $http_upgrade;
-                proxy_set_header Connection "upgrade";
-        }
+        #set $WEBSOCKET_PORT 1091;
+        #location /socket.io/ {
+        #        proxy_pass http://localhost:1091;
+        #        proxy_http_version 1.1;
+        #        proxy_set_header Upgrade $http_upgrade;
+        #        proxy_set_header Connection "upgrade";
+        #}
 
         location ~ "^/v1/transaction/values.json$" {
                 alias /var/lib/omniwallet/www/values.json;
