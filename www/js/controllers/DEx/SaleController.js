@@ -7,7 +7,7 @@ angular.module("omniControllers")
 
 			$scope.setSelectedCoin = function(currencyId){
 				WalletAssets.currencyList.forEach(function(currency){
-					if(currency.id == currencyId)
+					if(currency.id == currencyId.toString())
 						WalletAssets.selectedCoin = currency;
 				});
 			}
