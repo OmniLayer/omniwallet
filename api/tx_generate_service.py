@@ -15,6 +15,11 @@ app = Flask(__name__)
 app.debug = True
 
 HEXSPACE_SECOND='21'
+mainnet_exodus_address='1EXoDusjGwvnjZUyKkxZ4UHEf77z6A5S4P'
+testnet_exodus_address='mpexoDuSkGGqvqrkrjiFng38QPkJQVFyqv'
+magicbyte=0
+testnet=False
+exodus_address=mainnet_exodus_address
 
 @app.route('/<int:tx_type>', methods=['POST'])
 def generate_tx(tx_type):
@@ -41,6 +46,14 @@ def generate_tx(tx_type):
             return jsonify({ 'status': 403, 'data': 'No field in request form '+field })
         elif request.form[field] == '':
             return jsonify({ 'status': 403, 'data': 'Empty field in request form '+field })
+
+    if 'testnet' in request.form and ( bool(int(request.form['testnet'])) == True):
+        global testnet
+        testnet =True
+        global magicbyte
+        magicbyte = 111
+        global exodus_address
+        exodus_address=testnet_exodus_address
 
     txdata = prepare_txdata(tx_type, request.form)
     if tx_type == 50:
@@ -345,7 +358,7 @@ def construct_packets(byte_stream, total_bytes, from_address):
         while invalid:
             obfuscated_randbyte = obfuscated[:-2] + hex(random.randint(0,255))[2:].rjust(2,"0").upper()
             #set the last byte to something random in case we generated an invalid pubkey
-            potential_data_address = pybitcointools.pubkey_to_address(obfuscated_randbyte)
+            potential_data_address = pybitcointools.pubkey_to_address(obfuscated_randbyte, magicbyte)
             
             if bool(conn.validateaddress(potential_data_address).isvalid):
                 final_packets[i] = obfuscated_randbyte
@@ -423,7 +436,7 @@ def build_transaction(miner_fee_satoshis, pubkey,final_packets, total_packets, t
                         break
 
 
-    validnextoutputs = { "1EXoDusjGwvnjZUyKkxZ4UHEf77z6A5S4P": 0.00005757 }
+    validnextoutputs = { exodus_address: 0.00005757 }
     if to_address != None:
         validnextoutputs[to_address]=0.00005757 #Add for simple send
     
@@ -452,14 +465,14 @@ def build_transaction(miner_fee_satoshis, pubkey,final_packets, total_packets, t
     for i in range(total_outs):
         hex_string = "51" + HEXSPACE_FIRST + pubkey
         asm_string = "1 " + pubkey
-        addresses = [ pybitcointools.pubkey_to_address(pubkey)]
+        addresses = [ pybitcointools.pubkey_to_address(pubkey, magicbyte)]
         n_count = len(validnextoutputs)+i
         total_sig_count = 1
         #DEBUG print [i,'added string', ordered_packets[i]]
         for packet in ordered_packets[i]:
             hex_string = hex_string + HEXSPACE_SECOND + packet.lower() 
             asm_string = asm_string + " " + packet.lower()
-            addresses.append(pybitcointools.pubkey_to_address(packet))
+            addresses.append(pybitcointools.pubkey_to_address(packet, magicbyte))
             total_sig_count = total_sig_count + 1
         hex_string = hex_string + "5" + str(total_sig_count) + "ae"
         asm_string = asm_string + " " + str(total_sig_count) + " " + "OP_CHECKMULTISIG"
