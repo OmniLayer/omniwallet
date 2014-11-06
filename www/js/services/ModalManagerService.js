@@ -1,7 +1,6 @@
 angular.module("omniServices")
-    .service("ModalManager", ["$modal", "WalletAssets", "TransactionGenerator"
-
-        function ModalManagerService($modal, WalletAssets) {
+    .service("ModalManager", ["$modal", "WalletAssets", "TransactionGenerator",
+        function ModalManagerService($modal, WalletAssets, TransactionGenerator) {
             var self = this;
 
             self.openConfirmationModal = function(modalConfig) {
@@ -64,7 +63,7 @@ angular.module("omniServices")
                 });
             };
 
-            self.openBroadcastTransactionModal = function(address) {
+            self.openBroadcastArmoryOfflineTransactionModal = function(address) {
 
                 self.modalInstance = $modal.open({
                     templateUrl: "/views/modals/broadcast.html",
@@ -89,9 +88,38 @@ angular.module("omniServices")
                     },
                     resolve: {
                         broadcastTransaction: function() {
-                            return f
+                            return function(signedHex, from, $modalScope){
+                              TransactionGenerator.getArmoryRaw(signedHex).then(function(result){
+                                var finalTransaction = result.data.rawTransaction;
+                              
+                                //Showing the user the transaction hash doesn't work right now
+                                //var transactionHash = Bitcoin.Util.bytesToHex(transaction.getHash().reverse());
 
-
+                                TransactionGenerator.pushSignedTransaction(finalTransaction).then(function(successData) {
+                                  var successData = successData.data;
+                                  if (successData.pushed.match(/submitted|success/gi) != null) {
+                                    $modalScope.waiting = false;
+                                    $modalScope.transactionSuccess = true;
+                                    $modalScope.url = 'http://blockchain.info/address/' + from + '?sort=0';
+                                  } else {
+                                    $modalScope.waiting = false;
+                                    $modalScope.transactionError = true;
+                                    $modalScope.error = successData.pushed; //Unspecified error, show user
+                                  }
+                                }, function(errorData) {
+                                  $modalScope.waiting = false;
+                                  $modalScope.transactionError = true;
+                                  if (errorData.message)
+                                    $modalScope.error = 'Server error: ' + errorData.message;
+                                  else 
+                                    if (errorData.data)
+                                      $modalScope.error = 'Server error: ' + errorData.data;
+                                    else
+                                      $modalScope.error = 'Unknown Server Error';
+                                  console.error(errorData);
+                                });
+                              })
+                            };
                         },
                         address: function() {
                             return address;
