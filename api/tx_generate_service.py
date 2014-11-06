@@ -302,7 +302,7 @@ def prepare_txbytes(txdata):
                         len(sale_amount_bytes) +
                         len(desired_currency_id_bytes) + 
                         len(desired_amount_bytes) +
-                        len(action) )/2
+                        len(action_bytes) )/2
     
         byte_stream = (tx_ver_bytes + 
                         tx_type_bytes + 
@@ -310,7 +310,7 @@ def prepare_txbytes(txdata):
                         sale_amount_bytes +
                         desired_currency_id_bytes + 
                         desired_amount_bytes +
-                        action )  
+                        action_bytes )  
 
     return [byte_stream, total_bytes]
 
