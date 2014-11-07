@@ -222,7 +222,8 @@ function CrowdsaleIssuanceController($scope, propertiesService, $timeout, $injec
           deadline:Date.UTC($scope.deadline.getFullYear(),$scope.deadline.getMonth(),$scope.deadline.getDate(), $scope.deadline.getHours(), $scope.deadline.getMinutes(), 0, 0) / 1000,
           earlybird_bonus:$scope.earlyBirdBonus,
           percentage_for_issuer:$scope.percentageForIssuer,
-          fee: $scope.convertDisplayedValue($scope.minerFees)
+          fee: $scope.convertDisplayedValue($scope.minerFees),
+          testnet: (TESTNET || false)
         });
       } else {
         transactionData.push({
@@ -241,7 +242,8 @@ function CrowdsaleIssuanceController($scope, propertiesService, $timeout, $injec
           deadline:0,
           earlybird_bonus:0,
           percentage_for_issuer:0,
-          fee: $scope.convertDisplayedValue($scope.minerFees)
+          fee: $scope.convertDisplayedValue($scope.minerFees),
+          testnet: (TESTNET || false)
         });
       }
     });
