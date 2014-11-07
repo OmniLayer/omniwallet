@@ -28,6 +28,8 @@ var app = angular.module('omniwallet', [
   if (document.location.href.match('testnet') != null) {
     Bitcoin.setNetwork('test');
     TESTNET=true;
+  } else {
+    TESTNET=false;
   }
 
   $routeProvider.when('/assets/:page?', {
