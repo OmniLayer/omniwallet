@@ -1,6 +1,6 @@
 angular.module("omniFactories")
-    .factory("TransactionManager", ["$q", "userService", "TransactionGenerator", "WalletAssets",
-        function TransactionManagerFactory($q, userService, TransactionGenerator, WalletAssets) {
+    .factory("TransactionManager", ["$q", "userService", "TransactionGenerator", "WalletAssets", "TESTNET", "TX_DATA_URL",
+        function TransactionManagerFactory($q, userService, TransactionGenerator, WalletAssets, TESTNET, TX_DATA_URL) {
 
             var TransactionManager = function(txType) {
                 var self = this;
@@ -10,17 +10,19 @@ angular.module("omniFactories")
                 }
 
                 self.prepareData = function(rawdata, from) {
+                    self.from = from;
                     var addressData = userService.getAddress(from);
                     var pubKey = null;
                     if (addressData.pubkey)
-                        pubKey = addressData.pubkey.toUpperCase();
+                        self.pubKey = addressData.pubkey.toUpperCase();
                     else {
-                        var privKey = new Bitcoin.ECKey.decodeEncryptedFormat(addressData.privkey, addressData.address); // Using address as temporary password
-                        pubKey = privKey.getPubKeyHex();
+                        self.privKey = new Bitcoin.ECKey.decodeEncryptedFormat(addressData.privkey, addressData.address); // Using address as temporary password
+                        self.pubKey = self.privKey.getPubKeyHex();
                     }
-                    rawdata['pubkey'] = pubKey;
+                    rawdata['pubkey'] = self.pubKey;
                     rawdata['fee']=WalletAssets.minerFees;
-                    rawdata['transaction_from'] = from;
+                    rawdata['transaction_from'] = self.from;
+                    rawdata['testnet'] = TESTNET || 0;
                     return rawdata; // followed by call to pushTransaction(data,pubkey);
                 };
 
@@ -40,6 +42,7 @@ angular.module("omniFactories")
                     transaction.ins.forEach(function(input) {
                         input.script = script;
                     });
+                    return transaction;
                 }
 
                 self.processTransaction = function(txData, signOffline) {
@@ -55,7 +58,7 @@ angular.module("omniFactories")
                                     errorMessage: "Error preparing transaction"
                                 });
                             } else {
-                                self.prepareTransaction(successData.unsignedhex || successData.transaction, successData.sourceScript)
+                                var transaction = self.prepareTransaction(successData.unsignedhex || successData.transaction, successData.sourceScript)
                                 if (signOffline) {
                                     var parsedBytes = transaction.serialize();
 
@@ -77,7 +80,7 @@ angular.module("omniFactories")
                                 } else {
                                     try {
                                         //DEBUG console.log('before',transaction, Bitcoin.Util.bytesToHex(transaction.serialize()));
-                                        var signedSuccess = transaction.signWithKey(privKey);
+                                        var signedSuccess = transaction.signWithKey(self.privKey);
 
                                         var finalTransaction = Bitcoin.Util.bytesToHex(transaction.serialize());
 
@@ -91,7 +94,7 @@ angular.module("omniFactories")
                                                     deferred.resolve({
                                                         waiting: false,
                                                         transactionSuccess: true,
-                                                        url : 'http://blockchain.info/address/' + from + '?sort=0'
+                                                        url : TX_DATA_URL + successData.tx;
                                                     })
                                                 } else {
                                                     deferred.reject({
