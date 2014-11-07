@@ -16,7 +16,7 @@ angular.module("omniFactories")
                         pubKey = addressData.pubkey.toUpperCase();
                     else {
                         self.privKey = new Bitcoin.ECKey.decodeEncryptedFormat(addressData.privkey, addressData.address); // Using address as temporary password
-                        pubKey = privKey.getPubKeyHex();
+                        pubKey = self.privKey.getPubKeyHex();
                     }
                     rawdata['pubkey'] = pubKey;
                     rawdata['fee']=WalletAssets.minerFees;
