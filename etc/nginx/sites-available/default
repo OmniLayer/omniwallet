@@ -168,11 +168,16 @@ server {
                 uwsgi_pass   127.0.0.1:$PORT;
         }
 
-       location /v1/exchange/orders {
-                set   $app   orders;
-                uwsgi_pass   127.0.0.1:$PORT;
-       }
-
+        location = /v1/exchange/orders { rewrite ^ /v1/exchange/orders/; }
+        location /v1/exchange/orders { try_files $uri @flask_orders; }
+        location @flask_orders {
+                include uwsgi_params;
+                uwsgi_param SCRIPT_NAME /v1/exchange/orders;
+                uwsgi_param UWSGI_MODULE orders;
+                uwsgi_param UWSGI_CALLABLE app;
+                uwsgi_modifier1 30;
+                uwsgi_pass 127.0.0.1:$PORT;
+        }
 
         location = /v1/user/wallet { rewrite ^ /v1/user/wallet/; }
         location /v1/user/wallet { try_files $uri @flask_user_service; }
