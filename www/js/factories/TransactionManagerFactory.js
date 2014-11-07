@@ -10,17 +10,18 @@ angular.module("omniFactories")
                 }
 
                 self.prepareData = function(rawdata, from) {
+                    self.from = from;
                     var addressData = userService.getAddress(from);
                     var pubKey = null;
                     if (addressData.pubkey)
-                        pubKey = addressData.pubkey.toUpperCase();
+                        self.pubKey = addressData.pubkey.toUpperCase();
                     else {
                         self.privKey = new Bitcoin.ECKey.decodeEncryptedFormat(addressData.privkey, addressData.address); // Using address as temporary password
-                        pubKey = self.privKey.getPubKeyHex();
+                        self.pubKey = self.privKey.getPubKeyHex();
                     }
-                    rawdata['pubkey'] = pubKey;
+                    rawdata['pubkey'] = self.pubKey;
                     rawdata['fee']=WalletAssets.minerFees;
-                    rawdata['transaction_from'] = from;
+                    rawdata['transaction_from'] = self.from;
                     return rawdata; // followed by call to pushTransaction(data,pubkey);
                 };
 
@@ -92,7 +93,7 @@ angular.module("omniFactories")
                                                     deferred.resolve({
                                                         waiting: false,
                                                         transactionSuccess: true,
-                                                        url : 'http://blockchain.info/address/' + from + '?sort=0'
+                                                        url : 'http://blockchain.info/address/' + self.from + '?sort=0'
                                                     })
                                                 } else {
                                                     deferred.reject({
