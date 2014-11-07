@@ -223,7 +223,7 @@ function CrowdsaleIssuanceController($scope, propertiesService, $timeout, $injec
           earlybird_bonus:$scope.earlyBirdBonus,
           percentage_for_issuer:$scope.percentageForIssuer,
           fee: $scope.convertDisplayedValue($scope.minerFees),
-          testnet: (TESTNET || 0)
+          testnet: (TESTNET || false)
         });
       } else {
         transactionData.push({
@@ -243,7 +243,7 @@ function CrowdsaleIssuanceController($scope, propertiesService, $timeout, $injec
           earlybird_bonus:0,
           percentage_for_issuer:0,
           fee: $scope.convertDisplayedValue($scope.minerFees),
-          testnet: (TESTNET || 0)
+          testnet: (TESTNET || false)
         });
       }
     });

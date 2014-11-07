@@ -48,7 +48,7 @@ angular.module('omniwallet').factory('walletTransactionService',['$http',functio
     getUnsignedTransaction : function(type, data){
       if (type == 0 && data.currency_identifier == 0){
         btc_send_data = {
-          'from_address':data.pubkey, 'to_address':data.transaction_to, 'amount':data.amount_to_transfer, 'currency':'BTC', 'fee':data.fee,'marker': (data.marker || false), 'testnet': (TESTNET || 0)
+          'from_address':data.pubkey, 'to_address':data.transaction_to, 'amount':data.amount_to_transfer, 'currency':'BTC', 'fee':data.fee,'marker': (data.marker || false), 'testnet': (TESTNET || false)
         };
         var url = '/v1/transaction/send/';
         

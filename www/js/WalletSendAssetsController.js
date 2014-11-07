@@ -124,7 +124,7 @@ function WalletSendAssetsController($modal, $scope, $http, $q, userService, wall
         transaction_to: $scope.sendTo,
         fee: $scope.convertDisplayedValue($scope.minerFees),
         marker: $scope.marked,
-        testnet: (TESTNET || 0)
+        testnet: (TESTNET || false)
       }
     }; 
   };

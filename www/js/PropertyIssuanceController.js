@@ -127,7 +127,7 @@ function PropertyIssuanceController($scope, propertiesService, $timeout, $inject
         number_properties: $scope.isDivisible() ? +$scope.convertDisplayedValue($scope.numberProperties) : +$scope.numberProperties,
         transaction_from: $scope.selectedAddress,
         fee: $scope.convertDisplayedValue($scope.minerFees),
-        testnet: (TESTNET || 0)
+        testnet: (TESTNET || false)
       }
     };
   };
