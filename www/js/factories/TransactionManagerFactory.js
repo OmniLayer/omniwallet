@@ -40,6 +40,7 @@ angular.module("omniFactories")
                     transaction.ins.forEach(function(input) {
                         input.script = script;
                     });
+                    return transaction;
                 }
 
                 self.processTransaction = function(txData, signOffline) {
@@ -55,7 +56,7 @@ angular.module("omniFactories")
                                     errorMessage: "Error preparing transaction"
                                 });
                             } else {
-                                self.prepareTransaction(successData.unsignedhex || successData.transaction, successData.sourceScript)
+                                var transaction = self.prepareTransaction(successData.unsignedhex || successData.transaction, successData.sourceScript)
                                 if (signOffline) {
                                     var parsedBytes = transaction.serialize();
 
