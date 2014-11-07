@@ -195,6 +195,9 @@ angular.module('omniwallet')
         if (successData.pushed.match(/submitted|success/gi) != null) {
           $modalScope.waiting = false;
           $modalScope.transactionSuccess = true;
+        if(TESTNET)
+          $modalScope.url = 'http://tbtc.blockr.io/tx/info/' + successData.tx;
+        else
           $modalScope.url = 'http://blockchain.info/address/' + from + '?sort=0';
         } else {
           $modalScope.waiting = false;

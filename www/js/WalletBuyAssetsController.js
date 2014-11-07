@@ -99,6 +99,9 @@ function WalletBuyAssetsController($modal, $scope, $http, $q, userService, walle
             if (successData.pushed.match(/submitted|success/gi) != null) {
               $modalScope.waiting = false;
               $modalScope.sendSuccess = true;
+            if(TESTNET)
+              $modalScope.url = 'http://tbtc.blockr.io/tx/info/' + successData.tx;
+            else
               $modalScope.url = 'http://blockchain.info/address/' + buyer + '?sort=0';
             } else {
               $modalScope.waiting = false;

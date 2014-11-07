@@ -59,11 +59,11 @@ do
         SERVER_PID=$!
         echo $SERVER_PID > /tmp/omniapp.pid
         #get snapshot of directory files
-        APISHA=`ls -lR $APPDIR/api | sha1sum`
+        APISHA=`ls -lR $APPDIR/api/*.py | sha1sum`
     fi
 
     #check if api files have changed
-    CHECKSHA=`ls -lR $APPDIR/api | sha1sum`
+    CHECKSHA=`ls -lR $APPDIR/api/*.py | sha1sum`
     #Trigger api reload if changed
     if [ "$APISHA" != "$CHECKSHA" ]; then
         uwsgi --reload /tmp/omniapp.pid

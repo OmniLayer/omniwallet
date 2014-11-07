@@ -1,4 +1,19 @@
 //Define Modules here first
+angular.module("omniConfig")
+  .factory("TESTNET",["$location",function TestnetFactory($location){
+    if($location.host().match('testnet') != null){
+      Bitcoin.setNetwork('test');
+      return true;
+    } else
+      return false;
+  }])
+  .factory("TX_DATA_URL",["TESTNET", function TxDataUrlFactory(TESTNET){
+    if(TESTNET)
+      return "http://tbtc.blockr.io/tx/info/";
+    else
+      return "https://blockchain.info/tx/";
+  }]);
+
 angular.module("omniFactories", ["omniConfig"]);
 angular.module("omniServices", ["omniConfig", "omniFactories"]);
 angular.module("omniControllers", ["omniConfig", "omniFactories", "omniServices"]);
@@ -24,6 +39,13 @@ var app = angular.module('omniwallet', [
   $httpProvider.defaults.headers.get['Expires'] = '0'; 
   $httpProvider.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded;charset=utf-8';
   $httpProvider.defaults.transformRequest = [TransformRequest];
+
+  if (document.location.href.match('testnet') != null) {
+    Bitcoin.setNetwork('test');
+    TESTNET=true;
+  } else {
+    TESTNET=false;
+  }
 
   $routeProvider.when('/assets/:page?', {
       templateUrl: function(route) {
@@ -120,7 +142,6 @@ app.config(function($idleProvider, $keepaliveProvider, reCAPTCHAProvider, idleDu
   $idleProvider.idleDuration(idleDuration);
   $idleProvider.warningDuration(idleWarningDuration);
   // $keepaliveProvider.interval(2);
-
   // required: please use your own key :)
   reCAPTCHAProvider.setPublicKey(reCaptchaKey);
 
