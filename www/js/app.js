@@ -1,4 +1,19 @@
 //Define Modules here first
+angular.module("omniConfig")
+  .factory("TESTNET",["$location",function TestnetFactory($location){
+    if($location.host().match('testnet') != null){
+      Bitcoin.setNetwork('test');
+      return true;
+    } else
+      return false;
+  }])
+  .factory("TX_DATA_URL",["TESTNET", function TxDataUrlFactory(TESTNET){
+    if(TESTNET)
+      return "http://tbtc.blockr.io/tx/info/";
+    else
+      return "https://blockchain.info/tx/";
+  }]);
+
 angular.module("omniFactories", ["omniConfig"]);
 angular.module("omniServices", ["omniConfig", "omniFactories"]);
 angular.module("omniControllers", ["omniConfig", "omniFactories", "omniServices"]);
@@ -120,7 +135,6 @@ app.config(function($idleProvider, $keepaliveProvider, reCAPTCHAProvider, idleDu
   $idleProvider.idleDuration(idleDuration);
   $idleProvider.warningDuration(idleWarningDuration);
   // $keepaliveProvider.interval(2);
-
   // required: please use your own key :)
   reCAPTCHAProvider.setPublicKey(reCaptchaKey);
 

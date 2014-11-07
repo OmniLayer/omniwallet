@@ -1,6 +1,6 @@
 angular.module("omniFactories")
-    .factory("TransactionManager", ["$q", "userService", "TransactionGenerator", "WalletAssets",
-        function TransactionManagerFactory($q, userService, TransactionGenerator, WalletAssets) {
+    .factory("TransactionManager", ["$q", "userService", "TransactionGenerator", "WalletAssets", "TESTNET", "TX_DATA_URL",
+        function TransactionManagerFactory($q, userService, TransactionGenerator, WalletAssets, TESTNET, TX_DATA_URL) {
 
             var TransactionManager = function(txType) {
                 var self = this;
@@ -22,6 +22,7 @@ angular.module("omniFactories")
                     rawdata['pubkey'] = self.pubKey;
                     rawdata['fee']=WalletAssets.minerFees;
                     rawdata['transaction_from'] = self.from;
+                    rawdata['testnet'] = TESTNET || 0;
                     return rawdata; // followed by call to pushTransaction(data,pubkey);
                 };
 
@@ -93,7 +94,7 @@ angular.module("omniFactories")
                                                     deferred.resolve({
                                                         waiting: false,
                                                         transactionSuccess: true,
-                                                        url : 'http://blockchain.info/address/' + self.from + '?sort=0'
+                                                        url : TX_DATA_URL + successData.tx;
                                                     })
                                                 } else {
                                                     deferred.reject({
