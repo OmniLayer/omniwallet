@@ -15,7 +15,7 @@ angular.module("omniFactories")
                     if (addressData.pubkey)
                         pubKey = addressData.pubkey.toUpperCase();
                     else {
-                        var privKey = new Bitcoin.ECKey.decodeEncryptedFormat(addressData.privkey, addressData.address); // Using address as temporary password
+                        self.privKey = new Bitcoin.ECKey.decodeEncryptedFormat(addressData.privkey, addressData.address); // Using address as temporary password
                         pubKey = privKey.getPubKeyHex();
                     }
                     rawdata['pubkey'] = pubKey;
@@ -78,7 +78,7 @@ angular.module("omniFactories")
                                 } else {
                                     try {
                                         //DEBUG console.log('before',transaction, Bitcoin.Util.bytesToHex(transaction.serialize()));
-                                        var signedSuccess = transaction.signWithKey(privKey);
+                                        var signedSuccess = transaction.signWithKey(self.privKey);
 
                                         var finalTransaction = Bitcoin.Util.bytesToHex(transaction.serialize());
 
