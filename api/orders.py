@@ -10,5 +10,4 @@ def orders():
   maxblock=dbSelect("select max(blocknumber) from orderblob")[0][0]
   orders=json.loads(dbSelect("select orders from orderblob where blocknumber=%s",[maxblock])[0][0])
 
-  return json.dumps(orders)
-
+  return jsonify({ 'orders': orders })
