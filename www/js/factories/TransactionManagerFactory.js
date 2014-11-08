@@ -22,7 +22,7 @@ angular.module("omniFactories")
                     rawdata['pubkey'] = self.pubKey;
                     rawdata['fee']=WalletAssets.minerFees;
                     rawdata['transaction_from'] = self.from;
-                    rawdata['testnet'] = TESTNET || 0;
+                    rawdata['testnet'] = TESTNET || false;
                     return rawdata; // followed by call to pushTransaction(data,pubkey);
                 };
 
@@ -94,7 +94,7 @@ angular.module("omniFactories")
                                                     deferred.resolve({
                                                         waiting: false,
                                                         transactionSuccess: true,
-                                                        url : TX_DATA_URL + successData.tx;
+                                                        url : TX_DATA_URL + successData.tx
                                                     })
                                                 } else {
                                                     deferred.reject({
