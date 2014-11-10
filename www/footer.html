@@ -1,53 +1,56 @@
 <div id="footer" class="container navbar navbar-fixed-bottom" ng-mouseenter="expanded=true" ng-mouseleave="expanded=false" ng-init="expanded=false">
-  <div class="row footer-top-row" ng-class="{'footer-expanded':expanded,'footer-hidden':!expanded}">
-    <div class="col-xs-3">
-      <ul class="nav nav-stacked">
-        <li class="footer-header">More info</li>
-        <li class="footer-content"><a href="/about">About Omni Wallet</a></li>
-        <li class="footer-content" ng-hide="user.loggedIn"><a href="#">Can't log in?</a></li>
-        <li class="footer-content"><a href="#">Terms of use</a></li>
-        <li class="footer-content"><a href="/about/faq">F.A.Q.</a></li>
-      </ul>
+  <div class="navbar-collapse collapse">
+    <div class="row footer-top-row" ng-class="{'footer-expanded':expanded,'footer-hidden':!expanded}">
+      <div class="col-xs-3">
+        <ul class="nav nav-stacked">
+          <li class="footer-header">More info</li>
+          <li class="footer-content"><a href="/about">About Omni Wallet</a></li>
+          <li class="footer-content" ng-hide="user.loggedIn"><a href="#">Can't log in?</a></li>
+          <li class="footer-content"><a href="#">Terms of use</a></li>
+          <li class="footer-content"><a href="/about/faq">F.A.Q.</a></li>
+        </ul>
+      </div>
+      <div class="col-xs-2">
+        <ul class="nav nav-stacked">
+          <li class="footer-header">Follow us</li>
+          <li class="footer-content"><a href="https://www.facebook.com/groups/523941304389744/"><i class="icon-facebook"></i>Facebook</a></li>
+          <li class="footer-content"><a href="https://twitter.com/omniwallet"><i class="icon-twitter"></i>Twitter</a></li>
+          <li class="footer-content"><a href="#"><i class="icon-google"></i>Google+</a></li>
+        </ul>
+      </div>
+      <div class="col-xs-3">
+        <ul class="nav nav-stacked">
+          <li class="footer-header">Spread the word</li>
+          <li class="footer-content"><a href="#">Tell your friends about how awesome the Omni Wallet is<i class="icon-dudes img-responsive" alt="Tell a friend!"></i></a></li>
+        </ul>
+      </div>
+      <div class="col-xs-3 col-xs-offset-1">
+        <ul class="nav nav-stacked">
+          <li class="footer-header">Feeling chatty?</li>
+          <li class="footer-content"><a href="#"><i class="icon-ha"></i>Ask a question on our forums</a></li>
+          <li class="footer-content"><a href="#"><i class="icon-email"></i>Mail: info@omniwallet.org</a></li>
+          <li class="footer-suggestions"><a href="#"><i class="icon-uservoice"></i>We welcome your suggestions</a></li>
+        </ul>
+      </div>
     </div>
-    <div class="col-xs-2">
-      <ul class="nav nav-stacked">
-        <li class="footer-header">Follow us</li>
-        <li class="footer-content"><a href="https://www.facebook.com/groups/523941304389744/"><i class="icon-facebook"></i>Facebook</a></li>
-        <li class="footer-content"><a href="https://twitter.com/omniwallet"><i class="icon-twitter"></i>Twitter</a></li>
-        <li class="footer-content"><a href="#"><i class="icon-google"></i>Google+</a></li>
-      </ul>
-    </div>
-    <div class="col-xs-3">
-      <ul class="nav nav-stacked">
-        <li class="footer-header">Spread the word</li>
-        <li class="footer-content"><a href="#">Tell your friends about how awesome the Omni Wallet is<i class="icon-dudes img-responsive" alt="Tell a friend!"></i></a></li>
-      </ul>
-    </div>
-    <div class="col-xs-3 col-xs-offset-1">
-      <ul class="nav nav-stacked">
-        <li class="footer-header">Feeling chatty?</li>
-        <li class="footer-content"><a href="#"><i class="icon-ha"></i>Ask a question on our forums</a></li>
-        <li class="footer-content"><a href="#"><i class="icon-email"></i>Mail: info@omniwallet.org</a></li>
-        <li class="footer-suggestions"><a href="#"><i class="icon-uservoice"></i>We welcome your suggestions</a></li>
-      </ul>
-    </div>
-  </div>
-  <div class="row footer-bottom-row">
-    <div class="col-xs-6">
-      <ul class="nav navbar-nav footer-bottomleft-row">
-        <li class="footer-bottom"><a href="/about/omniwallet"><i class="icon-notif"></i>Omni Wallet is under ongoing development</a></li>
-        <li class="divider-vertical-small"></li>
-        <li class="footer-bottom"><a href="#">Disclaimer</a></li>
-        <li class="divider-vertical-small"></li>
-        <li class="footer-bottom"><a href="#">Terms of use</a></li>
-      </ul>
-    </div>
-    <div class="col-xs-4 col-xs-offset-2">
-      <ul class="nav navbar-nav navbar-right">
-        <li class="footer-bottom"><a href="#"><i class="icon-github"></i>Open source project</a></li>
-        <li class="divider-vertical-small"></li>
-        <li class="footer-bottom"><a href="#">Version {{version}}</a></li>
-      </ul>
+    <hr>
+    <div class="row footer-bottom-row">
+      <div class="col-xs-6">
+        <ul class="nav navbar-nav footer-bottomleft-row">
+          <li class="footer-content"><a href="/about/omniwallet"><i class="icon-notif"></i>Omni Wallet is under ongoing development</a></li>
+          <li class="divider-vertical-small"></li>
+          <li class="footer-content"><a href="#">Disclaimer</a></li>
+          <li class="divider-vertical-small"></li>
+          <li class="footer-content"><a href="#">Terms of use</a></li>
+        </ul>
+      </div>
+      <div class="col-xs-4 col-xs-offset-2">
+        <ul class="nav navbar-nav navbar-right">
+          <li class="footer-content"><a href="#"><i class="icon-github"></i>Open source project</a></li>
+          <li class="divider-vertical-small"></li>
+          <li class="footer-content"><a href="#">Version {{version}}</a></li>
+        </ul>
+      </div>
     </div>
   </div>
 </div>
