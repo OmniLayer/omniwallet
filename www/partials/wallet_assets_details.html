@@ -4,9 +4,9 @@
 
 <div class="col-xs-12" ng-controller="AssetDetailsController">
   <div class="row" ng-show="pendingThinking">
-    <div class="row" ng-include="/partials/assets/details.html">
+    <div class="row" ng-include="'/partials/assets/details.html'">
     </div>
-    <div class="row" ng-include="/partials/assets/history.html">
+    <div class="row" ng-include="'/partials/assets/history.html'">
     </div>
   </div>
   <div class="row" ng-hide="pendingThinking" ng-if="loggedIn">
