@@ -1,6 +1,4 @@
 RECAPTCHA_PRIVATE = None #replace private key text here
-
-#email settings
 DOMAIN = None     #Replace with domain to override email domain lookup, otherwise system hostname is used
 EMAILFROM = None  #Is set to None, use noreply@domain
 SMTPUSER = None   #If your smtp server requires authentication define it here
