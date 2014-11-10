@@ -320,3 +320,137 @@ span#recaptcha_privacy {
 .icons a.reddit { background: url(/assets/img/social-icons/reddit.png) left top no-repeat; }
 .icons a.facebook { background: url(/assets/img/social-icons/facebook.png) left top no-repeat; }
 .icons a:hover { background-position: left -34px; }
+
+/* ASSETS DETAILS PAGE */
+.show-grid {
+  margin-bottom:15px;
+  padding:10px
+}
+
+.bg-active {
+  background-color: #eee;
+}
+
+.countdown-number {
+  padding: 5px;
+  background-color: #fff;
+  border: 3px solid #ccc;
+  border-radius: 4px;
+  display: block;
+  text-align: center;
+  min-height: 70px;
+  font-size: xx-large;
+  -webkit-box-shadow: 0px 1px 1px #666;
+  -moz-box-shadow: 0px 1px 1px #666;
+  box-shadow: 0px 1px 1px #666;
+}
+
+.countdown-group {
+  display: inline-block;
+  min-width: 70px;
+}
+
+.countdown-label {
+  text-align: center;
+  width: 64px;
+  margin-left: 3px;
+  margin-top: 1px;
+  background-color: #ccc;
+  border-radius: 2px;
+}
+
+.tag {
+  border: 1px solid #333;
+  background-color: #fff;
+  padding: 3px;
+  border-radius: 2px;
+}
+
+.shout {
+  background-image: url("/assets/img/shout.png");
+  width: 106px;
+  height: 106px;
+  position: relative;
+}
+
+.shout > span {
+  position: absolute;
+  text-align: center;
+  top: 41px;
+  width:100%;
+  color: #fff;
+  font-size:large;
+}
+
+.shout-label{
+  padding-top: 41px;
+}
+
+.scroll{
+    height: 500px;
+    overflow: hidden;
+}
+
+.scroll-body{
+    width: 102%;
+    overflow: auto;
+    height: 100%;
+    padding-right: 25px;
+}
+
+.panel-asset-history{
+  margin-bottom: 5px;
+  border-width: 5px;
+}
+.panel-asset-history-purchase{
+  border-color:lightgray;
+  color:lightgray;
+}
+.panel-asset-history-close{
+  border-color:darkgray;
+  color:darkgray;
+}
+.panel-asset-history-create{
+  border-color:lightgreen;
+  color:lightgreen;
+}
+.badge{
+  border: 1px solid #ccc;
+  padding: 3px;
+  border-radius: 5px;
+  box-shadow: 0px 3px #ccc;
+  margin-bottom: 5px;
+}
+.standout{
+  position: relative;
+}
+.btn-standout{
+  position: absolute;
+  top: 0px;
+  right: 20px;
+  margin-top: -5px;
+  font-size: 23px;
+  border-radius: 0px;
+  -webkit-box-shadow: 1px 1px #ccc,2px 2px #ccc,3px 3px #ccc,4px 4px #ccc,5px 5px #ccc; 
+  -moz-box-shadow: 1px 1px #ccc,2px 2px #ccc,3px 3px #ccc,4px 4px #ccc,5px 5px #ccc; 
+  box-shadow: 1px 1px #ccc,2px 2px #ccc,3px 3px #ccc,4px 4px #ccc,5px 5px #ccc; 
+}
+.alert-standout{
+  border-radius: 0px;
+}
+.assets-history-badge{
+  float:right!important;
+  padding-right: 15px;
+}
+.label-asset-id{
+  font-size: 12px;
+  vertical-align: middle;
+  background-color: #999;
+}
+.label-asset-category{
+  background-color: #EEE;
+  color: #666;
+}
+.text-black{
+  color:#000;
+}
