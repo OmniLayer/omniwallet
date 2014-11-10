@@ -30,7 +30,11 @@ if config.DOMAIN is None:
   email_domain = socket.gethostname()
 else:
   email_domain = config.DOMAIN
-email_from = "noreply@"+str(email_domain)
+
+if config.EMAILFROM is None:
+  email_from = "noreply@"+str(email_domain)
+else:
+  email_from = config.EMAILFROM
 
 app = Flask(__name__)
 app.debug = True
@@ -398,7 +402,9 @@ def welcome_email(user_email, wallet, uuid):
     #Encoders.encode_base64(wfile)
     #wfile.add_header('Content-Disposition', 'attachment', filename=uuid+'.json')
     #msg.attach(wfile)
-    smtp = smtplib.SMTP('localhost')
+    smtp = smtplib.SMTP(config.SMTPDOMAIN, config.SMTPPORT)
+    if config.SMTPUSER is not None and config.SMTPPASS is not None:
+      smtp.login(config.SMTPUSER, config.SMTPPASS)
     smtp.sendmail(email_from, user_email, msg.as_string())
     smtp.close()
 
@@ -441,7 +447,9 @@ def email_wallet(user_email, wallet, uuid):
     Encoders.encode_base64(wfile)
     wfile.add_header('Content-Disposition', 'attachment', filename=uuid+'.json')
     msg.attach(wfile)
-    smtp = smtplib.SMTP('localhost')
+    smtp = smtplib.SMTP(config.SMTPDOMAIN, config.SMTPPORT)
+    if config.SMTPUSER is not None and config.SMTPPASS is not None:
+      smtp.login(config.SMTPUSER, config.SMTPPASS)
     smtp.sendmail(email_from, user_email, msg.as_string())
     smtp.close()
 
