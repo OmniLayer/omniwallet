@@ -4,9 +4,9 @@ angular.module("omniFactories")
 			var self = this;
 
 			self.initialize = function(){
-				self.socket = io.connect('http://' + document.domain + ':' + location.port + "/balance/" + address);
+				self.socket = io.connect('http://' + document.domain + ':' + location.port + "/balance");
 
-				self.socket.on("balance:update", function(data){
+				self.socket.on("update:"+address, function(data){
 					angular.extend(self,data)
 				});
 			}
