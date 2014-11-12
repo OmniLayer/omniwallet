@@ -7,12 +7,20 @@ angular.module("omniControllers")
 			var DExSaleTransaction = new TransactionManager(21);
 
 			$scope.switchOrderbook = function(propertyId){
+				var active = null;
+				var selected = null;
 				$scope.orderbooks.forEach(function(orderbook){
 					if(orderbook.tradingPair.property == propertyId)
-						return orderbook.active = true;
+						selected = orderbook;
+					if(orderbook.active)
+						active=orderbook;
 				});
-				var tradingPair = {property:propertyId,pair: propertyId < 2147483651 ? 1 : 2};
-				var orderbook = new Orderbook(DExSaleTransaction, tradingPair)
-				$scope.orderbooks.push(orderbook);
+				if(selected==null){
+					var tradingPair = {property:propertyId,pair: propertyId < 2147483651 ? 1 : 2};
+					selected = new Orderbook(DExSaleTransaction, tradingPair)
+					$scope.orderbooks.push(selected);
+				}
+				if (active!= selected)
+					active.active=false;
 			}
 	}]);
