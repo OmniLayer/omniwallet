@@ -27,7 +27,7 @@ def background_thread():
                       namespace='/test')
 
 def balance_thread():
-  """Example of how to send server generated events to clients."""
+    """Example of how to send server generated events to clients."""
     count = 0
     while True:
         time.sleep(10)
@@ -110,10 +110,76 @@ def balance_connect():
         balance = Thread(target=balance_thread)
         balance.start()
 
-@socketio.on("add address", namespace='/balance')
+@socketio.on("add:address", namespace='/balance')
 def add_address(message):
   global addresses
   addresses.push(message['data'])
+
+@socketio.on("getunsigned:get", namespace='/transaction')
+def get_unsigned(message):
+    tx_type= message["tx_type"]
+    #update this to support more transactions
+    supported_transactions = [50,51, 0]
+
+    if tx_type not in supported_transactions:
+        emit("getunsigned:result",{ 'status': 400, 'data': 'Unsupported transaction type '+str(tx_type) },namespace="/transaction")
+    
+    expected_fields=['transaction_version', 'transaction_from','pubkey','fee']
+
+    print "Form ",message["data"]
+
+    #might add tx 00, 53, etc later;
+    if tx_type == 50:
+        expected_fields+=['ecosystem', 'property_type', 'previous_property_id', 'property_category', 'property_subcategory', 'property_name', 'property_url', 'property_data', 'number_properties']
+    elif tx_type == 51:
+        expected_fields+=['ecosystem', 'property_type', 'previous_property_id', 'property_category', 'property_subcategory', 'property_name', 'property_url', 'property_data', 'currency_identifier_desired', 'number_properties', 'deadline', 'earlybird_bonus', 'percentage_for_issuer']
+    elif tx_type == 0:
+        expected_fields+=['currency_identifier', 'amount_to_transfer', 'transaction_to']
+    for field in expected_fields:
+        if field not in message["data"]:
+            emit("getunsigned:result",{ 'status': 403, 'data': 'No field in request form '+field },namespace="/transaction")
+        elif message["data"][field] == '':
+            emit("getunsigned:result",{ 'status': 403, 'data': 'Empty field in request form '+field },namespace="/transaction")
+
+    if 'testnet' in message["data"] and ( message["data"]['testnet'] in ['true', 'True'] ):
+        global testnet
+        testnet =True
+        global magicbyte
+        magicbyte = 111
+        global exodus_address
+        exodus_address=testnet_exodus_address
+
+    txdata = prepare_txdata(tx_type, message["data"])
+    if tx_type == 50:
+        try:
+            tx50bytes = prepare_txbytes(txdata)
+            packets = construct_packets( tx50bytes[0], tx50bytes[1], message["data"]['transaction_from'] )
+            unsignedhex = build_transaction( message["data"]['fee'], message["data"]['pubkey'], packets[0], packets[1], packets[2], message["data"]['transaction_from'])
+            
+            #DEBUG print tx50bytes, packets, unsignedhex
+            emit("getunsigned:result",{ 'status': 200, 'unsignedhex': unsignedhex[0] , 'sourceScript': unsignedhex[1] },namespace="/transaction")
+        except Exception as e:
+            emit("getunsigned:result",{ 'status': 502, 'data': 'Unspecified error '+str(e)}) 
+    elif tx_type == 51:
+        try:
+            tx51bytes = prepare_txbytes(txdata)
+            packets = construct_packets( tx51bytes[0], tx51bytes[1], message["data"]['transaction_from'])
+            unsignedhex= build_transaction( message["data"]['fee'], message["data"]['pubkey'], packets[0], packets[1], packets[2], message["data"]['transaction_from'])
+            #DEBUG print tx51bytes, packets, unsignedhex
+            emit("getunsigned:result",{ 'status': 200, 'unsignedhex': unsignedhex[0] , 'sourceScript': unsignedhex[1] },namespace="/transaction")
+        except Exception as e:
+            emit("getunsigned:result",{ 'status': 502, 'data': 'Unspecified error '+str(e)}) 
+            
+    elif tx_type == 0:
+        try:
+            tx0bytes = prepare_txbytes(txdata)
+            packets = construct_packets( tx0bytes[0], tx0bytes[1], message["data"]['transaction_from'])
+            unsignedhex= build_transaction( message["data"]['fee'], message["data"]['pubkey'], packets[0], packets[1], packets[2], message["data"]['transaction_from'], request.form['transaction_to'])
+            #DEBUG print tx0bytes, packets, unsignedhex
+            emit("getunsigned:result",{ 'status': 200, 'unsignedhex': unsignedhex[0] , 'sourceScript': unsignedhex[1] },namespace="/transaction")
+        except Exception as e:
+            emit("getunsigned:result",{ 'status': 502, 'data': 'Unspecified error '+str(e)},namespace="/transaction" )
+             
 
 @socketio.on('my event', namespace='/test')
 def test_message(message):

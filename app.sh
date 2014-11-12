@@ -71,13 +71,13 @@ do
         echo Api Reloaded
     fi
 
-    ps a | grep -v grep | grep "omni-websocket" > /dev/null
+    ps a | grep -v grep | grep "websocket" > /dev/null
     if [ $? -eq 0 ]; then
         echo "websocket api is running."
       else
         echo "Starting websocket daemon..."
-        cd $APPDIR/api/websocket
-        $PYTHONBIN omni-websocket.py > $DATADIR/websocket.log &
+        cd $APPDIR/api
+        $PYTHONBIN websocket.py > $DATADIR/websocket.log &
         WEBSOCKET_PID=$!
     fi
 

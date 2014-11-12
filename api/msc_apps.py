@@ -7,6 +7,7 @@ sys.path.append(lib_path)
 from msc_utils_obelisk import *
 from sqltools import *
 from rpcclient import *
+from txtools import *
 
 http_status = '200 OK'
 
