@@ -27,13 +27,14 @@ def background_thread():
                       namespace='/test')
 
 def balance_thread():
-    """Example of how to send server generated events to clients."""
+    """Send balance data for the connected clients."""
+    global addresses
     count = 0
     while True:
         time.sleep(10)
         count += 1
         socketio.emit('my response',
-                      {'data': 'Server generated event from /balance', 'count': count},
+                      {'data': addresses, 'count': count},
                       namespace='/balance')
   # global addresses
   # TIMEOUT='timeout -s 9 60 '
@@ -110,7 +111,7 @@ def balance_connect():
         balance = Thread(target=balance_thread)
         balance.start()
 
-@socketio.on("add:address", namespace='/balance')
+@socketio.on("address:add", namespace='/balance')
 def add_address(message):
   global addresses
   addresses.push(message['data'])
