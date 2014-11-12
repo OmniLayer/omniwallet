@@ -20,7 +20,7 @@ angular.module("omniControllers")
 					selected = new Orderbook(DExSaleTransaction, tradingPair)
 					$scope.orderbooks.push(selected);
 				}
-				if (active!= selected)
+				if (active && active!= selected)
 					active.active=false;
 			}
 	}]);
