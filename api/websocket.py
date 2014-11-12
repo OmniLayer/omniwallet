@@ -1,13 +1,12 @@
 from gevent import monkey
 monkey.patch_all()
 
-# import os, sys
 import time
+import json
 from threading import Thread
 from flask import Flask, render_template, session, request
 from flask.ext.socketio import SocketIO, emit, join_room, leave_room
-# sys.path.append(os.path.abspath(".."))
-# from msc_apps import *
+
 app = Flask(__name__)
 app.debug = True
 app.config['SECRET_KEY'] = 'secret!'
@@ -34,33 +33,33 @@ def balance_thread():
         time.sleep(10)
         count += 1
         for address in addresses:
-          socketio.emit('address:'+address,
-                      {'address': address, 'balances': []},
-                      namespace='/balance')
+          
   # global addresses
   # TIMEOUT='timeout -s 9 60 '
   # # Get the Mastercoin balances.  Not that this is also creating the default balance
   # # object, and should run before all the other currency checks.
   # def get_msc_balances( addr ):
   #   #TODO move functionality for individual currencies into /tx/ endpoint (sent, received, total reserved balances, etc.)
-  #   addr = re.sub(r'\W+', '', addr) #check alphanumeric
-  #   ROWS=dbSelect("select * from addressbalances ab, smartproperties sp where ab.address=%s and ab.propertyid=sp.propertyid "
-  #                 "and sp.protocol='Mastercoin'", [addr])
+          addr = re.sub(r'\W+', '', address) #check alphanumeric
+          ROWS=dbSelect("select * from addressbalances ab, smartproperties sp where ab.address=%s and ab.propertyid=sp.propertyid "
+                        "and sp.protocol='Mastercoin'", [addr])
 
-  #   address_data = { 'address' : addr, 'balance': [] }
-  #   for balrow in ROWS:
-  #       cID = str(int(balrow[2])) #currency id
-  #       sym_t = ('BTC' if cID == '0' else ('MSC' if cID == '1' else ('TMSC' if cID == '2' else 'SP' + cID) ) ) #symbol template
-  #       divi = balrow[-1]['divisible'] if type(balrow[-1]) == type({}) else json.loads(balrow[-1])['divisible']  #Divisibility
-  #       res = { 'symbol' : sym_t, 'divisible' : divi  }
-  #       res['value'] = ('%.8f' % float(balrow[4])).rstrip('0').rstrip('.')
-  #       #res['reserved_balance'] = ('%.8f' % float(balrow[5])).rstrip('0').rstrip('.')
-  #       address_data['balance'].append(res)
+          address_data = { 'address' : addr, 'balance': [] }
+          for balrow in ROWS:
+              cID = str(int(balrow[2])) #currency id
+              sym_t = ('BTC' if cID == '0' else ('MSC' if cID == '1' else ('TMSC' if cID == '2' else 'SP' + cID) ) ) #symbol template
+              divi = balrow[-1]['divisible'] if type(balrow[-1]) == type({}) else json.loads(balrow[-1])['divisible']  #Divisibility
+              res = { 'symbol' : sym_t, 'divisible' : divi  }
+              res['value'] = ('%.8f' % float(balrow[4])).rstrip('0').rstrip('.')
+              #res['reserved_balance'] = ('%.8f' % float(balrow[5])).rstrip('0').rstrip('.')
+              address_data['balance'].append(res)
 
-  #   if 0 >= len(ROWS):
-  #     return ( None, '{ "status": "NOT FOUND: ' + addr + '" }' )
+          # if 0 >= len(ROWS):
+          #   return ( None, '{ "status": "NOT FOUND: ' + addr + '" }' )
 
-  #   return ( address_data, None )
+          socketio.emit('address:'+address,
+                      address_data,
+                      namespace='/balance')
 
   # # Get the Bitcoin balances - this is a different format from the MSC one above.
   # def get_btc_balances( addr ):
@@ -116,8 +115,8 @@ def balance_connect():
 def add_address(message):
   global addresses
   address = message['data']
-  if address not in addresses: 
-    addresses.append(address)
+  if str(address) not in addresses: 
+    addresses.append(str(address))
 
 @socketio.on("getunsigned:get", namespace='/transaction')
 def get_unsigned(message):
