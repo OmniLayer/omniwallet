@@ -6,6 +6,7 @@ import json, re
 from threading import Thread
 from flask import Flask, render_template, session, request
 from flask.ext.socketio import SocketIO, emit, join_room, leave_room
+from msc_apps import *
 
 app = Flask(__name__)
 app.debug = True
