@@ -9,7 +9,7 @@
         </div>
         <div class="row">
             <a href="/dex/sale" class="btn btn-primary btn-sm" ng-show="isLoggedIn">Test Sale</a>
-            <form name="switchOrderbook" role="form" ng-submit="switchOrderbook(propertyId)" ng-init="propertyId = 0">
+            <form name="switch" role="form" ng-submit="switchOrderbook(propertyId)" ng-init="propertyId = 0">
             	<div class="form-group">
             		<label for="propertyId">Exchange SP#{{propertyId}}/MSC</label>
     				<input type="number" class="form-control" id="propertyId" placeholder="Enter desired property" ng-model="propertyId">
