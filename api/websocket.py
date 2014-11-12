@@ -33,8 +33,9 @@ def balance_thread():
     while True:
         time.sleep(10)
         count += 1
-        socketio.emit('my response',
-                      {'data': addresses, 'count': count},
+        for address in addresses:
+          socketio.emit('address:'+address,
+                      {'address': address, 'balances': []},
                       namespace='/balance')
   # global addresses
   # TIMEOUT='timeout -s 9 60 '
