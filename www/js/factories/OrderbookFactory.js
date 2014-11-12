@@ -8,4 +8,6 @@ angular.module("omniFactories")
 				self.tradingPair=tradingPair;
 			}
 		}
+
+		return Orderbook;
 	}]);
