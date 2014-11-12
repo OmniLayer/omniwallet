@@ -114,7 +114,7 @@ def balance_connect():
 @socketio.on("address:add", namespace='/balance')
 def add_address(message):
   global addresses
-  addresses.push(message['data'])
+  addresses.append(message['data'])
 
 @socketio.on("getunsigned:get", namespace='/transaction')
 def get_unsigned(message):
