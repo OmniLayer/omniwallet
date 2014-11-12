@@ -19,6 +19,8 @@ angular.module("omniControllers")
 					var tradingPair = {property:propertyId,pair: propertyId < 2147483651 ? 1 : 2};
 					selected = new Orderbook(DExSaleTransaction, tradingPair)
 					$scope.orderbooks.push(selected);
+				} else {
+					selected.active = true;
 				}
 				if (active && active!= selected)
 					active.active=false;
