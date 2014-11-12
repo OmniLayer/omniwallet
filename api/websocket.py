@@ -30,17 +30,12 @@ def balance_thread():
     """Send balance data for the connected clients."""
     global addresses
     count = 0
+    TIMEOUT='timeout -s 9 60 '
     while True:
         time.sleep(10)
         count += 1
         for address in addresses:
           
-  # global addresses
-  # TIMEOUT='timeout -s 9 60 '
-  # # Get the Mastercoin balances.  Not that this is also creating the default balance
-  # # object, and should run before all the other currency checks.
-  # def get_msc_balances( addr ):
-  #   #TODO move functionality for individual currencies into /tx/ endpoint (sent, received, total reserved balances, etc.)
           addr = re.sub(r'\W+', '', address) #check alphanumeric
           ROWS=dbSelect("select * from addressbalances ab, smartproperties sp where ab.address=%s and ab.propertyid=sp.propertyid "
                         "and sp.protocol='Mastercoin'", [addr])
@@ -58,44 +53,21 @@ def balance_thread():
           # if 0 >= len(ROWS):
           #   return ( None, '{ "status": "NOT FOUND: ' + addr + '" }' )
 
+          btc_balance = { 'symbol': 'BTC', 'divisible': True }
+          out, err = run_command(TIMEOUT+ 'sx balance -j ' + addr )
+          if err != None or out == '':
+            btc_balance[ 'value' ] = int(-666)
+          else:
+            try:
+                btc_balance[ 'value' ] = int( json.loads( out )[0][ 'paid' ])
+            except ValueError:
+                btc_balance[ 'value' ] = int(-666)
+
+          address_data['balance'].append(btc_balance)
+
           socketio.emit('address:'+address,
                       address_data,
                       namespace='/balance')
-
-  # # Get the Bitcoin balances - this is a different format from the MSC one above.
-  # def get_btc_balances( addr ):
-  #   balances = { 'symbol': 'BTC', 'divisible': True }
-  #   out, err = run_command(TIMEOUT+ 'sx balance -j ' + addr )
-  #   if err != None:
-  #     return None, err
-  #   elif out == '':
-  #     return None, 'No bitcoin balance available.  Invalid address?: ' + addr
-  #   else:
-  #     try:
-  #         balances[ 'value' ] = int( json.loads( out )[0][ 'paid' ])
-  #     except ValueError:
-  #         balances[ 'value' ] = int(-666)
-
-  #   return ( [ balances ], None )
-
-  # while True:
-  #   for address in addresses:
-  #     addr = re.sub(r'\W+', '', address) #check alphanumeric
-
-  #     address_data, err = get_msc_balances( addr )
-  #     if err != None:
-  #       address_data = {}
-  #       address_data[ 'address' ] = addr
-  #       address_data[ 'balance' ] = []
-
-  #     bitcoin_balances, err = get_btc_balances( addr )
-
-  #     if err == None:
-  #       for i in xrange(0,len( bitcoin_balances )):
-  #         address_data[ 'balance' ].append( bitcoin_balances[i] )
-
-  #     socketio.emit("update:"+address,
-  #       address_data, namespace="/balance")
 
 @app.route('/')
 def index():
