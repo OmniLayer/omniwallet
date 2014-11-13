@@ -1,3 +1,11 @@
+import random, pybitcointools, math
+from decimal import Decimal
+from msc_apps import *
+
+conn = getRPCconn()
+
+HEXSPACE_SECOND='21'
+
 # helper funcs
 def prepare_txdata(txtype,data):
         txdata=[]
@@ -183,7 +191,6 @@ def prepare_txbytes(txdata):
     return [byte_stream, total_bytes]
 
 def construct_packets(byte_stream, total_bytes, from_address):
-    import math
     total_packets = int(math.ceil(float(total_bytes)/30)) #get # of packets
     
     total_outs = int(math.ceil(float(total_packets)/2)) #get # of outs
@@ -262,6 +269,7 @@ def construct_packets(byte_stream, total_bytes, from_address):
     #DEBUG print plaintext_packets, obfuscation_packets,final_packets
     
     #add key identifier and ecdsa byte to new mastercoin data key
+    global magicbyte
     for i in range(len(final_packets)):
         obfuscated = '02' + final_packets[i] + "00" 
         #DEBUG print [obfuscated, len(obfuscated)]
@@ -346,7 +354,7 @@ def build_transaction(miner_fee_satoshis, pubkey,final_packets, total_packets, t
                         validnextinputs.append({ "txid": prev_tx.txid, "vout": output['n']})
                         break
 
-
+    global exodus_address
     validnextoutputs = { exodus_address: 0.00005757 }
     if to_address != None:
         validnextoutputs[to_address]=0.00005757 #Add for simple send
@@ -372,7 +380,7 @@ def build_transaction(miner_fee_satoshis, pubkey,final_packets, total_packets, t
             ordered_packets[i].append(final_packets[index])
             index = index + 1
     #DEBUG print ordered_packets
-    
+    global magicbyte
     for i in range(total_outs):
         hex_string = "51" + HEXSPACE_FIRST + pubkey
         asm_string = "1 " + pubkey
