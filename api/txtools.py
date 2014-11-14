@@ -1,8 +1,11 @@
-import random, pybitcointools, math
+import os,sys, random, pybitcointools, math, hashlib
 from decimal import Decimal
-from msc_apps import *
+tools_dir = os.environ.get('TOOLSDIR')
+lib_path = os.path.abspath(tools_dir)
+sys.path.append(lib_path)
+from msc_utils_obelisk import get_utxo
+from rpcclient import *
 
-conn = getRPCconn()
 
 HEXSPACE_SECOND='21'
 
@@ -279,7 +282,7 @@ def construct_packets(byte_stream, total_bytes, from_address):
             #set the last byte to something random in case we generated an invalid pubkey
             potential_data_address = pybitcointools.pubkey_to_address(obfuscated_randbyte, magicbyte)
             
-            if bool(conn.validateaddress(potential_data_address).isvalid):
+            if bool(validateaddress(potential_data_address)["isvalid"]):
                 final_packets[i] = obfuscated_randbyte
                 invalid = False
         #make sure the public key is valid using pybitcointools, if not, regenerate 
@@ -345,7 +348,7 @@ def build_transaction(miner_fee_satoshis, pubkey,final_packets, total_packets, t
     validnextinputs = []   #get valid redeemable inputs
     for unspent in unspent_tx:
         #retrieve raw transaction to spend it
-        prev_tx = conn.getrawtransaction(unspent[0])
+        prev_tx = getrawtransaction(unspent[0])
 
         for output in prev_tx.vout:
             if output['scriptPubKey']['reqSigs'] == 1 and output['scriptPubKey']['type'] != 'multisig':
@@ -362,11 +365,11 @@ def build_transaction(miner_fee_satoshis, pubkey,final_packets, total_packets, t
     if change >= 5757: # send anything above dust to yourself
         validnextoutputs[ from_address ] = float( Decimal(change)/Decimal(1e8) )
     
-    unsigned_raw_tx = conn.createrawtransaction(validnextinputs, validnextoutputs)
+    unsigned_raw_tx = createrawtransaction(validnextinputs, validnextoutputs)
     
     #DEBUG print change,unsigned_raw_tx
 
-    json_tx =  conn.decoderawtransaction(unsigned_raw_tx)
+    json_tx =  decoderawtransaction(unsigned_raw_tx)
     
     #append  data structure
     ordered_packets = []
@@ -480,13 +483,13 @@ def build_transaction(miner_fee_satoshis, pubkey,final_packets, total_packets, t
     hex_transaction = hex_transaction + blocklocktime
     
     #verify that transaction is valid
-    decoded_tx = conn.decoderawtransaction(''.join(hex_transaction).lower());
+    decoded_tx = decoderawtransaction(''.join(hex_transaction).lower());
     if 'txid' not in decoded_tx:
         raise Exception({ "status": "NOT OK", "error": "Network byte mismatch: Please try again"  })
 
     #DEBUG 
     print 'final hex ', ''.join(hex_transaction).lower()
-    #DEBUG print pprint.pprint(conn.decoderawtransaction(''.join(hex_transaction).lower()))
+    #DEBUG print pprint.pprint(decoderawtransaction(''.join(hex_transaction).lower()))
 
     unsigned_hex=''.join(hex_transaction).lower()
 
