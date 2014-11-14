@@ -50,7 +50,7 @@ angular.module("omniServices")
                             $modalInstance.dismiss('close');
                         };
                     },
-                    resolve: 
+                    resolve: {
                         modalConfig: function() {
                             return modalConfig;
                         },
