@@ -1,5 +1,5 @@
 angular.module("omniFactories")
-	.factory("AddressModel", ["BalanceSocket", function AddressModelFactory(BalanceSocket){
+	.factory("Address", ["BalanceSocket", function AddressModelFactory(BalanceSocket){
 		var AddressModel = function(address,privkey,pubkey){
 			var self = this;
 
