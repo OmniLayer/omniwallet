@@ -9,4 +9,8 @@ angular.module("omniServices")
 				$rootScope.apply(function(){callback(msg)});
 			})
 		}
+
+		self.emit = function(eventName,data){
+			self.socket.emit(eventName,data);
+		}
 	}])
