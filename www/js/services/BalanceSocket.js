@@ -6,7 +6,7 @@ angular.module("omniServices")
 
 		self.on = function(eventName,callback){
 			self.socket.on(eventName,function(msg){
-				$rootScope.apply(function(){callback(msg)});
+				$rootScope.$apply(function(){callback(msg)});
 			})
 		}
 
