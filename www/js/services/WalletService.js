@@ -51,6 +51,12 @@ angular.module("omniServices")
 	            }
 	        }
 
+	        self._removeAddress = function(address){
+	        	for (var i = 0; i < self.addresses.length; i++)
+	              if (self.addresses[i].address == address) 
+	                self.addresses.splice(i, 1);
+	        }
+
 			// self.initialize = function(){				  
 			//     self.selectedCoin = self.currencyList[0];
 			//     self.currencyList.forEach(function(e, i) {

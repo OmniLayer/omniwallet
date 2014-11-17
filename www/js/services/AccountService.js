@@ -137,9 +137,9 @@ angular.module("omniServices")
               if (self.wallet.addresses[i].address == address) {
                 var remove = self.wallet.addresses.splice(i, 1);
                 return self.saveSession().then(function(){
-                    Wallet._removeAddress(remove);
+                    Wallet._removeAddress(remove.address);
                 });
-            }
+              }
         };
 
       
