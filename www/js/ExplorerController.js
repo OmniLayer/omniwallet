@@ -1,5 +1,5 @@
-function ExplorerAssetsController($scope, userService){
-  $scope.isLoggedIn = userService.loggedIn();
+function ExplorerAssetsController($scope, Account){
+  $scope.isLoggedIn = Account.isLoggedIn;
   
   //TODO: Get assets data for display
 }
