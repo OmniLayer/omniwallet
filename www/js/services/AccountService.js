@@ -109,9 +109,7 @@ angular.module("omniServices")
                                 CryptUtilAsync.generateAsymmetricPair(function(result) {
                                     self.asymKey = result;
                                     self.encodedPub = window.btoa(self.asymKey.pubPem);
-                                    $scope.$apply(function() {
-                                        asyncCrypto.resolve();
-                                    });
+                                    asyncCrypto.resolve();
                                 });
                             });
                         });
