@@ -57,6 +57,12 @@ angular.module("omniServices")
 	                self.addresses.splice(i, 1);
 	        }
 
+	        self.getAsset = function(assetId){
+	        	return self.assets.filter(function(asset){
+	        		return asset.id == assetId;
+	        	})[0];
+	        }
+
 			// self.initialize = function(){				  
 			//     self.selectedCoin = self.currencyList[0];
 			//     self.currencyList.forEach(function(e, i) {
