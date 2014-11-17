@@ -5,7 +5,7 @@ function SimpleSendController($scope, Account) {
   MySimpleSendHelpers(wallet);
 
 }
-function HomeCtrl($scope, $templateCache, $injector, $location, $http, $q) {
+function HomeCtrl($scope, $templateCache, $injector, $location, $http, $q, Account) {
   if (Account.uuid) {
     $location.url('/wallet/overview');
   } else {
