@@ -1,6 +1,7 @@
 angular.module("omniServices")
     .service("Account", ["$http", "$q", "Address","Wallet", function AccountService($http, $q, Address, Wallet) {
         var self = this;
+        self.settings = {};
 
         function generateUUID() {
           var d = new Date().getTime();
@@ -107,7 +108,7 @@ angular.module("omniServices")
                                 self.walletKey = result;
                                 CryptUtilAsync.generateAsymmetricPair(function(result) {
                                     self.asymKey = result;
-                                    self.encodedPub = window.btoa(asymKey.pubPem);
+                                    self.encodedPub = window.btoa(self.asymKey.pubPem);
                                     $scope.$apply(function() {
                                         asyncCrypto.resolve();
                                     });
@@ -220,9 +221,9 @@ angular.module("omniServices")
         };
 
           
-        self.removeAddress = function(address) {
+        self.removeAddress = function(addressHash) {
             for (var i = 0; i < self.wallet.addresses.length; i++)
-              if (self.wallet.addresses[i].address == address) {
+              if (self.wallet.addresses[i].address == addressHash) {
                 var remove = self.wallet.addresses.splice(i, 1);
                 return self.saveSession().then(function(){
                     Wallet._removeAddress(remove.address);
