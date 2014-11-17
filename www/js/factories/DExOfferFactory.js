@@ -1,5 +1,5 @@
 angular.module("omniFactories")
-	.factory("DExOffer",["AddressModel",function DExOfferFactory(AddressModel){
+	.factory("DExOffer",["Address",function DExOfferFactory(Address){
 		var DExOffer= function(data){
 			var self = this;
 
