@@ -40,20 +40,20 @@ def balance_thread():
           ROWS=dbSelect("select * from addressbalances ab, smartproperties sp where ab.address=%s and ab.propertyid=sp.propertyid "
                         "and sp.protocol='Mastercoin'", [addr])
 
-          address_data = { 'address' : addr, 'balance': [] }
+          balance_data = { 'balance': [] }
           for balrow in ROWS:
               cID = str(int(balrow[2])) #currency id
               sym_t = ('BTC' if cID == '0' else ('MSC' if cID == '1' else ('TMSC' if cID == '2' else 'SP' + cID) ) ) #symbol template
               divi = balrow[-1]['divisible'] if type(balrow[-1]) == type({}) else json.loads(balrow[-1])['divisible']  #Divisibility
-              res = { 'symbol' : sym_t, 'divisible' : divi  }
+              res = { 'symbol' : sym_t, 'divisible' : divi, 'id' : cID }
               res['value'] = ('%.8f' % float(balrow[4])).rstrip('0').rstrip('.')
               #res['reserved_balance'] = ('%.8f' % float(balrow[5])).rstrip('0').rstrip('.')
-              address_data['balance'].append(res)
+              balance_data['balance'].append(res)
 
           # if 0 >= len(ROWS):
           #   return ( None, '{ "status": "NOT FOUND: ' + addr + '" }' )
 
-          btc_balance = { 'symbol': 'BTC', 'divisible': True }
+          btc_balance = { 'symbol': 'BTC', 'divisible': True, 'id' : 0 }
           out, err = run_command(TIMEOUT+ 'sx balance -j ' + addr )
           if err != None or out == '':
             btc_balance[ 'value' ] = int(-666)
@@ -63,10 +63,10 @@ def balance_thread():
             except ValueError:
                 btc_balance[ 'value' ] = int(-666)
 
-          address_data['balance'].append(btc_balance)
+          balance_data['balance'].append(btc_balance)
 
           socketio.emit('address:'+address,
-                      address_data,
+                      balance_data,
                       namespace='/balance')
 
 @app.route('/')

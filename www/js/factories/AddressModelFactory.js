@@ -11,11 +11,20 @@ angular.module("omniFactories")
 				self.socket = BalanceSocket;
 
 				self.socket.on("address:"+address, function(data){
-					angular.extend(self,data)
+					self.balance = data.balance
 				});
 
 				self.socket.emit("address:add", {data:address});
 			}
+
+			self.getBalance = function(assetId){
+				var balance = self.balance.filter(function(asset){
+					return asset.id == assetId;
+				})[0];
+				
+				return balance;
+			}
+
 			self.initialize();
 		}
 
