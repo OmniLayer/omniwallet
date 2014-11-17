@@ -1,7 +1,7 @@
 angular.module("omniControllers")
-	.controller("DExOverviewController", ["$scope","userService","Orderbook","TransactionManager",
-		function DExOverviewController($scope,userService,Orderbook,TransactionManager){
-			$scope.isLoggedIn = userService.loggedIn();
+	.controller("DExOverviewController", ["$scope","Account","Orderbook","TransactionManager","Wallet"
+		function DExOverviewController($scope,Account,Orderbook,TransactionManager,Wallet){
+			$scope.isLoggedIn = Account.isLoggedIn;
 			$scope.orderbooks = [];
 
 			var DExSaleTransaction = new TransactionManager(21);
@@ -10,13 +10,13 @@ angular.module("omniControllers")
 				var active = null;
 				var selected = null;
 				$scope.orderbooks.forEach(function(orderbook){
-					if(orderbook.tradingPair.property == propertyId)
+					if(orderbook.tradingPair.property.id == propertyId)
 						selected = orderbook;
 					if(orderbook.active)
 						active=orderbook;
 				});
 				if(selected==null){
-					var tradingPair = {property:propertyId,pair: propertyId < 2147483651 ? 1 : 2};
+					var tradingPair = {property:Wallet.getAsset(propertyId),pair: Wallet.getAsset(propertyId < 2147483651 ? 1 : 2)};
 					selected = new Orderbook(DExSaleTransaction, tradingPair)
 					$scope.orderbooks.push(selected);
 				} else {
