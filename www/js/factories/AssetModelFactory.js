@@ -1,5 +1,5 @@
-angular.modules("omniFactories")
-	.factories("Asset", [function AssetsModelFactory(){
+angular.module("omniFactories")
+	.factory("Asset", [function AssetsModelFactory(){
 		var Asset = function(symbol,divisible,tradable,address){
 			var self = this;
 
