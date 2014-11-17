@@ -19,7 +19,7 @@ function Login($injector, $scope, $http, $location, $modalInstance, $q, Account)
   $scope.login.button == undefined ? $scope.login.button = 'Open Wallet' : $scope.login.button;
   
   $scope.open = function(login) {
-    if ( Account.verifyUUID(uuid) == false ) {
+    if ( Account.verifyUUID(login.uuid) == false ) {
       $scope.missingUUID = true;
       return 0;
     }
