@@ -1,5 +1,5 @@
 angular.module("omniControllers")
-	.controller("DExOverviewController", ["$scope","Account","Orderbook","TransactionManager","Wallet"
+	.controller("DExOverviewController", ["$scope","Account","Orderbook","TransactionManager","Wallet",
 		function DExOverviewController($scope,Account,Orderbook,TransactionManager,Wallet){
 			$scope.isLoggedIn = Account.isLoggedIn;
 			$scope.orderbooks = [];
