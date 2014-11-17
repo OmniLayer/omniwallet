@@ -16,7 +16,7 @@ angular.module('omniwallet')
         var deferred = $q.defer();
 
         _.defer(function() {
-          var wallet = $injector.get('userService').getWallet();
+          var wallet = Account.wallet;
           if (wallet && wallet.addresses.length > 0) {
             var requests = [];
 
@@ -165,7 +165,7 @@ angular.module('omniwallet')
 
   function getAssetBalances(currencySymbol) {
     var deferred = $q.defer();
-    var wallet = $injector.get('userService').getWallet();
+    var wallet = Account.wallet;
     if (wallet && wallet.addresses.length > 0) {
       var requests = [];
       var balances = [];
@@ -201,7 +201,7 @@ angular.module('omniwallet')
   $scope.openCurrencyDetail = function(currencySymbol) {
     $scope.currencySymbol = currencySymbol;
     $scope.currencyName = "";
-    var currencies = $injector.get('userService').getCurrencies();
+    var currencies = Wallet.assets;
     currencies.forEach(function(currency) {
       if (currency.symbol == currencySymbol) {
         $scope.currencyName = currency.symbol == "BTC" ? "Bitcoin" : currency.symbol == "MSC" ? "Mastercoin" : currency.symbol == "TMSC" ? "Test Mastercoin" : currency.name;
