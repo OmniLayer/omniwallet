@@ -436,7 +436,7 @@ function SidecarController($rootScope, $scope, $http, $modal, $location, Account
   $scope.hasAddressesWithPrivkey = Account.loggedIn && getAddressesWithPrivkey().length != 0 ? true : false;
   $scope.hasTradableCoins = false;
   $scope.hasBTC = false;
-  if (Account.loggedIn) checkBalance(getAddressesWithPrivkey());
+  if (Account.loggedIn) checkBalance(Wallet.addresses);
   
   $scope.goToTradePage = function($event){
     if($location.path() == "/wallet/trade")
