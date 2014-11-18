@@ -93,23 +93,13 @@ function WalletAssetsFormController($scope, $injector, Wallet, walletTransaction
   });
   
   $scope.setBalance = function() {
-    var coin = $scope.selectedCoin ? $scope.selectedCoin.symbol : null;
+    var coin = $scope.selectedCoin;
     var address = $scope.selectedAddress;
     $scope.balanceData = [0,0];
-    if (address || coin) {
-      for (var i = 0; i < addrListBal.length; i++) {
-        if (addrListBal[i].address == address) {
-          for (var k = 0; k < addrListBal[i].balance.length; k++) {
-            if (addrListBal[i].balance[k].symbol == coin) {
-              var divisible = addrListBal[i].balance[k].divisible;
-              $scope.balanceData[0] = divisible ? new Big(addrListBal[i].balance[k].value).times(WHOLE_UNIT).valueOf() : addrListBal[i].balance[k].value;
-            }
-            if (addrListBal[i].balance[k].symbol == 'BTC') {
-              $scope.balanceData[1] = new Big(addrListBal[i].balance[k].value).times(WHOLE_UNIT).valueOf();
-            }
-          }
-        }
-      }
+    if (address && coin) {
+      var value = Wallet.getAddress($scope.selectedAddress).getBalance($scope.selectedCoin.id);
+      $scope.balanceData[0] = coin.divisible ? new Big(value).times(WHOLE_UNIT).valueOf() : value;
+      $scope.balanceData[1] = new Big(Wallet.getAddress($scope.selectedAddress).getBalance(0)).times(WHOLE_UNIT).valueOf();
     }
   };
 
