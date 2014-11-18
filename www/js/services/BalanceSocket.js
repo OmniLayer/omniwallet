@@ -5,9 +5,10 @@ angular.module("omniServices")
 		self.socket = io.connect('http://' + document.domain + ':' + location.port + "/balance");
 
 		self.on = function(eventName,callback){
-			self.socket.on(eventName,function(msg){
-				$rootScope.$apply(function(){callback(msg)});
-			})
+			self.socket.on(eventName,callback);
+			// function(msg){
+			// 	$rootScope.$apply(function(){callback(msg)});
+			// })
 		}
 
 		self.emit = function(eventName,data){
