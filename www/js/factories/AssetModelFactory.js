@@ -15,7 +15,7 @@ angular.module("omniFactories")
 
 				if(symbol.substring(0, 2) == "SP"){
                 	self.id = symbol.substring(2);
-	                $http.get('/v1/property/' + id + '.json').then(function(result) {
+	                $http.get('/v1/property/' + self.id + '.json').then(function(result) {
 	                  var property = result.data[0];
 	                  self.name = property.propertyName;
 	                  self.property_type = property.formatted_property_type;
