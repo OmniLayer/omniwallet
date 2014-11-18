@@ -1,6 +1,6 @@
 angular.module("omniFactories")
-	.factory("Orderbook",["DExOffer","Transaction","Account","MIN_MINER_FEE", 
-		function OrderbookFactory(DExOffer,Transaction,Account,MIN_MINER_FEE){
+	.factory("Orderbook",["DExOffer","Transaction","Account","Wallet","MIN_MINER_FEE", 
+		function OrderbookFactory(DExOffer,Transaction,Account,Wallet,MIN_MINER_FEE){
 			var Orderbook = function(tradingPair){
 				var self = this;
 
@@ -11,6 +11,9 @@ angular.module("omniFactories")
 					self.disabled = !self.active;
 					self.buy = new DExOffer();
 					self.sell = new DExOffer();
+
+					self.pair = Wallet.getAsset(tradingPair.pair);
+					self.property = Wallet.getAsset(tradingPair.property);
 				};
 
 				self.submitBuyOffer = function(){

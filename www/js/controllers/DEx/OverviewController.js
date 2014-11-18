@@ -8,13 +8,13 @@ angular.module("omniControllers")
 				var active = null;
 				var selected = null;
 				$scope.orderbooks.forEach(function(orderbook){
-					if(orderbook.tradingPair.property.id == propertyId)
+					if(orderbook.tradingPair.property == propertyId)
 						selected = orderbook;
 					if(orderbook.active)
 						active=orderbook;
 				});
 				if(selected==null){
-					var tradingPair = {property:Wallet.getAsset(propertyId),pair: Wallet.getAsset(propertyId < 2147483651 ? 1 : 2)};
+					var tradingPair = {property:propertyId,pair: propertyId < 2147483651 ? 1 : 2};
 					selected = new Orderbook(tradingPair)
 					$scope.orderbooks.push(selected);
 				} else {

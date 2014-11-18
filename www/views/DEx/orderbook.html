@@ -2,15 +2,15 @@
 	<div class="col-xs-6">
 		<div class="row">
 			<div class="col-xs-6">
-				<strong> BUY SP#{{orderbook.tradingPair.property.id}} </strong>
+				<strong> BUY SP#{{orderbook.tradingPair.property}} </strong>
 			</div>
 			<div class="col-xs-6">
-				Your balance: {{orderbook.buy.address.getBalance(orderbook.tradingPair.pair.id).value}}MSC
+				Your balance: {{orderbook.buy.address.getBalance(orderbook.tradingPair.pair).value}}MSC
 			</div>
 		</div>
 		<div class="row">
 			<div class="col-xs-12">
-				<form role="form" name="buy_form" ng-submit="orderbook.submitBuyOffer(orderbook.buy)" class="form-horizontal">
+				<form ng-show="orderbook.pair != undefined" role="form" name="buy_form" ng-submit="orderbook.submitBuyOffer(orderbook.buy)" class="form-horizontal">
 					<div class="form-group">
 						<label class="col-xs-2" for="buy_address">Address:</label>
 						<select name="buy_address" class="form-control col-xs-10" ng-model="orderbook.buy.address" 
@@ -38,7 +38,7 @@
 							<p class="form-control-static">{{orderbook.buy.amounts.pair}}</p>
 						</div>
 						<button type="submit" class="btn btn-default col-xs-3" >
-							Buy SP#{{orderbook.tradingPair.property.id}}
+							Buy SP#{{orderbook.tradingPair.property}}
 			            </button>
 					</div>
 				</form>
@@ -48,15 +48,15 @@
 	<div class="col-xs-6">
 		<div class="row">
 			<div class="col-xs-6">
-				<strong> SELL SP#{{orderbook.tradingPair.property.id}} </strong>
+				<strong> SELL SP#{{orderbook.tradingPair.property}} </strong>
 			</div>
 			<div class="col-xs-6">
-				Your balance: {{orderbook.buy.address.getBalance(orderbook.tradingPair.property.id).value}}SPT
+				Your balance: {{orderbook.buy.address.getBalance(orderbook.tradingPair.property).value}}SPT
 			</div>
 		</div>
 		<div class="row">
 			<div class="col-xs-12">
-				<form role="form" name="sell_form" ng-submit="orderbook.submitSellOffer(orderbook.sell)" class="form-horizontal">
+				<form ng-show="orderbook.property != undefined" role="form" name="sell_form" ng-submit="orderbook.submitSellOffer(orderbook.sell)" class="form-horizontal">
 					<div class="form-group">
 						<label class="col-xs-2" for="sell_address">Address:</label>
 						<select name="sell_address" class="form-control col-xs-10" ng-model="orderbook.sell.address" 
@@ -84,7 +84,7 @@
 							<p class="form-control-static">{{orderbook.sell.amounts.pair}}</p>
 						</div>
 						<button type="submit" class="btn btn-default col-xs-3" >
-							Sell SP#{{orderbook.tradingPair.property.id}}
+							Sell SP#{{orderbook.tradingPair.property}}
 			            </button>
 					</div>
 				</form>
