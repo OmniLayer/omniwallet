@@ -51,9 +51,9 @@ angular.module("omniServices")
 	            }
 	        }
 
-	        self._removeAddress = function(address){
+	        self._removeAddress = function(addressHash){
 	        	for (var i = 0; i < self.addresses.length; i++)
-	              if (self.addresses[i].address == address) 
+	              if (self.addresses[i].address == addressHash) 
 	                self.addresses.splice(i, 1);
 	        }
 
@@ -61,6 +61,12 @@ angular.module("omniServices")
 	        	return self.assets.filter(function(asset){
 	        		return asset.id == assetId;
 	        	})[0];
+	        }
+
+	        self.getAddress = function(addressHash){
+	        	return self.addresses.filter(function(address){
+	        		return address.address == addressHash;
+	        	})[0];	
 	        }
 
 			// self.initialize = function(){				  
