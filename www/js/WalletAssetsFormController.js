@@ -97,9 +97,9 @@ function WalletAssetsFormController($scope, $injector, Wallet, walletTransaction
     var address = $scope.selectedAddress;
     $scope.balanceData = [0,0];
     if (address && coin) {
-      var value = Wallet.getAddress($scope.selectedAddress).getBalance($scope.selectedCoin.id);
+      var value = Wallet.getAddress($scope.selectedAddress).getBalance($scope.selectedCoin.id).value;
       $scope.balanceData[0] = coin.divisible ? new Big(value).times(WHOLE_UNIT).valueOf() : value;
-      $scope.balanceData[1] = new Big(Wallet.getAddress($scope.selectedAddress).getBalance(0)).times(WHOLE_UNIT).valueOf();
+      $scope.balanceData[1] = new Big(Wallet.getAddress($scope.selectedAddress).getBalance(0).value).times(WHOLE_UNIT).valueOf();
     }
   };
 
