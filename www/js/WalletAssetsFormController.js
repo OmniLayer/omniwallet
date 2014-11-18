@@ -34,7 +34,7 @@ function WalletAssetsFormController($scope, $injector, Wallet, walletTransaction
   });
   $scope.$watch('selectedAddress', function() {
     $scope.setBalance();
-    var pubkey = Wallet.getAddress($scope.selectedAddress).pubkey;
+    var pubkey = $scope.selectedAddress ? Wallet.getAddress($scope.selectedAddress).pubkey : undefined;
     $scope.offline = pubkey != undefined && pubkey != "";
   });
   
@@ -97,7 +97,8 @@ function WalletAssetsFormController($scope, $injector, Wallet, walletTransaction
     var address = $scope.selectedAddress;
     $scope.balanceData = [0,0];
     if (address && coin) {
-      var value = Wallet.getAddress($scope.selectedAddress).getBalance($scope.selectedCoin.id).value;
+      var balance = Wallet.getAddress($scope.selectedAddress).getBalance($scope.selectedCoin.id);
+      var value = balance ? balance.value : 0;
       $scope.balanceData[0] = coin.divisible ? new Big(value).times(WHOLE_UNIT).valueOf() : value;
       $scope.balanceData[1] = new Big(Wallet.getAddress($scope.selectedAddress).getBalance(0).value).times(WHOLE_UNIT).valueOf();
     }
