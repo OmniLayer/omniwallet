@@ -17,7 +17,7 @@ function WalletSellAssetsController($modal, $scope, $http, $q, Wallet, walletTra
     var noCurrency={
         symbol: 'No DeX-tradable coins in wallet!',
         name: 'No DeX-tradable coins in wallet!',
-        addresses: [] 
+        tradableAddresses: [] 
     }
     $scope.currencySaleList.push(noCurrency);
     $scope.$parent.$parent.selectedCoin=noCurrency;
