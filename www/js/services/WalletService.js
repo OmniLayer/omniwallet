@@ -1,6 +1,6 @@
 angular.module("omniServices")
-	.service("Wallet",["Address", "Asset",
-		function WalletService(Address, Asset ){
+	.service("Wallet",["Address", "Asset", "BalanceSocket",
+		function WalletService(Address, Asset, BalanceSocket){
 			var self = this;
 
 			self.initialize =function(wallet){
@@ -14,7 +14,7 @@ angular.module("omniServices")
 	        self._addAddress = function(raw){
 	        	var address = new Address(raw.address,raw.privkey,raw.pubkey);
 
-                address.socket.on("address:"+address.address, function(data){
+                BalanceSocket.on("address:"+address.address, function(data){
                     data.balance.forEach(function(balanceItem) {
                         var tradable = ((address.privkey && address.privkey.length == 58) || address.pubkey) && balanceItem.value > 0;
                         var asset = null;

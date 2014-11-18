@@ -8,14 +8,12 @@ angular.module("omniFactories")
 				self.privkey = privkey;
 				self.pubkey = pubkey;
 				self.balance = [];
-				
-				self.socket = BalanceSocket;
 
-				self.socket.on("address:"+address, function(data){
+				BalanceSocket.on("address:"+address, function(data){
 					self.balance = data.balance
 				});
 
-				self.socket.emit("address:add", {data:address});
+				BalanceSocket.emit("address:add", {data:address});
 			}
 
 			self.getBalance = function(assetId){
