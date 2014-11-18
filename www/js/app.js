@@ -154,7 +154,7 @@ app.config(function($idleProvider, $keepaliveProvider, reCAPTCHAProvider, idleDu
   //Whitelist pages
   whitelisted = ['login', 'about', 'status', 'explorer'];
 
-  if (!Account.isLoggedIn) {
+  if (!Account.loggedIn) {
     for (var i = 0; i < whitelisted.length; i++) {
       if ($location.path().search(whitelisted[i]) != -1) {
         return;

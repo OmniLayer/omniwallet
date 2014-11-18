@@ -6,7 +6,7 @@ function WalletController($scope, $q, $http, $modal, $location, Account, Wallet)
   //console.log(Wallet.addresses);
 
 // HACK: We check for Account.isLoggedIn since this controller is used
-  $scope.addrList = Account.isLoggedIn ? Wallet.addresses.map(function(e, i, a) {
+  $scope.addrList = Account.loggedIn ? Wallet.addresses.map(function(e, i, a) {
     return e.address;
   }) : [];
   $scope.addrListBal = []

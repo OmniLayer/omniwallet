@@ -121,7 +121,7 @@ function Ctrl($scope, $route, $routeParams, $modal, $location, browser, Account)
   $scope.events = [];
 
   $scope.$on('$idleStart', function() {
-    if (Account.isLoggedIn) {
+    if (Account.loggedIn) {
       var originalTitle = document.title;
 
       $modal.open({
@@ -432,11 +432,11 @@ function SidecarController($rootScope, $scope, $http, $modal, $location, Account
     'wallet': '/partials/wallet_sc.html'
   };
 
-  $scope.hasAddresses = Account.isLoggedIn && Wallet.addresses.length != 0 ? true : false;
-  $scope.hasAddressesWithPrivkey = Account.isLoggedIn && getAddressesWithPrivkey().length != 0 ? true : false;
+  $scope.hasAddresses = Account.loggedIn && Wallet.addresses.length != 0 ? true : false;
+  $scope.hasAddressesWithPrivkey = Account.loggedIn && getAddressesWithPrivkey().length != 0 ? true : false;
   $scope.hasTradableCoins = false;
   $scope.hasBTC = false;
-  if (Account.isLoggedIn) checkBalance(getAddressesWithPrivkey());
+  if (Account.loggedIn) checkBalance(getAddressesWithPrivkey());
   
   $scope.goToTradePage = function($event){
     if($location.path() == "/wallet/trade")
@@ -485,9 +485,9 @@ function SidecarController($rootScope, $scope, $http, $modal, $location, Account
   $scope.$watch(function() {
     return Wallet.addresses
   }, function(result) {
-    $scope.hasAddresses = Account.isLoggedIn && result.length != 0 ? true : false;
-    $scope.hasAddressesWithPrivkey = Account.isLoggedIn && getAddressesWithPrivkey().length != 0 ? true : false;
-    if (Account.isLoggedIn) checkBalance(getAddressesWithPrivkey());
+    $scope.hasAddresses = Account.loggedIn && result.length != 0 ? true : false;
+    $scope.hasAddressesWithPrivkey = Account.loggedIn && getAddressesWithPrivkey().length != 0 ? true : false;
+    if (Account.loggedIn) checkBalance(getAddressesWithPrivkey());
   }, true);
 
   function getAddressesWithPrivkey() {
