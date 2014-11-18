@@ -19,7 +19,11 @@ function WalletAssetsFormController($scope, $injector, Wallet, walletTransaction
         $scope.selectedCoin = e;
     });
   }
-  $scope.addressList = $scope.selectedCoin ? $scope.selectedCoin.tradableAddresses.filter(.map(function(address){ return address.address}) : [];
+  $scope.addressList = $scope.selectedCoin ? $scope.selectedCoin.tradableAddresses.filter(function(e) {
+          return $scope.offlineSupport || (e.privkey && e.privkey.length == 58);
+        }).map(function(e){
+          return e.address;
+        }) : [];
   if(!$scope.$parent.selectedAddress)
     $scope.selectedAddress = $scope.addressList[0] || null;
   $scope.$watch('selectedCoin', function() {
@@ -35,7 +39,11 @@ function WalletAssetsFormController($scope, $injector, Wallet, walletTransaction
   });
   
   var updateData = function(){
-    $scope.addressList = $scope.selectedCoin ? $scope.selectedCoin.tradableAddresses.map(function(address){ return address.address}) : [];
+    $scope.addressList = $scope.selectedCoin ? $scope.selectedCoin.tradableAddresses.filter(function(e) {
+          return $scope.offlineSupport || (e.privkey && e.privkey.length == 58);
+        }).map(function(e){
+          return e.address;
+        }) : [];
     if(!$scope.$parent.selectedAddress)
       $scope.selectedAddress = $scope.addressList[0] || null;
     $scope.setBalance();
