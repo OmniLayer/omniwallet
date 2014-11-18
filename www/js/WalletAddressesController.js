@@ -9,14 +9,14 @@ angular.module('omniwallet')
 
     return deferred.promise;
   })
-  .factory('wallet_balances_data', function($http, $q, $timeout, $injector) {
+  .factory('wallet_balances_data', function($http, $q, $timeout, $injector, Account) {
     var count = 1;
     return {
       "getData": function() {
         var deferred = $q.defer();
 
         _.defer(function() {
-          var wallet = $injector.get('userService').getWallet();
+          var wallet = Account.wallet;
           if (wallet && wallet.addresses.length > 0) {
             var requests = [];
 
@@ -152,7 +152,7 @@ angular.module('omniwallet')
       }
     }
   })
-  .controller('WalletBalancesController', function($modal, $rootScope, $injector, $scope, wallet_balances_data, wallet_balances_template) {
+  .controller('WalletBalancesController', function($modal, $rootScope, $injector, $scope, wallet_balances_data, wallet_balances_template, Account) {
 
   var appraiser = $injector.get('appraiser');
   $rootScope.$on('APPRAISER_VALUE_CHANGED', function() {
@@ -172,7 +172,7 @@ angular.module('omniwallet')
         }
       });
       modalInstance.result.then(function() {
-	      $injector.get('userService').removeAddress(addritem.address);
+	      Account.removeAddress(addritem.address);
         $scope.modalOpened=false;
 	      $scope.refresh();
         },
