@@ -1,5 +1,5 @@
 angular.module("omniFactories")
-	.factory("Asset", [function AssetsModelFactory(){
+	.factory("Asset", ["$http",function AssetsModelFactory($http){
 		var Asset = function(symbol,divisible,tradable,address){
 			var self = this;
 
