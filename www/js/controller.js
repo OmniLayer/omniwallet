@@ -418,7 +418,7 @@ function ExplorerInspectorController($scope, $location, $http, hashExplorer) {
     });
   }
 }
-function SidecarController($rootScope, $scope, $http, $modal, $location, Account, balanceService) {
+function SidecarController($rootScope, $scope, $http, $modal, $location, Account, balanceService, Wallet) {
   $scope.values = {};
   $scope.setView = function(viewName) {
     $scope.view = $scope.sidecarTemplates[viewName];
