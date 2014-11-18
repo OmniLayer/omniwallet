@@ -8,7 +8,7 @@ angular.module('omniwallet')
 
     return deferred.promise;
   })
-  .factory('asset_types_data', function($http, $q, $timeout, $injector) {
+  .factory('asset_types_data', function($http, $q, $timeout, $injector, Account) {
     var count = 1;
     return {
       "getData": function() {
@@ -129,7 +129,7 @@ angular.module('omniwallet')
       }
     }
   })
-  .controller('AssetTypesController', function($q, $http, $modal, $rootScope, $injector, $scope, $element, asset_types_data, asset_types_template) {
+  .controller('AssetTypesController', function($q, $http, $modal, $rootScope, $injector, $scope, $element, asset_types_data, asset_types_template, Account) {
 
   var appraiser = $injector.get('appraiser');
   $rootScope.$on('APPRAISER_VALUE_CHANGED', function() {
