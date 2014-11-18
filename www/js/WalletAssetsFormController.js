@@ -61,7 +61,7 @@ function WalletAssetsFormController($scope, $injector, Wallet, walletTransaction
   $scope.balanceData = [0];
   var addrListBal = [];
   // fill the addrBalanceList with all the addresses on the wallet for which we've got private keys.
-  Wallet.getAddressesWithPrivkey().concat(Wallet.getAddressesWithPubkey()).forEach(function(e, i) {
+  Wallet.addresses.forEach(function(e, i) {
     if(Bitcoin.Address.validate(e)){
       var balances = [
         {
