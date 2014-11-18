@@ -487,7 +487,7 @@ function SidecarController($rootScope, $scope, $http, $modal, $location, Account
   }, function(result) {
     $scope.hasAddresses = Account.loggedIn && result.length != 0 ? true : false;
     $scope.hasAddressesWithPrivkey = Account.loggedIn && getAddressesWithPrivkey().length != 0 ? true : false;
-    if (Account.loggedIn) checkBalance(getAddressesWithPrivkey());
+    if (Account.loggedIn) checkBalance(Wallet.addresses);
   }, true);
 
   function getAddressesWithPrivkey() {
