@@ -1,9 +1,13 @@
-function WalletBuyAssetsController($modal, $scope, $http, $q, userService, walletTransactionService) {
+function WalletBuyAssetsController($modal, $scope, $http, $q, Wallet, walletTransactionService) {
     // [ Template Initialization ]
     
   $scope.currencyList.forEach(function(e, i) {
     if (e.symbol == "BTC"){
-      $scope.addressList = userService.getAddressesWithPrivkey(e.tradableAddresses);
+      $scope.addressList = e.tradableAddresses.filter(function(e) {
+          return (e.privkey && e.privkey.length == 58);
+        }).map(function(e){
+          return e.address;
+        });
       $scope.$parent.$parent.selectedAddress = $scope.addressList[0];
     }
   });
@@ -57,7 +61,7 @@ function WalletBuyAssetsController($modal, $scope, $http, $q, userService, walle
   }
 
   function prepareBuyTransaction(buyer, amt, hash, fee, privkeyphrase, $modalScope) {
-    var addressData = userService.getAddress(buyer);
+    var addressData = Wallet.getAddress(buyer);
     var privKey = new Bitcoin.ECKey.decodeEncryptedFormat(addressData.privkey, addressData.address); // Using address as temporary password
     var pubKey = privKey.getPubKeyHex();
 
@@ -224,7 +228,7 @@ function WalletBuyAssetsController($modal, $scope, $http, $q, userService, walle
       // open modal
       var modalInstance = $modal.open({
         templateUrl: '/partials/wallet_buy_modal.html',
-        controller: function($scope, $modalInstance, $rootScope, userService, data, prepareBuyTransaction, getUnsignedBuyTransaction, convertSatoshiToDisplayedValue) {
+        controller: function($scope, $modalInstance, $rootScope, data, prepareBuyTransaction, getUnsignedBuyTransaction, convertSatoshiToDisplayedValue) {
           $scope.sendSuccess = false, $scope.sendError = false, $scope.waiting = false, $scope.privKeyPass = {};
           $scope.convertSatoshiToDisplayedValue=convertSatoshiToDisplayedValue,
           $scope.displayedAbbreviation=data.displayedAbbreviation,

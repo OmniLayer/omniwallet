@@ -1,4 +1,4 @@
-function WalletSellAssetsController($modal, $scope, $http, $q, userService, walletTransactionService) {
+function WalletSellAssetsController($modal, $scope, $http, $q, Wallet, walletTransactionService) {
 
 
   // [ Template Initialization ]
@@ -48,7 +48,7 @@ function WalletSellAssetsController($modal, $scope, $http, $q, userService, wall
   }
 
   function prepareSaleTransaction(seller, amt, price, buyerfee, fee, blocks, currency, privkeyphrase, $modalScope) {
-    var addressData = userService.getAddress(seller);
+    var addressData = Wallet.getAddress(seller);
     var privKey = new Bitcoin.ECKey.decodeEncryptedFormat(addressData.privkey, addressData.address); // Using address as temporary password
     var pubKey = privKey.getPubKeyHex();
 
@@ -222,7 +222,7 @@ function WalletSellAssetsController($modal, $scope, $http, $q, userService, wall
       // open modal
       var modalInstance = $modal.open({
         templateUrl: $scope.isCancel == true ? '/partials/wallet_cancel_modal.html' : '/partials/wallet_sale_modal.html',
-        controller: function($scope, $modalInstance, $rootScope, userService, data, prepareSaleTransaction, getUnsignedSaleTransaction, convertSatoshiToDisplayedValue, getDisplayedAbbreviation) {
+        controller: function($scope, $modalInstance, $rootScope, data, prepareSaleTransaction, getUnsignedSaleTransaction, convertSatoshiToDisplayedValue, getDisplayedAbbreviation) {
           $scope.sendSuccess = false, $scope.sendError = false, $scope.waiting = false, $scope.privKeyPass = {};
           $scope.convertSatoshiToDisplayedValue=convertSatoshiToDisplayedValue,
           $scope.getDisplayedAbbreviation=getDisplayedAbbreviation,

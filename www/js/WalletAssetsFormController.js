@@ -1,13 +1,13 @@
 WHOLE_UNIT = new Big(0.00000001); //Backend data returns satoshi, use this conversion ratio
 SATOSHI_UNIT = new Big(100000000); //Backend data needs satoshi, use this conversion ratio
 MIN_MINER_FEE = new Big(0.00010000);
-function WalletAssetsFormController($scope, $injector, userService, walletTransactionService) {
+function WalletAssetsFormController($scope, $injector, Wallet, walletTransactionService) {
   // [ Form Validation]
   $scope.showErrors = false;
 
   // [ Template Initialization ]
 
-  $scope.currencyList = userService.getCurrencies().filter(function(currency){
+  $scope.currencyList = Wallet.assets.filter(function(currency){
        return currency.tradable;
   }); // [{symbol: 'BTC', addresses:[], name: 'BTC'}, {symbol: 'MSC', addresses:[], name: 'MSC'}, {symbol: 'TMSC', addresses:[], name: 'TMSC'}]
   
@@ -19,7 +19,7 @@ function WalletAssetsFormController($scope, $injector, userService, walletTransa
         $scope.selectedCoin = e;
     });
   }
-  $scope.addressList = $scope.selectedCoin ? userService.getTradableAddresses($scope.selectedCoin.tradableAddresses, $scope.offlineSupport) : [];
+  $scope.addressList = $scope.selectedCoin ? $scope.selectedCoin.tradableAddresses.filter(.map(function(address){ return address.address}) : [];
   if(!$scope.$parent.selectedAddress)
     $scope.selectedAddress = $scope.addressList[0] || null;
   $scope.$watch('selectedCoin', function() {
@@ -30,12 +30,12 @@ function WalletAssetsFormController($scope, $injector, userService, walletTransa
   });
   $scope.$watch('selectedAddress', function() {
     $scope.setBalance();
-    var pubkey = userService.getAddress($scope.selectedAddress).pubkey;
+    var pubkey = Wallet.getAddress($scope.selectedAddress).pubkey;
     $scope.offline = pubkey != undefined && pubkey != "";
   });
   
   var updateData = function(){
-    $scope.addressList = $scope.selectedCoin ? userService.getTradableAddresses($scope.selectedCoin.tradableAddresses, $scope.offlineSupport) : [];
+    $scope.addressList = $scope.selectedCoin ? $scope.selectedCoin.tradableAddresses.map(function(address){ return address.address}) : [];
     if(!$scope.$parent.selectedAddress)
       $scope.selectedAddress = $scope.addressList[0] || null;
     $scope.setBalance();
@@ -53,7 +53,7 @@ function WalletAssetsFormController($scope, $injector, userService, walletTransa
   $scope.balanceData = [0];
   var addrListBal = [];
   // fill the addrBalanceList with all the addresses on the wallet for which we've got private keys.
-  userService.getAddressesWithPrivkey().concat(userService.getAddressesWithPubkey()).forEach(function(e, i) {
+  Wallet.getAddressesWithPrivkey().concat(Wallet.getAddressesWithPubkey()).forEach(function(e, i) {
     if(Bitcoin.Address.validate(e)){
       var balances = [
         {
