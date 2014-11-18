@@ -7,7 +7,8 @@ angular.module("omniFactories")
 				self.address = address;
 				self.privkey = privkey;
 				self.pubkey = pubkey;
-
+				self.balance = [];
+				
 				self.socket = BalanceSocket;
 
 				self.socket.on("address:"+address, function(data){
