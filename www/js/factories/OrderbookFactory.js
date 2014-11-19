@@ -1,6 +1,6 @@
 angular.module("omniFactories")
-	.factory("Orderbook",["DExOffer","Transaction","Account","Wallet","MIN_MINER_FEE", 
-		function OrderbookFactory(DExOffer,Transaction,Account,Wallet,MIN_MINER_FEE){
+	.factory("Orderbook",["DExOffer","Transaction","Account","Wallet","$http","MIN_MINER_FEE", 
+		function OrderbookFactory(DExOffer,Transaction,Account,Wallet,$http,MIN_MINER_FEE){
 			var Orderbook = function(tradingPair){
 				var self = this;
 
@@ -18,6 +18,7 @@ angular.module("omniFactories")
 					self.addresses = Wallet.addresses.filter(function(address){
 						return ((address.privkey && address.privkey.length == 58) || address.pubkey)
 					});
+
 				};
 
 				self.submitBuyOffer = function(){
