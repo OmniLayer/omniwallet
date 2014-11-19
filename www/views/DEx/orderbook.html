@@ -5,7 +5,7 @@
 				<strong> BUY SP#{{orderbook.tradingPair.property}} </strong>
 			</div>
 			<div class="col-xs-6">
-				Your balance: {{orderbook.buy.address.getBalance(orderbook.tradingPair.pair).value}}MSC
+				Your balance: {{orderbook.getBalance(orderbook.buy.address, orderbook.tradingPair.pair)}}MSC
 			</div>
 		</div>
 		<div class="row">
@@ -13,8 +13,8 @@
 				<form ng-show="orderbook.pair != undefined" role="form" name="buy_form" ng-submit="orderbook.submitBuyOffer(orderbook.buy)" class="form-horizontal">
 					<div class="form-group">
 						<label class="col-xs-2" for="buy_address">Address:</label>
-						<select name="buy_address" class="form-control col-xs-10" ng-model="orderbook.buy.address" 
-							ng-options="address.address for address in orderbook.tradingPair.pair.tradableAddresses" required>
+						<select ng-if="orderbook.pair != undefined" name="buy_address" class="form-control col-xs-10" ng-model="orderbook.buy.address" 
+							ng-options="address.address for address in orderbook.pair.tradableAddresses" required>
 			                <option value=""> -- Choose Address -- </option>
 			            </select>
 					</div>
@@ -28,7 +28,7 @@
 					<div class="form-group">
 						<label class="col-xs-3" for="buy_price">Price Per SPT:</label>
 						<div class="input-group col-xs-9">
-							<input type="number" class="form-control" id="buy_price" placeholder="Enter price" ng-change="updateAmounts(buy_form.buy_price)">
+							<input type="number" class="form-control" id="buy_price" ng-model="orderbook.buy.price" placeholder="Enter price" ng-change="updateAmounts(orderbook.buy, buy_form.buy_price)">
 							<span class="input-group-addon">MSC</span>
 						</div>
 					</div>
@@ -51,7 +51,7 @@
 				<strong> SELL SP#{{orderbook.tradingPair.property}} </strong>
 			</div>
 			<div class="col-xs-6">
-				Your balance: {{orderbook.buy.address.getBalance(orderbook.tradingPair.property).value}}SPT
+				Your balance: {{orderbook.getBalance(orderbook.sell.address, orderbook.tradingPair.property)}}SPT
 			</div>
 		</div>
 		<div class="row">
@@ -59,8 +59,8 @@
 				<form ng-show="orderbook.property != undefined" role="form" name="sell_form" ng-submit="orderbook.submitSellOffer(orderbook.sell)" class="form-horizontal">
 					<div class="form-group">
 						<label class="col-xs-2" for="sell_address">Address:</label>
-						<select name="sell_address" class="form-control col-xs-10" ng-model="orderbook.sell.address" 
-							ng-options="address.address for address in orderbook.tradingPair.property.tradableAddresses" required>
+						<select ng-if="orderbook.property != undefined" name="sell_address" class="form-control col-xs-10" ng-model="orderbook.sell.address" 
+							ng-options="address.address for address in orderbook.property.tradableAddresses" required>
 			                <option value=""> -- Choose Address -- </option>
 			            </select>
 					</div>
@@ -74,7 +74,7 @@
 					<div class="form-group">
 						<label class="col-xs-3" for="sell_price">Price Per SPT:</label>
 						<div class="input-group col-xs-9">
-							<input type="number" class="form-control" id="sell_price" placeholder="Enter price" ng-change="updateAmounts(sell_form.sell_price)">
+							<input type="number" class="form-control" id="sell_price" ng-model="orderbook.sell.price"  placeholder="Enter price" ng-change="updateAmounts(orderbook.sell, sell_form.sell_price)">
 							<span class="input-group-addon">MSC</span>
 						</div>
 					</div>

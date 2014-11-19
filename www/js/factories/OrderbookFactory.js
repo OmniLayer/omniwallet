@@ -14,6 +14,7 @@ angular.module("omniFactories")
 
 					self.pair = Wallet.getAsset(tradingPair.pair);
 					self.property = Wallet.getAsset(tradingPair.property);
+
 				};
 
 				self.submitBuyOffer = function(){
@@ -69,6 +70,11 @@ angular.module("omniFactories")
 						transaction:dexOffer
 					})
 				};
+
+				self.getBalance = function(address, assetId){
+					var balance = address.getBalance(assetId);
+					return balance ? balance.value : 0;
+				}
 
 				self.initialize();
 			}
