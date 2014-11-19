@@ -20,14 +20,14 @@
 				<div class="form-group">
 					<label class="col-xs-3" for="buy_amount_desired">Amount (SPT):</label>
 					<div class="input-group col-xs-9">
-						<input type="number" class="form-control" id="buy_amount_desired" placeholder="Enter desired amount" ng-model="orderbook.buy.amounts.property">
+						<input type="number" class="form-control" id="buy_amount_desired" placeholder="Enter desired amount" ng-model="orderbook.buy.amounts.property" step="0.00000001" min="0.00000001">
 						<span class="input-group-addon">SPT</span>
 					</div>
 				</div>
 				<div class="form-group">
 					<label class="col-xs-3" for="buy_price">Price Per SPT:</label>
 					<div class="input-group col-xs-9">
-						<input type="number" class="form-control" id="buy_price" ng-model="orderbook.buy.price" placeholder="Enter price" ng-change="updateAmounts(orderbook.buy, orderbook.buy.price)">
+						<input type="number" class="form-control" id="buy_price" ng-model="orderbook.buy.price" placeholder="Enter price" ng-change="updateAmounts(orderbook.buy, orderbook.buy.price)" step="0.00000001" min="0.00000001">
 						<span class="input-group-addon">MSC</span>
 					</div>
 				</div>
@@ -66,14 +66,14 @@
 				<div class="form-group">
 					<label class="col-xs-3" for="sell_amount_desired">Amount (SPT):</label>
 					<div class="input-group col-xs-9">
-						<input type="number" class="form-control" id="sell_amount_desired" placeholder="Enter desired amount" ng-model="orderbook.sell.amounts.property">
+						<input type="number" class="form-control" id="sell_amount_desired" placeholder="Enter desired amount" ng-model="orderbook.sell.amounts.property" step="0.00000001" min="0.00000001">
 						<span class="input-group-addon">SPT</span>
 					</div>
 				</div>
 				<div class="form-group">
 					<label class="col-xs-3" for="sell_price">Price Per SPT:</label>
 					<div class="input-group col-xs-9">
-						<input type="number" class="form-control" id="sell_price" ng-model="orderbook.sell.price"  placeholder="Enter price" ng-change="updateAmounts(orderbook.sell, orderbook.sell.price">
+						<input type="number" class="form-control" id="sell_price" ng-model="orderbook.sell.price"  placeholder="Enter price" ng-change="updateAmounts(orderbook.sell, orderbook.sell.price" step="0.00000001" min="0.00000001">
 						<span class="input-group-addon">MSC</span>
 					</div>
 				</div>
