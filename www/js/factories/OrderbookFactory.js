@@ -42,6 +42,7 @@ angular.module("omniFactories")
 							desiredCurrency:self.tradingPair.property,
 							desiredAmount:self.buy.amounts.property,
 							totalCost:dexOffer.totalCost,
+							action:"Add",
 							confirmText: "Create Transaction"
 						},
 						transaction:dexOffer
