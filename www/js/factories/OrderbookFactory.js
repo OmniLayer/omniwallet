@@ -1,6 +1,6 @@
 angular.module("omniFactories")
-	.factory("Orderbook",["DExOffer","Transaction","Account","Wallet","$http","MIN_MINER_FEE", 
-		function OrderbookFactory(DExOffer,Transaction,Account,Wallet,$http,MIN_MINER_FEE){
+	.factory("Orderbook",["DExOffer","Transaction","Account","Wallet","ModalManager","MIN_MINER_FEE", 
+		function OrderbookFactory(DExOffer,Transaction,Account,Wallet,ModalManager,MIN_MINER_FEE){
 			var Orderbook = function(tradingPair){
 				var self = this;
 
