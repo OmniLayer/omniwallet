@@ -1,6 +1,6 @@
 angular.module("omniFactories")
-	.factory("Orderbook",["DExOffer","Transaction","Account","Wallet","ModalManager","MIN_MINER_FEE", 
-		function OrderbookFactory(DExOffer,Transaction,Account,Wallet,ModalManager,MIN_MINER_FEE){
+	.factory("Orderbook",["DExOffer","Transaction","Account","Wallet","ModalManager","MIN_MINER_FEE", "WHOLE_UNIT", 
+		function OrderbookFactory(DExOffer,Transaction,Account,Wallet,ModalManager,MIN_MINER_FEE,WHOLE_UNIT){
 			var Orderbook = function(tradingPair){
 				var self = this;
 
@@ -76,7 +76,7 @@ angular.module("omniFactories")
 				};
 
 				self.getBalance = function(address, assetId){
-					return address && address.getBalance(assetId) ? address.getBalance(assetId).value : 0;
+					return address && address.getBalance(assetId) ? new Big(address.getBalance(assetId).value).times(WHOLE_UNIT).valueOf() : 0;
 				}
 
 				self.initialize();
