@@ -12,4 +12,4 @@ LOCALDEVBYPASSDB = 0    #Set to 1 to use local storage/file system, Set to 0 to 
 #Used to generate challange/response hash
 SERVER_SECRET = 'SoSecret!'
 SESSION_SECRET = 'SuperSecretSessionStuff'
-
+WEBSOCKET_SECRET = 'SocketSecret!'
