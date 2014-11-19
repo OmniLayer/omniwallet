@@ -25,6 +25,8 @@ angular.module("omniFactories")
                 self.data['fee']= minerFee;
                 self.data['transaction_from'] = self.address.address;
                 self.data['testnet'] = TESTNET || false;
+
+                self.totalCost = minerFee; // TODO: calculate protocol cost
 			}
 
 			self.initialize()
