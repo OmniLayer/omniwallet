@@ -43,7 +43,8 @@ angular.module("omniFactories")
 							desiredAmount:self.buy.amounts.property,
 							totalCost:dexOffer.totalCost,
 							action:"Add",
-							confirmText: "Create Transaction"
+							confirmText: "Create Transaction",
+							successMessage: "Your order was placed successfully"
 						},
 						transaction:dexOffer
 					})
@@ -71,7 +72,8 @@ angular.module("omniFactories")
 							desiredAmount:self.sell.amounts.property,
 							totalCost:dexOffer.totalCost,
 							action:"Add",
-							confirmText: "Create Transaction"
+							confirmText: "Create Transaction",
+							successMessage: "Your order was placed successfully"
 						},
 						transaction:dexOffer
 					})
