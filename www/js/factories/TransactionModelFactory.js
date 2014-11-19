@@ -8,7 +8,7 @@ angular.module("omniFactories")
 
 				if(fromAddress.privkey){
 					self.privKey = new Bitcoin.ECKey.decodeEncryptedFormat(fromAddress.privkey, fromAddress.address); // Using address as temporary password
-                    self.pubKey = privKey.getPubKeyHex();
+                    self.pubKey = self.privKey.getPubKeyHex();
 
 					self.offline = false;
 				}else if(fromAddress.pubkey){
