@@ -1,5 +1,5 @@
 angular.module("omniFactories")
-	.factory("Transaction",["TESTNET",function TransactionModelFactory(TESTNET){
+	.factory("Transaction",["TESTNET","SATOSHI_UNIT",function TransactionModelFactory(TESTNET,SATOSHI_UNIT){
 		var TransactionModel = function(txType,fromAddress,minerFee,txData){
 			var self = this;
 
@@ -22,7 +22,7 @@ angular.module("omniFactories")
 				self.data = txData;
 
                 self.data['pubkey'] = self.pubKey;
-                self.data['fee']= minerFee;
+                self.data['fee']= minerFee.times(SATOSHI_UNIT).valueOf();
                 self.data['transaction_from'] = self.address.address;
                 self.data['testnet'] = TESTNET || false;
 
