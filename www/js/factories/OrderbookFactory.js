@@ -12,9 +12,12 @@ angular.module("omniFactories")
 					self.buy = new DExOffer();
 					self.sell = new DExOffer();
 
-					self.pair = Wallet.getAsset(tradingPair.pair);
+					self.pair = Wallet.getAsset(tradingPair.pair) || {tradableAddresses;
 					self.property = Wallet.getAsset(tradingPair.property);
 
+					self.addresses = Wallet.addresses.filter(function(address){
+						return ((address.privkey && address.privkey.length == 58) || address.pubkey)
+					});
 				};
 
 				self.submitBuyOffer = function(){
@@ -72,8 +75,7 @@ angular.module("omniFactories")
 				};
 
 				self.getBalance = function(address, assetId){
-					var balance = address.getBalance(assetId);
-					return balance ? balance.value : 0;
+					return address && address.getBalance(assetId) ? address.getBalance(assetId).value : 0;
 				}
 
 				self.initialize();

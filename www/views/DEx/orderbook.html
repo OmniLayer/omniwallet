@@ -10,11 +10,11 @@
 		</div>
 		<div class="row">
 			<div class="col-xs-12">
-				<form ng-show="orderbook.pair != undefined" role="form" name="buy_form" ng-submit="orderbook.submitBuyOffer(orderbook.buy)" class="form-horizontal">
+				<form role="form" name="buy_form" ng-submit="orderbook.submitBuyOffer(orderbook.buy)" class="form-horizontal">
 					<div class="form-group">
 						<label class="col-xs-2" for="buy_address">Address:</label>
-						<select ng-if="orderbook.pair != undefined" name="buy_address" class="form-control col-xs-10" ng-model="orderbook.buy.address" 
-							ng-options="address.address for address in orderbook.pair.tradableAddresses" required>
+						<select name="buy_address" class="form-control col-xs-10" ng-model="orderbook.buy.address" 
+							ng-options="address.address for address in orderbook.addresses" required>
 			                <option value=""> -- Choose Address -- </option>
 			            </select>
 					</div>
@@ -56,11 +56,11 @@
 		</div>
 		<div class="row">
 			<div class="col-xs-12">
-				<form ng-show="orderbook.property != undefined" role="form" name="sell_form" ng-submit="orderbook.submitSellOffer(orderbook.sell)" class="form-horizontal">
+				<form role="form" name="sell_form" ng-submit="orderbook.submitSellOffer(orderbook.sell)" class="form-horizontal">
 					<div class="form-group">
 						<label class="col-xs-2" for="sell_address">Address:</label>
-						<select ng-if="orderbook.property != undefined" name="sell_address" class="form-control col-xs-10" ng-model="orderbook.sell.address" 
-							ng-options="address.address for address in orderbook.property.tradableAddresses" required>
+						<select name="sell_address" class="form-control col-xs-10" ng-model="orderbook.sell.address" 
+							ng-options="address.address for address in orderbook.addresses" required>
 			                <option value=""> -- Choose Address -- </option>
 			            </select>
 					</div>
