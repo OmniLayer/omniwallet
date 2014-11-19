@@ -12,7 +12,7 @@ angular.module("omniFactories")
 					self.buy = new DExOffer();
 					self.sell = new DExOffer();
 
-					self.pair = Wallet.getAsset(tradingPair.pair) || {tradableAddresses;
+					self.pair = Wallet.getAsset(tradingPair.pair);
 					self.property = Wallet.getAsset(tradingPair.property);
 
 					self.addresses = Wallet.addresses.filter(function(address){
