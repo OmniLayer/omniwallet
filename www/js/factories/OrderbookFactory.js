@@ -1,6 +1,6 @@
 angular.module("omniFactories")
-	.factory("Orderbook",["DExOffer","Transaction","Account","Wallet","ModalManager","MIN_MINER_FEE", "WHOLE_UNIT", 
-		function OrderbookFactory(DExOffer,Transaction,Account,Wallet,ModalManager,MIN_MINER_FEE,WHOLE_UNIT){
+	.factory("Orderbook",["DExOffer","Transaction","Account","Wallet","ModalManager","MIN_MINER_FEE", "WHOLE_UNIT", "SATOSHI_UNIT", 
+		function OrderbookFactory(DExOffer,Transaction,Account,Wallet,ModalManager,MIN_MINER_FEE,WHOLE_UNIT,SATOSHI_UNIT){
 			var Orderbook = function(tradingPair){
 				var self = this;
 
@@ -27,10 +27,10 @@ angular.module("omniFactories")
 					var dexOffer = new Transaction(21,self.buy.address,fee,{
 							transaction_version:0,
 							sale_currency_id:self.tradingPair.pair,
-							sale_amount:self.buy.amounts.pair,
+							sale_amount: new Big(self.buy.amounts.pair).times(SATOSHI_UNIT).valueOf(),
 							desired_currency_id:self.tradingPair.property,
-							desired_amount:self.buy.amounts.property,
-							action:1 // TODO: fill appropriate value
+							desired_amount:new Big(self.buy.amounts.property).times(SATOSHI_UNIT).valueOf(),
+							action:1
 						});
 					ModalManager.openConfirmationModal({
 						dataTemplate: '/views/modals/partials/dex_offer.html',
@@ -55,10 +55,10 @@ angular.module("omniFactories")
 					var dexOffer = new Transaction(21,self.sell.address,fee,{
 							transaction_version:0,
 							sale_currency_id:self.tradingPair.property,
-							sale_amount:self.buy.amounts.property,
+							sale_amount:new Big(self.sell.amounts.property).times(SATOSHI_UNIT).valueOf(),
 							desired_currency_id:self.tradingPair.pair,
-							desired_amount:self.buy.amounts.pair,
-							action:1 // TODO: fill appropriate value
+							desired_amount:new Big(self.sell.amounts.pair).times(SATOSHI_UNIT).valueOf(),
+							action:1 
 						});
 					ModalManager.openConfirmationModal({
 						dataTemplate: '/views/modals/partials/dex_offer.html',
