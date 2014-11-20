@@ -10,7 +10,7 @@ angular.module("omniFactories")
 				self.totalforsale = offer.amountforsale;
 				self.totaldesired = offer.amountdesired;
 
-				self.remainigforsale = offer.remainingforsale;
+				self.remainingforsale = offer.remainingforsale;
 				self.remainingdesired = offer.remainingdesired;
 			};
 
@@ -24,7 +24,7 @@ angular.module("omniFactories")
 				self.totaldesired += offer.amountdesired;
 				self.totalforsale += offer.amountforsale;
 
-				self.remainigforsale += offer.remainingforsale;
+				self.remainingforsale += offer.remainingforsale;
 				self.remainingdesired += offer.remainingdesired;
 			};
 

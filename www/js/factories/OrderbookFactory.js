@@ -51,7 +51,7 @@ angular.module("omniFactories")
 							self.buyBook.sort(function(a, b) {
 					          var priceA = a.price;
 					          var priceB = b.price;
-					          return priceA.lt(priceB) ? -1 : priceA.gt(priceB) ? 1 : 0;
+					          return priceA.gt(priceB) ? -1 : priceA.lt(priceB) ? 1 : 0;
 					        });
 						})
 					$http.get("/v1/exchange/orders/book/pair/"+tradingPair.property+"/"+tradingPair.pair)
@@ -81,7 +81,7 @@ angular.module("omniFactories")
 							self.sellBook.sort(function(a, b) {
 					          var priceA = a.price;
 					          var priceB = b.price;
-					          return priceA.gt(priceB) ? -1 : priceA.lt(priceB) ? 1 : 0;
+					          return priceA.lt(priceB) ? -1 : priceA.gt(priceB) ? 1 : 0;
 					        });
 						})
 
