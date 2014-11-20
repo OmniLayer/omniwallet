@@ -1,0 +1,34 @@
+<div class="col-xs-6">
+	<table>
+		<caption>SELL OFFERS</caption>
+		<thead>
+			<th>Total MSC</th>
+			<th>Total SP#{{orderbook.tradingPair.property}}</th>
+			<th>Unit Price</th>
+		</thead>
+		<tbody>
+			<tr ng-repeat="order in sellBook">
+				<td>{{order.remainingdesired}}</td>
+				<td>{{order.remainingforsale}}</td>
+				<td>{{order.price}}</td>
+			</tr>
+		</tbody>
+	</table>
+</div>
+<div class="col-xs-6">
+	<table>
+		<caption>BUY OFFERS</caption>
+		<thead>
+			<th>Unit Price</th>
+			<th>Total SP#{{orderbook.tradingPair.property}}</th>
+			<th>Total MSC</th>
+		</thead>
+		<tbody>
+			<tr ng-repeat="order in buyBook">
+				<td>{{order.price}}</td>
+				<td>{{order.remainingdesired}}</td>
+				<td>{{order.remainingforsale}}</td>
+			</tr>
+		</tbody>
+	</table>
+</div>

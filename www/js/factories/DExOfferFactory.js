@@ -6,12 +6,9 @@ angular.module("omniFactories")
 			self.initialize = function(){
 				data = data || {};
 
-				if(data.offerId){// Load from server
+				angular.extend(self,data);
 
-				} else{ // Load from data
-					self.amounts = data.amounts || {property:0,pair:0};
-					self.address = data.address || null;
-				}
+				self.price = data.amountforsale / data.amountdesired
 			};
 
 
