@@ -7,7 +7,7 @@
 			<th>Unit Price</th>
 		</thead>
 		<tbody>
-			<tr ng-repeat="order in sellBook">
+			<tr ng-repeat="order in orderbook.sellBook">
 				<td>{{order.remainingdesired}}</td>
 				<td>{{order.remainingforsale}}</td>
 				<td>{{order.price}}</td>
@@ -24,7 +24,7 @@
 			<th>Total MSC</th>
 		</thead>
 		<tbody>
-			<tr ng-repeat="order in buyBook">
+			<tr ng-repeat="order in orderbook.buyBook">
 				<td>{{order.price}}</td>
 				<td>{{order.remainingdesired}}</td>
 				<td>{{order.remainingforsale}}</td>
