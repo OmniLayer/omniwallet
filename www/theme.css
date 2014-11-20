@@ -335,6 +335,7 @@ i.icon-facebook {
   height: 30px;
   float: left; 
   margin-right: 5px;
+  margin-top: -6px;
 }
 a:hover i.icon-facebook{
   background-image: url("/assets/img/footer-icons/facebook_roll.png")
@@ -347,6 +348,7 @@ i.icon-google {
   height: 30px; 
   float: left;
   margin-right: 5px;
+  margin-top: -6px;
 }
 a:hover i.icon-google{
   background-image: url("/assets/img/footer-icons/google_roll.png")
@@ -359,6 +361,7 @@ i.icon-twitter {
   height: 30px; 
   float: left;
   margin-right: 5px;
+  margin-top: -6px;
 }
 a:hover i.icon-twitter{
   background-image: url("/assets/img/footer-icons/twitter_roll.png")
@@ -367,38 +370,29 @@ a:hover i.icon-twitter{
 i.icon-ask {
   background-image: url("/assets/img/footer-icons/ask.png");
   background-position: 0pt;
-  width: #px;
-  height: #px; 
+  width: 21px;
+  height: 21px; 
   float: left;
   margin-right: 5px;
-}
-a:hover i.icon-ask{
-  background-image: url("/assets/img/footer-icons/email_ask.png")
 }
 
 i.icon-email {
   background-image: url("/assets/img/footer-icons/email.png");
   background-position: 0pt;
-  width: #px;
-  height: #px; 
+  width: 18px;
+  height: 12px; 
   float: left;
   margin-right: 5px;
-}
-a:hover i.icon-email{
-  background-image: url("/assets/img/footer-icons/email_roll.png")
 }
 
 i.icon-notif {
   background-image: url("/assets/img/footer-icons/notif.png");
   background-position: 0pt;
-  width: #px;
-  height: #px; 
+  width: 21px;
+  height: 21px; 
   float: left;
   margin-right: 5px;
   margin-top: -3px;
-}
-a:hover i.icon-notif{
-  background-image: url("/assets/img/footer-icons/notif_roll.png")
 }
 
 .divider-vertical-small {
@@ -440,15 +434,10 @@ a:hover i.icon-notif{
 }
 
 .footer-suggestions{
-  margin-top: 25px !important;
   font-size: 13px;
+  color: #ffffff;
   font-family: 'roboto light';
-}
-.footer-suggestions a{
-  color: #ffffff;
-}
-.footer-suggestions a:hover{
-  color: #ffffff;
+  margin-top: 25px !important;
 }
 
 .footer-middle {
@@ -465,12 +454,13 @@ a:hover i.icon-notif{
 
 .footer-bottom {
   font-size: 13px;
+  color: #999999;
   font-family: 'roboto light';
   margin-left: 511px; /* FOR NOW it's centered like this */
 }
 
 .footer-version {
-margin-right: 79px;
+margin-right: 93px;
 }
 
 span#recaptcha_privacy {
