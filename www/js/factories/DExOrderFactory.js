@@ -1,17 +1,17 @@
 angular.module("omniFactories")
-	.factory("DExOrder",["Address",function DExOrderFactory(Address){
+	.factory("DExOrder",["WHOLE_UNIT",function DExOrderFactory(WHOLE_UNIT){
 		var DExOrder= function(offer){
 			var self = this;
 
 			self.initialize = function(){
 				self.offers = [offer];
-				self.price = (new Big(offer.amountforsale)).div(new Big(offer.amountdesired));
+				self.price = (new Big(offer.amountforsale)).div(new Big(offer.amountdesired)).times(WHOLE_UNIT);
 
-				self.totalforsale = offer.amountforsale;
-				self.totaldesired = offer.amountdesired;
+				self.totalforsale = (new Big(offer.amountforsale)).times(WHOLE_UNIT);
+				self.totaldesired = (new Big(offer.amountdesired)).times(WHOLE_UNIT);
 
-				self.remainingforsale = offer.remainingforsale;
-				self.remainingdesired = offer.remainingdesired;
+				self.remainingforsale = (new Big(offer.remainingforsale)).times(WHOLE_UNIT);
+				self.remainingdesired = (new Big(offer.remainingdesired)).times(WHOLE_UNIT);
 			};
 
 			self.addOffer = function(offer){
@@ -21,11 +21,11 @@ angular.module("omniFactories")
 
 				self.offers.push(offer);
 
-				self.totaldesired += offer.amountdesired;
-				self.totalforsale += offer.amountforsale;
+				self.totaldesired = self.totaldesired.plus((new Big(offer.amountdesired)).times(WHOLE_UNIT));
+				self.totalforsale = self.totalforsale.plus((new Big(offer.amountforsale)).times(WHOLE_UNIT));
 
-				self.remainingforsale += offer.remainingforsale;
-				self.remainingdesired += offer.remainingdesired;
+				self.remainingforsale = self.remainingforsale.plus((new Big(offer.remainingforsale)).times(WHOLE_UNIT));
+				self.remainingdesired = self.remainingdesired.plus((new Big(offer.remainingdesired)).times(WHOLE_UNIT));
 			};
 
 
