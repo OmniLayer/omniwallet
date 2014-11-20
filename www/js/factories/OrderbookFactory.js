@@ -28,9 +28,10 @@ angular.module("omniFactories")
 							if(response.status != "200" || response.data.status !="OK")
 								return // handle errors
 
-							var order = null;
+							
 							var offers = response.data.orders
 							offers.forEach(function(offerData){
+								var order = null;
 								var offer = new DExOffer(offerData);
 								self.buyBook.forEach(function(orderData){
 									if(orderData.price.eq(offer.price)){
@@ -58,9 +59,10 @@ angular.module("omniFactories")
 							if(response.status != "200" || response.data.status !="OK")
 								return // handle errors
 
-							var order = null;
+							
 							var offers = response.data.orders
 							offers.forEach(function(offerData){
+								var order = null;
 								var offer = new DExOffer(offerData);
 								self.sellBook.forEach(function(orderData){
 									if(orderData.price.eq(offer.price)){
