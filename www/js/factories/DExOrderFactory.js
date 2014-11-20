@@ -16,7 +16,7 @@ angular.module("omniFactories")
 
 			self.addOffer = function(offer){
 				
-				if(!offer.price.eq(self.price)
+				if(!offer.price.eq(self.price))
 					throw "offers must have the same price";
 
 				self.offers.push(offer);
