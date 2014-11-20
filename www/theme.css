@@ -9,7 +9,7 @@ html {
   height: auto !important;
   height: 100%;
 /* Negative indent footer by it's height */
-  margin-bottom: 0 auto -305px;
+  margin-bottom: 0 auto -249px;
 }
 
 .brown{color:#9b846b}
@@ -298,7 +298,7 @@ form.form-search:before {
 
 /*Definitions for footer*/
 #push, #footer {
-  height: #px;
+  height: 249px;
 }
 
 #footer {
@@ -319,6 +319,7 @@ form.form-search:before {
 
 .footer-top-row{
   background-color: #496082;
+  padding-bottom: 20px;
 }
 .footer-middle-row{
   background-color: #20314a;
@@ -366,8 +367,8 @@ a:hover i.icon-twitter{
 i.icon-ask {
   background-image: url("/assets/img/footer-icons/ask.png");
   background-position: 0pt;
-  width: 23px;
-  height: 16px; 
+  width: #px;
+  height: #px; 
   float: left;
   margin-right: 5px;
 }
@@ -378,8 +379,8 @@ a:hover i.icon-ask{
 i.icon-email {
   background-image: url("/assets/img/footer-icons/email.png");
   background-position: 0pt;
-  width: 23px;
-  height: 16px; 
+  width: #px;
+  height: #px; 
   float: left;
   margin-right: 5px;
 }
@@ -390,8 +391,8 @@ a:hover i.icon-email{
 i.icon-notif {
   background-image: url("/assets/img/footer-icons/notif.png");
   background-position: 0pt;
-  width: 27px;
-  height: 27px; 
+  width: #px;
+  height: #px; 
   float: left;
   margin-right: 5px;
   margin-top: -3px;
@@ -409,7 +410,6 @@ a:hover i.icon-notif{
 .footer-titles {
   padding-left: 14px;
   padding-top: 13px;
-  padding-bottom: 12px;
   font-size: 16px;
   font-family: 'roboto light';
   font-weight: bold;
@@ -417,9 +417,9 @@ a:hover i.icon-notif{
 }
 
 .footer-content {
-  margin-bottom: -13px !important;
   font-size: 13px;
   font-family: 'roboto light';
+  margin-bottom: -11px;
 }
 .footer-content a{
   color: #9cb7de
@@ -428,9 +428,19 @@ a:hover i.icon-notif{
   color: #bfd4f2;
 }
 
+.footer-social {
+  font-size: 13px;
+  font-family: 'roboto light';
+}
+.footer-social a{
+  color: #9cb7de
+}
+.footer-social a:hover{
+  color: #bfd4f2;
+}
+
 .footer-suggestions{
-  margin-top: 36px !important;
-  margin-left: -7px !important;
+  margin-top: 25px !important;
   font-size: 13px;
   font-family: 'roboto light';
 }
@@ -456,9 +466,12 @@ a:hover i.icon-notif{
 .footer-bottom {
   font-size: 13px;
   font-family: 'roboto light';
-  text-align: center;
+  margin-left: 511px; /* FOR NOW it's centered like this */
 }
 
+.footer-version {
+margin-right: 79px;
+}
 
 span#recaptcha_privacy {
     /* hide the privacy policy link to google on recaptcha */
