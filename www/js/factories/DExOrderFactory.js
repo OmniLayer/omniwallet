@@ -5,7 +5,7 @@ angular.module("omniFactories")
 
 			self.initialize = function(){
 				self.offers = [offer];
-				self.price = offer.amountforsale / offer.amountdesired;
+				self.price = (new Big(offer.amountforsale)).div(new Big(offer.amountdesired));
 
 				self.totalforsale = offer.amountforsale;
 				self.totaldesired = offer.amountdesired;
@@ -16,7 +16,7 @@ angular.module("omniFactories")
 
 			self.addOffer = function(offer){
 				
-				if(offer.price !== self.price)
+				if(!offer.price.eq(self.price)
 					throw "offers must have the same price";
 
 				self.offers.push(offer);

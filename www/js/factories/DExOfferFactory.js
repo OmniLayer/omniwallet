@@ -8,7 +8,9 @@ angular.module("omniFactories")
 
 				angular.extend(self,data);
 
-				self.price = data.amountforsale / data.amountdesired
+				self.price = (new Big(data.amountforsale)).div(new Big(data.amountdesired));
+
+
 			};
 
 

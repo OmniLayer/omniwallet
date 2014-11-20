@@ -33,23 +33,24 @@ angular.module("omniFactories")
 							offers.forEach(function(offerData){
 								var offer = new DExOffer(offerData);
 								self.buyBook.forEach(function(orderData){
-									if(orderData.price == offer.price)
+									if(orderData.price.eq(offer.price)){
 										order = orderData;
+										order.addOffer(offer)
+									}
+										
 								})
-								if(order!= null){
-									order.addOffer(offer)
-								} else {
+
+								if(order == null){
 									order = new DExOrder(offer);
 									self.buyBook.push(order);
 								}
-
 
 							});
 
 							self.buyBook.sort(function(a, b) {
 					          var priceA = a.price;
 					          var priceB = b.price;
-					          return (currencyA < currencyB) ? -1 : (currencyA > currencyB) ? 1 : 0;
+					          return priceA.lt(priceB) ? -1 : priceA.gt(priceB) ? 1 : 0;
 					        });
 						})
 					$http.get("/v1/exchange/orders/book/pair/"+tradingPair.property+"/"+tradingPair.pair)
@@ -62,12 +63,12 @@ angular.module("omniFactories")
 							offers.forEach(function(offerData){
 								var offer = new DExOffer(offerData);
 								self.sellBook.forEach(function(orderData){
-									if(orderData.price == offer.price)
+									if(orderData.price.eq(offer.price)){
 										order = orderData;
+										order.addOffer(offer)
+									}
 								})
-								if(order!= null){
-									order.addOffer(offer)
-								} else {
+								if(order == null){
 									order = new DExOrder(offer);
 									self.sellBook.push(order);
 								}
@@ -78,7 +79,7 @@ angular.module("omniFactories")
 							self.sellBook.sort(function(a, b) {
 					          var priceA = a.price;
 					          var priceB = b.price;
-					          return (currencyA < currencyB) ? -1 : (currencyA > currencyB) ? 1 : 0;
+					          return priceA.gt(priceB) ? -1 : priceA.lt(priceB) ? 1 : 0;
 					        });
 						})
 
