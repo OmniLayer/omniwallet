@@ -31,7 +31,7 @@ angular.module("omniFactories")
 							var order = null;
 							var offers = response.data.orders
 							offers.forEach(function(offerData){
-								var offer = new DExOffer(data);
+								var offer = new DExOffer(offerData);
 								self.buyBook.forEach(function(orderData){
 									if(orderData.price == offer.price)
 										order = orderData;
