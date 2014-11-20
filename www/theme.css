@@ -298,27 +298,13 @@ form.form-search:before {
 
 /*Definitions for footer*/
 #push, #footer {
-  height: 305px;
+  height: #px;
 }
 
 #footer {
   position: absolute;
   bottom: 0;
   width: 100%;
-  background-color: #F9F9F9;
-  background-image: url("/assets/img/footer-icons/info_decoration.png");
-  background-repeat: no-repeat;
-  background-position: 0pt top;
-  -moz-box-shadow: 0px 3px 1px #DADADA;
-  -webkit-box-shadow: 0px 3px 1px #DADADA;
-  box-shadow: inset 0px 3px 1px #DADADA;
-}
-
-#footer .navbar-collapse > hr {
- margin-top: 0px !important;
- margin-bottom: 0px !important;
- margin-left: 45px !important;
- margin-right: 45px !important;
 }
 
 #footer .nav > li > a:hover, #footer .nav > li > a:focus {
@@ -330,45 +316,16 @@ form.form-search:before {
 .footer-div{
   padding-bottom: 0px;
 }
+
 .footer-top-row{
-  background-color: transparent;
-  overflow: hidden;
+  background-color: #496082;
+}
+.footer-middle-row{
+  background-color: #20314a;
 }
 .footer-bottom-row{
-  background-color: transparent;
-}
-.footer-bottomleft-row{
-  margin-left: -15px;
-}
-
-i.icon-uservoice {
-  background-image: url("/assets/img/footer-icons/uservoice.png");
-  background-position: 0pt;
-  width: 30px;
-  height: 30px; 
-  float: left;
-  margin-right: 5px;
-}
-a:hover i.icon-uservoice{
-  background-image: url("/assets/img/footer-icons/uservoice_roll.png")
-}
-a:active i.icon-uservoice{
-  background-image: url("/assets/img/footer-icons/uservoice_click.png")
-}
-
-i.icon-email {
-  background-image: url("/assets/img/footer-icons/email.png");
-  background-position: 0pt;
-  width: 23px;
-  height: 16px; 
-  float: left;
-  margin-right: 5px;
-}
-a:hover i.icon-email{
-  background-image: url("/assets/img/footer-icons/email_roll.png")
-}
-a:active i.icon-email{
-  background-image: url("/assets/img/footer-icons/email_click.png")
+  background-color: #ffffff;
+  text-align: center;
 }
 
 i.icon-facebook {
@@ -382,22 +339,6 @@ i.icon-facebook {
 a:hover i.icon-facebook{
   background-image: url("/assets/img/footer-icons/facebook_roll.png")
 }
-a:active i.icon-facebook{
-  background-image: url("/assets/img/footer-icons/facebook_click.png")
-}
-
-i.icon-github {
-  background-image: url("/assets/img/footer-icons/git.png");
-  background-position: 0pt;
-  width: 28px;
-  height: 27px; 
-  float: left;
-  margin-right: 5px;
-  margin-top: -3px;
-}
-a:hover i.icon-github{
-  background-image: url("/assets/img/footer-icons/gitroll.png")
-}
 
 i.icon-google {
   background-image: url("/assets/img/footer-icons/google.png");
@@ -410,23 +351,41 @@ i.icon-google {
 a:hover i.icon-google{
   background-image: url("/assets/img/footer-icons/google_roll.png")
 }
-a:active i.icon-google{
-  background-image: url("/assets/img/footer-icons/google_click.png")
-}
 
-i.icon-ha {
-  background-image: url("/assets/img/footer-icons/ha.png");
+i.icon-twitter {
+  background-image: url("/assets/img/footer-icons/twitter.png");
   background-position: 0pt;
-  width: 24px;
-  height: 20px; 
+  width: 20px;
+  height: 21px; 
   float: left;
   margin-right: 5px;
 }
-a:hover i.icon-ha{
-  background-image: url("/assets/img/footer-icons/ha_roll.png")
+a:hover i.icon-twitter{
+  background-image: url("/assets/img/footer-icons/twitter_roll.png")
 }
-a:active i.icon-ha{
-  background-image: url("/assets/img/footer-icons/ha_click.png")
+
+i.icon-ask {
+  background-image: url("/assets/img/footer-icons/ask.png");
+  background-position: 0pt;
+  width: 23px;
+  height: 16px; 
+  float: left;
+  margin-right: 5px;
+}
+a:hover i.icon-ask{
+  background-image: url("/assets/img/footer-icons/email_ask.png")
+}
+
+i.icon-email {
+  background-image: url("/assets/img/footer-icons/email.png");
+  background-position: 0pt;
+  width: 23px;
+  height: 16px; 
+  float: left;
+  margin-right: 5px;
+}
+a:hover i.icon-email{
+  background-image: url("/assets/img/footer-icons/email_roll.png")
 }
 
 i.icon-notif {
@@ -442,98 +401,64 @@ a:hover i.icon-notif{
   background-image: url("/assets/img/footer-icons/notif_roll.png")
 }
 
-i.icon-twitter {
-  background-image: url("/assets/img/footer-icons/twitter.png");
-  background-position: 0pt;
-  width: 20px;
-  height: 21px; 
-  float: left;
-  margin-right: 5px;
-}
-a:hover i.icon-twitter{
-  background-image: url("/assets/img/footer-icons/twitter_roll.png")
-}
-a:active i.icon-twitter{
-  background-image: url("/assets/img/footer-icons/twitter_click.png")
-}
-
-i.icon-dudes{
-  background-image: url("/assets/img/footer-icons/dudes.png");
-  background-position: 0pt;
-  width: 175px;
-  height: 102px;
-  margin-top: 15px;
-}
-a:hover i.icon-dudes{
-  background-image: url("/assets/img/footer-icons/dudes_roll.png")
-}
-
 .divider-vertical-small {
   height: 32px;
   margin-top: 9px;
   border-left: 1px solid #E6E6E6;
 }
 
-.footer-header {
+.footer-titles {
   padding-left: 14px;
   padding-top: 13px;
   padding-bottom: 12px;
-  font-size: 18px;
-  font-family: 'Gudea';
+  font-size: 16px;
+  font-family: 'roboto light';
   font-weight: bold;
 }
 
 .footer-content {
   margin-bottom: -13px !important;
-  font-size: 16px;
-  font-family: 'Gudea';
+  font-size: 13px;
+  font-family: 'roboto light';
   font-weight: bold;
 }
 .footer-content a{
-  color: #d9dadb
+  color: #9cb7de
 }
 .footer-content a:hover{
-  color: #00acdd;
-}
-.footer-content a:active{
-  color: #2e508f;
+  color: #bfd4f2;
 }
 
 .footer-suggestions{
   margin-top: 36px !important;
   margin-left: -7px !important;
-  font-size: 16px;
-  font-family: 'Gudea';
+  font-size: 13px;
+  font-family: 'roboto light';
   font-weight: bold;
 }
 .footer-suggestions a{
-  color: #FF9300;
+  color: #ffffff;
 }
 .footer-suggestions a:hover{
-  color: #00acdd;
-}
-.footer-suggestions a:active{
-  color: #2e508f;
+  color: #ffffff;
 }
 
-.footer-expanded{
-  height: 255px;
-  -moz-transition: height 1s ease 0.3s;
-  -webkit-transition: height 1s ease 0.3s;
-  transition: height 1s ease 0.3s;
+.footer-middle {
+  font-size: 13px;
+  font-family: 'roboto light';
+  font-weight: bold;
 }
-.footer-expanded .footer-header{
-  color: #818181;
+.footer-middle a{
+  color: #7186a6;
+  text-shadow: none !important;
+}
+.footer-middle a:hover{
+  color: #96a8c3;
 }
 
-.footer-hidden{
-  height: 50px;
-  -moz-transition: height 1s;
-  -webkit-transition: height 1s;
-  transition: height 1s;
-}
-.footer-hidden .footer-header{
-  color: #D1D1D1;
+.footer-bottom {
+  font-size: 13px;
+  font-family: 'roboto light';
 }
 
 
