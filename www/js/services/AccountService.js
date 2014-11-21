@@ -42,7 +42,7 @@ angular.module("omniServices")
                     var data = result.data;
                     self.nonce = CryptUtil.generateNonceForDifficulty(data.pow_challenge);
                     self.walletKey = CryptUtil.generateSymmetricKey(form.password, data.salt);
-                    var encryptedWallet = CryptUtil.encryptObject(wallet, walletKey);
+                    var encryptedWallet = CryptUtil.encryptObject(wallet, self.walletKey);
                     self.asymKey = CryptUtil.generateAsymmetricPair();
                     var createData = {
                         email: form.email,
