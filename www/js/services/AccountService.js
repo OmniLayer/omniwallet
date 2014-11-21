@@ -26,7 +26,7 @@ angular.module("omniServices")
           }
         };
 
-        self.create = function(create){
+        self.create = function(form){
             var create = $q.defer();
             if(!self.validating){
                 self.uuid = generateUUID();
@@ -41,21 +41,21 @@ angular.module("omniServices")
                   .then(function(result) {
                     var data = result.data;
                     self.nonce = CryptUtil.generateNonceForDifficulty(data.pow_challenge);
-                    self.walletKey = CryptUtil.generateSymmetricKey(create.password, data.salt);
+                    self.walletKey = CryptUtil.generateSymmetricKey(form.password, data.salt);
                     var encryptedWallet = CryptUtil.encryptObject(wallet, walletKey);
                     self.asymKey = CryptUtil.generateAsymmetricPair();
                     var createData = {
-                        email: create.email,
+                        email: form.email,
                         nonce: self.nonce,
                         public_key: self.asymKey.pubPem,
                         uuid: self.uuid,
                         wallet: encryptedWallet
                       };
 
-                    if(create.captcha){
+                    if(form.captcha){
                       angular.extend(createData, {
-                        recaptcha_challenge_field:create.captcha.challenge,
-                        recaptcha_response_field:create.captcha.response
+                        recaptcha_challenge_field:form.captcha.challenge,
+                        recaptcha_response_field:form.captcha.response
                       })
                     };
 
