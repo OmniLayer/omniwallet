@@ -37,7 +37,7 @@ angular.module("omniServices")
                 var walletKey = '';
                 var asymKey = {};
                 self.validating=true;
-                $http.get('/v1/user/wallet/challenge?uuid=' + uuid)
+                $http.get('/v1/user/wallet/challenge?uuid=' + self.uuid)
                   .then(function(result) {
                     var data = result.data;
                     self.nonce = CryptUtil.generateNonceForDifficulty(data.pow_challenge);
