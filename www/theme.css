@@ -367,32 +367,21 @@ a:hover i.icon-twitter{
   background-image: url("/assets/img/footer-icons/twitter_roll.png")
 }
 
-i.icon-ask {
-  background-image: url("/assets/img/footer-icons/ask.png");
-  background-position: 0pt;
-  width: 21px;
-  height: 21px; 
+.icon-ask {
   float: left;
   margin-right: 5px;
+  margin-top: -1px;
 }
 
-i.icon-email {
-  background-image: url("/assets/img/footer-icons/email.png");
-  background-position: 0pt;
-  width: 18px;
-  height: 12px; 
+.icon-email {
   float: left;
   margin-right: 5px;
+  margin-top: 4px;
 }
 
-i.icon-notif {
-  background-image: url("/assets/img/footer-icons/notif.png");
-  background-position: 0pt;
-  width: 21px;
-  height: 21px; 
+.icon-notif {
   float: left;
   margin-right: 5px;
-  margin-top: -3px;
 }
 
 .divider-vertical-small {
@@ -405,14 +394,14 @@ i.icon-notif {
   padding-left: 14px;
   padding-top: 13px;
   font-size: 16px;
-  font-family: 'roboto light';
+  font-family: 'roboto';
   font-weight: bold;
   color: #ffffff
 }
 
 .footer-content {
   font-size: 13px;
-  font-family: 'roboto light';
+  font-family: 'roboto';
   margin-bottom: -11px;
 }
 .footer-content a{
@@ -424,7 +413,7 @@ i.icon-notif {
 
 .footer-social {
   font-size: 13px;
-  font-family: 'roboto light';
+  font-family: 'roboto';
 }
 .footer-social a{
   color: #9cb7de
@@ -436,13 +425,13 @@ i.icon-notif {
 .footer-suggestions{
   font-size: 13px;
   color: #ffffff;
-  font-family: 'roboto light';
-  margin-top: 25px !important;
+  font-family: 'roboto';
+  margin-top: 39px !important;
 }
 
 .footer-middle {
   font-size: 13px;
-  font-family: 'roboto light';
+  font-family: 'roboto';
 }
 .footer-middle a{
   color: #7186a6;
@@ -455,8 +444,8 @@ i.icon-notif {
 .footer-bottom {
   font-size: 13px;
   color: #999999;
-  font-family: 'roboto light';
-  margin-left: 511px; /* FOR NOW it's centered like this */
+  font-family: 'roboto';
+  margin-left: 486px; /* FOR NOW it's centered like this */
 }
 
 .footer-version {
