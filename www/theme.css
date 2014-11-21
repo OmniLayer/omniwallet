@@ -449,12 +449,11 @@ a:hover i.icon-twitter{
   font-size: 13px;
   color: #999999;
   font-family: 'roboto';
-  margin-left: 486px; /* FOR NOW it's centered like this */
-  margin-top: -6px
+  margin-top: -6px;
 }
 
 .footer-version {
-margin-right: 93px;
+  margin-right: 93px;
 }
 
 span#recaptcha_privacy {
