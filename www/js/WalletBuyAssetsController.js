@@ -248,7 +248,7 @@ function WalletBuyAssetsController($modal, $scope, $http, $q, userService, walle
               buyer: address,
               amt: buyAmount,
               hash: saleHash,
-              fee: totalFeeCost,
+              fee: minerFees,
               selectedCoin: $scope.selectedCoin,
               displayedAbbreviation: $scope.displayedAbbreviation,
               insufficientBitcoin: insufficientBitcoin
