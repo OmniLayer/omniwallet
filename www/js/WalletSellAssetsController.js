@@ -250,7 +250,7 @@ function WalletSellAssetsController($modal, $scope, $http, $q, userService, wall
               amt: saleAmount,
               price: salePricePerCoin,
               buyersfee: buyersFee,
-              fee: totalFeeCost,
+              fee: minerFees,
               blocks: saleBlocks,
               currency: coin,
               selectedCoin: $scope.selectedCoin,
