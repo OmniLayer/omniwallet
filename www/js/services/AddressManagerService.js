@@ -8,7 +8,7 @@ angular.module("omniServices")
 	      } catch (e) {
 	        return false;
 	      }
-	    },
+	    };
 	    self.decodeAddressFromPrivateKey=function (key) {
 
 	      //  Return the address decoded from the private key.
@@ -16,7 +16,7 @@ angular.module("omniServices")
 	      var addr = eckey.getBitcoinAddress().toString();
 	  
 	      return addr;
-	    },
+	    };
 	    self.encodePrivateKey=function(key, passphrase) {
 	  
 	      //  Return encoded key.  Forget the passphrase forever.
@@ -24,5 +24,13 @@ angular.module("omniServices")
 	      var enc = eckey.getEncryptedFormat(passphrase);
 	  
 	      return enc;
-	    }
+	    };
+
+	    self.createAddress = function () {
+	      var ecKey = new Bitcoin.ECKey();
+	      var address = ecKey.getBitcoinAddress().toString();
+	      var encryptedPrivateKey = ecKey.getEncryptedFormat(address);
+
+	      return {hash:address,privkey:encryptedPrivateKey}
+	    };
 	}]);
