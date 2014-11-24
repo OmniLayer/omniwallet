@@ -29,6 +29,7 @@ angular.module("omniServices")
                         $scope.fromAddress = modalConfig.transaction.address.address;
 
                         $scope.openBroadcastTransactionForm = function(address) {
+                            $modalInstance.dismiss('close');
                             modalManager.openBroadcastTransactionModal(address);
                         };
 

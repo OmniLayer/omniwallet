@@ -1,5 +1,5 @@
 angular.module('omniwallet')
-  .factory('enumerated_addresses', function($http, $q, $timeout) {
+  .factory('enumerated_addresses', function($http, $q, $timeout, Account) {
     var count = 1;
     return {
       "getData": function() {

@@ -29,9 +29,9 @@ function Login($injector, $scope, $http, $location, $modalInstance, $q, Account)
     $scope.badPassword = false;
     $scope.serverError = false;
 
-    Account.login(login.uuid,login.password).then(function(account){
+    Account.login(login.uuid,login.password).then(function(wallet){
       if( $scope.login != undefined && $scope.login.action == 'verify' ) {
-        $modalInstance.close(account) //pass wallet as verification
+        $modalInstance.close(wallet) //pass wallet as verification
       } else {
         $modalInstance.close()
         $location.path('/wallet');

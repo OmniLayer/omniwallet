@@ -139,7 +139,7 @@ angular.module("omniServices")
 
                             self.loggedIn = true;
                             self.loginInProgress = false;
-                            login.resolve(self);
+                            login.resolve(wallet);
                         } catch (e) {
                         	self.loginInProgress = false;
                             login.reject(e);
