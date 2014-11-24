@@ -107,7 +107,7 @@ def prepare_sell_tx_for_signing(seller, amount, bitcoin_amount_desired, btc_min_
     inputs_total_value=0
 
     if inputs_number < 1:
-        error('zero inputs from '+seller+' amount '+(required_value+fee))
+        error('zero inputs from '+seller+' amount '+str(required_value+fee))
     for i in range(inputs_number):
         inputs.append(utxo_split[i*12+3])
         try:
