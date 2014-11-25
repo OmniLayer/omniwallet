@@ -22,7 +22,8 @@ angular.module('omniwallet')
       }
     };
   })
-  .controller('AddAddressController', [ "Account","Wallet",function($modal, $scope, $timeout, Account,Wallet, enumerated_addresses) {
+  .controller('AddAddressController', [ "$modal", "$scope", "$timeout", "Account", "Wallet", "enumerated_addresses",
+    function($modal, $scope, $timeout, Account,Wallet, enumerated_addresses) {
   
     function decodeAddressFromPrivateKey(key) {
   
