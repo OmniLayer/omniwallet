@@ -439,7 +439,8 @@ angular.module('omniwallet').factory('appraiser', ['$rootScope', '$http', '$q', 
         );
       });
       $q.all(requests).then(function(responses) {
-        callback();
+        if(callback)
+          callback();
       });
     };
     AppraiserService.prototype.updateValue = function(callback, symbol) {
