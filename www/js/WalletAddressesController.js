@@ -9,15 +9,14 @@ angular.module('omniwallet')
 
     return deferred.promise;
   })
-  .factory('wallet_balances_data', function($http, $q, $timeout, $injector, Account) {
+  .factory('wallet_balances_data', function($http, $q, $timeout, $injector, Wallet) {
     var count = 1;
     return {
       "getData": function() {
         var deferred = $q.defer();
 
         _.defer(function() {
-          var wallet = Account.wallet;
-          if (wallet && wallet.addresses.length > 0) {
+          if (Wallet.addresses && wallet.addresses.length > 0) {
             var requests = [];
 
             var balances = {};
@@ -27,7 +26,7 @@ angular.module('omniwallet')
 
             var appraiser = $injector.get('appraiser');
 
-            wallet.addresses.forEach(function(addr) {
+            Wallet.addresses.forEach(function(addr) {
               if (addr.balance.length == 0) {
                 console.log('No balances for ' + addr.address + ', invalid address?');
                 invalidAddresses.push(addr.address);
