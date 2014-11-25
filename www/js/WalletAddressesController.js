@@ -16,7 +16,7 @@ angular.module('omniwallet')
         var deferred = $q.defer();
 
         _.defer(function() {
-          if (Wallet.addresses && wallet.addresses.length > 0) {
+          if (Wallet.addresses && Wallet.addresses.length > 0) {
             var requests = [];
 
             var balances = {};
