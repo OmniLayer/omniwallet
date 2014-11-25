@@ -75,6 +75,7 @@ angular.module("omniServices")
                       })
                     }else {
                       self.validating=false;
+                      self.settings.firstLogin = true;
                       self.wallet = wallet;
                       Wallet.initialize(wallet);
                       ga('send', 'event', 'button', 'click', 'Create Wallet');
@@ -133,7 +134,7 @@ angular.module("omniServices")
                         try {
                             var wallet = CryptUtil.decryptObject(data, self.walletKey);
                             self.wallet = wallet;
-
+                            self.settings.firstLogin=false;
                             // update wallet service
                             Wallet.initialize(wallet);
 
