@@ -27,24 +27,23 @@ angular.module('omniwallet')
 
             Wallet.addresses.forEach(function(addr) {
               addr.balance.forEach(function(currencyItem) {
-                  if(currencyItem.divisible)
-                    var value=new Big(currencyItem.value).times(WHOLE_UNIT).valueOf();
-                  if (!balances.hasOwnProperty(currencyItem.symbol)) {
-                    balances[currencyItem.symbol] = {
-                      "symbol": currencyItem.symbol,
-                      "balance": +value || currencyItem.value,
-                      "value": appraiser.getValue(currencyItem.value, currencyItem.symbol, currencyItem.divisible),
-                    };
-                  } else {
-                    balances[currencyItem.symbol].balance += +value || currencyItem.value;
-                    balances[currencyItem.symbol].value += appraiser.getValue(currencyItem.value, currencyItem.symbol, currencyItem.divisible);
-                  }
-		  //console.log(balances);
-                  if (currencyItem.symbol == 'BTC') {
-                    balances[currencyItem.symbol].name = "Bitcoin"
-                  }
-                });
-              }));
+                if(currencyItem.divisible)
+                  var value=new Big(currencyItem.value).times(WHOLE_UNIT).valueOf();
+                if (!balances.hasOwnProperty(currencyItem.symbol)) {
+                  balances[currencyItem.symbol] = {
+                    "symbol": currencyItem.symbol,
+                    "balance": +value || currencyItem.value,
+                    "value": appraiser.getValue(currencyItem.value, currencyItem.symbol, currencyItem.divisible),
+                  };
+                } else {
+                  balances[currencyItem.symbol].balance += +value || currencyItem.value;
+                  balances[currencyItem.symbol].value += appraiser.getValue(currencyItem.value, currencyItem.symbol, currencyItem.divisible);
+                }
+	  //console.log(balances);
+                if (currencyItem.symbol == 'BTC') {
+                  balances[currencyItem.symbol].name = "Bitcoin"
+                }
+              });
             });
             // First, the standard currencies.
             $http.get('/v1/transaction/values.json').then(function(result) {
@@ -85,12 +84,6 @@ angular.module('omniwallet')
                   balances: balances,
                   currencies: currencyInfo
                 });
-              }
-            }
-            );
-            $q.all(requests).then(function(responses) {
-              if (currencyInfo) {
-                
               }
             });
           } else {
