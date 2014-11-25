@@ -178,7 +178,7 @@ angular.module("omniServices")
                     url: '/v1/user/wallet/update',
                     method: 'POST',
                     data: {
-                      uuid: uuid,
+                      uuid: self.uuid,
                       wallet: encryptedWallet,
                       signature: signature
                     }

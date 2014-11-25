@@ -6,9 +6,10 @@ function CreateWalletController($scope, $location, $modalInstance, Account, Addr
     $scope.serverError = $scope.invalidCaptcha =false;
     Account.create(create).then(function(account){
       var address = AddressManager.createAddress();
-      account.addAddress(address.hash,address.privkey)
-      $modalInstance.close()
-      $location.path('/wallet');
+      account.addAddress(address.hash,address.privkey).then(function(result){
+        $modalInstance.close()
+        $location.path('/wallet');
+      });
     },function(error){
       angular.extend($scope,error);
     })
