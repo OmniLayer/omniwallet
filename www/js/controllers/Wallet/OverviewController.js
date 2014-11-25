@@ -1,5 +1,5 @@
 angular.module("omniControllers")
-  .controler("OverviewController",["$scope", "$location" "Account", "Wallet", 
+  .controller("WalletOverviewController",["$scope", "$location" "Account", "Wallet",
     function WalletOverviewController($scope, $location, Account, Wallet) {
       $scope.uuid = Account.uuid;
       $scope.loginLink = $location.protocol() + "://" + $location.host() + "/login/" + $scope.uuid;
