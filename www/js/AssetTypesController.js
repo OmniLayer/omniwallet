@@ -121,7 +121,7 @@ angular.module('omniwallet')
       }
     }
   })
-  .controller('AssetTypesController', function($q, $http, $modal, $rootScope, $injector, $scope, $element, asset_types_data, asset_types_template, Account) {
+  .controller('AssetTypesController', function($q, $http, $modal, $rootScope, $injector, $scope, $element, asset_types_data, asset_types_template, Account, Wallet) {
 
   var appraiser = $injector.get('appraiser');
   $rootScope.$on('APPRAISER_VALUE_CHANGED', function() {
