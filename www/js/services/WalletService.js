@@ -1,6 +1,6 @@
 angular.module("omniServices")
-	.service("Wallet",["Address", "Asset", "BalanceSocket",
-		function WalletService(Address, Asset, BalanceSocket){
+	.service("Wallet",["Address", "Asset", "BalanceSocket","appraiser"
+		function WalletService(Address, Asset, BalanceSocket,appraiser){
 			var self = this;
 
 			self.initialize =function(wallet){
@@ -15,6 +15,7 @@ angular.module("omniServices")
 	        	var address = new Address(raw.address,raw.privkey,raw.pubkey);
 
                 BalanceSocket.on("address:"+address.address, function(data){
+                    var update = false;
                     data.balance.forEach(function(balanceItem) {
                         var tradable = ((address.privkey && address.privkey.length == 58) || address.pubkey) && balanceItem.value > 0;
                         var asset = null;
@@ -25,6 +26,7 @@ angular.module("omniServices")
                             if (asset.addresses().indexOf(address) == -1){
                              tradable ? asset.tradableAddresses.push(address) : asset.watchAddresses.push(address) ;
                              asset.tradable = asset.tradable || tradable;
+                             update=true;
                             }
                             break;
                           }
@@ -33,8 +35,11 @@ angular.module("omniServices")
                             asset = new Asset(balanceItem.symbol, balanceItem.divisible, tradable, address)
                             
                             self.assets.push(asset);
+                            update=true;
                         }
                     });
+					if(update)
+						appraiser.updateValues();
                 });
 
                 self.addresses.push(address)
