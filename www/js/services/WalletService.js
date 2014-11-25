@@ -1,6 +1,6 @@
 angular.module("omniServices")
-	.service("Wallet",["Address", "Asset", "BalanceSocket","appraiser",
-		function WalletService(Address, Asset, BalanceSocket,appraiser){
+	.service("Wallet",["Address", "Asset", "BalanceSocket","$injector",
+		function WalletService(Address, Asset, BalanceSocket,$injector){
 			var self = this;
 
 			self.initialize =function(wallet){
@@ -38,8 +38,11 @@ angular.module("omniServices")
                             update=true;
                         }
                     });
-					if(update)
+					if(update){
+						var appraiser= $injector.get("appraiser")
 						appraiser.updateValues();
+					}
+						
                 });
 
                 self.addresses.push(address)
