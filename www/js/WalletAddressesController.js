@@ -60,7 +60,7 @@ angular.module('omniwallet')
                    isOffline=false;
                   }
                   balances[currencyItem.symbol].addresses[addr.address] = {
-                    "address": result.data.address,
+                    "address": addr.address,
                     "balance": +value || currencyItem.value,
                     "value": appraiser.getValue(currencyItem.value, currencyItem.symbol, currencyItem.divisible),
 	                  "private": hasPrivate,
