@@ -78,8 +78,8 @@ def orderbookbyaddress(address):
      response_status='OK'
      response='{"status":"'+response_status+'", "data":'+ str(orders) +'}'
    except TypeError:
-     response_status='Not OK'
-     response='{"status":"'+response_status+'", "data": No Addresses provided}'
+     response_status='Error'
+     response='{"status":"'+response_status+'", "error": No Addresses provided}'
 
 
    return (response, None)
@@ -113,8 +113,8 @@ def orderbookbypair(currency1=None,currency2=None):
        response_status='Error'
        response='{"status":"'+response_status+'", "error":"Bad Currency ID"}'
    except TypeError:
-     response_status='Not OK'
-     response='{"status":"'+response_status+'", "data": No currency provided}'
+     response_status='Error'
+     response='{"status":"'+response_status+'", "error": No currency provided}'
 
 
    return (response, None)
