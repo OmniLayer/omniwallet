@@ -13,7 +13,7 @@ def orders():
 
   return jsonify({ 'orders': orders })
 
-@app.route('/book')
+@app.route('/book/')
 def orderbook():
 
    rows=dbSelect("select seller,propertyforsale,amountforsale,remainingforsale,propertydesired,amountdesired,desiredreceived "
@@ -34,7 +34,7 @@ def orderbook():
 
    return (response, None)
 
-@app.route('/book/all')
+@app.route('/book/all/')
 def orderbookall():
 
    rows=dbSelect("select seller,propertyforsale,amountforsale,remainingforsale,propertydesired,amountdesired,desiredreceived,orderstate "
@@ -85,6 +85,10 @@ def orderbookbyaddress(address):
    return (response, None)
 
 
+@app.route('/book/pair/<int:currency1>/<int:currency2>')
+def orderbookbypairshort(currency1=None,currency2=None):
+  return orderbookbypair(currency1,currency2,0)
+
 @app.route('/book/pair/<int:currency1>/<int:currency2>/<int:displayclosed>')
 def orderbookbypair(currency1=None,currency2=None, displayclosed=0):
 
@@ -94,12 +98,12 @@ def orderbookbypair(currency1=None,currency2=None, displayclosed=0):
      displayclosed = re.sub(r'\D', '', str(displayclosed)) #check alphanumeric
 
      if int(currency1) > 0 and int(currency1) < 4294967295 and int(currency2) > 0 and int(currency2) < 4294967295:
-       if displayclosed == 1:
+       if displayclosed == "1":
          rows=dbSelect("select seller,propertyforsale,amountforsale,remainingforsale,propertydesired,amountdesired,desiredreceived,orderstate "
                        "from orderbook where propertyforsale=%s and propertydesired=%s",(currency1,currency2))
        else:
          rows=dbSelect("select seller,propertyforsale,amountforsale,remainingforsale,propertydesired,amountdesired,desiredreceived,orderstate "
-                       "from orderbook where propertyforsale=%s and propertydesired=%s and (orderstate='open' or orderstate='open-part-filled')",
+                       "from orderbook where propertyforsale=%s and propertydesired=%s and orderstate in ('open','open-part-filled')",
                        (currency1,currency2))
 
 
