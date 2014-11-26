@@ -85,16 +85,23 @@ def orderbookbyaddress(address):
    return (response, None)
 
 
-@app.route('/book/pair/<int:currency1>/<int:currency2>')
-def orderbookbypair(currency1=None,currency2=None):
+@app.route('/book/pair/<int:currency1>/<int:currency2>/<int:displayclosed>')
+def orderbookbypair(currency1=None,currency2=None, displayclosed=0):
 
    try:
      currency1 = re.sub(r'\D', '', str(currency1)) #check alphanumeric
      currency2 = re.sub(r'\D', '', str(currency2)) #check alphanumeric
+     displayclosed = re.sub(r'\D', '', str(displayclosed)) #check alphanumeric
 
      if int(currency1) > 0 and int(currency1) < 4294967295 and int(currency2) > 0 and int(currency2) < 4294967295:
-       rows=dbSelect("select seller,propertyforsale,amountforsale,remainingforsale,propertydesired,amountdesired,desiredreceived,orderstate "
-                     "from orderbook where propertyforsale=%s and propertydesired=%s",(currency1,currency2))
+       if displayclosed == 1:
+         rows=dbSelect("select seller,propertyforsale,amountforsale,remainingforsale,propertydesired,amountdesired,desiredreceived,orderstate "
+                       "from orderbook where propertyforsale=%s and propertydesired=%s",(currency1,currency2))
+       else:
+         rows=dbSelect("select seller,propertyforsale,amountforsale,remainingforsale,propertydesired,amountdesired,desiredreceived,orderstate "
+                       "from orderbook where propertyforsale=%s and propertydesired=%s and (orderstate='open' or orderstate='open-part-filled')",
+                       (currency1,currency2))
+
 
        orders=[]
        for order in rows:
