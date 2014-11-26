@@ -114,7 +114,7 @@ def orderbookbypair(currency1=None,currency2=None):
        response='{"status":"'+response_status+'", "error":"Bad Currency ID"}'
    except TypeError:
      response_status='Error'
-     response='{"status":"'+response_status+'", "error": No currency provided}'
+     response='{"status":"'+response_status+'", "error": No Currency ID provided}'
 
 
    return (response, None)
