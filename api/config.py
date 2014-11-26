@@ -7,7 +7,7 @@ SMTPDOMAIN = 'localhost'  #smtp server to use for sending, default    'localhost
 SMTPPORT = 25     #smtp port,  default 25
 
 #For wallets and session store you can switch between disk and the database
-LOCALDEVBYPASSDB = 0    #Set to 1 to use local storage/file system, Set to 0 to use database
+LOCALDEVBYPASSDB = 1    #Set to 1 to use local storage/file system, Set to 0 to use database
 
 #Used to generate challange/response hash
 SERVER_SECRET = 'SoSecret!'
