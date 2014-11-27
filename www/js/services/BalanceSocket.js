@@ -1,8 +1,8 @@
 angular.module("omniServices")
-	.service("BalanceSocket", ["$rootScope",function BalanceSocketService($rootScope){
+	.service("BalanceSocket", ["$rootScope","$location",function BalanceSocketService($rootScope,$location){
 		var self = this;
 
-		self.socket = io.connect('http://' + document.domain + ':' + location.port + "/balance");
+		self.socket = io.connect($location.protocol()+'://' + $location.host() + ':' + $location.port() + "/balance");
 
 		self.on = function(eventName,callback){
 			self.socket.on(eventName,callback);

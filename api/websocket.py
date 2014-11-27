@@ -76,4 +76,7 @@ def add_address(message):
 
 
 if __name__ == '__main__':
+  if config.WEBSOCKET_SSL:
+    socketio.run(app, '127.0.0.1',1091, keyfile=config.KEY_FILE, certfile=config.CERT_FILE)
+  else
     socketio.run(app, '127.0.0.1',1091)
