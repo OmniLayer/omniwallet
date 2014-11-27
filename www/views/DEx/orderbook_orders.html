@@ -8,9 +8,9 @@
 		</thead>
 		<tbody>
 			<tr ng-repeat="order in orderbook.sellBook">
-				<td>{{order.remainingdesired}}</td>
-				<td>{{order.remainingforsale}}</td>
-				<td>{{order.price}}</td>
+				<td>{{order.desiredreceived.toFixed(8)}}</td>
+				<td>{{order.remainingforsale.toFixed(8)}}</td>
+				<td>{{order.price.toFixed(8)}}</td>
 			</tr>
 		</tbody>
 	</table>
@@ -25,9 +25,9 @@
 		</thead>
 		<tbody>
 			<tr ng-repeat="order in orderbook.buyBook">
-				<td>{{order.price}}</td>
-				<td>{{order.remainingdesired}}</td>
-				<td>{{order.remainingforsale}}</td>
+				<td>{{order.price.toFixed(8)}}</td>
+				<td>{{order.desiredreceived.toFixed(8)}}</td>
+				<td>{{order.remainingforsale.toFixed(8)}}</td>
 			</tr>
 		</tbody>
 	</table>

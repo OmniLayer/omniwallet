@@ -11,7 +11,7 @@ angular.module("omniFactories")
 				self.totaldesired = (new Big(offer.amountdesired)).times(WHOLE_UNIT);
 
 				self.remainingforsale = (new Big(offer.remainingforsale)).times(WHOLE_UNIT);
-				self.remainingdesired = (new Big(offer.remainingdesired)).times(WHOLE_UNIT);
+				self.desiredreceived = (new Big(offer.desiredreceived)).times(WHOLE_UNIT);
 			};
 
 			self.addOffer = function(offer){
@@ -25,7 +25,7 @@ angular.module("omniFactories")
 				self.totalforsale = self.totalforsale.plus((new Big(offer.amountforsale)).times(WHOLE_UNIT));
 
 				self.remainingforsale = self.remainingforsale.plus((new Big(offer.remainingforsale)).times(WHOLE_UNIT));
-				self.remainingdesired = self.remainingdesired.plus((new Big(offer.remainingdesired)).times(WHOLE_UNIT));
+				self.desiredreceived = self.desiredreceived.plus((new Big(offer.desiredreceived)).times(WHOLE_UNIT));
 			};
 
 
