@@ -412,6 +412,14 @@ a:hover i.icon-twitter{
   color: #bfd4f2;
 }
 
+.footer-email {
+  font-size: 13px;
+  font-family: 'roboto';
+  color: #9cb7de;
+  margin-top: 10px !important;
+  margin-left: 17px !important;
+}
+
 .footer-social {
   font-size: 13px;
   font-family: 'roboto';
@@ -428,7 +436,7 @@ a:hover i.icon-twitter{
   font-size: 13px;
   color: #ffffff;
   font-family: 'roboto';
-  margin-top: 39px !important;
+  margin-top: 41px !important;
   margin-left: 15px !important;
 }
 
