@@ -13,8 +13,3 @@ LOCALDEVBYPASSDB = 0    #Set to 1 to use local storage/file system, Set to 0 to 
 SERVER_SECRET = 'SoSecret!'
 SESSION_SECRET = 'SuperSecretSessionStuff'
 WEBSOCKET_SECRET = 'SocketSecret!'
-
-# WebSockets SSL config
-WEBSOCKET_SSL=False # Run on http by default
-CERT_FILE='server.crt'
-KEY_FILE='server.key'
