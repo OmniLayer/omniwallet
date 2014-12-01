@@ -37,7 +37,7 @@ angular.module("omniControllers")
 			      $scope.availableTokens = availableTokens.filter(function(currency){
 			        return $scope.tradingTokens.indexOf(currency.currencyId) == -1;
 			      });
-			      $scope.property=[0];
+			      $scope.property=$scope.availableTokens[0];
 			    });
 			};
 
