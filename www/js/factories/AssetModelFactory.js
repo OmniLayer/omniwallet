@@ -1,5 +1,5 @@
 angular.module("omniFactories")
-	.factory("Asset", ["$http",function AssetsModelFactory($http){
+	.factory("Asset", ["PropertyManager",function AssetsModelFactory(PropertyManager){
 		var Asset = function(symbol,divisible,tradable,address){
 			var self = this;
 
@@ -15,7 +15,7 @@ angular.module("omniFactories")
 
 				if(symbol.substring(0, 2) == "SP"){
                 	self.id = symbol.substring(2);
-	                $http.get('/v1/property/' + self.id + '.json').then(function(result) {
+	                PropertyManager.getProperty(self.id).then(function(result) {
 	                  var property = result.data[0];
 	                  self.name = property.propertyName;
 	                  self.property_type = property.formatted_property_type;

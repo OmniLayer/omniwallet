@@ -1,39 +1,4 @@
 //global services go here
-angular.module('omniwallet').factory('propertiesService',['$http',function($http){
-  var service = {
-    list : function(ecosystem) {
-      var url = '/v1/properties/list';
-      var data = {
-        ecosystem: ecosystem
-      };
-      var promise = $http.post(url, data);
-      return promise;
-    },
-    
-    loadCategories:function(ecosystem) {
-      var url = '/v1/properties/categories';
-      var data = {
-        ecosystem: ecosystem
-      };
-      var promise = $http.post(url, data);
-      return promise;
-    },
-  
-    loadSubcategories:function(ecosystem,category) {
-      var url = '/v1/properties/subcategories';
-      var data = {
-        ecosystem: ecosystem,
-        category: category
-      };
-      var promise = $http.post(url, data);
-      return promise;
-    }
-  };
-  
-  return service;
-  
-}]);
-
 angular.module('omniwallet').factory('walletTransactionService',['$http',function($http){
   var service = {
     pushSignedTransaction : function(signedTransaction) {

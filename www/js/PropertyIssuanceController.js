@@ -1,4 +1,4 @@
-function PropertyIssuanceController($scope, propertiesService, $timeout, $injector, $modal){
+function PropertyIssuanceController($scope, PropertyManager, $timeout, $injector, $modal){
   $scope.walletAssets=$scope.$parent.$parent;
   $scope.walletAssets.currencyList.forEach(function(e, i) {
     if (e.symbol == "BTC")
@@ -22,13 +22,13 @@ function PropertyIssuanceController($scope, propertiesService, $timeout, $inject
   };
   
   $scope.loadCategories=function(){
-    propertiesService.loadCategories($scope.ecosystem).then(function(result){  
+    PropertyManager.loadCategories($scope.ecosystem).then(function(result){  
       $scope.categories=result.data.categories.sort();
     });
   };
   $scope.loadSubcategories=function(category){
     $scope.propertySubcategory = '';
-    propertiesService.loadSubcategories($scope.ecosystem, category).then(function(result){  
+    PropertyManager.loadSubcategories($scope.ecosystem, category).then(function(result){  
       $scope.subcategories=result.data.subcategories.sort();
     });
   };
