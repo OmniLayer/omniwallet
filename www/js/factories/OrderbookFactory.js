@@ -6,14 +6,14 @@ angular.module("omniFactories")
 
 				self.initialize = function(){
 					self.tradingPair=tradingPair;
-					self.title = "Trade #" + tradingPair.property + " for " + (tradingPair.pair == 1 ? "Mastercoin": "Test Mastercoin");
+					self.title = "Trade " + tradingPair.property.propertyName + " for " + (tradingPair.pair == 1 ? "Mastercoin": "Test Mastercoin");
 					self.active = true;
 					self.disabled = !self.active;
 					self.buyOrder = {};
 					self.sellOrder = {};
 
 					self.pair = Wallet.getAsset(tradingPair.pair);
-					self.property = Wallet.getAsset(tradingPair.property);
+					self.property = Wallet.getAsset(tradingPair.property.currencyId);
 
 					// TODO:  list only addresses with balance > 0
 					self.addresses = Wallet.addresses.filter(function(address){
@@ -23,7 +23,7 @@ angular.module("omniFactories")
 					self.buyBook = []
 					self.sellBook = []
 
-					$http.get("/v1/exchange/orders/book/pair/"+tradingPair.pair+"/"+tradingPair.property)
+					$http.get("/v1/exchange/orders/book/pair/"+tradingPair.pair+"/"+tradingPair.property.currencyId)
 						.then(function(response){
 							if(response.status != "200" || response.data.status !="OK")
 								return // handle errors
@@ -54,7 +54,7 @@ angular.module("omniFactories")
 					          return priceA.gt(priceB) ? -1 : priceA.lt(priceB) ? 1 : 0;
 					        });
 						})
-					$http.get("/v1/exchange/orders/book/pair/"+tradingPair.property+"/"+tradingPair.pair)
+					$http.get("/v1/exchange/orders/book/pair/"+tradingPair.property.currencyId+"/"+tradingPair.pair)
 						.then(function(response){
 							if(response.status != "200" || response.data.status !="OK")
 								return // handle errors
@@ -94,7 +94,7 @@ angular.module("omniFactories")
 							transaction_version:0,
 							sale_currency_id:self.tradingPair.pair,
 							sale_amount: new Big(self.buyOrder.amounts.pair).times(SATOSHI_UNIT).valueOf(),
-							desired_currency_id:self.tradingPair.property,
+							desired_currency_id:self.tradingPair.property.currencyId,
 							desired_amount:new Big(self.buyOrder.amounts.property).times(SATOSHI_UNIT).valueOf(),
 							action:1
 						});
@@ -105,7 +105,7 @@ angular.module("omniFactories")
 							address:self.buyOrder.address,
 							saleCurrency:self.tradingPair.pair,
 							saleAmount:self.buyOrder.amounts.pair,
-							desiredCurrency:self.tradingPair.property,
+							desiredCurrency:self.tradingPair.property.currencyId,
 							desiredAmount:self.buyOrder.amounts.property,
 							totalCost:dexOffer.totalCost,
 							action:"Add",
@@ -121,7 +121,7 @@ angular.module("omniFactories")
 					var fee = Account.settings.minerFee || MIN_MINER_FEE;
 					var dexOffer = new Transaction(21,self.sellOrder.address,fee,{
 							transaction_version:0,
-							sale_currency_id:self.tradingPair.property,
+							sale_currency_id:self.tradingPair.property.currencyId,
 							sale_amount:new Big(self.sellOrder.amounts.property).times(SATOSHI_UNIT).valueOf(),
 							desired_currency_id:self.tradingPair.pair,
 							desired_amount:new Big(self.sellOrder.amounts.pair).times(SATOSHI_UNIT).valueOf(),
@@ -134,7 +134,7 @@ angular.module("omniFactories")
 							address:self.sellOrder.address,
 							saleCurrency:self.tradingPair.pair,
 							saleAmount:self.sellOrder.amounts.pair,
-							desiredCurrency:self.tradingPair.property,
+							desiredCurrency:self.tradingPair.property.currencyId,
 							desiredAmount:self.sellOrder.amounts.property,
 							totalCost:dexOffer.totalCost,
 							action:"Add",

@@ -6,20 +6,20 @@ angular.module("omniControllers")
 			$scope.availableTokens = [];
 			$scope.tradingTokens = [];
 
-			$scope.switchOrderbook = function(propertyId){
+			$scope.switchOrderbook = function(property){
 				var active = null;
 				var selected = null;
 				$scope.orderbooks.forEach(function(orderbook){
-					if(orderbook.tradingPair.property == propertyId)
+					if(orderbook.tradingPair.property == property.currencyId)
 						selected = orderbook;
 					if(orderbook.active)
 						active=orderbook;
 				});
 				if(selected==null){
-					var tradingPair = {property:propertyId,pair: propertyId < 2147483651 ? 1 : 2};
+					var tradingPair = {property:property,pair: property.currencyId < 2147483651 ? 1 : 2};
 					selected = new Orderbook(tradingPair)
 					$scope.orderbooks.push(selected);
-					$scope.tradingTokens.tradingTokens(propertyId)
+					$scope.tradingTokens.push(property.currencyId);
 				} else {
 					selected.active = true;
 				}
@@ -37,6 +37,7 @@ angular.module("omniControllers")
 			      $scope.availableTokens = availableTokens.filter(function(currency){
 			        return $scope.tradingTokens.indexOf(currency.currencyId) == -1;
 			      });
+			      $scope.property=[0];
 			    });
 			};
 

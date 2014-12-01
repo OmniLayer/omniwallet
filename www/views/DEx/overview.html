@@ -9,12 +9,12 @@
         </div>
         <div class="row">
         	<div class="col-xs-12">
-        		<form name="switch" role="form" ng-submit="switchOrderbook(propertyId)" class="form-horizontal">
+        		<form name="switch" role="form" ng-submit="switchOrderbook(property)" class="form-horizontal">
 	            	<div class="form-group col-xs-9">
-	            		<label class="col-xs-3" for="propertyId">Exchange SP#{{propertyId}}/MSC</label>
+	            		<label class="col-xs-3" for="propertyId">Exchange {{property.propertyName}}/MSC</label>
                         <div class="col-xs-8">
-                            <select id="propertyId" class="form-control" name="currencyDesired" ng-init="ecosystem=2;setEcosystem()" ng-model="propertyId"
-                              ng-options="currency.currencyId as formatCurrencyDisplay(currency) for currency in availableTokens">
+                            <select id="propertyId" class="form-control" name="currencyDesired" ng-init="ecosystem=2;setEcosystem()" ng-model="property"
+                              ng-options="currency as formatCurrencyDisplay(currency) for currency in availableTokens">
                             </select>
                         </div>
 	    				<button type="submit" class="btn btn-default col-xs-1">Switch</button>
