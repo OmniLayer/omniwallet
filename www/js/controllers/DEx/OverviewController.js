@@ -28,7 +28,7 @@ angular.module("omniControllers")
 			}
 
 			$scope.setEcosystem = function(){
-			    PropertyManager.list($scope.ecosystem).then(function(result){
+			    PropertyManager.listProperties($scope.ecosystem).then(function(result){
 			      var availableTokens = result.data.properties.sort(function(a, b) {
 			          var currencyA = a.propertyName.toUpperCase();
 			          var currencyB = b.propertyName.toUpperCase();
