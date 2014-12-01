@@ -8,16 +8,23 @@
             DEx Phase 2
         </div>
         <div class="row">
-        	<div class="col-xs-6">
+        	<div class="col-xs-12">
         		<form name="switch" role="form" ng-submit="switchOrderbook(propertyId)" class="form-horizontal">
 	            	<div class="form-group">
 	            		<label class="col-xs-4" for="propertyId">Exchange SP#{{propertyId}}/MSC</label>
-	    				<input type="number" class="form-control col-xs-6" id="propertyId" placeholder="Enter desired property" ng-model="propertyId">
+                        <select id="propertyId" class="form-control col-xs-6" name="currencyDesired" ng-init="ecosystem=2;setEcosystem()" ng-model="propertyId"
+                          ng-options="currency.currencyId as formatCurrencyDisplay(currency) for currency in availableTokens">
+                        </select>
 	    				<button type="submit" class="btn btn-default col-xs-2">Switch</button>
 	    			</div>
-	    		</form>
-			</div>
-			<div class="col-xs-6">
+                    <div class="input-group pull-right">
+                        <span class="input-group-addon"> Environment: </span>
+                        <select name="ecosystem" class="form-control" ng-model="ecosystem" ng-change="setEcosystem()" disabled="">
+                          <option value="1"> Production </option>
+                          <option value="2"> Testing </option>
+                        </select>
+                    </div>
+                </form>
             	<a href="/dex/sale" class="btn btn-primary btn-sm" ng-show="isLoggedIn" hidden>Test Sale</a>
 			</div>
         </div>
