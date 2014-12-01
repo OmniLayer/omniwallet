@@ -30,7 +30,7 @@ def orderbook():
      orders.append(data)
 
    response_status='OK'
-   response='{"status":"'+response_status+'", "orders":'+ str(orders) +'}'
+   response=jsonify({"status":response_status, "orders":orders})
 
    return (response, None)
 
@@ -52,7 +52,7 @@ def orderbookall():
      orders.append(data)
 
    response_status='OK'
-   response='{"status":"'+response_status+'", "orders":'+ str(orders) +'}'
+   response=jsonify({"status":response_status, "orders":orders})
 
    return (response, None)
 
@@ -76,10 +76,10 @@ def orderbookbyaddress(address):
        orders.append(data)
 
      response_status='OK'
-     response='{"status":"'+response_status+'", "orders":'+ str(orders) +'}'
+     response=jsonify({"status":response_status, "orders":orders})
    except TypeError:
      response_status='Error'
-     response='{"status":"'+response_status+'", "error": No Addresses provided}'
+     response=jsonify({"status":response_status, "error":"No Addresses Provided"})
 
 
    return (response, None)
@@ -119,13 +119,13 @@ def orderbookbypair(currency1=None,currency2=None, displayclosed=0):
          orders.append(data)
 
        response_status='OK'
-       response='{"status":"'+response_status+'", "orders":'+ str(orders) +'}'
+       response=jsonify({"status":response_status, "orders":orders})
      else:
        response_status='Error'
-       response='{"status":"'+response_status+'", "error":"Bad Currency ID"}'
+       response=jsonify({"status":response_status, "error":"Bad Currency ID"})
    except TypeError:
      response_status='Error'
-     response='{"status":"'+response_status+'", "error": No Currency ID provided}'
+     response=jsonify({"status":response_status, "error":"No Currency ID Provided"})
 
 
    return (response, None)
