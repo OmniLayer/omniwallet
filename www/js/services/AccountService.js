@@ -95,7 +95,7 @@ angular.module("omniServices")
 
         self.login = function(uuid, passphrase) {
             var login = $q.defer()
-            if (!self.loggedIn && !self.loginInProgress) {
+            if (!self.loginInProgress) {
             	self.loginInProgress = true;
                 self.uuid = uuid;
                 $http.get('/v1/user/wallet/challenge?uuid=' + uuid)
@@ -150,7 +150,7 @@ angular.module("omniServices")
                         login.reject(result);
                     });
             } else {
-                login.reject({error: "Login in progress or already loggedin"});
+                login.reject({error: "Login in progress"});
             }
 
             return login.promise;
