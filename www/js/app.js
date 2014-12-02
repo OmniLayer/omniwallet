@@ -26,7 +26,7 @@ var app = angular.module('omniwallet', [
   'vr.filters.passwordStrength',
   'ngIdle',
   'reCAPTCHA',
-  'pascalprecht.translate'
+  'pascalprecht.translate',
   'omniConfig',
   'omniFactories',
   'omniServices',
