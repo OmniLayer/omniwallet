@@ -32,11 +32,11 @@ angular.module('omniwallet')
                 if (!balances.hasOwnProperty(currencyItem.symbol)) {
                   balances[currencyItem.symbol] = {
                     "symbol": currencyItem.symbol,
-                    "balance": +value || currencyItem.value,
+                    "balance": +value || +currencyItem.value,
                     "value": appraiser.getValue(currencyItem.value, currencyItem.symbol, currencyItem.divisible),
                   };
                 } else {
-                  balances[currencyItem.symbol].balance += +value || currencyItem.value;
+                  balances[currencyItem.symbol].balance += +value || +currencyItem.value;
                   balances[currencyItem.symbol].value += appraiser.getValue(currencyItem.value, currencyItem.symbol, currencyItem.divisible);
                 }
 	  //console.log(balances);
@@ -133,11 +133,20 @@ angular.module('omniwallet')
     $scope.isLoading = true;
     $scope.items = asset_types_data.getData().then(function(balances) {
       $scope.balances = balances;
-
+      $scope.totals = {};
       var total = 0;
       for (var k in balances.balances) {
-        if (typeof balances.balances[k].value == 'number')
+        if (typeof balances.balances[k].value == 'number'){
           total += balances.balances[k].value;
+
+          var symbolTotal = $scope.totals[k]
+          //          console.log(symbolTotal, successData.balance[i].symbol)
+          if (!symbolTotal)
+            $scope.totals[k] = 0
+          
+          // property == 1 is for undivisible coins, convert to satoshis otherwise.
+          $scope.totals[k] += balances.balances[k].property_type == 1 ? balances.balances[k].balance : +(new Big(balances.balances[k].balance).times(SATOSHI_UNIT).valueOf())
+        }
       }
       $scope.total = total;
 
@@ -247,8 +256,8 @@ angular.module('omniwallet')
 
     var svg = d3.select("#all-assets-graph")
 
-    if ($scope.totalsPromise) {
-      $scope.totalsPromise.then(function(successData) {
+    if ($scope.totals) {
+      
 
         var appraiser = $injector.get('appraiser');
         var data = [],
@@ -294,7 +303,6 @@ angular.module('omniwallet')
             return d.data.name;
           });
         }
-      });
     }
 
   }
