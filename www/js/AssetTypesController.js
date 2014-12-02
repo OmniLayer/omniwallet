@@ -123,7 +123,6 @@ angular.module('omniwallet')
   })
   .controller('AssetTypesController', function($q, $http, $modal, $rootScope, $injector, $scope, $element, asset_types_data, asset_types_template, Account, Wallet) {
 
-    $scope.totals={};
   var appraiser = $injector.get('appraiser');
   $rootScope.$on('APPRAISER_VALUE_CHANGED', function() {
     $scope.refresh();
@@ -134,7 +133,7 @@ angular.module('omniwallet')
     $scope.isLoading = true;
     $scope.items = asset_types_data.getData().then(function(balances) {
       $scope.balances = balances;
-
+      $scope.totals = {};
       var total = 0;
       for (var k in balances.balances) {
         if (typeof balances.balances[k].value == 'number'){
