@@ -199,11 +199,11 @@ angular.module("omniServices")
               if (self.wallet.addresses[i].address == address) {
                 if(privKey){
                   self.wallet.addresses[i].privkey = privKey;
-                  self.wallet.addresses[i].pubkey = undefined;
+                  self.wallet.addresses[i].pubkey = "";
                 }
                 if(pubKey){
                   if(self.wallet.addresses[i].privkey)
-                    throw "Address " + address + " has already a private key"
+                    throw "Address " + address + " has already a private key."
 
                   self.wallet.addresses[i].pubkey = pubKey;
                 }
