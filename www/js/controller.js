@@ -1,12 +1,12 @@
 
-function SimpleSendController($scope, userService) {
-  var wallet = userService.getWallet();
+function SimpleSendController($scope, Account) {
+  var wallet = Account.wallet;
 
   MySimpleSendHelpers(wallet);
 
 }
-function HomeCtrl($scope, $templateCache, $injector, $location, $http, $q) {
-  if ($injector.get('userService').getUUID()) {
+function HomeCtrl($scope, $templateCache, $injector, $location, $http, $q, Account) {
+  if (Account.uuid) {
     $location.url('/wallet/overview');
   } else {
     //DEV ONLY
@@ -90,12 +90,12 @@ function StatsCtrl($scope, $route, $routeParams, $http) {
   });
 }
 
-function Ctrl($scope, $route, $routeParams, $modal, $location, browser, userService) {
+function Ctrl($scope, $route, $routeParams, $modal, $location, browser, Account) {
 
   $scope.$route = $route;
   $scope.$location = $location;
   $scope.browser = browser;
-  $scope.userService = userService;
+  $scope.Account = Account;
 
   /*$scope.$on('$locationChangeStart', function(event, next) {
     if (browser === 'chrome') {
@@ -121,7 +121,7 @@ function Ctrl($scope, $route, $routeParams, $modal, $location, browser, userServ
   $scope.events = [];
 
   $scope.$on('$idleStart', function() {
-    if (userService.loggedIn()) {
+    if (Account.loggedIn) {
       var originalTitle = document.title;
 
       $modal.open({
@@ -157,7 +157,7 @@ function Ctrl($scope, $route, $routeParams, $modal, $location, browser, userServ
             $scope.idleEndTime--;
             if ($scope.idleEndTime === 0) {
               $interval.cancel(timer);
-              location = location.origin + '/login/' + userService.getUUID()
+              location = location.origin + '/login/' + Account.uuid
             }
 
             $scope.idleEndTimeFormatted = idleEndTimeFormat($scope.idleEndTime);
@@ -187,8 +187,8 @@ function Ctrl($scope, $route, $routeParams, $modal, $location, browser, userServ
   });
 
   $scope.$on('$idleTimeout', function() {
-    /*if (userService.loggedIn()) {
-      location = location.origin + '/login/' + userService.getUUID()
+    /*if (Account.isLoggedOn) {
+      location = location.origin + '/login/' + Account.uuid
     }*/
   });
 
@@ -235,7 +235,7 @@ function FailedSaveLoginController($scope, $modal, $location) {
 }
 
 
-function RevisionController($scope, $http, $modal, userService) {
+function RevisionController($scope, $http, $modal) {
 
   $scope.getData = function() {
     console.log('init 0');
@@ -245,7 +245,7 @@ function RevisionController($scope, $http, $modal, userService) {
   };
 }
 
-function NavigationController($scope, $http, $modal, userService) {
+function NavigationController($scope, $http, $modal, Account) {
 
   $scope.getNavData = function() {
     console.log('init 0');
@@ -323,11 +323,11 @@ function NavigationController($scope, $http, $modal, userService) {
   };
 
   $scope.logout = function() {
-    userService.logout();
+    Account.logout();
     //window.location.reload(false);
   };
 
-  $scope.user = userService.data;
+  $scope.user = Account;
 }
 
 function ExplorerController($scope, $http, hashExplorer) {
@@ -418,7 +418,7 @@ function ExplorerInspectorController($scope, $location, $http, hashExplorer) {
     });
   }
 }
-function SidecarController($rootScope, $scope, $http, $modal, $location, userService, balanceService) {
+function SidecarController($rootScope, $scope, $http, $modal, $location, Account, balanceService, Wallet) {
   $scope.values = {};
   $scope.setView = function(viewName) {
     $scope.view = $scope.sidecarTemplates[viewName];
@@ -432,11 +432,11 @@ function SidecarController($rootScope, $scope, $http, $modal, $location, userSer
     'wallet': '/partials/wallet_sc.html'
   };
 
-  $scope.hasAddresses = userService.data.loggedIn && userService.getAllAddresses().length != 0 ? true : false;
-  $scope.hasAddressesWithPrivkey = userService.data.loggedIn && getAddressesWithPrivkey().length != 0 ? true : false;
+  $scope.hasAddresses = Account.loggedIn && Wallet.addresses.length != 0 ? true : false;
+  $scope.hasAddressesWithPrivkey = Account.loggedIn && getAddressesWithPrivkey().length != 0 ? true : false;
   $scope.hasTradableCoins = false;
   $scope.hasBTC = false;
-  if (userService.data.loggedIn) checkBalance(getAddressesWithPrivkey());
+  if (Account.loggedIn) checkBalance(Wallet.addresses);
   
   $scope.goToTradePage = function($event){
     if($location.path() == "/wallet/trade")
@@ -483,16 +483,16 @@ function SidecarController($rootScope, $scope, $http, $modal, $location, userSer
   };
 
   $scope.$watch(function() {
-    return userService.getAllAddresses()
+    return Wallet.addresses
   }, function(result) {
-    $scope.hasAddresses = userService.data.loggedIn && result.length != 0 ? true : false;
-    $scope.hasAddressesWithPrivkey = userService.data.loggedIn && getAddressesWithPrivkey().length != 0 ? true : false;
-    if (userService.data.loggedIn) checkBalance(getAddressesWithPrivkey());
+    $scope.hasAddresses = Account.loggedIn && result.length != 0 ? true : false;
+    $scope.hasAddressesWithPrivkey = Account.loggedIn && getAddressesWithPrivkey().length != 0 ? true : false;
+    if (Account.loggedIn) checkBalance(Wallet.addresses);
   }, true);
 
   function getAddressesWithPrivkey() {
     var addresses = []
-    userService.getAllAddresses().map(function(e, i, a) {
+    Wallet.addresses.map(function(e, i, a) {
       if (e.privkey && e.privkey.length == 58) {
         addresses.push(e.address);
       }
@@ -506,15 +506,12 @@ function SidecarController($rootScope, $scope, $http, $modal, $location, userSer
     $scope.hasBTC = false;
     if(addresses instanceof Array){
       addresses.forEach(function(address){
-        balanceService.balance(address).then(function(result){
-          var balances = result.data.balance;
-          balances.forEach(function(balance){
+          address.balance.forEach(function(balance){
             if(balance.value > 0)
               $scope.hasTradableCoins = true;
             if(balance.symbol == "BTC" && balance.value > 0)
               $scope.hasBTC = true;
           });
-        });
       });
     }
   }

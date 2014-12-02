@@ -150,11 +150,11 @@ app.config(function($idleProvider, $keepaliveProvider, reCAPTCHAProvider, idleDu
       theme: 'clean'
   });
 })
-.run(function(userService, $location) {
+.run(function(Account, $location, TESTNET) {
   //Whitelist pages
   whitelisted = ['login', 'about', 'status', 'explorer'];
 
-  if (!userService.loggedIn()) {
+  if (!Account.loggedIn) {
     for (var i = 0; i < whitelisted.length; i++) {
       if ($location.path().search(whitelisted[i]) != -1) {
         return;

@@ -1,5 +1,5 @@
 WHOLE_UNIT = new Big(0.00000001);
-function WalletSendAssetsController($modal, $scope, $http, $q, userService, walletTransactionService) {
+function WalletSendAssetsController($modal, $scope, $http, $q, walletTransactionService) {
   $scope.walletAssets =  $scope.$parent.$parent;
   var transactionGenerationController = $scope.$parent;
   // Enable the transaction for offline wallets

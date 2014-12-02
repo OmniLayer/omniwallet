@@ -1,13 +1,13 @@
 WHOLE_UNIT = new Big(0.00000001); //Backend data returns satoshi, use this conversion ratio
 SATOSHI_UNIT = new Big(100000000); //Backend data needs satoshi, use this conversion ratio
 MIN_MINER_FEE = new Big(0.00010000);
-function WalletAssetsFormController($scope, $injector, userService, walletTransactionService) {
+function WalletAssetsFormController($scope, $injector, Wallet, walletTransactionService) {
   // [ Form Validation]
   $scope.showErrors = false;
 
   // [ Template Initialization ]
 
-  $scope.currencyList = userService.getCurrencies().filter(function(currency){
+  $scope.currencyList = Wallet.assets.filter(function(currency){
        return currency.tradable;
   }); // [{symbol: 'BTC', addresses:[], name: 'BTC'}, {symbol: 'MSC', addresses:[], name: 'MSC'}, {symbol: 'TMSC', addresses:[], name: 'TMSC'}]
   
@@ -19,7 +19,11 @@ function WalletAssetsFormController($scope, $injector, userService, walletTransa
         $scope.selectedCoin = e;
     });
   }
-  $scope.addressList = $scope.selectedCoin ? userService.getTradableAddresses($scope.selectedCoin.tradableAddresses, $scope.offlineSupport) : [];
+  $scope.addressList = $scope.selectedCoin ? $scope.selectedCoin.tradableAddresses.filter(function(e) {
+          return $scope.offlineSupport || (e.privkey && e.privkey.length == 58);
+        }).map(function(e){
+          return e.address;
+        }) : [];
   if(!$scope.$parent.selectedAddress)
     $scope.selectedAddress = $scope.addressList[0] || null;
   $scope.$watch('selectedCoin', function() {
@@ -30,12 +34,16 @@ function WalletAssetsFormController($scope, $injector, userService, walletTransa
   });
   $scope.$watch('selectedAddress', function() {
     $scope.setBalance();
-    var pubkey = userService.getAddress($scope.selectedAddress).pubkey;
+    var pubkey = $scope.selectedAddress ? Wallet.getAddress($scope.selectedAddress).pubkey : undefined;
     $scope.offline = pubkey != undefined && pubkey != "";
   });
   
   var updateData = function(){
-    $scope.addressList = $scope.selectedCoin ? userService.getTradableAddresses($scope.selectedCoin.tradableAddresses, $scope.offlineSupport) : [];
+    $scope.addressList = $scope.selectedCoin ? $scope.selectedCoin.tradableAddresses.filter(function(e) {
+          return $scope.offlineSupport || (e.privkey && e.privkey.length == 58);
+        }).map(function(e){
+          return e.address;
+        }) : [];
     if(!$scope.$parent.selectedAddress)
       $scope.selectedAddress = $scope.addressList[0] || null;
     $scope.setBalance();
@@ -53,7 +61,7 @@ function WalletAssetsFormController($scope, $injector, userService, walletTransa
   $scope.balanceData = [0];
   var addrListBal = [];
   // fill the addrBalanceList with all the addresses on the wallet for which we've got private keys.
-  userService.getAddressesWithPrivkey().concat(userService.getAddressesWithPubkey()).forEach(function(e, i) {
+  Wallet.addresses.forEach(function(e, i) {
     if(Bitcoin.Address.validate(e)){
       var balances = [
         {
@@ -85,23 +93,14 @@ function WalletAssetsFormController($scope, $injector, userService, walletTransa
   });
   
   $scope.setBalance = function() {
-    var coin = $scope.selectedCoin ? $scope.selectedCoin.symbol : null;
+    var coin = $scope.selectedCoin;
     var address = $scope.selectedAddress;
     $scope.balanceData = [0,0];
-    if (address || coin) {
-      for (var i = 0; i < addrListBal.length; i++) {
-        if (addrListBal[i].address == address) {
-          for (var k = 0; k < addrListBal[i].balance.length; k++) {
-            if (addrListBal[i].balance[k].symbol == coin) {
-              var divisible = addrListBal[i].balance[k].divisible;
-              $scope.balanceData[0] = divisible ? new Big(addrListBal[i].balance[k].value).times(WHOLE_UNIT).valueOf() : addrListBal[i].balance[k].value;
-            }
-            if (addrListBal[i].balance[k].symbol == 'BTC') {
-              $scope.balanceData[1] = new Big(addrListBal[i].balance[k].value).times(WHOLE_UNIT).valueOf();
-            }
-          }
-        }
-      }
+    if (address && coin) {
+      var balance = Wallet.getAddress($scope.selectedAddress).getBalance($scope.selectedCoin.id);
+      var value = balance ? balance.value : 0;
+      $scope.balanceData[0] = coin.divisible ? new Big(value).times(WHOLE_UNIT).valueOf() : value;
+      $scope.balanceData[1] = new Big(Wallet.getAddress($scope.selectedAddress).getBalance(0).value).times(WHOLE_UNIT).valueOf();
     }
   };
 

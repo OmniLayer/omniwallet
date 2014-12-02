@@ -8,7 +8,7 @@ angular.module('omniwallet')
 
     return deferred.promise;
   })
-  .factory('asset_types_data', function($http, $q, $timeout, $injector) {
+  .factory('asset_types_data', function($http, $q, $timeout, $injector, Wallet) {
     var count = 1;
     return {
       "getData": function() {
@@ -16,8 +16,7 @@ angular.module('omniwallet')
         var deferred = $q.defer();
 
         _.defer(function() {
-          var wallet = $injector.get('userService').getWallet();
-          if (wallet && wallet.addresses.length > 0) {
+          if (Wallet.addresses && Wallet.addresses.length > 0) {
             var requests = [];
 
             var balances = {};
@@ -26,72 +25,65 @@ angular.module('omniwallet')
 
             var appraiser = $injector.get('appraiser');
 
-            wallet.addresses.forEach(function(addr) {
-              requests.push($injector.get('balanceService').balance(addr.address).then(function(result) {
-                result.data.balance.forEach(function(currencyItem) {
-                  if(currencyItem.divisible)
-                    var value=new Big(currencyItem.value).times(WHOLE_UNIT).valueOf();
-                  if (!balances.hasOwnProperty(currencyItem.symbol)) {
-                    balances[currencyItem.symbol] = {
-                      "symbol": currencyItem.symbol,
-                      "balance": +value || currencyItem.value,
-                      "value": appraiser.getValue(currencyItem.value, currencyItem.symbol, currencyItem.divisible),
-                    };
-                  } else {
-                    balances[currencyItem.symbol].balance += +value || currencyItem.value;
-                    balances[currencyItem.symbol].value += appraiser.getValue(currencyItem.value, currencyItem.symbol, currencyItem.divisible);
-                  }
-		  //console.log(balances);
-                  if (currencyItem.symbol == 'BTC') {
-                    balances[currencyItem.symbol].name = "Bitcoin"
-                  }
-                });
-              }));
+            Wallet.addresses.forEach(function(addr) {
+              addr.balance.forEach(function(currencyItem) {
+                if(currencyItem.divisible)
+                  var value=new Big(currencyItem.value).times(WHOLE_UNIT).valueOf();
+                if (!balances.hasOwnProperty(currencyItem.symbol)) {
+                  balances[currencyItem.symbol] = {
+                    "symbol": currencyItem.symbol,
+                    "balance": +value || currencyItem.value,
+                    "value": appraiser.getValue(currencyItem.value, currencyItem.symbol, currencyItem.divisible),
+                  };
+                } else {
+                  balances[currencyItem.symbol].balance += +value || currencyItem.value;
+                  balances[currencyItem.symbol].value += appraiser.getValue(currencyItem.value, currencyItem.symbol, currencyItem.divisible);
+                }
+	  //console.log(balances);
+                if (currencyItem.symbol == 'BTC') {
+                  balances[currencyItem.symbol].name = "Bitcoin"
+                }
+              });
             });
             // First, the standard currencies.
-            requests.push($http.get('/v1/transaction/values.json').then(function(result) {
+            $http.get('/v1/transaction/values.json').then(function(result) {
               currencyInfo = result.data;
-            }
-            ));
-            $q.all(requests).then(function(responses) {
-              if (currencyInfo) {
-                currencyInfo.forEach(function(item) {
-                  if (balances.hasOwnProperty(item.currency))
-                    balances[item.currency].name = item.name;
-                });
+              currencyInfo.forEach(function(item) {
+                if (balances.hasOwnProperty(item.currency))
+                  balances[item.currency].name = item.name;
+              });
 
-                // Now, any applicable smart properties.
-                var spReqs = [];
+              // Now, any applicable smart properties.
+              var spReqs = [];
 
-                for (var b in balances) {
-                  var spMatch = balances[b].symbol.match(/^SP([0-9]+)$/);
+              for (var b in balances) {
+                var spMatch = balances[b].symbol.match(/^SP([0-9]+)$/);
 
-                  if (spMatch != null) {
-                    var updateFunction = function(result) {
-                      if (result.status == 200)
-                        this.property_type = result.data[0].formatted_property_type;
-                      this.name = result.data[0].propertyName + ' (' + this.symbol.match(/^SP([0-9]+)$/)[1] + ')';
-		      this.shortname = result.data[0].propertyName;
-                    };
-                    spReqs.push($http.get('/v1/property/' + spMatch[1] + '.json').then(updateFunction.bind(balances[b])));
-                  }
+                if (spMatch != null) {
+                  var updateFunction = function(result) {
+                    if (result.status == 200)
+                      this.property_type = result.data[0].formatted_property_type;
+                    this.name = result.data[0].propertyName + ' (' + this.symbol.match(/^SP([0-9]+)$/)[1] + ')';
+                    this.shortname = result.data[0].propertyName;
+                  };
+                  spReqs.push($http.get('/v1/property/' + spMatch[1] + '.json').then(updateFunction.bind(balances[b])));
                 }
+              }
 
-                if (spReqs.length > 0) {
-                  $q.all(spReqs).then(function() {
-                    deferred.resolve(
-                    {
-                      balances: balances,
-                      currencies: currencyInfo
-                    });
-                  });
-                } else {
+              if (spReqs.length > 0) {
+                $q.all(spReqs).then(function() {
                   deferred.resolve(
                   {
                     balances: balances,
                     currencies: currencyInfo
                   });
-                }
+                });
+              } else {
+                deferred.resolve(
+                {
+                  balances: balances,
+                  currencies: currencyInfo
+                });
               }
             });
           } else {
@@ -129,7 +121,7 @@ angular.module('omniwallet')
       }
     }
   })
-  .controller('AssetTypesController', function($q, $http, $modal, $rootScope, $injector, $scope, $element, asset_types_data, asset_types_template) {
+  .controller('AssetTypesController', function($q, $http, $modal, $rootScope, $injector, $scope, $element, asset_types_data, asset_types_template, Account, Wallet) {
 
   var appraiser = $injector.get('appraiser');
   $rootScope.$on('APPRAISER_VALUE_CHANGED', function() {
@@ -165,7 +157,7 @@ angular.module('omniwallet')
 
   function getAssetBalances(currencySymbol) {
     var deferred = $q.defer();
-    var wallet = $injector.get('userService').getWallet();
+    var wallet = Account.wallet;
     if (wallet && wallet.addresses.length > 0) {
       var requests = [];
       var balances = [];
@@ -201,7 +193,7 @@ angular.module('omniwallet')
   $scope.openCurrencyDetail = function(currencySymbol) {
     $scope.currencySymbol = currencySymbol;
     $scope.currencyName = "";
-    var currencies = $injector.get('userService').getCurrencies();
+    var currencies = Wallet.assets;
     currencies.forEach(function(currency) {
       if (currency.symbol == currencySymbol) {
         $scope.currencyName = currency.symbol == "BTC" ? "Bitcoin" : currency.symbol == "MSC" ? "Mastercoin" : currency.symbol == "TMSC" ? "Test Mastercoin" : currency.name;
