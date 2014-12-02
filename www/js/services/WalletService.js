@@ -51,8 +51,11 @@ angular.module("omniServices")
 	        self._updateAddress = function(address,privKey,pubKey){
 	        	for (var i in self.addresses) {
 		            if (self.addresses[i].address == address) {
-		                if(privKey)
-		                  self.addresses[i].privkey = privKey;
+		                if(privKey){
+		                	self.addresses[i].privkey = privKey;
+		                	self.addresses[i].pubkey = undefined;
+		                }
+		                  
 		                if(pubKey)
 		                  self.addresses[i].pubkey = pubKey;
 		            }

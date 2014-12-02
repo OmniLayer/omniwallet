@@ -199,7 +199,7 @@ angular.module("omniServices")
               if (self.wallet.addresses[i].address == address) {
                 if(privKey){
                   self.wallet.addresses[i].privkey = privKey;
-                  self.wallet.addresses[i].pubkey = "";
+                  self.wallet.addresses[i].pubkey = undefined;
                 }
                 if(pubKey){
                   if(self.wallet.addresses[i].privkey)
