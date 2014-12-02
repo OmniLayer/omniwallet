@@ -234,6 +234,17 @@ function FailedSaveLoginController($scope, $modal, $location) {
   }
 }
 
+function AccountSettingsController($modal, $injector, $scope, userService) {
+
+  wallet = $injector.get('userService').getWallet();
+  $scope.uuid = wallet['uuid']
+  if (wallet['email'] == undefined) {
+    $scope.email = null
+  } else {
+    $scope.email = wallet['email']
+  }
+
+}
 
 function RevisionController($scope, $http, $modal) {
 
