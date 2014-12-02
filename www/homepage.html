@@ -1,6 +1,6 @@
 <row>
   <div class="center-block col-xs-12">
-    <h3 class="text-center">Balance Check</h3>
+    <h3 class="text-center">{{ 'HOMEPAGE_BALANCECHECK' | translate }}</h3>
     <form class="form-horizontal" role="form" name="addressentry">
       <div class="form-group">
         <div class="col-xs-offset-2 col-xs-10">
@@ -11,7 +11,7 @@
                 <input type="button" ng-click="checkBalance();" ng-disabled="validate(balanceAddress) == false" class="btn btn-primary" value="Click!" />
             </span>
            </div>
-           <span class="help-block"><small>Enter a valid Bitcoin Address, e.g. 1EXoDusjGwvnjZUyKkxZ4UHEf77z6A5S4P</small></span>
+           <span class="help-block"><small>{{ 'HOMEPAGE_ENTERVALIDADDRESS' | translate }}</small></span>
         </div>
       </div>
     </form>
@@ -44,7 +44,7 @@
 <div class="container middle row">
   <div class="alert alert-custom alert-dismissable" ng-show="browser !== 'chrome'">
   <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-  Omniwallet recommends the use of Chrome, since the wallet may not yet function perfectly on other browsers.
+  {{ 'HOMEPAGE_BROWSERRECOMMENDATION' | translate }}
   </div>
 </div>
 </row>
