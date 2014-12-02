@@ -143,7 +143,9 @@ angular.module('omniwallet')
           //          console.log(symbolTotal, successData.balance[i].symbol)
           if (!symbolTotal)
             $scope.totals[k] = 0
-          $scope.totals[k] += +balances.balances[k].value
+          
+          // property == 1 is for undivisible coins, convert to satoshis otherwise.
+          $scope.totals[k] += balances.balances[k].property_type == 1 ? balances.balances[k].balance : +(new Big(balances.balances[k].balance).times(SATOSHI_UNIT).valueOf())
         }
       }
       $scope.total = total;
