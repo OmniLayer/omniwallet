@@ -197,10 +197,16 @@ angular.module("omniServices")
         self.addAddress = function(address, privKey, pubKey) {
             for (var i in self.wallet.addresses) {
               if (self.wallet.addresses[i].address == address) {
-                if(privKey)
+                if(privKey){
                   self.wallet.addresses[i].privkey = privKey;
-                if(pubKey)
+                  self.wallet.addresses[i].pubkey = undefined;
+                }
+                if(pubKey){
+                  if(self.wallet.addresses[i].privkey)
+                    throw "Address " + address + " has already a private key"
+
                   self.wallet.addresses[i].pubkey = pubKey;
+                }
                 return self.saveSession().then(function(){
                     Wallet._updateAddress(address,privKey,pubKey);
                 });

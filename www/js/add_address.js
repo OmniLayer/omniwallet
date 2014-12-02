@@ -106,13 +106,13 @@ angular.module('omniwallet')
                       $scope.progressColor = "green";
                     }
                     if(exportData.exportWatch && (!obj.privkey && !obj.pubkey)) {
-                      blob.addresses.push({ address: obj.address, privkey: "", pubkey:false });
+                      blob.addresses.push({ address: obj.address, privkey: "", pubkey:"" });
                       $scope.progressMessage = "Exported watch address " + obj.address;
                       $scope.progressColor = "green";
                     }
                     if(exportData.exportOffline && (!obj.privkey && obj.pubkey)) {
-                      blob.addresses.push({ address: obj.address, privkey: "", pubkey:true });
-                      $scope.progressMessage = "Exported watch address " + obj.address;
+                      blob.addresses.push({ address: obj.address, privkey: "", pubkey:obj.pubkey });
+                      $scope.progressMessage = "Exported offline address " + obj.address;
                       $scope.progressColor = "green";
                     }
                   } catch (e) {
@@ -159,11 +159,18 @@ angular.module('omniwallet')
       modalInstance.result.then(function(result) {
   
         if (result.address) {
-          Account.addAddress(result.address,undefined,result.pubkey);
+          try{
+            Account.addAddress(result.address,undefined,result.pubkey); 
+                
+            $scope.refresh();
+            $scope.addedNewAddress = true;
+            $scope.createdAddress = result.address; 
+          } catch (e){
+            $scope.errorAddingAddress =true;
+            $scope.error=e;
+          }
+          
         }
-        $scope.refresh();
-        $scope.addedNewAddress = true;
-        $scope.createdAddress = result.address;
       }, function() {});
     };
     
