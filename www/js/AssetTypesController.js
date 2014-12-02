@@ -32,11 +32,11 @@ angular.module('omniwallet')
                 if (!balances.hasOwnProperty(currencyItem.symbol)) {
                   balances[currencyItem.symbol] = {
                     "symbol": currencyItem.symbol,
-                    "balance": +value || currencyItem.value,
+                    "balance": +value || +currencyItem.value,
                     "value": appraiser.getValue(currencyItem.value, currencyItem.symbol, currencyItem.divisible),
                   };
                 } else {
-                  balances[currencyItem.symbol].balance += +value || currencyItem.value;
+                  balances[currencyItem.symbol].balance += +value || +currencyItem.value;
                   balances[currencyItem.symbol].value += appraiser.getValue(currencyItem.value, currencyItem.symbol, currencyItem.divisible);
                 }
 	  //console.log(balances);
@@ -123,6 +123,7 @@ angular.module('omniwallet')
   })
   .controller('AssetTypesController', function($q, $http, $modal, $rootScope, $injector, $scope, $element, asset_types_data, asset_types_template, Account, Wallet) {
 
+    $scope.totals={};
   var appraiser = $injector.get('appraiser');
   $rootScope.$on('APPRAISER_VALUE_CHANGED', function() {
     $scope.refresh();
@@ -138,6 +139,12 @@ angular.module('omniwallet')
       for (var k in balances.balances) {
         if (typeof balances.balances[k].value == 'number')
           total += balances.balances[k].value;
+
+        var symbolTotal = $scope.totals[balances[i].symbol]
+        //          console.log(symbolTotal, successData.balance[i].symbol)
+        if (!symbolTotal)
+          $scope.totals[balances[i].symbol] = 0
+        $scope.totals[balances[i].symbol] += +balances[i].value
       }
       $scope.total = total;
 
@@ -247,8 +254,8 @@ angular.module('omniwallet')
 
     var svg = d3.select("#all-assets-graph")
 
-    if ($scope.totalsPromise) {
-      $scope.totalsPromise.then(function(successData) {
+    if ($scope.totals) {
+      
 
         var appraiser = $injector.get('appraiser');
         var data = [],
@@ -294,7 +301,6 @@ angular.module('omniwallet')
             return d.data.name;
           });
         }
-      });
     }
 
   }
