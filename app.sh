@@ -71,16 +71,15 @@ do
         echo Api Reloaded
     fi
 
-    #disable websockets until we are ready to use it
-    #ps a | grep -v grep | grep "omni-websocket" > /dev/null
-    #if [ $? -eq 0 ]; then
-    #    echo "websocket api is running."
-    #  else
-    #    echo "Starting websocket daemon..."
-    #    cd $APPDIR/api/websocket
-    #    node omni-websocket.js > $DATADIR/nodeapp.log &
-    #    WEBSOCKET_PID=$!
-    #fi
+    ps a | grep -v grep | grep "websocket" > /dev/null
+    if [ $? -eq 0 ]; then
+        echo "websocket api is running."
+      else
+        echo "Starting websocket daemon..."
+        cd $APPDIR/api
+        $PYTHONBIN websocket.py > $DATADIR/websocket.log &
+        WEBSOCKET_PID=$!
+    fi
 
     mkdir -p $DATADIR
     cd $DATADIR

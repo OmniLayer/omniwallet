@@ -1,7 +1,7 @@
-function TransactionGenerationController($scope, $modal, userService, walletTransactionService){
+function TransactionGenerationController($scope, $modal, Wallet, walletTransactionService){
   
   $scope.prepareTransaction = function(txType, rawdata, from, $modalScope){
-    var addressData = userService.getAddress(from);
+    var addressData = Wallet.getAddress(from);
     var pubKey = null;
     if(addressData.pubkey)
       pubKey= addressData.pubkey.toUpperCase();

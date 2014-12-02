@@ -1,35 +1,35 @@
 angular.module("omniServices")
-    .service("ModalManager", ["$modal", "WalletAssets", "TransactionGenerator",
-        function ModalManagerService($modal, WalletAssets, TransactionGenerator) {
+    .service("ModalManager", ["$modal", "TransactionGenerator","TransactionManager",
+        function ModalManagerService($modal, TransactionGenerator, TransactionManager) {
             var self = this;
 
             self.openConfirmationModal = function(modalConfig) {
                 self.modalInstance = $modal.open({
                     templateUrl: "/views/modals/base.html",
-                    controller: function ConfirmationModalController($scope, $modalInstance, walletAssets, modalConfig, modalManager) {
+                    controller: function ConfirmationModalController($scope, $modalInstance, modalConfig, modalManager) {                        
                         angular.extend($scope, modalConfig.scope);
 
                         $scope.bodyTemplate = modalConfig.bodyTemplate || "/views/modals/confirmation.html";
                         $scope.footerTemplate = modalConfig.footerTemplate || "/views/modals/partials/confirmation_footer.html";
                         $scope.dataTemplate = modalConfig.dataTemplate || "";
 
-                        $scope.signOffline = walletAssets.offline;
+                        $scope.signOffline = modalConfig.transaction.offline;
                         
                         $scope.confirm = function() {
                             $scope.clicked = true;
                             $scope.waiting = true;
-                            var data = modalConfig.transactionManager.prepareData(modalConfig.transactionData,walletAssets.selectedAddress);
 
-                            modalConfig.transactionManager.processTransaction(data,walletAssets.offline).then(function(result){
+                            TransactionManager.processTransaction(modalConfig.transaction).then(function(result){
                             	angular.extend($scope,result)
                             }, function(errorData){
                             	angular.extend($scope,errorData)
                             });
                         };
 
-                        $scope.fromAddress = walletAssets.selectedAddress;
+                        $scope.fromAddress = modalConfig.transaction.address.address;
 
                         $scope.openBroadcastTransactionForm = function(address) {
+                            $modalInstance.dismiss('close');
                             modalManager.openBroadcastTransactionModal(address);
                         };
 
@@ -52,9 +52,6 @@ angular.module("omniServices")
                         };
                     },
                     resolve: {
-                        walletAssets: function() {
-                            return WalletAssets;
-                        },
                         modalConfig: function() {
                             return modalConfig;
                         },

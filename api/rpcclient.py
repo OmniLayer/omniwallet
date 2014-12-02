@@ -83,6 +83,15 @@ def sendrawtransaction(tx):
     except Exception, e:
       return e
 
+def validateaddress(addr):
+    return host.call("validateaddress", addr)
+
+def createrawtransaction(ins,outs):
+    return host.call("createrawtransaction",ins,outs)
+
+def decoderawtransaction(rawtx):
+    return host.call("decoderawtransaction", rawtx)
+
 ## Mastercoin Specific RPC calls
 def getbalance_MP(addr, propertyid):
     return host.call("getbalance_MP", addr, propertyid)
