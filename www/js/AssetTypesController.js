@@ -137,14 +137,15 @@ angular.module('omniwallet')
 
       var total = 0;
       for (var k in balances.balances) {
-        if (typeof balances.balances[k].value == 'number')
+        if (typeof balances.balances[k].value == 'number'){
           total += balances.balances[k].value;
 
-        var symbolTotal = $scope.totals[balances[i].symbol]
-        //          console.log(symbolTotal, successData.balance[i].symbol)
-        if (!symbolTotal)
-          $scope.totals[balances[i].symbol] = 0
-        $scope.totals[balances[i].symbol] += +balances[i].value
+          var symbolTotal = $scope.totals[k]
+          //          console.log(symbolTotal, successData.balance[i].symbol)
+          if (!symbolTotal)
+            $scope.totals[k] = 0
+          $scope.totals[k] += +balances.balances[k].value
+        }
       }
       $scope.total = total;
 
