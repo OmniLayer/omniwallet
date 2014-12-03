@@ -408,13 +408,14 @@ angular.module('omniwallet').factory('appraiser', ['$rootScope', '$http', '$q', 
     function AppraiserService() {
       this.conversions = {};
       this.wallet = $injector.get('Wallet');
+      this.Account = $injector.get('Account');
       var self = this;
       function UpdateLoop() {
         self.updateValues(function() {
           setTimeout(UpdateLoop, 300000);
         });
       }
-      UpdateLoop();
+      if (self.Account.loggedIn) UpdateLoop();
     };
 
     AppraiserService.prototype.updateValues = function(callback) {
