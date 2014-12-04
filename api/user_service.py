@@ -151,6 +151,7 @@ def update():
   validate_uuid = UUID(request.form['uuid'])
   uuid = str(validate_uuid)
   session = ws.hashlib.sha256(config.SESSION_SECRET + uuid).hexdigest()
+  email = request.form['email'] if 'email' in request.form else None
 
   if config.LOCALDEVBYPASSDB:
     session_challenge = session + "_challenge"
@@ -203,7 +204,7 @@ def update():
       print 'Challenge signature not verified'
       abort(403)
 
-    write_wallet(uuid, wallet)
+    write_wallet(uuid, wallet, email)
     dbExecute("update sessions set challenge=NULL, timestamp=DEFAULT where sessionid=%s",[session])
     dbCommit()
 

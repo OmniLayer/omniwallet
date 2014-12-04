@@ -39,7 +39,7 @@ angular.module('omniwallet')
                   balances[currencyItem.symbol].balance += +value || +currencyItem.value;
                   balances[currencyItem.symbol].value += appraiser.getValue(currencyItem.value, currencyItem.symbol, currencyItem.divisible);
                 }
-	  //console.log(balances);
+                //console.log(balances);
                 if (currencyItem.symbol == 'BTC') {
                   balances[currencyItem.symbol].name = "Bitcoin"
                 }
