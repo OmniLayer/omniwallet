@@ -238,7 +238,7 @@ function WalletHistoryController($scope, $q, $http, hashExplorer, Wallet) {
   }
 }
 
-function WalletTradeController($scope, $http, $q) {
+function WalletTradeController($scope, $http, $q, Account) {
 
   //init and use global to pass data around
   $scope.global = {
@@ -247,6 +247,12 @@ function WalletTradeController($scope, $http, $q) {
 
   $scope.onTradeView = true
   $scope.history = '/partials/wallet_history.html';
+
+  if (Account.wallet['settings']['showdexdust'] == undefined) {
+    $scope.inactive=true
+  } else {
+    $scope.inactive = Account.wallet['settings']['showdexdust']
+  }
 
   $scope.setView = function(view, data) {
     if (view != 'tradeInfo'){

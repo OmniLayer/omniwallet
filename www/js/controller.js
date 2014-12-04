@@ -234,16 +234,47 @@ function FailedSaveLoginController($scope, $modal, $location) {
   }
 }
 
-function AccountSettingsController($modal, $injector, $scope, userService) {
+function AccountSettingsController($modal, $injector, $scope, Account) {
 
-  wallet = $injector.get('userService').getWallet();
-  $scope.uuid = wallet['uuid']
+  wallet = Account.wallet;
+  $scope.wallet = wallet;
+  $scope.uuid = wallet['uuid'];
+
   if (wallet['email'] == undefined) {
-    $scope.email = null
+    $scope.email = ""
   } else {
     $scope.email = wallet['email']
   }
 
+  if (wallet['settings'] == undefined) {
+    settings = []
+  } else {
+    settings=wallet['settings']
+  }
+
+  if (settings['showdexdust'] == undefined) {
+    settings['showdexdust'] = 'false'
+  }
+  $scope.showdexdust = settings['showdexdust']
+  
+  if (settings['donate'] == undefined) {
+    settings['donate'] = 'false'
+  }
+  $scope.donate = settings['donate']
+  
+  if (settings['showtesteco'] == undefined) {
+    settings['showtesteco'] = 'false'
+  }
+  $scope.showtesteco = settings['showtesteco']
+  
+  $scope.save = function() {
+        wallet['email'] = $scope.email;
+        wallet['settings'] = { 'showdexdust':$scope.showdexdust, 
+                               'donate':$scope.donate, 
+                               'showtesteco':$scope.showtesteco };
+        Account.wallet = wallet;
+        Account.saveSession();
+        };
 }
 
 function RevisionController($scope, $http, $modal) {
