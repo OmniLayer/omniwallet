@@ -25,4 +25,8 @@ angular.module("omniControllers")
 				if (active && active!= selected)
 					active.active=false;
 			}
+
+			$scope.updateAmounts = function(order,price){
+				order.amounts.pair = order.amounts.property * price;
+			};
 	}]);
