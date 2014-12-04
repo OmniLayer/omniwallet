@@ -143,11 +143,16 @@ angular.module("omniServices")
                             login.resolve(wallet);
                         } catch (e) {
                         	self.loginInProgress = false;
-                            login.reject(e);
+                          login.reject({badPassword : true});
                         }
                     }, function(result) {
                     	self.loginInProgress = false;
-                        login.reject(result);
+                      if (result.status == 403) {
+                        login.reject({missingUUID : true});
+                      } else {
+                        login.reject({serverError : true});
+                      }
+                        
                     });
             } else {
                 login.reject({error: "Login in progress"});
