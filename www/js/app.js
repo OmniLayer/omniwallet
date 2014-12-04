@@ -26,6 +26,7 @@ var app = angular.module('omniwallet', [
   'vr.filters.passwordStrength',
   'ngIdle',
   'reCAPTCHA',
+  'pascalprecht.translate'
   'omniConfig',
   'omniFactories',
   'omniServices',
@@ -138,7 +139,7 @@ var app = angular.module('omniwallet', [
   $locationProvider.html5Mode(true).hashPrefix('!');
 });
 
-app.config(function($idleProvider, $keepaliveProvider, reCAPTCHAProvider, idleDuration, idleWarningDuration, reCaptchaKey) {
+app.config(function($idleProvider, $keepaliveProvider, reCAPTCHAProvider, idleDuration, idleWarningDuration, reCaptchaKey, $translateProvider, EnglishTranslation) {
   $idleProvider.idleDuration(idleDuration);
   $idleProvider.warningDuration(idleWarningDuration);
   // $keepaliveProvider.interval(2);
@@ -149,6 +150,10 @@ app.config(function($idleProvider, $keepaliveProvider, reCAPTCHAProvider, idleDu
   reCAPTCHAProvider.setOptions({
       theme: 'clean'
   });
+
+  $translateProvider.translations('en', EnglishTranslation);
+   
+  $translateProvider.preferredLanguage('en');
 })
 .run(function(Account, $location, TESTNET) {
   //Whitelist pages
