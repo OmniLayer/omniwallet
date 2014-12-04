@@ -2,6 +2,10 @@
 <timepicker ng-model="t" hidden></timepicker> <!-- initalize ui.bootstrap.timepicker (bad interaction with ng-route) -->
 <div tooltip=""></div> <!-- initalize ui.bootstrap.tooltip (bad interaction with ng-route) -->
 <progressbar hidden style="margin-top:10px" animate="false" value="0" type="success" max="100"></progressbar>
+<tabset hidden>
+  <tab>
+  </tab>
+</tabset>
 <div class="sidecar col-xs-2" ng-controller="SidecarController" ng-init=setView('wallet')>
     <div ng-include="templates['sidecar']"></div>
 </div>
