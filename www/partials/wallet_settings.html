@@ -8,7 +8,9 @@
   <form novalidate class="simple-form">
     Wallet ID: {{uuid}}  <br />
     Wallet Email: <input type="email" ng-model="email" /><br />
-    Wallet Currency: (let users change currency)  <br />
+    Wallet Currency: 
+      <select data-ng-options="o for o in currencylist" data-ng-model="selectedCurrency"></select>
+      <br />
     Hide DEx (Phase I) Offers where the purchase price is less than the dust limit (Default: Yes): 
       <input type="radio" ng-model="showdexdust" value="true" />Yes
       <input type="radio" ng-model="showdexdust" value="false" />No (Advanced)<br />

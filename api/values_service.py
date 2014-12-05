@@ -93,7 +93,11 @@ def currencylist():
   ROWS=dbSelect("select distinct propertyname from smartproperties sp , exchangerates ex "
                 "where sp.protocol=ex.protocol1 and sp.protocol='Fiat' and ex.rate1for2 !=0")
 
-  return json.dumps(ROWS)    
+  retval=[]
+  for x in ROWS:
+   retval.append(x[0])
+
+  return json.dumps(retval)    
 
 #TODO COnversion
 @app.route('/history/<currency>')

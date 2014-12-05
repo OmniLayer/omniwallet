@@ -234,7 +234,7 @@ function FailedSaveLoginController($scope, $modal, $location) {
   }
 }
 
-function AccountSettingsController($modal, $injector, $scope, Account) {
+function AccountSettingsController($modal, $injector, $scope, $http, Account) {
 
   wallet = Account.wallet;
   $scope.wallet = wallet;
@@ -251,6 +251,20 @@ function AccountSettingsController($modal, $injector, $scope, Account) {
   } else {
     settings=wallet['settings']
   }
+
+  if (settings['usercurrency'] == undefined) {
+    settings['usercurrency'] = "USD"
+  }
+
+  $http.get('/v1/values/currencylist').success(function(data) {
+    $scope.currencylist = data;    
+  }).error(function(){
+    $scope.currencylist = [["USD"]];
+  });
+
+  //console.log($scope.currencylist.indexOf(settings['usercurrency']));
+
+  $scope.selectedCurrency = settings['usercurrency']
 
   if (settings['showdexdust'] == undefined) {
     settings['showdexdust'] = 'false'
@@ -269,7 +283,8 @@ function AccountSettingsController($modal, $injector, $scope, Account) {
   
   $scope.save = function() {
         wallet['email'] = $scope.email;
-        wallet['settings'] = { 'showdexdust':$scope.showdexdust, 
+        wallet['settings'] = { 'usercurrency':$scope.selectedCurrency,
+                               'showdexdust':$scope.showdexdust, 
                                'donate':$scope.donate, 
                                'showtesteco':$scope.showtesteco };
         Account.wallet = wallet;
