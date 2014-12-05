@@ -61,6 +61,7 @@ angular.module('omniwallet')
                   }
                   balances[currencyItem.symbol].addresses[addr.address] = {
                     "address": addr.address,
+                    "qr": "https://chart.googleapis.com/chart?chs=150x150&cht=qr&chl="+addr.address+"&choe=UTF-8",
                     "balance": +value || currencyItem.value,
                     "value": appraiser.getValue(currencyItem.value, currencyItem.symbol, currencyItem.divisible),
 	                  "private": hasPrivate,
