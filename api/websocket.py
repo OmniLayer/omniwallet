@@ -75,13 +75,11 @@ def balance_connect():
 def add_address(message):
   global addresses
   address = message['data']
-  print message
   if str(address) in addresses: 
     addresses[str(address)] += 1
   else:
     addresses[str(address)] = 1
 
-  print addresses
   #speed up initial data load
   balance_data=get_balancedata(address)
   emit('address:'+address,

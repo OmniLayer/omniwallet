@@ -78,9 +78,8 @@ do
       else
         echo "Starting websocket daemon..."
         cd $APPDIR/api
-        $PYTHONBIN websocket.py & #> $DATADIR/websocket.log &
+        $PYTHONBIN websocket.py > $DATADIR/websocket.log 2>&1 &
         WEBSOCKET_PID=$!
-        echo $WEBSOCKET_PID
     fi
 
     mkdir -p $DATADIR
