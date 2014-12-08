@@ -15,6 +15,9 @@ app.config['SECRET_KEY'] = config.WEBSOCKET_SECRET
 socketio = SocketIO(app)
 thread = None
 balance = None
+clients = 0
+maxclients = 0
+maxaddresses = 0
 addresses = {}
 
 def printmsg(msg):
@@ -55,13 +58,13 @@ def get_balancedata(address):
 
 def balance_thread():
     """Send balance data for the connected clients."""
-    global addresses
+    global addresses, maxaddresses, clients, maxclients
     count = 0
     TIMEOUT='timeout -s 9 8 '
     while True:
         time.sleep(10)
         count += 1
-        printmsg("Tracking "+str(len(addresses))+" addresses, ran "+str(count)+" times")
+        printmsg("Tracking "+str(len(addresses))+"/"+str(maxaddresses)+"(max) addresses, for "+str(clients)+"/"+str(maxclients)+"(max) clients, ran "+str(count)+" times")
         for address in addresses:
           balance_data=get_balancedata(address)
           socketio.emit('address:'+address,
@@ -72,8 +75,13 @@ def balance_thread():
 @socketio.on('connect', namespace='/balance')
 def balance_connect():
     #printmsg('Client connected')
+    global balance, clients, maxclients
     session['addresses']=[]
-    global balance
+
+    clients += 1
+    if clients > maxclients:
+      maxclients=clients
+
     if balance is None:
         balance = Thread(target=balance_thread)
         balance.start()
@@ -91,6 +99,8 @@ def endSession(session):
 @socketio.on('disconnect', namespace='/balance')
 def disconnect():
     #printmsg('Client disconnected')
+    global clients
+    clients -=1
     endSession(session)
 
 
@@ -102,7 +112,8 @@ def logout():
 
 @socketio.on("address:add", namespace='/balance')
 def add_address(message):
-  global addresses
+  global addresses, maxaddresses
+  
   address = message['data']
   if str(address) in addresses: 
     addresses[str(address)] += 1
@@ -111,6 +122,9 @@ def add_address(message):
 
   if str(address) not in session['addresses']:
     session['addresses'].append(str(address))
+
+  if len(addresses) > maxaddresses:
+    maxaddresses=len(addresses)
 
   #speed up initial data load
   balance_data=get_balancedata(address)
