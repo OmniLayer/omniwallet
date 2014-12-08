@@ -74,7 +74,7 @@ def balance_thread():
 
 @socketio.on('connect', namespace='/balance')
 def balance_connect():
-    #printmsg('Client connected')
+    printmsg('Client connected')
     global balance, clients, maxclients
     session['addresses']=[]
 
@@ -98,7 +98,7 @@ def endSession(session):
 
 @socketio.on('disconnect', namespace='/balance')
 def disconnect():
-    #printmsg('Client disconnected')
+    printmsg('Client disconnected')
     global clients
     clients -=1
     endSession(session)
