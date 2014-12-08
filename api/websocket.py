@@ -1,4 +1,4 @@
-from gevent import monkey
+suerefrom gevent import monkey
 monkey.patch_all()
 
 import time
@@ -61,6 +61,7 @@ def balance_thread():
     while True:
         time.sleep(10)
         count += 1
+        printmsg("Tracking "+str(len(addresses))+" addresses, ran "+str(count)+" times")
         for address in addresses:
           balance_data=get_balancedata(address)
           socketio.emit('address:'+address,
