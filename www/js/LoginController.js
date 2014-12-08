@@ -37,6 +37,7 @@ function Login($injector, $scope, $http, $location, $modalInstance, $q, Account)
         $location.path('/wallet');
       }
     },function(error){
+      $scope.loginInProgress=false;
       angular.extend($scope,error);
     })
         
