@@ -88,12 +88,16 @@ def balance_connect():
 
 
 def endSession(session):
+  try:
     global addresses
     for address in session['addresses']:
       if addresses[address] == 1:
         addresses.pop(address)
       else:
         addresses[address] -= 1
+  except KeyError:
+    #addresses not defined
+    printmsg("No addresses list to clean for "+str(session))
 
 
 @socketio.on('disconnect', namespace='/balance')
@@ -101,6 +105,9 @@ def disconnect():
     printmsg('Client disconnected')
     global clients
     clients -=1
+    #make sure we don't screw up the counter if reloading mid connections
+    if clients < 0:
+      clients=0
     endSession(session)
 
 
