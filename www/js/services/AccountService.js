@@ -164,6 +164,7 @@ angular.module("omniServices")
             self.addresses = null;
             self.assets = null;
             self.loggedIn = false;
+            Wallet.destroy();
         }
 
         self.saveSession = function() {
