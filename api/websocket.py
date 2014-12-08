@@ -17,6 +17,9 @@ thread = None
 balance = None
 addresses = {}
 
+def printmsg(msg):
+    print msg
+    sys.stdout.flush()
 
 def get_balancedata(address):
     addr = re.sub(r'\W+', '', address) #check alphanumeric
@@ -64,12 +67,37 @@ def balance_thread():
                       balance_data,
                       namespace='/balance')
 
+
 @socketio.on('connect', namespace='/balance')
 def balance_connect():
+    #printmsg('Client connected')
+    session['addresses']=[]
     global balance
     if balance is None:
         balance = Thread(target=balance_thread)
         balance.start()
+
+
+def endSession(session):
+    global addresses
+    for address in session['addresses']:
+      if addresses[address] == 1:
+        addresses.pop(address)
+      else:
+        addresses[address] -= 1
+
+
+@socketio.on('disconnect', namespace='/balance')
+def disconnect():
+    #printmsg('Client disconnected')
+    endSession(session)
+
+
+@socketio.on('session:logout', namespace='/balance')
+def logout():
+    #printmsg('Client logged out')
+    endSession(session)
+
 
 @socketio.on("address:add", namespace='/balance')
 def add_address(message):
@@ -80,11 +108,15 @@ def add_address(message):
   else:
     addresses[str(address)] = 1
 
+  if str(address) not in session['addresses']:
+    session['addresses'].append(str(address))
+
   #speed up initial data load
   balance_data=get_balancedata(address)
   emit('address:'+address,
         balance_data,
         namespace='/balance')
+
 
 if __name__ == '__main__':
   socketio.run(app, '127.0.0.1',1091)
