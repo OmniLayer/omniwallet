@@ -133,7 +133,8 @@ angular.module('omniwallet')
     $scope.refresh();
   });
   $rootScope.$on('BALANCE_CHANGED', function() {
-    $scope.refresh();
+    if(!$scope.isLoading)
+      $scope.refresh();
   });
 
   $scope.CSYM=Account.getSetting("usercurrency");
