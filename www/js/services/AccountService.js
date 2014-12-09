@@ -243,5 +243,60 @@ angular.module("omniServices")
               }
         };
 
+        self.getSetting = function(name){
+
+            if (self.wallet.settings == undefined) {
+                settings = []
+            } else {
+                settings=self.wallet.settings
+            }
+            retval="";
+
+            switch (name) {
+
+            case "email":
+              if (self.wallet.email == undefined) {
+                retval = ""
+              } else {
+                retval = self.wallet.email
+              }
+              break;
+
+            case "donate":
+              if (settings['donate'] == undefined) {
+                retval = 'false'
+              } else {
+                retval = settings['donate']
+              }
+              break;
+
+            case "usercurrency":
+              if (settings['usercurrency'] == undefined) {
+                retval = "USD"
+              } else {
+                retval = settings['usercurrency']
+              }
+              break;
+
+            case "showdexdust":
+              if (settings['showdexdust'] == undefined) {
+                retval = 'false'
+              } else {
+                retval = settings['showdexdust']
+              }
+              break;
+
+            case "showtesteco":
+              if (settings['showtesteco'] == undefined) {
+                retval = 'false'
+              } else {
+                retval = settings['showtesteco']
+              }
+              break;
+
+            }
+            //console.log(retval);
+            return retval;
+        }
       
     }]);

@@ -248,11 +248,7 @@ function WalletTradeController($scope, $http, $q, Account) {
   $scope.onTradeView = true
   $scope.history = '/partials/wallet_history.html';
 
-  if (Account.wallet['settings']['showdexdust'] == undefined) {
-    $scope.inactive=true
-  } else {
-    $scope.inactive = Account.wallet['settings']['showdexdust']
-  }
+  $scope.inactive = Account.getSetting("showdexdust");
 
   $scope.setView = function(view, data) {
     if (view != 'tradeInfo'){

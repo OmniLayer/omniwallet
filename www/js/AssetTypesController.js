@@ -131,11 +131,7 @@ angular.module('omniwallet')
     $scope.refresh();
   });
 
-  if (Account.wallet['settings']['usercurrency'] == undefined) {
-    $scope.csym = "USD";
-  } else {
-    $scope.CSYM=Account.wallet['settings']['usercurrency'];
-  }
+  $scope.CSYM=Account.getSetting("usercurrency");
 
   $scope.refresh = function() {
 

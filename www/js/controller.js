@@ -236,25 +236,11 @@ function FailedSaveLoginController($scope, $modal, $location) {
 
 function AccountSettingsController($modal, $injector, $scope, $http, Account) {
 
-  wallet = Account.wallet;
-  $scope.wallet = wallet;
-  $scope.uuid = wallet['uuid'];
+  mywallet = Account.wallet;
+  $scope.wallet = mywallet;
+  $scope.uuid = mywallet['uuid'];
 
-  if (wallet['email'] == undefined) {
-    $scope.email = ""
-  } else {
-    $scope.email = wallet['email']
-  }
-
-  if (wallet['settings'] == undefined) {
-    settings = []
-  } else {
-    settings=wallet['settings']
-  }
-
-  if (settings['usercurrency'] == undefined) {
-    settings['usercurrency'] = "USD"
-  }
+  $scope.email = Account.getSetting('email');
 
   $http.get('/v1/values/currencylist').success(function(data) {
     $scope.currencylist = data;    
@@ -262,32 +248,18 @@ function AccountSettingsController($modal, $injector, $scope, $http, Account) {
     $scope.currencylist = [["USD"]];
   });
 
-  //console.log($scope.currencylist.indexOf(settings['usercurrency']));
-
-  $scope.selectedCurrency = settings['usercurrency']
-
-  if (settings['showdexdust'] == undefined) {
-    settings['showdexdust'] = 'false'
-  }
-  $scope.showdexdust = settings['showdexdust']
-  
-  if (settings['donate'] == undefined) {
-    settings['donate'] = 'false'
-  }
-  $scope.donate = settings['donate']
-  
-  if (settings['showtesteco'] == undefined) {
-    settings['showtesteco'] = 'false'
-  }
-  $scope.showtesteco = settings['showtesteco']
+  $scope.selectedCurrency = Account.getSetting("usercurrency")
+  $scope.showdexdust = Account.getSetting("showdexdust")
+  $scope.donate = Account.getSetting("donate")
+  $scope.showtesteco = Account.getSetting("showtesteco")
   
   $scope.save = function() {
-        wallet['email'] = $scope.email;
-        wallet['settings'] = { 'usercurrency':$scope.selectedCurrency,
+        mywallet['email'] = $scope.email;
+        mywallet['settings'] = { 'usercurrency':$scope.selectedCurrency,
                                'showdexdust':$scope.showdexdust, 
                                'donate':$scope.donate, 
                                'showtesteco':$scope.showtesteco };
-        Account.wallet = wallet;
+        Account.wallet = mywallet;
         Account.saveSession();
         var appraiser= $injector.get("appraiser")
         appraiser.updateValues();
