@@ -517,7 +517,16 @@ def build_transaction(miner_fee_satoshis, pubkey,final_packets, total_packets, t
     inputsdata = []
     for _input in json_tx['vin']:
         prior_input_txhash = _input['txid'].upper()  
-        prior_input_index = str(hex(_input['vout'])[2:]).rjust(2,"0").ljust(8,"0")
+        ihex = str(hex(_input['vout'])[2:]).rjust(2,"0")
+        lhex = len(ihex)
+        if lhex in [1,2]:
+            prior_input_index = ihex.ljust(8,"0")
+        elif lhex in [3,4]: 
+            prior_input_index = ihex[-2:].rjust(2,"0")+ihex[:-2].rjust(2,"0").ljust(6,"0")
+        elif lhex in [5,6]: 
+            prior_input_index = ihex[-2:].rjust(2,"0")+ihex[-4:-2].rjust(2,"0")+ihex[:-4].rjust(2,"0").ljust(4,"0")
+        elif lhex in [7,8]: 
+            prior_input_index = ihex[-2:].rjust(2,"0")+ihex[-4:-2].rjust(2,"0")+ihex[-6:-4].rjust(2,"0")+ihex[:-6].rjust(2,"0").ljust(2,"0")
         input_raw_signature = _input['scriptSig']['hex']
         
         prior_txhash_bytes =  [prior_input_txhash[ start: start + 2 ] for start in range(0, len(prior_input_txhash), 2)][::-1]
