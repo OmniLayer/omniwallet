@@ -130,6 +130,13 @@ angular.module('omniwallet')
   $rootScope.$on('BALANCE_CHANGED', function() {
     $scope.refresh();
   });
+
+  if (Account.wallet['settings']['usercurrency'] == undefined) {
+    $scope.csym = "USD";
+  } else {
+    $scope.CSYM=Account.wallet['settings']['usercurrency'];
+  }
+
   $scope.refresh = function() {
 
     $scope.isLoading = true;

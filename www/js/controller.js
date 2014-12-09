@@ -289,6 +289,8 @@ function AccountSettingsController($modal, $injector, $scope, $http, Account) {
                                'showtesteco':$scope.showtesteco };
         Account.wallet = wallet;
         Account.saveSession();
+        var appraiser= $injector.get("appraiser")
+        appraiser.updateValues();
         };
 }
 

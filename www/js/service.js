@@ -418,11 +418,6 @@ angular.module('omniwallet').factory('appraiser', ['$rootScope', '$http', '$q', 
       }
 
       if (self.Account.loggedIn) { 
-        if (self.Account.wallet['settings']['usercurrency'] == undefined) {
-          cursym = "USD";
-        } else {
-          cursym = self.Account.wallet['settings']['usercurrency'];
-        }
         UpdateLoop();
       } else {
         cursym = "USD";
@@ -433,6 +428,12 @@ angular.module('omniwallet').factory('appraiser', ['$rootScope', '$http', '$q', 
       var self = this;
       var requests = [];
       var coins = this.wallet.assets;
+      if (self.Account.wallet['settings']['usercurrency'] == undefined) {
+        cursym = "USD";
+      } else {
+        cursym = self.Account.wallet['settings']['usercurrency'];
+      }
+
       coins.forEach(function(coin) {
         if (coin.symbol === 'BTC') {
           symbol="BTC"+cursym;
