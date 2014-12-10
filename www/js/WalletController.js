@@ -305,7 +305,12 @@ function WalletTradeController($scope, $http, $q, Account) {
     'MSC': 'Mastercoin',
     'TMSC': 'Test Mastercoin'
   }
-  $scope.currPairs = [['BTC', 'MSC'], ['BTC', 'TMSC']];
+  
+  if ( Account.getSetting("showtesteco") === 'true'){
+    $scope.currPairs = [['BTC', 'MSC'], ['BTC', 'TMSC']];
+  } else {
+    $scope.currPairs = [['BTC', 'MSC']];
+  }
 
   //Get the active currency pair
   $scope.activeCurrencyPair = []

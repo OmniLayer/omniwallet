@@ -24,9 +24,12 @@ angular.module('omniwallet')
             var emptyAddresses = [];
 
             var appraiser = $injector.get('appraiser');
+            var Account = $injector.get('Account');
+            showtesteco = Account.getSetting('showtesteco');
 
             Wallet.addresses.forEach(function(addr) {
               addr.balance.forEach(function(currencyItem) {
+               if ((parseInt(currencyItem.id,10) < 2147483648) && (parseInt(currencyItem.id,10) != 2) || showtesteco === 'true'){
                 if(currencyItem.divisible)
                   var value=new Big(currencyItem.value).times(WHOLE_UNIT).valueOf();
                 if (!balances.hasOwnProperty(currencyItem.symbol)) {
@@ -44,6 +47,7 @@ angular.module('omniwallet')
                 if (currencyItem.symbol == 'BTC') {
                   balances[currencyItem.symbol].name = "Bitcoin"
                 }
+               }
               });
             });
             // First, the standard currencies.
@@ -134,25 +138,15 @@ angular.module('omniwallet')
 
   $scope.CSYM=Account.getSetting("usercurrency");
 
-  function filterEcosystem(list) {
-    retval= {}
-    for (var b in list) {
-      if ((parseInt(list[b].id,10) < 2147483648) && (parseInt(list[b].id,10) != 2)){
-        retval[b]=list[b];
-      }
-    }
-    return retval
-  }
-
   $scope.refresh = function() {
 
-    showtesteco = Account.getSetting("showtesteco");
+    if (!Account.loggedIn) {
+      //console.log("caught attempted refresh after logout");
+      return 0;
+    }
+
     $scope.isLoading = true;
     $scope.items = asset_types_data.getData().then(function(balances) {
-
-      if (showtesteco == "false") {
-        balances.balances = filterEcosystem(balances.balances);
-      }
 
       $scope.balances = balances;
       $scope.totals = {};
