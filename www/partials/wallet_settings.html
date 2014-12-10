@@ -6,22 +6,37 @@
     <div class="text-left panel-body om-title" >Account Settings</div>
   </div>
   <form novalidate class="simple-form">
-    Wallet ID: {{uuid}}  <br />
-    Wallet Email: <input type="email" ng-model="email" /><br />
+    Wallet ID: {{uuid}}  <br /> <br />
+    Wallet Email: <input type="email" ng-model="email" /><br /> <br />
     Wallet Currency: 
       <select data-ng-options="o for o in currencylist" data-ng-model="selectedCurrency"></select>
-      <br />
-    Hide DEx (Phase I) Offers where the purchase price is less than the dust limit (Default: Yes): 
-      <input type="radio" ng-model="showdexdust" value="true" />Yes
-      <input type="radio" ng-model="showdexdust" value="false" />No (Advanced)<br />
+      <br /> <br />
     Display Test Ecosystem Properties (Default: No):
       <input type="radio" ng-model="showtesteco" value="true" />Yes
-      <input type="radio" ng-model="showtesteco" value="false" />No<br />
+      <input type="radio" ng-model="showtesteco" value="false" />No<br /> <br />
     Donate to the Developers (Let the Developers redeem multisig outputs):
       <input type="radio" ng-model="donate" value="true" />Yes
-      <input type="radio" ng-model="donate" value="false" />No<br />
-
-    <button ng-click="save()">Save Preferences</button>
+      <input type="radio" ng-model="donate" value="false" />No<br /><br />
+    Hide DEx (Phase I) offers where the purchase price is less than the dust limit (Default: Yes): 
+      <input type="radio" ng-model="showdexdust" value="true" />Yes
+      <input type="radio" ng-model="showdexdust" value="false" />No (Advanced)<br /> <br />
+    <button type="button" class="btn btn-primary" ng-model="singleModel" ng-click="changePassword()">Change Password</button>
+    <button type="button" class="btn btn-success" ng-model="singleModel" ng-click="save()">Save Preferences</button>
   </form>
-  <br><br><br>{{wallet}}
+  <br> 
+  <div collapse="!saved">
+    <div class="col-xs-8 alert alert-success alert-dismissable">
+     <button type="button" class="close" aria-hidden="true" ng-click="saved=!saved">&times;</button>
+     <strong>Success:</strong> Your Wallet has been updated. <br />
+    </div>
+  </div>
+  <div collapse="!error">
+    <div class="col-xs-8 alert alert-danger alert-dismissable">
+     <button type="button" class="close" aria-hidden="true" ng-click="error=!error">&times;</button>
+     <strong>Error:</strong> We seem to have encountered a problem updating your Wallet. <br />
+             Please logout, close your browse, wait a minute then log back in and try again.<br />
+    </div> 
+  </div>
+
+<br><br>
 </div>

@@ -252,7 +252,7 @@ function AccountSettingsController($modal, $injector, $scope, $http, Account) {
   $scope.showdexdust = Account.getSetting("showdexdust")
   $scope.donate = Account.getSetting("donate")
   $scope.showtesteco = Account.getSetting("showtesteco")
-  
+
   $scope.save = function() {
         mywallet['email'] = $scope.email;
         mywallet['settings'] = { 'usercurrency':$scope.selectedCurrency,
@@ -261,9 +261,40 @@ function AccountSettingsController($modal, $injector, $scope, $http, Account) {
                                'showtesteco':$scope.showtesteco };
         Account.wallet = mywallet;
         Account.saveSession();
-        var appraiser= $injector.get("appraiser")
+        $scope.saved = true;
+        $scope.error = false;
+        var appraiser= $injector.get("appraiser");
         appraiser.updateValues();
         };
+
+  $scope.changePassword = function() {
+    $scope.login = {
+        uuid: Account.uuid,
+        action: 'verify',
+        title: 'Verify Current Password',
+        button: 'Validate',
+        disable: true //disable UUID field in template
+      };
+      var modalInstance = $modal.open({
+        templateUrl: '/partials/login_modal.html',
+        controller: LoginController,
+        scope: $scope
+      });
+      modalInstance.result.then(function() {
+          var newPasswordModal = $modal.open({
+            templateUrl: '/partials/wallet_password_modal.html',
+            controller: WalletPasswordController,
+            scope: $scope
+          });
+          newPasswordModal.result.then(function() {
+            $scope.saved = true;
+            $scope.error = false;
+          }, function() {
+            $scope.saved = false;
+            $scope.error = true;
+          });
+      });
+  };
 }
 
 function RevisionController($scope, $http, $modal) {
