@@ -32,6 +32,7 @@ angular.module('omniwallet')
                 if (!balances.hasOwnProperty(currencyItem.symbol)) {
                   balances[currencyItem.symbol] = {
                     "symbol": currencyItem.symbol,
+                    "id" : currencyItem.id,
                     "balance": +value || +currencyItem.value,
                     "value": appraiser.getValue(currencyItem.value, currencyItem.symbol, currencyItem.divisible),
                   };
@@ -133,10 +134,26 @@ angular.module('omniwallet')
 
   $scope.CSYM=Account.getSetting("usercurrency");
 
+  function filterEcosystem(list) {
+    retval= {}
+    for (var b in list) {
+      if ((parseInt(list[b].id,10) < 2147483648) && (parseInt(list[b].id,10) != 2)){
+        retval[b]=list[b];
+      }
+    }
+    return retval
+  }
+
   $scope.refresh = function() {
 
+    showtesteco = Account.getSetting("showtesteco");
     $scope.isLoading = true;
     $scope.items = asset_types_data.getData().then(function(balances) {
+
+      if (showtesteco == "false") {
+        balances.balances = filterEcosystem(balances.balances);
+      }
+
       $scope.balances = balances;
       $scope.totals = {};
       var total = 0;
