@@ -218,6 +218,10 @@ border-left-color: #111111;
   color: #97a9c4;
 }
 
+.navbar-main .navbar-nav > li > a > span{
+  font-size: 10px;
+}
+
 .navbar-main .navbar-nav > li > a:hover,
 .navbar-main .navbar-nav > li > a:focus {
   color: #ffffff;
@@ -321,6 +325,28 @@ border-left-color: #111111;
   border-bottom-color: #496082;
   border-width: 16px;
   margin-left: -16px;
+}
+
+#wallet-navbar .arrow_box:after,
+#wallet-navbar .arrow_box:before {
+  margin-left: 13%;
+}
+
+
+
+#exchange-navbar .arrow_box:after,
+#exchange-navbar .arrow_box:before {
+  margin-left: 20%;
+}
+
+#explorer-navbar .arrow_box:after,
+#explorer-navbar .arrow_box:before {
+  margin-left: 26%;
+}
+
+#about-navbar .arrow_box:after,
+#about-navbar .arrow_box:before {
+  margin-left: 31.4%;
 }
 
 @media (max-width: 767px) {

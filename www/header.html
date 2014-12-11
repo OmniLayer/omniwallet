@@ -1,6 +1,6 @@
 <div id="header" ng-controller="NavigationController" ng-init="getNavData();modalOpened=false;section=''">
   <div class="navbar navbar-static-top navbar-main" role="navigation">
-    <div class="container-fluid">
+    <div class="container">
       <!-- Brand and toggle get grouped for better mobile display -->
       <div class="navbar-header">
         <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#omni-navbar">
@@ -14,14 +14,14 @@
       <!-- Collect the nav links, forms, and other content for toggling -->
       <div class="collapse navbar-collapse" id="omni-navbar">
         <ul class="nav navbar-nav navbar-right">
-          <li ng-hide="account.loggedIn"><a href="#" ng-click="openCreateModal()" class="btn btn-notice">Create Wallet</a></li>
-          <li ng-hide="account.loggedIn"><a href="#" ng-click="openLoginModal()">Login</a></li>
+          <li ng-hide="user.loggedIn"><button href="#" ng-click="openCreateModal()" class="btn btn-warning">Create Wallet</button></li>
+          <li ng-hide="user.loggedIn"><a href="#" ng-click="openLoginModal()">Login</a></li>
           <li class="divider-vertical" ng-hide="user.loggedIn"></li>
-          <li ng-show="account.loggedIn"><a href="#" ng-click="section='wallet'">My Wallet <span class="glyphicon glyphicon-chevron-down"></span></a></li>
+          <li ng-show="user.loggedIn"><a href="#" ng-click="section='wallet'">My Wallet <span class="glyphicon glyphicon-chevron-down"></span></a></li>
           <li><a href="#" ng-click="section='exchange'">Exchange <span class="glyphicon glyphicon-chevron-down"></span></a></li>
           <li><a href="#" ng-click="section='explorer'">Explorer <span class="glyphicon glyphicon-chevron-down"></span></a></li>
           <li><a href="#" ng-click="section='about'">About <span class="glyphicon glyphicon-chevron-down"></span></a></li>
-          <li ng-show="account.loggedIn" class="dropdown">
+          <li ng-show="user.loggedIn" class="dropdown">
             <a href class="dropdown-toggle">
               My Account <span class="glyphicon glyphicon-chevron-down"></span>
             </a>
@@ -34,7 +34,7 @@
     </div>
   </div>
   <div class="navbar navbar-static-top navbar-main-tier1" role="navigation" ng-if="section!=''">
-    <div id="wallet-navbar" ng-show="section=='wallet'">
+    <div id="wallet-navbar" ng-if="section=='wallet'">
       <div class="arrow_box"></div>
       <ul class="nav navbar-nav">
         <li><a href="/wallet/overview">Overview</a></li>
@@ -43,14 +43,14 @@
         <li><a href="/wallet/history">History</a></li>
       </ul>
     </div>
-    <div id="exchange-navbar" ng-show="section=='exchange'">
+    <div id="exchange-navbar" ng-if="section=='exchange'">
       <div class="arrow_box"></div>
       <ul class="nav navbar-nav">
         <li><a href="/exchange/trade">Trade</a></li>
         <li><a href="/exchange/myoffers">My Offers</a></li>
       </ul>
     </div>
-    <div id="explorer-navbar" ng-show="section=='explorer'">
+    <div id="explorer-navbar" ng-if="section=='explorer'">
       <div class="arrow_box"></div>
       <ul class="nav navbar-nav">
         <li><a href="/explorer/overview">Transactions</a></li>
@@ -59,7 +59,7 @@
         <li><a href="/explorer/following">Following</a></li>
       </ul>
     </div>
-    <div id="about-navbar" ng-show="section=='about'">
+    <div id="about-navbar" ng-if="section=='about'">
       <div class="arrow_box"></div>
       <ul class="nav navbar-nav">
         <li><a href="/about/omniwallet">About Omniwallet</a></li>
