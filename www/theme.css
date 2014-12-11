@@ -77,6 +77,10 @@ border-right-color: #222222;
 border-left-color: #111111;
 }
 
+.navbar-brand img {
+  max-height: 3.7em;
+}
+
 .navbar-main-tier1 {
   background-color: #496082;
   position: fixed;
