@@ -84,6 +84,7 @@ border-left-color: #111111;
   position: fixed;
   left: 0;
   right: 0;
+  top: 70px;
   z-index: 1050;
 }
 
@@ -186,7 +187,9 @@ border-left-color: #111111;
   position: fixed;
   left: 0;
   right: 0;
+  top: 0px;
   z-index: 1040;
+  max-height: 70px
 }
 
 .navbar-main .navbar-brand {
@@ -201,6 +204,14 @@ border-left-color: #111111;
 
 .navbar-main .navbar-text {
   color: #97a9c4;
+}
+
+.navbar-main .navbar-nav > li {
+  padding-top: 2%;
+}
+
+.navbar-main .navbar-nav > li > button {
+  padding-top: 7%;
 }
 
 .navbar-main .navbar-nav > li > a {
@@ -242,6 +253,7 @@ border-left-color: #111111;
 .navbar-main .navbar-collapse,
 .navbar-main .navbar-form {
   border-color: #eeeeee;
+  max-height: 70px
 }
 
 .navbar-main .navbar-nav > .open > a,

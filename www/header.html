@@ -34,7 +34,7 @@
     </div>
   </div>
   <div class="navbar navbar-static-top navbar-main-tier1" role="navigation" ng-if="section!=''">
-    <div class="collapse navbar-collapse" id="wallet-navbar" ng-show="section=='wallet'">
+    <div id="wallet-navbar" ng-show="section=='wallet'">
       <div class="arrow_box"></div>
       <ul class="nav navbar-nav">
         <li><a href="/wallet/overview">Overview</a></li>
@@ -43,14 +43,14 @@
         <li><a href="/wallet/history">History</a></li>
       </ul>
     </div>
-    <div class="collapse navbar-collapse" id="exchange-navbar" ng-show="section=='exchange'">
+    <div id="exchange-navbar" ng-show="section=='exchange'">
       <div class="arrow_box"></div>
       <ul class="nav navbar-nav">
         <li><a href="/exchange/trade">Trade</a></li>
         <li><a href="/exchange/myoffers">My Offers</a></li>
       </ul>
     </div>
-    <div class="collapse navbar-collapse" id="explorer-navbar" ng-show="section=='explorer'">
+    <div id="explorer-navbar" ng-show="section=='explorer'">
       <div class="arrow_box"></div>
       <ul class="nav navbar-nav">
         <li><a href="/explorer/overview">Transactions</a></li>
@@ -59,7 +59,7 @@
         <li><a href="/explorer/following">Following</a></li>
       </ul>
     </div>
-    <div class="collapse navbar-collapse" id="about-navbar" ng-show="section=='about'">
+    <div id="about-navbar" ng-show="section=='about'">
       <div class="arrow_box"></div>
       <ul class="nav navbar-nav">
         <li><a href="/about/omniwallet">About Omniwallet</a></li>
