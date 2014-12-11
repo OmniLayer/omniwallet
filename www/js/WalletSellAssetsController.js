@@ -1,4 +1,4 @@
-function WalletSellAssetsController($modal, $scope, $http, $q, userService, walletTransactionService) {
+function WalletSellAssetsController($modal, $scope, $http, $q, Wallet, walletTransactionService) {
 
 
   // [ Template Initialization ]
@@ -17,7 +17,7 @@ function WalletSellAssetsController($modal, $scope, $http, $q, userService, wall
     var noCurrency={
         symbol: 'No DeX-tradable coins in wallet!',
         name: 'No DeX-tradable coins in wallet!',
-        addresses: [] 
+        tradableAddresses: [] 
     }
     $scope.currencySaleList.push(noCurrency);
     $scope.$parent.$parent.selectedCoin=noCurrency;
@@ -48,7 +48,7 @@ function WalletSellAssetsController($modal, $scope, $http, $q, userService, wall
   }
 
   function prepareSaleTransaction(seller, amt, price, buyerfee, fee, blocks, currency, privkeyphrase, $modalScope) {
-    var addressData = userService.getAddress(seller);
+    var addressData = Wallet.getAddress(seller);
     var privKey = new Bitcoin.ECKey.decodeEncryptedFormat(addressData.privkey, addressData.address); // Using address as temporary password
     var pubKey = privKey.getPubKeyHex();
 
@@ -91,6 +91,9 @@ function WalletSellAssetsController($modal, $scope, $http, $q, userService, wall
             if (successData.pushed.match(/submitted|success/gi) != null) {
               $modalScope.waiting = false;
               $modalScope.sendSuccess = true;
+            if(TESTNET)
+              $modalScope.url = 'http://tbtc.blockr.io/tx/info/' + successData.tx;
+            else
               $modalScope.url = 'http://blockchain.info/address/' + seller + '?sort=0';
             } else {
               $modalScope.waiting = false;
@@ -219,7 +222,7 @@ function WalletSellAssetsController($modal, $scope, $http, $q, userService, wall
       // open modal
       var modalInstance = $modal.open({
         templateUrl: $scope.isCancel == true ? '/partials/wallet_cancel_modal.html' : '/partials/wallet_sale_modal.html',
-        controller: function($scope, $modalInstance, $rootScope, userService, data, prepareSaleTransaction, getUnsignedSaleTransaction, convertSatoshiToDisplayedValue, getDisplayedAbbreviation) {
+        controller: function($scope, $modalInstance, $rootScope, data, prepareSaleTransaction, getUnsignedSaleTransaction, convertSatoshiToDisplayedValue, getDisplayedAbbreviation) {
           $scope.sendSuccess = false, $scope.sendError = false, $scope.waiting = false, $scope.privKeyPass = {};
           $scope.convertSatoshiToDisplayedValue=convertSatoshiToDisplayedValue,
           $scope.getDisplayedAbbreviation=getDisplayedAbbreviation,
@@ -247,7 +250,7 @@ function WalletSellAssetsController($modal, $scope, $http, $q, userService, wall
               amt: saleAmount,
               price: salePricePerCoin,
               buyersfee: buyersFee,
-              fee: totalFeeCost,
+              fee: minerFees,
               blocks: saleBlocks,
               currency: coin,
               selectedCoin: $scope.selectedCoin,

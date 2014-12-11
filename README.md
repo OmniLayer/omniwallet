@@ -57,7 +57,6 @@ pip install -r requirements.txt
 nginx=stable # use nginx=development for latest development version
 add-apt-repository ppa:nginx/$nginx
 apt-get install nginx
-curl -sL https://deb.nodesource.com/setup | bash -
 cp etc/nginx/sites-available/default /etc/nginx/sites-available
 ```
 Find and replace the following section near the beginning of /etc/nginx/sites-available/default:
@@ -69,6 +68,7 @@ nano /etc/nginx/sites-available/default
 ```
 Install npm:
 ```
+curl -sL https://deb.nodesource.com/setup | bash -
 apt-get install nodejs
 npm install -g uglify-js
 npm install -g grunt-cli

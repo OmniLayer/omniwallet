@@ -8,6 +8,7 @@ from msc_apps import *
 import random
 
 def sell_form_response(response_dict):
+    print response_dict
     expected_fields=['seller', 'amount', 'price', 'min_buyer_fee', 'fee', 'blocks', 'currency']
     for field in expected_fields:
         if not response_dict.has_key(field):
@@ -81,6 +82,8 @@ def sell_form_response(response_dict):
 
 def prepare_sell_tx_for_signing(seller, amount, bitcoin_amount_desired, btc_min_buyer_fee, btc_fee, blocks, currency_id):
 
+    print "seller, amount, bitcoin_amount_desired, btc_min_buyer_fee, btc_fee, blocks, currency_id"
+    print seller, amount, bitcoin_amount_desired, btc_min_buyer_fee, btc_fee, blocks, currency_id
     # check if address or pubkey was given as seller
     if seller.startswith('0'): # a pubkey was given
         seller_pub=seller
@@ -107,7 +110,7 @@ def prepare_sell_tx_for_signing(seller, amount, bitcoin_amount_desired, btc_min_
     inputs_total_value=0
 
     if inputs_number < 1:
-        error('zero inputs')
+        error('zero inputs from '+seller+' amount '+str(required_value+fee))
     for i in range(inputs_number):
         inputs.append(utxo_split[i*12+3])
         try:

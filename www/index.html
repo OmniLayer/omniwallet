@@ -22,17 +22,16 @@
     <link rel="stylesheet" href="/bower_components/bootstrap/dist/css/bootstrap-theme.min.css">
     <link rel="stylesheet" href="/theme.css">
 
-    <script src="/js/config.js"></script>
-
     <link href='https://fonts.googleapis.com/css?family=Gudea:400,400italic,700' rel='stylesheet' type='text/css'>
-    
-    <script src="/socket.io/socket.io.js"></script>
-    <script> var socket = io(); </script>
 
+    <!-- SocketIO 1.x.x not supported right now -->
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/socket.io/0.9.16/socket.io.min.js"></script>
+    
     <script src="/bower_components/underscore/underscore.js"></script>
     <script src="/bower_components/jquery/dist/jquery.min.js"></script>
     <script src="/bower_components/angular/angular.js"></script>
     <script src="/bower_components/angular-route/angular-route.js"></script>
+    <script src="/bower_components/angular-translate/angular-translate.js"></script>
     <script src="/bower_components/numeraljs/numeral.js"></script>
     <script src="/bower_components/angular-numeraljs/src/angular-numeraljs.js"></script>
     <script src="/bower_components/angular-idle/src/angular-idle.js"></script>
@@ -48,7 +47,21 @@
     <script src="/bower_components/FileSaver/FileSaver.js"></script>
     <script src="/bower_components/big.js/big.min.js"></script>
     <script type="text/javascript" src="/bower_components/angular-re-captcha/angular-re-captcha.js"></script>
+    <script src="/js/config.js"></script>
     <script src="/js/app.js"></script>
+    <script src="/js/factories/AddressModelFactory.js"></script>
+    <script src="/js/factories/AssetModelFactory.js"></script>
+    <script src="/js/factories/TransactionModelFactory.js"></script>
+    <script src="/js/services/WalletService.js"></script>
+    <script src="/js/services/AccountService.js"></script>
+    <script src="/js/lang/en-US.js"></script>
+    <script src="/js/services/TransactionGenerationService.js"></script>
+    <script src="/js/services/TransactionManagerService.js"></script>
+    <script src="/js/services/ModalManagerService.js"></script>
+    <script src="/js/services/BalanceSocket.js"></script>
+    <script src="/js/services/AddressManagerService.js"></script>
+    <script src="/js/services/PropertyManagerService.js"></script>
+    <script src="/js/controllers/Wallet/OverviewController.js"></script>
     <script src="/js/directive.js"></script>
     <script src="/js/service.js"></script>
     <script src="/js/controller.js"></script>
