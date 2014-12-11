@@ -30,12 +30,12 @@
               <li><a href="/" ng-click="logout()">Logout</a></li>
             </ul>
         </ul>
+        <div class="arrow_box"></div>
       </div>
     </div>
   </div>
-  <div class="navbar navbar-static-top navbar-main-tier1" role="navigation" ng-if="section!=''">
+  <div class="navbar navbar-static-top navbar-main-tier1" role="navigation" collapse="section!=''">
     <div id="wallet-navbar" ng-if="section=='wallet'">
-      <div class="arrow_box"></div>
       <ul class="nav navbar-nav">
         <li><a href="/wallet/overview">Overview</a></li>
         <li><a href="/wallet/addresses">My Addresses</a></li>
@@ -44,14 +44,12 @@
       </ul>
     </div>
     <div id="exchange-navbar" ng-if="section=='exchange'" ng-class="{'login':user.loggedIn}">
-      <div class="arrow_box"></div>
       <ul class="nav navbar-nav">
-        <li><a href="/exchange/trade">Trade</a></li>
-        <li><a href="/exchange/myoffers">My Offers</a></li>
+        <li><a href="/wallet/trade">Trade</a></li>
+        <li><a href="/wallet/myoffers">My Offers</a></li>
       </ul>
     </div>
     <div id="explorer-navbar" ng-if="section=='explorer'" ng-class="{'login':user.loggedIn}">
-      <div class="arrow_box"></div>
       <ul class="nav navbar-nav">
         <li><a href="/explorer/overview">Transactions</a></li>
         <li><a href="/explorer/assets">Assets</a></li>
@@ -60,7 +58,6 @@
       </ul>
     </div>
     <div id="about-navbar" ng-if="section=='about'" ng-class="{'login':user.loggedIn}">
-      <div class="arrow_box"></div>
       <ul class="nav navbar-nav">
         <li><a href="/about/omniwallet">About Omniwallet</a></li>
         <li><a href="/about/mastercoin">About Mastercoin</a></li>
