@@ -13,7 +13,12 @@
     </div>
 
     <div class="form-group">
-      <label class="col-xs-3 control-label">Wallet Email:</label>
+      <label class="col-xs-3 control-label">Wallet Email:
+        <a href=""
+          tooltip="(Optional) Your email can be used to recover your Wallet ID if you lose/misplace it and eventually for notifications concerning
+          wallet activity."
+          tooltip-append-to-body="true" tooltip-placement="top"> <strong>(?)</strong></a>
+      </label>
       <div class="col-xs-4">
         <input class="form-control" type="email" ng-model="email">
         <div collapse="!myForm.$error.email"><p class="alert-danger" align="center">Please enter a valid email</p></div>
