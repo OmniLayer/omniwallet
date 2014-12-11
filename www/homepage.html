@@ -1,20 +1,22 @@
-<row>
+<div class="row">
   <div class="center-block col-xs-12">
     <h3 class="text-center">{{ 'HOMEPAGE_BALANCECHECK' | translate }}</h3>
-    <form class="form-horizontal" role="form" name="addressentry">
-      <div class="form-group">
-        <div class="col-xs-offset-2 col-xs-10">
-           <div class="input-group col-xs-10">
-            <span ng-show="validate(balanceAddress)" class="glyphicon glyphicon-ok green input-group-addon input-group"></span>
-            <input type="text" class="form-control input-group" name="address" id="address" placeholder="{{ 'COMMON_ADDRESS' | translate }}" ng-model="balanceAddress" ng-change="hasBalances=false">
-            <span class="input-group-btn">
-                <input type="button" ng-click="checkBalance();" ng-disabled="validate(balanceAddress) == false" class="btn btn-primary" value="Click!" />
-            </span>
-           </div>
-           <span class="help-block"><small>{{ 'HOMEPAGE_ENTERVALIDADDRESS' | translate }}</small></span>
-        </div>
-      </div>
-    </form>
+  </div>
+  <form class="form-horizontal form-group" role="form" name="addressentry">
+    <div class="input-group col-xs-offset-2 col-xs-8">
+      <span ng-show="validate(balanceAddress)" class="glyphicon glyphicon-ok green input-group-addon input-group"></span>
+        <input type="text" class="form-control input-group" name="address" id="address" placeholder="{{ 'COMMON_ADDRESS' | translate }}" ng-model="balanceAddress" ng-change="hasBalances=false">
+      <span class="input-group-btn">
+        <input type="button" ng-click="checkBalance();" ng-disabled="validate(balanceAddress) == false" class="btn btn-primary" value="Click!" />
+      </span>
+    </div>
+    <div class="col-xs-offset-2">
+      <ul>
+        <li class="help-block"><small>{{ 'HOMEPAGE_ENTERVALIDADDRESS' | translate }}</small></li>
+      </ul>
+    </div>
+  </form>
+
     <div ng-if="hasBalances">
       <div class="asset-table">
         <div ng-repeat="currency in balances">
@@ -36,28 +38,9 @@
       </div> 
     </div>
   </div>
-</row>
-
-
-<row>
-<br />
 <div class="container middle row">
   <div class="alert alert-custom alert-dismissable" ng-show="browser !== 'chrome'">
-  <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-  {{ 'HOMEPAGE_BROWSERRECOMMENDATION' | translate }}
+    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+    {{ 'HOMEPAGE_BROWSERRECOMMENDATION' | translate }}
   </div>
 </div>
-</row>
-
-<row>
- <div class="col-xs-12"><br /><br /></div>
-</row>
-
-
-<row>
-  <div class="col-xs-12 alert alert-info alert-dismissable hide">
-   <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-   <strong>Coming Soon:</strong> We are proud to announce that starting next week Omni will be moving to Beta status. <br />
-           You will also be able to find us on the main domain:  http://www.omniwallet.org <br /> 
-  </div>
-</row>
