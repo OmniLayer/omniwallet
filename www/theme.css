@@ -342,8 +342,8 @@ border-left-color: #111111;
   margin-left: 20%;
 }
 
-#exchange-navbar .login .arrow_box:after,
-#exchange-navbar .login .arrow_box:before {
+#exchange-navbar.login .arrow_box:after,
+#exchange-navbar.login .arrow_box:before {
   margin-left: 13.4%;
 }
 
@@ -352,8 +352,8 @@ border-left-color: #111111;
   margin-left: 26%;
 }
 
-#explorer-navbar .login .arrow_box:after,
-#explorer-navbar .login .arrow_box:before {
+#explorer-navbar.login .arrow_box:after,
+#explorer-navbar.login .arrow_box:before {
   margin-left: 19.3%;
 }
 
@@ -362,8 +362,8 @@ border-left-color: #111111;
   margin-left: 31.4%;
 }
 
-#about-navbar .login .arrow_box:after,
-#about-navbar .login .arrow_box:before {
+#about-navbar.login .arrow_box:after,
+#about-navbar.login .arrow_box:before {
   margin-left: 24.6%;
 }
 
