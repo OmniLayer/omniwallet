@@ -249,14 +249,14 @@ function AccountSettingsController($modal, $injector, $scope, $http, Account) {
   });
 
   $scope.selectedCurrency = Account.getSetting("usercurrency")
-  $scope.showdexdust = Account.getSetting("showdexdust")
+  $scope.filterdexdust = Account.getSetting("filterdexdust")
   $scope.donate = Account.getSetting("donate")
   $scope.showtesteco = Account.getSetting("showtesteco")
 
   $scope.save = function() {
         mywallet['email'] = $scope.email;
         mywallet['settings'] = { 'usercurrency':$scope.selectedCurrency,
-                               'showdexdust':$scope.showdexdust, 
+                               'filterdexdust':$scope.filterdexdust, 
                                'donate':$scope.donate, 
                                'showtesteco':$scope.showtesteco };
         Account.wallet = mywallet;

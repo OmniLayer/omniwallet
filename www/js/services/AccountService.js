@@ -278,11 +278,11 @@ angular.module("omniServices")
               }
               break;
 
-            case "showdexdust":
-              if (settings['showdexdust'] == undefined) {
-                retval = 'false'
+            case "filterdexdust":
+              if (settings['filterdexdust'] == undefined) {
+                retval = 'true'
               } else {
-                retval = settings['showdexdust']
+                retval = settings['filterdexdust']
               }
               break;
 
