@@ -187,7 +187,8 @@ angular.module("omniServices")
                     data: {
                       uuid: self.uuid,
                       wallet: encryptedWallet,
-                      signature: signature
+                      signature: signature,
+                      email: self.getSetting("email")
                     }
                   });
                 }).then(function(result) {
