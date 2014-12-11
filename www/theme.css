@@ -337,6 +337,10 @@ border-left-color: #111111;
   margin-left: 7%;
 }
 
+#wallet-navbar .navbar-nav {
+  margin-left: 35%
+}
+
 #exchange-navbar .arrow_box:after,
 #exchange-navbar .arrow_box:before {
   margin-left: 20%;
@@ -345,6 +349,10 @@ border-left-color: #111111;
 #exchange-navbar.login .arrow_box:after,
 #exchange-navbar.login .arrow_box:before {
   margin-left: 13.4%;
+}
+
+#exchange-navbar .navbar-nav {
+  margin-left: 46%;
 }
 
 #explorer-navbar .arrow_box:after,
@@ -357,6 +365,10 @@ border-left-color: #111111;
   margin-left: 19.3%;
 }
 
+#explorer-navbar .navbar-nav {
+  margin-left: 39%;
+}
+
 #about-navbar .arrow_box:after,
 #about-navbar .arrow_box:before {
   margin-left: 31.4%;
@@ -367,6 +379,9 @@ border-left-color: #111111;
   margin-left: 24.6%;
 }
 
+#about-navbar .navbar-nav {
+  margin-left: 38%;
+}
 @media (max-width: 767px) {
 .navbar-collapse .nav > .divider-vertical {
     display: none;
