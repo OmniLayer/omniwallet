@@ -1,5 +1,5 @@
 angular.module("omniFactories")
-	.factory("Address", ["BalanceSocket", function AddressModelFactory(BalanceSocket){
+	.factory("Address", ["BalanceSocket", "$rootScope", function AddressModelFactory(BalanceSocket, $rootScope){
 		var AddressModel = function(address,privkey,pubkey){
 			var self = this;
 
@@ -11,6 +11,7 @@ angular.module("omniFactories")
 
 				BalanceSocket.on("address:"+address, function(data){
 					self.balance = data.balance
+					$rootScope.$emit('BALANCE_CHANGED');
 				});
 
 				BalanceSocket.emit("address:add", {data:address});
