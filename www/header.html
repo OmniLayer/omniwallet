@@ -43,14 +43,14 @@
         <li><a href="/wallet/history">History</a></li>
       </ul>
     </div>
-    <div id="exchange-navbar" ng-if="section=='exchange'">
+    <div id="exchange-navbar" ng-if="section=='exchange'" ng-class="{'login':user.loggedIn}">
       <div class="arrow_box"></div>
       <ul class="nav navbar-nav">
         <li><a href="/exchange/trade">Trade</a></li>
         <li><a href="/exchange/myoffers">My Offers</a></li>
       </ul>
     </div>
-    <div id="explorer-navbar" ng-if="section=='explorer'">
+    <div id="explorer-navbar" ng-if="section=='explorer'" ng-class="{'login':user.loggedIn}">
       <div class="arrow_box"></div>
       <ul class="nav navbar-nav">
         <li><a href="/explorer/overview">Transactions</a></li>
@@ -59,7 +59,7 @@
         <li><a href="/explorer/following">Following</a></li>
       </ul>
     </div>
-    <div id="about-navbar" ng-if="section=='about'">
+    <div id="about-navbar" ng-if="section=='about'" ng-class="{'login':user.loggedIn}">
       <div class="arrow_box"></div>
       <ul class="nav navbar-nav">
         <li><a href="/about/omniwallet">About Omniwallet</a></li>
