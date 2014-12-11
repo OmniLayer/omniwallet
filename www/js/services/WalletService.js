@@ -4,12 +4,18 @@ angular.module("omniServices")
 			var self = this;
 
 			self.initialize =function(wallet){
+	            BalanceSocket.connect();
+
 	            self.addresses = [];
 	            self.assets = [];
 	            wallet.addresses.forEach(function(raw){
 	                self._addAddress(raw);
 	            });
 	        };
+
+	        self.destroy = function(){
+	        	BalanceSocket.disconnect();
+	        }
 
 	        self._addAddress = function(raw){
 	        	var address = new Address(raw.address,raw.privkey,raw.pubkey);
