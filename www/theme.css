@@ -81,6 +81,10 @@ border-left-color: #111111;
 
 .navbar-main-tier1 {
   background-color: #496082;
+  position: fixed;
+  left: 0;
+  right: 0;
+  z-index: 1050;
 }
 
 .navbar-main-tier1 .navbar-brand {
@@ -179,6 +183,10 @@ border-left-color: #111111;
 .navbar-main {
   background-color: #133959;
   margin-bottom: 0px;
+  position: fixed;
+  left: 0;
+  right: 0;
+  z-index: 1040;
 }
 
 .navbar-main .navbar-brand {
