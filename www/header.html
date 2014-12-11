@@ -17,13 +17,13 @@
           <li ng-hide="account.loggedIn"><a href="#" ng-click="openCreateModal()" class="btn btn-notice">Create Wallet</a></li>
           <li ng-hide="account.loggedIn"><a href="#" ng-click="openLoginModal()">Login</a></li>
           <li class="divider-vertical" ng-hide="user.loggedIn"></li>
-          <li ng-show="account.loggedIn"><a href="#" ng-click="section=wallet">My Wallet</a></li>
-          <li><a href="#" ng-click="section=exchange">Exchange</a></li>
-          <li><a href="#" ng-click="section=explorer">Explorer</a></li>
-          <li><a href="#" ng-click="section=about">About</a></li>
+          <li ng-show="account.loggedIn"><a href="#" ng-click="section='wallet'">My Wallet <span class="glyphicon glyphicon-chevron-down"></span></a></li>
+          <li><a href="#" ng-click="section='exchange'">Exchange <span class="glyphicon glyphicon-chevron-down"></span></a></li>
+          <li><a href="#" ng-click="section='explorer'">Explorer <span class="glyphicon glyphicon-chevron-down"></span></a></li>
+          <li><a href="#" ng-click="section='about'">About <span class="glyphicon glyphicon-chevron-down"></span></a></li>
           <li ng-show="account.loggedIn" class="dropdown">
             <a href class="dropdown-toggle">
-              My Account
+              My Account <span class="glyphicon glyphicon-chevron-down"></span>
             </a>
             <ul class="dropdown-menu" role="menu">
               <li><a href="/account/settings">Account Settings</a></li>
@@ -33,7 +33,7 @@
       </div>
     </div>
   </div>
-  <div class="navbar navbar-static-top navbar-main-tier1" role="navigation" ng-show="section!=''">
+  <div class="navbar navbar-static-top navbar-main-tier1" role="navigation" ng-if="section!=''">
     <div class="collapse navbar-collapse" id="wallet-navbar" ng-show="section=='wallet'">
       <div class="arrow_box"></div>
       <ul class="nav navbar-nav">
