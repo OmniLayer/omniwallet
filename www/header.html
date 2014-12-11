@@ -1,31 +1,72 @@
-<div ng-controller="NavigationController" ng-init="getNavData();modalOpened=false">
-  <div class="navbar navbar-default navbar-fixed-top">
-
-<a class="navbar-brand" href="/"><img src="/assets/img/logo-beta.png" alt="mastercoin"></a>
-        <div class="navbar-header" ng-show="user.loggedIn">
-            <br /><div class="btn btn-default" ng-click="openUUIDmodal()">Wallet ID<br /><small>{{ user.wallet.uuid }}</small></div>
-        </div>
-
-      <div class="container">
-        <div class="navbar-header">
-            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            </button>
-        </div>
-        <div class="navbar-collapse collapse">
-            <ul class="nav navbar-nav navbar-right">
-              <li ng-hide="user.loggedIn"><a href="/" ng-click="openCreateModal()">Create Wallet</a></li>
-              <li ng-hide="user.loggedIn"><a href="/" ng-click="openLoginModal()">Login</a></li>
-              <li ng-show="user.loggedIn"><a href="/wallet/overview">My Wallet</a></li>
-              <li><a href="/explorer/overview">Explorer</a></li>
-              <li><a href="/about">About</a></li>
-              <li><a href="/status">Status</a></li>
-              <li ng-show="user.loggedIn"><a href="/" ng-click="logout()">Logout</a></li>
-            </ul>
-        </div>
+<div id="header" ng-controller="NavigationController" ng-init="getNavData();modalOpened=false;section=''">
+  <div class="navbar navbar-static-top navbar-main" role="navigation">
+    <div class="container">
+      <!-- Brand and toggle get grouped for better mobile display -->
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#omni-navbar">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="/"><img src="/assets/img/logo-rebrand.png" alt="omni"></a>
       </div>
+      <!-- Collect the nav links, forms, and other content for toggling -->
+      <div class="collapse navbar-collapse" id="omni-navbar">
+        <ul class="nav navbar-nav navbar-right">
+          <li ng-hide="user.loggedIn"><button href="#" ng-click="openCreateModal()" class="btn btn-warning">Create Wallet</button></li>
+          <li ng-hide="user.loggedIn"><a href="#" ng-click="openLoginModal()">Login</a></li>
+          <li class="divider-vertical" ng-hide="user.loggedIn"></li>
+          <li ng-show="user.loggedIn"><a href="#" ng-click="section='wallet'">My Wallet <span class="glyphicon glyphicon-chevron-down"></span></a></li>
+          <li><a href="#" ng-click="section='exchange'">Exchange <span class="glyphicon glyphicon-chevron-down"></span></a></li>
+          <li><a href="#" ng-click="section='explorer'">Explorer <span class="glyphicon glyphicon-chevron-down"></span></a></li>
+          <li><a href="#" ng-click="section='about'">About <span class="glyphicon glyphicon-chevron-down"></span></a></li>
+          <li ng-show="user.loggedIn" class="dropdown">
+            <a href class="dropdown-toggle">
+              My Account <span class="glyphicon glyphicon-chevron-down"></span>
+            </a>
+            <ul class="dropdown-menu" role="menu">
+              <li><a href="/account/settings">Account Settings</a></li>
+              <li><a href="/" ng-click="logout()">Logout</a></li>
+            </ul>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="navbar navbar-static-top navbar-main-tier1" role="navigation" ng-if="section!=''">
+    <div id="wallet-navbar" ng-if="section=='wallet'">
+      <div class="arrow_box"></div>
+      <ul class="nav navbar-nav">
+        <li><a href="/wallet/overview">Overview</a></li>
+        <li><a href="/wallet/addresses">My Addresses</a></li>
+        <li><a href="/wallet/assets">My Assets</a></li>
+        <li><a href="/wallet/history">History</a></li>
+      </ul>
+    </div>
+    <div id="exchange-navbar" ng-if="section=='exchange'" ng-class="{'login':user.loggedIn}">
+      <div class="arrow_box"></div>
+      <ul class="nav navbar-nav">
+        <li><a href="/exchange/trade">Trade</a></li>
+        <li><a href="/exchange/myoffers">My Offers</a></li>
+      </ul>
+    </div>
+    <div id="explorer-navbar" ng-if="section=='explorer'" ng-class="{'login':user.loggedIn}">
+      <div class="arrow_box"></div>
+      <ul class="nav navbar-nav">
+        <li><a href="/explorer/overview">Transactions</a></li>
+        <li><a href="/explorer/assets">Assets</a></li>
+        <li><a href="/explorer/bookmarks">Bookmarks</a></li>
+        <li><a href="/explorer/following">Following</a></li>
+      </ul>
+    </div>
+    <div id="about-navbar" ng-if="section=='about'" ng-class="{'login':user.loggedIn}">
+      <div class="arrow_box"></div>
+      <ul class="nav navbar-nav">
+        <li><a href="/about/omniwallet">About Omniwallet</a></li>
+        <li><a href="/about/mastercoin">About Mastercoin</a></li>
+        <li><a href="/about/faq">FAQ</a></li>
+        <li><a href="/about/contact">Contact Us</a></li>
+      </ul>
+    </div>
   </div>
 </div>
-
