@@ -12,6 +12,7 @@ from msc_apps import *
 
 
 def accept_form_response(response_dict):
+    print response_dict
     expected_fields = ('buyer', 'amount', 'tx_hash', 'fee')
     for field in expected_fields:
         if field not in response_dict:
@@ -72,6 +73,9 @@ def accept_form_response(response_dict):
 
 
 def prepare_accept_tx_for_signing(buyer, amount, tx_hash, min_btc_fee=10000):
+
+    print "buyer, amount, tx_hash, min_btc_fee=10000"
+    print buyer, amount, tx_hash, min_btc_fee
 
     # check if address or pubkey was given as buyer
     if buyer.startswith('0'): # a pubkey was given

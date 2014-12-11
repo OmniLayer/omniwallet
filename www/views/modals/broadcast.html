@@ -1,0 +1,37 @@
+<div class="modal-header">
+  <h3>Broadcast Signed Transaction</h3>
+</div>
+<form novalidate class="form-horizontal">
+  <div class="modal-body">
+    <p>
+      Please copy the signed transaction on the textbox below to broadcastit
+    </p>
+    <h5>Broadcasting Address: <strong>{{broadcastAddress}}</strong></h5>
+    <div class="control-group">
+      <label class="control-label" for="signedtx">Signed Armory Transaction</label>
+      <div class="controls">
+        <textarea rows="16" class="form-control input-sm" ng-model="transaction.signedHex" id="signedtx"></textarea>
+      </div>
+    </div>
+</div>
+<div class="modal-footer">
+    <div class="row" ng-hide="transactionSuccess">
+      <button ng-disabled="clicked" class="btn btn-primary" ng-click="ok(transaction.signedHex)">Broadcast</button>
+      <button ng-disabled="wating" class="btn btn-warning" ng-click="cancel()">Cancel</button>
+      <img class="" src="/assets/img/spinner.gif" ng-show="waiting">
+    </div>
+      <br>
+    <div class="row">
+      <div ng-show="transactionSuccess">
+        <h4 class="pull-left" style="color:green"> Transaction broadcasted successfully <a target="_blank" href="{{url}}">here.</a></h4>
+        <a href="/wallet/overview">
+          <button class="btn btn-success" ng-click="close()">Close</button>
+        </a>
+      </div>
+      <div ng-show="transactionError">
+        <h4 class="col-xs-12" style="color:red;"> Transaction failed to broadcast: 
+         {{error}} </h4>
+      </div>
+    </div>
+  </div>
+</form>
