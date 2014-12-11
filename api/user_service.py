@@ -276,7 +276,7 @@ def write_wallet(uuid, wallet, email=None):
     with open(filename, 'w') as f:
       f.write(wallet)
   else:
-    dbExecute("with upsert as (update wallets set walletblob=%s, email=$s where walletid=%s returning *) "
+    dbExecute("with upsert as (update wallets set walletblob=%s, email=%s where walletid=%s returning *) "
               "insert into wallets (walletblob,walletid,email) select %s,%s,%s where not exists (select * from upsert)", 
               (wallet,email,uuid,wallet,uuid,email))
     dbCommit()

@@ -5,7 +5,7 @@
   <div class="panel-default">
     <div class="text-left panel-body om-title" >Account Settings</div>
   </div>
-  <form novalidate class="form-horizontal">
+  <form name="myForm" class="form-horizontal">
 
     <div class="form-group">
       <label class="col-xs-3 control-label">Wallet ID: </label>
@@ -14,7 +14,10 @@
 
     <div class="form-group">
       <label class="col-xs-3 control-label">Wallet Email:</label>
-      <div class="col-xs-4"><input class="form-control" type="email" ng-model="email"></div>
+      <div class="col-xs-4">
+        <input class="form-control" type="email" ng-model="email">
+        <div collapse="!myForm.$error.email"><p class="alert-danger" align="center">Please enter valid email</p></div>
+     </div>
     </div> 
 
     <div class="form-group">
@@ -60,7 +63,7 @@
     </div>
 
     <button type="button" class="btn btn-primary" ng-model="singleModel" ng-click="changePassword()">Change Password</button>
-    <button type="button" class="btn btn-success" ng-model="singleModel" ng-click="save()">Save Preferences</button>
+    <button type="button" class="btn btn-success" ng-model="singleModel" ng-click="save()" ng-disabled="myForm.$error.email">Save Preferences</button>
   </form>
   <br> 
   <div collapse="!saved">

@@ -254,6 +254,10 @@ function AccountSettingsController($modal, $injector, $scope, $http, Account) {
   $scope.showtesteco = Account.getSetting("showtesteco")
 
   $scope.save = function() {
+      if ($scope.myForm.$error.email) {
+        $scope.saved = false;
+        $scope.error = true;   
+      } else {
         mywallet['email'] = $scope.email;
         mywallet['settings'] = { 'usercurrency':$scope.selectedCurrency,
                                'filterdexdust':$scope.filterdexdust, 
@@ -265,7 +269,8 @@ function AccountSettingsController($modal, $injector, $scope, $http, Account) {
         $scope.error = false;
         var appraiser= $injector.get("appraiser");
         appraiser.updateValues();
-        };
+      }
+    };
 
   $scope.changePassword = function() {
     $scope.login = {
