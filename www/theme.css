@@ -2,16 +2,18 @@ html {
   position: relative;
   min-height: 100%;
 }
-
-/* Wrapper for page content to push down footer */
-#wrap {
-  min-height: 100%;
-  height: auto !important;
-  height: 100%;
-/* Negative indent footer by it's height */
-  margin-bottom: 0 auto -246px;
+body {
+  /* Margin bottom by footer height */
+  margin-bottom: 60px;
 }
-
+#footer {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  /* Set the fixed height of the footer here */
+  height: 100px;
+  background-color: #f5f5f5;
+}
 .brown{color:#9b846b}
 .green{color:#61B329}
 .info{background-color:#B0C4DE}
@@ -67,7 +69,9 @@ a {
 .navbar-nav > li {
   padding-top: 5%;
 }
-
+.footer .navbar-nav > li {
+  padding-top: 0;
+}
 .modal-body{
   background-color: #fcfbfb;
 }
@@ -180,7 +184,9 @@ a {
 .collapsed-div{
   max-height: 40px;
 }
-
+.footer-div{
+  padding-bottom: 0px;
+}
 .horizontal-line{
   width: 400px;
   height: 5px;
@@ -294,177 +300,23 @@ form.form-search:before {
     text-align: left;
     width: 50%;*/
 }
-
-
-/*Definitions for footer*/
-#push, #footer {
-  height: 246px;
-}
-
-#footer {
-  position: absolute;
-  bottom: 0;
-  width: 100%;
-}
-
-#footer .nav > li > a:hover, #footer .nav > li > a:focus {
-  background-color: transparent;
-}
-.footer .navbar-nav > li {
-  padding-top: 0;
-}
-.footer-div{
-  padding-bottom: 0px;
-}
-
-.footer-top-row{
-  background-color: #496082;
-  padding-bottom: 20px;
-}
-.footer-middle-row{
-  background-color: #20314a;
-  margin-bottom: -6px;
-}
-.footer-bottom-row{
-  background-color: #ffffff;
-}
-
-i.icon-facebook {
-  background-image: url("/assets/img/footer-icons/facebook.png");
-  background-position: 0pt;
-  width: 30px;
-  height: 30px;
-  float: left; 
-  margin-right: 5px;
-  margin-top: -6px;
-}
-a:hover i.icon-facebook{
-  background-image: url("/assets/img/footer-icons/facebook_roll.png")
-}
-
-i.icon-google {
-  background-image: url("/assets/img/footer-icons/google.png");
-  background-position: 0pt;
-  width: 30px;
-  height: 30px; 
-  float: left;
-  margin-right: 5px;
-  margin-top: -6px;
-}
-a:hover i.icon-google{
-  background-image: url("/assets/img/footer-icons/google_roll.png")
-}
-
-i.icon-twitter {
-  background-image: url("/assets/img/footer-icons/twitter.png");
-  background-position: 0pt;
-  width: 30px;
-  height: 30px; 
-  float: left;
-  margin-right: 5px;
-  margin-top: -6px;
-}
-a:hover i.icon-twitter{
-  background-image: url("/assets/img/footer-icons/twitter_roll.png")
-}
-
-.icon-ask {
-  float: left;
-  margin-right: 5px;
-  margin-top: -1px;
-}
-
-.icon-email {
-  float: left;
-  margin-right: 5px;
-  margin-top: 4px;
-}
-
-.icon-notif {
-  float: left;
-  margin-right: 5px;
-}
-
-.divider-vertical-small {
-  height: 14px;
-  margin-top: 12px;
-  border-left: 1px solid #7186a6;
-}
-
-.footer-titles {
-  padding-left: 14px;
-  padding-top: 16px;
-  font-size: 16px;
-  font-family: 'roboto';
-  font-weight: bold;
-  color: #ffffff
-}
-
-.footer-content {
-  font-size: 13px;
-  font-family: 'roboto';
-  margin-bottom: -11px;
-}
-.footer-content a{
-  color: #9cb7de
-}
-.footer-content a:hover{
-  color: #bfd4f2;
-}
-
-.footer-email {
-  font-size: 13px;
-  font-family: 'roboto';
-  color: #9cb7de;
-  margin-top: 10px !important;
-  margin-left: 17px !important;
-}
-
-.footer-social {
-  font-size: 13px;
-  font-family: 'roboto';
-  margin-bottom: 4px;
-}
-.footer-social a{
-  color: #9cb7de
-}
-.footer-social a:hover{
-  color: #bfd4f2;
-}
-
-.footer-suggestions{
-  font-size: 13px;
-  color: #ffffff;
-  font-family: 'roboto';
-  margin-top: 41px !important;
-  margin-left: 15px !important;
-}
-
-.footer-middle {
-  font-size: 13px;
-  font-family: 'roboto';
-  margin-top: -6px;
-}
-.footer-middle a{
-  color: #7186a6;
-  text-shadow: none !important;
-}
-.footer-middle a:hover{
-  color: #96a8c3;
-}
-
-.footer-bottom {
-  font-size: 13px;
-  color: #999999;
-  font-family: 'roboto';
-  margin-top: -6px;
-}
-
-.footer-version {
-  margin-right: 93px;
-}
-
 span#recaptcha_privacy {
     /* hide the privacy policy link to google on recaptcha */
     display: none;
 }
+/* Social icons (source: http://azmind.com/2012/11/06/social-icons-sprites-35-ready-to-use-icons-psd-png-html-css/) */
+.icons a {
+    display: inline-block;
+    width: 24px;
+    height: 24px;
+    margin: 10px;
+    vertical-align: middle;
+    -o-transition: all .3s;
+    -moz-transition: all .3s;
+    -webkit-transition: all .3s;
+    -ms-transition: all .3s;
+}
+.icons a.twitter { background: url(/assets/img/social-icons/twitter.png) left top no-repeat; }
+.icons a.reddit { background: url(/assets/img/social-icons/reddit.png) left top no-repeat; }
+.icons a.facebook { background: url(/assets/img/social-icons/facebook.png) left top no-repeat; }
+.icons a:hover { background-position: left -34px; }

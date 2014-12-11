@@ -23,7 +23,6 @@
     <link rel="stylesheet" href="/theme.css">
 
     <link href='https://fonts.googleapis.com/css?family=Gudea:400,400italic,700' rel='stylesheet' type='text/css'>
-    <link href='https://fonts.googleapis.com/css?family=Roboto:300' rel='stylesheet' type='text/css'>
 
     <!-- SocketIO 1.x.x not supported right now -->
     <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/socket.io/0.9.16/socket.io.min.js"></script>
@@ -97,25 +96,25 @@
 
   </head>
   <body>
-    <div class="container" ng-controller="Ctrl">
-        <div id="wrap">
-            <div class="header">
-               <div ng-include="templates['header']"></div> 
-            </div>
-            <div class="container middle row">
-              <div class="info info-custom info-dismissable" ng-hide="true">
-                <button type="button" class="close" data-dismiss="info" aria-hidden="true">&times;</button>
-                Omniwallet&#8482; is a cryptocurrency web wallet that combines security, usability and meta-currency support.
-              </div>
-            </div>
-            <div ng-view></div>
-            <br/><br />
-            <div class="row"></div>
-            <div id="push"></div>
-        </div>
-        <div class="footer">
-            <div ng-include="templates['footer']"></div> 
-        </div>
+    <div id="wrap">
+       <div class="container" ng-controller="Ctrl">
+         <div class="header">
+           <div ng-include="templates['header']"></div> 
+         </div>
+         <div class="container middle row">
+           <div class="info info-custom info-dismissable" ng-hide="true">
+             <button type="button" class="close" data-dismiss="info" aria-hidden="true">&times;</button>
+             Omniwallet&#8482; is a cryptocurrency web wallet that combines security, usability and meta-currency support.
+           </div>
+         </div>
+           <div ng-view></div>
+         <br/><br />
+          <div class="row"></div>
+         <div class="footer">
+          <div ng-include="templates['footer']"></div> 
+         </div>
+       </div>
+      </div>
     </div>
   </body>
 </html>
