@@ -88,7 +88,7 @@ border-left-color: #111111;
   right: 0;
   top: 70px;
   max-height: 50px;
-  z-index: 1050;
+  z-index: 1010;
 }
 
 .navbar-main-tier1 .navbar-brand {
@@ -195,7 +195,7 @@ border-left-color: #111111;
   left: 0;
   right: 0;
   top: 0px;
-  z-index: 1040;
+  z-index: 1020;
   max-height: 70px
 }
 
@@ -309,6 +309,7 @@ border-left-color: #111111;
   position:relative;  
   height:10px; 
   width:10px;
+  top: 60px;
 }
 .arrow_box:before {
   content:"";
@@ -319,51 +320,16 @@ border-left-color: #111111;
   bottom:0px; 
 }
 
-#wallet-navbar .arrow_box:after,
-#wallet-navbar .arrow_box:before {
-  margin-left: 7%;
-}
-
 #wallet-navbar .navbar-nav {
-  margin-left: 35%
-}
-
-#exchange-navbar .arrow_box:after,
-#exchange-navbar .arrow_box:before {
-  margin-left: 20%;
-}
-
-#exchange-navbar.login .arrow_box:after,
-#exchange-navbar.login .arrow_box:before {
-  margin-left: 13.4%;
+  margin-left: 49%
 }
 
 #exchange-navbar .navbar-nav {
   margin-left: 46%;
 }
 
-#explorer-navbar .arrow_box:after,
-#explorer-navbar .arrow_box:before {
-  margin-left: 26%;
-}
-
-#explorer-navbar.login .arrow_box:after,
-#explorer-navbar.login .arrow_box:before {
-  margin-left: 19.3%;
-}
-
 #explorer-navbar .navbar-nav {
   margin-left: 39%;
-}
-
-#about-navbar .arrow_box:after,
-#about-navbar .arrow_box:before {
-  margin-left: 31.4%;
-}
-
-#about-navbar.login .arrow_box:after,
-#about-navbar.login .arrow_box:before {
-  margin-left: 24.6%;
 }
 
 #about-navbar .navbar-nav {
