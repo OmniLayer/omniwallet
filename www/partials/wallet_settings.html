@@ -22,8 +22,13 @@
       <div class="col-xs-4">
         <input class="form-control" type="email" ng-model="email">
         <div collapse="!myForm.$error.email"><p class="alert-danger" align="center">Please enter a valid email</p></div>
-     </div>
+      </div>
     </div> 
+
+    <div class="form-group">
+      <label class="col-xs-3 control-label">Wallet Password:</label>
+      <div class="col-xs-6"><a href="" ng-click="changePassword()"><p class="form-control-static">Change Your Wallet Password</p></a></div>
+    </div>
 
     <div class="form-group">
       <label class="col-xs-3 control-label">Wallet Currency: 
@@ -67,8 +72,7 @@
       <input type="radio" ng-model="filterdexdust" value="false" />No
     </div>
 
-    <button type="button" class="btn btn-primary" ng-model="singleModel" ng-click="changePassword()">Change Password</button>
-    <button type="button" class="btn btn-success" ng-model="singleModel" ng-click="save()" ng-disabled="myForm.$error.email">Save Preferences</button>
+    <button type="button" class="btn btn-primary" ng-model="singleModel" ng-click="save()" ng-disabled="myForm.$error.email">Save Preferences</button>
   </form>
   <br> 
   <div collapse="!saved">

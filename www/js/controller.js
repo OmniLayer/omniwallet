@@ -296,7 +296,8 @@ function AccountSettingsController($modal, $injector, $scope, $http, Account) {
             $scope.error = false;
           }, function() {
             $scope.saved = false;
-            $scope.error = true;
+            //Closing modal shouldn't generate an error
+            //$scope.error = true;
           });
       });
   };
