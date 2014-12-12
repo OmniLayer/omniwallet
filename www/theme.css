@@ -67,9 +67,8 @@ a {
 }
 .navbar .divider-vertical {
 height: 50px;
-margin: 0 9px;
-border-right: 1px solid #ffffff;
-border-left: 1px solid #f2f2f2;
+margin: 10px;
+border-right: 1px solid #97a9c4;
 }
 
 .navbar-inverse .divider-vertical {
@@ -318,6 +317,34 @@ border-left-color: #111111;
   border:10px solid #496082;
   border-color:transparent transparent #496082 transparent;
   bottom:0px; 
+}
+
+.arrow_box .wallet {
+  margin-left: 49.6%
+}
+
+.arrow_box .exchange {
+  margin-left: 63%
+}
+
+.arrow_box .login .exchange {
+  margin-left: 56%
+}
+
+.arrow_box .explorer {
+  margin-left: 69%
+}
+
+.arrow_box .login .explorer {
+  margin-left: 62%
+}
+
+.arrow_box .about {
+  margin-left: 74.3%
+}
+
+.arrow_box .login .about {
+  margin-left: 67.3%
 }
 
 #wallet-navbar .navbar-nav {

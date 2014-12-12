@@ -26,11 +26,11 @@
               My Account <span class="glyphicon glyphicon-chevron-down"></span>
             </a>
             <ul class="dropdown-menu" role="menu">
-              <li><a href="/account/settings">Account Settings</a></li>
+              <li><a href="/wallet/settings">Account Settings</a></li>
               <li><a href="/" ng-click="logout()">Logout</a></li>
             </ul>
         </ul>
-        <div class="arrow_box"></div>
+        <div class="arrow_box" ng-hide="section==''" ng-class="{'login':user.loggedIn, 'wallet':section=='wallet', 'exchange':section=='exchange', 'explorer':section=='explorer', 'about':section=='about'}"></div>
       </div>
     </div>
   </div>
@@ -43,13 +43,13 @@
         <li><a href="/wallet/history">History</a></li>
       </ul>
     </div>
-    <div id="exchange-navbar" ng-if="section=='exchange'" ng-class="{'login':user.loggedIn}">
+    <div id="exchange-navbar" ng-if="section=='exchange'">
       <ul class="nav navbar-nav">
         <li><a href="/wallet/trade">Trade</a></li>
         <li><a href="/wallet/myoffers">My Offers</a></li>
       </ul>
     </div>
-    <div id="explorer-navbar" ng-if="section=='explorer'" ng-class="{'login':user.loggedIn}">
+    <div id="explorer-navbar" ng-if="section=='explorer'">
       <ul class="nav navbar-nav">
         <li><a href="/explorer/overview">Transactions</a></li>
         <li><a href="/explorer/assets">Assets</a></li>
@@ -57,7 +57,7 @@
         <li><a href="/explorer/following">Following</a></li>
       </ul>
     </div>
-    <div id="about-navbar" ng-if="section=='about'" ng-class="{'login':user.loggedIn}">
+    <div id="about-navbar" ng-if="section=='about'">
       <ul class="nav navbar-nav">
         <li><a href="/about/omniwallet">About Omniwallet</a></li>
         <li><a href="/about/mastercoin">About Mastercoin</a></li>
