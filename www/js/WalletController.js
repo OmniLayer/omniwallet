@@ -238,7 +238,7 @@ function WalletHistoryController($scope, $q, $http, hashExplorer, Wallet) {
   }
 }
 
-function WalletTradeController($scope, $http, $q) {
+function WalletTradeController($scope, $http, $q, Account) {
 
   //init and use global to pass data around
   $scope.global = {
@@ -247,6 +247,8 @@ function WalletTradeController($scope, $http, $q) {
 
   $scope.onTradeView = true
   $scope.history = '/partials/wallet_history.html';
+
+  $scope.inactive = Account.getSetting("filterdexdust");
 
   $scope.setView = function(view, data) {
     if (view != 'tradeInfo'){
@@ -303,7 +305,12 @@ function WalletTradeController($scope, $http, $q) {
     'MSC': 'Mastercoin',
     'TMSC': 'Test Mastercoin'
   }
-  $scope.currPairs = [['BTC', 'MSC'], ['BTC', 'TMSC']];
+  
+  if ( Account.getSetting("showtesteco") === 'true'){
+    $scope.currPairs = [['BTC', 'MSC'], ['BTC', 'TMSC']];
+  } else {
+    $scope.currPairs = [['BTC', 'MSC']];
+  }
 
   //Get the active currency pair
   $scope.activeCurrencyPair = []

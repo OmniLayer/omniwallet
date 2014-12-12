@@ -1,15 +1,25 @@
 WHOLE_UNIT = new Big(0.00000001); //Backend data returns satoshi, use this conversion ratio
 SATOSHI_UNIT = new Big(100000000); //Backend data needs satoshi, use this conversion ratio
 MIN_MINER_FEE = new Big(0.00010000);
-function WalletAssetsFormController($scope, $injector, Wallet, walletTransactionService) {
+function WalletAssetsFormController($scope, $injector, Wallet, walletTransactionService, Account) {
   // [ Form Validation]
   $scope.showErrors = false;
 
   // [ Template Initialization ]
 
-  $scope.currencyList = Wallet.assets.filter(function(currency){
+  currencyList = Wallet.assets.filter(function(currency){
        return currency.tradable;
-  }); // [{symbol: 'BTC', addresses:[], name: 'BTC'}, {symbol: 'MSC', addresses:[], name: 'MSC'}, {symbol: 'TMSC', addresses:[], name: 'TMSC'}]
+  }); // [{symbol: 'BTC', addresses:[], name: 'BTC'}, {symbol: 'MSC', addresses:[], name: 'MSC'}, {symbol: 'TMSC', addresses:[], name: 'TMSC'}
+
+  showtesteco = Account.getSetting("showtesteco");
+
+  if (showtesteco === 'true') {
+    $scope.currencyList = currencyList;
+  } else {
+    $scope.currencyList = currencyList.filter(function(currency){
+      return ((parseInt(currency.id,10) < 2147483648) && (parseInt(currency.id,10) != 2))
+    });
+  }
   
   //Set default if not inherited.
   if (!$scope.$parent.selectedCoin){

@@ -410,21 +410,34 @@ angular.module('omniwallet').factory('appraiser', ['$rootScope', '$http', '$q', 
       this.wallet = $injector.get('Wallet');
       this.Account = $injector.get('Account');
       var self = this;
+
       function UpdateLoop() {
         self.updateValues(function() {
           setTimeout(UpdateLoop, 300000);
         });
       }
-      if (self.Account.loggedIn) UpdateLoop();
+
+      if (self.Account.loggedIn) { 
+        UpdateLoop();
+      } else {
+        cursym = "USD";
+      }
     };
 
     AppraiserService.prototype.updateValues = function(callback) {
       var self = this;
       var requests = [];
       var coins = this.wallet.assets;
+      cursym = self.Account.getSetting("usercurrency");
+
       coins.forEach(function(coin) {
+        if (coin.symbol === 'BTC') {
+          symbol="BTC"+cursym;
+        } else {
+          symbol=coin.symbol;
+        }
         requests.push(
-        $http.get('/v1/values/' + coin.symbol + '.json').then(function(response) {
+        $http.get('/v1/values/' + symbol + '.json').then(function(response) {
           var currency = response.data[0];
           if (currency.symbol == 'BTC') {
             // Store these things internally as the value of a satoshi.
@@ -446,8 +459,13 @@ angular.module('omniwallet').factory('appraiser', ['$rootScope', '$http', '$q', 
     };
     AppraiserService.prototype.updateValue = function(callback, symbol) {
       var self = this;      
+      if (symbol === 'BTC') {
+        usercur=symbol+cursym;
+      } else {
+        usercur=symbol
+      }
       if (symbol === 'BTC' || this.conversions.BTC) {
-        $http.get('/v1/values/' + symbol + '.json').then(function(response) {
+        $http.get('/v1/values/' + usercur + '.json').then(function(response) {
           var currency = response.data[0];
           if (currency.symbol == 'BTC') {
             // Store these things internally as the value of a satoshi.

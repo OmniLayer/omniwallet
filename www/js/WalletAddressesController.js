@@ -25,6 +25,8 @@ angular.module('omniwallet')
             var emptyAddresses = [];
 
             var appraiser = $injector.get('appraiser');
+            var Account = $injector.get('Account');
+            showtesteco = Account.getSetting('showtesteco');
 
             Wallet.addresses.forEach(function(addr) {
               if (addr.balance.length == 0) {
@@ -32,6 +34,7 @@ angular.module('omniwallet')
                 invalidAddresses.push(addr.address);
               } else {
                 addr.balance.forEach(function(currencyItem) {
+                 if ((parseInt(currencyItem.id,10) < 2147483648) && (parseInt(currencyItem.id,10) != 2) || showtesteco === 'true'){
                   if(currencyItem.divisible)
                     var value=new Big(currencyItem.value).times(WHOLE_UNIT).valueOf();
                   if (!balances.hasOwnProperty(currencyItem.symbol)) {
@@ -67,6 +70,7 @@ angular.module('omniwallet')
 	                  "private": hasPrivate,
 	                  "offline": isOffline
                   };
+                 }
                 });
               }
             });
