@@ -104,12 +104,9 @@ border-left-color: #111111;
   color: #a2b6d3;
 }
 
-.navbar-main-tier1 .navbar-nav {
-  margin-top: -8px; 
-}
-
 .navbar-main-tier1 .navbar-nav > li > a {
   color: #a2b6d3;
+  text-shadow: none;
 }
 
 .navbar-main-tier1 .navbar-nav > li > a:hover,
@@ -222,6 +219,7 @@ border-left-color: #111111;
 
 .navbar-main .navbar-nav > li > a {
   color: #97a9c4;
+  text-shadow: none;
 }
 
 .navbar-main .navbar-nav > li > a > span{
@@ -320,7 +318,7 @@ border-left-color: #111111;
 }
 
 .arrow_box.wallet {
-  left: 43,3%
+  left: 43.3%
 }
 
 .arrow_box.exchange {
@@ -348,7 +346,7 @@ border-left-color: #111111;
 }
 
 #wallet-navbar .navbar-nav {
-  margin-left: 49%
+  margin-left: 41%
 }
 
 #exchange-navbar .navbar-nav {
