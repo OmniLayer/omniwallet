@@ -319,32 +319,32 @@ border-left-color: #111111;
   bottom:0px; 
 }
 
-.arrow_box .wallet {
-  margin-left: 49.6%
+.arrow_box.wallet {
+  left: 49.6%
 }
 
-.arrow_box .exchange {
-  margin-left: 63%
+.arrow_box.exchange {
+  left: 63%
 }
 
-.arrow_box .login .exchange {
-  margin-left: 56%
+.arrow_box.login.exchange {
+  left: 56%
 }
 
-.arrow_box .explorer {
-  margin-left: 69%
+.arrow_box.explorer {
+  left: 69%
 }
 
-.arrow_box .login .explorer {
-  margin-left: 62%
+.arrow_box.login.explorer {
+  left: 62%
 }
 
-.arrow_box .about {
-  margin-left: 74.3%
+.arrow_box.about {
+  left: 74.3%
 }
 
-.arrow_box .login .about {
-  margin-left: 67.3%
+.arrow_box.login.about {
+  left: 69%
 }
 
 #wallet-navbar .navbar-nav {
