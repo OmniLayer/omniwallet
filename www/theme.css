@@ -53,7 +53,7 @@ html {
   margin-left: 150px;
 }
 .middle {
-  margin-top: 125px;
+  background-color: #eeeeee;
 }
 .arc path {
   stroke: #fff;

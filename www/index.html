@@ -98,20 +98,16 @@
 
   </head>
   <body>
-    <div class="container" ng-controller="Ctrl">
+    <div class="container-fluid" ng-controller="Ctrl">
         <div id="wrap">
-            <div class="header">
+            <div class="header row">
                <div ng-include="templates['header']"></div> 
             </div>
             <div class="container middle row">
-              <div class="info info-custom info-dismissable" ng-hide="true">
-                <button type="button" class="close" data-dismiss="info" aria-hidden="true">&times;</button>
-                Omniwallet&#8482; is a cryptocurrency web wallet that combines security, usability and meta-currency support.
+              <div class="panel panel-default">
+                <div class="panel-body" ng-view></div>
               </div>
             </div>
-            <div ng-view></div>
-            <br/><br />
-            <div class="row"></div>
             <div id="push"></div>
         </div>
         <div class="footer">
