@@ -16,6 +16,25 @@ function CreateWalletController($scope, $location, $modalInstance, Account, Addr
   }
 }
 
+function WalletPasswordController($scope, $location, $modalInstance, $http, Account) {
+  $scope.dismiss = $modalInstance.dismiss;
+
+  $scope.changePassword = function(change) {
+    $scope.validating=true;
+    $scope.serverError = false;
+
+    $http.get('/v1/user/wallet/challenge?uuid=' + Account.uuid)
+    .success(function(data, status) {
+      Account.walletKey = CryptUtil.generateSymmetricKey(change.password, data.salt);
+      Account.saveSession();
+      $modalInstance.close()
+    }).error(function() {
+      $scope.validating=false;
+      $scope.serverError = true;    
+    });
+  }
+}
+
 function generateUUID() {
   var d = new Date().getTime();
   var uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {

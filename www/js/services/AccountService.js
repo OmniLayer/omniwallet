@@ -187,7 +187,8 @@ angular.module("omniServices")
                     data: {
                       uuid: self.uuid,
                       wallet: encryptedWallet,
-                      signature: signature
+                      signature: signature,
+                      email: self.getSetting("email")
                     }
                   });
                 }).then(function(result) {
@@ -243,5 +244,60 @@ angular.module("omniServices")
               }
         };
 
+        self.getSetting = function(name){
+
+            if (self.wallet.settings == undefined) {
+                settings = []
+            } else {
+                settings=self.wallet.settings
+            }
+            retval="";
+
+            switch (name) {
+
+            case "email":
+              if (self.wallet.email == undefined) {
+                retval = ""
+              } else {
+                retval = self.wallet.email
+              }
+              break;
+
+            case "donate":
+              if (settings['donate'] == undefined) {
+                retval = 'false'
+              } else {
+                retval = settings['donate']
+              }
+              break;
+
+            case "usercurrency":
+              if (settings['usercurrency'] == undefined) {
+                retval = "USD"
+              } else {
+                retval = settings['usercurrency']
+              }
+              break;
+
+            case "filterdexdust":
+              if (settings['filterdexdust'] == undefined) {
+                retval = 'true'
+              } else {
+                retval = settings['filterdexdust']
+              }
+              break;
+
+            case "showtesteco":
+              if (settings['showtesteco'] == undefined) {
+                retval = 'false'
+              } else {
+                retval = settings['showtesteco']
+              }
+              break;
+
+            }
+            //console.log(retval);
+            return retval;
+        }
       
     }]);

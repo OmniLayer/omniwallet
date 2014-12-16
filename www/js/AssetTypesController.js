@@ -24,14 +24,18 @@ angular.module('omniwallet')
             var emptyAddresses = [];
 
             var appraiser = $injector.get('appraiser');
+            var Account = $injector.get('Account');
+            showtesteco = Account.getSetting('showtesteco');
 
             Wallet.addresses.forEach(function(addr) {
               addr.balance.forEach(function(currencyItem) {
+               if ((parseInt(currencyItem.id,10) < 2147483648) && (parseInt(currencyItem.id,10) != 2) || showtesteco === 'true'){
                 if(currencyItem.divisible)
                   var value=new Big(currencyItem.value).times(WHOLE_UNIT).valueOf();
                 if (!balances.hasOwnProperty(currencyItem.symbol)) {
                   balances[currencyItem.symbol] = {
                     "symbol": currencyItem.symbol,
+                    "id" : currencyItem.id,
                     "balance": +value || +currencyItem.value,
                     "value": appraiser.getValue(currencyItem.value, currencyItem.symbol, currencyItem.divisible),
                   };
@@ -39,10 +43,11 @@ angular.module('omniwallet')
                   balances[currencyItem.symbol].balance += +value || +currencyItem.value;
                   balances[currencyItem.symbol].value += appraiser.getValue(currencyItem.value, currencyItem.symbol, currencyItem.divisible);
                 }
-	  //console.log(balances);
+                //console.log(balances);
                 if (currencyItem.symbol == 'BTC') {
                   balances[currencyItem.symbol].name = "Bitcoin"
                 }
+               }
               });
             });
             // First, the standard currencies.
@@ -130,10 +135,19 @@ angular.module('omniwallet')
   $rootScope.$on('BALANCE_CHANGED', function() {
     $scope.refresh();
   });
+
+  $scope.CSYM=Account.getSetting("usercurrency");
+
   $scope.refresh = function() {
+
+    if (!Account.loggedIn) {
+      //console.log("caught attempted refresh after logout");
+      return 0;
+    }
 
     $scope.isLoading = true;
     $scope.items = asset_types_data.getData().then(function(balances) {
+
       $scope.balances = balances;
       $scope.totals = {};
       var total = 0;

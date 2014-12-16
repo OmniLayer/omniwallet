@@ -1,4 +1,4 @@
-function WalletSellAssetsController($modal, $scope, $http, $q, Wallet, walletTransactionService) {
+function WalletSellAssetsController($modal, $scope, $http, $q, Wallet, walletTransactionService, Account) {
 
 
   // [ Template Initialization ]
@@ -37,7 +37,8 @@ function WalletSellAssetsController($modal, $scope, $http, $q, Wallet, walletTra
         min_buyer_fee: buyersFee,
         fee: fee,
         blocks: saleBlocks,
-        currency: currency
+        currency: currency,
+        donate: Account.getSetting("donate")
       }).success(function(data) {
         return deferred.resolve(data);
       }).error(function(data) {

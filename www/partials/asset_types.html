@@ -6,7 +6,7 @@
     <div ng-if="balances.balances">
       <row>
         <div class="currency-name col-xs-8 text-left">
-          Estimated Total Value
+          Estimated Total Value ({{CSYM}})
         </div>
         <div class="currency-value col-xs-4 text-right number" title="{{currency.balance}}" ng-bind-html="total | numeraljs: '$0,0.00':true">
         </div>

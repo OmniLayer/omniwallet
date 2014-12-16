@@ -8,7 +8,7 @@ from msc_apps import *
 from debug import *
 
 
-TIMEOUT='timeout -s 9 60 '
+TIMEOUT='timeout -s 9 10 '
 # Get the Mastercoin balances.  Not that this is also creating the default balance
 # object, and should run before all the other currency checks.
 def get_msc_balances( addr ):
