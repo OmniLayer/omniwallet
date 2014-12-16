@@ -140,6 +140,7 @@ angular.module("omniServices")
 
                             self.loggedIn = true;
                             self.loginInProgress = false;
+                            self.setCurrencySymbol(self.getSetting('usercurrency'));
                             login.resolve(wallet);
                         } catch (e) {
                         	self.loginInProgress = false;
@@ -242,6 +243,98 @@ angular.module("omniServices")
                     Wallet._removeAddress(remove.address);
                 });
               }
+        };
+
+        self.setCurrencySymbol = function(currency){
+
+          csym = '$'
+
+          switch (currency) {
+
+            case "USD":
+            case "AUD":
+            case "CAD":
+            case "NZD":
+            case "MXN":
+            case "SGD":
+            default:
+              csym = '$'
+              break;
+
+            case "EUR":
+              csym= '€'
+              break;
+
+            case "CHF":
+            case "IDR":
+              csym = 'Rp'
+              break;
+
+            case "ILS":
+              csym = '₪'
+              break;
+
+            case "TRY":
+              csym = '&#8378;'
+              break;
+
+            case "NOK":
+            case "SEK":
+              csym = 'kr'
+              break;
+
+            case "BRL":
+              csym = 'R$'
+              break;
+
+            case "ZAR":
+              csym = 'R'
+              break;
+
+            case "HKD":
+              csym = 'HK$'
+              break;
+
+            case "RUB":
+              csym = 'руб'
+              break;
+
+            case "GBP":
+              csym = '£'
+              break;
+
+            case "RON":
+              csym = 'lei'
+              break;
+
+            case "CNY":
+              csym='¥'
+              break;
+
+            case "PLN":
+              csym='zł'
+              break;
+          }
+
+
+          numeral.language('en', {
+            delimiters: {
+              thousands: ',',
+              decimal: '.'
+            },
+            abbreviations: {
+              thousand: 'k',
+              million: 'm',
+              billion: 'b',
+              trillion: 't'
+            },
+            ordinal : function (number) {
+              return number === 1 ? 'er' : 'ème';
+            },
+            currency: {
+              symbol: csym
+            }
+          });
         };
 
         self.getSetting = function(name){
