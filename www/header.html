@@ -21,8 +21,15 @@
             <a href="#" ng-click="openLoginModal()">Login</a>
           </li>
           <li class="divider-vertical" ng-hide="account.loggedIn"></li>
-          <li ng-show="account.loggedIn" ng-class="{active:section=='wallet'}">
-            <a href="/wallet/overview" ng-click="section='wallet';subsection='overview'">My Wallet <span class="glyphicon glyphicon-chevron-down"></span></a>
+          <li ng-show="account.loggedIn" ng-class="{active:section=='wallet'}" class="dropdown">
+            <a href="/wallet/overview" ng-click="section='wallet';subsection='overview'" class="dropdown-toggle">My Wallet <span class="glyphicon glyphicon-chevron-down"></span></a>
+            <ul class="dropdown-menu" role="menu">
+              <li ng-class="{active:subsection=='overview'}"><a ng-click="subsection='overview'" href="/wallet/overview">Overview</a></li>
+              <li ng-class="{active:subsection=='myaddresses'}"><a ng-click="subsection='myaddresses'" href="/wallet/addresses">My Addresses</a></li>
+              <li ng-class="{active:subsection=='myassets'}"><a ng-click="subsection='myassets'" href="/wallet/assets">My Assets</a></li>
+              <li ng-class="{active:subsection=='history'}"><a ng-click="subsection='history'" href="/wallet/history">History</a></li>
+              <li ng-class="{active:subsection=='send'}"><a ng-click="subsection='send'" href="/wallet/send">Send</a></li>
+            </ul>
           </li>
           <li ng-class="{active:section=='exchange'}">
             <a href="/wallet/trade" ng-click="section='exchange';subsection='trade'">Exchange <span class="glyphicon glyphicon-chevron-down"></span></a>
