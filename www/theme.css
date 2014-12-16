@@ -318,31 +318,31 @@ border-left-color: #111111;
 }
 
 .arrow_box.wallet {
-  left: 41%
+  left: 56%
 }
 
 .arrow_box.exchange {
-  left: 61%
+  left: 69.5%
 }
 
 .arrow_box.login.exchange {
-  left: 51%
+  left: 62.5%
 }
 
 .arrow_box.explorer {
-  left: 70%
+  left: 75.5%
 }
 
 .arrow_box.login.explorer {
-  left: 79%
+  left: 68.5%
 }
 
 .arrow_box.about {
-  left: 81%
+  left: 80.8%
 }
 
 .arrow_box.login.about {
-  left: 67%
+  left: 73.8%
 }
 
 #wallet-navbar .navbar-nav {
