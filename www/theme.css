@@ -55,7 +55,11 @@ body {
   margin-left: 150px;
 }
 .main {
-  margin-top: 120px;
+  margin-top: 150px;
+}
+
+.main > .container > .panel .panel-default {
+  min-height: 530px;
 }
 .arc path {
   stroke: #fff;
