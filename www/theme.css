@@ -77,7 +77,7 @@ border-left-color: #111111;
 }
 
 .navbar-brand img {
-  max-height: 3.7em;
+  max-height: 40px;
 }
 
 .navbar-main-tier1 {
@@ -303,7 +303,7 @@ border-left-color: #111111;
 }
 
 .arrow_box {
-  position:relative;  
+  position:absolute;  
   height:10px; 
   width:10px;
   top: 60px;
@@ -318,31 +318,31 @@ border-left-color: #111111;
 }
 
 .arrow_box.wallet {
-  left: 43.3%
+  left: 41%
 }
 
 .arrow_box.exchange {
-  left: 63%
-}
-
-.arrow_box.login.exchange {
-  left: 52.4%
-}
-
-.arrow_box.explorer {
-  left: 72%
-}
-
-.arrow_box.login.explorer {
   left: 61%
 }
 
+.arrow_box.login.exchange {
+  left: 51%
+}
+
+.arrow_box.explorer {
+  left: 70%
+}
+
+.arrow_box.login.explorer {
+  left: 79%
+}
+
 .arrow_box.about {
-  left: 79.3%
+  left: 81%
 }
 
 .arrow_box.login.about {
-  left: 69%
+  left: 67%
 }
 
 #wallet-navbar .navbar-nav {
