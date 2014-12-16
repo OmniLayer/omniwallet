@@ -405,6 +405,8 @@ def welcome_email(user_email, wallet, uuid):
     #msg.attach(wfile)
     smtp = smtplib.SMTP(config.SMTPDOMAIN, config.SMTPPORT)
     if config.SMTPUSER is not None and config.SMTPPASS is not None:
+      if config.SMTPSTARTTLS:
+        smtp.starttls()
       smtp.login(config.SMTPUSER, config.SMTPPASS)
     smtp.sendmail(email_from, user_email, msg.as_string())
     smtp.close()

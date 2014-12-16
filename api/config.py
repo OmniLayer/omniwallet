@@ -5,6 +5,7 @@ SMTPUSER = None   #If your smtp server requires authentication define it here
 SMTPPASS = None   #If your smtp server requires authentication define it here
 SMTPDOMAIN = 'localhost'  #smtp server to use for sending, default    'localhost'
 SMTPPORT = 25     #smtp port,  default 25
+SMTPSTARTTLS = False  # Use starttls before SMTP login
 
 #For wallets and session store you can switch between disk and the database
 LOCALDEVBYPASSDB = 0    #Set to 1 to use local storage/file system, Set to 0 to use database
