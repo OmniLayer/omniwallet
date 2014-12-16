@@ -267,6 +267,7 @@ function AccountSettingsController($modal, $injector, $scope, $http, Account) {
         Account.saveSession();
         $scope.saved = true;
         $scope.error = false;
+        Account.setCurrencySymbol($scope.selectedCurrency);
         var appraiser= $injector.get("appraiser");
         appraiser.updateValues();
       }
