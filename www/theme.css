@@ -2,18 +2,16 @@ html {
   position: relative;
   min-height: 100%;
 }
-body {
-  /* Margin bottom by footer height */
-  margin-bottom: 60px;
+
+/* Wrapper for page content to push down footer */
+#wrap {
+  min-height: 100%;
+  height: auto !important;
+  height: 100%;
+/* Negative indent footer by it's height */
+  margin-bottom: 30px;
 }
-#footer {
-  position: absolute;
-  bottom: 0;
-  width: 100%;
-  /* Set the fixed height of the footer here */
-  height: 100px;
-  background-color: #f5f5f5;
-}
+
 .brown{color:#9b846b}
 .green{color:#61B329}
 .info{background-color:#B0C4DE}
