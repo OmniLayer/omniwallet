@@ -2,7 +2,9 @@ html {
   position: relative;
   min-height: 100%;
 }
-
+body {
+  background-color: #eeeeee;
+}
 /* Wrapper for page content to push down footer */
 #wrap {
   min-height: 100%;
@@ -53,7 +55,7 @@ html {
   margin-left: 150px;
 }
 .main {
-  background-color: #eeeeee;
+  margin-top: 120px;
 }
 .arc path {
   stroke: #fff;
