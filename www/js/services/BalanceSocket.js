@@ -8,8 +8,9 @@ angular.module("omniServices")
 
 		self.disconnect = function(){
 			self.socket.disconnect();
+			self.socket=null;
 		}
-		
+
 		self.on = function(eventName,callback){
 			self.socket.on(eventName,callback);
 			// function(msg){

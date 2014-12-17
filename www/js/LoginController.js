@@ -29,17 +29,21 @@ function Login($injector, $scope, $http, $location, $modalInstance, $q, Account)
     $scope.badPassword = false;
     $scope.serverError = false;
 
-    Account.login(login.uuid,login.password).then(function(wallet){
-      if( $scope.login != undefined && $scope.login.action == 'verify' ) {
-        $modalInstance.close(wallet) //pass wallet as verification
-      } else {
-        $modalInstance.close()
-        $location.path('/wallet');
-      }
-    },function(error){
-      $scope.loginInProgress=false;
-      angular.extend($scope,error);
-    })
-        
+    if($scope.login.action == 'verify'){
+      Account.verify(login.uuid,login.password).then(function(){
+        $modalInstance.close(Account.wallet) //pass wallet as verification
+      },function(error){
+        $scope.loginInProgress=false;
+        angular.extend($scope,error);
+      });
+    } else {
+      Account.login(login.uuid,login.password).then(function(wallet){
+          $modalInstance.close()
+          $location.path('/wallet');
+      },function(error){
+	$scope.loginInProgress=false;
+        angular.extend($scope,error);
+      })
+    }   
   };
 }

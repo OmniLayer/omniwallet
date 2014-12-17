@@ -10,8 +10,10 @@ angular.module("omniFactories")
 				self.balance = [];
 
 				BalanceSocket.on("address:"+address, function(data){
-					self.balance = data.balance
-					$rootScope.$emit('BALANCE_CHANGED');
+					if(self.balance != data.balance){
+						self.balance = data.balance
+						$rootScope.$emit('BALANCE_CHANGED');
+					}
 				});
 
 				BalanceSocket.emit("address:add", {data:address});
