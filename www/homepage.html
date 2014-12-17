@@ -1,37 +1,33 @@
-<div class="container">
-  <div class="row">
-    <div class="col-xs-12">
-      <ul>
-        <li>{{ 'HOMEPAGE_WELCOME' | translate }}</li>
-        <li class="visible-xs-block">/* CREATE WALLET BUTTON */</li>
-        <li class="visible-xs-block">/* LOGIN BUTTON */</li>
-        <li class="visible-xs-block">{{ 'HOMEPAGE_BALANCECHECK' | translate }}</li>
-      </ul>
-    </div>
+<div ng-controller="HomeController">
+  <div class="row">{{ 'HOMEPAGE_WELCOME' | translate }}</div>
+  <div class="row visible-xs-block">/* CREATE WALLET BUTTON */</div>
+  <div class="row visible-xs-block">/* LOGIN BUTTON */</div>
+  <div class="row visible-xs-block">{{ 'HOMEPAGE_BALANCECHECK' | translate }}</div>
+  <div class="well hidden-xs">
+    <div class="row">{{ 'HOMEPAGE_BALANCECHECK' | translate }}</div>
+    <div class="row">{{ 'HOMEPAGE_ENTERVALIDADDRESS' | translate }}</div>
+    <div class="row">/* ADDRESS INPUT */</div>
+    <div class="row">/* BALANCE CHECK GREEN BUTTON */</div>
   </div>
-
-
-  <div class="row middle-box hidden-xs">
-    <div class="col-xs-12">
-      <ul>
-        <li>{{ 'HOMEPAGE_BALANCECHECK' | translate }}</li>
-        <li>{{ 'HOMEPAGE_ENTERVALIDADDRESS' | translate }}</li>
-        <li>/* ADDRESS INPUT */</li>
-        <li>/* BALANCE CHECK GREEN BUTTON */</li>
-      </ul>
-    </div>
-  </div>
-
   <div class="row hidden-xs">
     <div class="col-xs-6">
-      /* CREATE WALLET BOX */
+      <div class="col-xs-8">
+        /* CREATE WALLET TEXT */
+      </div>
+      <div class="col-xs-4">
+        /* CREATE WALLET BUTTON */
+      </div>
     </div>
     <div class="col-xs-6">
-      /* LOGIN BOX */
+      <div class="col-xs-8">
+        /* LOGIN TEXT */
+      </div>
+      <div class="col-xs-4">
+        /* LOGIN BUTTON */
+      </div>
     </div>
   </div>
 </div>
-
 
 
 
