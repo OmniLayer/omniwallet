@@ -83,5 +83,12 @@ angular.module("omniControllers")
       };
 
       $scope.account = Account;
+
+      $scope.$on('$locationChangeSuccess', function(path) {
+        if(path=="/wallet"){
+          $scope.section='wallet';
+          $scope.subsection='overview';
+        }
+      });
     }
     ])
