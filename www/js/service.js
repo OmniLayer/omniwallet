@@ -429,7 +429,7 @@ angular.module('omniwallet').factory('appraiser', ['$rootScope', '$http', '$q', 
       var requests = [];
       var coins = this.wallet.assets;
       cursym = self.Account.getSetting("usercurrency");
-
+      var changed = false;
       coins.forEach(function(coin) {
         if (coin.symbol === 'BTC') {
           symbol="BTC"+cursym;
@@ -442,10 +442,10 @@ angular.module('omniwallet').factory('appraiser', ['$rootScope', '$http', '$q', 
           if (currency.symbol == 'BTC') {
             // Store these things internally as the value of a satoshi.
             self.conversions.BTC = currency.price / 100000000;
-            $rootScope.$emit('APPRAISER_VALUE_CHANGED', 'BTC');
+            changed = true
           } else {
             self.conversions[currency.symbol] = currency.price;
-            $rootScope.$emit('APPRAISER_VALUE_CHANGED', currency.symbol);
+            changed=true
           }
         }, function(error) {
           console.log(error);
@@ -453,6 +453,9 @@ angular.module('omniwallet').factory('appraiser', ['$rootScope', '$http', '$q', 
         );
       });
       $q.all(requests).then(function(responses) {
+        if (changed)
+          $rootScope.$emit('APPRAISER_VALUE_CHANGED')
+        
         if(callback)
           callback();
       });
