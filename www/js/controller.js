@@ -245,13 +245,17 @@ function AccountSettingsController($modal, $injector, $scope, $http, Account) {
   $http.get('/v1/values/currencylist').success(function(data) {
     $scope.currencylist = data;    
   }).error(function(){
-    $scope.currencylist = [["USD"]];
+    $scope.currencylist = [{'value':'USD','label':'United States Dollar'}];
   });
 
   $scope.selectedCurrency = Account.getSetting("usercurrency")
   $scope.filterdexdust = Account.getSetting("filterdexdust")
   $scope.donate = Account.getSetting("donate")
   $scope.showtesteco = Account.getSetting("showtesteco")
+
+  $scope.label=function (name, abv) {
+     return name+" ("+abv+")";
+  }
 
   $scope.save = function() {
       if ($scope.myForm.$error.email) {
@@ -314,7 +318,7 @@ function RevisionController($scope, $http, $modal) {
   };
 }
 
-function NavigationController($scope, $http, $modal, Account) {
+function NavigationController($scope, $http, $modal, Account, $location, $window) {
 
   $scope.getNavData = function() {
     console.log('init 0');
@@ -392,7 +396,7 @@ function NavigationController($scope, $http, $modal, Account) {
   };
 
   $scope.logout = function() {
-    Account.logout();
+    $window.location.href = $location.protocol() + "://" + $location.host();
     //window.location.reload(false);
   };
 
