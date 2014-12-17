@@ -256,13 +256,12 @@ angular.module("omniServices")
 
           switch (currency) {
 
-            case "USD":
             case "AUD":
             case "CAD":
             case "NZD":
             case "MXN":
             case "SGD":
-            default:
+            case "USD":
               csym = '$'
               break;
 
@@ -321,6 +320,10 @@ angular.module("omniServices")
 
             case "PLN":
               csym='zł'
+              break;
+
+            default:
+              csym = '&#164;'
               break;
           }
 
