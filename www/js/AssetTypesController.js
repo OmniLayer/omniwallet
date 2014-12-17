@@ -29,35 +29,36 @@ angular.module('omniwallet')
 
             Wallet.addresses.forEach(function(addr) {
               addr.balance.forEach(function(currencyItem) {
-               if ((parseInt(currencyItem.id,10) < 2147483648) && (parseInt(currencyItem.id,10) != 2) || showtesteco === 'true'){
-                if(currencyItem.divisible)
-                  var value=new Big(currencyItem.value).times(WHOLE_UNIT).valueOf();
-                if (!balances.hasOwnProperty(currencyItem.symbol)) {
-                  var asset = Wallet
-                  balances[currencyItem.symbol] = {
-                    "symbol": currencyItem.symbol,
-                    "id" : currencyItem.id,
-                    "balance": +value || +currencyItem.value,
-                    "value": appraiser.getValue(currencyItem.value, currencyItem.symbol, currencyItem.divisible),
-                  };
-                } else {
-                  balances[currencyItem.symbol].balance += +value || +currencyItem.value;
-                  balances[currencyItem.symbol].value += appraiser.getValue(currencyItem.value, currencyItem.symbol, currencyItem.divisible);
-                }
-                //console.log(balances);
-                if (currencyItem.symbol == 'BTC') {
-                  balances[currencyItem.symbol].name = "Bitcoin"
-                } else if (currencyItem.symbol == 'MSC') {
-                  balances[currencyItem.symbol].name = "Mastercoin"
-                } else if (currencyItem.symbol == 'TMSC') {
-                  balances[currencyItem.symbol].name = "Test Mastercoin"
-                } else {
-                  var spMatch = currencyItem.symbol.match(/^SP([0-9]+)$/);
+                if ((parseInt(currencyItem.id,10) < 2147483648) && (parseInt(currencyItem.id,10) != 2) || showtesteco === 'true'){
+                  if(currencyItem.divisible)
+                    var value=new Big(currencyItem.value).times(WHOLE_UNIT).valueOf();
+                  if (!balances.hasOwnProperty(currencyItem.symbol)) {
+                    var asset = Wallet
+                    balances[currencyItem.symbol] = {
+                      "symbol": currencyItem.symbol,
+                      "id" : currencyItem.id,
+                      "balance": +value || +currencyItem.value,
+                      "value": appraiser.getValue(currencyItem.value, currencyItem.symbol, currencyItem.divisible),
+                    };
+                  } else {
+                    balances[currencyItem.symbol].balance += +value || +currencyItem.value;
+                    balances[currencyItem.symbol].value += appraiser.getValue(currencyItem.value, currencyItem.symbol, currencyItem.divisible);
+                  }
+                  //console.log(balances);
+                  if (currencyItem.symbol == 'BTC') {
+                    balances[currencyItem.symbol].name = "Bitcoin"
+                  } else if (currencyItem.symbol == 'MSC') {
+                    balances[currencyItem.symbol].name = "Mastercoin"
+                  } else if (currencyItem.symbol == 'TMSC') {
+                    balances[currencyItem.symbol].name = "Test Mastercoin"
+                  } else {
+                    var spMatch = currencyItem.symbol.match(/^SP([0-9]+)$/);
 
-                  if (spMatch != null) {
-                    var asset = Wallet.getAsset(spMatch[1]);
-                    balances[currencyItem.symbol].name = asset.name
+                    if (spMatch != null) {
+                      var asset = Wallet.getAsset(spMatch[1]);
+                      balances[currencyItem.symbol].name = asset.name
 
+                    }
                   }
                 }
               });
