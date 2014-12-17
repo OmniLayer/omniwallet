@@ -271,6 +271,9 @@ angular.module("omniServices")
               break;
 
             case "CHF":
+              csym = 'CHF'
+              break;
+
             case "IDR":
               csym = 'Rp'
               break;

@@ -245,13 +245,17 @@ function AccountSettingsController($modal, $injector, $scope, $http, Account) {
   $http.get('/v1/values/currencylist').success(function(data) {
     $scope.currencylist = data;    
   }).error(function(){
-    $scope.currencylist = [["USD"]];
+    $scope.currencylist = [{'value':'USD','label':'United States Dollar'}];
   });
 
   $scope.selectedCurrency = Account.getSetting("usercurrency")
   $scope.filterdexdust = Account.getSetting("filterdexdust")
   $scope.donate = Account.getSetting("donate")
   $scope.showtesteco = Account.getSetting("showtesteco")
+
+  $scope.label=function (name, abv) {
+     return name+" ("+abv+")";
+  }
 
   $scope.save = function() {
       if ($scope.myForm.$error.email) {
