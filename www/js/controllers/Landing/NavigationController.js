@@ -85,7 +85,7 @@ angular.module("omniControllers")
       $scope.account = Account;
 
       $scope.$on('$locationChangeSuccess', function($event, path, from) {
-        if(/wallet$/.test(path)) {
+        if(/\/wallet$/.test(path)) {
           $scope.section='wallet';
           $scope.subsection='overview';
         }
