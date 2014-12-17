@@ -3,12 +3,17 @@
   <div class="row visible-xs-block center-block"><button type="button" class="btn" ng-click="openCreateModal()">{{ 'COMMON_CREATEWALLET' | translate }}</button></div>
   <div class="row visible-xs-block center-block"><button type="button" class="btn" ng-click="openLoginModal()">{{ 'COMMON_LOGIN' | translate }}</button></div>
   <div class="row visible-xs-block text-center"><a href="/" ng-click="Open a balance check modal (TBD)">{{ 'HOMEPAGE_BALANCECHECK' | translate }}</a></div>
+
   <div class="well hidden-xs">
-    <div class="row">{{ 'HOMEPAGE_BALANCECHECK' | translate }}</div>
-    <div class="row">{{ 'HOMEPAGE_ENTERVALIDADDRESS' | translate }}<small>{{ 'HOMEPAGE_ADDRESSEXAMPLE' | translate }}</small></div>
-    <div class="row">/* ADDRESS INPUT */</div>
-    <div class="row">/* BALANCE CHECK GREEN BUTTON */</div>
+    <form class="form-group" role="form" name="addressentry">
+      <label for="AddressInput">{{ 'HOMEPAGE_BALANCECHECK' | translate }}</label>
+      <span id="helpBlock" class="help-block">{{ 'HOMEPAGE_ENTERVALIDADDRESS' | translate }}</span><small>{{ 'HOMEPAGE_ADDRESSEXAMPLE' | translate }}</small>
+      <input type="text" class="form-control input-group" name="AddressInput" id="AddressInput" ng-model="balanceAddress" ng-change="hasBalances=false">
+      <span ng-show="validate(balanceAddress)" class="glyphicon glyphicon-ok green input-group-addon input-group"></span>
+      <button type="submit" ng-click="checkBalance();" ng-disabled="validate(balanceAddress) == false" class="btn pull-right">{{ 'HOMEPAGE_CHECKBALANCE' | translate }}</button>
+    </form>
   </div>
+
   <div class="row hidden-xs">
     <div class="col-xs-6">
       <div class="col-xs-8">
@@ -33,31 +38,6 @@
 
 
 
-
-
-
-
-
-
-<div class="row">
-  <div class="center-block col-xs-12">
-    <h3 class="text-center">{{ 'HOMEPAGE_BALANCECHECK' | translate }}</h3>
-  </div>
-  <form class="form-horizontal form-group" role="form" name="addressentry">
-    <div class="input-group col-xs-offset-2 col-xs-8">
-      <span ng-show="validate(balanceAddress)" class="glyphicon glyphicon-ok green input-group-addon input-group"></span>
-        <input type="text" class="form-control input-group" name="address" id="address" placeholder="{{ 'COMMON_ADDRESS' | translate }}" ng-model="balanceAddress" ng-change="hasBalances=false">
-      <span class="input-group-btn">
-        <input type="button" ng-click="checkBalance();" ng-disabled="validate(balanceAddress) == false" class="btn btn-primary" value="Click!" />
-      </span>
-    </div>
-    <div class="col-xs-offset-2">
-      <ul>
-        <li class="help-block"><small>{{ 'HOMEPAGE_ENTERVALIDADDRESS' | translate }}</small></li>
-      </ul>
-    </div>
-  </form>
-
     <div ng-if="hasBalances">
       <div class="asset-table">
         <div ng-repeat="currency in balances">
@@ -78,7 +58,7 @@
         </div>
       </div> 
     </div>
-  </div>
+
 <div class="container middle row">
   <div class="alert alert-custom alert-dismissable" ng-show="browser !== 'chrome'">
     <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>

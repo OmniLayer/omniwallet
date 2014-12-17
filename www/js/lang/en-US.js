@@ -9,6 +9,7 @@ angular.module("omniConfig")
 	HOMEPAGE_ALREADYHAVEWALLET: 'If you have an existing wallet, log in here.',
    	HOMEPAGE_BALANCECHECK:'Balance Check',
    	HOMEPAGE_BROWSERRECOMMENDATION: 'Omniwallet recommends the use of Chrome, since the wallet may not yet function perfectly on other browsers.',
+   	HOMEPAGE_CHECKBALANCE: 'Check Balance',
 	HOMEPAGE_ENTERVALIDADDRESS:'Enter a valid Bitcoin Address ',
    	HOMEPAGE_HAVEWALLET: 'Have a Wallet?',
 	HOMEPAGE_NEEDWALLET: 'Need a Wallet?',
