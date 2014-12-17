@@ -90,12 +90,12 @@ def getPropertyid(abv,protocol):
 
 @app.route('/currencylist')
 def currencylist():
-  ROWS=dbSelect("select distinct propertyname from smartproperties sp , exchangerates ex "
-                "where sp.protocol=ex.protocol1 and sp.protocol='Fiat' and ex.rate1for2 !=0")
+  ROWS=dbSelect("select distinct propertyname,issuer from smartproperties sp , exchangerates ex "
+                "where sp.protocol=ex.protocol1 and sp.protocol='Fiat' and ex.rate1for2 !=0 order by propertyname")
 
   retval=[]
   for x in ROWS:
-   retval.append(x[0])
+   retval.append({'value':x[0],'label':x[1]})
 
   return json.dumps(retval)    
 
