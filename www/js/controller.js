@@ -392,7 +392,7 @@ function NavigationController($scope, $http, $modal, Account, $location, $window
   };
 
   $scope.logout = function() {
-    $window.location.href = $location.protocol() + "://" $location.host();
+    $window.location.href = $location.protocol() + "://" + $location.host();
     //window.location.reload(false);
   };
 
