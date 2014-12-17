@@ -118,9 +118,6 @@ var app = angular.module('omniwallet', [
         ga('send', 'event', 'button', 'click', route.page);
         return view
       }
-    }).when('/', {
-      templateUrl: '/homepage.html',
-      controller: HomeCtrl
     }).when('/login/:uuid', {
       template: '<div ng-controller="HiddenLoginController" ng-init="open()"></div>',
       controller: HiddenLoginController
