@@ -1,4 +1,4 @@
-function CreateWalletController($scope, $location, $modalInstance, Account, AddressManager) {
+function CreateWalletController($scope, $location, $modalInstance, $idle, Account, AddressManager) {
   $scope.dismiss = $modalInstance.dismiss;
   
   $scope.createWallet = function(create) {
@@ -9,6 +9,7 @@ function CreateWalletController($scope, $location, $modalInstance, Account, Addr
       account.addAddress(address.hash,address.privkey).then(function(result){
         $modalInstance.close()
         $location.path('/wallet');
+        $idle.watch();
       });
     },function(error){
       angular.extend($scope,error);
