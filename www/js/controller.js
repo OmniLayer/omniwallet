@@ -318,7 +318,7 @@ function RevisionController($scope, $http, $modal) {
   };
 }
 
-function NavigationController($scope, $http, $modal, Account) {
+function NavigationController($scope, $http, $modal, Account, $location, $window) {
 
   $scope.getNavData = function() {
     console.log('init 0');
@@ -396,7 +396,7 @@ function NavigationController($scope, $http, $modal, Account) {
   };
 
   $scope.logout = function() {
-    Account.logout();
+    $window.location.href = $location.protocol() + "://" + $location.host();
     //window.location.reload(false);
   };
 

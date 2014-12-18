@@ -14,7 +14,10 @@ angular.module("omniServices")
 	        };
 
 	        self.destroy = function(){
+	        	self.addresses = [];
+	            self.assets = [];
 	        	BalanceSocket.disconnect();
+	        	
 	        }
 
 	        self._addAddress = function(raw){

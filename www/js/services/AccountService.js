@@ -94,12 +94,8 @@ angular.module("omniServices")
             return create.promise;
         }
 
-        self.login = function(uuid, passphrase) {
-            var login = $q.defer()
-            if (!self.loginInProgress) {
-            	self.loginInProgress = true;
-                self.uuid = uuid;
-                $http.get('/v1/user/wallet/challenge?uuid=' + uuid)
+        self.verify = function(uuid,passphrase){
+          return $http.get('/v1/user/wallet/challenge?uuid=' + uuid)
                     .then(function(result) {
                         var data = result.data;
                         var asyncCrypto = $q.defer();
@@ -129,7 +125,15 @@ angular.module("omniServices")
                                 uuid: self.uuid
                             }
                         });
-                    })
+                    });
+        }
+
+        self.login = function(uuid, passphrase) {
+            var login = $q.defer()
+            if (!self.loginInProgress) {
+            	self.loginInProgress = true;
+                self.uuid = uuid;
+                self.verify(uuid,passphrase)
                     .then(function(result) {
                         var data = result.data;
                         try {
