@@ -303,7 +303,7 @@ angular.module("omniServices")
               break;
 
             case "RUB":
-              csym = 'руб'
+              csym = '&#8381;'
               break;
 
             case "GBP":
