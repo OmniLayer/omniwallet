@@ -1,4 +1,4 @@
-function WalletBuyAssetsController($modal, $scope, $http, $q, Wallet, walletTransactionService) {
+function WalletBuyAssetsController($modal, $scope, $http, $q, Wallet, walletTransactionService, Account) {
     // [ Template Initialization ]
     
   $scope.currencyList.forEach(function(e, i) {
@@ -50,7 +50,8 @@ function WalletBuyAssetsController($modal, $scope, $http, $q, Wallet, walletTran
         pubKey: pubKey,
         amount: buyAmount,
         fee: fee,
-        tx_hash: saleTransactionHash
+        tx_hash: saleTransactionHash,
+        donate: Account.getSetting("donate")
       }).success(function(data) {
         return deferred.resolve(data);
       }).error(function(data) {

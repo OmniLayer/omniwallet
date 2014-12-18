@@ -1,4 +1,4 @@
-function PropertyIssuanceController($scope, propertiesService, $timeout, $injector, $modal){
+function PropertyIssuanceController($scope, propertiesService, $timeout, $injector, $modal, Account){
   $scope.walletAssets=$scope.$parent.$parent;
   $scope.walletAssets.currencyList.forEach(function(e, i) {
     if (e.symbol == "BTC")
@@ -127,7 +127,8 @@ function PropertyIssuanceController($scope, propertiesService, $timeout, $inject
         number_properties: $scope.isDivisible() ? +$scope.convertDisplayedValue($scope.numberProperties) : +$scope.numberProperties,
         transaction_from: $scope.selectedAddress,
         fee: $scope.convertDisplayedValue($scope.minerFees),
-        testnet: (TESTNET || false)
+        testnet: (TESTNET || false),
+        donate: Account.getSetting("donate")
       }
     };
   };

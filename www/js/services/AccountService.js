@@ -71,7 +71,8 @@ angular.module("omniServices")
                       self.validating=false;
                       Recaptcha.reload();
                       create.reject({
-                        invalidCaptcha : true
+                        invalidCaptcha : true,
+                        validating : false
                       })
                     }else {
                       self.validating=false;
@@ -93,12 +94,8 @@ angular.module("omniServices")
             return create.promise;
         }
 
-        self.login = function(uuid, passphrase) {
-            var login = $q.defer()
-            if (!self.loginInProgress) {
-            	self.loginInProgress = true;
-                self.uuid = uuid;
-                $http.get('/v1/user/wallet/challenge?uuid=' + uuid)
+        self.verify = function(uuid,passphrase){
+          return $http.get('/v1/user/wallet/challenge?uuid=' + uuid)
                     .then(function(result) {
                         var data = result.data;
                         var asyncCrypto = $q.defer();
@@ -128,7 +125,15 @@ angular.module("omniServices")
                                 uuid: self.uuid
                             }
                         });
-                    })
+                    });
+        }
+
+        self.login = function(uuid, passphrase) {
+            var login = $q.defer()
+            if (!self.loginInProgress) {
+            	self.loginInProgress = true;
+                self.uuid = uuid;
+                self.verify(uuid,passphrase)
                     .then(function(result) {
                         var data = result.data;
                         try {
@@ -140,6 +145,7 @@ angular.module("omniServices")
 
                             self.loggedIn = true;
                             self.loginInProgress = false;
+                            self.setCurrencySymbol(self.getSetting('usercurrency'));
                             login.resolve(wallet);
                         } catch (e) {
                         	self.loginInProgress = false;
@@ -187,7 +193,8 @@ angular.module("omniServices")
                     data: {
                       uuid: self.uuid,
                       wallet: encryptedWallet,
-                      signature: signature
+                      signature: signature,
+                      email: self.getSetting("email")
                     }
                   });
                 }).then(function(result) {
@@ -243,5 +250,158 @@ angular.module("omniServices")
               }
         };
 
+        self.setCurrencySymbol = function(currency){
+
+          csym = '$'
+
+          switch (currency) {
+
+            case "AUD":
+            case "CAD":
+            case "NZD":
+            case "MXN":
+            case "SGD":
+            case "USD":
+              csym = '$'
+              break;
+
+            case "EUR":
+              csym= '€'
+              break;
+
+            case "CHF":
+              csym = 'CHF'
+              break;
+
+            case "IDR":
+              csym = 'Rp'
+              break;
+
+            case "ILS":
+              csym = '₪'
+              break;
+
+            case "TRY":
+              csym = '&#8378;'
+              break;
+
+            case "NOK":
+            case "SEK":
+              csym = 'kr'
+              break;
+
+            case "BRL":
+              csym = 'R$'
+              break;
+
+            case "ZAR":
+              csym = 'R'
+              break;
+
+            case "HKD":
+              csym = 'HK$'
+              break;
+
+            case "RUB":
+              csym = 'руб'
+              break;
+
+            case "GBP":
+              csym = '£'
+              break;
+
+            case "RON":
+              csym = 'lei'
+              break;
+
+            case "CNY":
+              csym='¥'
+              break;
+
+            case "PLN":
+              csym='zł'
+              break;
+
+            default:
+              csym = '&#164;'
+              break;
+          }
+
+
+          numeral.language('en', {
+            delimiters: {
+              thousands: ',',
+              decimal: '.'
+            },
+            abbreviations: {
+              thousand: 'k',
+              million: 'm',
+              billion: 'b',
+              trillion: 't'
+            },
+            ordinal : function (number) {
+              return number === 1 ? 'er' : 'ème';
+            },
+            currency: {
+              symbol: csym
+            }
+          });
+        };
+
+        self.getSetting = function(name){
+
+            if (self.wallet.settings == undefined) {
+                settings = []
+            } else {
+                settings=self.wallet.settings
+            }
+            retval="";
+
+            switch (name) {
+
+            case "email":
+              if (self.wallet.email == undefined) {
+                retval = ""
+              } else {
+                retval = self.wallet.email
+              }
+              break;
+
+            case "donate":
+              if (settings['donate'] == undefined) {
+                retval = 'false'
+              } else {
+                retval = settings['donate']
+              }
+              break;
+
+            case "usercurrency":
+              if (settings['usercurrency'] == undefined) {
+                retval = "USD"
+              } else {
+                retval = settings['usercurrency']
+              }
+              break;
+
+            case "filterdexdust":
+              if (settings['filterdexdust'] == undefined) {
+                retval = 'true'
+              } else {
+                retval = settings['filterdexdust']
+              }
+              break;
+
+            case "showtesteco":
+              if (settings['showtesteco'] == undefined) {
+                retval = 'false'
+              } else {
+                retval = settings['showtesteco']
+              }
+              break;
+
+            }
+            //console.log(retval);
+            return retval;
+        }
       
     }]);

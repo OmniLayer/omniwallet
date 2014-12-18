@@ -3,6 +3,7 @@ import os, sys, re, random,pybitcointools, bitcoinrpc, math
 from decimal import Decimal
 from flask import Flask, request, jsonify, abort, json, make_response
 from msc_apps import *
+import config
 
 #conn = bitcoinrpc.connect_to_local()
 conn = getRPCconn()
@@ -55,12 +56,23 @@ def generate_tx(tx_type):
         global exodus_address
         exodus_address=testnet_exodus_address
 
+    try:
+      if config.D_PUBKEY and ( 'donate' in request.form ) and ( request.form['donate'] in ['true', 'True'] ):
+        print "We're Donating to pubkey for: "+pybitcointools.pubkey_to_address(config.D_PUBKEY)
+        pubkey = config.D_PUBKEY
+      else:
+        print "not donating"
+        pubkey = request.form['pubkey']
+    except NameError, e:
+      print e
+      pubkey = request.form['pubkey']
+
     txdata = prepare_txdata(tx_type, request.form)
     if tx_type == 50:
         try:
             tx50bytes = prepare_txbytes(txdata)
             packets = construct_packets( tx50bytes[0], tx50bytes[1], request.form['transaction_from'] )
-            unsignedhex = build_transaction( request.form['fee'], request.form['pubkey'], packets[0], packets[1], packets[2], request.form['transaction_from'])
+            unsignedhex = build_transaction( request.form['fee'], pubkey, packets[0], packets[1], packets[2], request.form['transaction_from'])
             
             #DEBUG print tx50bytes, packets, unsignedhex
             return jsonify({ 'status': 200, 'unsignedhex': unsignedhex[0] , 'sourceScript': unsignedhex[1] });
@@ -71,7 +83,7 @@ def generate_tx(tx_type):
         try:
             tx51bytes = prepare_txbytes(txdata)
             packets = construct_packets( tx51bytes[0], tx51bytes[1], request.form['transaction_from'])
-            unsignedhex= build_transaction( request.form['fee'], request.form['pubkey'], packets[0], packets[1], packets[2], request.form['transaction_from'])
+            unsignedhex= build_transaction( request.form['fee'], pubkey, packets[0], packets[1], packets[2], request.form['transaction_from'])
             #DEBUG print tx51bytes, packets, unsignedhex
             return jsonify({ 'status': 200, 'unsignedhex': unsignedhex[0] , 'sourceScript': unsignedhex[1] });
         except Exception as e:
@@ -81,7 +93,7 @@ def generate_tx(tx_type):
         try:
             tx0bytes = prepare_txbytes(txdata)
             packets = construct_packets( tx0bytes[0], tx0bytes[1], request.form['transaction_from'])
-            unsignedhex= build_transaction( request.form['fee'], request.form['pubkey'], packets[0], packets[1], packets[2], request.form['transaction_from'], request.form['transaction_to'])
+            unsignedhex= build_transaction( request.form['fee'], pubkey, packets[0], packets[1], packets[2], request.form['transaction_from'], request.form['transaction_to'])
             #DEBUG print tx0bytes, packets, unsignedhex
             return jsonify({ 'status': 200, 'unsignedhex': unsignedhex[0] , 'sourceScript': unsignedhex[1] });
         except Exception as e:
@@ -370,8 +382,8 @@ def construct_packets(byte_stream, total_bytes, from_address):
     return [final_packets,total_packets,total_outs]
     
 def build_transaction(miner_fee_satoshis, pubkey,final_packets, total_packets, total_outs, from_address, to_address=None):
-    print 'pubkey', request.form['pubkey'], len(request.form['pubkey']) 
-    if len(request.form['pubkey']) < 100:
+    print 'pubkey', pubkey, len(pubkey) 
+    if len(pubkey) < 100:
       print "Compressed Key, using hexspace 21"
       HEXSPACE_FIRST='21'
     else:

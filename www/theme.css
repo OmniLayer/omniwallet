@@ -9,7 +9,7 @@ html {
   height: auto !important;
   height: 100%;
 /* Negative indent footer by it's height */
-  margin-bottom: 0 auto -246px;
+  margin-bottom: 30px;
 }
 
 .brown{color:#9b846b}

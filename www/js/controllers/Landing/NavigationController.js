@@ -78,7 +78,7 @@ angular.module("omniControllers")
       };
 
       $scope.logout = function() {
-        Account.logout();
+        $window.location.href = $location.protocol() + "://" + $location.host();
         //window.location.reload(false);
       };
 
