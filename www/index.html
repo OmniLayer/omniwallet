@@ -64,6 +64,7 @@
     <script src="/js/services/PropertyManagerService.js"></script>
     <script src="/js/controllers/Wallet/OverviewController.js"></script>
     <script src="/js/controllers/Landing/NavigationController.js"></script>
+    <script src="/js/controllers/Landing/SiteController.js"></script>
     <script src="/js/directive.js"></script>
     <script src="/js/service.js"></script>
     <script src="/js/controller.js"></script>
@@ -97,22 +98,22 @@
     </script>
 
   </head>
-  <body>
-    <div class="container-fluid" ng-controller="Ctrl">
-        <div id="wrap">
-            <div class="header row">
-               <div ng-include="templates['header']"></div> 
-            </div>
-            <div class="container middle row">
-              <div class="panel panel-default">
-                <div class="panel-body" ng-view></div>
-              </div>
-            </div>
-            <div id="push"></div>
+  <body ng-controller="SiteController">
+    <div id="wrap">
+        <div class="header">
+           <div ng-include="'/header.html'"></div> 
         </div>
-        <div class="footer">
-            <div ng-include="templates['footer']"></div> 
+        <div class="main">
+            <div class="container">
+                <div class="panel panel-default">
+                    <div class="panel-body" ng-view></div>
+                </div>
+            </div>
         </div>
+        <div id="push"></div>
+    </div>
+    <div class="footer">
+        <div ng-include="'/footer.html'"></div> 
     </div>
   </body>
 </html>
