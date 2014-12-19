@@ -144,6 +144,7 @@ function WalletSendAssetsController($modal, $scope, $http, $q, walletTransaction
             $scope.btcValueChanged = true;
             $scope.newBtcAmount = parseFloat(new Big($scope.value/$scope.getBitcoinValue()).toFixed(8));
             $scope.newValue = parseFloat(new Big($scope.convertSatoshiToDisplayedValue($scope.sendAmount)*$scope.getBitcoinValue()).toFixed(3));
+            //$scope.newValue = numeral($scope.newValue).format("$0,0.00");
           }
     };      
     $scope.goBack = function(){
