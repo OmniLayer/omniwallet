@@ -372,6 +372,10 @@ border-left-color: #111111;
   max-height: 70px
 }
 
+.navbar-main .container{
+  position: relative;;
+}
+
 .navbar-main .navbar-brand {
   color: #97a9c4;
 }
@@ -534,31 +538,31 @@ border-left-color: #111111;
 }
 
 .arrow_box.wallet {
-  left: 56%
+  right: 480px;
 }
 
 .arrow_box.exchange {
-  left: 69.5%
+  right: 250px;
 }
 
 .arrow_box.login.exchange {
-  left: 62.5%
+  right: 371px;
 }
 
 .arrow_box.explorer {
-  left: 75.5%
+  right: 145px;
 }
 
 .arrow_box.login.explorer {
-  left: 68.5%
+  right: 270px;
 }
 
 .arrow_box.about {
-  left: 80.8%
+  right: 57px;
 }
 
 .arrow_box.login.about {
-  left: 73.8%
+  right: 180px
 }
 
 #wallet-navbar .navbar-nav {
