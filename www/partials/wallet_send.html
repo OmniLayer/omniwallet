@@ -1,13 +1,8 @@
-<div class="sidecar col-xs-2" ng-controller="SidecarController" ng-init=setView('wallet')>
-    <div ng-include="templates['sidecar']"></div>
-</div>
 <div ng-controller="WalletAssetsFormController" ng-init="bitcoinValue=getBitcoinValue()">
   <div ng-controller="TransactionGenerationController">
   <div class="col-xs-10" ng-controller="WalletSendAssetsController">
     <div class="row">
-     <div class="panel-default">
-       <div class="text-left panel-body om-title">Send</div>
-     </div>
+       <div class="text-left om-title">Send</div>
       <div ng-show="showErrors" class="alert alert-danger"> <strong> {{error}} </strong> </div> 
       <form name="sendForm" ng-submit="validateForm()">
       <div class="row">
