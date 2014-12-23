@@ -68,8 +68,8 @@
           <li ng-class="{active:subsection=='bookmarks'}"><a ng-click="subsection='bookmarks'" href="/explorer/bookmarks">{{'NAVIGATION_BOOKMARKS' | translate}}</a></li>
           <li ng-class="{active:subsection=='following'}"><a ng-click="subsection='following'" href="/explorer/following">{{'NAVIGATION_FOLLOWING' | translate}}</a></li>
           <li class="navbar-header">{{'NAVIGATION_ABOUT' | translate}}</li>
-          <li ng-class="{active:subsection=='omniwallet'}"><a ng-click="subsection='omniwallet'" href="/about/omniwallet">{{''NAVIGATION_ABOUT'OMNI' | translate}}</a></li>
-          <li ng-class="{active:subsection=='mastercoin'}"><a ng-click="subsection='mastercoin'" href="/about/mastercoin">{{'NAVIGATION_ABOUT'MSC | translate}}</a></li>
+          <li ng-class="{active:subsection=='omniwallet'}"><a ng-click="subsection='omniwallet'" href="/about/omniwallet">{{'NAVIGATION_ABOUTOMNI' | translate}}</a></li>
+          <li ng-class="{active:subsection=='mastercoin'}"><a ng-click="subsection='mastercoin'" href="/about/mastercoin">{{'NAVIGATION_ABOUTMSC' | translate}}</a></li>
           <li ng-class="{active:subsection=='faq'}"><a ng-click="subsection='faq'" href="/about/faq">{{'NAVIGATION_FAQ' | translate}}</a></li>
           <li ng-class="{active:subsection=='contact'}"><a ng-click="subsection='contact'" href="/about/contact">{{'NAVIGATION_CONTACT' | translate}}</a></li>
           <li ng-if="account.loggedIn" class="navbar-header">{{'NAVIGATION_ACCOUNT' | translate}}</li>
@@ -104,8 +104,8 @@
     </div>
     <div id="about-navbar" ng-if="section=='about'">
       <ul class="nav navbar-nav">
-        <li ng-class="{active:subsection=='omniwallet'}"><a ng-click="subsection='omniwallet'" href="/about/omniwallet">{{''NAVIGATION_ABOUT'OMNI' | translate}}</a></li>
-        <li ng-class="{active:subsection=='mastercoin'}"><a ng-click="subsection='mastercoin'" href="/about/mastercoin">{{'NAVIGATION_ABOUT'MSC | translate}}</a></li>
+        <li ng-class="{active:subsection=='omniwallet'}"><a ng-click="subsection='omniwallet'" href="/about/omniwallet">{{'NAVIGATION_ABOUTOMNI' | translate}}</a></li>
+        <li ng-class="{active:subsection=='mastercoin'}"><a ng-click="subsection='mastercoin'" href="/about/mastercoin">{{'NAVIGATION_ABOUTMSC' | translate}}</a></li>
         <li ng-class="{active:subsection=='faq'}"><a ng-click="subsection='faq'" href="/about/faq">{{'NAVIGATION_FAQ' | translate}}</a></li>
         <li ng-class="{active:subsection=='contact'}"><a ng-click="subsection='contact'" href="/about/contact">{{'NAVIGATION_CONTACT' | translate}}</a></li>
       </ul>
