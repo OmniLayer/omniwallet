@@ -46,7 +46,7 @@ body {
   font-size:26px;
   color:#999999;
 }
-.om-title {
+.om-subtitle {
   font-size:22px;
   color:#7a97c3;
 }
@@ -94,49 +94,49 @@ a:hover{
   color: #db7010;
 }
 
-.btn-primary {
+.btn-main {
   color: #ffffff;
   background-color: #7ed933;
   border-color: #7ed933;
 }
 
-.btn-primary:hover,
-.btn-primary:focus,
-.btn-primary:active,
-.btn-primary.active,
-.open .dropdown-toggle.btn-primary {
+.btn-main:hover,
+.btn-main:focus,
+.btn-main:active,
+.btn-main.active,
+.open .dropdown-toggle.btn-main {
   color: #ffffff;
   background-color: #6cc821;
   border-color: #6cc821;
 }
 
-.btn-primary:active,
-.btn-primary.active,
-.open .dropdown-toggle.btn-primary {
+.btn-main:active,
+.btn-main.active,
+.open .dropdown-toggle.btn-main {
   background-image: none;
 }
 
-.btn-primary.disabled,
-.btn-primary[disabled],
-fieldset[disabled] .btn-primary,
-.btn-primary.disabled:hover,
-.btn-primary[disabled]:hover,
-fieldset[disabled] .btn-primary:hover,
-.btn-primary.disabled:focus,
-.btn-primary[disabled]:focus,
-fieldset[disabled] .btn-primary:focus,
-.btn-primary.disabled:active,
-.btn-primary[disabled]:active,
-fieldset[disabled] .btn-primary:active,
-.btn-primary.disabled.active,
-.btn-primary[disabled].active,
-fieldset[disabled] .btn-primary.active {
+.btn-main.disabled,
+.btn-main[disabled],
+fieldset[disabled] .btn-main,
+.btn-main.disabled:hover,
+.btn-main[disabled]:hover,
+fieldset[disabled] .btn-main:hover,
+.btn-main.disabled:focus,
+.btn-main[disabled]:focus,
+fieldset[disabled] .btn-main:focus,
+.btn-main.disabled:active,
+.btn-main[disabled]:active,
+fieldset[disabled] .btn-main:active,
+.btn-main.disabled.active,
+.btn-main[disabled].active,
+fieldset[disabled] .btn-main.active {
   background-color: #eee;
   border-color: #e1e1e1;
   color: #bcbcbc;
 }
 
-.btn-primary .badge {
+.btn-main .badge {
   color: #7ed933;
   background-color: #fff;
 }
