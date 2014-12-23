@@ -12,7 +12,7 @@ angular.module("omniConfig")
 	NAVIGATION_ADDRESSES: 'My Addresses',
 	NAVIGATION_ASSETS: 'My Assets',
 	NAVIGATION_HISTORY: 'History',
-	NAVIGATON_EXCHANGE: 'Exchange',
+	NAVIGATION_EXCHANGE: 'Exchange',
 	NAVIGATION_EXPLORER:'Explorer',
 	NAVIGATION_ABOUT:'About',
 	NAVIGATION_ACCOUNT:'My Account',
