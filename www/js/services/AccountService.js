@@ -1,5 +1,5 @@
 angular.module("omniServices")
-    .service("Account", ["$http", "$q", "Address","Wallet", "appraiser", function AccountService($http, $q, Address, Wallet, appraiser) {
+    .service("Account", ["$http", "$q", "Address","Wallet", function AccountService($http, $q, Address, Wallet) {
         var self = this;
         self.settings = {};
 
@@ -80,8 +80,6 @@ angular.module("omniServices")
                       self.wallet = wallet;
                       Wallet.initialize(wallet);
 
-                      appraiser.start();
-
                       ga('send', 'event', 'button', 'click', 'Create Wallet');
                       self.loggedIn = true;
                       create.resolve(self);
@@ -146,7 +144,6 @@ angular.module("omniServices")
                             // update wallet service
                             Wallet.initialize(wallet);
 
-                            appraiser.start();
                             self.loggedIn = true;
                             self.loginInProgress = false;
                             self.setCurrencySymbol(self.getSetting('usercurrency'));
