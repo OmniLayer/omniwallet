@@ -1,12 +1,7 @@
-angular.module('omniServices').service('appraiser', ['$rootScope', '$http', '$q', 'Account',
- function($rootScope, $http, $q, Account) {
+angular.module('omniServices').service('appraiser', ['$rootScope', '$http', '$q', 'Wallet','Account',
+ function($rootScope, $http, $q, Wallet, Account) {
     var self = this;
     self.conversions = {};
-    self.assets=[]
-
-    self.addAsset = function(asset){
-      self.assets.push(asset);
-    }
 
     function UpdateLoop() {
       self.updateValues(function() {
@@ -17,7 +12,7 @@ angular.module('omniServices').service('appraiser', ['$rootScope', '$http', '$q'
   
     self.updateValues = function(callback) {
       var requests = [];
-      var coins = self.assets;
+      var coins = Wallet.assets;
       cursym = Account.getSetting("usercurrency");
       var changed = [];
       coins.forEach(function(coin) {
@@ -35,6 +30,7 @@ angular.module('omniServices').service('appraiser', ['$rootScope', '$http', '$q'
           } else {
             self.conversions[currency.symbol] = currency.price;
           }
+          coin.price = self.getValue(coin.balance,coin.symbol,coin.divisible)
           changed.push(currency.symbol)
         }, function(error) {
           console.log(error);

@@ -1,8 +1,8 @@
 angular.module("omniFactories")
-	.factory("Asset", ["PropertyManager","$rootScope","appraiser",function AssetsModelFactory(PropertyManager,$rootScope,appraiser){
+	.factory("Asset", ["PropertyManager","$rootScope","$injector",function AssetsModelFactory(PropertyManager,$rootScope,$injector){
 		var Asset = function(symbol, balance,tradable,address){
 			var self = this;
-
+			var appraiser = $injector.get('appraiser');
 			self.initialize = function(){
                 self.symbol = symbol;
                 self.balance = balance;
@@ -26,12 +26,6 @@ angular.module("omniFactories")
                   self.price = appraiser.getValue(self.balance, self.symbol, self.divisible);
                 });
 
-                $rootScope.$on("APPRAISER_VALUE_CHANGED", function(evt,changed){
-                	if(changed.indexOf(self.symbol) > -1) {
-                		self.price = appraiser.getValue(self.balance, self.symbol, self.divisible);
-                	}
-                })
-
                 $rootScope.$on("BALANCE_CHANGED",function(evt,changed,values){
                 	var index = changed.indexOf(self.symbol);
                 	if(index>-1){
@@ -40,7 +34,6 @@ angular.module("omniFactories")
                 	}
                 })
 
-                appraiser.addAsset(self);
 			}
 
 			self.initialize();
