@@ -1,4 +1,5 @@
-angular.module('omniServices').service('appraiser', ['$rootScope', '$http', '$q', 'Wallet' function($rootScope, $http, $q,  Wallet) {
+angular.module('omniServices').service('appraiser', ['$rootScope', '$http', '$q', 'Wallet',
+ function($rootScope, $http, $q,  Wallet) {
     var self = this;
     self.conversions = {};
 
