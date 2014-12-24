@@ -3,7 +3,7 @@ angular.module('omniServices')
     var self = this;
     
     self.getProperty =function(propertyId){
-      return $http.get('/v1/property/' + propertyId + '.json')
+      return $http.get('/v1/properties/getdata/' + propertyId )
     }
     
     self.listProperties=function(ecosystem) {
@@ -33,5 +33,4 @@ angular.module('omniServices')
       var promise = $http.post(url, data);
       return promise;
     }
-    
 }]);

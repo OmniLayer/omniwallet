@@ -1,11 +1,11 @@
 angular.module("omniFactories")
-	.factory("Asset", ["PropertyManager",function AssetsModelFactory(PropertyManager){
-		var Asset = function(symbol,divisible,tradable,address){
+	.factory("Asset", ["PropertyManager","$rootScope","appraiser",function AssetsModelFactory(PropertyManager,$rootScope,appraiser){
+		var Asset = function(symbol, balance,tradable,address){
 			var self = this;
 
 			self.initialize = function(){
                 self.symbol = symbol;
-                self.divisible = divisible;
+                self.balance = balance;
                 self.tradableAddresses = tradable ? [address] : [];
                 self.watchAddresses = !tradable ? [address] : [];
                 self.addresses = function(){ 
@@ -15,15 +15,30 @@ angular.module("omniFactories")
 
 				if(symbol.substring(0, 2) == "SP"){
                 	self.id = symbol.substring(2);
-	                PropertyManager.getProperty(self.id).then(function(result) {
-	                  var property = result.data[0];
-	                  self.name = property.propertyName;
-	                  self.property_type = property.formatted_property_type;
-	                });
                 } else {
                 	self.id = symbol == "BTC" ? 0 : symbol == "MSC" ? 1 : symbol == "TMSC" ? 2 : null;
-                	self.name = symbol;
+                	self.divisible=true;
                 }
+
+                PropertyManager.getProperty(self.id).then(function(result) {
+                  var property = result.data[0];
+                  angular.extend(self,property);
+                  self.price = appraiser.getValue(self.balance, self.symbol, self.divisible);
+                });
+
+                $rootScope.$on("APPRAISER_VALUE_CHANGED", function(evt,changed){
+                	if(changed.indexOf(self.symbol) > -1) {
+                		self.price = appraiser.getValue(self.balance, self.symbol, self.divisible);
+                	}
+                })
+
+                $rootScope.$on("BALANCE_CHANGED",function(evt,changed,values){
+                	var index = changed.indexOf(self.symbol);
+                	if(index>-1){
+                		self.balance=values[index];
+                		self.price = appraiser.getValue(self.balance, self.symbol, self.divisible);
+                	}
+                })
 			}
 
 			self.initialize();
