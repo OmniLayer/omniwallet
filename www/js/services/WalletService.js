@@ -1,6 +1,6 @@
 angular.module("omniServices")
-	.service("Wallet",["Address", "Asset", "BalanceSocket","$injector",
-		function WalletService(Address, Asset, BalanceSocket,$injector){
+	.service("Wallet",["Address", "Asset", "BalanceSocket","appraiser",
+		function WalletService(Address, Asset, BalanceSocket,appraiser){
 			var self = this;
 
 			self.initialize =function(wallet){
@@ -11,6 +11,7 @@ angular.module("omniServices")
 	            wallet.addresses.forEach(function(raw){
 	                self._addAddress(raw);
 	            });
+	            appraiser.start();
 	        };
 
 	        self.destroy = function(){
@@ -41,14 +42,13 @@ angular.module("omniServices")
                           }
                         }
                         if (asset === null) {
-                            asset = new Asset(balanceItem.symbol, balanceItem.divisible, tradable, address)
+                            asset = new Asset(balanceItem.symbol,balanceItem.value, tradable, address)
                             
                             self.assets.push(asset);
                             update=true;
                         }
                     });
 					if(update){
-						var appraiser= $injector.get("appraiser")
 						appraiser.updateValues();
 					}
 						
@@ -108,7 +108,6 @@ angular.module("omniServices")
 			// }
 
 			// self.getBitcoinValue = function(){
-			//     var appraiser = $injector.get('appraiser');
 			//     return appraiser.getValue(100000000,"BTC");
 			// }
 			// self.setBitcoinValue = function(value){
