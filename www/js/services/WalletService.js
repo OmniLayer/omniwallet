@@ -11,7 +11,6 @@ angular.module("omniServices")
 	            wallet.addresses.forEach(function(raw){
 	                self._addAddress(raw);
 	            });
-	            appraiser.start();
 	        };
 
 	        self.destroy = function(){

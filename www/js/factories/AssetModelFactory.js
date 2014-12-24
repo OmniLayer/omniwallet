@@ -39,6 +39,8 @@ angular.module("omniFactories")
                 		self.price = appraiser.getValue(self.balance, self.symbol, self.divisible);
                 	}
                 })
+
+                appraiser.addAsset(self);
 			}
 
 			self.initialize();

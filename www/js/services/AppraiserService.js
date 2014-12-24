@@ -1,8 +1,13 @@
-angular.module('omniServices').service('appraiser', ['$rootScope', '$http', '$q', 'Wallet',
- function($rootScope, $http, $q,  Wallet) {
+angular.module('omniServices').service('appraiser', ['$rootScope', '$http', '$q', 
+ function($rootScope, $http, $q) {
     var self = this;
     self.conversions = {};
+    self.assets=[]
 
+    self.addAsset = function(asset){
+      self.assets.push(asset);
+    }
+    
     function UpdateLoop() {
       self.updateValues(function() {
         setTimeout(UpdateLoop, 300000);
@@ -12,7 +17,7 @@ angular.module('omniServices').service('appraiser', ['$rootScope', '$http', '$q'
   
     self.updateValues = function(callback) {
       var requests = [];
-      var coins = Wallet.assets;
+      var coins = self.assets;
       cursym = self.Account.getSetting("usercurrency");
       var changed = [];
       coins.forEach(function(coin) {
