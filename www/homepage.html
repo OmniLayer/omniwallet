@@ -5,25 +5,27 @@
   <div class="row visible-xs-block text-center"><a href="/" ng-click="Open a balance check modal (TBD)">{{ 'HOMEPAGE_BALANCECHECK' | translate }}</a></div>
   <div class="well hidden-xs">
     <div class="row">{{ 'HOMEPAGE_BALANCECHECK' | translate }}</div>
-    <div class="row">{{ 'HOMEPAGE_ENTERVALIDADDRESS' | translate }}</div>
+    <div class="row">{{ 'HOMEPAGE_ENTERVALIDADDRESS' | translate }}<small>{{ 'HOMEPAGE_ADDRESSEXAMPLE' | translate }}</small></div>
     <div class="row">/* ADDRESS INPUT */</div>
     <div class="row">/* BALANCE CHECK GREEN BUTTON */</div>
   </div>
   <div class="row hidden-xs">
     <div class="col-xs-6">
       <div class="col-xs-8">
-        /* CREATE WALLET TEXT */
+        <h1>{{ 'HOMEPAGE_NEEDWALLET' | translate }}</h1>
+        <p>{{ 'HOMEPAGE_SIGNUP' | translate }}</p>
       </div>
       <div class="col-xs-4">
-        /* CREATE WALLET BUTTON */
+        <button type="button" class="btn" ng-click="openCreateModal()">{{ 'COMMON_CREATEWALLET' | translate }}</button>
       </div>
     </div>
     <div class="col-xs-6">
       <div class="col-xs-8">
-        /* LOGIN TEXT */
+        <h1>{{ 'HOMEPAGE_HAVEWALLET' | translate }}</h1>
+        <p>{{ 'HOMEPAGE_ALREADYHAVEWALLET' | translate }}</p>
       </div>
       <div class="col-xs-4">
-        /* LOGIN BUTTON */
+        <button type="button" class="btn" ng-click="openLoginModal()">{{ 'COMMON_LOGIN' | translate }}</button>
       </div>
     </div>
   </div>
@@ -31,7 +33,6 @@
 
 
 
-<button type="button" class="btn btn-default">Default</button>
 
 
 
