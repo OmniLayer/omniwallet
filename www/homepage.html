@@ -8,35 +8,35 @@
     <form class="form-group" role="form" name="addressentry">
       <label for="AddressInput">{{ 'HOMEPAGE_BALANCECHECK' | translate }}</label>
       <span id="helpBlock" class="help-block">{{ 'HOMEPAGE_ENTERVALIDADDRESS' | translate }}<small>{{ 'HOMEPAGE_ADDRESSEXAMPLE' | translate }}</small></span>
-      <input type="text" class="form-control input-group" name="AddressInput" id="AddressInput" ng-model="balanceAddress" ng-change="hasBalances=false">
+      <input type="text" class="form-control input-group" name="AddressInput" id="AddressInput" ng-model="balanceAddress" ng-change="checkAddress=undefined">
       <span ng-show="validate(balanceAddress)" class="glyphicon glyphicon-ok green input-group-addon input-group"></span>
       <button type="submit" ng-click="checkBalance();" ng-disabled="validate(balanceAddress) == false" class="btn pull-right">{{ 'HOMEPAGE_CHECKBALANCE' | translate }}</button>
     </form>
   </div>
-    <div ng-if="hasBalances">
-      <div class="asset-table">
-        <div ng-repeat="currency in balances">
-          <row class="col-xs-offset-2 col-xs-10">
-            <div class="container-fluid">
-              <div class="asset-item col-xs-4 text-left">
-                <span>{{currency.name ? currency.name : currency.symbol}}</span>
-              </div>
-              <div class="asset-item col-xs-6 text-right number">
-                <span ng-if="currency.property_type != undefined && currency.property_type == 1" class="currency" class="number" title="{{currency.balance}}" ng-bind-html="currency.balance | numeraljs: '0,0'"></span>
-                <span ng-if="currency.property_type != undefined && currency.property_type == 2" class="currency" class="number" title="{{currency.balance}}" ng-bind-html="currency.balance | numeraljs: '0,0.00000000'"></span>
-                <span ng-if="currency.property_type == undefined" class="currency" title="{{currency.balance}}"><span ng-bind-html="currency.balance | numeraljs: '0,0.00000000'"></span> {{currency.symbol}}</span>
-              </div>
-              <div class="asset-item col-xs-2 text-right number" title="{{currency.value | currency}}" ng-bind-html="currency.value | currency | numeraljs: '$0,0.00':true">
-              </div>
+  <div ng-if="checkAddress">
+    <div class="asset-table">
+      <div ng-repeat="currency in checkAddress.balance">
+        <div class="row">
+          <div class="container-fluid">
+            <div class="asset-item col-xs-4 text-left">
+              <span>{{currency.name ? currency.name : currency.symbol}}</span>
             </div>
-          </row> 
-        </div>
-      </div> 
+            <div class="asset-item col-xs-6 text-right number">
+              <span ng-if="currency.property_type != undefined && currency.property_type == 1" class="currency" class="number" title="{{currency.balance}}" ng-bind-html="currency.balance | numeraljs: '0,0'"></span>
+              <span ng-if="currency.property_type != undefined && currency.property_type == 2" class="currency" class="number" title="{{currency.balance}}" ng-bind-html="currency.balance | numeraljs: '0,0.00000000'"></span>
+              <span ng-if="currency.property_type == undefined" class="currency" title="{{currency.balance}}"><span ng-bind-html="currency.balance | numeraljs: '0,0.00000000'"></span> {{currency.symbol}}</span>
+            </div>
+            <div class="asset-item col-xs-2 text-right number" title="{{currency.value | currency}}" ng-bind-html="currency.value | currency | numeraljs: '$0,0.00':true">
+            </div>
+          </div>
+        </div> 
+      </div>
+    </div> 
+  </div>
+  <div class="container middle row">
+    <div class="alert alert-custom alert-dismissable" ng-show="browser !== 'chrome'">
+      <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+      {{ 'HOMEPAGE_BROWSERRECOMMENDATION' | translate }}
     </div>
-
-<div class="container middle row">
-  <div class="alert alert-custom alert-dismissable" ng-show="browser !== 'chrome'">
-    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-    {{ 'HOMEPAGE_BROWSERRECOMMENDATION' | translate }}
   </div>
 </div>
