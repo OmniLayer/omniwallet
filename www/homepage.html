@@ -1,16 +1,16 @@
 <div ng-controller="HomeController">
-  <div class="row mobile-centered">{{ 'HOMEPAGE_WELCOME' | translate }}</div>
-  <div class="row visible-xs-block center-block"><button type="button" class="btn" ng-click="openCreateModal()">{{ 'COMMON_CREATEWALLET' | translate }}</button></div>
-  <div class="row visible-xs-block center-block"><button type="button" class="btn" ng-click="openLoginModal()">{{ 'COMMON_LOGIN' | translate }}</button></div>
+  <div class="row mobile-centered om-title">{{ 'HOMEPAGE_WELCOME' | translate }}</div>
+  <div class="row visible-xs-block center-block"><button type="button" class="btn btn-secondary" ng-click="openCreateModal()">{{ 'COMMON_CREATEWALLET' | translate }}</button></div>
+  <div class="row visible-xs-block center-block"><button type="button" class="btn btn-main" ng-click="openLoginModal()">{{ 'COMMON_LOGIN' | translate }}</button></div>
   <div class="row visible-xs-block text-center"><a href="/" ng-click="openBalanceCheckModal()">{{ 'HOMEPAGE_BALANCECHECK' | translate }}</a></div>
 
   <div class="well hidden-xs">
     <form class="form-group" role="form" name="addressentry">
-      <label for="AddressInput">{{ 'HOMEPAGE_BALANCECHECK' | translate }}</label>
+      <label for="AddressInput" class="om-subtitle">{{ 'HOMEPAGE_BALANCECHECK' | translate }}</label>
       <span id="helpBlock" class="help-block">{{ 'HOMEPAGE_ENTERVALIDADDRESS' | translate }}<small>{{ 'HOMEPAGE_ADDRESSEXAMPLE' | translate }}</small></span>
       <input type="text" class="form-control input-group" name="AddressInput" id="AddressInput" ng-model="balanceAddress" ng-change="checkAddress=undefined">
       <span ng-show="validate(balanceAddress)" class="glyphicon glyphicon-ok green input-group-addon input-group"></span>
-      <button type="submit" ng-click="checkBalance();" ng-disabled="validate(balanceAddress) == false" class="btn pull-right">{{ 'HOMEPAGE_CHECKBALANCE' | translate }}</button>
+      <button type="submit" ng-click="checkBalance();" ng-disabled="validate(balanceAddress) == false" class="btn btn-main pull-right">{{ 'HOMEPAGE_CHECKBALANCE' | translate }}</button>
     </form>
   </div>
   <div ng-if="checkAddress">
