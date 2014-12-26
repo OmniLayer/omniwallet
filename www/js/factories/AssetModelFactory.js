@@ -23,14 +23,14 @@ angular.module("omniFactories")
                 PropertyManager.getProperty(self.id).then(function(result) {
                   var property = result.data[0];
                   angular.extend(self,property);
-                  self.price = appraiser.getValue(self.balance, self.symbol, self.divisible);
+                  self.value = appraiser.getValue(self.balance, self.symbol, self.divisible);
                 });
 
                 $rootScope.$on("BALANCE_CHANGED",function(evt,changed,values){
                 	var index = changed.indexOf(self.symbol);
                 	if(index>-1){
                 		self.balance=values[index];
-                		self.price = appraiser.getValue(self.balance, self.symbol, self.divisible);
+                		self.value = appraiser.getValue(self.balance, self.symbol, self.divisible);
                 	}
                 })
 

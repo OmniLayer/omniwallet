@@ -33,5 +33,6 @@ angular.module("omniConfig")
 	WALLET_OVERVIEW_TITLE:'Overview',
 	WALLET_OVERVIEW_OPTIONS:'Wallet Options',
 	WALLET_OVERVIEW_OPTIONSTOGGLE:'Toggle Options',
+	WALLET_OVERVIEW_PORTFOLIO:'Portfolio Composition by value',
 	WALLET_OVERVIEW_WALLETID:'Wallet ID'
   })

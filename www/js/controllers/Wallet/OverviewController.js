@@ -5,28 +5,33 @@ angular.module("omniControllers")
       $scope.loginLink = $location.protocol() + "://" + $location.host() + "/login/" + $scope.uuid;
       //console.log(Wallet.addresses);
       $scope.firstLogin = Account.firstLogin;
-      // HACK: We check for Account.isLoggedIn since this controller is used when not logged in
-      $scope.addrList = [];
-      $scope.addrListBal = [];
-      $scope.maxCurrencies = [];
-      $scope.totals = {};
+      $scope.CSYM=Account.getSetting("usercurrency");
+      $scope.total=0;
+      $scope.chartConfig = {
+        tooltips: true,
+        mouseover: function() {},
+        mouseout: function() {},
+        click: function() {}
+      };
 
-      $scope.addrList =  Wallet.addresses.map(function(e, i, a) {
-        return e.address;
+      $scope.balanceData = {
+        data: []
+      };
+
+      Wallet.assets.forEach(function(asset) {
+        total += +asset.value;
+
+        var add = true;
+        $scope.balanceData.data.forEach(function(data){
+          if(data.x==asset.symbol){
+            data.y = [asset.value];
+            add = false;
+          }
+        })
+        if(add)
+          $scope.balanceData.data.push({x:asset.symbol,y:[asset.value],tooltip:asset.symbol})
       });
 
-      Wallet.addresses.forEach(function(address, index) {
-        if (address.balance.length > 0)
-          $scope.maxCurrencies = address.balance;
-
-        for (var i = 0; i < address.balance.length; i++) {
-          var symbolTotal = $scope.totals[address.balance[i].symbol];
-          //          console.log(symbolTotal, address.balance[i].symbol)
-          if (!symbolTotal)
-            $scope.totals[address.balance[i].symbol] = 0;
-          $scope.totals[address.balance[i].symbol] += +address.balance[i].value;
-        }
-      });
       $scope.disclaimerSeen = Account.settings.disclaimerSeen;
       $scope.$on('$locationChangeSuccess', function(path) {
         Account.settings.disclaimerSeen = true;
