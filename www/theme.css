@@ -989,7 +989,8 @@ span#recaptcha_privacy {
 }
 
 @media (max-width: 768px){
-  .mobile-centered
-    { text-align: center; }
-  }
+  .mobile-centered{
+     text-align: center; 
+     }
+   }
 

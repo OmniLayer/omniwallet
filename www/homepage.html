@@ -7,7 +7,7 @@
   <div class="well hidden-xs">
     <form class="form-group" role="form" name="addressentry">
       <label for="AddressInput">{{ 'HOMEPAGE_BALANCECHECK' | translate }}</label>
-      <span id="helpBlock" class="help-block">{{ 'HOMEPAGE_ENTERVALIDADDRESS' | translate }}</span><small>{{ 'HOMEPAGE_ADDRESSEXAMPLE' | translate }}</small>
+      <span id="helpBlock" class="help-block">{{ 'HOMEPAGE_ENTERVALIDADDRESS' | translate }}<small>{{ 'HOMEPAGE_ADDRESSEXAMPLE' | translate }}</small></span>
       <input type="text" class="form-control input-group" name="AddressInput" id="AddressInput" ng-model="balanceAddress" ng-change="hasBalances=false">
       <span ng-show="validate(balanceAddress)" class="glyphicon glyphicon-ok green input-group-addon input-group"></span>
       <button type="submit" ng-click="checkBalance();" ng-disabled="validate(balanceAddress) == false" class="btn pull-right">{{ 'HOMEPAGE_CHECKBALANCE' | translate }}</button>
