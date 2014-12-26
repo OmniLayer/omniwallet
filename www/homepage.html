@@ -1,8 +1,8 @@
-<div ng-controller="HomeController">
-  <div class="row">{{ 'HOMEPAGE_WELCOME' | translate }}</div>
-  <div class="row visible-xs-block">/* CREATE WALLET BUTTON */</div>
-  <div class="row visible-xs-block">/* LOGIN BUTTON */</div>
-  <div class="row visible-xs-block">{{ 'HOMEPAGE_BALANCECHECK' | translate }}</div>
+<div ng-controller="HomeController NavigationController">
+  <div class="row mobile-centered">{{ 'HOMEPAGE_WELCOME' | translate }}</div>
+  <div class="row visible-xs-block center-block"><button type="button" class="btn" ng-click="openCreateModal()">{{ 'COMMON_CREATEWALLET' | translate }}</button></div>
+  <div class="row visible-xs-block center-block"><button type="button" class="btn" ng-click="openLoginModal()">{{ 'COMMON_LOGIN' | translate }}</button></div>
+  <div class="row visible-xs-block text-center"><a href="/" ng-click="Open a balance check modal (TBD)">{{ 'HOMEPAGE_BALANCECHECK' | translate }}</a></div>
   <div class="well hidden-xs">
     <div class="row">{{ 'HOMEPAGE_BALANCECHECK' | translate }}</div>
     <div class="row">{{ 'HOMEPAGE_ENTERVALIDADDRESS' | translate }}</div>
@@ -31,7 +31,7 @@
 
 
 
-
+<button type="button" class="btn btn-default">Default</button>
 
 
 

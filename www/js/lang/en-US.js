@@ -3,12 +3,13 @@ angular.module("omniConfig")
 	COMMON_ADDRESS: 'Address',
 	COMMON_OVERVIEW: 'Overview',
    	COMMON_SEND: 'Send',
-   	HOMEPAGE_WELCOME: 'Welcome to Omniwallet'
+	COMMON_CREATEWALLET: 'Create Wallet',
+	COMMON_LOGIN: 'Login',
    	HOMEPAGE_BALANCECHECK:'Balance Check',
+   	HOMEPAGE_BROWSERRECOMMENDATION: 'Omniwallet recommends the use of Chrome, since the wallet may not yet function perfectly on other browsers.',
 	HOMEPAGE_ENTERVALIDADDRESS:'Enter a valid Bitcoin Address (e.g. 1EXoDusjGwvnjZUyKkxZ4UHEf77z6A5S4P)',
-	HOMEPAGE_BROWSERRECOMMENDATION: 'Omniwallet recommends the use of Chrome, since the wallet may not yet function perfectly on other browsers.'
+   	HOMEPAGE_WELCOME: 'Welcome to Omniwallet'
 	NAVIGATION_CREATE: 'Create Wallet',
-	NAVIGATION_LOGIN: 'Login',
 	NAVIGATION_WALLET: 'My Wallet',
 	NAVIGATION_ADDRESSES: 'My Addresses',
 	NAVIGATION_ASSETS: 'My Assets',
