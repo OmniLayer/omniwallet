@@ -19,8 +19,9 @@ angular.module("omniControllers")
       };
 
       function refresh(){
+        $scope.total = 0;
         Wallet.assets.forEach(function(asset) {
-          total += +asset.value;
+          $scope.total += +asset.value;
 
           var add = true;
           $scope.balanceData.data.forEach(function(data){
@@ -30,7 +31,7 @@ angular.module("omniControllers")
             }
           })
           if(add)
-            $scope.balanceData.data.push({x:asset.symbol,y:[asset.value],tooltip:asset.symbol+": "})
+            $scope.balanceData.data.push({x:asset.symbol,y:[asset.value],tooltip:asset.symbol+": $"+asset.value.toFixed(2)})
         });
       }
 
