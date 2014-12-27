@@ -1,6 +1,6 @@
 angular.module("omniServices")
-    .service("ModalManager", ["$modal", "TransactionGenerator","TransactionManager",
-        function ModalManagerService($modal, TransactionGenerator, TransactionManager) {
+    .service("ModalManager", ["$modal", "TransactionGenerator","TransactionManager","Account",
+        function ModalManagerService($modal, TransactionGenerator, TransactionManager, Account) {
             var self = this;
 
             self.openConfirmationModal = function(modalConfig) {
@@ -128,26 +128,21 @@ angular.module("omniServices")
             };
 
             self.openBackupWalletModal = function() {
-              $scope.login = {
-                uuid: Account.uuid,
-                action: 'verify',
-                title: 'Verify Account',
-                button: 'Validate',
-                disable: true //disable UUID field in template
-              };
               var modalInstance = $modal.open({
                 templateUrl: '/partials/login_modal.html',
                 controller: LoginController,
-                scope: $scope
+                scope: {
+                    login:{
+                        uuid: Account.uuid,
+                        action: 'verify',
+                        title: 'Verify Account',
+                        button: 'Validate',
+                        disable: true //disable UUID field in template
+                    }
+                }
               });
           
               modalInstance.result.then(function(wallet) {
-                $scope.exportData = {
-                  backupName : wallet.uuid,
-                  exportPrivate : true,
-                  exportWatch : true
-                };
-                $scope.exportInProgress=false;
                 var exportModalInstance = $modal.open({
                   templateUrl: '/partials/export_wallet.html',
                   controller: function($scope, $modalInstance, wallet){
@@ -223,7 +218,15 @@ angular.module("omniServices")
                       $modalInstance.dismiss('close');
                     };
                   },
-                  scope: $scope,
+                  scope: {
+                    exportInProgress:false,
+                    exportData:{
+                      backupName : wallet.uuid,
+                      exportPrivate : true,
+                      exportWatch : true,
+                      exportOffline:true
+                    }
+                  },
                   resolve:{
                     wallet: function(){
                       return wallet;
@@ -240,7 +243,7 @@ angular.module("omniServices")
               });
               
               modalInstance.result.then(function(wallet){
-                $scope.refresh();
+                //$scope.refresh();
               });
             };
             
