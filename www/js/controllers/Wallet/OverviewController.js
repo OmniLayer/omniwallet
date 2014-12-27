@@ -34,7 +34,7 @@ angular.module("omniControllers")
             }
           })
           if(add)
-            balanceData.data.push({x:asset.symbol,y:[asset.value],tooltip:asset.symbol+": "+typeof(asset.value) == Number?"$"+asset.value.toFixed(2):asset.value})
+            balanceData.data.push({x:asset.symbol,y:[asset.value],tooltip:asset.symbol+": "+typeof(asset.value) == Number?"$"+asset.value.toFixed(2).toString():asset.value})
         });
 
         $scope.balanceData= balanceData;

@@ -67,7 +67,7 @@ h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6{
 .label-primary{
   padding: 15px;
   color: #fff;
-  background-color: #133959;
+  background-color: #6b81a3;
   border-radius: 5px 0px 0px 5px;
 }
 
@@ -82,7 +82,7 @@ h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6{
   color: #cbd8ed;
 }
 
-.row{
+.om-row{
   margin-bottom:20px;
 }
 .sidebar {
