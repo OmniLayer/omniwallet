@@ -39,7 +39,7 @@ angular.module('omniServices').service('appraiser', ['$rootScope', '$http', '$q'
       });
       $q.all(requests).then(function(responses) {
         if (changed.length>0)
-          $rootScope.$emit('APPRAISER_VALUE_CHANGED',changed)
+          $rootScope.$broadcast('APPRAISER_VALUE_CHANGED',changed)
         
         if(callback)
           callback();

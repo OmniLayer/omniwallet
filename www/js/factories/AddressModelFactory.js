@@ -12,7 +12,7 @@ angular.module("omniFactories")
 				BalanceSocket.on("address:"+address, function(data){
 					if(self.balance != data.balance){
 						self.balance = data.balance
-						$rootScope.$emit('BALANCE_CHANGED', data.balance.map(function(element){
+						$rootScope.$broadcast('BALANCE_CHANGED', data.balance.map(function(element){
 	                		return element.symbol;
 	                	}), data.balance.map(function(element){
 	                		return element.value;

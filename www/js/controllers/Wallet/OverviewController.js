@@ -18,22 +18,33 @@ angular.module("omniControllers")
         data: []
       };
 
-      Wallet.assets.forEach(function(asset) {
-        total += +asset.value;
+      function refresh(){
+        Wallet.assets.forEach(function(asset) {
+          total += +asset.value;
 
-        var add = true;
-        $scope.balanceData.data.forEach(function(data){
-          if(data.x==asset.symbol){
-            data.y = [asset.value];
-            add = false;
-          }
-        })
-        if(add)
-          $scope.balanceData.data.push({x:asset.symbol,y:[asset.value],tooltip:asset.symbol})
-      });
+          var add = true;
+          $scope.balanceData.data.forEach(function(data){
+            if(data.x==asset.symbol){
+              data.y = [asset.value];
+              add = false;
+            }
+          })
+          if(add)
+            $scope.balanceData.data.push({x:asset.symbol,y:[asset.value],tooltip:asset.symbol+": "})
+        });
+      }
 
       $scope.disclaimerSeen = Account.settings.disclaimerSeen;
       $scope.$on('$locationChangeSuccess', function(path) {
         Account.settings.disclaimerSeen = true;
-      });
+      })
+
+      $scope.$on("BALANCE_CHANGED",function(evt,changed,values){
+        refresh();
+      })
+      $scope.$on("APPRAISER_VALUE_CHANGED",function(evt,changed){
+        refresh();
+      })
+
+      refresh();
     }]);
