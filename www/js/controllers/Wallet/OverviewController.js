@@ -20,19 +20,24 @@ angular.module("omniControllers")
 
       function refresh(){
         $scope.total = 0;
+        var balanceData = {
+          data: []
+        };
         Wallet.assets.forEach(function(asset) {
           $scope.total += typeof(asset.value) == Number?+asset.value:0;
 
           var add = true;
-          $scope.balanceData.data.forEach(function(data){
+          balanceData.data.forEach(function(data){
             if(data.x==asset.symbol){
               data.y = [asset.value];
               add = false;
             }
           })
           if(add)
-            $scope.balanceData.data.push({x:asset.symbol,y:[asset.value],tooltip:asset.symbol+": "+typeof(asset.value) == Number?"$"+asset.value.toFixed(2):asset.value})
+            balanceData.data.push({x:asset.symbol,y:[asset.value],tooltip:asset.symbol+": "+typeof(asset.value) == Number?"$"+asset.value.toFixed(2):asset.value})
         });
+
+        $scope.balanceData= balanceData;
       }
 
       $scope.disclaimerSeen = Account.settings.disclaimerSeen;
