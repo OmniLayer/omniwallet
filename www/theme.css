@@ -36,6 +36,55 @@ h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6{
   width:489px;
 }
 
+@media (max-width: 767px) {
+  .chart {
+   width: 380px;
+   height: 380px;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  .chart {
+   width: 380px;
+   height: 380px;
+  }
+}
+
+@media (min-width: 992px) and (max-width: 1199px) {
+  .chart {
+   width: 380px;
+   height: 380px;
+  }
+}
+
+@media (min-width: 1200px) {
+  .chart {
+   width: 380px;
+   height: 380px;
+  }
+}
+
+.label-primary{
+  padding: 15px;
+  color: #fff;
+  background-color: #133959;
+  border-radius: 5px 0px 0px 5px;
+}
+
+.label-secondary{
+  padding: 15px;
+  color: #fff;
+  background-color: #90a6c7;
+  border-radius: 0px 5px 5px 0px;
+}
+
+.label-secondary .currency {
+  color: #cbd8ed;
+}
+
+.row{
+  margin-bottom:20px;
+}
 .sidebar {
   position: fixed;
   top: 51px;

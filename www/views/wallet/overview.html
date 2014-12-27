@@ -40,14 +40,14 @@
       <div class="row hidden-xs">
         <div class="col-sm-12 col-md-12">
           <span class="label-primary">{{ 'WALLET_OVERVIEW_ESTIMATED' | translate }} </span>
-          <span class="label-secondary" ng-bind-html="total | numeraljs: '$0,0.00':true"></span>
+          <span class="label-secondary"><span ng-bind-html="total | numeraljs: '$0,0.00':true"><span class="currency">({{CSYM}})</span></span>
         </div>
       </div>
       <div class="row">
         <div class="col-xs-12 col-sm-12 col-md-12">
           <div class="panel panel-default">
             <div class="panel-heading">
-              {{ 'WALLET_OVERVIEW_PORTFOLIO' | translate }} ({{CSYM}})
+              {{ 'WALLET_OVERVIEW_PORTFOLIO' | translate }} 
             </div>
             <div data-ac-chart="'pie'" 
                 data-ac-data="balanceData" 
