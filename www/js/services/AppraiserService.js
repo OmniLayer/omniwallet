@@ -30,7 +30,7 @@ angular.module('omniServices').service('appraiser', ['$rootScope', '$http', '$q'
           } else {
             self.conversions[currency.symbol] = currency.price;
           }
-          coin.price = self.getValue(coin.balance,coin.symbol,coin.divisible)
+          coin.value = self.getValue(coin.balance,coin.symbol,coin.divisible)
           changed.push(currency.symbol)
         }, function(error) {
           console.log(error);
