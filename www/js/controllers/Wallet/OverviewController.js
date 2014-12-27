@@ -1,6 +1,6 @@
 angular.module("omniControllers")
-  .controller("WalletOverviewController", ["$scope","Account","$location","Wallet",
-    function WalletOverviewController($scope,Account,$location,Wallet){
+  .controller("WalletOverviewController", ["$scope","Account","$location","Wallet","ModalManager",
+    function WalletOverviewController($scope,Account,$location,Wallet,ModalManager){
       $scope.uuid = Account.uuid;
       $scope.loginLink = $location.protocol() + "://" + $location.host() + "/login/" + $scope.uuid;
       //console.log(Wallet.addresses);
@@ -18,13 +18,21 @@ angular.module("omniControllers")
         data: []
       };
 
+      $scope.openBackupModal=function(){
+        ModalManager.openBackupWalletModal();
+      }
+
+      $scope.openImportModal=function(){
+        ModalManager.openImportWalletModal();
+      }
+
       function refresh(){
         $scope.total = 0;
         var balanceData = {
           data: []
         };
         Wallet.assets.forEach(function(asset) {
-          $scope.total += typeof(asset.value) == "number"?+asset.value:0;
+          $scope.total += (typeof(asset.value) == "number"?+asset.value:0);
 
           var add = true;
           balanceData.data.forEach(function(data){
@@ -34,7 +42,7 @@ angular.module("omniControllers")
             }
           })
           if(add)
-            balanceData.data.push({x:asset.symbol,y:[asset.value],tooltip:asset.symbol+": "+typeof(asset.value) == "number"?"$"+asset.value.toFixed(2).toString():asset.value})
+            balanceData.data.push({x:asset.symbol,y:[asset.value],tooltip:asset.symbol+": "+(typeof(asset.value) == "number"?"$"+asset.value.toFixed(2).toString():asset.value)})
         });
 
         $scope.balanceData= balanceData;
