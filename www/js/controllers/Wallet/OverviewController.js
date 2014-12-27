@@ -21,7 +21,7 @@ angular.module("omniControllers")
       function refresh(){
         $scope.total = 0;
         Wallet.assets.forEach(function(asset) {
-          $scope.total += +asset.value;
+          $scope.total += typeof(asset.value) == Number?+asset.value:0;
 
           var add = true;
           $scope.balanceData.data.forEach(function(data){

@@ -29,6 +29,7 @@ angular.module("omniConfig")
 	NAVIGATION_TRANSACTIONS:'Transactions',
 	NAVIGATION_WALLET: 'My Wallet',
 	WALLET_OVERVIEW_BACKUP:'Backup',
+	WALLET_OVERVIEW_ESTIMATED:'Estimated Total value',
 	WALLET_OVERVIEW_IMPORT:'Import',
 	WALLET_OVERVIEW_TITLE:'Overview',
 	WALLET_OVERVIEW_OPTIONS:'Wallet Options',
