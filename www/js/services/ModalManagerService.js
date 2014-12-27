@@ -3,6 +3,15 @@ angular.module("omniServices")
         function ModalManagerService($modal, TransactionGenerator, TransactionManager, Account) {
             var self = this;
 
+            function encodePrivateKey(key, passphrase) {
+  
+              //  Return encoded key.  Forget the passphrase forever.
+              var eckey = new Bitcoin.ECKey(key);
+              var enc = eckey.getEncryptedFormat(passphrase);
+          
+              return enc;
+            };
+            
             self.openConfirmationModal = function(modalConfig) {
                 self.modalInstance = $modal.open({
                     templateUrl: "/views/modals/base.html",
