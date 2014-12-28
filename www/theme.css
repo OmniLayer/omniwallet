@@ -813,6 +813,19 @@ form.form-search:before {
     width: 50%;*/
 }
 
+@media (max-width: 768px){
+  .mobile-centered{
+     text-align: center; 
+     }
+   }
+
+.main-container{
+  padding: 30px;
+}
+
+.homepage-welcome{
+  margin-left: 0px;
+}
 
 /*Definitions for footer*/
 #push, #footer {
@@ -987,10 +1000,3 @@ span#recaptcha_privacy {
     display: none;
 
 }
-
-@media (max-width: 768px){
-  .mobile-centered{
-     text-align: center; 
-     }
-   }
-
