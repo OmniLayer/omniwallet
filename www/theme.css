@@ -833,8 +833,22 @@ form.form-search:before {
   padding: 12px 25px 47px 25px;
 }
 
+.homepage-form-title{
+  font-weight: normal;
+}
+
 .CB-btn{
   margin-top: 7px;
+}
+
+.help-text{
+  margin-top: 7px;
+  color: #333333;
+  font-size: 16px;
+}
+
+.sm-help-text{
+  color: #aaaaaa
 }
 
 /*Definitions for footer*/

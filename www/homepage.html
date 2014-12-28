@@ -6,9 +6,9 @@
 
   <div class="hidden-xs homepage-form">
     <form class="form-group" role="form" name="addressentry">
-      <label for="AddressInput" class="om-subtitle">{{ 'HOMEPAGE_BALANCECHECK' | translate }}</label>
-      <span id="helpBlock" class="help-block">{{ 'HOMEPAGE_ENTERVALIDADDRESS' | translate }}<small>{{ 'HOMEPAGE_ADDRESSEXAMPLE' | translate }}</small></span>
-      <input type="text" class="form-control input-group input-white" name="AddressInput" id="AddressInput" ng-model="balanceAddress" ng-change="checkAddress=false">
+      <label for="AddressInput" class="om-subtitle homepage-form-title">{{ 'HOMEPAGE_BALANCECHECK' | translate }}</label>
+      <span id="helpBlock" class="help-block help-text">{{ 'HOMEPAGE_ENTERVALIDADDRESS' | translate }}<small class="sm-help-text">{{ 'HOMEPAGE_ADDRESSEXAMPLE' | translate }}</small></span>
+      <input type="text" class="form-control input-lg input-group input-white" name="AddressInput" id="AddressInput" ng-model="balanceAddress" ng-change="checkAddress=false">
       <button type="submit" ng-click="checkBalance();" ng-disabled="validate(balanceAddress) == false" class="btn btn-main pull-right CB-btn">{{ 'HOMEPAGE_CHECKBALANCE' | translate }}</button>
     </form>
   </div>
