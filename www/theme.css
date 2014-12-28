@@ -820,11 +820,21 @@ form.form-search:before {
    }
 
 .main-container{
-  padding: 30px;
+  padding: 15px;
 }
 
 .homepage-welcome{
   margin-left: 0px;
+}
+
+.homepage-form{
+  background-color: #f9f9f9;
+  border: 1px solid #eaeaea;
+  padding: 12px 25px 47px 25px;
+}
+
+.CB-btn{
+  margin-top: 7px;
 }
 
 /*Definitions for footer*/
