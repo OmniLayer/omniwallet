@@ -2,7 +2,7 @@
 	<div ng-if="asset.balance>0 || asset.symbol == 'BTC'" >
 		<div class="row">
 			<div class="col-xs-11">
-				<div class="col-xs-12 col-sm-6">{{asset.name}} ({{asset.id}})</div>
+				<div class="col-xs-12 col-sm-6">{{asset.name || asset.symbol}} ({{asset.id}})</div>
 				<div class="col-xs-6 col-sm-4">
 					<span ng-if="asset.divisible != undefined && !asset.divisible" class="currency" title="{{asset.balance}}" ng-bind-html="asset.balance | numeraljs: '0,0'"></span>
 	                <span ng-if="asset.divisible != undefined && asset.divisible" class="currency" title="{{asset.balance}}" ng-bind-html="asset.balance | numeraljs: '0,0.00000000'"></span>
@@ -10,7 +10,7 @@
 				</div>
 				<div class="col-xs-6 col-sm-2" title="{{asset.value}}" ng-bind-html="asset.value | numeraljs: '$0,0.00':true"></div>
 			</div>
-			<div class="col-xs-1"><div class="radio inline btn-collapse"><span></span><input type="radio" name="details" ng-model="asset.showDetails" checked=""><span></span></div></div>
+			<div class="col-xs-1"><div class="checkbox inline btn-collapse"><span></span><input type="checkbox" name="{{asset.symbol}}" ng-model="asset.showDetails" checked=""><span></span></div></div>
 		</div>
 		<div class="row" collapsed="asset.showDetails">
 			<table class="table">

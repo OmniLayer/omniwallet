@@ -117,15 +117,15 @@ h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6{
 }
 .btn-collapse span {
   position: absolute;
-  width: 37px;
-  height: 52px;
+  width: 23px;
+  height: 22px;
   background-image: url(/assets/img/icons/circle-arrow-down.png);
   background-repeat: no-repeat;
   background-color: transparent;
   border: 0pt none;
-  margin: 0px 6px;
+  margin: 0px;
 }
-.btn-collapse input[type="radio"] + span /*the span element that immediately follow the radio button */ {
+.btn-collapse input[type="checkbox"] + span /*the span element that immediately follow the checkbox button */ {
   visibility: hidden;
   background-image: url(/assets/img/icons/circle-arrow-up.png);
 }
