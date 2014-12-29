@@ -8,7 +8,8 @@ angular.module("omniFactories")
 				self.privkey = privkey;
 				self.pubkey = pubkey;
 				self.balance = [];
-
+				self.qr = "https://chart.googleapis.com/chart?chs=150x150&cht=qr&chl="+address+"&choe=UTF-8";
+				
 				BalanceSocket.on("address:"+address, function(data){
 					if(self.balance != data.balance){
 						self.balance = data.balance

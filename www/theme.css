@@ -109,6 +109,27 @@ h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6{
   font-size:22px;
   color:#7a97c3;
 }
+
+.btn-collapse input {
+  width: 23px;
+  height: 22px;
+  margin: 0px !important;
+}
+.btn-collapse span {
+  position: absolute;
+  width: 37px;
+  height: 52px;
+  background-image: url(/assets/img/icons/circle-arrow-down.png);
+  background-repeat: no-repeat;
+  background-color: transparent;
+  border: 0pt none;
+  margin: 0px 6px;
+}
+.btn-collapse input[type="radio"] + span /*the span element that immediately follow the radio button */ {
+  visibility: hidden;
+  background-image: url(/assets/img/icons/circle-arrow-up.png);
+}
+
 .missing-dex-alert{
   margin-top: 0px;
   margin-bottom: 0px;
