@@ -9,7 +9,7 @@ angular.module("omniFactories")
                 self.tradableAddresses = tradable ? [address] : [];
                 self.watchAddresses = !tradable ? [address] : [];
                 self.price = 0;
-                
+
                 self.addresses = function(){ 
                 	return self.tradableAddresses.concat(self.watchAddresses); 
                 };
@@ -29,13 +29,14 @@ angular.module("omniFactories")
                   self.divisible ? self.displayBalance = new Big(self.balance).times(WHOLE_UNIT).valueOf() : self.displayBalance = self.balance;
                 });
 
-                $rootScope.$on("BALANCE_CHANGED",function(evt,changed,values){
-                	var index = changed.indexOf(self.symbol);
-                	if(index>-1){
-                		self.balance=values[index];
-                        self.divisible ? self.displayBalance = new Big(self.balance).times(WHOLE_UNIT).valueOf() : self.displayBalance = self.balance;
-                		self.value = appraiser.getValue(self.balance, self.symbol, self.divisible);
-                	}
+                $rootScope.$on("BALANCE_CHANGED",function(evt){
+                    var total = 0;
+                    self.addresses().forEach(function(address){
+                        total += address.getBalance(self.id);
+                    });
+            		self.balance=total;
+                    self.divisible ? self.displayBalance = new Big(self.balance).times(WHOLE_UNIT).valueOf() : self.displayBalance = self.balance;
+            		self.value = appraiser.getValue(self.balance, self.symbol, self.divisible);
                 })
 
 			}
