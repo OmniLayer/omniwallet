@@ -2,8 +2,8 @@ angular.module("omniConfig")
 	.constant("EnglishTranslation",{
    	COMMON_ACTIONS: 'Actions',
 	COMMON_ADDRESS: 'Address',
-	COMMON_BALANCE: 'Broadcast Transaction',
-   	COMMON_BROADCAST: 'Balance',
+	COMMON_BALANCE: 'Balance',
+   	COMMON_BROADCAST: 'Broadcast Transaction',
    	COMMON_OVERVIEW: 'Overview',
    	COMMON_REMOVEADDRESS: 'Remove from Wallet',
    	COMMON_SEND: 'Send',

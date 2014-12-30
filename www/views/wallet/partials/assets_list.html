@@ -4,9 +4,9 @@
 			<div class="col-xs-11">
 				<div class="col-xs-12 col-sm-6">{{asset.name || asset.symbol}} ({{asset.id}})</div>
 				<div class="col-xs-6 col-sm-4">
-					<span ng-if="asset.divisible != undefined && !asset.divisible" class="currency" title="{{asset.balance}}" ng-bind-html="asset.balance | numeraljs: '0,0'"></span>
-	                <span ng-if="asset.divisible != undefined && asset.divisible" class="currency" title="{{asset.balance}}" ng-bind-html="asset.balance | numeraljs: '0,0.00000000'"></span>
-	                <span ng-if="asset.divisible == undefined" class="currency" title="{{asset.balance}}"><span ng-bind-html="asset.balance | numeraljs: '0,0.00000000'"></span></span>
+					<span ng-if="asset.divisible != undefined && !asset.divisible" class="currency" title="{{asset.displayBalance}}" ng-bind-html="asset.displayBalance | numeraljs: '0,0'"></span>
+	                <span ng-if="asset.divisible != undefined && asset.divisible" class="currency" title="{{asset.displayBalance}}" ng-bind-html="asset.displayBalance | numeraljs: '0,0.00000000'"></span>
+	                <span ng-if="asset.divisible == undefined" class="currency" title="{{asset.displayBalance}}"><span ng-bind-html="asset.displayBalance | numeraljs: '0,0.00000000'"></span></span>
 				</div>
 				<div class="col-xs-6 col-sm-2" title="{{asset.value}}" ng-bind-html="asset.value | numeraljs: '$0,0.00':true"></div>
 			</div>
@@ -41,9 +41,9 @@
 			            <td ng-hide="address.privkey != undefined || address.pubkey != undefined">
 			            	<img ng-src="{{address.qr}}" ng-show="showqr"><a href ng-click="showqr = !showqr">{{address.address}}</a>
 			            </td>
-			            <td ng-if="asset.divisible != undefined && !asset.divisible" class="currency number" title="{{address.getBalance(asset.id).balance}}" ng-bind-html="address.getBalance(asset.id).balance | numeraljs: '0,0'"></td>
-			            <td ng-if="asset.divisible != undefined && asset.divisible" class="currency number" title="{{address.getBalance(asset.id).balance}}" ng-bind-html="address.getBalance(asset.id).balance | numeraljs: '0,0.00000000'"></td>
-			            <td ng-if="asset.divisible == undefined" class="currency number" title="{{address.getBalance(asset.id).balance}}"><span ng-bind-html="address.getBalance(asset.id).balance | numeraljs: '0,0.00000000'"></span> {{currency.symbol}}</td>
+			            <td ng-if="asset.divisible != undefined && !asset.divisible" class="currency number" title="{{address.getBalance(asset.id)}}" ng-bind-html="address.getBalance(asset.id) | numeraljs: '0,0'"></td>
+			            <td ng-if="asset.divisible != undefined && asset.divisible" class="currency number" title="{{address.getBalance(asset.id)}}" ng-bind-html="address.getBalance(asset.id) | numeraljs: '0,0.00000000'"></td>
+			            <td ng-if="asset.divisible == undefined" class="currency number" title="{{address.getBalance(asset.id)}}"><span ng-bind-html="address.getBalance(asset.id) | numeraljs: '0,0.00000000'"></span> {{currency.symbol}}</td>
 			            <td class="currency number" title="{{address.value}}" ng-bind-html="address.value | numeraljs: '$0,0.00':true"></td>
 			            <td>
 			          		<div class="dropdown">
