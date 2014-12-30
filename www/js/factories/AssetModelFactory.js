@@ -21,7 +21,7 @@ angular.module("omniFactories")
                 }
 
                 PropertyManager.getProperty(self.id).then(function(result) {
-                  var property = result.data[0];
+                  var property = result.data;
                   angular.extend(self,property);
                   self.value = appraiser.getValue(self.balance, self.symbol, self.divisible);
                 });

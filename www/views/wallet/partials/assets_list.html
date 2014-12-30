@@ -1,5 +1,5 @@
 <div class="container-fluid" ng-repeat="asset in wallet.assets">
-	<div ng-if="asset.balance>0 || asset.symbol == 'BTC'" >
+	<div ng-if="asset.balance>0 || asset.symbol == 'BTC'" class="asset-details">
 		<div class="row">
 			<div class="col-xs-11">
 				<div class="col-xs-12 col-sm-6">{{asset.name || asset.symbol}} ({{asset.id}})</div>
@@ -18,8 +18,9 @@
 					<tr>
 						<th class="hide-xs"><i class="icon-l"></i></th>
 						<th>{{ 'COMMON_ADDRESS' | translate }}</th>
-						<th class="hide-xs"></th>
-						<th class="hide-xs"></th>
+						<th class="hide-xs">{{ 'COMMON_BALANCE' | translate }}</th>
+						<th class="hide-xs">{{ 'COMMON_VALUE' | translate }}</th>
+						<th></th>
 					</tr>
 				</thead>
 				<tbody>

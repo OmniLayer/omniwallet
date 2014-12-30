@@ -1,11 +1,13 @@
 angular.module("omniConfig")
 	.constant("EnglishTranslation",{
-	COMMON_ADDRESS: 'Address',
-	COMMON_OVERVIEW: 'Overview',
-   	COMMON_SEND: 'Send',
    	COMMON_ACTIONS: 'Actions',
+	COMMON_ADDRESS: 'Address',
+	COMMON_BALANCE: 'Broadcast Transaction',
+   	COMMON_BROADCAST: 'Balance',
+   	COMMON_OVERVIEW: 'Overview',
    	COMMON_REMOVEADDRESS: 'Remove from Wallet',
-   	COMMON_BROADCAST: 'Broadcast Transaction',
+   	COMMON_SEND: 'Send',
+   	COMMON_VALUE: 'Value',
    	HOMEPAGE_BALANCECHECK: 'Balance Check',
    	HOMEPAGE_BROWSERRECOMMENDATION: 'Omniwallet recommends the use of Chrome, since the wallet may not yet function perfectly on other browsers.',
 	HOMEPAGE_ENTERVALIDADDRESS: 'Enter a valid Bitcoin Address, e.g. 1EXoDusjGwvnjZUyKkxZ4UHEf77z6A5S4P',
