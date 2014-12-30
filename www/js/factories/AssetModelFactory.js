@@ -8,6 +8,8 @@ angular.module("omniFactories")
                 self.balance = balance;
                 self.tradableAddresses = tradable ? [address] : [];
                 self.watchAddresses = !tradable ? [address] : [];
+                self.price = 0;
+                
                 self.addresses = function(){ 
                 	return self.tradableAddresses.concat(self.watchAddresses); 
                 };
