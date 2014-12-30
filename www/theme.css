@@ -110,6 +110,27 @@ h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6{
   color:#7a97c3;
 }
 
+.collapse-toggle div {
+  min-height: 22px;
+  min-width: 23px;
+}
+
+.collapse-toggle input {
+  position: absolute;
+  margin: 0;
+/*hide the checkbox button*/
+  -moz-opacity: 0;
+  -khtml-opacity: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+.collapse-toggle input[type="checkbox"]:checked + span {
+  visibility: visible;
+}
+.collapse-toggle .checkbox input[type="checkbox"] {
+  margin-left: 0px;
+}
+
 .btn-collapse input {
   width: 23px;
   height: 22px;
@@ -1063,4 +1084,11 @@ span#recaptcha_privacy {
     /* hide the privacy policy link to google on recaptcha */
     display: none;
 
+}
+
+i.icon-l{
+  background-image: url("/assets/img/icons/L.png");
+  background-position: 0pt;
+  width: 9px;
+  height: 13px;
 }
