@@ -1,27 +1,60 @@
-<br />
-<br />
-<div id="footer" class="navbar navbar-default navbar-fixed-bottom panel-footer">
+<div id="footer" class="container navbar navbar-fixed-bottom">
   <div class="navbar-collapse collapse">
-    <div class="nav navbar-nav navbar-left col-md-5">
-      <div class="text-muted credit"><a href="http://www.mastercoin.org">&copy; Mastercoin Foundation 2014.</a></div>
-      <div class="text-muted credit">Omniwallet&#8482; is a cryptocurrency wallet for Mastercoin, which is a based on Bitcoin technology and is leading the way in the Bitcoin 2.0 revolution.</div>
-      <div><class="text-left"><a href="/about/omniwallet" class="text-danger">This Wallet is under development. Read More...</a></div>
-
+    <div class="row footer-top-row">
+      <div class="col-xs-3 col-xs-offset-1">
+        <ul class="nav nav-stacked">
+          <li class="footer-titles">More Info</li>
+          <li class="footer-content"><a href="/about">About Omniwallet</a></li>
+          <li class="footer-content" ng-hide="Account.loggedIn"><a href="#">Trouble Logging In?</a></li>
+          <li class="footer-content"><a href="#">Terms of Use</a></li>
+          <li class="footer-content"><a href="/about/faq">FAQ</a></li>
+        </ul>
+      </div>
+      <div class="col-xs-3">
+        <ul class="nav nav-stacked">
+          <li class="footer-titles">Spread the Word</li>
+          <li class="footer-content"><a href="#">Tell your friends and colleagues<br>how awesome Omniwallet is</a></li>
+        </ul>
+      </div>
+      <div class="col-xs-3">
+        <ul class="nav nav-stacked">
+          <li class="footer-titles">Feeling Chatty?</li>
+          <li class="footer-content"><a href="/about/contact"><img src="/assets/img/footer-icons/ask.png" class="icon-ask" width="21px" height="21px">Ask a question on our forums</a></li>
+          <li class="footer-email"><img src="/assets/img/footer-icons/email.png" class="icon-email" width="18px" height="12px">info@omniwallet.org</li>
+          <li class="footer-suggestions">We welcome your suggestions</li>
+        </ul>
+      </div>
+      <div class="col-xs-2">
+        <ul class="nav nav-stacked">
+          <li class="footer-titles">Follow Us</li>
+          <li class="footer-social"><a href="https://www.facebook.com/groups/523941304389744/"><i class="icon-facebook"></i>Facebook</a></li>
+          <li class="footer-social"><a href="https://twitter.com/omniwallet"><i class="icon-twitter"></i>Twitter</a></li>
+          <li class="footer-social"><a href="#"><i class="icon-google"></i>Google+</a></li>
+        </ul>
+      </div>
     </div>
-    <div class="col-md-2 col-md-offset-2 text-muted">
-      <b> Contact Us</b><br />
-      <small>
-           <a href="/about/contact" target="_new"> Github, Chat, Email, Forums</a> <br />
-           We welcome feedback.</small>
+    <div class="row footer-middle-row">
+      <div class="col-xs-5 col-xs-offset-1">
+        <ul class="nav navbar-nav">
+          <li class="footer-middle"><a href="/about/omniwallet"><img src="/assets/img/footer-icons/notif.png" class="icon-notif" width="21px" height="21px">Omniwallet is under ongoing development</a></li>
+          <li class="divider-vertical-small"></li>
+          <li class="footer-middle"><a href="#">Disclaimer</a></li>
+          <li class="divider-vertical-small"></li>
+          <li class="footer-middle"><a href="#">Terms of Use</a></li>
+        </ul>
+      </div>
+      <div class="col-xs-4 col-xs-offset-2">
+        <ul class="nav navbar-nav navbar-right">
+          <li class="footer-middle"><a href="#">Open Source Project</a></li>
+          <li class="divider-vertical-small"></li>
+          <li class="footer-middle footer-version"><a href="#">Version {{version}}</a></li>
+        </ul>
+      </div>
     </div>
-
-    <div class="container c-footer-container text-right">
-      <div class="text-muted text-center"><b>Follow us</b></div>
-      <ul class="nav navbar-nav navbar-right">
-        <li class="icons"><a href="https://www.facebook.com/groups/523941304389744/" target="_blank" class="facebook"></a></li>
-        <li class="icons"><a href="https://twitter.com/omniwallet" target="_blank" class="twitter"></a></li>
-        <li class="icons"><a href="http://www.reddit.com/r/omniwallet" target="_blank" class="reddit"></a></li>
-      </ul>
+    <div class="row footer-bottom-row">
+      <div class="col-xs-12 footer-bottom text-center">
+        © Copyright Mastercoin Fundation 2014. All rights reserved.
+      </div>
     </div>
   </div>
 </div>

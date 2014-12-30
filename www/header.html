@@ -1,31 +1,109 @@
-<div ng-controller="NavigationController" ng-init="getNavData();modalOpened=false">
-  <div class="navbar navbar-default navbar-fixed-top">
-
-<a class="navbar-brand" href="/"><img src="/assets/img/logo-beta.png" alt="mastercoin"></a>
-        <div class="navbar-header" ng-show="user.loggedIn">
-            <br /><div class="btn btn-default" ng-click="openUUIDmodal()">Wallet ID<br /><small>{{ user.wallet.uuid }}</small></div>
-        </div>
-
-      <div class="container">
-        <div class="navbar-header">
-            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            </button>
-        </div>
-        <div class="navbar-collapse collapse">
-            <ul class="nav navbar-nav navbar-right">
-              <li ng-hide="user.loggedIn"><a href="/" ng-click="openCreateModal()">Create Wallet</a></li>
-              <li ng-hide="user.loggedIn"><a href="/" ng-click="openLoginModal()">Login</a></li>
-              <li ng-show="user.loggedIn"><a href="/wallet/overview">My Wallet</a></li>
-              <li><a href="/explorer/overview">Explorer</a></li>
-              <li><a href="/about">About</a></li>
-              <li><a href="/status">Status</a></li>
-              <li ng-show="user.loggedIn"><a href="/" ng-click="logout()">Logout</a></li>
-            </ul>
-        </div>
+<div id="header" ng-controller="NavigationController" ng-init="getNavData();modalOpened=false;section='';subsection=''">
+  <div class="navbar navbar-static-top navbar-main" role="navigation">
+    <div class="container">
+      <!-- Brand and toggle get grouped for better mobile display -->
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#omni-navbar">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="/"><img src="/assets/img/logo-rebrand.png" alt="omni"></a>
       </div>
+      <!-- Collect the nav links, forms, and other content for toggling -->
+      <div class="hidden-xs">
+        <ul class="nav navbar-nav navbar-right">
+          <li ng-hide="account.loggedIn">
+            <button href="#" ng-click="openCreateModal()" class="btn btn-warning">{{ 'NAVIGATION_CREATE' | translate }}</button>
+          </li>
+          <li ng-hide="account.loggedIn">
+            <a href="#" ng-click="openLoginModal()">{{ 'NAVIGATION_LOGIN' | translate }}</a>
+          </li>
+          <li class="divider-vertical" ng-hide="account.loggedIn"></li>
+          <li ng-show="account.loggedIn" ng-class="{active:section=='wallet'}">
+            <a href="/wallet/overview" ng-click="section='wallet';subsection='overview'">{{ 'NAVIGATION_WALLET' | translate }} <span class="glyphicon glyphicon-chevron-down"></span></a>
+          </li>
+          <li ng-class="{active:section=='exchange'}">
+            <a href="/wallet/trade" ng-click="section='exchange';subsection='trade'">{{'NAVIGATION_EXCHANGE' | translate}} <span class="glyphicon glyphicon-chevron-down"></span></a>
+          </li>
+          <li ng-class="{active:section=='explorer'}">
+            <a href="/explorer/overview" ng-click="section='explorer';subsection='transactions'">{{'NAVIGATION_EXPLORER' | translate}} <span class="glyphicon glyphicon-chevron-down"></span></a>
+          </li>
+          <li ng-class="{active:section=='about'}">
+            <a href="/about/omniwallet" ng-click="section='about';subsection='omniwallet'">{{'NAVIGATION_ABOUT' | translate}} <span class="glyphicon glyphicon-chevron-down"></span></a>
+          </li>
+          <li ng-show="account.loggedIn" class="dropdown">
+            <a href class="dropdown-toggle">
+              {{'NAVIGATION_ACCOUNT' | translate}} <span class="glyphicon glyphicon-chevron-down"></span>
+            </a>
+            <ul class="dropdown-menu" role="menu">
+              <li><a ng-click="section='account'" href="/wallet/settings">{{'NAVIGATION_SETTINGS' | translate}}</a></li>
+              <li><a href="/" ng-click="logout()">{{'NAVIGATION_LOGOUT' | translate}}</a></li>
+            </ul>
+        </ul>
+        <div class="arrow_box" ng-hide="section==''" ng-class="{'login':account.loggedIn, 'wallet':section=='wallet', 'exchange':section=='exchange', 'explorer':section=='explorer', 'about':section=='about'}"></div>
+      </div>
+      
+      <div class="collapse navbar-collapse hidden-sm hidden-md hidden-lg" id="omni-navbar">
+        <ul class="nav nav-stacked">
+          <li ng-if="account.loggedIn" class="navbar-header">{{ 'NAVIGATION_WALLET' | translate }}</li>
+          <li ng-if="account.loggedIn" ng-class="{active:subsection=='overview'}"><a ng-click="subsection='overview'" href="/wallet/overview">{{'COMMON_OVERVIEW' | translate }}</a></li>
+          <li ng-if="account.loggedIn" ng-class="{active:subsection=='myaddresses'}"><a ng-click="subsection='myaddresses'" href="/wallet/addresses">{{ 'NAVIGATION_ADDRESSES' | translate }}</a></li>
+          <li ng-if="account.loggedIn" ng-class="{active:subsection=='myassets'}"><a ng-click="subsection='myassets'" href="/wallet/assets">{{ 'NAVIGATION_ASSETS' | translate }}</a></li>
+          <li ng-if="account.loggedIn" ng-class="{active:subsection=='history'}"><a ng-click="subsection='history'" href="/wallet/history">{{'NAVIGATION_HISTORY' | translate}}</a></li>
+          <li ng-if="account.loggedIn" ng-class="{active:subsection=='send'}"><a ng-click="section='wallet';subsection='send'" href="/wallet/send">{{ 'COMMON_SEND' | translate }}</a></li>
+          <li class="navbar-header">{{'NAVIGATION_EXCHANGE' | translate}}</li>
+          <li ng-class="{active:subsection=='trade'}"><a ng-click="subsection='trade'" href="/wallet/trade">{{'NAVIGATION_TRADE' | translate}}</a></li>
+          <li ng-class="{active:subsection=='myoffers'}"><a ng-click="subsection='myoffers'" href="/wallet/myoffers">{{'NAVIGATION_OFFERS' | translate}}</a></li>
+          <li class="navbar-header">{{'NAVIGATION_EXPLORER' | translate}}</li>
+          <li ng-class="{active:subsection=='transactions'}"><a ng-click="subsection='transactions'" href="/explorer/overview">{{'NAVIGATION_TRANSACTIONS' | translate}}</a></li>
+          <li ng-class="{active:subsection=='assets'}"><a ng-click="subsection='assets'" href="/explorer/assets">{{'NAVIGATION_EXPLOREASSETS' | translate}}</a></li>
+          <li ng-class="{active:subsection=='bookmarks'}"><a ng-click="subsection='bookmarks'" href="/explorer/bookmarks">{{'NAVIGATION_BOOKMARKS' | translate}}</a></li>
+          <li ng-class="{active:subsection=='following'}"><a ng-click="subsection='following'" href="/explorer/following">{{'NAVIGATION_FOLLOWING' | translate}}</a></li>
+          <li class="navbar-header">{{'NAVIGATION_ABOUT' | translate}}</li>
+          <li ng-class="{active:subsection=='omniwallet'}"><a ng-click="subsection='omniwallet'" href="/about/omniwallet">{{'NAVIGATION_ABOUTOMNI' | translate}}</a></li>
+          <li ng-class="{active:subsection=='mastercoin'}"><a ng-click="subsection='mastercoin'" href="/about/mastercoin">{{'NAVIGATION_ABOUTMSC' | translate}}</a></li>
+          <li ng-class="{active:subsection=='faq'}"><a ng-click="subsection='faq'" href="/about/faq">{{'NAVIGATION_FAQ' | translate}}</a></li>
+          <li ng-class="{active:subsection=='contact'}"><a ng-click="subsection='contact'" href="/about/contact">{{'NAVIGATION_CONTACT' | translate}}</a></li>
+          <li ng-if="account.loggedIn" class="navbar-header">{{'NAVIGATION_ACCOUNT' | translate}}</li>
+          <li ng-if="account.loggedIn" ng-class="{active:section=='account'}"><a ng-click="section='account'" href="/wallet/settings">{{'NAVIGATION_SETTINGS' | translate}}</a></li>
+          <li ng-if="account.loggedIn"><a href="/" ng-click="logout()">{{'NAVIGATION_LOGOUT' | translate}}</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="navbar navbar-static-top navbar-main-tier1 hidden-xs" role="navigation" collapse="section==''">
+    <div id="wallet-navbar" ng-if="section=='wallet'">
+      <ul class="nav navbar-nav">
+        <li ng-class="{active:subsection=='overview'}"><a ng-click="subsection='overview'" href="/wallet/overview">{{'COMMON_OVERVIEW' | translate }}</a></li>
+        <li ng-class="{active:subsection=='myaddresses'}"><a ng-click="subsection='myaddresses'" href="/wallet/addresses">{{ 'NAVIGATION_ADDRESSES' | translate }}</a></li>
+        <li ng-class="{active:subsection=='myassets'}"><a ng-click="subsection='myassets'" href="/wallet/assets">{{'NAVIGATION_ASSETS' | translate}}</a></li>
+        <li ng-class="{active:subsection=='history'}"><a ng-click="subsection='history'" href="/wallet/history">{{'NAVIGATION_HISTORY' | translate}}</a></li>
+        <li ng-class="{active:subsection=='send'}"><a ng-click="subsection='send'" href="/wallet/send">{{ 'COMMON_SEND' | translate }}</a></li>
+      </ul>
+    </div>
+    <div id="exchange-navbar" ng-if="section=='exchange'">
+      <ul class="nav navbar-nav">
+        <li ng-class="{active:subsection=='trade'}"><a ng-click="subsection='trade'" href="/wallet/trade">{{'NAVIGATION_TRADE' | translate}}</a></li>
+        <li ng-class="{active:subsection=='myoffers'}"><a ng-click="subsection='myoffers'" href="/wallet/myoffers">{{'NAVIGATION_OFFERS' | translate}}</a></li>
+      </ul>
+    </div>
+    <div id="explorer-navbar" ng-if="section=='explorer'">
+      <ul class="nav navbar-nav">
+        <li ng-class="{active:subsection=='transactions'}"><a ng-click="subsection='transactions'" href="/explorer/overview">{{'NAVIGATION_TRANSACTIONS' | translate}}</a></li>
+        <li ng-class="{active:subsection=='assets'}"><a ng-click="subsection='assets'" href="/explorer/assets">{{'NAVIGATION_EXPLOREASSETS' | translate}}</a></li>
+        <li ng-class="{active:subsection=='bookmarks'}"><a ng-click="subsection='bookmarks'" href="/explorer/bookmarks">{{'NAVIGATION_BOOKMARKS' | translate}}</a></li>
+        <li ng-class="{active:subsection=='following'}"><a ng-click="subsection='following'" href="/explorer/following">{{'NAVIGATION_FOLLOWING' | translate}}</a></li>
+      </ul>
+    </div>
+    <div id="about-navbar" ng-if="section=='about'">
+      <ul class="nav navbar-nav">
+        <li ng-class="{active:subsection=='omniwallet'}"><a ng-click="subsection='omniwallet'" href="/about/omniwallet">{{'NAVIGATION_ABOUTOMNI' | translate}}</a></li>
+        <li ng-class="{active:subsection=='mastercoin'}"><a ng-click="subsection='mastercoin'" href="/about/mastercoin">{{'NAVIGATION_ABOUTMSC' | translate}}</a></li>
+        <li ng-class="{active:subsection=='faq'}"><a ng-click="subsection='faq'" href="/about/faq">{{'NAVIGATION_FAQ' | translate}}</a></li>
+        <li ng-class="{active:subsection=='contact'}"><a ng-click="subsection='contact'" href="/about/contact">{{'NAVIGATION_CONTACT' | translate}}</a></li>
+      </ul>
+    </div>
   </div>
 </div>
-
