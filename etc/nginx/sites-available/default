@@ -92,9 +92,9 @@ server {
                  rewrite ^ /v1/system/revision;
         }
 
-        location ~ "^/v1/exchange/offers/(.*)$" {
-                alias /var/lib/omniwallet/www/offers/$1;
-        }
+        #location ~ "^/v1/exchange/offers/(.*)$" {
+        #        alias /var/lib/omniwallet/www/offers/$1;
+        #}
 
         #location ~ "^/v1/transaction/general/(.*)$" {
         #        alias /var/lib/omniwallet/www/general/$1;
@@ -166,6 +166,17 @@ server {
         location /v1/exchange/offers {
                 set   $app   offers;
                 uwsgi_pass   127.0.0.1:$PORT;
+        }
+
+        location = /v1/exchange/orders { rewrite ^ /v1/exchange/orders/; }
+        location /v1/exchange/orders { try_files $uri @flask_orders; }
+        location @flask_orders {
+                include uwsgi_params;
+                uwsgi_param SCRIPT_NAME /v1/exchange/orders;
+                uwsgi_param UWSGI_MODULE orders;
+                uwsgi_param UWSGI_CALLABLE app;
+                uwsgi_modifier1 30;
+                uwsgi_pass 127.0.0.1:$PORT;
         }
 
         location = /v1/user/wallet { rewrite ^ /v1/user/wallet/; }
