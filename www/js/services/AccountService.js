@@ -368,11 +368,13 @@ angular.module("omniServices")
               break;
 
             case "donate":
-              if (settings['donate'] == undefined) {
-                retval = 'false'
-              } else {
-                retval = settings['donate']
-              }
+              //if (settings['donate'] == undefined) {
+              //  retval = 'false'
+              //} else {
+              //  retval = settings['donate']
+              //}
+              //disable all donate options for now
+              retval = 'false'
               break;
 
             case "usercurrency":

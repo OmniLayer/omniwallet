@@ -170,7 +170,7 @@ angular.module('omniwallet')
       });
       modalInstance.result.then(function() {
 	      Account.removeAddress(addritem.address);
-        $scope.modalOpened=false;
+              $scope.modalOpened=false;
 	      $scope.refresh();
         },
         function() {
