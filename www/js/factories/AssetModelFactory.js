@@ -30,14 +30,14 @@ angular.module("omniFactories")
                 });
 
                 $rootScope.$on("BALANCE_CHANGED",function(evt){
-                    var total = 0;
+                    var total = new Big(0);
                     self.addresses().forEach(function(address){
-                        total += address.getBalance(self.id);
+                        total = total.plus(address.getBalance(self.id));
                     });
-            		self.balance=total;
+            		self.balance=total.valueOf();
                     self.divisible ? self.displayBalance = new Big(self.balance).times(WHOLE_UNIT).valueOf() : self.displayBalance = self.balance;
             		self.value = appraiser.getValue(self.balance, self.symbol, self.divisible);
-                })
+                });
 
 			}
 
