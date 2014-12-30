@@ -31,6 +31,7 @@ angular.module('omniServices').service('appraiser', ['$rootScope', '$http', '$q'
             self.conversions[currency.symbol] = currency.price;
           }
           coin.value = self.getValue(coin.balance,coin.symbol,coin.divisible)
+          coin.price = self.getValue(coin.divisible ? 100000000 : 1,coin.symbol,coin.divisible)
           changed.push(currency.symbol)
         }, function(error) {
           console.log(error);

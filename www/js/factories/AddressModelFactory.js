@@ -35,6 +35,14 @@ angular.module("omniFactories")
 				return value || currencyItem.value;
 			}
 
+			self.getValue =function(assetId){
+				var currencyItem = self.balance.filter(function(asset){
+					return asset.id == assetId;
+				})[0];
+
+				currencyItem.divisible ? new Big(currencyItem.value).times(WHOLE_UNIT).times(currencyItem.price).valueOf() : currencyItem.value * currencyItem.price;
+			}
+
 			self.initialize();
 		}
 
