@@ -14,9 +14,12 @@ angular.module("omniFactories")
 					if(self.balance != data.balance){
 						var previousBalance = self.balance;
 						data.balance.forEach(function(balance,index){
-							var previous = previousBalance.find(function(prevBalance){
+							var found = previousBalance.filter(function(prevBalance){
 								return prevBalance.symbol == balance.symbol
-							})[0].value
+							})[0];
+
+							var previous = found ? found.value : 0;
+
 							$rootScope.$broadcast('balance:'+balance.symbol,  balance.value-previous);
 						});
 
