@@ -10,9 +10,9 @@
 				</div>
 				<div class="col-xs-6 col-sm-2" title="{{asset.value}}" ng-bind-html="asset.value | numeraljs: '$0,0.00':true"></div>
 			</div>
-			<div class="col-xs-1 collapse-toggle"><div class="checkbox inline btn-collapse"><span></span><input type="checkbox" name="{{asset.symbol}}"  ng-init="asset.showDetails=false" ng-model="asset.showDetails" checked="false"><span></span></div></div>
+			<div class="col-xs-1 collapse-toggle"><div class="checkbox inline btn-collapse"><span></span><input type="checkbox" name="{{asset.symbol}}"  ng-init="asset.hideDetails=true" ng-model="asset.hideDetails"><span></span></div></div>
 		</div>
-		<div class="row" collapse="asset.showDetails">
+		<div class="row" collapse="asset.hideDetails">
 			<div class="col-xs-12">
 				<table class="table">
 					<thead>

@@ -123,6 +123,7 @@ h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6{
   -khtml-opacity: 0;
   opacity: 0;
   cursor: pointer;
+  z-index: 10;
 }
 .collapse-toggle input[type="checkbox"]:checked + span {
   visibility: visible;
@@ -140,7 +141,7 @@ h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6{
   position: absolute;
   width: 23px;
   height: 22px;
-  background-image: url(/assets/img/icons/circle-arrow-down.png);
+  background-image: url(/assets/img/icons/circle-arrow-up.png);
   background-repeat: no-repeat;
   background-color: transparent;
   border: 0pt none;
@@ -148,7 +149,7 @@ h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6{
 }
 .btn-collapse input[type="checkbox"] + span /*the span element that immediately follow the checkbox button */ {
   visibility: hidden;
-  background-image: url(/assets/img/icons/circle-arrow-up.png);
+  background-image: url(/assets/img/icons/circle-arrow-down.png);
 }
 
 .missing-dex-alert{
