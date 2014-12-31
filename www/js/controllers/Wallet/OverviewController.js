@@ -53,7 +53,7 @@ angular.module("omniControllers")
         Account.settings.disclaimerSeen = true;
       })
 
-      $scope.$on("BALANCE_CHANGED",function(evt,changed,values){
+      $scope.$on("balance:changed",function(evt,changed,values){
         refresh();
       })
       $scope.$on("APPRAISER_VALUE_CHANGED",function(evt,changed){

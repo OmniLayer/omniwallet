@@ -18,13 +18,14 @@ angular.module("omniFactories")
 								return prevBalance.symbol == balance.symbol
 							})[0];
 
-							var previous = found ? found.value : 0;
+							var delta = found ? balance.value-found.value : balance.value;
 
-							$rootScope.$broadcast('balance:'+balance.symbol,  balance.value-previous);
+							if (delta != 0)
+								$rootScope.$broadcast('balance:'+balance.symbol,  delta);
 						});
 
-						
 						self.balance = data.balance;
+						$rootScope.$broadcast('balance:changed');
 					}
 				});
 
