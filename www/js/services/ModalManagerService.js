@@ -152,6 +152,14 @@ angular.module("omniServices")
               });
           
               self.modalInstance.result.then(function(wallet) {
+                var exportScope = $rootScope.$new();
+                exportScope.exportInProgress=false;
+                exportScope.exportData={
+                      backupName : wallet.uuid,
+                      exportPrivate : true,
+                      exportWatch : true,
+                      exportOffline:true
+                    }
                 var exportModalInstance = $modal.open({
                   templateUrl: '/partials/export_wallet.html',
                   controller: function($scope, $modalInstance, wallet){
@@ -227,15 +235,7 @@ angular.module("omniServices")
                       $modalInstance.dismiss('close');
                     };
                   },
-                  scope: {
-                    exportInProgress:false,
-                    exportData:{
-                      backupName : wallet.uuid,
-                      exportPrivate : true,
-                      exportWatch : true,
-                      exportOffline:true
-                    }
-                  },
+                  scope: exportScope,
                   resolve:{
                     wallet: function(){
                       return wallet;
