@@ -1,5 +1,5 @@
 angular.module("omniFactories")
-	.factory("Asset", ["PropertyManager","$rootScope","$injector", "WHOLE_UNIT", function AssetsModelFactory(PropertyManager,$rootScope,$injector,WHOLE_UNIT){
+	.factory("Asset", ["PropertyManager","$rootScope","$injector", "WHOLE_UNIT","SATOSHI_UNIT", function AssetsModelFactory(PropertyManager,$rootScope,$injector,WHOLE_UNIT,SATOSHI_UNIT ){
 		var Asset = function(symbol, balance,tradable,address){
 			var self = this;
 			var appraiser = $injector.get('appraiser');
@@ -29,12 +29,8 @@ angular.module("omniFactories")
                   self.divisible ? self.displayBalance = new Big(self.balance).times(WHOLE_UNIT).valueOf() : self.displayBalance = self.balance;
                 });
 
-                $rootScope.$on("BALANCE_CHANGED",function(evt){
-                    var total = new Big(0);
-                    self.addresses().forEach(function(address){
-                        total = total.plus(address.getBalance(self.id));
-                    });
-            		self.balance=total.valueOf();
+                $rootScope.$on("balance:"+self.symbol,function(evt, delta){
+            		self.balance += delta;
                     self.divisible ? self.displayBalance = new Big(self.balance).times(WHOLE_UNIT).valueOf() : self.displayBalance = self.balance;
             		self.value = appraiser.getValue(self.balance, self.symbol, self.divisible);
                 });
