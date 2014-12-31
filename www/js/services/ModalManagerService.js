@@ -1,6 +1,6 @@
 angular.module("omniServices")
-    .service("ModalManager", ["$modal", "$rootScope", "TransactionGenerator","TransactionManager","Account",
-        function ModalManagerService($modal, $rootScope, TransactionGenerator, TransactionManager, Account) {
+    .service("ModalManager", ["$modal", "$rootScope", "$timeout","TransactionGenerator","TransactionManager","Account",
+        function ModalManagerService($modal, $rootScope, $timeout, TransactionGenerator, TransactionManager, Account) {
             var self = this;
 
             function encodePrivateKey(key, passphrase) {
