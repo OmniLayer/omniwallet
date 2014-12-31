@@ -35,7 +35,7 @@ def get_balancedata(address):
         sym_t = ('BTC' if cID == '0' else ('MSC' if cID == '1' else ('TMSC' if cID == '2' else 'SP' + cID) ) ) #symbol template
         divi = balrow[-1]['divisible'] if type(balrow[-1]) == type({}) else json.loads(balrow[-1])['divisible']  #Divisibility
         res = { 'symbol' : sym_t, 'divisible' : divi, 'id' : cID }
-        res['value'] = ('%.8f' % float(balrow[4])).rstrip('0').rstrip('.')
+        res['value'] = int(('%.8f' % float(balrow[4])).rstrip('0').rstrip('.'))
         #res['reserved_balance'] = ('%.8f' % float(balrow[5])).rstrip('0').rstrip('.')
         balance_data['balance'].append(res)
 
