@@ -1,6 +1,6 @@
 angular.module("omniServices")
-    .service("ModalManager", ["$modal", "TransactionGenerator","TransactionManager","Account",
-        function ModalManagerService($modal, TransactionGenerator, TransactionManager, Account) {
+    .service("ModalManager", ["$modal", "$rootScope", "TransactionGenerator","TransactionManager","Account",
+        function ModalManagerService($modal, $rootScope, TransactionGenerator, TransactionManager, Account) {
             var self = this;
 
             function encodePrivateKey(key, passphrase) {
@@ -137,18 +137,18 @@ angular.module("omniServices")
             };
 
             self.openBackupWalletModal = function() {
-              self.modalInstance = $modal.open({
-                templateUrl: '/partials/login_modal.html',
-                controller: LoginController,
-                scope: {
-                    login:{
+              var scope = $rootScope.$new();
+              scope.login={
                         uuid: Account.uuid,
                         action: 'verify',
                         title: 'Verify Account',
                         button: 'Validate',
                         disable: true //disable UUID field in template
                     }
-                }
+              self.modalInstance = $modal.open({
+                templateUrl: '/partials/login_modal.html',
+                controller: LoginController,
+                scope: scope
               });
           
               self.modalInstance.result.then(function(wallet) {
