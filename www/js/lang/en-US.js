@@ -3,6 +3,7 @@ angular.module("omniConfig")
    	COMMON_ACTIONS: 'Actions',
 	COMMON_ADDRESS: 'Address',
 	COMMON_BALANCE: 'Balance',
+	COMMON_BITCOIN: 'Bitcoin',
    	COMMON_BROADCAST: 'Broadcast Transaction',
    	COMMON_OVERVIEW: 'Overview',
    	COMMON_REMOVEADDRESS: 'Remove from Wallet',
