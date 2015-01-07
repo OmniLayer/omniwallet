@@ -289,4 +289,15 @@ server {
                 uwsgi_modifier1 30;
                 uwsgi_pass 127.0.0.1:$PORT;
         }
+
+        location = /v1/decode { rewrite ^ /v1/decode; }
+        location /v1/decode { try_files $uri @flask_decode; }
+        location @flask_decode {
+                include uwsgi_params;
+                uwsgi_param SCRIPT_NAME /v1/decode;
+                uwsgi_param UWSGI_MODULE decode;
+                uwsgi_param UWSGI_CALLABLE app;
+                uwsgi_modifier1 30;
+                uwsgi_pass 127.0.0.1:$PORT;
+        }
 }
