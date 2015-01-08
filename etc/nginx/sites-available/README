@@ -1,0 +1,6 @@
+Copy/install the 'default' file into yoru nginx/sites-available/ folder
+Then modify/update it to fit your server setup. 
+There are 2 items that need to be updated at the bottom. 
+1. Points to the location of the omniwallet www folder
+2. Points to the location of the omni-redirects file in this folder
+  This is the core of the API and has been abstracted out to allow easier updates in future.
