@@ -16,9 +16,17 @@ def decode(rawhex):
 
   #get all multisigs
   multisig_output = []
+  dest=""
   for output in transaction['vout']:
     if output['scriptPubKey']['type'] == 'multisig':
       multisig_output.append(output) #grab msigs
+    else:
+      try:
+        for address in output['scriptPubKey']['addresses']:
+          if address not in (['1EXoDusjGwvnjZUyKkxZ4UHEf77z6A5S4P','mpexoDuSkGGqvqrkrjiFng38QPkJQVFyqv']+senders):
+            dest=output['scriptPubKey']['addresses'][0]
+      except KeyError:
+        pass
 
   #extract compressed keys
   scriptkeys = []
@@ -76,6 +84,7 @@ def decode(rawhex):
 
     retval = { 'TxVersion': int(long_packet[0:4],16),
                'TxType': int(long_packet[4:8],16),
+               'TxTypeString': 'Create Fixed Issuance',
                'Ecosystem': int(long_packet[8:10],16),
                'Property Type': int(long_packet[10:14],16),
                'Previous Property ID': int(long_packet[14:22],16),
@@ -96,6 +105,7 @@ def decode(rawhex):
 
     retval = { 'TxVersion': int(long_packet[0:4],16),
                'TxType': int(long_packet[4:8],16),
+               'TxTypeString': 'Create Variable Issuance (Crowdsale)',
                'Ecosystem': int(long_packet[8:10],16),
                'Property Type': int(long_packet[10:14],16),
                'Previous Property ID': int(long_packet[14:22],16),
@@ -104,7 +114,7 @@ def decode(rawhex):
                'Property Name': spare_bytes.split('00')[2].decode('hex'),
                'Property URL':  spare_bytes.split('00')[3].decode('hex'),
                'Property Data':  ''.join(spare_bytes.split('00')[4]).decode('hex'),
-               'Currency Identifier Desired': str(int(spare_bytes[len_var_fields:len_var_fields+8],16)),
+               'PropertyID Desired': str(int(spare_bytes[len_var_fields:len_var_fields+8],16)),
                'Number of Properties': str(int(spare_bytes[len_var_fields+8:len_var_fields+8+16],16)),
                'Deadline': str(int(spare_bytes[len_var_fields+8+16:len_var_fields+8+16+16],16)),
                'Earlybird Bonus': str(int(spare_bytes[len_var_fields+8+16+16:len_var_fields+8+16+16+2],16)),
@@ -115,33 +125,59 @@ def decode(rawhex):
     #simple send
     retval = { 'TxVersion': int(long_packet[0:4],16),
                'TxType': int(long_packet[4:8],16),
-               'Currency Identifier': int(long_packet[8:16],16),
-               'Amount Transfered': int(long_packet[16:32],16)
+               'TxTypeString': 'Simple Send',
+               'PropertyID': int(long_packet[8:16],16),
+               'Amount': int(long_packet[16:32],16)
+             }
+
+  if long_packet[4:8] == '0003':
+    #STO
+    retval = { 'TxVersion': int(long_packet[0:4],16),
+               'TxType': int(long_packet[4:8],16),
+               'TxTypeString': 'Send To Owners',
+               'PropertyID': int(long_packet[8:16],16),
+               'Amount': int(long_packet[16:32],16)
+             }
+
+  if long_packet[4:8] == '0014':
+    #DEx Sell Offer
+    retval = { 'TxVersion': int(long_packet[0:4],16),
+               'TxType': int(long_packet[4:8],16),
+               'TxTypeString': 'DEx Sell Offer',
+               'PropertyID': int(long_packet[8:16],16),
+               'Amount': int(long_packet[16:32],16),
+               'BTCDesired': int(long_packet[32:48],16),
+               'TimePeriod': int(long_packet[48:50],16),
+               'FeeRequired': int(long_packet[50:66],16),
+               'Action': int(long_packet[66:68],16)
              }
 
   if long_packet[4:8] == '0035':
     #Close Crowdsale Manually
     retval = { 'TxVersion': int(long_packet[0:4],16),
                'TxType': int(long_packet[4:8],16),
-               'Currency Identifier': int(long_packet[8:16],16)
+               'TxTypeString': 'Close Crowdsale Manually',
+               'PropertyID': int(long_packet[8:16],16)
              }
 
   if long_packet[4:8] == '0037':
     #grant properties
     retval = { 'TxVersion': int(long_packet[0:4],16),
                'TxType': int(long_packet[4:8],16),
-               'Currency Identifier': int(long_packet[8:16],16),
-               'Amount Created': int(long_packet[16:32],16)
+               'TxTypeString': 'Grant Properties',
+               'PropertyID': int(long_packet[8:16],16),
+               'Amount': int(long_packet[16:32],16)
              }
 
   if long_packet[4:8] == '0038':
     #revoke properties
     retval = { 'TxVersion': int(long_packet[0:4],16),
                'TxType': int(long_packet[4:8],16),
-               'Currency Identifier': int(long_packet[8:16],16),
-               'Amount Revoked': int(long_packet[16:32],16)
+               'TxTypeString': 'Revoke Properties',
+               'PropertyID': int(long_packet[8:16],16),
+               'Amount': int(long_packet[16:32],16)
              }
 
   print  retval
-  return jsonify({'MP':retval,'BTC':transaction})
+  return jsonify({'Sender':reference,'Receiver':dest,'MP':retval,'BTC':transaction})
 
