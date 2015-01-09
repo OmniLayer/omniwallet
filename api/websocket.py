@@ -36,7 +36,7 @@ def get_balancedata(address):
         divi = balrow[-1]['divisible'] if type(balrow[-1]) == type({}) else json.loads(balrow[-1])['divisible']  #Divisibility
         res = { 'symbol' : sym_t, 'divisible' : divi, 'id' : cID }
         res['value'] = ('%.8f' % float(balrow[4])).rstrip('0').rstrip('.')
-        res['pending_balance'] = ('%.8f' % float(balrow[8])).rstrip('0').rstrip('.')
+        res['pending'] = ('%.8f' % float(balrow[8])).rstrip('0').rstrip('.')
         #res['reserved_balance'] = ('%.8f' % float(balrow[5])).rstrip('0').rstrip('.')
         balance_data['balance'].append(res)
 
@@ -46,12 +46,15 @@ def get_balancedata(address):
     btc_balance = { 'symbol': 'BTC', 'divisible': True, 'id' : 0 }
     out, err = run_command(TIMEOUT+ 'sx balance -j ' + addr )
     if err != None or out == '':
-      btc_balance[ 'value' ] = int(-666)
+      btc_balance[ 'value' ] = int(-555)
+      btc_balance['pending'] = int(0)
     else:
       try:
         btc_balance[ 'value' ] = int( json.loads( out )[0][ 'paid' ])
+        btc_balance['pending'] = int( json.loads( out )[0][ 'pending' ] - json.loads( out )[0][ 'paid' ])
       except ValueError:
-        btc_balance[ 'value' ] = int(-666)
+        btc_balance[ 'value' ] = int(-555)
+        btc_balance['pending'] = int(0)
 
     balance_data['balance'].append(btc_balance)
     return balance_data
