@@ -43,7 +43,7 @@ def pushtx_response(response_dict):
     
     response=pushtxnode(signed_tx)
 
-    if "NOTOK" not in response['status']:
+    if "NOTOK" not in response:
       insertpending(signed_tx)
     
     print signed_tx,'\n', response
