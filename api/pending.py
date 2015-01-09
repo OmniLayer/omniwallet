@@ -44,7 +44,7 @@ def insertpending(txhex):
               "values(%s,%s,%s,%s,%s,%s,%s,%s)", (address,propertyid,protocol,txdbserialnum,addresstxindex,addressrole,sendamount))
 
     #update pending balance
-    dbExecute("update addressbalances set balancepending=balancepending+%s where address=%s and propertyid=%s and protocol=%s", (sendamount,address,protocol))
+    dbExecute("update addressbalances set balancepending=balancepending+%s::numeric where address=%s and propertyid=%s and protocol=%s", (sendamount,address,protocol))
 
     if receiver != "":
       address=receiver
@@ -52,7 +52,7 @@ def insertpending(txhex):
       dbExecute("insert into addressesintxs (address,propertyid,protocol,txdbserialnum,addresstxindex,addressrole,balanceavailablecreditdebit) "
                 "values(%s,%s,%s,%s,%s,%s,%s,%s)", (address,propertyid,protocol,txdbserialnum,addresstxindex,addressrole,recvamount))
       #update pending balance
-      dbExecute("update addressbalances set balancepending=balancepending+%s where address=%s and propertyid=%s and protocol=%s", (recvamount,address,protocol))
+      dbExecute("update addressbalances set balancepending=balancepending+%s::numeric where address=%s and propertyid=%s and protocol=%s", (recvamount,address,protocol))
     dbCommit()
   except Exception,e:
     print "Error adding pendingtx: ", txhex
