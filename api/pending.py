@@ -17,7 +17,7 @@ def insertpending(txhex):
     txhash = rawtx['BTC']['txid']
     protocol = "Mastercoin"
     addresstxindex=0
-    txdbserialnum = dbSelect("select least(-1,min(txdbserialnum)) from transactions;")
+    txdbserialnum = dbSelect("select least(-1,min(txdbserialnum)) from transactions;")[0][0]
     txdbserialnum -= 1
     amount = rawtx['MP']['Amount']
 
@@ -41,20 +41,20 @@ def insertpending(txhex):
     addressrole="sender"
     #insert the addressesintxs entry for the sender
     dbExecute("insert into addressesintxs (address,propertyid,protocol,txdbserialnum,addresstxindex,addressrole,balanceavailablecreditdebit) "
-              "values(%s,%s,%s,%s,%s,%s,%s,%s)", (address,propertyid,protocol,txdbserialnum,addresstxindex,addressrole,sendamount))
+              "values(%s,%s,%s,%s,%s,%s,%s)", (address,propertyid,protocol,txdbserialnum,addresstxindex,addressrole,sendamount))
 
     #update pending balance
-    dbExecute("update addressbalances set balancepending=balancepending+%s::numeric where address=%s and propertyid=%s and protocol=%s", (sendamount,address,protocol))
+    dbExecute("update addressbalances set balancepending=balancepending+%s::numeric where address=%s and propertyid=%s and protocol=%s", (sendamount,address,propertyid,protocol))
 
     if receiver != "":
       address=receiver
-      addressrole="receiver"
+      addressrole="recipient"
       dbExecute("insert into addressesintxs (address,propertyid,protocol,txdbserialnum,addresstxindex,addressrole,balanceavailablecreditdebit) "
-                "values(%s,%s,%s,%s,%s,%s,%s,%s)", (address,propertyid,protocol,txdbserialnum,addresstxindex,addressrole,recvamount))
+                "values(%s,%s,%s,%s,%s,%s,%s)", (address,propertyid,protocol,txdbserialnum,addresstxindex,addressrole,recvamount))
       #update pending balance
-      dbExecute("update addressbalances set balancepending=balancepending+%s::numeric where address=%s and propertyid=%s and protocol=%s", (recvamount,address,protocol))
+      dbExecute("update addressbalances set balancepending=balancepending+%s::numeric where address=%s and propertyid=%s and protocol=%s", (recvamount,address,propertyid,protocol))
     dbCommit()
   except Exception,e:
-    print "Error: ", e "\n Could not add PendingTx: ", txhex
+    print "Error: ", e, "\n Could not add PendingTx: ", txhex
     dbRollback()
 
