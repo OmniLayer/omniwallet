@@ -51,7 +51,7 @@ def get_balancedata(address):
     else:
       try:
         btc_balance[ 'value' ] = int( json.loads( out )[0][ 'paid' ])
-        btc_balance['pending'] = int( json.loads( out )[0][ 'pending' ] - json.loads( out )[0][ 'paid' ])
+        btc_balance['pending'] = int( json.loads( out )[0][ 'pending' ] ) - int( json.loads( out )[0][ 'paid' ])
       except ValueError:
         btc_balance[ 'value' ] = int(-555)
         btc_balance['pending'] = int(0)
