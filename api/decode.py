@@ -8,6 +8,10 @@ app = Flask(__name__)
 app.debug = True
 
 @app.route('/<rawhex>')
+def decode_handler(rawhex):
+  return jsonify(decode(rawhex))
+
+
 def decode(rawhex):
 
   transaction = decoderawtransaction(rawhex)['result']
@@ -187,5 +191,5 @@ def decode(rawhex):
              }
 
   print  retval
-  return jsonify({'Sender':reference,'Receiver':dest,'MP':retval,'BTC':transaction})
+  return {'Sender':reference,'Receiver':dest,'MP':retval,'BTC':transaction}
 
