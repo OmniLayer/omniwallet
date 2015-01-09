@@ -25,14 +25,18 @@ function HomeCtrl($scope, $templateCache, $injector, $location, $http, $q, Accou
       var appraiser = $injector.get('appraiser');
       $injector.get('balanceService').balance($scope.balanceAddress).then(function(result) {
         result.data.balance.forEach(function(currencyItem, index, collection) {
-          if(currencyItem.divisible)
+          if(currencyItem.divisible) {
             var value=new Big(currencyItem.value).times(WHOLE_UNIT).valueOf();
-
+            var pending=value+ new Big(currencyItem.pending).times(WHOLE_UNIT).valueOf();
+          } else {
+            var pending=currencyItem.value+currencyItem.pending;
+          }
           appraiser.updateValue(function() {
             balances[currencyItem.symbol] = {
               "symbol": currencyItem.symbol,
               "balance": +value || currencyItem.value,
               "value": appraiser.getValue(currencyItem.value, currencyItem.symbol, currencyItem.divisible),
+              "pending": pending,
             };
             if (currencyItem.symbol == 'BTC') {
               balances[currencyItem.symbol].name = "Bitcoin";
