@@ -38,8 +38,16 @@ def decode(rawhex):
 
   #filter keys that are ref
   nonrefkeys = []
+
+  #check for testnet addresses
+  if reference[:1] in ['2','m','n']:
+    #testnet address
+    offset=111
+  else:
+    offset=0
+
   for compressedkey in scriptkeys:
-    if pybitcointools.pubtoaddr(compressedkey) not in senders :
+    if pybitcointools.pubtoaddr(compressedkey,offset) not in senders :
         nonrefkeys.append(compressedkey)
 
   max_seqnum = len(nonrefkeys)
