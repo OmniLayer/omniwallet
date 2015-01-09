@@ -55,6 +55,6 @@ def insertpending(txhex):
       dbExecute("update addressbalances set balancepending=balancepending+%s::numeric where address=%s and propertyid=%s and protocol=%s", (recvamount,address,protocol))
     dbCommit()
   except Exception,e:
-    print "Error adding pendingtx: ", txhex
+    print "Error: ", e "\n Could not add PendingTx: ", txhex
     dbRollback()
 
