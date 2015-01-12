@@ -35,8 +35,13 @@ def get_balancedata(address):
         sym_t = ('BTC' if cID == '0' else ('MSC' if cID == '1' else ('TMSC' if cID == '2' else 'SP' + cID) ) ) #symbol template
         divi = balrow[-1]['divisible'] if type(balrow[-1]) == type({}) else json.loads(balrow[-1])['divisible']  #Divisibility
         res = { 'symbol' : sym_t, 'divisible' : divi, 'id' : cID }
-        res['value'] = ('%.8f' % float(balrow[4])).rstrip('0').rstrip('.')
         res['pending'] = ('%.8f' % float(balrow[8])).rstrip('0').rstrip('.')
+        if res['pending'] < 0:
+          #update the 'available' balance immediately when the sender sent something. prevent double spend
+          res['value'] = ('%.8f' % float( (balrow[4]-balrow[8]) )).rstrip('0').rstrip('.')
+        else:
+          res['value'] = ('%.8f' % float(balrow[4])).rstrip('0').rstrip('.')
+
         #res['reserved_balance'] = ('%.8f' % float(balrow[5])).rstrip('0').rstrip('.')
         balance_data['balance'].append(res)
 
@@ -50,8 +55,12 @@ def get_balancedata(address):
       btc_balance['pending'] = int(0)
     else:
       try:
-        btc_balance[ 'value' ] = int( json.loads( out )[0][ 'paid' ])
         btc_balance['pending'] = int( json.loads( out )[0][ 'pending' ] ) - int( json.loads( out )[0][ 'paid' ])
+        if btc_balance['pending'] < 0:
+          #update the 'available' balance immediately when the sender sent something. prevent double spend
+          btc_balance[ 'value' ] = int( json.loads( out )[0][ 'pending' ])
+        else:
+          btc_balance[ 'value' ] = int( json.loads( out )[0][ 'paid' ])
       except ValueError:
         btc_balance[ 'value' ] = int(-555)
         btc_balance['pending'] = int(0)
