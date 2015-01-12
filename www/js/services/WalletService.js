@@ -4,7 +4,7 @@ angular.module("omniServices")
 			var self = this;
 
 			self.initialize =function(wallet){
-	            BalanceSocket.connect();
+
 
 	            self.addresses = [];
 	            self.assets = [];

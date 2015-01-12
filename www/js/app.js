@@ -154,7 +154,7 @@ app.config(function($idleProvider, $keepaliveProvider, reCAPTCHAProvider, idleDu
    
   $translateProvider.preferredLanguage('en');
 })
-.run(function(Account, $location, TESTNET) {
+.run(function(Account, $location, TESTNET, BalanceSocket) {
   //Whitelist pages
   whitelisted = ['login', 'about', 'status', 'explorer'];
 
@@ -166,6 +166,7 @@ app.config(function($idleProvider, $keepaliveProvider, reCAPTCHAProvider, idleDu
     }
     $location.path('/');
   }
+  BalanceSocket.connect();
 });
 
 //app helpers
