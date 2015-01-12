@@ -35,8 +35,13 @@ angular.module('omniwallet')
               } else {
                 addr.balance.forEach(function(currencyItem) {
                  if ((parseInt(currencyItem.id,10) < 2147483648) && (parseInt(currencyItem.id,10) != 2) || showtesteco === 'true'){
-                  if(currencyItem.divisible)
+                  if(currencyItem.divisible){
                     var value=new Big(currencyItem.value).times(WHOLE_UNIT).valueOf();
+                    var pending=new Big(currencyItem.pending).times(WHOLE_UNIT).valueOf();
+                  } else {
+                    var pending=currencyItem.pending;
+                  }
+
                   if (!balances.hasOwnProperty(currencyItem.symbol)) {
                     balances[currencyItem.symbol] = {
                       "symbol": currencyItem.symbol,
@@ -66,6 +71,7 @@ angular.module('omniwallet')
                     "address": addr.address,
                     "qr": "https://chart.googleapis.com/chart?chs=150x150&cht=qr&chl="+addr.address+"&choe=UTF-8",
                     "balance": +value || currencyItem.value,
+                    "pending": pending,
                     "value": appraiser.getValue(currencyItem.value, currencyItem.symbol, currencyItem.divisible),
 	                  "private": hasPrivate,
 	                  "offline": isOffline
