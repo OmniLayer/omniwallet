@@ -7,7 +7,6 @@ angular.module("omniConfig")
 	COMMON_LOGIN: 'Login',
 	HOMEPAGE_ADDRESSEXAMPLE: '(e.g. 1EXoDusjGwvnjZUyKkxZ4UHEf77z6A5S4P)',
    	HOMEPAGE_BALANCECHECK:'Balance Check',
-   	HOMEPAGE_BROWSERRECOMMENDATION: 'Omniwallet recommends the use of Chrome, since the wallet may not yet function perfectly on other browsers.',
    	HOMEPAGE_CHECKBALANCE: 'Check Balance',
 	HOMEPAGE_ENTERVALIDADDRESS:'Enter a valid Bitcoin Address ',
 	HOMEPAGE_WELCOME: 'Welcome to Omniwallet',
