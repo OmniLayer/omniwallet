@@ -143,6 +143,18 @@ def add_address(message):
         balance_data,
         namespace='/balance')
 
+@socketio.on("address:refresh", namespace='/balance')
+def refresh_address(message):
+  global addresses
+
+  address = message['data']
+  if str(address) in addresses:
+    balance_data=get_balancedata(address)
+    emit('address:'+address,
+        balance_data,
+        namespace='/balance')
+  else:
+    add_address(message)
 
 if __name__ == '__main__':
   socketio.run(app, '127.0.0.1',1091)
