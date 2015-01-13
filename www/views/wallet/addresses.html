@@ -1,0 +1,35 @@
+<div ng-controller="WalletAddressesController">
+  <div class="row om-row">
+    <div class="col-xs-12 col-sm-3 col-md-4 col-lg-4">
+      <div class="text-left om-title">{{ 'WALLET_ADDRESSES_TITLE' | translate}}</div>
+    </div>
+    <div class="hidden-xs col-sm-9 col-md-8 col-lg-8">
+      <form class="pull-right form-inline">
+        <div class="input-group">
+          <label  for="listview">{{ 'WALLET_ADDRESSES_VIEW' | translate}}:</label>
+          <select ng-model="listTemplate">
+            <option value="templates['addresses']">{{ 'COMMON_ADDRESSES' | translate}}</a></option>
+            <option value="templates['assets']">{{ 'COMMON_ASSETS' | translate}}</a></option>
+          </select>
+        </div>
+        <a class="btn btn-main" href="/wallet/send">{{ 'COMMON_SEND' |  translate }}</a>
+        <div class="input-group btn-group">
+          <button type="button" class="hidden-xs btn btn-main dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+            {{ 'WALLET_ADDRESSES_OPTIONS' | translate}} <span class="glyphicon glyphicon-chevron-down"></span>
+          </button>
+          <ul class="dropdown-menu dropdown-menu-right" role="menu">
+            <li class="btn-main"><a href="#" ng-click="createBTCAddress()">{{ 'WALLET_ADDRESSES_CREATE' | translate}}</a></li>
+            <li class="btn-main"><a href="#" ng-click="modalManager.openImportPrivateKeyForm()">{{ 'WALLET_ADDRESSES_IMPORT' | translate}}</a></li>
+            <li class="btn-main"><a href="#" ng-click="modalManager.openImportWatchOnlyForm()">{{ 'WALLET_ADDRESSES_WATCH' | translate}}</a></li>
+            <li class="btn-main"><a href="#" ng-click="modalManager.openImportArmoryForm()">{{ 'WALLET_ADDRESSES_OFFLINE' | translate}}</a></li>
+          </ul>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-xs-12" ng-include="listTemplate">
+    </div>
+  </div>›
+ </div>

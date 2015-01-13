@@ -75,7 +75,7 @@ angular.module("omniServices")
 
                 self.modalInstance = $modal.open({
                     templateUrl: "/views/modals/broadcast.html",
-                    controller: function($scope, $modalInstance, address, broadcastTransaction) {
+                    controller: function BroadcastModalController($scope, $modalInstance, address, broadcastTransaction) {
                         $scope.broadcastAddress = address;
 
                         $scope.ok = function(signedHex) {
@@ -402,6 +402,187 @@ angular.module("omniServices")
                 self.modalInstance.result.then(function() {
                   Account.removeAddress(addritem.address);
                   });
+
+            self.openImportArmoryForm = function() {
+              var modalInstance = $modal.open({
+                templateUrl: '/partials/import_armory_offline.html',
+                controller: AddArmoryAddressModal
+              });
+          
+              modalInstance.result.then(function(result) {
+          
+                if (result.address) {
+                  Account.addAddress(result.address,undefined,result.pubkey);
+                }
+                $scope.refresh();
+                $scope.addedNewAddress = true;
+                $scope.createdAddress = result.address;
+              }, function() {});
+            };
+            
+            var AddArmoryAddressModal = function($scope, $modalInstance) {
+              $scope.validate = function(newAddress) {
+                try{
+                  var address = new Bitcoin.Address.fromPubKey(Bitcoin.Util.hexToBytes(newAddress.pubkey))
+                  if(Bitcoin.Address.validate(address.toString())){
+                    newAddress.address=address.toString();
+                    return true
+                  }
+                } catch (e) {
+                  return false;
+                }
+              };
+          
+              $scope.addressNotListed = function(pubkey) {
+                var addresses = Wallet.addresses;
+                var address = new Bitcoin.Address.fromPubKey(Bitcoin.Util.hexToBytes(pubkey));
+                for (var i in addresses) {
+                  if (addresses[i].address == address.toString()) {
+                    return false;
+                  }
+                }
+          
+                return true;
+              };
+          
+              $scope.ok = function(result) {
+                try{
+                  var address = new Bitcoin.Address.fromPubKey(Bitcoin.Util.hexToBytes(result.pubkey));
+                  if(Bitcoin.Address.validate(address.toString())){
+                    $modalInstance.close(result);
+                  }
+                } catch (e) {
+                  console.log('*** Invalid pubkey: ' + result.pubkey);
+                }
+              };
+          
+              $scope.cancel = function() {
+                $modalInstance.dismiss('cancel');
+              };
+            };
+            // Begin Import watch only Form Code
+            self.openImportWatchOnlyForm = function() {
+              var modalInstance = $modal.open({
+                templateUrl: '/partials/import_watch_only.html',
+                controller: AddBtcAddressModal
+              });
+          
+              modalInstance.result.then(function(result) {
+          
+                if (result.address) {
+                  Account.addAddress(result.address);
+                }
+                $scope.refresh();
+                $scope.addedNewAddress = true;
+                $scope.createdAddress = result.address;
+              }, function() {});
+            };
+          
+            var AddBtcAddressModal = function($scope, $modalInstance) {
+              $scope.validate = function(address) {
+                return Bitcoin.Address.validate(address);
+              };
+          
+              $scope.addressNotListed = function(address) {
+                var addresses = Wallet.addresses;
+                for (var i in addresses) {
+                  if (addresses[i].address == address) {
+                    return false;
+                  }
+                }
+          
+                return true;
+              };
+          
+              $scope.ok = function(result) {
+                if (Bitcoin.Address.validate(result.address))
+                  $modalInstance.close(result);
+                else
+                  console.log('*** Invalid address: ' + result.address);
+              };
+          
+              $scope.cancel = function() {
+                $modalInstance.dismiss('cancel');
+              };
+            };
+            // Done Import Watch Only Form Code.
+          
+            // Begin Import Private Key Form Code
+            self.openImportPrivateKeyForm = function() {
+              var modalInstance = $modal.open({
+                templateUrl: '/partials/import_private.html',
+                controller: AddPrivateKeyModal
+              });
+          
+              modalInstance.result.then(function(result) {
+          
+                if (result.privKey) {
+                  // Use address as passphrase for now
+                  var addr = decodeAddressFromPrivateKey(result.privKey);
+                  Account.addAddress(
+                  addr,
+                  encodePrivateKey(result.privKey, addr));
+                }
+                $scope.refresh();
+                $scope.addedNewAddress = true;
+                $scope.createdAddress = decodeAddressFromPrivateKey(result.privKey);
+              }, function() {});
+            };
+          
+            var AddPrivateKeyModal = function($scope, $modalInstance) {
+              $scope.validate = function(address) {
+                if (!address) return false;
+          
+                try {
+                  var eckey = new Bitcoin.ECKey(address);
+                  var addr = eckey.getBitcoinAddress().toString();
+                  return true;
+                } catch (e) {
+                  return false;
+                }
+              };
+          
+              $scope.ok = function(result) {
+                $modalInstance.close(result);
+              };
+          
+              $scope.cancel = function() {
+                $modalInstance.dismiss('cancel');
+              };
+            };
+            // Done Import Private Key Form Code.
+            // Begin Import Encrypted Key Form Code
+            self.openImportEncryptedKeyForm = function() {
+              var modalInstance = $modal.open({
+                templateUrl: '/partials/import_encrypted_private.html',
+                controller: AddEncryptedPrivateModal
+              });
+          
+              modalInstance.result.then(function(result) {
+          
+                if (result.encryptedPrivKey && result.password) {
+                  // Decrypt key then store with default password of addr
+                  var key = Bitcoin.ECKey.decodeEncryptedFormat(result.encryptedPrivKey, result.password);
+                  var privkey = Bitcoin.Util.bytesToHex(key.getPrivateKeyByteArray());
+                  // Use address as passphrase for now
+                  var addr = decodeAddressFromPrivateKey(privkey);
+                  Account.addAddress(
+                  addr,
+                  encodePrivateKey(privkey, addr));
+                }
+                $scope.refresh();
+          
+              }, function() {});
+            };
+          
+            var AddEncryptedPrivateModal = function($scope, $modalInstance) {
+              $scope.ok = function(result) {
+                $modalInstance.close(result);
+              };
+          
+              $scope.cancel = function() {
+                $modalInstance.dismiss('cancel');
+              };
             };
         }
     ])
