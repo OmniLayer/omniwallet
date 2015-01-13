@@ -49,8 +49,8 @@ angular.module('omniwallet')
                       "symbol": currencyItem.symbol,
                       "balance": +value || +currencyItem.value,
                       "value": appraiser.getValue(currencyItem.value, currencyItem.symbol, currencyItem.divisible),
-                      "pendingpos": 0,
-                      "pendingneg": 0,
+                      "pendingpos": +pendingpos,
+                      "pendingneg": +pendingneg,
                       "addresses": {}
                     };
                   } else {
