@@ -15,7 +15,9 @@ def decode_handler(rawhex):
 def decode(rawhex):
 
   transaction = decoderawtransaction(rawhex)['result']
-  senders = getrawtransaction(transaction['vin'][0]['txid'])['result']['vout'][transaction['vin'][0]['vout']]['scriptPubKey']['addresses']
+  rawtx = getrawtransaction(transaction['vin'][0]['txid'])
+  senders  = rawtx['result']['vout'][transaction['vin'][0]['vout']]['scriptPubKey']['addresses']
+  inputBTC = rawtx['result']['vout'][transaction['vin'][0]['vout']]['value']
   reference = senders[0]
 
   #get all multisigs
@@ -191,5 +193,4 @@ def decode(rawhex):
              }
 
   print  retval
-  return {'Sender':reference,'Receiver':dest,'MP':retval,'BTC':transaction}
-
+  return {'Sender':reference,'Receiver':dest,'MP':retval,'BTC':transaction, 'inputBTC':inputBTC}
