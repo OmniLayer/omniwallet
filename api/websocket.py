@@ -67,7 +67,6 @@ def get_balancedata(address):
         res['pendingpos'] = ('%.8f' % float(balrow[3])).rstrip('0').rstrip('.')
         res['pendingneg'] = ('%.8f' % float(balrow[4])).rstrip('0').rstrip('.')
         if cID == '0':
-          printmsg("found btc")
           #get btc balance from sx
           if err != None or out == '':
             btc_balance[ 'value' ] = int(-555)
