@@ -36,9 +36,9 @@ def get_balancedata(address):
         divi = balrow[-1]['divisible'] if type(balrow[-1]) == type({}) else json.loads(balrow[-1])['divisible']  #Divisibility
         res = { 'symbol' : sym_t, 'divisible' : divi, 'id' : cID }
         res['pending'] = ('%.8f' % float(balrow[8])).rstrip('0').rstrip('.')
-        if res['pending'] < 0:
+        if balrow[8] < 0:
           #update the 'available' balance immediately when the sender sent something. prevent double spend
-          res['value'] = ('%.8f' % float( (balrow[4]-balrow[8]) )).rstrip('0').rstrip('.')
+          res['value'] = ('%.8f' % float( (balrow[4]+balrow[8]) )).rstrip('0').rstrip('.')
         else:
           res['value'] = ('%.8f' % float(balrow[4])).rstrip('0').rstrip('.')
 

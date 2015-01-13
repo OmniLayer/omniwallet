@@ -47,12 +47,17 @@ angular.module('omniwallet')
                       "symbol": currencyItem.symbol,
                       "balance": +value || +currencyItem.value,
                       "value": appraiser.getValue(currencyItem.value, currencyItem.symbol, currencyItem.divisible),
+                      "pending": 0,
                       "addresses": {}
                     };
                   } else {
                     balances[currencyItem.symbol].balance += +value || +currencyItem.value;
                     balances[currencyItem.symbol].value += appraiser.getValue(currencyItem.value, currencyItem.symbol, currencyItem.divisible);
                   }
+                  if (pending > 0) {
+                    balances[currencyItem.symbol].pending += +pending;
+                  }
+
 
                   if (currencyItem.symbol == 'BTC') {
                     balances[currencyItem.symbol].name = "Bitcoin"
