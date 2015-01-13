@@ -88,7 +88,7 @@ def decode(rawhex):
     long_packet += packet[2:]
 
 
-  retval = {"Error":"Can\'t decode tx"}
+  retval = {"Error":"Can\'t decode MP TX"}
   if long_packet[4:8] == '0032':
     #Create Fixed Issuance
     spare_bytes = ''.join(long_packet[22:])

@@ -53,10 +53,11 @@ def get_balancedata(address):
                              atx.propertyid) s2
                         on s1.propertyid=s2.propertyid) f1
                      inner join smartproperties sp
-                     on f1.propertyid=sp.propertyid and sp.protocol='Mastercoin'
+                     on f1.propertyid=sp.propertyid and (sp.protocol='Mastercoin' or sp.protocol='Bitcoin')
                      order by f1.propertyid""",(addr,addr))
 
     balance_data = { 'balance': [] }
+    out, err = run_command(TIMEOUT+ 'sx balance -j ' + addr )
     for balrow in ROWS:
         cID = str(int(balrow[0])) #currency id
         sym_t = ('BTC' if cID == '0' else ('MSC' if cID == '1' else ('TMSC' if cID == '2' else 'SP' + cID) ) ) #symbol template
@@ -65,11 +66,26 @@ def get_balancedata(address):
         res = { 'symbol' : sym_t, 'divisible' : divi, 'id' : cID }
         res['pendingpos'] = ('%.8f' % float(balrow[3])).rstrip('0').rstrip('.')
         res['pendingneg'] = ('%.8f' % float(balrow[4])).rstrip('0').rstrip('.')
-        if balrow[4] < 0:
-          #update the 'available' balance immediately when the sender sent something. prevent double spend
-          res['value'] = ('%.8f' % float( (balrow[2]+balrow[4]) )).rstrip('0').rstrip('.')
+        if cID == '0':
+          printmsg("found btc")
+          #get btc balance from sx
+          if err != None or out == '':
+            btc_balance[ 'value' ] = int(-555)
+          else:
+            try:
+              if balrow[4] < 0:
+                res['value'] = int( json.loads( out )[0][ 'paid' ]) + int(balrow[4])
+              else:
+                res['value'] = int( json.loads( out )[0][ 'paid' ])
+            except ValueError:
+              btc_balance[ 'value' ] = int(-555)
         else:
-          res['value'] = ('%.8f' % float(balrow[2])).rstrip('0').rstrip('.')
+          #get regular balance from db
+          if balrow[4] < 0:
+            #update the 'available' balance immediately when the sender sent something. prevent double spend
+            res['value'] = ('%.8f' % float( (balrow[2]+balrow[4]) )).rstrip('0').rstrip('.')
+          else:
+            res['value'] = ('%.8f' % float(balrow[2])).rstrip('0').rstrip('.')
 
         #res['reserved_balance'] = ('%.8f' % float(balrow[5])).rstrip('0').rstrip('.')
         balance_data['balance'].append(res)
@@ -77,24 +93,26 @@ def get_balancedata(address):
     # if 0 >= len(ROWS):
     #   return ( None, '{ "status": "NOT FOUND: ' + addr + '" }' )
 
-    btc_balance = { 'symbol': 'BTC', 'divisible': True, 'id' : 0 }
-    out, err = run_command(TIMEOUT+ 'sx balance -j ' + addr )
-    if err != None or out == '':
-      btc_balance[ 'value' ] = int(-555)
-      btc_balance['pending'] = int(0)
-    else:
-      try:
-        btc_balance['pending'] = int( json.loads( out )[0][ 'pending' ] ) - int( json.loads( out )[0][ 'paid' ])
-        if btc_balance['pending'] < 0:
-          #update the 'available' balance immediately when the sender sent something. prevent double spend
-          btc_balance[ 'value' ] = int( json.loads( out )[0][ 'pending' ])
-        else:
-          btc_balance[ 'value' ] = int( json.loads( out )[0][ 'paid' ])
-      except ValueError:
-        btc_balance[ 'value' ] = int(-555)
-        btc_balance['pending'] = int(0)
+    #check if we got BTC data from DB, if not trigger manually add
+    addbtc=True
+    for x in balance_data['balance']:
+      if "BTC" in x['symbol']:
+        addbtc=False
 
-    balance_data['balance'].append(btc_balance)
+    if addbtc:
+      btc_balance = { 'symbol': 'BTC', 'divisible': True, 'id' : 0 }
+      #out, err = run_command(TIMEOUT+ 'sx balance -j ' + addr )
+      if err != None or out == '':
+        btc_balance[ 'value' ] = int(-555)
+      else:
+        try:
+          btc_balance[ 'value' ] = int( json.loads( out )[0][ 'paid' ])
+        except ValueError:
+          btc_balance[ 'value' ] = int(-555)
+      btc_balance['pendingpos'] = int(0)
+      btc_balance['pendingneg'] = int(0)
+      balance_data['balance'].append(btc_balance)
+
     return balance_data
 
 

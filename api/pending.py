@@ -1,5 +1,6 @@
 from decode import *
 from sqltools import *
+import decimal
 
 def insertpending(txhex):
 
@@ -29,7 +30,7 @@ def insertbtc(rawtx):
     txdbserialnum = dbSelect("select least(-1,min(txdbserialnum)) from transactions;")[0][0]
     txdbserialnum -= 1
     addresstxindex = 0
-    inputamount = -int(decimal.Decimal(str(rawtx['BTC']['inputBTC']))*decimal.Decimal(1e8))
+    inputamount = -int(decimal.Decimal(str(rawtx['inputBTC']))*decimal.Decimal(1e8))
 
     dbExecute("insert into transactions (txhash,protocol,txdbserialnum,txtype,txversion) values(%s,%s,%s,%s,%s)",
               (txhash,protocol,txdbserialnum,txtype,txversion))
@@ -46,7 +47,7 @@ def insertbtc(rawtx):
       for addr in output['scriptPubKey']['addresses']:
          address=addr
          dbExecute("insert into addressesintxs (address,propertyid,protocol,txdbserialnum,addresstxindex,addressrole,balanceavailablecreditdebit) "
-                   "values(%s,%s,%s,%s,%s,%s,%s)", (address,propertyid,protocol,txdbserialnum,addresstxindex,addressrole,inputamount))
+                   "values(%s,%s,%s,%s,%s,%s,%s)", (address,propertyid,protocol,txdbserialnum,addresstxindex,addressrole,outputamount))
       addresstxindex+=1
     dbCommit()
   except Exception,e:
