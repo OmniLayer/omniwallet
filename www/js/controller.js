@@ -27,16 +27,19 @@ function HomeCtrl($scope, $templateCache, $injector, $location, $http, $q, Accou
         result.data.balance.forEach(function(currencyItem, index, collection) {
           if(currencyItem.divisible) {
             var value=new Big(currencyItem.value).times(WHOLE_UNIT).valueOf();
-            var pending=value+ new Big(currencyItem.pending).times(WHOLE_UNIT).valueOf();
+            var pendingpos= new Big(currencyItem.pendingpos).times(WHOLE_UNIT).valueOf();
+            var pendingneg=value+ new Big(currencyItem.pendingneg).times(WHOLE_UNIT).valueOf();
           } else {
-            var pending=currencyItem.value+currencyItem.pending;
+            var pendingpos=currencyItem.pendingpos;
+            var pendingneg=currencyItem.value+currencyItem.pendingneg;
           }
           appraiser.updateValue(function() {
             balances[currencyItem.symbol] = {
               "symbol": currencyItem.symbol,
               "balance": +value || currencyItem.value,
               "value": appraiser.getValue(currencyItem.value, currencyItem.symbol, currencyItem.divisible),
-              "pending": pending,
+              "pendingpos": pendingpos,
+              "pendingneg": pendingneg
             };
             if (currencyItem.symbol == 'BTC') {
               balances[currencyItem.symbol].name = "Bitcoin";

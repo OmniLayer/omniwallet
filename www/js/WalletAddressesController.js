@@ -37,9 +37,11 @@ angular.module('omniwallet')
                  if ((parseInt(currencyItem.id,10) < 2147483648) && (parseInt(currencyItem.id,10) != 2) || showtesteco === 'true'){
                   if(currencyItem.divisible){
                     var value=new Big(currencyItem.value).times(WHOLE_UNIT).valueOf();
-                    var pending=new Big(currencyItem.pending).times(WHOLE_UNIT).valueOf();
+                    var pendingpos=new Big(currencyItem.pendingpos).times(WHOLE_UNIT).valueOf();
+                    var pendingneg=new Big(currencyItem.pendingneg).times(WHOLE_UNIT).valueOf();
                   } else {
-                    var pending=currencyItem.pending;
+                    var pendingpos=currencyItem.pendingpos;
+                    var pendingneg=currencyItem.pendingneg;
                   }
 
                   if (!balances.hasOwnProperty(currencyItem.symbol)) {
@@ -47,17 +49,16 @@ angular.module('omniwallet')
                       "symbol": currencyItem.symbol,
                       "balance": +value || +currencyItem.value,
                       "value": appraiser.getValue(currencyItem.value, currencyItem.symbol, currencyItem.divisible),
-                      "pending": 0,
+                      "pendingpos": 0,
+                      "pendingneg": 0,
                       "addresses": {}
                     };
                   } else {
                     balances[currencyItem.symbol].balance += +value || +currencyItem.value;
                     balances[currencyItem.symbol].value += appraiser.getValue(currencyItem.value, currencyItem.symbol, currencyItem.divisible);
+                    balances[currencyItem.symbol].pendingpos += +pendingpos;
+                    balances[currencyItem.symbol].pendingneg += +pendingneg;
                   }
-                  if (pending > 0) {
-                    balances[currencyItem.symbol].pending += +pending;
-                  }
-
 
                   if (currencyItem.symbol == 'BTC') {
                     balances[currencyItem.symbol].name = "Bitcoin"
@@ -76,7 +77,8 @@ angular.module('omniwallet')
                     "address": addr.address,
                     "qr": "https://chart.googleapis.com/chart?chs=150x150&cht=qr&chl="+addr.address+"&choe=UTF-8",
                     "balance": +value || currencyItem.value,
-                    "pending": pending,
+                    "pendingpos": pendingpos,
+                    "pendingneg": pendingneg,
                     "value": appraiser.getValue(currencyItem.value, currencyItem.symbol, currencyItem.divisible),
 	                  "private": hasPrivate,
 	                  "offline": isOffline

@@ -26,8 +26,35 @@ def printmsg(msg):
 
 def get_balancedata(address):
     addr = re.sub(r'\W+', '', address) #check alphanumeric
-    ROWS=dbSelect("select ab.propertyid,sp.propertytype,ab.balanceavailable,ab.balancepending from addressbalances ab, smartproperties sp "
-                  "where ab.address=%s and ab.propertyid=sp.propertyid and sp.protocol='Mastercoin'", [addr])
+    #ROWS=dbSelect("select ab.propertyid,sp.propertytype,ab.balanceavailable,ab.balancepending from addressbalances ab, smartproperties sp "
+    #              "where ab.address=%s and ab.propertyid=sp.propertyid and sp.protocol='Mastercoin'", [addr])
+    ROWS=dbSelect("""select
+                       f1.propertyid, sp.propertytype, f1.balanceavailable, f1.pendingpos, f1.pendingneg
+                     from
+                       (select
+                          COALESCE(s1.propertyid,s2.propertyid) as propertyid, COALESCE(s1.balanceavailable,0) as balanceavailable,
+                          COALESCE(s2.pendingpos,0) as pendingpos,COALESCE(s2.pendingneg,0) as pendingneg
+                        from
+                          (select propertyid,balanceavailable
+                           from addressbalances
+                           where address=%s) s1
+                        full join
+                          (SELECT atx.propertyid,
+                             sum(CASE WHEN atx.balanceavailablecreditdebit > 0 THEN atx.balanceavailablecreditdebit ELSE 0 END) AS pendingpos,
+                             sum(CASE WHEN atx.balanceavailablecreditdebit < 0 THEN atx.balanceavailablecreditdebit ELSE 0 END) AS pendingneg
+                           from
+                             addressesintxs atx, transactions tx
+                           where
+                             atx.txdbserialnum=tx.txdbserialnum
+                             and tx.txstate='pending'
+                             and tx.txdbserialnum<-1
+                             and atx.address=%s
+                           group by
+                             atx.propertyid) s2
+                        on s1.propertyid=s2.propertyid) f1
+                     inner join smartproperties sp
+                     on f1.propertyid=sp.propertyid and sp.protocol='Mastercoin'
+                     order by f1.propertyid""",(addr,addr))
 
     balance_data = { 'balance': [] }
     for balrow in ROWS:
@@ -36,10 +63,11 @@ def get_balancedata(address):
         #1 = new indivisible property, 2=new divisible property (per spec)
         divi = True if int(balrow[1]) == 2 else False
         res = { 'symbol' : sym_t, 'divisible' : divi, 'id' : cID }
-        res['pending'] = ('%.8f' % float(balrow[3])).rstrip('0').rstrip('.')
-        if balrow[3] < 0:
+        res['pendingpos'] = ('%.8f' % float(balrow[3])).rstrip('0').rstrip('.')
+        res['pendingneg'] = ('%.8f' % float(balrow[4])).rstrip('0').rstrip('.')
+        if balrow[4] < 0:
           #update the 'available' balance immediately when the sender sent something. prevent double spend
-          res['value'] = ('%.8f' % float( (balrow[2]+balrow[3]) )).rstrip('0').rstrip('.')
+          res['value'] = ('%.8f' % float( (balrow[2]+balrow[4]) )).rstrip('0').rstrip('.')
         else:
           res['value'] = ('%.8f' % float(balrow[2])).rstrip('0').rstrip('.')
 
