@@ -26,21 +26,22 @@ def printmsg(msg):
 
 def get_balancedata(address):
     addr = re.sub(r'\W+', '', address) #check alphanumeric
-    ROWS=dbSelect("select * from addressbalances ab, smartproperties sp where ab.address=%s and ab.propertyid=sp.propertyid "
-                  "and sp.protocol='Mastercoin'", [addr])
+    ROWS=dbSelect("select ab.propertyid,sp.propertytype,ab.balanceavailable,ab.balancepending from addressbalances ab, smartproperties sp "
+                  "where ab.address=%s and ab.propertyid=sp.propertyid and sp.protocol='Mastercoin'", [addr])
 
     balance_data = { 'balance': [] }
     for balrow in ROWS:
-        cID = str(int(balrow[2])) #currency id
+        cID = str(int(balrow[0])) #currency id
         sym_t = ('BTC' if cID == '0' else ('MSC' if cID == '1' else ('TMSC' if cID == '2' else 'SP' + cID) ) ) #symbol template
-        divi = balrow[-1]['divisible'] if type(balrow[-1]) == type({}) else json.loads(balrow[-1])['divisible']  #Divisibility
+        #1 = new indivisible property, 2=new divisible property (per spec)
+        divi = True if int(balrow[1]) == 2 else False
         res = { 'symbol' : sym_t, 'divisible' : divi, 'id' : cID }
-        res['pending'] = ('%.8f' % float(balrow[8])).rstrip('0').rstrip('.')
-        if balrow[8] < 0:
+        res['pending'] = ('%.8f' % float(balrow[3])).rstrip('0').rstrip('.')
+        if balrow[3] < 0:
           #update the 'available' balance immediately when the sender sent something. prevent double spend
-          res['value'] = ('%.8f' % float( (balrow[4]+balrow[8]) )).rstrip('0').rstrip('.')
+          res['value'] = ('%.8f' % float( (balrow[2]+balrow[3]) )).rstrip('0').rstrip('.')
         else:
-          res['value'] = ('%.8f' % float(balrow[4])).rstrip('0').rstrip('.')
+          res['value'] = ('%.8f' % float(balrow[2])).rstrip('0').rstrip('.')
 
         #res['reserved_balance'] = ('%.8f' % float(balrow[5])).rstrip('0').rstrip('.')
         balance_data['balance'].append(res)
