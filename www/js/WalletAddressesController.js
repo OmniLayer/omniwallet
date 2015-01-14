@@ -168,6 +168,10 @@ angular.module('omniwallet')
   $rootScope.$on('APPRAISER_VALUE_CHANGED', function() {
     $scope.refresh();
   });
+  $rootScope.$on('BALANCE_CHANGED', function() {
+    if(!$scope.isLoading)
+      $scope.refresh();
+  });
 
   $scope.openDeleteConfirmForm = function(addritem) {
     if (!$scope.modalOpened) {

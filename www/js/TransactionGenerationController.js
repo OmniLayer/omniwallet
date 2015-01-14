@@ -75,10 +75,11 @@ function TransactionGenerationController($scope, $modal, Wallet, walletTransacti
                   if(index +1 == transactions.length){
                     $modalScope.waiting = false;
                     $modalScope.transactionSuccess = true;
-                  if(TESTNET)
-                    $modalScope.url = 'http://tbtc.blockr.io/tx/info/' + successData.tx;
-                  else
-                    $modalScope.url = 'http://blockchain.info/address/' + from + '?sort=0';
+                    BalanceSocket.emit("address:refresh", {data:from});
+                    if(TESTNET)
+                      $modalScope.url = 'http://tbtc.blockr.io/tx/info/' + successData.tx;
+                    else
+                      $modalScope.url = 'http://blockchain.info/address/' + from + '?sort=0';
                   } else {
                     pushOrderedTransactions(transactions,index+1);
                   }
