@@ -17,9 +17,9 @@
                    <!-- <td ng-show={{item.address.privkey}}>{{item.address.address}}<span class="glyphicon glyphicon-lock" tooltip="Your Wallet has the Private key for this address"></span></td> -->
 		    <td class="currency number" title="{{item.balance}}" ng-bind-html="item.balance | numeraljs: '0,0.00000000'"></td>
                    <td class="currency number" title="{{item.balance}}"><span ng-bind-html="item.balance | numeraljs: '0,0.00000000'"></span>
-                      <span ng-show="item.pendingneg<0" tooltip="This balance reflects Omni pending transaction(s) with a total outgoing amount of {{item.pendingneg*-1}}">
+                      <span ng-show="item.pendingneg<0" tooltip="This balance reflects Omni's pending transaction(s) with a total outgoing amount of {{item.pendingneg*-1}}">
                         <a href="/about/faq" target="_new"><span class="glyphicon glyphicon-export"></span></a></span>
-                      <span ng-show="item.pendingpos>0" tooltip="Oh Boy, Someone sent you something from Omni. When it confirms this balance will be updated">
+                      <span ng-show="item.pendingpos>0" tooltip="Omni's Unconfirmed Incoming Amount. Someone sent you something from Omni. When it confirms this balance will update">
                         <br><small><a href="/about/faq" target="_new"><span class="glyphicon glyphicon-import"></span></a> (+<span ng-bind-html="item.pendingpos | numeraljs: '0,0.00000000'"></span> )</small></span>
                     </td>
 		  </tr>
