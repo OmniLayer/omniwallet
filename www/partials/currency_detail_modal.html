@@ -20,7 +20,7 @@
                       <span ng-show="item.pendingpos>0" tooltip="Omni's Unconfirmed Incoming Amount. Someone sent you something from Omni. When it confirms this balance will update">
                         <br><small><a href="/about/faq" target="_new"><span class="glyphicon glyphicon-import"></span></a> (+<span ng-bind-html="item.pendingpos | numeraljs: '0,0.00000000'"></span> )</small></span>
                     </td>
-                    <td class="currency number" title="{{item.value}}"><span ng-bind-html="item.balance | numeraljs: '0,0.00000000'"></span></td>
+                    <td class="currency number" title="{{item.value}}"><span ng-bind-html="item.value | numeraljs: '0,0.00000000'"></span></td>
 		  </tr>
 		</tbody>
 	</table>
