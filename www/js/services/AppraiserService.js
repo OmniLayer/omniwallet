@@ -81,7 +81,7 @@ angular.module('omniServices').service('appraiser', ['$rootScope', '$http', '$q'
         if (self.conversions.BTC)
           return self.conversions.BTC * amount;
         else
-          return '--';
+          return 0;
       } else {        
         if (self.conversions.hasOwnProperty(symbol)) {
           if (divisible)
@@ -89,7 +89,7 @@ angular.module('omniServices').service('appraiser', ['$rootScope', '$http', '$q'
           else
             return self.getValue(self.conversions[symbol] * amount * 100000000, 'BTC', true);
         } else
-          return '--';
+          return 0;
       }
     };
 
