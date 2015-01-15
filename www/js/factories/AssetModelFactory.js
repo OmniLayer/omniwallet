@@ -27,6 +27,7 @@ angular.module("omniFactories")
                   angular.extend(self,property);
                   self.value = appraiser.getValue(self.balance, self.symbol, self.divisible);
                   self.divisible ? self.displayBalance = new Big(self.balance).times(WHOLE_UNIT).valueOf() : self.displayBalance = self.balance;
+                  $rootScope.$broadcast("asset:loaded", {data:self})
                 });
 
                 $rootScope.$on("balance:"+self.symbol,function(evt, delta){

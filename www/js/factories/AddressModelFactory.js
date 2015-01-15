@@ -4,6 +4,7 @@ angular.module("omniFactories")
 			var self = this;
 
 			self.initialize = function(){
+				self.loaded = false;
 				self.address = address;
 				self.privkey = privkey;
 				self.pubkey = pubkey;
@@ -26,6 +27,11 @@ angular.module("omniFactories")
 
 						self.balance = data.balance;
 						$rootScope.$broadcast('balance:changed');
+
+						if(!self.loaded){
+							self.loaded=true;
+							$rootScope.$broadcast("address:loaded", {hash:address});
+						}
 					}
 				});
 

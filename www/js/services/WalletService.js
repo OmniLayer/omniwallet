@@ -1,22 +1,52 @@
 angular.module("omniServices")
-	.service("Wallet",["Address", "Asset", "BalanceSocket","$injector",
-		function WalletService(Address, Asset, BalanceSocket,$injector){
+	.service("Wallet",["Address", "Asset", "BalanceSocket","$injector","$rootScope",
+		function WalletService(Address, Asset, BalanceSocket,$injector,$rootScope){
 			var self = this;
 
 			var appraiser = null;
-			
+			self.loaded = false;
 			self.initialize =function(wallet){
 	            BalanceSocket.connect();
 				appraiser = $injector.get('appraiser');
 
 	            self.addresses = [];
 	            self.assets = [];
+	            self.loader = {
+	            	totalAddresses: wallet.addresses.length,
+	            	totalAssets:0,
+	            	addresses:0,
+	            	assets:0,
+	            	loadedAddresses:false,
+	            	loadedAssets:false
+	            }
 	            wallet.addresses.forEach(function(raw){
 	                self._addAddress(raw);
 	            });
 
 	            appraiser.start();
+
+				$rootScope.$on("address:loaded", function(address){
+					self.loader.addresses +=1;
+						check_load()
+				});
+
+				$rootScope.$on("asset:loaded", function(asset){
+					self.loader.assets +=1;
+						check_load()
+				});
+
+				function check_load(){
+					if(self.loader.addresses==self.loader.totalAddresses)
+						self.loader.loadedAddresses = true;
+
+					if(self.loader.assets==self.loader.totalAssets)
+						self.loader.loadedAssets = true;
+
+					if(self.loader.loadedAddresses && self.loader.loadedAssets)
+						self.loaded = true;
+				}
 	        };
+
 
 	        self.destroy = function(){
 	        	self.addresses = [];
@@ -30,6 +60,9 @@ angular.module("omniServices")
 
                 BalanceSocket.on("address:"+address.address, function(data){
                     var update = false;
+                    if(self.loader.totalAssets < data.balance.length)
+                    	self.loader.totalAssets = data.balance.length;
+                    
                     data.balance.forEach(function(balanceItem) {
                         var tradable = ((address.privkey && address.privkey.length == 58) || address.pubkey) && balanceItem.value > 0;
                         var asset = null;
