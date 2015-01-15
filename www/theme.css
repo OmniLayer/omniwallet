@@ -28,6 +28,44 @@ body {
 h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6{
   font-family: 'roboto';
 }
+
+.dropdown-menu-main {
+  background-color: #7ed933;
+  border: 1px solid #cccccc;
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  border-radius: 4px;
+  -webkit-box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175);
+          box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175);
+  background-clip: padding-box;
+}
+
+.dropdown-menu-main .divider {
+  background-color: #e5e5e5;
+}
+
+.dropdown-menu-main > li > a {
+  color: #ffffff;
+}
+
+.dropdown-menu-main > li > a:hover,
+.dropdown-menu-main > li > a:focus {
+  color: #ffffff;
+  background-color: #a0df6d;
+}
+
+.dropdown-menu-main > .active > a,
+.dropdown-menu-main > .active > a:hover,
+.dropdown-menu-main > .active > a:focus {
+  color: #ffffff;
+  background-color: #a0df6d;
+}
+
+.dropdown-menu-main > .disabled > a,
+.dropdown-menu-main > .disabled > a:hover,
+.dropdown-menu-main > .disabled > a:focus {
+  color: #999999;
+}
+
 .dropdown-toggle > span {
   font-size: 10px;
 }
