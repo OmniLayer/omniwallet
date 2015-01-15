@@ -108,7 +108,7 @@
         <div class="main">
             <div class="container">
                 <div class="panel panel-default">
-                    <div class="om-title text-center" ng-show="account.loggedIn" ng-hide="wallet.loaded">{{ 'WALLET_LOADING' | translate}}...</div>
+                    <div class="om-title text-center" ng-show="account.loggedIn && !wallet.loaded">{{ 'WALLET_LOADING' | translate}}...</div>
                     <div class="panel-body" ng-view></div>
                 </div>
             </div>
