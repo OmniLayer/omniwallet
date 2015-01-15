@@ -42,13 +42,13 @@ angular.module("omniServices")
 					if(self.loader.assets==self.loader.totalAssets){
 						self.loader.loadedAssets = true;
 						self.assets = self.assets.sort(function(itemA, itemB){
-							nameA = itemA.name;
-							nameB = itemB.name;
+							var nameA = itemA.name;
+							var nameB = itemB.name;
 
 							var order = 0;
-							if(nameA == "Bitcoin")
+							if(nameA == "BTC")
 								order = 1;
-							else if(nameB == "Bitcoin")
+							else if(nameB == "BTC")
 								order = -1;
 							else
 								order = nameA < nameB ? -1 : nameA > nameB ? 1 : 0;
