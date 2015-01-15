@@ -13,7 +13,7 @@ angular.module("omniServices")
 	            self.assets = [];
 	            self.loader = {
 	            	totalAddresses: wallet.addresses.length,
-	            	totalAssets:0,
+	            	totalAssets:1,
 	            	addresses:0,
 	            	assets:0,
 	            	loadedAddresses:false,
