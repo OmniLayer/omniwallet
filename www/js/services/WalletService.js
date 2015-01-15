@@ -47,9 +47,9 @@ angular.module("omniServices")
 
 							var order = 0;
 							if(nameA == "BTC")
-								order = 1;
-							else if(nameB == "BTC")
 								order = -1;
+							else if(nameB == "BTC")
+								order = 1;
 							else
 								order = nameA < nameB ? -1 : nameA > nameB ? 1 : 0;
 
