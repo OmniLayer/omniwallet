@@ -17,6 +17,8 @@ angular.module("omniControllers")
       $scope.balanceData = {
         data: []
       };
+      
+      $scope.showtesteco = Account.getSetting('showtesteco');
 
       $scope.openBackupModal=function(){
         ModalManager.openBackupWalletModal();
