@@ -47,6 +47,7 @@
     <script src="/bower_components/sjcl/sjcl.js"></script>
     <script src="/bower_components/FileSaver/FileSaver.js"></script>
     <script src="/bower_components/big.js/big.min.js"></script>
+    <script type='text/javascript' src='/bower_components/angular-charts/dist/angular-charts.min.js'></script>
     <script type="text/javascript" src="/bower_components/angular-re-captcha/angular-re-captcha.js"></script>
     <script src="/js/config.js"></script>
     <script src="/js/app.js"></script>
@@ -56,6 +57,7 @@
     <script src="/js/services/WalletService.js"></script>
     <script src="/js/services/AccountService.js"></script>
     <script src="/js/lang/en-US.js"></script>
+    <script src="/js/services/AppraiserService.js"></script>
     <script src="/js/services/TransactionGenerationService.js"></script>
     <script src="/js/services/TransactionManagerService.js"></script>
     <script src="/js/services/ModalManagerService.js"></script>
@@ -106,6 +108,7 @@
         <div class="main">
             <div class="container">
                 <div class="panel panel-default">
+                    <div class="om-title text-center" ng-show="account.loggedIn && !wallet.loaded">{{ 'WALLET_LOADING' | translate}}...</div>
                     <div class="panel-body" ng-view></div>
                 </div>
             </div>
