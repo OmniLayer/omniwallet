@@ -39,8 +39,24 @@ angular.module("omniServices")
 					if(self.loader.addresses==self.loader.totalAddresses)
 						self.loader.loadedAddresses = true;
 
-					if(self.loader.assets==self.loader.totalAssets)
+					if(self.loader.assets==self.loader.totalAssets){
 						self.loader.loadedAssets = true;
+						self.assets = self.assets.sort(function(itemA, itemB){
+							nameA = itemA.name;
+							nameB = itemB.name;
+
+							var order = 0;
+							if(nameA == "Bitcoin")
+								order = 1;
+							else if(nameB == "Bitcoin")
+								order = -1;
+							else
+								order = nameA < nameB ? -1 : nameA > nameB ? 1 : 0;
+
+							return order;
+
+						});
+					}
 
 					if(self.loader.loadedAddresses && self.loader.loadedAssets)
 						self.loaded = true;
