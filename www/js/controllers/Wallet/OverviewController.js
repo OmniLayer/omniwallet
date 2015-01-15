@@ -36,7 +36,7 @@ angular.module("omniControllers")
         Wallet.assets.forEach(function(asset) {
           $scope.total += (typeof(asset.value) == "number"?+asset.value:0);
 
-          var add = true;
+          var add = asset.value && asset.value > 0;
           balanceData.data.forEach(function(data){
             if(data.x==asset.symbol){
               data.y = [asset.value];
