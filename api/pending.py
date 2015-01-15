@@ -20,8 +20,7 @@ def insertpending(txhex):
 
 def insertbtc(rawtx):
   try:
-    sender = rawtx['Sender']
-    receiver = rawtx['Receiver']
+    inputs=rawtx['inputs']
     propertyid = 0
     txtype = 0
     txversion = rawtx['BTC']['version']
@@ -30,17 +29,20 @@ def insertbtc(rawtx):
     txdbserialnum = dbSelect("select least(-1,min(txdbserialnum)) from transactions;")[0][0]
     txdbserialnum -= 1
     addresstxindex = 0
-    inputamount = -int(decimal.Decimal(str(rawtx['inputBTC']))*decimal.Decimal(1e8))
 
     dbExecute("insert into transactions (txhash,protocol,txdbserialnum,txtype,txversion) values(%s,%s,%s,%s,%s)",
               (txhash,protocol,txdbserialnum,txtype,txversion))
 
-    address=sender
     addressrole="sender"
-    #insert the addressesintxs entry for the sender
-    dbExecute("insert into addressesintxs (address,propertyid,protocol,txdbserialnum,addresstxindex,addressrole,balanceavailablecreditdebit) "
-              "values(%s,%s,%s,%s,%s,%s,%s)", (address,propertyid,protocol,txdbserialnum,addresstxindex,addressrole,inputamount))
+    for address in inputs:
+      inputamount= - inputs[address]
+      #insert the addressesintxs entry for the sender
+      dbExecute("insert into addressesintxs (address,propertyid,protocol,txdbserialnum,addresstxindex,addressrole,balanceavailablecreditdebit) "
+                "values(%s,%s,%s,%s,%s,%s,%s)", (address,propertyid,protocol,txdbserialnum,addresstxindex,addressrole,inputamount))
+      addresstxindex+=1
 
+
+    addresstxindex = 0
     addressrole="recipient"
     for output in rawtx['BTC']['vout']:
       outputamount = int(decimal.Decimal(str(output['value']))*decimal.Decimal(1e8))

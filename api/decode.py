@@ -1,7 +1,7 @@
 from flask import Flask, abort, json, jsonify
 import hashlib
 import pybitcointools
-from decimal import *
+import decimal
 from rpcclient import *
 
 app = Flask(__name__)
@@ -12,25 +12,59 @@ def decode_handler(rawhex):
   return jsonify(decode(rawhex))
 
 
+def getinputs(rawtx):
+  retval={'invalid':False, 'inputs':{}}
+  for input in rawtx['vin']:
+      prevtx=getrawtransaction(input['txid'])
+      if prevtx['result']['vout'][input['vout']]['scriptPubKey']['type'] not in ['pubkeyhash','scripthash']:
+        #Valid MP tx's only have pubkeyhash and scripthash as inputs
+        retval['invalid']=True
+      inputamount= int(decimal.Decimal(str( prevtx['result']['vout'][input['vout']]['value']))*decimal.Decimal(1e8))
+      for addr in prevtx['result']['vout'][input['vout']]['scriptPubKey']['addresses']:
+        if addr in retval['inputs']:
+          retval['inputs'][addr] += inputamount
+        else:
+          retval['inputs'][addr] = inputamount
+  return retval
+  
+
 def decode(rawhex):
 
-  transaction = decoderawtransaction(rawhex)['result']
-  rawtx = getrawtransaction(transaction['vin'][0]['txid'])
-  senders  = rawtx['result']['vout'][transaction['vin'][0]['vout']]['scriptPubKey']['addresses']
-  inputBTC = rawtx['result']['vout'][transaction['vin'][0]['vout']]['value']
-  reference = senders[0]
+  rawBTC = decoderawtransaction(rawhex)['result']
+  sia=0
+  reference=""
+  inputs=getinputs(rawBTC)
+  senders=inputs['inputs']
+  for sender in senders:
+    if senders[sender] > sia:
+      reference = sender
+      sia = senders[sender]
+
+  if reference == "":
+    retval = {"Error":"Can\'t decode MP TX. No valid sending address found."}
+    return {'Sender':reference,'BTC':rawBTC, 'MP':retval,'inputs':senders}
+
+  if inputs['invalid']:
+    retval = {"Error":"Can\'t decode MP TX. Invalid input type detected"}
+    return {'Sender':reference,'BTC':rawBTC, 'MP':retval,'inputs':senders}
+
+    
+  #senders  = rawtx['result']['vout'][rawBTC['vin'][0]['vout']]['scriptPubKey']['addresses']
+  #reference = senders[0]
 
   #get all multisigs
   multisig_output = []
   dest=""
-  for output in transaction['vout']:
+  for output in rawBTC['vout']:
     if output['scriptPubKey']['type'] == 'multisig':
       multisig_output.append(output) #grab msigs
-    else:
+    elif output['scriptPubKey']['type'] in ['pubkeyhash','scripthash']:
       try:
         for address in output['scriptPubKey']['addresses']:
-          if address not in (['1EXoDusjGwvnjZUyKkxZ4UHEf77z6A5S4P','mpexoDuSkGGqvqrkrjiFng38QPkJQVFyqv']+senders):
-            dest=output['scriptPubKey']['addresses'][0]
+          if address not in ['1EXoDusjGwvnjZUyKkxZ4UHEf77z6A5S4P','mpexoDuSkGGqvqrkrjiFng38QPkJQVFyqv'] and address not in reference:
+            dest=address
+            #return on first successful dest address per spec (highest vout)
+            break
       except KeyError:
         pass
 
@@ -87,8 +121,7 @@ def decode(rawhex):
     print 'Decoded packet #' + str(packet[0:2]) + ' : ' + packet
     long_packet += packet[2:]
 
-
-  retval = {"Error":"Can\'t decode MP TX"}
+  retval=""
   if long_packet[4:8] == '0032':
     #Create Fixed Issuance
     spare_bytes = ''.join(long_packet[22:])
@@ -192,5 +225,8 @@ def decode(rawhex):
                'Amount': int(long_packet[16:32],16)
              }
 
+  if retval == "":
+    retval = {"Error":"Can\'t decode MP TX"}
+    dest = ""
   print  retval
-  return {'Sender':reference,'Receiver':dest,'MP':retval,'BTC':transaction, 'inputBTC':inputBTC}
+  return {'Sender':reference,'Receiver':dest,'MP':retval,'BTC':rawBTC, 'inputs':senders}
