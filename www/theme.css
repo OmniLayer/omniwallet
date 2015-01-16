@@ -66,6 +66,25 @@ h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6{
   color: #999999;
 }
 
+.dropdown-menu-main > li > a:hover,
+.dropdown-menu > li > a:focus {
+  background-color: #a0df6d;
+  background-image: -webkit-linear-gradient(top, #a0df6d 0%, #a0df6d 100%);
+  background-image: linear-gradient(to bottom, #a0df6d 0%, #a0df6d 100%);
+  background-repeat: repeat-x;
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffa0df6d', endColorstr='#ffa0df6d', GradientType=0);
+}
+
+.dropdown-menu > .active > a,
+.dropdown-menu > .active > a:hover,
+.dropdown-menu > .active > a:focus {
+  background-color: #a0df6d;
+  background-image: -webkit-linear-gradient(top, #a0df6d 0%, #a0df6d 100%);
+  background-image: linear-gradient(to bottom, #a0df6d 0%, #a0df6d 100%);
+  background-repeat: repeat-x;
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffa0df6d', endColorstr='#ffa0df6d', GradientType=0);
+}
+
 .dropdown-toggle > span {
   font-size: 10px;
 }

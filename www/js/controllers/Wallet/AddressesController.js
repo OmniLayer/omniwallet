@@ -1,5 +1,5 @@
 angular.module("omniControllers")
-	.controller('WalletAddressesController', [ "$scope", function($scope) {
+	.controller('WalletAddressesController', [ "$scope", "Account", function($scope, Account) {
     $scope.templates = {
       addresses:'/views/wallet/partials/addresses_list.html',
       assets:'/views/wallet/partials/assets_list.html'

@@ -1,10 +1,19 @@
 angular.module("omniServices")
-    .service("ModalManager", ["$modal", "$rootScope", "$timeout","TransactionGenerator","TransactionManager","Account",
-        function ModalManagerService($modal, $rootScope, $timeout, TransactionGenerator, TransactionManager, Account) {
+    .service("ModalManager", ["$modal", "$rootScope", "$timeout","TransactionGenerator","TransactionManager","Account","Wallet",
+        function ModalManagerService($modal, $rootScope, $timeout, TransactionGenerator, TransactionManager, Account, Wallet) {
           var self = this;
 
+          function decodeAddressFromPrivateKey(key) {
+  
+            //  Return the address decoded from the private key.
+            var eckey = new Bitcoin.ECKey(key);
+            var addr = eckey.getBitcoinAddress().toString();
+        
+            return addr;
+          };
+        
           function encodePrivateKey(key, passphrase) {
-
+        
             //  Return encoded key.  Forget the passphrase forever.
             var eckey = new Bitcoin.ECKey(key);
             var enc = eckey.getEncryptedFormat(passphrase);
