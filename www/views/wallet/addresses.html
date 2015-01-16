@@ -8,8 +8,11 @@
         <div class="form-group">
           <label>{{ 'WALLET_ADDRESSES_VIEW' | translate}}</label>
           <div class="btn-group">
-            <button type="button" class="hidden-xs btn btn-main dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-              <span ng-if="listTemplate==templates['addresses']">{{ 'COMMON_ADDRESSES' | translate}}</span> <span ng-if="listTemplate==templates['assets']">{{ 'COMMON_ASSETS' | translate}}</span> <span class="glyphicon glyphicon-chevron-down"></span>
+            <button type="button" class="hidden-xs btn btn-tertiary dropdown-toggle" data-toggle="dropdown" aria-expanded="false" ng-if="listTemplate==templates['addresses']">
+              {{ 'COMMON_ADDRESSES' | translate}}  <span class="glyphicon glyphicon-chevron-down"></span>
+            </button>
+            <button type="button" class="hidden-xs btn btn-tertiary dropdown-toggle" data-toggle="dropdown" aria-expanded="false" ng-if="listTemplate==templates['assets']">
+              {{ 'COMMON_ASSETS' | translate}} <span class="glyphicon glyphicon-chevron-down"></span>
             </button>
             <ul class="dropdown-menu dropdown-menu-right" role="menu">
               <li><a href="#" ng-click="listTemplate=templates['addresses']">{{ 'COMMON_ADDRESSES' | translate}}</a></li>
