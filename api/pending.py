@@ -51,6 +51,10 @@ def insertbtc(rawtx):
          dbExecute("insert into addressesintxs (address,propertyid,protocol,txdbserialnum,addresstxindex,addressrole,balanceavailablecreditdebit) "
                    "values(%s,%s,%s,%s,%s,%s,%s)", (address,propertyid,protocol,txdbserialnum,addresstxindex,addressrole,outputamount))
       addresstxindex+=1
+
+    #store signed tx until it confirms
+    dbExecute("insert into txjson (txdbserialnum, protocol, txdata) values (%s,%s,%s)", (txdbserialnum, protocol, json.dumps(rawtx['BTC'])) )
+
     dbCommit()
   except Exception,e:
     print "Error: ", e, "\n Could not add BTC PendingTx: ", rawtx
