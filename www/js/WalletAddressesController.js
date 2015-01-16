@@ -35,18 +35,29 @@ angular.module('omniwallet')
               } else {
                 addr.balance.forEach(function(currencyItem) {
                  if ((parseInt(currencyItem.id,10) < 2147483648) && (parseInt(currencyItem.id,10) != 2) || showtesteco === 'true'){
-                  if(currencyItem.divisible)
+                  if(currencyItem.divisible){
                     var value=new Big(currencyItem.value).times(WHOLE_UNIT).valueOf();
+                    var pendingpos=new Big(currencyItem.pendingpos).times(WHOLE_UNIT).valueOf();
+                    var pendingneg=new Big(currencyItem.pendingneg).times(WHOLE_UNIT).valueOf();
+                  } else {
+                    var pendingpos=currencyItem.pendingpos;
+                    var pendingneg=currencyItem.pendingneg;
+                  }
+
                   if (!balances.hasOwnProperty(currencyItem.symbol)) {
                     balances[currencyItem.symbol] = {
                       "symbol": currencyItem.symbol,
                       "balance": +value || +currencyItem.value,
                       "value": appraiser.getValue(currencyItem.value, currencyItem.symbol, currencyItem.divisible),
+                      "pendingpos": +pendingpos,
+                      "pendingneg": +pendingneg,
                       "addresses": {}
                     };
                   } else {
                     balances[currencyItem.symbol].balance += +value || +currencyItem.value;
                     balances[currencyItem.symbol].value += appraiser.getValue(currencyItem.value, currencyItem.symbol, currencyItem.divisible);
+                    balances[currencyItem.symbol].pendingpos += +pendingpos;
+                    balances[currencyItem.symbol].pendingneg += +pendingneg;
                   }
 
                   if (currencyItem.symbol == 'BTC') {
@@ -66,6 +77,8 @@ angular.module('omniwallet')
                     "address": addr.address,
                     "qr": "https://chart.googleapis.com/chart?chs=150x150&cht=qr&chl="+addr.address+"&choe=UTF-8",
                     "balance": +value || currencyItem.value,
+                    "pendingpos": pendingpos,
+                    "pendingneg": pendingneg,
                     "value": appraiser.getValue(currencyItem.value, currencyItem.symbol, currencyItem.divisible),
 	                  "private": hasPrivate,
 	                  "offline": isOffline
@@ -155,6 +168,10 @@ angular.module('omniwallet')
   $rootScope.$on('APPRAISER_VALUE_CHANGED', function() {
     $scope.refresh();
   });
+  $rootScope.$on('BALANCE_CHANGED', function() {
+    if(!$scope.isLoading)
+      $scope.refresh();
+  });
 
   $scope.openDeleteConfirmForm = function(addritem) {
     if (!$scope.modalOpened) {
@@ -192,10 +209,11 @@ angular.module('omniwallet')
         if (successData.pushed.match(/submitted|success/gi) != null) {
           $modalScope.waiting = false;
           $modalScope.transactionSuccess = true;
-        if(TESTNET)
-          $modalScope.url = 'http://tbtc.blockr.io/tx/info/' + successData.tx;
-        else
-          $modalScope.url = 'http://blockchain.info/address/' + from + '?sort=0';
+          $scope.refresh();
+          if(TESTNET)
+            $modalScope.url = 'http://tbtc.blockr.io/tx/info/' + successData.tx;
+          else
+            $modalScope.url = 'http://blockchain.info/address/' + from + '?sort=0';
         } else {
           $modalScope.waiting = false;
           $modalScope.transactionError = true;
