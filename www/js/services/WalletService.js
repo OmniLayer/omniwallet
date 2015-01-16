@@ -1,17 +1,68 @@
 angular.module("omniServices")
-	.service("Wallet",["Address", "Asset", "BalanceSocket","$injector",
-		function WalletService(Address, Asset, BalanceSocket,$injector){
+	.service("Wallet",["Address", "Asset", "BalanceSocket","$injector","$rootScope",
+		function WalletService(Address, Asset, BalanceSocket,$injector,$rootScope){
 			var self = this;
 
+			var appraiser = null;
+			self.loaded = false;
 			self.initialize =function(wallet){
 	            BalanceSocket.connect();
+				appraiser = $injector.get('appraiser');
 
 	            self.addresses = [];
 	            self.assets = [];
+	            self.loader = {
+	            	totalAddresses: wallet.addresses.length || 1,
+	            	totalAssets:1,
+	            	addresses:0,
+	            	assets:0,
+	            	loadedAddresses:false,
+	            	loadedAssets:false
+	            }
 	            wallet.addresses.forEach(function(raw){
 	                self._addAddress(raw);
 	            });
+
+	            appraiser.start();
+
+				$rootScope.$on("address:loaded", function(address){
+					self.loader.addresses +=1;
+						check_load()
+				});
+
+				$rootScope.$on("asset:loaded", function(asset){
+					self.loader.assets +=1;
+						check_load()
+				});
+
+				function check_load(){
+					if(self.loader.addresses==self.loader.totalAddresses)
+						self.loader.loadedAddresses = true;
+
+					if(self.loader.assets==self.loader.totalAssets){
+						self.loader.loadedAssets = true;
+						self.assets = self.assets.sort(function(itemA, itemB){
+							var nameA = itemA.name;
+							var nameB = itemB.name;
+
+							var order = 0;
+							if(nameA == "BTC")
+								order = -1;
+							else if(nameB == "BTC")
+								order = 1;
+							else
+								order = nameA < nameB ? -1 : nameA > nameB ? 1 : 0;
+
+							return order;
+
+						});
+					}
+
+					if(self.loader.loadedAddresses && self.loader.loadedAssets)
+						self.loaded = true;
+				}
 	        };
+
 
 	        self.destroy = function(){
 	        	self.addresses = [];
@@ -25,6 +76,9 @@ angular.module("omniServices")
 
                 BalanceSocket.on("address:"+address.address, function(data){
                     var update = false;
+                    if(self.loader.totalAssets < data.balance.length)
+                    	self.loader.totalAssets = data.balance.length;
+                    
                     data.balance.forEach(function(balanceItem) {
                         var tradable = ((address.privkey && address.privkey.length == 58) || address.pubkey) && balanceItem.value > 0;
                         var asset = null;
@@ -35,20 +89,19 @@ angular.module("omniServices")
                             if (asset.addresses().indexOf(address) == -1){
                              tradable ? asset.tradableAddresses.push(address) : asset.watchAddresses.push(address) ;
                              asset.tradable = asset.tradable || tradable;
-                             update=true;
                             }
                             break;
                           }
                         }
                         if (asset === null) {
-                            asset = new Asset(balanceItem.symbol, balanceItem.divisible, tradable, address)
+                            asset = new Asset(balanceItem.symbol,balanceItem.value, tradable, address)
                             
                             self.assets.push(asset);
                             update=true;
                         }
                     });
+
 					if(update){
-						var appraiser= $injector.get("appraiser")
 						appraiser.updateValues();
 					}
 						
@@ -74,7 +127,15 @@ angular.module("omniServices")
 	        self._removeAddress = function(addressHash){
 	        	for (var i = 0; i < self.addresses.length; i++)
 	              if (self.addresses[i].address == addressHash) 
-	                self.addresses.splice(i, 1);
+	                var address = self.addresses.splice(i, 1);
+
+	            address.balance.forEach(function(balance){
+	            	var asset = self.getAsset(balance.symbol);
+	            	if (asset.tradableAddresses.indexOf(address) > -1)
+	            		asset.tradableAddresses.splice(asset.tradableAddresses.indexOf(address), 1)
+	            	else
+	            		asset.watchAddresses.splice(asset.watchAddresses.indexOf(address), 1)
+	            })
 	        }
 
 	        self.getAsset = function(assetId){
@@ -108,7 +169,6 @@ angular.module("omniServices")
 			// }
 
 			// self.getBitcoinValue = function(){
-			//     var appraiser = $injector.get('appraiser');
 			//     return appraiser.getValue(100000000,"BTC");
 			// }
 			// self.setBitcoinValue = function(value){

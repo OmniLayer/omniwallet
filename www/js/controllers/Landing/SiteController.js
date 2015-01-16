@@ -1,12 +1,13 @@
  angular.module("omniControllers")
-  .controller("SiteController",["$scope", "$route", "$routeParams", "$modal", "$location", "browser", "Account", "Wallet",
-    function SiteController($scope, $route, $routeParams, $modal, $location, browser, Account, Wallet) {
+  .controller("SiteController",["$scope", "$route", "$routeParams", "$modal", "$location", "browser", "Account", "Wallet", "ModalManager",
+    function SiteController($scope, $route, $routeParams, $modal, $location, browser, Account, Wallet, ModalManager) {
 
       $scope.$route = $route;
       $scope.$location = $location;
       $scope.browser = browser;
       $scope.account = Account;
       $scope.wallet = Wallet;
+      $scope.modalManager = ModalManager;
 
       /*$scope.$on('$locationChangeStart', function(event, next) {
         if (browser === 'chrome') {
