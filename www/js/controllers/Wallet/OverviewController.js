@@ -11,7 +11,7 @@ angular.module("omniControllers")
         chart: {
                 type: 'pieChart',
                 height: 500,
-                x: function(asset){return asset.symbol;},
+                x: function(asset){return asset.name;},
                 y: function(asset){return asset.value;},
                 showLabels: true,
                 transitionDuration: 500,
