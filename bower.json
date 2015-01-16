@@ -23,9 +23,9 @@
     "angular-idle": "https://github.com/hackedbychinese/ng-idle.git#master",
     "angular-re-captcha": "~0.0.3",
     "angular-translate": "~2.4.2",
-    "angular-charts": "~0.2.6"
+    "angular-nvd3": "~0.0.9"
   },
   "resolutions": {
-    "d3": "~3.3.10"
+    "d3": "~3.4"
   }
 }
