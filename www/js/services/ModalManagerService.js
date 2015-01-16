@@ -424,9 +424,6 @@ angular.module("omniServices")
               if (result.address) {
                 Account.addAddress(result.address,undefined,result.pubkey);
               }
-              $scope.refresh();
-              $scope.addedNewAddress = true;
-              $scope.createdAddress = result.address;
             }, function() {});
           };
           
@@ -482,9 +479,6 @@ angular.module("omniServices")
               if (result.address) {
                 Account.addAddress(result.address);
               }
-              $scope.refresh();
-              $scope.addedNewAddress = true;
-              $scope.createdAddress = result.address;
             }, function() {});
           };
         
@@ -533,9 +527,6 @@ angular.module("omniServices")
                 addr,
                 encodePrivateKey(result.privKey, addr));
               }
-              $scope.refresh();
-              $scope.addedNewAddress = true;
-              $scope.createdAddress = decodeAddressFromPrivateKey(result.privKey);
             }, function() {});
           };
         
@@ -580,7 +571,6 @@ angular.module("omniServices")
                 addr,
                 encodePrivateKey(privkey, addr));
               }
-              $scope.refresh();
         
             }, function() {});
           };
