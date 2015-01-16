@@ -30,8 +30,15 @@ angular.module('omniwallet')
             Wallet.addresses.forEach(function(addr) {
               addr.balance.forEach(function(currencyItem) {
                 if ((parseInt(currencyItem.id,10) < 2147483648) && (parseInt(currencyItem.id,10) != 2) || showtesteco === 'true'){
-                  if(currencyItem.divisible)
+                  if(currencyItem.divisible) {
                     var value=new Big(currencyItem.value).times(WHOLE_UNIT).valueOf();
+                    var pendingpos=new Big(currencyItem.pendingpos).times(WHOLE_UNIT).valueOf();
+                    var pendingneg=new Big(currencyItem.pendingneg).times(WHOLE_UNIT).valueOf();
+                  } else {
+                    var pendingpos=currencyItem.pendingpos;
+                    var pendingneg=currencyItem.pendingneg;
+                  }
+
                   if (!balances.hasOwnProperty(currencyItem.symbol)) {
                     var asset = Wallet
                     balances[currencyItem.symbol] = {
@@ -39,10 +46,14 @@ angular.module('omniwallet')
                       "id" : currencyItem.id,
                       "balance": +value || +currencyItem.value,
                       "value": appraiser.getValue(currencyItem.value, currencyItem.symbol, currencyItem.divisible),
+                      "pendingpos": +pendingpos,
+                      "pendingneg": +pendingneg
                     };
                   } else {
                     balances[currencyItem.symbol].balance += +value || +currencyItem.value;
                     balances[currencyItem.symbol].value += appraiser.getValue(currencyItem.value, currencyItem.symbol, currencyItem.divisible);
+                    balances[currencyItem.symbol].pendingpos += +pendingpos;
+                    balances[currencyItem.symbol].pendingneg += +pendingneg;
                   }
                   //console.log(balances);
                   if (currencyItem.symbol == 'BTC') {
@@ -168,15 +179,22 @@ angular.module('omniwallet')
           for (var i in resultBalances) {
             var value = null;
             var item = resultBalances[i];
-            if(item.divisible)
+            if(item.divisible) {
               value=new Big(item.value).times(WHOLE_UNIT).valueOf();
+              var pendingpos=new Big(item.pendingpos).times(WHOLE_UNIT).valueOf();
+              var pendingneg=new Big(item.pendingneg).times(WHOLE_UNIT).valueOf();
+            } else {
+              var pendingpos=item.pendingpos;
+              var pendingneg=item.pendingneg;
+            }
             if (item.symbol == currencySymbol) {
               balances.push({
                 "address": addr,
                 "balance": +value || item.value,
-                "value": appraiser.getValue(item.value, currencySymbol, item.divisible)
+                "value": appraiser.getValue(item.value, currencySymbol, item.divisible),
+                "pendingpos": +pendingpos,
+                "pendingneg": +pendingneg
               });
-
             }
           }
         })
