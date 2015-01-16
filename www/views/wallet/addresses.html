@@ -6,16 +6,16 @@
     <div class="hidden-xs col-sm-9 col-md-8 col-lg-8">
       <form class="pull-right form-inline">
         <div class="form-group">
-          <label  for="listview">{{ 'WALLET_ADDRES
-            <div class="btn-group">
-              <button type="button" class="hidden-xs btn btn-main dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-                <span ng-if="listTemplate==templates['addresses']">{{ 'COMMON_ADDRESSES' | translate}}</span> <span ng-if="listTemplate==templates['assets']">{{ 'COMMON_ASSETS' | translate}}</span> <span class="glyphicon glyphicon-chevron-down"></span>
-              </button>
-              <ul class="dropdown-menu dropdown-menu-right" role="menu">
-                <li><a href="#" ng-click="listTemplate=templates['addresses']">{{ 'COMMON_ADDRESSES' | translate}}</a></li>
-                <li><a href="#" ng-click="listTemplate=templates['assets']">{{ 'COMMON_ASSETS' | translate}}</a></li>
-              </ul>
-            </div>
+          <label>{{ 'WALLET_ADDRESSES_VIEW' | translate}}</label>
+          <div class="btn-group">
+            <button type="button" class="hidden-xs btn btn-main dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+              <span ng-if="listTemplate==templates['addresses']">{{ 'COMMON_ADDRESSES' | translate}}</span> <span ng-if="listTemplate==templates['assets']">{{ 'COMMON_ASSETS' | translate}}</span> <span class="glyphicon glyphicon-chevron-down"></span>
+            </button>
+            <ul class="dropdown-menu dropdown-menu-right" role="menu">
+              <li><a href="#" ng-click="listTemplate=templates['addresses']">{{ 'COMMON_ADDRESSES' | translate}}</a></li>
+              <li><a href="#" ng-click="listTemplate=templates['assets']">{{ 'COMMON_ASSETS' | translate}}</a></li>
+            </ul>
+          </div>
         </div>
         <a class="btn btn-secondary" href="/wallet/send">{{ 'COMMON_SEND' |  translate }}</a>
         <div class="form-group btn-group">
