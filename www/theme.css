@@ -324,13 +324,17 @@ span#recaptcha_privacy {
 
 .assets-dropdown{
   margin-top: -4px;
-  margin-right: 3px;
+  margin-right: 4px;
   padding: 0px;
+  min-width: 100%;
+  background-color: transparent;
+  border: transparent;
+  box-shadow: none;
 }
 
-.assets-dropdown-element{
-  padding: 3px 0px 2px 0px;
-}
+/*.assets-dropdown-elements{
+  something for its elements
+}*/
 
 .divider{
   margin: 0px;
