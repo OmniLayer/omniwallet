@@ -320,3 +320,19 @@ span#recaptcha_privacy {
 .icons a.reddit { background: url(/assets/img/social-icons/reddit.png) left top no-repeat; }
 .icons a.facebook { background: url(/assets/img/social-icons/facebook.png) left top no-repeat; }
 .icons a:hover { background-position: left -34px; }
+
+
+.assets-dropdown{
+  margin-top: -4px;
+  margin-right: 3px;
+  padding: 0px;
+}
+
+.assets-dropdown-element{
+  padding: 3px 0px 2px 0px;
+}
+
+.divider{
+  margin: 0px;
+  color: #abdb84;
+}
