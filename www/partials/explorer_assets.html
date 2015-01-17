@@ -1,7 +1,20 @@
-<div class="sidecar col-xs-2" ng-controller="SidecarController" ng-init=setView('explorer')>
-    <div ng-include="templates['sidecar']"></div>
+<div class="main-container" ng-controller="ExplorerAssetsController">
+  <div class="row hidden-xs">
+    <div class="col-xs-2"></div>
+    <div class="col-xs-offset-9 col-xs-1 pull-right"></div>
+  </div>
+  <div class="row visible-xs">
+    <div class="col-xs-2"></div>
+    <div class="col-xs-offset-9 col-xs-1 pull-right"></div>
+  </div>
 </div>
 
+
+
+
+
+
+/*
 <div class="col-xs-10" ng-controller="ExplorerAssetsController">
 <div class="panel-default">
     <div class="text-left panel-body om-title" >
@@ -18,3 +31,4 @@
 </table>
 </div>
 </div>
+*/
