@@ -7,6 +7,10 @@ angular.module("omniConfig")
    	COMMON_BROADCAST: 'Broadcast Transaction',
    	COMMON_OVERVIEW: 'Overview',
    	COMMON_REMOVEADDRESS: 'Remove from Wallet',
+	COMMON_ADDRESSES: 'Addresses',
+	COMMON_ASSETS: 'Assets',
+	COMMON_ASSET: 'Asset',
+	COMMON_OVERVIEW: 'Overview',
    	COMMON_SEND: 'Send',
    	COMMON_VALUE: 'Value',
    	HOMEPAGE_BALANCECHECK: 'Balance Check',
@@ -42,5 +46,12 @@ angular.module("omniConfig")
 	WALLET_OVERVIEW_OPTIONS:'Wallet Options',
 	WALLET_OVERVIEW_OPTIONSTOGGLE:'Toggle Options',
 	WALLET_OVERVIEW_PORTFOLIO:'Portfolio Composition by value',
-	WALLET_OVERVIEW_WALLETID:'Wallet ID'
+	WALLET_OVERVIEW_WALLETID:'Wallet ID',
+	WALLET_ADDRESSES_CREATE:'Create New Address',
+	WALLET_ADDRESSES_IMPORT:'Import Address With Private Key',
+	WALLET_ADDRESSES_TITLE:'My Addresses',
+	WALLET_ADDRESSES_VIEW:'View by',
+	WALLET_ADDRESSES_OPTIONS:'Add Address',
+	WALLET_ADDRESSES_WATCH:'Add Watch Only Address',
+	WALLET_ADDRESSES_OFFLINE:'Add Armory Offline Address'
   })

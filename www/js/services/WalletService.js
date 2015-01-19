@@ -127,10 +127,10 @@ angular.module("omniServices")
 	        self._removeAddress = function(addressHash){
 	        	for (var i = 0; i < self.addresses.length; i++)
 	              if (self.addresses[i].address == addressHash) 
-	                var address = self.addresses.splice(i, 1);
+	                var address = self.addresses.splice(i, 1)[0];
 
 	            address.balance.forEach(function(balance){
-	            	var asset = self.getAsset(balance.symbol);
+	            	var asset = self.getAsset(balance.id);
 	            	if (asset.tradableAddresses.indexOf(address) > -1)
 	            		asset.tradableAddresses.splice(asset.tradableAddresses.indexOf(address), 1)
 	            	else
