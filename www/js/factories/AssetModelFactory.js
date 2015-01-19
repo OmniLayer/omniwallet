@@ -25,6 +25,7 @@ angular.module("omniFactories")
                 PropertyManager.getProperty(self.id).then(function(result) {
                   var property = result.data;
                   angular.extend(self,property);
+                  if (self.name == "BTC") self.name = "Bitcoin";
                   self.value = appraiser.getValue(self.balance, self.symbol, self.divisible);
                   self.divisible ? self.displayBalance = new Big(self.balance).times(WHOLE_UNIT).valueOf() : self.displayBalance = self.balance;
                   $rootScope.$broadcast("asset:loaded", {data:self})

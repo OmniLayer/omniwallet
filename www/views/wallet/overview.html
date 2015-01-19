@@ -39,11 +39,10 @@
             <div class="panel-heading">
               {{ 'WALLET_OVERVIEW_PORTFOLIO' | translate }} 
             </div>
-            <div ng-if="total>0" data-ac-chart="'pie'" 
-                data-ac-data="balanceData" 
-                data-ac-config="chartConfig" 
-                class="chart panel-body">
-            </div>
+            <nvd3 data="chartData" 
+                options="chartConfig" 
+                class="panel-body">
+            </nvd3>
           </div>
         </div>
       </div>

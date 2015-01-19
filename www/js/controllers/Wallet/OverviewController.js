@@ -8,17 +8,30 @@ angular.module("omniControllers")
       $scope.CSYM=Account.getSetting("usercurrency");
       $scope.total=0;
       $scope.chartConfig = {
-        tooltips: true,
-        mouseover: function() {},
-        mouseout: function() {},
-        click: function() {}
-      };
-
-      $scope.balanceData = {
-        data: []
+        chart: {
+                type: 'pieChart',
+                height: 500,
+                x: function(asset){return asset.name;},
+                y: function(asset){return asset.value;},
+                showLabels: true,
+                transitionDuration: 500,
+                labelThreshold: 0.01,
+                legend: {
+                    margin: {
+                        top: 5,
+                        right: 35,
+                        bottom: 5,
+                        left: 0
+                    }
+                }
+            }
       };
       
       $scope.showtesteco = Account.getSetting('showtesteco');
+
+      $scope.chartData = Wallet.assets.filter(function(asset){
+        return ((asset.id < 2147483648 && asset.id != 2) || $scope.showtesteco === 'true')
+      })
 
       $scope.openBackupModal=function(){
         ModalManager.openBackupWalletModal();
@@ -30,24 +43,11 @@ angular.module("omniControllers")
 
       function refresh(){
         $scope.total = 0;
-        var balanceData = {
-          data: []
-        };
-        Wallet.assets.forEach(function(asset) {
-          $scope.total += (typeof(asset.value) == "number"?+asset.value:0);
 
-          var add = true;
-          balanceData.data.forEach(function(data){
-            if(data.x==asset.symbol){
-              data.y = [asset.value];
-              add = false;
-            }
-          })
-          if(add)
-            balanceData.data.push({x:asset.symbol,y:[asset.value],tooltip:asset.symbol+": "+(typeof(asset.value) == "number"?"$"+asset.value.toFixed(2).toString():asset.value)})
+        Wallet.assets.forEach(function(asset) {
+          $scope.total += asset.value;
         });
 
-        $scope.balanceData= balanceData;
       }
 
       $scope.disclaimerSeen = Account.settings.disclaimerSeen;
