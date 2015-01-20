@@ -76,9 +76,7 @@ angular.module("omniServices")
 
                 BalanceSocket.on("address:"+address.address, function(data){
                     var update = false;
-                    if(self.loader.totalAssets < data.balance.length)
-                    	self.loader.totalAssets = data.balance.length;
-                    
+                                        
                     data.balance.forEach(function(balanceItem) {
                         var tradable = ((address.privkey && address.privkey.length == 58) || address.pubkey) && balanceItem.value > 0;
                         var asset = null;
@@ -94,8 +92,10 @@ angular.module("omniServices")
                           }
                         }
                         if (asset === null) {
-                            asset = new Asset(balanceItem.symbol,balanceItem.value, tradable, address)
+                            self.loader.totalAssets +=1;
                             
+                            asset = new Asset(balanceItem.symbol,balanceItem.value, tradable, address)
+
                             self.assets.push(asset);
                             update=true;
                         }
