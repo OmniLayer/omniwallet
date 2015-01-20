@@ -75,8 +75,7 @@ angular.module("omniServices")
 	        	var address = new Address(raw.address,raw.privkey,raw.pubkey);
 
                 BalanceSocket.on("address:"+address.hash, function(data){
-                    var update = false;
-                                        
+                    var update = false;                    
                     data.balance.forEach(function(balanceItem) {
                         var tradable = ((address.privkey && address.privkey.length == 58) || address.pubkey) && balanceItem.value > 0;
                         var asset = null;

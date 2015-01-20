@@ -20,9 +20,11 @@ angular.module("omniFactories")
 							})[0];
 
 							var delta = found ? balance.value-found.value : balance.value;
+							var dneg = found ? balance.pendingneg - found.pendingneg : balance.pendingneg;
+							var dpos = found ? balance.pendingpos - found.pendingpos : balance.pendingpos;
 
-							if (delta != 0)
-								$rootScope.$broadcast('balance:'+balance.symbol,  delta);
+							if (delta != 0 || dpos !=0 || dneg != 0)
+								$rootScope.$broadcast('balance:'+balance.symbol, delta, dneg, dpos);
 						});
 
 						self.balance = data.balance;
@@ -47,6 +49,28 @@ angular.module("omniFactories")
                     var value=new Big(currencyItem.value).times(WHOLE_UNIT).valueOf();
 				
 				return value || currencyItem.value;
+			}
+
+			self.getPendingNeg = function(assetId){
+				var currencyItem = self.balance.filter(function(asset){
+					return asset.id == assetId;
+				})[0];
+
+				if(currencyItem.divisible)
+                    var value=new Big(currencyItem.pendingneg).times(WHOLE_UNIT).valueOf();
+				
+				return value || currencyItem.pendingneg;
+			}
+
+			self.getPendingPos = function(assetId){
+				var currencyItem = self.balance.filter(function(asset){
+					return asset.id == assetId;
+				})[0];
+				
+				if(currencyItem.divisible)
+                    var value=new Big(currencyItem.pendingpos).times(WHOLE_UNIT).valueOf();
+				
+				return value || currencyItem.pendingpos;
 			}
 
 			self.getBalance = function(assetId){
