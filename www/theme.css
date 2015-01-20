@@ -1149,3 +1149,7 @@ i.icon-l{
 .panel-main > .panel-body {
   padding: 31px;
 }
+
+.panel.form {
+  background-color: #f0f0f0;
+}

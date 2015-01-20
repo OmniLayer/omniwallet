@@ -1,48 +1,44 @@
-<div ng-controller="WalletAssetsFormController" ng-init="bitcoinValue=getBitcoinValue()">
-  <div ng-controller="TransactionGenerationController">
-    <div ng-controller="WalletSendAssetsController" ng-if="wallet.loaded">
-      <div class="row">
-        <div class="col-xs-12">
-          <div class="text-left om-title">{{ 'WALLET_SEND_TITLE' | translate}}</div>
-          <!-- <div ng-show="showErrors" class="alert alert-danger"> <strong> {{error}} </strong>  -->
-        </div>
-      </div> 
-      <div class="row">
-        <div class="col-sm-12">  
-          <form name="sendForm" ng-submit="validateForm()">
-            <div class="well">
-              <div class="form-group col-sm-6">
-                <label for="chooseCoin" >{{ 'WALLET_SEND_CHOOSECOIN' | translate}}:</label>
-                <div class="btn-group">
-                  <button class="btn btn-default dropdown-toggle" type="button" id="chooseCoin" data-toggle="dropdown" aria-expanded="false">
-                    {{selectedAsset.name}} <small ng-show="selectedAsset.id > 2">({{selectedAsset.id}})</small>
-                    <span class="caret"></span>
-                  </button>
-                  <ul class="dropdown-menu" role="menu" aria-labelledby="chooseCoin">
-                    <li role="presentation" ng-repeat="asset in wallet.assets" ng-if="(asset.balance>0 || asset.symbol == 'BTC') && ((asset.id < 2147483648 && asset.id != 2) || showtesteco === 'true')">
-                      <a role="menuitem" tabindex="-1" href="#" ng-click="selectedAsset = asset">{{asset.name}} <small>({{asset.id}})</small></a>
-                    </li>
-                  </ul>
-                </div>
-              </div> 
-              <div class="form-group col-sm-6">
-                <label class="text-justify" >{{ 'WALLET_SEND_FROM' | translate}}:</label>
-                <div class="btn-group">
-                  <button class="btn btn-default dropdown-toggle" type="button" id="chooseAddress" data-toggle="dropdown" aria-expanded="true">
-                    {{selectedAddress.hash}} 
-                    <span class="caret"></span>
-                  </button>
-                  <ul class="dropdown-menu" role="menu" aria-labelledby="chooseAddress">
-                    <li role="presentation" ng-repeat="address in selectedAsset.tradeableAddresses">
-                      <a role="menuitem" tabindex="-1" href="#" ng-click="selectedAddress = address">{{address.hash}} </a>
-                    </li>
-                  </ul>
-                </div>
-              </div>
-            </div>  
-          </form>
-        </div>    
-      </div>
-    </div>
+<div class="row" ng-controller="WalletSendController" ng-if="wallet.loaded">
+  <div class="col-xs-12">
+    <div class="text-left om-title">{{ 'WALLET_SEND_TITLE' | translate}}</div>
+    <!-- <div ng-show="showErrors" class="alert alert-danger"> <strong> {{error}} </strong>  -->
   </div>
+</div> 
+<div class="row">
+  <div class="col-sm-12">  
+    <form name="sendForm" ng-submit="validateForm()">
+      <div class="panel panel-form">
+        <div class="panel-body">
+          <div class="form-group col-sm-6">
+            <label for="chooseCoin" >{{ 'WALLET_SEND_CHOOSECOIN' | translate}}:</label>
+            <div class="btn-group">
+              <button class="btn btn-default dropdown-toggle" type="button" id="chooseCoin" data-toggle="dropdown" aria-expanded="false">
+                {{selectedAsset.name}} <small ng-show="selectedAsset.id > 2">({{selectedAsset.id}})</small>
+                <span class="caret"></span>
+              </button>
+              <ul class="dropdown-menu" role="menu" aria-labelledby="chooseCoin">
+                <li role="presentation" ng-repeat="asset in wallet.assets" ng-if="asset.tradeable && ((asset.id < 2147483648 && asset.id != 2) || showtesteco === 'true')">
+                  <a role="menuitem" tabindex="-1" href="#" ng-click="setAsset(asset)">{{asset.name}} <small ng-show="selectedAsset.id > 2">({{asset.id}})</small></a>
+                </li>
+              </ul>
+            </div>
+          </div> 
+          <div class="form-group col-sm-6">
+            <label class="text-justify" >{{ 'WALLET_SEND_FROM' | translate}}:</label>
+            <div class="btn-group">
+              <button class="btn btn-default dropdown-toggle" type="button" id="chooseAddress" data-toggle="dropdown" aria-expanded="true">
+                {{selectedAddress.hash}} 
+                <span class="caret"></span>
+              </button>
+              <ul class="dropdown-menu" role="menu" aria-labelledby="chooseAddress">
+                <li role="presentation" ng-repeat="address in selectedAsset.tradeableAddresses">
+                  <a role="menuitem" tabindex="-1" href="#" ng-click="selectedAddress = address">{{address.hash}} </a>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>  
+    </form>
+  </div>    
 </div>
