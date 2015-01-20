@@ -74,11 +74,8 @@ angular.module("omniServices")
 	        self._addAddress = function(raw){
 	        	var address = new Address(raw.address,raw.privkey,raw.pubkey);
 
-                BalanceSocket.on("address:"+address.address, function(data){
-                    var update = false;
-                    if(self.loader.totalAssets < data.balance.length)
-                    	self.loader.totalAssets = data.balance.length;
-                    
+                BalanceSocket.on("address:"+address.hash, function(data){
+                    var update = false;                    
                     data.balance.forEach(function(balanceItem) {
                         var tradable = ((address.privkey && address.privkey.length == 58) || address.pubkey) && balanceItem.value > 0;
                         var asset = null;
@@ -94,8 +91,11 @@ angular.module("omniServices")
                           }
                         }
                         if (asset === null) {
-                            asset = new Asset(balanceItem.symbol,balanceItem.value, tradable, address)
+                        	if(balanceItem.symbol!="BTC")
+                            	self.loader.totalAssets += 1;
                             
+                            asset = new Asset(balanceItem.symbol,balanceItem.value, tradable, address)
+
                             self.assets.push(asset);
                             update=true;
                         }
@@ -112,7 +112,7 @@ angular.module("omniServices")
 
 	        self._updateAddress = function(address,privKey,pubKey){
 	        	for (var i in self.addresses) {
-		            if (self.addresses[i].address == address) {
+		            if (self.addresses[i].hash == address) {
 		                if(privKey){
 		                	self.addresses[i].privkey = privKey;
 		                	self.addresses[i].pubkey = undefined;
@@ -126,7 +126,7 @@ angular.module("omniServices")
 
 	        self._removeAddress = function(addressHash){
 	        	for (var i = 0; i < self.addresses.length; i++)
-	              if (self.addresses[i].address == addressHash) 
+	              if (self.addresses[i].hash == addressHash) 
 	                var address = self.addresses.splice(i, 1)[0];
 
 	            address.balance.forEach(function(balance){
@@ -146,7 +146,7 @@ angular.module("omniServices")
 
 	        self.getAddress = function(addressHash){
 	        	return self.addresses.filter(function(address){
-	        		return address.address == addressHash;
+	        		return address.hash == addressHash;
 	        	})[0];	
 	        }
 

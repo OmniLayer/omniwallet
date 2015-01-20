@@ -44,7 +44,7 @@ angular.module("omniServices")
                           });
                       };
 
-                      $scope.fromAddress = modalConfig.transaction.address.address;
+                      $scope.fromAddress = modalConfig.transaction.address.hash;
 
                       $scope.openBroadcastTransactionForm = function(address) {
                           $modalInstance.dismiss('close');
@@ -203,7 +203,7 @@ angular.module("omniServices")
                       
                         try{
                           if(exportData.exportPrivate && obj.privkey) {
-                            var ecKey = Bitcoin.ECKey.decodeEncryptedFormat(obj.privkey, obj.address);
+                            var ecKey = Bitcoin.ECKey.decodeEncryptedFormat(obj.privkey, obj.hash);
                             var addr = ecKey.getBitcoinAddress().toString();
                             var key = ecKey.getWalletImportFormat();
                             blob.addresses.push({ address: addr, privkey: key, pubkey: obj.pubkey });
@@ -211,17 +211,17 @@ angular.module("omniServices")
                             $scope.progressColor = "green";
                           }
                           if(exportData.exportWatch && (!obj.privkey && !obj.pubkey)) {
-                            blob.addresses.push({ address: obj.address, privkey: "", pubkey:"" });
-                            $scope.progressMessage = "Exported watch address " + obj.address;
+                            blob.addresses.push({ address: obj.hash, privkey: "", pubkey:"" });
+                            $scope.progressMessage = "Exported watch address " + obj.hash;
                             $scope.progressColor = "green";
                           }
                           if(exportData.exportOffline && (!obj.privkey && obj.pubkey)) {
-                            blob.addresses.push({ address: obj.address, privkey: "", pubkey:obj.pubkey });
-                            $scope.progressMessage = "Exported offline address " + obj.address;
+                            blob.addresses.push({ address: obj.hash, privkey: "", pubkey:obj.pubkey });
+                            $scope.progressMessage = "Exported offline address " + obj.hash;
                             $scope.progressColor = "green";
                           }
                         } catch (e) {
-                          $scope.progressMessage = "Error exporting "+obj.address+": " + e;
+                          $scope.progressMessage = "Error exporting "+obj.hash+": " + e;
                           $scope.progressColor = "red";
                         }
                         $scope.summary.push({color:$scope.progressColor,message: $scope.progressMessage});
@@ -409,8 +409,21 @@ angular.module("omniServices")
                 }
               });
               self.modalInstance.result.then(function() {
-                Account.removeAddress(addritem.address);
+                Account.removeAddress(addritem.hash);
                 });
+          };
+
+          var DeleteBtcAddressModal = function($scope, $modalInstance, address) {
+            $scope.address = address.hash;
+            $scope.private = address.privkey != undefined;
+
+            $scope.ok = function() {
+              $modalInstance.close();
+            };
+
+            $scope.cancel = function() {
+              $modalInstance.dismiss('cancel');
+            };
           };
 
           self.openImportArmoryForm = function() {
@@ -444,7 +457,7 @@ angular.module("omniServices")
               var addresses = Wallet.addresses;
               var address = new Bitcoin.Address.fromPubKey(Bitcoin.Util.hexToBytes(pubkey));
               for (var i in addresses) {
-                if (addresses[i].address == address.toString()) {
+                if (addresses[i].hash == address.toString()) {
                   return false;
                 }
               }
@@ -490,7 +503,7 @@ angular.module("omniServices")
             $scope.addressNotListed = function(address) {
               var addresses = Wallet.addresses;
               for (var i in addresses) {
-                if (addresses[i].address == address) {
+                if (addresses[i].hash == address) {
                   return false;
                 }
               }
