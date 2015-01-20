@@ -32,7 +32,7 @@ function WalletAssetsFormController($scope, $injector, Wallet, walletTransaction
   $scope.addressList = $scope.selectedCoin ? $scope.selectedCoin.tradableAddresses.filter(function(e) {
           return $scope.offlineSupport || (e.privkey && e.privkey.length == 58);
         }).map(function(e){
-          return e.address;
+          return e.hash;
         }) : [];
   if(!$scope.$parent.selectedAddress)
     $scope.selectedAddress = $scope.addressList[0] || null;
@@ -52,7 +52,7 @@ function WalletAssetsFormController($scope, $injector, Wallet, walletTransaction
     $scope.addressList = $scope.selectedCoin ? $scope.selectedCoin.tradableAddresses.filter(function(e) {
           return $scope.offlineSupport || (e.privkey && e.privkey.length == 58);
         }).map(function(e){
-          return e.address;
+          return e.hash;
         }) : [];
     if(!$scope.$parent.selectedAddress)
       $scope.selectedAddress = $scope.addressList[0] || null;

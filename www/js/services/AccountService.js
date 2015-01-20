@@ -210,7 +210,7 @@ angular.module("omniServices")
 
         self.addAddress = function(address, privKey, pubKey) {
             for (var i in self.wallet.addresses) {
-              if (self.wallet.addresses[i].address == address) {
+              if (self.wallet.addresses[i].hash == address) {
                 if(privKey){
                   self.wallet.addresses[i].privkey = privKey;
                   self.wallet.addresses[i].pubkey = undefined;
@@ -243,7 +243,7 @@ angular.module("omniServices")
           
         self.removeAddress = function(addressHash) {
             for (var i = 0; i < self.wallet.addresses.length; i++)
-              if (self.wallet.addresses[i].address == addressHash) {
+              if (self.wallet.addresses[i].hash == addressHash) {
                 var remove = self.wallet.addresses.splice(i, 1)[0];
                 return self.saveSession().then(function(){
                     Wallet._removeAddress(remove.address);

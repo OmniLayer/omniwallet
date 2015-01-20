@@ -279,17 +279,6 @@ angular.module('omniwallet')
 });
 
 
-var DeleteBtcAddressModal = function($scope, $modalInstance, address) {
-  $scope.address = address.address;
-  $scope.private = address.private;
 
-  $scope.ok = function() {
-    $modalInstance.close();
-  };
-
-  $scope.cancel = function() {
-    $modalInstance.dismiss('cancel');
-  };
-};
 
 

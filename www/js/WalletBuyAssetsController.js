@@ -6,7 +6,7 @@ function WalletBuyAssetsController($modal, $scope, $http, $q, Wallet, walletTran
       $scope.addressList = e.tradableAddresses.filter(function(e) {
           return (e.privkey && e.privkey.length == 58);
         }).map(function(e){
-          return e.address;
+          return e.hash;
         });
       $scope.$parent.$parent.selectedAddress = $scope.addressList[0];
     }

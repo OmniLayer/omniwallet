@@ -1,17 +1,17 @@
 angular.module("omniFactories")
 	.factory("Address", ["BalanceSocket", "$rootScope","WHOLE_UNIT", function AddressModelFactory(BalanceSocket, $rootScope, WHOLE_UNIT){
-		var AddressModel = function(address,privkey,pubkey){
+		var AddressModel = function(hash,privkey,pubkey){
 			var self = this;
 
 			self.initialize = function(){
 				self.loaded = false;
-				self.address = address;
+				self.hash = hash;
 				self.privkey = privkey;
 				self.pubkey = pubkey;
 				self.balance = [];
-				self.qr = "https://chart.googleapis.com/chart?chs=150x150&cht=qr&chl="+address+"&choe=UTF-8";
+				self.qr = "https://chart.googleapis.com/chart?chs=150x150&cht=qr&chl="+hash+"&choe=UTF-8";
 				
-				BalanceSocket.on("address:"+address, function(data){
+				BalanceSocket.on("address:"+hash, function(data){
 					if(self.balance != data.balance){
 						var previousBalance = self.balance;
 						data.balance.forEach(function(balance,index){
@@ -30,12 +30,12 @@ angular.module("omniFactories")
 
 						if(!self.loaded){
 							self.loaded=true;
-							$rootScope.$broadcast("address:loaded", {hash:address});
+							$rootScope.$broadcast("address:loaded", {hash:hash});
 						}
 					}
 				});
 
-				BalanceSocket.emit("address:add", {data:address});
+				BalanceSocket.emit("address:add", {data:hash});
 			}
 
 			self.getDisplayBalance = function(assetId){
