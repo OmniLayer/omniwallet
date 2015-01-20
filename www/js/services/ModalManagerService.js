@@ -289,7 +289,7 @@ angular.module("omniServices")
                       }
           
                       try{
-                        var addr = address.hash;
+                        var addr = address.address;
                         if(address.privkey){
                           var eckey = new Bitcoin.ECKey(address.privkey);
                           addr = eckey.getBitcoinAddress().toString();
@@ -331,7 +331,7 @@ angular.module("omniServices")
                   $scope.total = wallet.addresses.length;
                   $scope.completed = 0;
                   var next = function(){
-                    if($scope.completed < $scope.total) $scope.progressMessage="Importing address " + wallet.addresses[$scope.completed].hash;
+                    if($scope.completed < $scope.total) $scope.progressMessage="Importing address " + wallet.addresses[$scope.completed].address;
                     $timeout(function(){
                       return importAddress(wallet.addresses[$scope.completed]);
                     },0,false);
@@ -348,10 +348,10 @@ angular.module("omniServices")
                       // Use address as passphrase for now
                       if(addr.privkey) 
                         Account.addAddress(
-                          addr.hash,
-                          encodePrivateKey(addr.privkey, addr.hash))
+                          addr.address,
+                          encodePrivateKey(addr.privkey, addr.address))
                           .then(function(){
-                            $scope.progressMessage="Imported address " + addr.hash;
+                            $scope.progressMessage="Imported address " + addr.address;
                             $scope.progressColor = "green";
                             
                             $scope.summary.push({message:$scope.progressMessage,color:$scope.progressColor});
@@ -360,9 +360,9 @@ angular.module("omniServices")
                           });
                       else
                         Account.addAddress(
-                          addr.hash, undefined, addr.pubkey)
+                          addr.address, undefined, addr.pubkey)
                           .then(function(){
-                            $scope.progressMessage="Imported address " + addr.hash;
+                            $scope.progressMessage="Imported address " + addr.address;
                             $scope.progressColor = "green";
                             
                             $scope.summary.push({message:$scope.progressMessage,color:$scope.progressColor});
