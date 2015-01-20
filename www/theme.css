@@ -1146,6 +1146,6 @@ i.icon-l{
   background-color: #f5f5f5;
 }
 
-.panel-body {
+.panel-main > .panel-body {
   padding: 31px;
 }

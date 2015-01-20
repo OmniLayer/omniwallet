@@ -53,5 +53,8 @@ angular.module("omniConfig")
 	WALLET_ADDRESSES_VIEW:'View by',
 	WALLET_ADDRESSES_OPTIONS:'Add Address',
 	WALLET_ADDRESSES_WATCH:'Add Watch Only Address',
-	WALLET_ADDRESSES_OFFLINE:'Add Armory Offline Address'
+	WALLET_ADDRESSES_OFFLINE:'Add Armory Offline Address',
+	WALLET_SEND_TITLE:'Send',
+	WALLET_SEND_CHOOSECOIN:'Choose coin',
+	WALLET_SEND_FROM:'Send from address'
   })
