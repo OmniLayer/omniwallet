@@ -321,20 +321,16 @@ span#recaptcha_privacy {
 .icons a.facebook { background: url(/assets/img/social-icons/facebook.png) left top no-repeat; }
 .icons a:hover { background-position: left -34px; }
 
+.my-assets{
+  padding-right: 15px;
+}
 
 .assets-dropdown{
   margin-top: -4px;
-  margin-right: 4px;
+  margin-right: 2px;
   padding: 0px;
   min-width: 100%;
-  background-color: transparent;
-  border: transparent;
-  box-shadow: none;
 }
-
-/*.assets-dropdown-elements{
-  something for its elements
-}*/
 
 .divider{
   margin: 0px;
