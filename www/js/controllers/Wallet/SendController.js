@@ -7,6 +7,9 @@ angular.module("omniControllers")
 
       	$scope.setAsset = function(asset){
       		$scope.selectedAsset = asset;
-      		$scope.selectedAddress = $scope.selectedAsset.tradeableAddresses[0];
+      		$scope.selectedAddress = $scope.selectedAsset.tradableAddresses[0];
+      	}
+      	$scope.setAddress = function(address){
+      		$scope.selectedAddress = address;
       	}
 	}])

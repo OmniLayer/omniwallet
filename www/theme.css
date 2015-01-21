@@ -394,6 +394,52 @@ fieldset[disabled] .btn-tertiary.active {
   background-color: #fff;
 }
 
+.btn-clear {
+  color: #333333;
+  background-color: #ffffff;
+  border-color: #ffffff;
+}
+
+.btn-clear:hover,
+.btn-clear:focus,
+.btn-clear:active,
+.btn-clear.active,
+.open .dropdown-toggle.btn-clear {
+  color: #333333;
+  background-color: #eeeeee;
+  border-color: #eeeeee;
+}
+
+.btn-clear:active,
+.btn-clear.active,
+.open .dropdown-toggle.btn-clear {
+  background-image: none;
+}
+
+.btn-clear.disabled,
+.btn-clear[disabled],
+fieldset[disabled] .btn-clear,
+.btn-clear.disabled:hover,
+.btn-clear[disabled]:hover,
+fieldset[disabled] .btn-clear:hover,
+.btn-clear.disabled:focus,
+.btn-clear[disabled]:focus,
+fieldset[disabled] .btn-clear:focus,
+.btn-clear.disabled:active,
+.btn-clear[disabled]:active,
+fieldset[disabled] .btn-clear:active,
+.btn-clear.disabled.active,
+.btn-clear[disabled].active,
+fieldset[disabled] .btn-clear.active {
+  background-color: #eee;
+  border-color: #e1e1e1;
+  color: #bcbcbc;
+}
+
+.btn-clear .badge {
+  color: #333;
+  background-color: #fff;
+}
 .footer .navbar-nav > li {
   padding-top: 0;
 }
@@ -1150,6 +1196,6 @@ i.icon-l{
   padding: 31px;
 }
 
-.panel.form {
+.panel-form {
   background-color: #f0f0f0;
 }

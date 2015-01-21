@@ -1,5 +1,5 @@
 <div ng-controller="WalletSendController" ng-if="wallet.loaded">
-  <div class="row">
+  <div class="row om-row">
     <div class="col-xs-12">
       <div class="text-left om-title">{{ 'WALLET_SEND_TITLE' | translate}}</div>
       <!-- <div ng-show="showErrors" class="alert alert-danger"> <strong> {{error}} </strong>  -->
@@ -10,10 +10,10 @@
       <form name="sendForm">
         <div class="panel panel-form">
           <div class="panel-body">
-            <div class="form-group col-sm-6">
+            <div class="col-sm-6">
               <label for="chooseCoin" >{{ 'WALLET_SEND_CHOOSECOIN' | translate}}:</label>
-              <div class="btn-group">
-                <button class="btn btn-default dropdown-toggle" type="button" id="chooseCoin" data-toggle="dropdown" aria-expanded="false">
+              <div class="btn-group send-asset-dropdown">
+                <button class="btn btn-clear dropdown-toggle" type="button" id="chooseCoin" data-toggle="dropdown" aria-expanded="false">
                   {{selectedAsset.name}} <small ng-show="selectedAsset.id > 2">({{selectedAsset.id}})</small>
                   <span class="caret"></span>
                 </button>
@@ -24,16 +24,16 @@
                 </ul>
               </div>
             </div> 
-            <div class="form-group col-sm-6">
+            <div class="col-sm-6">
               <label class="text-justify" >{{ 'WALLET_SEND_FROM' | translate}}:</label>
-              <div class="btn-group">
-                <button class="btn btn-default dropdown-toggle" type="button" id="chooseAddress" data-toggle="dropdown" aria-expanded="true">
+              <div class="btn-group send-address-dropdown">
+                <button class="btn btn-clear dropdown-toggle" type="button" id="chooseAddress" data-toggle="dropdown" aria-expanded="true">
                   {{selectedAddress.hash}} 
                   <span class="caret"></span>
                 </button>
                 <ul class="dropdown-menu" role="menu" aria-labelledby="chooseAddress">
                   <li role="presentation" ng-repeat="address in selectedAsset.tradableAddresses">
-                    <a role="menuitem" tabindex="-1" href="#" ng-click="selectedAddress = address">{{address.hash}} </a>
+                    <a role="menuitem" tabindex="-1" href="#" ng-click="setAddress(address)">{{address.hash}} </a>
                   </li>
                 </ul>
               </div>
