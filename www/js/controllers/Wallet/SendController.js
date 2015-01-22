@@ -1,5 +1,5 @@
 angular.module("omniControllers")
-	.controller("WalletSendController",["$scope", "MIN_MINER_FEE", "OMNI_PROTOCOL_COST", "SATOSHI_UNIT", function WalletSendController($scope, MIN_MINER_FEE, PROTOCOL_FEE,SATOSHI_UNIT){
+	.controller("WalletSendController",["$scope", "MIN_MINER_FEE", "OMNI_PROTOCOL_COST", "SATOSHI_UNIT", "ModalManager", "Transaction", function WalletSendController($scope, MIN_MINER_FEE, PROTOCOL_FEE,SATOSHI_UNIT,ModalManager,Transaction){
 		$scope.minersFee = MIN_MINER_FEE;
 		$scope.protocolFee = PROTOCOL_FEE;
 
@@ -17,7 +17,7 @@ angular.module("omniControllers")
       		$scope.selectedAddress = address;
       	}
 
-      	self.sendTransaction = function(){
+      	$scope.sendTransaction = function(){
 			// TODO: Validations
 			var fee = $scope.minersFee;
 			var amount = $scope.sendByValue ? $scope.sendAmount * $scope.selectedAsset.price : $scope.sendAmount;
