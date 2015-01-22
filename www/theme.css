@@ -209,6 +209,10 @@ h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6{
   background-image: url(/assets/img/icons/circle-arrow-down.png);
 }
 
+.send-toggle {
+  width:60px;
+}
+
 .send-toggle div {
   min-height: 27px;
   min-width: 54px;
@@ -235,6 +239,7 @@ h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6{
   width: 54px;
   height: 27px;
   margin: 0px !important;
+  margin-left: -27px !important;
 }
 .btn-sendbyvalue span {
   position: absolute;
@@ -245,10 +250,15 @@ h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6{
   background-color: transparent;
   border: 0pt none;
   margin: 0px;
+  margin-left: -27px;
 }
 .btn-sendbyvalue input[type="checkbox"] + span /*the span element that immediately follow the checkbox button */ {
   visibility: hidden;
   background-image: url(/assets/img/icons/toggle-fiat.png);
+}
+
+.no-padding{
+  padding: 0;
 }
 
 .missing-dex-alert{

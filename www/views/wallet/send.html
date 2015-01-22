@@ -46,8 +46,8 @@
               <label for="chooseCoin" >
                 {{ 'WALLET_SEND_AMOUNT' | translate}} ({{selectedAddress.getDisplayBalance(selectedAsset.id)}} {{selectedAsset.name}} <small ng-show="selectedAsset.id > 2">({{selectedAsset.id}})</small> {{ 'COMMON_AVAILABLE' | translate}})
               </label>
-              <div class="input-group">
-                <span class="input-group-addon" ng-if="selectedAsset.symbol == 'BTC'">
+              <div class="input-group" ng-if="selectedAsset.symbol == 'BTC'">
+                <span class="input-group-addon no-padding">
                   <div class="send-toggle">
                     <div class="checkbox inline btn-sendbyvalue">
                       <span></span>
@@ -60,6 +60,10 @@
                     placeholder="{{selectedAsset.divisible ? '1.00000000' : '1'}}" step="{{selectedAsset.divisible ? 0.00000001 : 1}}" 
                     min="{{selectedAsset.divisible ? 0.00000001 : 1}}" required>
               </div>
+              <input ng-if="selectedAsset.symbol != 'BTC'" id="amount" name="amount" type="number" ng-model="sendAmount" 
+                    class="form-control" value="sendAmount"
+                    placeholder="{{selectedAsset.divisible ? '1.00000000' : '1'}}" step="{{selectedAsset.divisible ? 0.00000001 : 1}}" 
+                    min="{{selectedAsset.divisible ? 0.00000001 : 1}}" required>
             </div> 
             <div class="col-sm-6">
               <label class="text-justify" >{{ 'WALLET_SEND_TO' | translate}}</label>
