@@ -7,7 +7,7 @@
   </div> 
   <div class="row">
     <div class="col-sm-12">  
-      <form name="sendForm">
+      <form name="sendForm" submit="sendTransaction()">
         <div class="panel panel-form">
           <div class="panel-body">
             <div class="col-sm-6">
@@ -51,7 +51,7 @@
                   <div class="send-toggle">
                     <div class="btn-sendbyvalue">
                       <span></span>
-                      <input type="checkbox" name="sendByValue" ng-init="sendByValue = false" ng-model="sendByValue">
+                      <input type="checkbox" name="sendByValue" ng-init="sendByValue = false" ng-model="sendByValue" ng-change="convertAmount()">
                       <span></span>
                     </div>
                   </div>
@@ -59,7 +59,7 @@
                 <input id="amount" name="amount" type="number" ng-model="sendAmount" class="form-control" value="sendAmount"
                     placeholder="{{selectedAsset.divisible ? '1.00000000' : '1'}}" step="{{selectedAsset.divisible ? 0.00000001 : 1}}" 
                     min="{{selectedAsset.divisible ? 0.00000001 : 1}}" required>
-                <div class="hint">({{sendByValue ? (sendAmount || 0) / selectedAsset.price : (sendAmount || 0) * selectedAsset.price}} {{sendByValue ? 'BTC' : userCurrency}})</div>
+                <div class="hint">({{sendByValue ? ((sendAmount || 0) / selectedAsset.price).toFixed(4) : ((sendAmount || 0) * selectedAsset.price).toFixed(2)}} {{sendByValue ? 'BTC' : userCurrency}})</div>
               </div>
               <input ng-if="selectedAsset.symbol != 'BTC'" id="amount" name="amount" type="number" ng-model="sendAmount" 
                     class="form-control" value="sendAmount"

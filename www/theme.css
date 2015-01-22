@@ -870,13 +870,11 @@ border-left-color: #111111;
   padding-left: 0;
   font-size: 36px;
   color: #636363;
-  font-family: 'Gudea', sans-serif;
 }
 .modal-action-btn{
   background-color: #f5f2f2;
   color: #44b8ef;
   font-size: 32px;
-  font-family: 'Gudea', sans-serif;
   border-width: 1px;
   border-color: #e8e7e7
 }
@@ -900,7 +898,6 @@ border-left-color: #111111;
   color:#636363;
   font-size: 15px;
   font-weight: bold;
-  font-family: 'Gudea', sans-serif;
   margin-top: 16px;
 }
 
@@ -914,7 +911,6 @@ border-left-color: #111111;
 .description-title{
   font-size: 18px;
   color: #b8b7b7;
-  font-family: 'Gudea', sans-serif;
   font-weight: bold;
   float: left;
   width: 103px;
@@ -923,7 +919,6 @@ border-left-color: #111111;
 .description-title-large{
   font-size: 18px;
   color: #b8b7b7;
-  font-family: 'Gudea', sans-serif;
   font-weight: bold;
   float: left;
   width: 126px;
@@ -932,7 +927,6 @@ border-left-color: #111111;
 .description-title-xlarge{
   font-size: 18px;
   color: #b8b7b7;
-  font-family: 'Gudea', sans-serif;
   font-weight: bold;
   float: left;
   width: 200px;
@@ -941,19 +935,16 @@ border-left-color: #111111;
 .description-text{
   font-size: 18px;
   color: #696969;
-  font-family: 'Gudea', sans-serif;
   font-weight: bold;
 }
 .description-extra{
   font-size: 18px;
   color: #b8b7b7;
-  font-family: 'Gudea', sans-serif;
   font-weight: bold;
 }
 .send-fee{
   font-size: 16px;
   color:#c4c4c4;
-  font-family: 'Gudea', sans-serif;
 }
 .expandable-div{
   height: auto;
