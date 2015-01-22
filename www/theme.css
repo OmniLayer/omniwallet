@@ -209,6 +209,48 @@ h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6{
   background-image: url(/assets/img/icons/circle-arrow-down.png);
 }
 
+.send-toggle div {
+  min-height: 27px;
+  min-width: 54px;
+}
+
+.send-toggle input {
+  position: absolute;
+  margin: 0;
+/*hide the checkbox button*/
+  -moz-opacity: 0;
+  -khtml-opacity: 0;
+  opacity: 0;
+  cursor: pointer;
+  z-index: 10;
+}
+.send-toggle input[type="checkbox"]:checked + span {
+  visibility: visible;
+}
+.send-toggle .checkbox input[type="checkbox"] {
+  margin-left: 0px;
+}
+
+.btn-sendbyvalue input {
+  width: 54px;
+  height: 27px;
+  margin: 0px !important;
+}
+.btn-sendbyvalue span {
+  position: absolute;
+  width: 54px;
+  height: 27px;
+  background-image: url(/assets/img/icons/toggle-btc.png);
+  background-repeat: no-repeat;
+  background-color: transparent;
+  border: 0pt none;
+  margin: 0px;
+}
+.btn-sendbyvalue input[type="checkbox"] + span /*the span element that immediately follow the checkbox button */ {
+  visibility: hidden;
+  background-image: url(/assets/img/icons/toggle-fiat.png);
+}
+
 .missing-dex-alert{
   margin-top: 0px;
   margin-bottom: 0px;
@@ -406,8 +448,8 @@ fieldset[disabled] .btn-tertiary.active {
 .btn-clear.active,
 .open .dropdown-toggle.btn-clear {
   color: #333333;
-  background-color: #eeeeee;
-  border-color: #eeeeee;
+  background-color: #ffffff;
+  border-color: #ffffff;
 }
 
 .btn-clear:active,
@@ -440,6 +482,41 @@ fieldset[disabled] .btn-clear.active {
   color: #333;
   background-color: #fff;
 }
+
+.send-asset-dropdown {
+    display: block;
+}
+
+.send-asset-dropdown .dropdown-toggle {
+    width: 60%;
+    text-align: left;
+}
+
+.send-asset-dropdown .dropdown-menu {
+    width: 60%;
+}
+
+.send-asset-dropdown .caret {
+    margin-top: 8px;
+}
+
+.send-address-dropdown {
+    display: block;
+}
+
+.send-address-dropdown .dropdown-toggle {
+    width: 100%;
+    text-align: left;
+}
+
+.send-address-dropdown .dropdown-menu {
+    width: 100%;
+}
+
+.send-address-dropdown .caret {
+    margin-top: 8px;
+}
+
 .footer .navbar-nav > li {
   padding-top: 0;
 }

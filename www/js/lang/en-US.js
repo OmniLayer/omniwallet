@@ -2,6 +2,7 @@ angular.module("omniConfig")
 	.constant("EnglishTranslation",{
    	COMMON_ACTIONS: 'Actions',
 	COMMON_ADDRESS: 'Address',
+	COMMON_AVAILABLE: 'available',
 	COMMON_BALANCE: 'Balance',
 	COMMON_BITCOIN: 'Bitcoin',
    	COMMON_BROADCAST: 'Broadcast Transaction',
@@ -56,5 +57,7 @@ angular.module("omniConfig")
 	WALLET_ADDRESSES_OFFLINE:'Add Armory Offline Address',
 	WALLET_SEND_TITLE:'Send',
 	WALLET_SEND_CHOOSECOIN:'Choose coin',
-	WALLET_SEND_FROM:'Send from address'
+	WALLET_SEND_FROM:'Send from address',
+	WALLET_SEND_AMOUNT:'Send amount',
+	WALLET_SEND_TO:'Send to address'
   })
