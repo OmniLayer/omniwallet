@@ -59,5 +59,7 @@ angular.module("omniConfig")
 	WALLET_SEND_CHOOSECOIN:'Choose coin',
 	WALLET_SEND_FROM:'Send from address',
 	WALLET_SEND_AMOUNT:'Send amount',
-	WALLET_SEND_TO:'Send to address'
+	WALLET_SEND_TO:'Send to address',
+	WALLET_SEND_COST:'Total transaction cost',
+	WALLET_SEND_SUBMIT:'Send Transaction'
   })

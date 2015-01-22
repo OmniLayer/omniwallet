@@ -49,7 +49,7 @@
               <div class="input-group" ng-if="selectedAsset.symbol == 'BTC'">
                 <span class="input-group-addon no-padding">
                   <div class="send-toggle">
-                    <div class="checkbox inline btn-sendbyvalue">
+                    <div class="btn-sendbyvalue">
                       <span></span>
                       <input type="checkbox" name="sendByValue" ng-init="sendByValue = false" ng-model="sendByValue">
                       <span></span>
@@ -70,7 +70,11 @@
               <input name="reciever" type="text" ng-model="sendTo" class="form-control" required>
             </div>
           </div>
-        </div>  
+        </div>
+        <p>
+          {{ 'WALLET_SEND_COST' | translate}}: {{selectedAsset.symbol == 'BTC'? minersFee : minersFee + protocolFee}} BTC <a href="#"><span class="glyphicon glyphicon-pencil"></span></a>
+        </p>  
+        <button type="submit" class="btn btn-main">{{ 'WALLET_SEND_SUBMIT' | translate}}</button>
       </form>
     </div>    
   </div>
