@@ -72,7 +72,7 @@
           </div>
         </div>
         <p>
-          {{ 'WALLET_SEND_COST' | translate}}: {{selectedAsset.symbol == 'BTC'? minersFee : minersFee + protocolFee}} BTC <button type="button" class="btn btn-xs"><span class="glyphicon glyphicon-pencil small"></span></button>
+          {{ 'WALLET_SEND_COST' | translate}}: {{selectedAsset.symbol == 'BTC'? minersFee.valueOf() : minersFee.plus(protocolFee).valueOf()}} BTC <button type="button" class="btn btn-xs"><span class="glyphicon glyphicon-pencil small"></span></button>
         </p>  
         <button type="submit" class="btn btn-main pull-right">{{ 'WALLET_SEND_SUBMIT' | translate}}</button>
       </form>
