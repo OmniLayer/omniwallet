@@ -7,7 +7,8 @@ angular.module("omniControllers")
 		$scope.selectedAddress = $scope.selectedAsset.tradableAddresses[0];
 
       	$scope.showtesteco = $scope.account.getSetting('showtesteco');
-
+      	$scope.userCurrency = $scope.account.getSetting("usercurrency");
+      	
       	$scope.setAsset = function(asset){
       		$scope.selectedAsset = asset;
       		$scope.selectedAddress = $scope.selectedAsset.tradableAddresses[0];

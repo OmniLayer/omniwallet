@@ -59,6 +59,7 @@
                 <input id="amount" name="amount" type="number" ng-model="sendAmount" class="form-control" value="sendAmount"
                     placeholder="{{selectedAsset.divisible ? '1.00000000' : '1'}}" step="{{selectedAsset.divisible ? 0.00000001 : 1}}" 
                     min="{{selectedAsset.divisible ? 0.00000001 : 1}}" required>
+                <div class="hint">({{sendByValue ? (sendAmount || 0) / selectedAsset.price : (sendAmount || 0) * selectedAsset.price}} {{sendByValue ? 'BTC' : userCurrency}})</div>
               </div>
               <input ng-if="selectedAsset.symbol != 'BTC'" id="amount" name="amount" type="number" ng-model="sendAmount" 
                     class="form-control" value="sendAmount"

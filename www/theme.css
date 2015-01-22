@@ -1286,3 +1286,11 @@ i.icon-l{
 .panel-form {
   background-color: #f0f0f0;
 }
+
+.hint {
+    position: absolute;
+    right: 8px;
+    bottom: 8px;
+    color: #c0c0c0;
+    font-size: 12px;
+}
