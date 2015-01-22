@@ -1,5 +1,5 @@
 angular.module("omniControllers")
-	.controller("WalletSendController",["$scope", "MIN_MINER_FEE", "OMNI_PROTOCOL_COST", "SATOSHI_UNIT", "ModalManager", "Transaction", function WalletSendController($scope, MIN_MINER_FEE, PROTOCOL_FEE,SATOSHI_UNIT,ModalManager,Transaction){
+	.controller("WalletSendController",["$scope", "MIN_MINER_FEE", "OMNI_PROTOCOL_COST", "SATOSHI_UNIT", "Transaction", function WalletSendController($scope, MIN_MINER_FEE, PROTOCOL_FEE,SATOSHI_UNIT,Transaction){
 		$scope.minersFee = MIN_MINER_FEE;
 		$scope.protocolFee = PROTOCOL_FEE;
 
@@ -26,9 +26,10 @@ angular.module("omniControllers")
 		        currency_identifier:$scope.selectedAsset.id,
 		        amount_to_transfer : $scope.selectedAsset.divisible ? +new Big(amount).times(SATOSHI_UNIT).valueOf() : +amount,
 		        transaction_to: $scope.sendTo,
-		        donate: Account.getSetting("donate")
-		      });
-			ModalManager.openConfirmationModal({
+		        donate: $scope.account.getSetting("donate")
+		    });
+			
+			$scope.modalManager.openConfirmationModal({
 				dataTemplate: '/views/modals/partials/send.html',
 				footerTemplate: '/views/modals/partials/send_footer.html',
 				scope: {
