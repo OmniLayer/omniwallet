@@ -1,5 +1,5 @@
 angular.module("omniControllers")
-	.controller("WalletSendController",["$scope", "MIN_MINER_FEE", "OMNI_PROTOCOL_COST" function WalletSendController($scope, MIN_MINER_FEE, PROTOCOL_FEE){
+	.controller("WalletSendController",["$scope", "MIN_MINER_FEE", "OMNI_PROTOCOL_COST", function WalletSendController($scope, MIN_MINER_FEE, PROTOCOL_FEE){
 		$scope.minersFee = MIN_MINER_FEE;
 		$scope.protocolFee = PROTOCOL_FEE;
 
