@@ -19,7 +19,7 @@
                 </button>
                 <ul class="dropdown-menu" role="menu" aria-labelledby="chooseCoin">
                   <li role="presentation" ng-repeat="asset in wallet.assets" ng-if="asset.tradable && ((asset.id < 2147483648 && asset.id != 2) || showtesteco === 'true')">
-                    <a role="menuitem" tabindex="-1" href="#" ng-click="setAsset(asset)">{{asset.name}} <small ng-show="selectedAsset.id > 2">({{asset.id}})</small></a>
+                    <a role="menuitem" tabindex="-1" href="#" ng-click="setAsset(asset)">{{asset.name}} <small ng-show="asset.id > 2">({{asset.id}})</small></a>
                   </li>
                 </ul>
               </div>

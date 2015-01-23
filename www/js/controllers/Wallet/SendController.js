@@ -28,20 +28,29 @@ angular.module("omniControllers")
 		        transaction_to: $scope.sendTo,
 		        donate: $scope.account.getSetting("donate")
 		    });
+		    
+			var btcPrice = $scope.selectedAsset.price;
 			
+			var modalScope = {
+				title:"Confirm Send",
+				token:$scope.selectedAsset.name,
+				sendAmount:$scope.sendAmount,
+				symbol:$scope.selectedAsset.symbol,
+				sendValue:$scope.sendAmount * btcPrice,
+				toAddress:$scope.sendTo,
+				fees:simpleSend.totalCost,
+				confirmText:"WALLET_SEND_FUNDS"
+			};
+
+
 			$scope.modalManager.openConfirmationModal({
 				dataTemplate: '/views/modals/partials/send.html',
 				footerTemplate: $scope.selectedAsset.id == 0 ? '/views/modals/partials/send_footer.html' : undefined,
-				scope: {
-					title:"Confirm Send",
-					token:$scope.selectedAsset.name,
-					sendAmount:$scope.sendAmount,
-					symbol:$scope.selectedAsset.symbol,
-					sendValue:$scope.sendAmount * $scope.selectedAsset.price,
-					toAddress:$scope.sendTo,
-					fees:simpleSend.totalCost,
-					confirmText:"'WALLET_SEND_FUNDS'",
-					btcValueChanged:false
+				scope: $scope.selectedAsset.id != 0 ? modalScope : angular.extend(modalScope, {
+					btcValueChanged:false,
+					bitcoinValue:btcPrice,
+					bitcoin:$scope.selectedAsset,
+
 				},
 				transaction:simpleSend
 			})
