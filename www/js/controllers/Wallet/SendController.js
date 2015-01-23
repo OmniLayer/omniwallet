@@ -31,7 +31,7 @@ angular.module("omniControllers")
 			
 			$scope.modalManager.openConfirmationModal({
 				dataTemplate: '/views/modals/partials/send.html',
-				footerTemplate: '/views/modals/partials/send_footer.html',
+				footerTemplate: $scope.selectedAsset.id == 0 ? '/views/modals/partials/send_footer.html' : undefined,
 				scope: {
 					title:"Confirm Send",
 					token:$scope.selectedAsset.name,
@@ -39,7 +39,9 @@ angular.module("omniControllers")
 					symbol:$scope.selectedAsset.symbol,
 					sendValue:$scope.sendAmount * $scope.selectedAsset.price,
 					toAddress:$scope.sendTo,
-					fees:simpleSend.totalCost
+					fees:simpleSend.totalCost,
+					confirmText:"'WALLET_SEND_FUNDS'",
+					btcValueChanged:false
 				},
 				transaction:simpleSend
 			})

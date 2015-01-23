@@ -44,7 +44,14 @@
           <div class="panel-body">
             <div class="col-sm-6">
               <label for="chooseCoin" >
-                {{ 'WALLET_SEND_AMOUNT' | translate}} ({{selectedAddress.getDisplayBalance(selectedAsset.id)}} {{selectedAsset.name}} <small ng-show="selectedAsset.id > 2">({{selectedAsset.id}})</small> {{ 'COMMON_AVAILABLE' | translate}})
+                <span>{{ 'COMMON_SEND' | translate}} <span>
+                <span ng-if="selectedAsset.symbol == 'BTC'">
+                  {{sendByValue ? 'BTC' : userCurrency}}
+                </span>
+                <span ng-if="selectedAsset.symbol == 'BTC'">
+                  {{ 'WALLET_SEND_AMOUNT' | translate}}
+                </span>
+                ({{selectedAddress.getDisplayBalance(selectedAsset.id)}} {{selectedAsset.name}} <small ng-show="selectedAsset.id > 2">({{selectedAsset.id}})</small> {{ 'COMMON_AVAILABLE' | translate}})
               </label>
               <div class="input-group" ng-show="selectedAsset.symbol == 'BTC'">
                 <span class="input-group-addon no-padding">
