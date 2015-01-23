@@ -58,13 +58,13 @@ angular.module("omniConfig")
 	WALLET_SEND_TITLE:'Send',
 	WALLET_SEND_CHOOSECOIN:'Choose coin',
 	WALLET_SEND_FROM:'From address',
-	WALLET_SEND_AMOUNT:'Send amount',
+	WALLET_SEND_AMOUNT:'amount',
 	WALLET_SEND_TO:'To address',
 	WALLET_SEND_COST:'Total transaction cost',
 	WALLET_SEND_SUBMIT:'Next',
 	WALLET_SEND_FUNDS:'Send Funds',
 	WALLET_SEND_TOKEN:'Token',
-	WALLET_SEND_AMOUNT:'Amount',
-	WALLET_SEND_FROM:'From',
-	WALLET_SEND_TO:'To'
+	WALLET_SEND_MODAL_AMOUNT:'Amount',
+	WALLET_SEND_MODAL_FROM:'From',
+	WALLET_SEND_MODAL_TO:'To'
   })
