@@ -32,12 +32,14 @@ angular.module("omniServices")
                       $scope.dataTemplate = modalConfig.dataTemplate || "";
 
                       $scope.signOffline = modalConfig.transaction.offline;
+
+                      $scope.transaction = modalConfig.transaction;
                       
                       $scope.confirm = function() {
                           $scope.clicked = true;
                           $scope.waiting = true;
 
-                          TransactionManager.processTransaction(modalConfig.transaction).then(function(result){
+                          TransactionManager.processTransaction($scope.transaction).then(function(result){
                           	angular.extend($scope,result)
                           }, function(errorData){
                           	angular.extend($scope,errorData)

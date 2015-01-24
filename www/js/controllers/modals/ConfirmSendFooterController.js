@@ -1,5 +1,5 @@
 angular.module("omniControllers")
-	.controller("ConfirmSendFooterController", ["$scope", function($scope){
+	.controller("ConfirmSendFooterController", ["$scope", "SATOSHI_UNIT", function($scope, SATOSHI_UNIT){
 		$scope.ok = function() {
           if ($scope.bitcoinValue == $scope.bitcoin.price) {
             $scope.clicked = true;
@@ -16,22 +16,15 @@ angular.module("omniControllers")
 
 	    $scope.sendByValue = function(){
 	      $scope.sendAmount = $scope.newBtcAmount;
-	      $scope.sendAmount = new Big(parseInt($scope.sendAmount)).toFixed(0);
-	      data.transactionData.amount_to_transfer = $scope.sendAmount;
-	      $scope.sendAmountDisplayed = parseFloat(new Big($scope.convertSatoshiToDisplayedValue($scope.sendAmount)));
+	      $scope.transaction.data['amount_to_transfer'] = +new Big($scope.newBtcAmount).times(SATOSHI_UNIT).valueOf();
 	      $scope.btcValueChanged = false;
 	      $scope.transactionError = false;
-	      $scope.bitcoinValue = $scope.getBitcoinValue();
-	      $scope.setBitcoinValue($scope.getBitcoinValue());
-	      $scope.changeAmount();
+	      $scope.bitcoinValue = $scope.bitcoin.price;
 	    };
 	    $scope.sendByAmount = function(){
-	      var amount = $scope.convertSatoshiToDisplayedValue($scope.sendAmount);
-	      $scope.value = new Big(amount*$scope.getBitcoinValue()).toFixed(3);
+	      $scope.sendValue = $scope.newValue;
 	      $scope.btcValueChanged = false;
 	      $scope.transactionError = false;
-	      $scope.bitcoinValue = $scope.getBitcoinValue();
-	      $scope.setBitcoinValue($scope.getBitcoinValue());
-	      $scope.changeValue();
+	      $scope.bitcoinValue = $scope.bitcoin.price;
 	    };
 	}])

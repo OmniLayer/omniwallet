@@ -49,9 +49,8 @@ angular.module("omniControllers")
 				scope: $scope.selectedAsset.id != 0 ? modalScope : angular.extend(modalScope, {
 					btcValueChanged:false,
 					bitcoinValue:btcPrice,
-					bitcoin:$scope.selectedAsset,
-
-				},
+					bitcoin:$scope.selectedAsset
+				}),
 				transaction:simpleSend
 			})
 		};
