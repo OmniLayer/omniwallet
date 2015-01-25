@@ -1282,3 +1282,19 @@ i.icon-l{
     color: #c0c0c0;
     font-size: 12px;
 }
+
+.my-assets{
+  padding-right: 15px;
+}
+
+.assets-dropdown{
+  margin-top: -4px;
+  margin-right: 2px;
+  padding: 0px;
+  min-width: 100%;
+}
+
+.divider{
+  margin: 0px;
+  color: #abdb84;
+}

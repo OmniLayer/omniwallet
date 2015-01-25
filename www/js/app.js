@@ -59,7 +59,7 @@ var app = angular.module('omniwallet', [
         if (viewFound != -1)
           view = '/partials/wallet_assets_' + route.page + '.html';
         else
-          view = '/partials/explorer_assets.html';
+          view = '/views/wallet/assets.html';
 
         ga('send', 'event', 'button', 'click', route.page);
         return view;
