@@ -1,9 +1,10 @@
 angular.module("omniControllers")
 	.controller("ConfirmSendFooterController", ["$scope", "SATOSHI_UNIT", function($scope, SATOSHI_UNIT){
 		$scope.ok = function() {
+
+	        $scope.clicked = true;
+	        $scope.waiting = true;
           if ($scope.bitcoinValue == $scope.bitcoin.price) {
-            $scope.clicked = true;
-            $scope.waiting = true;
             $scope.confirm();
           }
           else{
@@ -19,12 +20,14 @@ angular.module("omniControllers")
 	      $scope.transaction.data['amount_to_transfer'] = +new Big($scope.newBtcAmount).times(SATOSHI_UNIT).valueOf();
 	      $scope.btcValueChanged = false;
 	      $scope.transactionError = false;
+	      $scope.clicked = false;
 	      $scope.bitcoinValue = $scope.bitcoin.price;
 	    };
 	    $scope.sendByAmount = function(){
 	      $scope.sendValue = $scope.newValue;
 	      $scope.btcValueChanged = false;
 	      $scope.transactionError = false;
+	      $scope.clicked = false;
 	      $scope.bitcoinValue = $scope.bitcoin.price;
 	    };
 	}])
