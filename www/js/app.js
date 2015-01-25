@@ -71,7 +71,7 @@ var app = angular.module('omniwallet', [
   $routeProvider.when('/wallet/:page?', {
       templateUrl: function(route) {
         //new views added here
-        var availableViews = ['overview', 'addresses', 'trade', 'history', 'send', 'myoffers', 'settings'];
+        var availableViews = ['overview', 'assets', 'addresses', 'trade', 'history', 'send', 'myoffers', 'settings'];
 
         var viewFound = availableViews.indexOf(route.page);
         if (viewFound == -1)
