@@ -813,6 +813,43 @@ form.form-search:before {
     width: 50%;*/
 }
 
+@media (max-width: 768px){
+  .mobile-centered{
+     text-align: center; 
+     }
+   }
+
+.main-container{
+  padding: 15px;
+}
+
+.homepage-welcome{
+  margin-left: 0px;
+}
+
+.homepage-form{
+  background-color: #f9f9f9;
+  border: 1px solid #eaeaea;
+  padding: 12px 25px 47px 25px;
+}
+
+.homepage-form-title{
+  font-weight: normal;
+}
+
+.CB-btn{
+  margin-top: 7px;
+}
+
+.help-text{
+  margin-top: 7px;
+  color: #333333;
+  font-size: 16px;
+}
+
+.sm-help-text{
+  color: #aaaaaa
+}
 
 /*Definitions for footer*/
 #push, #footer {

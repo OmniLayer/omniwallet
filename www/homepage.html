@@ -1,63 +1,35 @@
-<row>
-  <div class="center-block col-xs-12">
-    <h3 class="text-center">{{ 'HOMEPAGE_BALANCECHECK' | translate }}</h3>
-    <form class="form-horizontal" role="form" name="addressentry">
-      <div class="form-group">
-        <div class="col-xs-offset-2 col-xs-10">
-           <div class="input-group col-xs-10">
-            <span ng-show="validate(balanceAddress)" class="glyphicon glyphicon-ok green input-group-addon input-group"></span>
-            <input type="text" class="form-control input-group" name="address" id="address" placeholder="{{ 'COMMON_ADDRESS' | translate }}" ng-model="balanceAddress" ng-change="hasBalances=false">
-            <span class="input-group-btn">
-                <input type="button" ng-click="checkBalance();" ng-disabled="validate(balanceAddress) == false" class="btn btn-primary" value="Click!" />
-            </span>
-           </div>
-           <span class="help-block"><small>{{ 'HOMEPAGE_ENTERVALIDADDRESS' | translate }}</small></span>
-        </div>
-      </div>
+<div class="main-container"ng-controller="HomeController">
+  <div class="row mobile-centered om-title homepage-welcome">{{ 'HOMEPAGE_WELCOME' | translate }}</div>
+  <div class="row visible-xs text-center"><button type="button" class="btn btn-secondary" ng-click="openCreateModal()">{{ 'COMMON_CREATEWALLET' | translate }}</button></div>
+  <div class="row visible-xs text-center"><button type="button" class="btn btn-main" ng-click="openLoginModal()">{{ 'COMMON_LOGIN' | translate }}</button></div>
+  <div class="row visible-xs text-center"><a href="/" ng-click="openBalanceCheckModal()">{{ 'HOMEPAGE_BALANCECHECK' | translate }}</a></div>
+
+  <div class="hidden-xs homepage-form">
+    <form class="form-group" role="form" name="addressentry">
+      <label for="AddressInput" class="om-subtitle homepage-form-title">{{ 'HOMEPAGE_BALANCECHECK' | translate }}</label>
+      <span id="helpBlock" class="help-block help-text">{{ 'HOMEPAGE_ENTERVALIDADDRESS' | translate }}<small class="sm-help-text">{{ 'HOMEPAGE_ADDRESSEXAMPLE' | translate }}</small></span>
+      <input type="text" class="form-control input-lg input-group input-white" name="AddressInput" id="AddressInput" ng-model="balanceAddress" ng-change="checkAddress=false">
+      <button type="submit" ng-click="checkBalance();" ng-disabled="validate(balanceAddress) == false" class="btn btn-main pull-right CB-btn">{{ 'HOMEPAGE_CHECKBALANCE' | translate }}</button>
     </form>
-    <div ng-if="hasBalances">
-      <div class="asset-table">
-        <div ng-repeat="currency in balances">
-          <row class="col-xs-offset-2 col-xs-10">
-            <div class="container-fluid">
-              <div class="asset-item col-xs-4 text-left">
-                <span>{{currency.name ? currency.name : currency.symbol}}</span>
-              </div>
-              <div class="asset-item col-xs-6 text-right number">
-                <span ng-if="currency.property_type != undefined && currency.property_type == 1" class="currency" class="number" title="{{currency.balance}}" ng-bind-html="currency.balance | numeraljs: '0,0'"></span>
-                <span ng-if="currency.property_type != undefined && currency.property_type == 2" class="currency" class="number" title="{{currency.balance}}" ng-bind-html="currency.balance | numeraljs: '0,0.00000000'"></span>
-                <span ng-if="currency.property_type == undefined" class="currency" title="{{currency.balance}}"><span ng-bind-html="currency.balance | numeraljs: '0,0.00000000'"></span> {{currency.symbol}}</span>
-              </div>
-              <div class="asset-item col-xs-2 text-right number" title="{{currency.value | currency}}" ng-bind-html="currency.value | currency | numeraljs: '$0,0.00':true">
-              </div>
-            </div>
-          </row> 
-        </div>
-      </div> 
-    </div>
   </div>
-</row>
-
-
-<row>
-<br />
-<div class="container middle row">
-  <div class="alert alert-custom alert-dismissable" ng-show="browser !== 'chrome'">
-  <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-  {{ 'HOMEPAGE_BROWSERRECOMMENDATION' | translate }}
+  <div ng-if="checkAddress">
+    <div class="asset-table">
+      <div ng-repeat="currency in checkAddress.balance">
+        <div class="row">
+          <div class="container-fluid input-dark">
+            <div class="asset-item col-xs-6 text-left">
+              <span>{{currency.name ? currency.name : currency.symbol}}</span>
+            </div>
+            <div class="asset-item col-xs-4 text-right number">
+              <span ng-if="currency.property_type != undefined && currency.property_type == 1" class="currency" class="number" title="{{currency.balance}}" ng-bind-html="currency.balance | numeraljs: '0,0'"></span>
+              <span ng-if="currency.property_type != undefined && currency.property_type == 2" class="currency" class="number" title="{{currency.balance}}" ng-bind-html="currency.balance | numeraljs: '0,0.00000000'"></span>
+              <span ng-if="currency.property_type == undefined" class="currency" title="{{currency.balance}}"><span ng-bind-html="currency.balance | numeraljs: '0,0.00000000'"></span> {{currency.symbol}}</span>
+            </div>
+            <div class="asset-item col-xs-2 text-right number" title="{{currency.value | currency}}" ng-bind-html="currency.value | currency | numeraljs: '$0,0.00':true">
+            </div>
+          </div>
+        </div> 
+      </div>
+    </div> 
   </div>
 </div>
-</row>
-
-<row>
- <div class="col-xs-12"><br /><br /></div>
-</row>
-
-
-<row>
-  <div class="col-xs-12 alert alert-info alert-dismissable hide">
-   <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-   <strong>Coming Soon:</strong> We are proud to announce that starting next week Omni will be moving to Beta status. <br />
-           You will also be able to find us on the main domain:  http://www.omniwallet.org <br /> 
-  </div>
-</row>

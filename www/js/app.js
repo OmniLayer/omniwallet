@@ -119,8 +119,7 @@ var app = angular.module('omniwallet', [
         return view
       }
     }).when('/', {
-      templateUrl: '/homepage.html',
-      controller: HomeCtrl
+      templateUrl: '/homepage.html'
     }).when('/login/:uuid', {
       template: '<div ng-controller="HiddenLoginController" ng-init="open()"></div>',
       controller: HiddenLoginController
@@ -155,7 +154,7 @@ app.config(function($idleProvider, $keepaliveProvider, reCAPTCHAProvider, idleDu
    
   $translateProvider.preferredLanguage('en');
 })
-.run(function(Account, $location, TESTNET) {
+.run(function(Account, $location, TESTNET, BalanceSocket) {
   //Whitelist pages
   whitelisted = ['login', 'about', 'status', 'explorer'];
 
@@ -167,6 +166,7 @@ app.config(function($idleProvider, $keepaliveProvider, reCAPTCHAProvider, idleDu
     }
     $location.path('/');
   }
+  BalanceSocket.connect();
 });
 
 //app helpers
