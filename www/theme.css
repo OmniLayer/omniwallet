@@ -209,6 +209,58 @@ h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6{
   background-image: url(/assets/img/icons/circle-arrow-down.png);
 }
 
+.send-toggle {
+  width:60px;
+}
+
+.send-toggle div {
+  min-height: 27px;
+  min-width: 54px;
+}
+
+.send-toggle input {
+  position: absolute;
+  margin: 0;
+/*hide the checkbox button*/
+  -moz-opacity: 0;
+  -khtml-opacity: 0;
+  opacity: 0;
+  cursor: pointer;
+  z-index: 10;
+}
+.send-toggle input[type="checkbox"]:checked + span {
+  visibility: visible;
+}
+.send-toggle .checkbox input[type="checkbox"] {
+  margin-left: 0px;
+}
+
+.btn-sendbyvalue input {
+  width: 54px;
+  height: 27px;
+  margin: 0px !important;
+  margin-left: -27px !important;
+}
+.btn-sendbyvalue span {
+  position: absolute;
+  width: 54px;
+  height: 27px;
+  background-image: url(/assets/img/icons/toggle-btc.png);
+  background-repeat: no-repeat;
+  background-color: transparent;
+  border: 0pt none;
+  margin: 0px;
+  margin-left: -27px;
+}
+.btn-sendbyvalue input[type="checkbox"] + span /*the span element that immediately follow the checkbox button */ {
+  visibility: hidden;
+  background-image: url(/assets/img/icons/toggle-fiat.png);
+}
+
+.no-padding{
+  padding: 0;
+}
+
 .missing-dex-alert{
   margin-top: 0px;
   margin-bottom: 0px;
@@ -392,6 +444,87 @@ fieldset[disabled] .btn-tertiary.active {
 .btn-tertiary .badge {
   color: #c0c0c0;
   background-color: #fff;
+}
+
+.btn-clear {
+  color: #333333;
+  background-color: #ffffff;
+  border-color: #ffffff;
+}
+
+.btn-clear:hover,
+.btn-clear:focus,
+.btn-clear:active,
+.btn-clear.active,
+.open .dropdown-toggle.btn-clear {
+  color: #333333;
+  background-color: #ffffff;
+  border-color: #ffffff;
+}
+
+.btn-clear:active,
+.btn-clear.active,
+.open .dropdown-toggle.btn-clear {
+  background-image: none;
+}
+
+.btn-clear.disabled,
+.btn-clear[disabled],
+fieldset[disabled] .btn-clear,
+.btn-clear.disabled:hover,
+.btn-clear[disabled]:hover,
+fieldset[disabled] .btn-clear:hover,
+.btn-clear.disabled:focus,
+.btn-clear[disabled]:focus,
+fieldset[disabled] .btn-clear:focus,
+.btn-clear.disabled:active,
+.btn-clear[disabled]:active,
+fieldset[disabled] .btn-clear:active,
+.btn-clear.disabled.active,
+.btn-clear[disabled].active,
+fieldset[disabled] .btn-clear.active {
+  background-color: #eee;
+  border-color: #e1e1e1;
+  color: #bcbcbc;
+}
+
+.btn-clear .badge {
+  color: #333;
+  background-color: #fff;
+}
+
+.send-asset-dropdown {
+    display: block;
+}
+
+.send-asset-dropdown .dropdown-toggle {
+    width: 60%;
+    text-align: left;
+}
+
+.send-asset-dropdown .dropdown-menu {
+    width: 60%;
+}
+
+.send-asset-dropdown .caret {
+    margin-top: 8px;
+}
+
+.send-address-dropdown {
+    display: block;
+}
+
+.send-address-dropdown .dropdown-toggle {
+    width: 100%;
+    text-align: left;
+}
+
+.send-address-dropdown .dropdown-menu {
+    width: 100%;
+}
+
+.send-address-dropdown .caret {
+    margin-top: 8px;
 }
 
 .footer .navbar-nav > li {
@@ -737,13 +870,11 @@ border-left-color: #111111;
   padding-left: 0;
   font-size: 36px;
   color: #636363;
-  font-family: 'Gudea', sans-serif;
 }
 .modal-action-btn{
   background-color: #f5f2f2;
   color: #44b8ef;
   font-size: 32px;
-  font-family: 'Gudea', sans-serif;
   border-width: 1px;
   border-color: #e8e7e7
 }
@@ -767,7 +898,6 @@ border-left-color: #111111;
   color:#636363;
   font-size: 15px;
   font-weight: bold;
-  font-family: 'Gudea', sans-serif;
   margin-top: 16px;
 }
 
@@ -781,7 +911,6 @@ border-left-color: #111111;
 .description-title{
   font-size: 18px;
   color: #b8b7b7;
-  font-family: 'Gudea', sans-serif;
   font-weight: bold;
   float: left;
   width: 103px;
@@ -790,7 +919,6 @@ border-left-color: #111111;
 .description-title-large{
   font-size: 18px;
   color: #b8b7b7;
-  font-family: 'Gudea', sans-serif;
   font-weight: bold;
   float: left;
   width: 126px;
@@ -799,7 +927,6 @@ border-left-color: #111111;
 .description-title-xlarge{
   font-size: 18px;
   color: #b8b7b7;
-  font-family: 'Gudea', sans-serif;
   font-weight: bold;
   float: left;
   width: 200px;
@@ -808,19 +935,16 @@ border-left-color: #111111;
 .description-text{
   font-size: 18px;
   color: #696969;
-  font-family: 'Gudea', sans-serif;
   font-weight: bold;
 }
 .description-extra{
   font-size: 18px;
   color: #b8b7b7;
-  font-family: 'Gudea', sans-serif;
   font-weight: bold;
 }
 .send-fee{
   font-size: 16px;
   color:#c4c4c4;
-  font-family: 'Gudea', sans-serif;
 }
 .expandable-div{
   height: auto;
@@ -970,9 +1094,6 @@ form.form-search:before {
 }
 .footer .navbar-nav > li {
   padding-top: 0;
-}
-.footer-div{
-  padding-bottom: 0px;
 }
 
 .footer-top-row{
@@ -1146,6 +1267,18 @@ i.icon-l{
   background-color: #f5f5f5;
 }
 
-.panel-body {
+.panel-main > .panel-body {
   padding: 31px;
+}
+
+.panel-form {
+  background-color: #f0f0f0;
+}
+
+.hint {
+    position: absolute;
+    right: 8px;
+    bottom: 8px;
+    color: #c0c0c0;
+    font-size: 12px;
 }

@@ -69,8 +69,10 @@
     <script src="/js/services/PropertyManagerService.js"></script>
     <script src="/js/controllers/Wallet/OverviewController.js"></script>
     <script src="/js/controllers/Wallet/AddressesController.js"></script>
+    <script src="/js/controllers/Wallet/SendController.js"></script>
     <script src="/js/controllers/Landing/NavigationController.js"></script>
     <script src="/js/controllers/Landing/SiteController.js"></script>
+    <script src="/js/controllers/modals/ConfirmSendFooterController.js"></script>
     <script src="/js/directive.js"></script>
     <script src="/js/service.js"></script>
     <script src="/js/controller.js"></script>
@@ -81,7 +83,6 @@
     <script src="/js/WalletAddressesController.js"></script>
     <script src="/js/WalletController.js"></script>
     <script src="/js/WalletAssetsFormController.js"></script>
-    <script src="/js/WalletSendAssetsController.js"></script>
     <script src="/js/WalletSellAssetsController.js"></script>
     <script src="/js/WalletBuyAssetsController.js"></script>
     <script src="/js/CreateWalletController.js"></script>
@@ -111,7 +112,7 @@
         </div>
         <div class="main">
             <div class="container">
-                <div class="panel panel-default">
+                <div class="panel panel-default panel-main">
                     <div class="om-title text-center" ng-show="account.loggedIn && !wallet.loaded">{{ 'WALLET_LOADING' | translate}}...</div>
                     <div class="panel-body" ng-view></div>
                 </div>
