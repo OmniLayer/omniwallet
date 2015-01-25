@@ -5,6 +5,7 @@ lib_path = os.path.abspath(tools_dir)
 sys.path.append(lib_path)
 from msc_utils_parsing import *
 from msc_apps import *
+from pending import *
 import tempfile
 
 sys.path.append(os.path.abspath("../lib"))
@@ -41,6 +42,10 @@ def pushtx_response(response_dict):
     signed_tx=response_dict['signedTransaction'][0]
     
     response=pushtxnode(signed_tx)
+
+    if "NOTOK" not in response:
+      insertpending(signed_tx)
+    
     print signed_tx,'\n', response
     return (response, None)
 

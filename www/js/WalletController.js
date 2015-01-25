@@ -7,7 +7,7 @@ function WalletController($scope, $q, $http, $modal, $location, Account, Wallet)
 
 // HACK: We check for Account.isLoggedIn since this controller is used
   $scope.addrList = Account.loggedIn ? Wallet.addresses.map(function(e, i, a) {
-    return e.address;
+    return e.hash;
   }) : [];
   $scope.addrListBal = []
   $scope.maxCurrencies = [];

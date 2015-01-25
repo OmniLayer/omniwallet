@@ -32,7 +32,7 @@ function WalletAssetsFormController($scope, $injector, Wallet, walletTransaction
   $scope.addressList = $scope.selectedCoin ? $scope.selectedCoin.tradableAddresses.filter(function(e) {
           return $scope.offlineSupport || (e.privkey && e.privkey.length == 58);
         }).map(function(e){
-          return e.address;
+          return e.hash;
         }) : [];
   if(!$scope.$parent.selectedAddress)
     $scope.selectedAddress = $scope.addressList[0] || null;
@@ -52,7 +52,7 @@ function WalletAssetsFormController($scope, $injector, Wallet, walletTransaction
     $scope.addressList = $scope.selectedCoin ? $scope.selectedCoin.tradableAddresses.filter(function(e) {
           return $scope.offlineSupport || (e.privkey && e.privkey.length == 58);
         }).map(function(e){
-          return e.address;
+          return e.hash;
         }) : [];
     if(!$scope.$parent.selectedAddress)
       $scope.selectedAddress = $scope.addressList[0] || null;
@@ -107,10 +107,9 @@ function WalletAssetsFormController($scope, $injector, Wallet, walletTransaction
     var address = $scope.selectedAddress;
     $scope.balanceData = [0,0];
     if (address && coin) {
-      var balance = Wallet.getAddress($scope.selectedAddress).getBalance($scope.selectedCoin.id);
-      var value = balance ? balance.value : 0;
-      $scope.balanceData[0] = coin.divisible ? new Big(value).times(WHOLE_UNIT).valueOf() : value;
-      $scope.balanceData[1] = new Big(Wallet.getAddress($scope.selectedAddress).getBalance(0).value).times(WHOLE_UNIT).valueOf();
+      var value = Wallet.getAddress($scope.selectedAddress).getBalance($scope.selectedCoin.id);
+      $scope.balanceData[0] = value;
+      $scope.balanceData[1] = Wallet.getAddress($scope.selectedAddress).getBalance(0);
     }
   };
 

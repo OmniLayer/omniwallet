@@ -27,6 +27,7 @@ var app = angular.module('omniwallet', [
   'ngIdle',
   'reCAPTCHA',
   'pascalprecht.translate',
+  'nvd3',
   'omniConfig',
   'omniFactories',
   'omniServices',
@@ -58,7 +59,7 @@ var app = angular.module('omniwallet', [
         if (viewFound != -1)
           view = '/partials/wallet_assets_' + route.page + '.html';
         else
-          view = '/partials/explorer_assets.html';
+          view = '/views/wallet/assets.html';
 
         ga('send', 'event', 'button', 'click', route.page);
         return view;
@@ -70,13 +71,13 @@ var app = angular.module('omniwallet', [
   $routeProvider.when('/wallet/:page?', {
       templateUrl: function(route) {
         //new views added here
-        var availableViews = ['overview', 'addresses', 'trade', 'history', 'send', 'myoffers', 'settings'];
+        var availableViews = ['overview', 'assets', 'addresses', 'trade', 'history', 'send', 'myoffers', 'settings'];
 
         var viewFound = availableViews.indexOf(route.page);
         if (viewFound == -1)
           route.page = 'overview';
 
-        var view = '/partials/wallet_' + route.page + '.html';
+        var view = '/views/wallet/' + route.page + '.html';
         //DEBUG console.log(view, route.page, view == '/wallet_addresses.html')
 
         ga('send', 'event', 'button', 'click', route.page);

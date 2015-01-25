@@ -1,4 +1,4 @@
-function TransactionGenerationController($scope, $modal, Wallet, walletTransactionService){
+function TransactionGenerationController($scope, $modal, Wallet, walletTransactionService, BalanceSocket){
   
   $scope.prepareTransaction = function(txType, rawdata, from, $modalScope){
     var addressData = Wallet.getAddress(from);
@@ -6,7 +6,7 @@ function TransactionGenerationController($scope, $modal, Wallet, walletTransacti
     if(addressData.pubkey)
       pubKey= addressData.pubkey.toUpperCase();
     else{
-      var privKey = new Bitcoin.ECKey.decodeEncryptedFormat(addressData.privkey, addressData.address); // Using address as temporary password
+      var privKey = new Bitcoin.ECKey.decodeEncryptedFormat(addressData.privkey, addressData.hash); // Using address as temporary password
       pubKey = privKey.getPubKeyHex();
     }
     var data = rawdata instanceof Array ? rawdata : [rawdata];
@@ -75,10 +75,11 @@ function TransactionGenerationController($scope, $modal, Wallet, walletTransacti
                   if(index +1 == transactions.length){
                     $modalScope.waiting = false;
                     $modalScope.transactionSuccess = true;
-                  if(TESTNET)
-                    $modalScope.url = 'http://tbtc.blockr.io/tx/info/' + successData.tx;
-                  else
-                    $modalScope.url = 'http://blockchain.info/address/' + from + '?sort=0';
+                    BalanceSocket.emit("address:refresh", {data:from});
+                    if(TESTNET)
+                      $modalScope.url = 'http://tbtc.blockr.io/tx/info/' + successData.tx;
+                    else
+                      $modalScope.url = 'http://blockchain.info/address/' + from + '?sort=0';
                   } else {
                     pushOrderedTransactions(transactions,index+1);
                   }
@@ -159,7 +160,7 @@ function TransactionGenerationController($scope, $modal, Wallet, walletTransacti
     }
   };
 
-  var modalBaseController = $scope.modalBaseController = function($scope, $modalInstance, data, prepareTransaction, setModalScope, walletAssets) {
+  var modalBaseController = $scope.modalBaseController = function($scope, $modalInstance, data, prepareTransaction, setModalScope, walletAssets, BalanceSocket) {
     setModalScope($scope);
     $scope.signOffline= walletAssets.offline;
     
@@ -223,10 +224,11 @@ function TransactionGenerationController($scope, $modal, Wallet, walletTransacti
                       if (successData.pushed.match(/submitted|success/gi) != null) {
                         $modalScope.waiting = false;
                         $modalScope.transactionSuccess = true;
-                      if(TESTNET)
-                        $modalScope.url = 'http://tbtc.blockr.io/tx/info/' + successData.tx;
-                      else
-                        $modalScope.url = 'http://blockchain.info/address/' + from + '?sort=0';
+                        BalanceSocket.emit("address:refresh", {data:from});
+                        if(TESTNET)
+                          $modalScope.url = 'http://tbtc.blockr.io/tx/info/' + successData.tx;
+                        else
+                          $modalScope.url = 'http://blockchain.info/address/' + from + '?sort=0';
                       } else {
                         $modalScope.waiting = false;
                         $modalScope.transactionError = true;

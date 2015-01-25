@@ -1,6 +1,6 @@
 <div class="row" ng-hide="transactionSuccess  || readyToSign">
-    <button ng-disabled="clicked" class="btn btn-lg modal-action-btn" ng-click="confirm()" style="padding-bottom: 6px;">
-        <img ng-if="confirmLogo" ng-src="confirmLogo" class="action-img-normal"><img ng-if="confirmLogoRoll" ng-src="confirmLogoRoll" class="action-img-roll">{{confirmText}}
+    <button ng-disabled="clicked" class="btn btn-main" ng-click="confirm()">
+        {{confirmText | translate}}
     </button>
     <img class="" src="/assets/img/spinner.gif" ng-show="waiting">
 </div>
@@ -8,17 +8,17 @@
     <div ng-show="readyToSign">
         <h4 class="pull-left" style="color:green;">Your transaction was generated successfully, now save the text above and sign it on your Armory offline computer. Come back with the signed text to broadcast it.  
           </h4>
-        <button ng-click="openBroadcastTransactionForm(fromAddress)" class="btn btn-warning" ng-if="signOffline">Broadcast</button>
-        <button ng-click="saveUnsigned(unsignedTransaction)" class="btn btn-success" ng-hide="saved">Save</button>
+        <button ng-click="openBroadcastTransactionForm(fromAddress)" class="btn btn-secondary" ng-if="signOffline">Broadcast</button>
+        <button ng-click="saveUnsigned(unsignedTransaction)" class="btn btn-main" ng-hide="saved">Save</button>
         <a href="/wallet/overview">
-            <button ng-click="close()" class="btn" ng-class="{'btn-danger':unsaved,'btn-success':saved}">Close</button>
+            <button ng-click="close()" class="btn" ng-class="{'btn-tertiary':unsaved,'btn-main':saved}">Close</button>
         </a>
     </div>
     <div ng-show="transactionSuccess">
         <h4 class="pull-left" style="color:green"> {{successMessage}}, 
         check your transaction <a target="_blank" href="{{url}}">here.</a></h4>
         <a href="/wallet/overview">
-            <button class="btn btn-success" ng-click="cancel()">Close</button>
+            <button class="btn btn-main" ng-click="cancel()">Close</button>
         </a>
     </div>
     <div ng-show="transactionError">

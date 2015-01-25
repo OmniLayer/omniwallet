@@ -23,13 +23,13 @@ module.exports = function(grunt) {
 					directory: 'www/bower_components/bitcoinjs-lib'
 				}
 			},
-      "crypto-js": {
+			"crypto-js": {
 				options: {
 					repository: "https://github.com/scintill/crypto-js.git",
 					branch: 'master',
 					directory: 'www/bower_components/bitcoinjs-lib/src/crypto-js'
 				}
-      }
+			}
 		},
 		shell: {
 			html: {
@@ -59,14 +59,14 @@ module.exports = function(grunt) {
 				},
 				command: 'npm install ; npm run minify'
 			},
-      "omni-websocket": {
-        options: {
-          execOptions: {
-            cwd: "api/websocket"
-          }
-        },
-        command: 'npm install'
-      },
+			"omni-websocket": {
+				options: {
+					execOptions: {
+						cwd: "api/websocket"
+					}
+				},
+				command: 'npm install'
+			},
 			cryptolib: {
 				options: {
 					stdout: true,

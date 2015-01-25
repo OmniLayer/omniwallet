@@ -20,6 +20,7 @@
 
     <link rel="stylesheet" href="/bower_components/bootstrap/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="/bower_components/bootstrap/dist/css/bootstrap-theme.min.css">
+    <link rel="stylesheet" href="/bower_components/nvd3/nv.d3.css">
     <link rel="stylesheet" href="/theme.css">
 
     <link href='https://fonts.googleapis.com/css?family=Gudea:400,400italic,700' rel='stylesheet' type='text/css'>
@@ -44,9 +45,12 @@
     <script src="/bower_components/forge/js/forge.min.js"></script>
     <script src="/bower_components/bitcoinjs-lib/build/bitcoinjs-lib.js"></script>
     <script src="/bower_components/d3/d3.min.js"></script>
+    <script src="/bower_components/nvd3/nv.d3.js"></script>
+    <script src="/bower_components/angular-nvd3/dist/angular-nvd3.js"></script>
     <script src="/bower_components/sjcl/sjcl.js"></script>
     <script src="/bower_components/FileSaver/FileSaver.js"></script>
     <script src="/bower_components/big.js/big.min.js"></script>
+    <script type='text/javascript' src='/bower_components/angular-charts/dist/angular-charts.js'></script>
     <script type="text/javascript" src="/bower_components/angular-re-captcha/angular-re-captcha.js"></script>
     <script src="/js/config.js"></script>
     <script src="/js/app.js"></script>
@@ -56,6 +60,7 @@
     <script src="/js/services/WalletService.js"></script>
     <script src="/js/services/AccountService.js"></script>
     <script src="/js/lang/en-US.js"></script>
+    <script src="/js/services/AppraiserService.js"></script>
     <script src="/js/services/TransactionGenerationService.js"></script>
     <script src="/js/services/TransactionManagerService.js"></script>
     <script src="/js/services/ModalManagerService.js"></script>
@@ -64,8 +69,11 @@
     <script src="/js/services/PropertyManagerService.js"></script>
     <script src="/js/controllers/landing/HomeController.js"></script>
     <script src="/js/controllers/Wallet/OverviewController.js"></script>
+    <script src="/js/controllers/Wallet/AddressesController.js"></script>
+    <script src="/js/controllers/Wallet/SendController.js"></script>
     <script src="/js/controllers/Landing/NavigationController.js"></script>
     <script src="/js/controllers/Landing/SiteController.js"></script>
+    <script src="/js/controllers/modals/ConfirmSendFooterController.js"></script>
     <script src="/js/directive.js"></script>
     <script src="/js/service.js"></script>
     <script src="/js/controller.js"></script>
@@ -76,7 +84,6 @@
     <script src="/js/WalletAddressesController.js"></script>
     <script src="/js/WalletController.js"></script>
     <script src="/js/WalletAssetsFormController.js"></script>
-    <script src="/js/WalletSendAssetsController.js"></script>
     <script src="/js/WalletSellAssetsController.js"></script>
     <script src="/js/WalletBuyAssetsController.js"></script>
     <script src="/js/CreateWalletController.js"></script>
@@ -106,7 +113,8 @@
         </div>
         <div class="main">
             <div class="container">
-                <div class="panel panel-default">
+                <div class="panel panel-default panel-main">
+                    <div class="om-title text-center" ng-show="account.loggedIn && !wallet.loaded">{{ 'WALLET_LOADING' | translate}}...</div>
                     <div class="panel-body" ng-view></div>
                 </div>
             </div>

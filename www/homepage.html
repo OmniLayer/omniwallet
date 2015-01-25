@@ -2,7 +2,7 @@
   <div class="row mobile-centered om-title homepage-welcome">{{ 'HOMEPAGE_WELCOME' | translate }}</div>
   <div class="row visible-xs text-center"><button type="button" class="btn btn-secondary" ng-click="openCreateModal()">{{ 'COMMON_CREATEWALLET' | translate }}</button></div>
   <div class="row visible-xs text-center"><button type="button" class="btn btn-main" ng-click="openLoginModal()">{{ 'COMMON_LOGIN' | translate }}</button></div>
-  <div class="row visible-xs text-center"><a href="/" ng-click="openBalanceCheckModal()">{{ 'HOMEPAGE_BALANCECHECK' | translate }}</a></div>
+  <div class="row visible-xs text-center"><a href="/" ng-click="modalManager.openBalanceCheckModal()">{{ 'HOMEPAGE_BALANCECHECK' | translate }}</a></div>
 
   <div class="hidden-xs homepage-form">
     <form class="form-group" role="form" name="addressentry">
