@@ -6,7 +6,6 @@ angular.module("omniServices")
 			var appraiser = null;
 			self.loaded = false;
 			self.initialize =function(wallet){
-	            BalanceSocket.connect();
 				appraiser = $injector.get('appraiser');
 
 	            self.addresses = [];
