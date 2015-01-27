@@ -43,7 +43,7 @@ angular.module("omniConfig")
 	NAVIGATION_TRADE:'Trade',
 	NAVIGATION_TRANSACTIONS:'Transactions',
 	NAVIGATION_WALLET: 'My Wallet',
-	WALLET_LOADING:'Loading',
+	COMMON_LOADING:'Loading',
 	WALLET_OVERVIEW_BACKUP:'Backup',
 	WALLET_OVERVIEW_ESTIMATED:'Estimated Total value',
 	WALLET_OVERVIEW_IMPORT:'Import',
