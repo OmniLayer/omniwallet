@@ -9,19 +9,6 @@
       $scope.wallet = Wallet;
       $scope.modalManager = ModalManager;
 
-      /*$scope.$on('$locationChangeStart', function(event, next) {
-        if (browser === 'chrome') {
-          return;
-        }
-
-        event.preventDefault();
-
-        $modal.open({
-          backdrop: 'static',
-          templateUrl: '/partials/browser_message_modal.html'
-        });
-      });*/
-
       $scope.templates = {
         'sidecar': '/partials/sidecar.html',
         'add_address': '/partials/add_address.html',

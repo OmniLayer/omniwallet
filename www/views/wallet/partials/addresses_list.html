@@ -32,7 +32,7 @@
                  <span ng-show="address.getPendingPos(0)>0" tooltip="Oh Boy, Someone sent you something from Omni. When it confirms this balance will be updated">
                     <br><a href="/about/faq" target="_new"><span class="glyphicon glyphicon-import"></span></a> (+<span ng-bind-html="address.getPendingPos(0) | numeraljs: '0,0.00000000'"></span> Unconfirmed)</span>
 			</div>
-			<div class="col-xs-5 col-sm-2" title="{{address.getDisplayBalance(0) * wallet.getAsset('0').price}}" ng-bind-html="address.getDisplayBalance(0) * wallet.getAsset(0).price | numeraljs: '$0,0.00':true"></div>
+			<div class="col-xs-5 col-sm-2 text-right" title="{{address.getDisplayBalance(0) * wallet.getAsset('0').price}}" ng-bind-html="address.getDisplayBalance(0) * wallet.getAsset(0).price | numeraljs: '$0,0.00':true"></div>
 			<div class="col-xs-2">
 				<div class="dropdown pull-right">
 	          		<a data-toggle="dropdown" href="#" class="btn btn-tertiary btn-xs"> {{ 'COMMON_ACTIONS' | translate }} </a>
