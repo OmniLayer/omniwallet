@@ -11,10 +11,10 @@
         <span id="helpBlock" class="help-block help-text">{{ 'HOMEPAGE_ENTERVALIDADDRESS' | translate }}<small class="sm-help-text">{{ 'HOMEPAGE_ADDRESSEXAMPLE' | translate }}</small></span>
         <input type="text" class="form-control input-lg input-group input-white" name="AddressInput" id="AddressInput" ng-model="balanceAddress" ng-change="checkAddress=false">
       </div>
-      <button type="submit" ng-click="checkBalance();" ng-disabled="validate(balanceAddress) == false" class="btn btn-main pull-right CB-btn">{{ 'HOMEPAGE_CHECKBALANCE' | translate }}</button>
+      <button type="submit" ng-click="checkBalance();" ng-disabled="validate(balanceAddress) == false" class="btn btn-main pull-right">{{ 'HOMEPAGE_CHECKBALANCE' | translate }}</button>
     </form>
   </div>
-  <div ng-if="checkAddress && !checkAddress.loaded">
+  <div class="om-title text-center" ng-if="checkAddress && !checkAddress.loaded">
     {{ 'COMMON_LOADING' | translate}}...
   </div>
   <div ng-if="checkAddress && checkAddress.loaded">
@@ -26,11 +26,11 @@
               <span>{{currency.name ? currency.name : currency.symbol}}</span>
             </div>
             <div class="asset-item col-xs-4 text-right number">
-              <span ng-if="currency.property_type != undefined && currency.property_type == 1" class="currency" class="number" title="{{currency.balance}}" ng-bind-html="currency.balance | numeraljs: '0,0'"></span>
-              <span ng-if="currency.property_type != undefined && currency.property_type == 2" class="currency" class="number" title="{{currency.balance}}" ng-bind-html="currency.balance | numeraljs: '0,0.00000000'"></span>
-              <span ng-if="currency.property_type == undefined" class="currency" title="{{currency.balance}}"><span ng-bind-html="currency.balance | numeraljs: '0,0.00000000'"></span> {{currency.symbol}}</span>
+              <span ng-if="!currency.divisible" class="currency" class="number" title="{{checkAddress.getDisplayBalance(currency.id)}}" ng-bind-html="checkAddress.getDisplayBalance(currency.id) | numeraljs: '0,0'"></span>
+              <span ng-if="currency.divisible" class="currency" class="number" title="{{checkAddress.getDisplayBalance(currency.id)}}" ng-bind-html="checkAddress.getDisplayBalance(currency.id) | numeraljs: '0,0.00000000'"></span>
+              <span ng-if="currency.symbol == 'BTC'" class="currency" title="{{checkAddress.getDisplayBalance(currency.id)}}"><span ng-bind-html="checkAddress.getDisplayBalance(currency.id) | numeraljs: '0,0.00000000'"></span> {{currency.symbol}}</span>
             </div>
-            <div class="asset-item col-xs-2 text-right number" title="{{currency.value | currency}}" ng-bind-html="currency.value | currency | numeraljs: '$0,0.00':true">
+            <div class="asset-item col-xs-2 text-right number" title="{{0 | currency}}" ng-bind-html="0 | numeraljs: '$0,0.00':true">
             </div>
           </div>
         </div> 
