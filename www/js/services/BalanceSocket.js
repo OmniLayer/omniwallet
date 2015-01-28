@@ -4,7 +4,7 @@ angular.module("omniServices")
 		self.connected =false;
 		self.connect = function(){
 			self.socket = io.connect($location.protocol()+'://' + $location.host() + ':' + $location.port() + "/balance");
-			self.connect=true;
+			self.connected=true;
 		}
 
 		self.disconnect = function(){

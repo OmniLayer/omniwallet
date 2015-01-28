@@ -32,29 +32,7 @@ angular.module("omniControllers")
         });
       };
 
-      $scope.openLoginModal = function() {        
-        $scope.login ={
-          title:'Login',
-          button:'Open Wallet'
-        };
-        if (!$scope.modalOpened) {
-          $scope.modalOpened = true;
-          var modalInstance = $modal.open({
-          templateUrl: '/partials/login_modal.html',
-          controller: LoginController,
-          scope: $scope,
-          backdrop:'static'
-          });
-          modalInstance.result.then(
-          function(){
-            // reset modal state when user logs in successfully
-            $scope.modalOpened = false;
-          },
-          function(){
-            $scope.modalOpened = false;
-          });
-        }
-      };
+      
 
       $scope.openUUIDmodal = function() {
         if (!$scope.modalOpened) {

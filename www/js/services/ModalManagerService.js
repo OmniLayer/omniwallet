@@ -20,6 +20,20 @@ angular.module("omniServices")
         
             return enc;
           };
+
+          self.openLoginModal = function() {  
+              self.modalInstance = $modal.open({
+              templateUrl: '/partials/login_modal.html',
+              controller: LoginController,
+              scope: {
+                login : {
+                  title:'Login',
+                  button:'Open Wallet'
+                }
+              },
+              backdrop:'static'
+              });
+          };
           
           self.openConfirmationModal = function(modalConfig) {
               self.modalInstance = $modal.open({

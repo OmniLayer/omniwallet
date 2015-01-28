@@ -18,7 +18,7 @@
             <button href="#" ng-click="openCreateModal()" class="btn btn-warning">{{ 'NAVIGATION_CREATE' | translate }}</button>
           </li>
           <li ng-hide="account.loggedIn">
-            <a href="#" ng-click="openLoginModal()">{{ 'COMMON_LOGIN' | translate }}</a>
+            <a href="#" ng-click="modalManager.openLoginModal()">{{ 'COMMON_LOGIN' | translate }}</a>
           </li>
           <li class="divider-vertical" ng-hide="account.loggedIn"></li>
           <li ng-show="account.loggedIn" ng-class="{active:section=='wallet'}">
