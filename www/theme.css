@@ -650,6 +650,11 @@ border-left-color: #111111;
   color: #ffffff;
 }
 
+.navbar-header {
+  color: #ffffff;
+  background-color: #133959;
+}
+
 .navbar-main {
   background-color: #133959;
   margin-bottom: 0px;
@@ -731,8 +736,12 @@ border-left-color: #111111;
 
 .navbar-main .navbar-collapse,
 .navbar-main .navbar-form {
-  border-color: #eeeeee;
-  max-height: 70px
+  color: #7998be;
+  background-color: #1a4366;
+}
+
+.navbar-main .navbar-collapse > li {
+  border: #2f5371 1px solid;
 }
 
 .navbar-main .navbar-nav > .open > a,
