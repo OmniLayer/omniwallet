@@ -653,6 +653,7 @@ border-left-color: #111111;
 .navbar-header {
   color: #ffffff;
   background-color: #133959;
+  padding: 12px 10px;
 }
 
 .navbar-main {
@@ -738,10 +739,26 @@ border-left-color: #111111;
 .navbar-main .navbar-form {
   color: #7998be;
   background-color: #1a4366;
+  padding-left: 1px;
+  padding-right: 1px;
 }
 
-.navbar-main .navbar-collapse > li {
+.navbar-main .navbar-collapse .nav {
   border: #2f5371 1px solid;
+}
+
+.navbar-main .navbar-collapse .nav > li {
+  border-bottom: #2f5371 1px solid;
+}
+
+.navbar-main .navbar-collapse .nav > li:last-child {
+  border-bottom: 0px;
+}
+
+
+.navbar-main .navbar-collapse .nav > li > a {
+  color: #7998be;
+  padding: 12px 10px;
 }
 
 .navbar-main .navbar-nav > .open > a,
