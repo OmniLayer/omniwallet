@@ -13,7 +13,7 @@ angular.module('omniControllers')
 
 		    angular.forEach($scope.addresses, function(addrObject) {
 		      promises.push($http.post('/v1/transaction/address', {
-		        'addr': addrObject.address
+		        'addr': addrObject.hash
 		      })
 		      .success(function(data, status, headers, config) {
 		        delete data.address;
@@ -50,7 +50,7 @@ angular.module('omniControllers')
 		        if(transaction.tx_type_str == undefined)
 		          transaction.tx_type_str = transaction.icon_text;
 
-		        var addresses = $scope.addresses.map(function(addrO) { return addrO.address; });
+		        var addresses = $scope.addresses.map(function(addrO) { return addrO.hash; });
 		        var incoming = addresses.indexOf(transaction.to_address);
 
 		        if(incoming == -1 && transaction.to_address.length > 32)
@@ -130,7 +130,7 @@ angular.module('omniControllers')
 		        if(transaction.tx_type_str == undefined)
 		          transaction.tx_type_str = transaction.icon_text;
 
-		        var addresses = $scope.addresses.map(function(addrO) { return addrO.address; });
+		        var addresses = $scope.addresses.map(function(addrO) { return addrO.hash; });
 		        var incoming = addresses.indexOf(transaction.to_address);
 
 		        if(incoming == -1 && transaction.to_address.length > 32)
