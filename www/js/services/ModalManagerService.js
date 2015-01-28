@@ -22,16 +22,17 @@ angular.module("omniServices")
           };
 
           self.openLoginModal = function() {  
+              var modalScope = $rootScope.$new()
+              modalScope.login = {
+                title:'Login',
+                button:'Open Wallet'
+              }
+
               self.modalInstance = $modal.open({
-              templateUrl: '/partials/login_modal.html',
-              controller: LoginController,
-              scope: {
-                login : {
-                  title:'Login',
-                  button:'Open Wallet'
-                }
-              },
-              backdrop:'static'
+                templateUrl: '/partials/login_modal.html',
+                controller: LoginController,
+                scope: modalScope,
+                backdrop:'static'
               });
           };
           
