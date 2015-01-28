@@ -15,7 +15,7 @@
       <div class="hidden-xs">
         <ul class="nav navbar-nav navbar-right">
           <li ng-hide="account.loggedIn">
-            <button href="#" ng-click="openCreateModal()" class="btn btn-warning">{{ 'NAVIGATION_CREATE' | translate }}</button>
+            <button href="#" ng-click="modalManager.openCreateModal()" class="btn btn-warning">{{ 'NAVIGATION_CREATE' | translate }}</button>
           </li>
           <li ng-hide="account.loggedIn">
             <a href="#" ng-click="modalManager.openLoginModal()">{{ 'COMMON_LOGIN' | translate }}</a>

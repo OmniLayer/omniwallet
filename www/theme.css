@@ -650,7 +650,7 @@ border-left-color: #111111;
   color: #ffffff;
 }
 
-.navbar-header {
+.navbar-collapse .nav .navbar-header {
   color: #ffffff;
   background-color: #133959;
   padding: 12px 10px;
