@@ -21,11 +21,5 @@ angular.module("omniControllers")
       $scope.openBalanceCheckModal = function(){
         //call modal manager service to display the balance check modal
       }
-      $scope.openLoginModal = function(){
-        //call modal manager service to display the login modal
-      }
-      $scope.openCreateModal = function(){
-        //call modal manager service to display the create wallet modal
-      }
      };
     }])

@@ -20,6 +20,29 @@ angular.module("omniServices")
         
             return enc;
           };
+
+          self.openCreateModal = function() {
+              self.modalInstance = $modal.open({
+                templateUrl: '/partials/wallet_create_modal.html',
+                controller: CreateWalletController,
+                backdrop:'static'
+              });
+          };
+
+          self.openLoginModal = function() {  
+              var modalScope = $rootScope.$new()
+              modalScope.login = {
+                title:'Login',
+                button:'Open Wallet'
+              }
+
+              self.modalInstance = $modal.open({
+                templateUrl: '/partials/login_modal.html',
+                controller: LoginController,
+                scope: modalScope,
+                backdrop:'static'
+              });
+          };
           
           self.openConfirmationModal = function(modalConfig) {
               self.modalInstance = $modal.open({

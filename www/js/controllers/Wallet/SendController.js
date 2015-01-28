@@ -13,6 +13,7 @@ angular.module("omniControllers")
       		$scope.selectedAsset = asset;
       		$scope.selectedAddress = $scope.selectedAsset.tradableAddresses[0];
       	}
+      	
       	$scope.setAddress = function(address){
       		$scope.selectedAddress = address;
       	}

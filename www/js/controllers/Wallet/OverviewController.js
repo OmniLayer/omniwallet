@@ -1,11 +1,11 @@
 angular.module("omniControllers")
-  .controller("WalletOverviewController", ["$scope","Account","$location","Wallet","ModalManager",
-    function WalletOverviewController($scope,Account,$location,Wallet,ModalManager){
-      $scope.uuid = Account.uuid;
+  .controller("WalletOverviewController", ["$scope","$location","Wallet","ModalManager",
+    function WalletOverviewController($scope,$location,Wallet,ModalManager){
+      $scope.uuid = $scope.account.uuid;
       $scope.loginLink = $location.protocol() + "://" + $location.host() + "/login/" + $scope.uuid;
       //console.log(Wallet.addresses);
-      $scope.firstLogin = Account.firstLogin;
-      $scope.CSYM=Account.getSetting("usercurrency");
+      $scope.firstLogin = $scope.account.firstLogin;
+      $scope.CSYM=$scope.account.getSetting("usercurrency");
       $scope.total=0;
       $scope.chartConfig = {
         chart: {
@@ -27,7 +27,7 @@ angular.module("omniControllers")
             }
       };
       
-      $scope.showtesteco = Account.getSetting('showtesteco');
+      $scope.showtesteco = $scope.account.getSetting('showtesteco');
 
       $scope.chartData = Wallet.assets.filter(function(asset){
         return ((asset.id < 2147483648 && asset.id != 2) || $scope.showtesteco === 'true')
@@ -50,9 +50,9 @@ angular.module("omniControllers")
 
       }
 
-      $scope.disclaimerSeen = Account.settings.disclaimerSeen;
+      $scope.disclaimerSeen = $scope.account.settings.disclaimerSeen;
       $scope.$on('$locationChangeSuccess', function(path) {
-        Account.settings.disclaimerSeen = true;
+        $scope.account.settings.disclaimerSeen = true;
       })
 
       $scope.$on("balance:changed",function(evt,changed,values){
