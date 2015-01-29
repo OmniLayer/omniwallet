@@ -34,14 +34,14 @@ def getaddress():
         transaction['state'] = txrow[3]
         transaction['currency']['id'] = txrow[4]
         transaction['role'] = txrow[5]
-        transaction['amount'] = int(('%.8f' % float(txrow[6])).rstrip('0').rstrip('.'))
+        transaction['amount'] = txrow[6]
         transaction['currency']['name'] = txrow[7]
 
         transactions.append(transaction)
 
     response = { 'address': address, 'transactions': transactions } 
 
-    return json.dumps(response)
+    return jsonifys(response)
 
 @app.route('/general/<currency_page>')
 def getcurrencyrecent(currency_page):
