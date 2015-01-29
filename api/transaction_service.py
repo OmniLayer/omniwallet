@@ -19,7 +19,7 @@ def getaddress():
                             t.TxHash, t.TxType, t.TxRecvTime, t.TxState, 
                             sp.PropertyName 
                       from transactions t, addressesintxs atx, smartproperties sp 
-                      where t.txdbserialnum = atx.txdbserialnum and sp.PropertyID = atx.PropertyID andatx.address=%s and t.txdbserialnum >0 
+                      where t.txdbserialnum = atx.txdbserialnum and sp.PropertyID = atx.PropertyID and atx.address=%s and t.txdbserialnum >0 
                       order by t.txdbserialnum DESC""", [address])
 
     response = { 'address': address, 'transactions': ROWS } 
