@@ -1,17 +1,26 @@
 angular.module('omniControllers')
 	.controller('WalletHistoryController', ["$scope", "$q", "$http", "hashExplorer", "$translate",
-		function WalletHistoryController($scope, $q, $http, hashExplorer) {
-		  $scope.setHashExplorer = hashExplorer.setHash.bind(hashExplorer);
+		function WalletHistoryController($scope, $q, $http, hashExplorer, $translate) {
+		    $scope.setHashExplorer = hashExplorer.setHash.bind(hashExplorer);
+		    var alladdresses = {hash:""};
 
-		  $scope.changeAddress=function(address){
-		  	if(address){
-		  		$scope.selectedAddress = address;
-		  		$scope.history = address.transactions;
-		  	} else {
-		  		$translate('WALLET_HISTORY_ALLADDRESSES').then(function(){
-			  		$scope.selectedAddress = {hash:translation.WALLET_HISTORY_ALLADDRESSES}
+		    $translate('WALLET_HISTORY_ALLADDRESSES').then(function(){
+		  		alladdresses={hash:translation.WALLET_HISTORY_ALLADDRESSES};
+		  		$scope.selectedAddress = alladdresses;
+	  		});
+
+
+  			$scope.history = $scope.wallet.transactions();		
+
+
+		    $scope.changeAddress=function(address){
+			  	if(address){
+			  		$scope.selectedAddress = address;
+			  		$scope.history = address.transactions;
+			  	} else {
+			  		$scope.selectedAddress = alladdresses
 			  		$scope.history = $scope.wallet.transactions();
-		  		});
-		  	}
-		  }
+			  	
+			  	}
+		    }
 		}])
