@@ -15,14 +15,31 @@ def getaddress():
     except ValueError:
         abort(make_response('This endpoint only consumes valid input', 400))
 
-    ROWS=dbSelect("""select atx.PropertyID, atx.AddressRole, atx.BalanceAvailableCreditDebit, 
-                            t.TxHash, t.TxType, t.TxRecvTime, t.TxState, 
+    ROWS=dbSelect("""select t.TxHash, t.TxType, t.TxRecvTime, t.TxState,
+                            atx.PropertyID, atx.AddressRole, atx.BalanceAvailableCreditDebit,
                             sp.PropertyName 
                       from transactions t, addressesintxs atx, smartproperties sp 
                       where t.txdbserialnum = atx.txdbserialnum and sp.PropertyID = atx.PropertyID and atx.address=%s and t.txdbserialnum >0 
                       order by t.txdbserialnum DESC""", [address])
 
-    response = { 'address': address, 'transactions': ROWS } 
+    transactions = []
+
+    if len(ROWS) > 0:
+      for txrow in ROWS:
+        transaction = {'currency':{}}
+
+        transaction['hash'] = txrow[0]
+        transaction['type'] = txrow[1]
+        transaction['time'] = txrow[2]
+        transaction['state'] = txrow[3]
+        transaction['currency']['id'] = txrow[4]
+        transaction['role'] = txrow[5]
+        transaction['amount'] = int(('%.8f' % float(txrow[6])).rstrip('0').rstrip('.'))
+        transaction['currency']['name'] = txrow[7]
+
+        transactions.push(transaction)
+
+    response = { 'address': address, 'transactions': transactions } 
 
     return json.dumps(response)
 

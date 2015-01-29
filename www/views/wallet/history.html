@@ -37,10 +37,10 @@
 
       <tr ng-repeat="transaction in history track by $index">
         <!-- <td ng-click="setHashExplorer(transaction)"> <a href="/explorer/inspector?view={{transaction.tx_hash}}">{{transaction.tx_hash_concat}}</a></td> -->
-        <td>{{transaction.PropertyName | truncate:14 }}</td>
-        <td>{{ 'TX_TYPE_' + transaction.TxType | translate}}</td>
-        <td class="number" title="{{transaction.BalanceAvailableCreditDebit}}" ng-bind-html="transaction.BalanceAvailableCreditDebit | numeraljs: '0,0.00000000'"></td>
-        <td>{{transaction.TxRecvTime | date:'dd MMM HH:mma Z'}}</td>
+        <td>{{transaction.currency.name | truncate:14 }}</td>
+        <td>{{ 'TX_TYPE_' + transaction.type | translate}}</td>
+        <td class="number" title="{{transaction.amount}}" ng-bind-html="transaction.amount | numeraljs: '0,0.00000000'"></td>
+        <td>{{transaction.time | date:'dd MMM HH:mma Z'}}</td>
         <td>(details)
       </tr>
     </table>
