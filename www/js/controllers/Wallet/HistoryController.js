@@ -8,9 +8,10 @@ angular.module('omniControllers')
 		  		$scope.selectedAddress = address;
 		  		$scope.history = address.transactions;
 		  	} else {
-		  		$translate('WALLET_HISTORY_ALLADDRESSES').then(function())
-		  		$scope.selectedAddress = {hash:translation.WALLET_HISTORY_ALLADDRESSES}
-		  		$scope.history = $scope.wallet.transactions();
+		  		$translate('WALLET_HISTORY_ALLADDRESSES').then(function(){
+			  		$scope.selectedAddress = {hash:translation.WALLET_HISTORY_ALLADDRESSES}
+			  		$scope.history = $scope.wallet.transactions();
+		  		});
 		  	}
 		  }
 		}])
