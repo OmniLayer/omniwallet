@@ -37,7 +37,7 @@ def getaddress():
         transaction['amount'] = int(('%.8f' % float(txrow[6])).rstrip('0').rstrip('.'))
         transaction['currency']['name'] = txrow[7]
 
-        transactions.push(transaction)
+        transactions.append(transaction)
 
     response = { 'address': address, 'transactions': transactions } 
 
