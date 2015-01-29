@@ -15,14 +15,14 @@ def getaddress():
     except ValueError:
         abort(make_response('This endpoint only consumes valid input', 400))
 
-    ROWS=dbSelect("select * from transactions t, addressesintxs atx where t.txdbserialnum = atx.txdbserialnum and atx.address=%s and t.txdbserialnum >0 order by t.txdbserialnum DESC", [address])
+    ROWS=dbSelect("""select atx.PropertyID, atx.AddressRole, atx.BalanceAvailableCreditDebit, 
+                            t.TxHash, t.TxType, t.TxRecvTime, t.TxState, 
+                            sp.PropertyName 
+                      from transactions t, addressesintxs atx, smartproperties sp 
+                      where t.txdbserialnum = atx.txdbserialnum and sp.PropertyID = atx.PropertyID andatx.address=%s and t.txdbserialnum >0 
+                      order by t.txdbserialnum DESC""", [address])
 
-    response = { 'address': {}, 'balance': {}, '0' : { 'transactions': [] } } #To preserve compatability, 'currID': {'txdata'}
-    if len(ROWS) > 0:
-      for addrrow in ROWS:
-        #res = requests.get('http://localhost/v1/transaction/tx/' + addrrow[0] + '.json').json()[0]
-        res = json.loads(gettransaction(addrrow[0]))[0]
-        response['0']['transactions'].append(res)
+    response = { 'address': address, 'transactions': ROWS } 
 
     return json.dumps(response)
 
