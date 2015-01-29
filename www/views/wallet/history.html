@@ -1,12 +1,22 @@
 <div class="row text-left om-title">History</div>
 
-  <div class="row" ng-controller="WalletHistoryController" ng-init="getData(selectedAddress)">
+  <div class="row" ng-controller="WalletHistoryController">
     
-      <h4> Full Wallet History for
-        <select ng-model="selectedAddress" ng-options="addrObject.address as addrObject.address for addrObject in addresses" 
-          ng-change="getData(selectedAddress)">
-        <option value="">-- All Addresses --</option>
-        </select> 
+      <h4 class="pull-right"> Full Wallet History for
+        <div class="btn-group btn-tertiary">
+          <button class="btn btn-clear dropdown-toggle" type="button" id="chooseAddress" data-toggle="dropdown" aria-expanded="true">
+            {{selectedAddress.hash}} 
+            <span class="caret pull-right"></span>
+          </button>
+          <ul class="dropdown-menu" role="menu" aria-labelledby="chooseAddress">
+            <li role="presentation">
+              <a role="menuitem" tabindex="-1" href="#" ng-click="changeAddress(null)">-- All Addresses --</a>
+            </li>
+            <li role="presentation" ng-repeat="address in wallet.addresses">
+              <a role="menuitem" tabindex="-1" href="#" ng-click="changeAddress(address)">{{address.hash}} </a>
+            </li>
+          </ul>
+        </div> 
       </h4>
 
     <h3 ng-show="isLoading" class="text-center">Loading...<img src="/assets/img/spinner.gif"></h3>
@@ -14,24 +24,24 @@
     <table class="table table-hover table-condensed">
       <thead>
           <tr>
-            <th>Transaction hash</th>
+            <!-- <th>Transaction hash</th> -->
             <th>Currency</th>
             <th>Type</th>
             <th>Amount</th>
             <th>Transaction time</th>
+            <th>Transaction details</th>
           </tr>
       </thead>
-      <tbody>
+      <tbody> 
       </tbody>
 
-      <tr class="{{ transaction.color }}" ng-repeat="transaction in history track by $index" ng-show="transaction.tx_hash != undefined">
-        <td ng-click="setHashExplorer(transaction)"> <a href="/explorer/inspector?view={{transaction.tx_hash}}">{{transaction.tx_hash_concat}}</a></td>
-        <td>{{transaction.currency_str | truncate:14 }}</td>
-        <td>{{transaction.tx_type_str}}</td>
-        <td ng-show="transaction.color=='info'" class="number" title="-{{transaction.formatted_amount}}" ng-bind-html="transaction.formatted_amount | numeraljs: '-0,0.00000000'"></td>
-        <td ng-show="transaction.color=='success'" class="number" title="{{transaction.formatted_amount}}" ng-bind-html="transaction.formatted_amount | numeraljs: '0,0.00000000'"></td>
-        <td ng-show="transaction.color=='warning'" class="number" title="{{transaction.formatted_amount}}" ng-bind-html="transaction.formatted_amount | numeraljs: '0,0.00000000'"></td>
-        <td>{{transaction.tx_time | date:'dd MMM HH:mma Z'}}</td>
+      <tr ng-repeat="transaction in history track by $index">
+        <!-- <td ng-click="setHashExplorer(transaction)"> <a href="/explorer/inspector?view={{transaction.tx_hash}}">{{transaction.tx_hash_concat}}</a></td> -->
+        <td>{{transaction.PropertyName | truncate:14 }}</td>
+        <td>{{ 'TX_TYPE_' + transaction.TxType | translate}}</td>
+        <td class="number" title="{{transaction.BalanceAvailableCreditDebit}}" ng-bind-html="transaction.BalanceAvailableCreditDebit | numeraljs: '0,0.00000000'"></td>
+        <td>{{transaction.TxRecvTime | date:'dd MMM HH:mma Z'}}</td>
+        <td>(details)
       </tr>
     </table>
   </div>

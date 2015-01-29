@@ -151,6 +151,14 @@ angular.module("omniServices")
 	        	})[0];	
 	        }
 
+	        self.transactions = function(){
+	        	return self.addresses.map(function(address){
+	        		return address.transactions;
+	        	}).reduce(function(previous,current){
+	        		return previous.concat(current);
+	        	})
+	        }
+
 			// self.initialize = function(){				  
 			//     self.selectedCoin = self.currencyList[0];
 			//     self.currencyList.forEach(function(e, i) {
