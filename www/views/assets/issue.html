@@ -10,40 +10,46 @@
       <div class="row">
         <div class="col-xs-12">
           <form name="issuanceForm" ng-submit="validateIssuanceForm()">
-            <h3 class="om-subtitle">{{'ASSET_ISSUANCE_DETAILS_SUBTITLE' | translate}}</h3>
-            <hr>
-            <div class="form-group col-sm-6">
-              <div class="input-group">
-                <span class="input-group-addon"> {{ 'COMMON_NAME' | translate }} ({{ 'ASSET_ISSUANCE_DETAILS_NAME_HINT' | translate }}): </span>
-                <input name="name" type="text" ng-model="propertyName" class="form-control" placeholder="ex: BobCoin" maxlength="255" ng-maxlength="255" required>
+            <div class="row">
+              <h3 class="om-subtitle">{{'ASSET_ISSUANCE_DETAILS_SUBTITLE' | translate}}</h3>
+              <hr>
+            </div>
+            <div class="row">
+              <div class="form-group col-sm-6">
+                  <label for="name"> {{ 'COMMON_NAME' | translate }} ({{ 'ASSET_ISSUANCE_DETAILS_NAME_HINT' | translate }}): </label>
+                  <input name="name" type="text" ng-model="propertyName" class="form-control" placeholder="ex: BobCoin" maxlength="255" ng-maxlength="255" required>
+              </div>
+              <div class="form-group col-sm-6">
+                  <label for="type"> {{ 'ASSET_ISSUANCE_DETAILS_DIVISIBLE' | translate }}: </label>
+                  <select name="type" class="form-control" ng-model="propertyType" ng-change="typeChanged()" required>
+                    <option value="2"> {{ 'COMMON_YES' | translate }} </option>
+                    <option value="1"> {{ 'COMMON_NO' | translate }} </option>
+                  </select>
               </div>
             </div>
-            <div class="form-group col-sm-6">
-              <div class="input-group">
-                <span class="input-group-addon"> {{ 'ASSET_ISSUANCE_DETAILS_DIVISIBLE' | translate }}: </span>
-                <select name="type" class="form-control" ng-model="propertyType" ng-change="typeChanged()" required>
-                  <option value="2"> {{ 'COMMON_YES' | translate }} </option>
-                  <option value="1"> {{ 'COMMON_NO' | translate }} </option>
-                </select>
+            <div class="row">
+              <div class="form-group col-sm-6">
+                <label for="category">{{ 'ASSET_ISSUANCE_DETAILS_CATEGORY' | translate }}:</label>
+                <combobox name="category" model-value="propertyCategory" placeholder="{{ 'COMMON_SELECT' | translate }}" 
+                option-list="categories" value-selected="loadSubcategories(category)"></combobox>
+              </div>  
+              <div class="form-group col-sm-6" ng-show="propertyCategory != ''">
+                <label for="subcategory">{{ 'ASSET_ISSUANCE_DETAILS_SUBCATEGORY' | translate }}:</label>
+                <combobox name="subcategory" model-value="propertySubcategory" placeholder="{{ 'COMMON_SELECT' | translate }}" 
+                option-list="subcategories"></combobox>
               </div>
             </div>
-            <div class="form-group col-sm-6">
-              <combobox name="category" model-value="propertyCategory" placeholder="{{ 'COMMON_SELECT' | translate }}" label="{{ 'ASSET_ISSUANCE_DETAILS_CATEGORY' | translate }}:"
-              option-list="categories" value-selected="loadSubcategories(category)"></combobox>
-            </div>  
-            <div class="form-group col-sm-6" ng-show="propertyCategory != ''">
-              <combobox name="subcategory" model-value="propertySubcategory" placeholder="{{ 'COMMON_SELECT' | translate }}" label="{{ 'ASSET_ISSUANCE_DETAILS_SUBCATEGORY' | translate }}:"
-              option-list="subcategories"></combobox>
-            </div>
-            <div class="form-group col-sm-6">
-              <div class="input-group">
-                <span class="input-group-addon"> {{ 'ASSET_ISSUANCE_DETAILS_URL' | translate }}: </span>
-                <input name="url" type="url" ng-model="propertyUrl" class="form-control" placeholder="Enter a web address for the user to get more info on the Smart Property" maxlength="255" ng-maxlength="255" >
+            <div class="row">
+              <div class="form-group col-sm-6">
+                  <label for="url"> {{ 'ASSET_ISSUANCE_DETAILS_URL' | translate }}: </span>
+                  <input name="url" type="url" ng-model="propertyUrl" class="form-control" placeholder="Enter a web address for the user to get more info on the Smart Property" maxlength="255" ng-maxlength="255" >
               </div>
             </div>
-            <div class="form-group col-sm-12">
-              <textarea class="form-control" ng-model="propertyData" maxlength="255" ng-maxlength="255" placeholder="Enter Smart Property description." rows="3"></textarea>
-              <div style="position: absolute;right: 15px;bottom: 0px;color: #ccc;">{{254 - propertyData.length}} {{'ASSET_ISSUANCE_DETAILS_DESCRIPTION_HINT' | translate}}</div>
+            <div class="row">
+              <div class="form-group col-sm-12">
+                <textarea class="form-control" ng-model="propertyData" maxlength="255" ng-maxlength="255" placeholder="Enter Smart Property description." rows="3"></textarea>
+                <div style="position: absolute;right: 15px;bottom: 0px;color: #ccc;">{{254 - propertyData.length}} {{'ASSET_ISSUANCE_DETAILS_DESCRIPTION_HINT' | translate}}</div>
+              </div>
             </div>
             <!--
             <br ng-hide="isNewProperty">
