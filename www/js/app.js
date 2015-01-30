@@ -59,7 +59,7 @@ var app = angular.module('omniwallet', [
         var view;
         var viewFound = availableViews.indexOf(route.page);
         if (viewFound != -1)
-          view = '/partials/wallet_assets_' + route.page + '.html';
+          view = '/views/assets/' + route.page + '.html';
         else
           view = '/views/wallet/assets.html';
 
@@ -67,7 +67,7 @@ var app = angular.module('omniwallet', [
         return view;
       }
     }).otherwise({
-      redirectTo:'/explorer/assets'
+      redirectTo:'/wallet/assets'
     });
 
   $routeProvider.when('/wallet/:page?', {
