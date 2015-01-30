@@ -13,7 +13,8 @@ angular.module("omniConfig")
     else
       return "https://blockchain.info/tx/";
   }]);
-
+  
+angular.module("omniFilters", ["omniConfig"]);
 angular.module("omniFactories", ["omniConfig"]);
 angular.module("omniServices", ["omniConfig", "omniFactories"]);
 angular.module("omniControllers", ["omniConfig", "omniFactories", "omniServices"]);
