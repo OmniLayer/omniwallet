@@ -13,7 +13,7 @@ angular.module("omniConfig")
     else
       return "https://blockchain.info/tx/";
   }]);
-  
+
 angular.module("omniFilters", ["omniConfig"]);
 angular.module("omniFactories", ["omniConfig"]);
 angular.module("omniServices", ["omniConfig", "omniFactories"]);
@@ -30,6 +30,7 @@ var app = angular.module('omniwallet', [
   'pascalprecht.translate',
   'nvd3',
   'omniConfig',
+  'omniFilters',
   'omniFactories',
   'omniServices',
   'omniControllers'
