@@ -22,6 +22,7 @@ angular.module("omniConfig")
 	COMMON_SELECT:'Select',
 	COMMON_YES:'Yes',
 	COMMON_NO:'No',
+	COMMON_CANCEL:'Cancel',
 	HOMEPAGE_ADDRESSEXAMPLE: '(e.g. 1EXoDusjGwvnjZUyKkxZ4UHEf77z6A5S4P)',
    	HOMEPAGE_BALANCECHECK:'Balance Check',
    	HOMEPAGE_CHECKBALANCE: 'Check Balance',
