@@ -1,16 +1,17 @@
-<div class="row text-left om-title">History</div>
+<div class="row text-left om-title">{{'WALLET_HISTORY_TITLE' | translate}}</div>
 
   <div class="row" ng-controller="WalletHistoryController">
     
-      <h4 class="pull-right"> Full Wallet History for
+      <h4 class="pull-right">{{'WALLET_HISTORY_FILTERLABEL' | translate}}
         <div class="btn-group btn-tertiary">
           <button class="btn btn-clear dropdown-toggle" type="button" id="chooseAddress" data-toggle="dropdown" aria-expanded="true">
-            {{selectedAddress.hash}} 
+            <span ng-if="selectedAddress">{{selectedAddress.hash}}</span>
+            <span ng-hide="selectedAddress">{{'WALLET_HISTORY_ALLADDRESSES' | translate}}</span>
             <span class="caret pull-right"></span>
           </button>
           <ul class="dropdown-menu" role="menu" aria-labelledby="chooseAddress">
             <li role="presentation">
-              <a role="menuitem" tabindex="-1" href="#" ng-click="changeAddress(null)">-- All Addresses --</a>
+              <a role="menuitem" tabindex="-1" href="#" ng-click="changeAddress()">{{'WALLET_HISTORY_ALLADDRESSES' | translate}}</a>
             </li>
             <li role="presentation" ng-repeat="address in wallet.addresses">
               <a role="menuitem" tabindex="-1" href="#" ng-click="changeAddress(address)">{{address.hash}} </a>
@@ -19,17 +20,17 @@
         </div> 
       </h4>
 
-    <h3 ng-show="isLoading" class="text-center">Loading...<img src="/assets/img/spinner.gif"></h3>
+    <h3 ng-show="isLoading" class="text-center">{{'COMMON_LOADING' | translate}}...<img src="/assets/img/spinner.gif"></h3>
 
     <table class="table table-hover table-condensed">
       <thead>
           <tr>
             <!-- <th>Transaction hash</th> -->
-            <th>Currency</th>
-            <th>Type</th>
-            <th>Amount</th>
-            <th>Transaction time</th>
-            <th>Transaction details</th>
+            <th>{{'WALLET_HISTORY_CURRENCY' | translate}}</th>
+            <th>{{'WALLET_HISTORY_TYPE' | translate}}</th>
+            <th>{{'WALLET_HISTORY_AMOUNT' | translate}}</th>
+            <th>{{'WALLET_HISTORY_TXTIME' | translate}}</th>
+            <th>{{'WALLET_HISTORY_TXTDETAILS' | translate}}</th>
           </tr>
       </thead>
       <tbody> 
