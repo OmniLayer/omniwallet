@@ -4,7 +4,7 @@ angular.module('omniControllers')
 		    $scope.setHashExplorer = hashExplorer.setHash.bind(hashExplorer);
 		    var alladdresses = {hash:""};
 
-		    $translate('WALLET_HISTORY_ALLADDRESSES').then(function(){
+		    $translate('WALLET_HISTORY_ALLADDRESSES').then(function(translation){
 		  		alladdresses={hash:translation.WALLET_HISTORY_ALLADDRESSES};
 		  		$scope.selectedAddress = alladdresses;
 	  		});
