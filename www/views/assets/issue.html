@@ -7,7 +7,7 @@
       <div class="row">
         <div class="col-xs-12">
           <form name="issuanceForm" ng-submit="validateIssuanceForm()">
-            <div class="container-fluid" ng-include="'/views/assets/partials/asset_form_details.html'">
+            <div class="container-fluid" ng-include="'/views/assets/partials/form_details.html'">
             </div>
             <div class="container-fluid">
               <div class="row">
@@ -18,23 +18,11 @@
               </div>
               <div class="row">
                 <div class="form-group col-sm-6">
-                    <label for="issuer"> {{'ASSET_ISSUANCE_ISSUER' | translate}}</label>
-                    <select name="issuer" class="form-control" ng-model="walletAssets.selectedAddress"
-                    ng-options="address as address.hash for address in wallet.getAsset(0).tradableAddresses"
-                    ng-init="walletAssets.selectedAddress = wallet.getAsset(0).tradableAddresses[0]" required>
-                    </select>
-                </div>
-                <div class="form-group col-sm-6">
                     <label for="amount"> {{'ASSET_ISSUANCE_AMOUNT' | translate}} <small>({{'ASSET_ISSUANCE_AMOUNT_HINT' | translate}})</small></label>
-                    <input name="amount" type="number" step="1" ng-model="numberProperties" step="{{tokenStep}}" min="{{tokenMin}}" max="{{tokenMax}}" ensure-integer ensure-over="numberProperties" ensure-if="!isDivisible()" class="form-control" placeholder="Enter desired amount" required>
+                    <input name="amount" type="number" step="1" ng-model="numberProperties" step="{{tokenStep}}" min="{{tokenMin}}" max="{{tokenMax}}" ensure-integer ensure-over="numberProperties" ensure-if="!isDivisible()" class="form-control" required>
                 </div>
               </div>
-              <div class="row">
-                <div class="form-group col-sm-6">
-                    <label for=""> {{'ASSET_ISSUANCE_DETAILS_FEES' | translate}} <small>({{walletAssets.selectedAddress.getDisplayBalance(0)}} BTC {{ 'COMMON_AVAILABLE' | translate}})</small></label>
-                    <input name="fees" type="number" ng-model="minerFees" class="form-control"
-                    placeholder="0.0001 suggested minimum" step="0.0001" min="0.0001" ng-change="calculateTotal(minerFees)" required>
-                </div>
+              <div class="row" ng-include="/views/assets/partials/form_addressfee.html">
               </div>
               <div class="row">
                 <div class="col-xs-12 text-right">
