@@ -40,7 +40,7 @@ def getaddress():
 
     response = { 'address': address, 'transactions': transactions } 
 
-    return jsonifys(response)
+    return jsonify(response)
 
 @app.route('/general/<currency_page>')
 def getcurrencyrecent(currency_page):
