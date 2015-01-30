@@ -65,7 +65,7 @@ angular.module("omniConfig")
 	TX_DETAILS_20_SELLER: 'You put for sale {{coin}}',
 	TX_DETAILS_21_BUYER: 'You reserved {{coin}}',
 	TX_DETAILS_21_SENDER: 'You bought {{coin}}',
-	TX_DETAILS_21_BELLER: 'You sold {{coin}}',
+	TX_DETAILS_21_SELLER: 'You sold {{coin}}',
 	TX_DETAILS_22_BUYER: 'You bought {{coin}}',
 	TX_DETAILS_50_ISSUER: 'You created {{coin}}',
 	TX_DETAILS_51_ISSUER: 'You started {{coin}} Crowdsale',
