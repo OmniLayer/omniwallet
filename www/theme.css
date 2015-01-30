@@ -29,6 +29,34 @@ h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6{
   font-family: 'roboto';
 }
 
+.tx-buyer {
+  color:#5685cb;
+}
+.tx-issuer {
+  color:#f4d644;
+}
+.tx-participant {
+  color:#5685cb;
+}
+.tx-payee {
+  color:#52d644;
+}
+.tx-recipient {
+  color:#52d644;
+}
+.tx-seller {
+  color:#5685cb;
+}
+.tx-sender {
+  color:#fa412e;
+}
+.tx-payer {
+  color:#fa412e;
+}
+.tx-feepayer {
+  color:#fa412e;
+}
+
 .dropdown-menu-main {
   background-color: #7ed933;
   border: 1px solid #cccccc;
