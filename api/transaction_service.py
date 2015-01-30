@@ -16,8 +16,8 @@ def getaddress():
         abort(make_response('This endpoint only consumes valid input', 400))
 
     ROWS=dbSelect("""select t.TxHash, t.TxType, t.TxRecvTime, t.TxState,
-                            atx.PropertyID, atx.AddressRole, atx.BalanceAvailableCreditDebit,
-                            sp.PropertyName 
+                            atx.AddressRole, atx.BalanceAvailableCreditDebit,
+                            sp.PropertyData
                       from transactions t, addressesintxs atx, smartproperties sp 
                       where t.txdbserialnum = atx.txdbserialnum and sp.PropertyID = atx.PropertyID and atx.address=%s and t.txdbserialnum >0 
                       order by t.txdbserialnum DESC""", [address])
@@ -26,16 +26,15 @@ def getaddress():
 
     if len(ROWS) > 0:
       for txrow in ROWS:
-        transaction = {'currency':{}}
+        transaction = {}
 
         transaction['hash'] = txrow[0]
         transaction['type'] = txrow[1]
         transaction['time'] = txrow[2]
         transaction['state'] = txrow[3]
-        transaction['currency']['id'] = txrow[4]
-        transaction['role'] = txrow[5]
-        transaction['amount'] = txrow[6]
-        transaction['currency']['name'] = txrow[7]
+        transaction['role'] = txrow[4]
+        transaction['amount'] = txrow[5]
+        transaction['currency'] = txrow[6]
 
         transactions.append(transaction)
 
