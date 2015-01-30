@@ -39,7 +39,7 @@
         <!-- <td ng-click="setHashExplorer(transaction)"> <a href="/explorer/inspector?view={{transaction.tx_hash}}">{{transaction.tx_hash_concat}}</a></td> -->
         <td>{{transaction.currency.name | truncate:14 }}</td>
         <td class="tx-{{transaction.role}}">{{ 'TX_TYPE_' + transaction.type | translate}}</td>
-        <td ng-show="transaction.currency.divisible" class="number" title="{{transaction.amount | toWhole}}" ng-bind-html="transaction.amount | numeraljs: '0,0.00000000'"></td>
+        <td ng-show="transaction.currency.divisible" class="number" title="{{transaction.amount | toWhole}}" ng-bind-html="transaction.amount | toWhole | numeraljs: '0,0.00000000'"></td>
         <td ng-hide="transaction.currency.divisible" class="number" title="{{transaction.amount}}" ng-bind-html="transaction.amount | numeraljs: '0,0'"></td> 
         <td>{{transaction.time | date:'dd MMM HH:mma Z'}}</td>
         <td>(details)
