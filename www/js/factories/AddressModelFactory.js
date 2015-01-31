@@ -10,6 +10,7 @@ angular.module("omniFactories")
 					self.privkey = privkey;
 					self.pubkey = pubkey;
 					self.balance = [];
+					self.transactions = [];
 					self.qr = "https://chart.googleapis.com/chart?chs=150x150&cht=qr&chl="+hash+"&choe=UTF-8";
 					
 					AddressManager.getTransactions(hash).then(function(result){
