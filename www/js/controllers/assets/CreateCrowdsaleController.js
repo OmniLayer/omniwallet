@@ -2,15 +2,13 @@ angular.module("omniControllers")
 	.controller("CreateCrowdsaleController",["$scope", "PropertyManager", "$timeout", "Transaction", "ModalManager", "SATOSHI_UNIT",
 		function CreateCrowdsaleController($scope, PropertyManager, $timeout, Transaction, ModalManager, SATOSHI_UNIT){
 		  $scope.ecosystem = 2;
-		  $scope.propertyType = 2;
 		  $scope.tokenStep = $scope.tokenMin =  0.00000001;
 		  $scope.tokenMax = "92233720368.54775807";
 		  $scope.categories = [];
 		  $scope.subcategories = [];
 		  $scope.availableTokens = [];
-		  $scope.propertyCategory = '';
 		  $scope.issuerData = {};
-		  $scope.propertyDetails = {};
+		  $scope.propertyDetails = {propertyType : 2, propertyCategory : ''};
 		  
 		  var mastercoin, testMastercoin, bitcoin;
 		  $scope.setEcosystem = function(){
@@ -77,7 +75,7 @@ angular.module("omniControllers")
 		  // TRASANCTION GENERATION CONFIG 
 		  $scope.confirm = function(){
 		  	//TODO: VALIDATIONS
-		  	var fee = $scope.issuerData.minerFees;
+		  	var fee = new Big($scope.issuerData.minerFees);
 			var crowdsaleCreation = new Transaction(51,$scope.issuerData.selectedAddress,fee,{
 		          transaction_version:0,
 		          ecosystem:$scope.ecosystem,
