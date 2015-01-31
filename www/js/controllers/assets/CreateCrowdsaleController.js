@@ -184,7 +184,7 @@ angular.module("omniControllers")
 		  // DATEPICKER CONFIGURATION
 		  var nextMonth = new Date();
 		  var offset = nextMonth.getTimezoneOffset() * 60000;
-		  var minDeadline = new Date((new Date()).getTime() + 1800000 + offset);
+		  var minDeadline = new Date((new Date()).getTime() + 1800000 - offset);
 		  $scope.today = function() {
 		    $scope.deadline = minDeadline;
 		  };
