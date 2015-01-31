@@ -120,15 +120,16 @@ angular.module("omniControllers")
 		  }
 		  
 		  // DATEPICKER CONFIGURATION
-		  var nextMonth = new Date();
-		  var offset = nextMonth.getTimezoneOffset() * 60000;
-		  var minDeadline = new Date((new Date()).getTime() + 1800000 - offset);
+		  var deadline = new Date();
+		  var offset = deadline.getTimezoneOffset() * 60000;
+		  // set mn deadline to be half an hour ahead
+		  var minDeadline = new Date(deadline.getTime() + 1800000 - offset);
 		  $scope.today = function() {
 		    $scope.deadline = minDeadline;
 		  };
 		  
-		  nextMonth.setMonth(nextMonth.getMonth() +1);
-		  $scope.deadline = new Date(nextMonth.getTime() + offset);
+		  deadline.setMonth(deadline.getMonth() +1);
+		  $scope.deadline = new Date(deadline.getTime() - offset);
 
 		  $scope.open = function($event) {
 		    $event.preventDefault();
