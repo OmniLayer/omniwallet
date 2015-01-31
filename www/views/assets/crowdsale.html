@@ -70,31 +70,18 @@
           <div class="row">
             <div class="form-group col-xs-12">
               <label for="currencyDesired">{{ 'ASSET_CROWDSALE_RATES' | translate}}</label>
-              <div class="panel panel-form" ng-repeat="investment in currenciesDesired">
+              <div class="panel panel-form">
                 <div class="panel-body form-inline">
                   <div class="form-group col-xs-5">
-                    <input name="amount" type="text" ng-model="investment.numberOfTokens" big-number step="{{tokenStep}}" min="{{tokenMin}}" max="{{tokenMax}}" ensure-integer ensure-over="investment.numberOfTokens" ensure-if="!isDivisible()" class="form-control" placeholder="{{ 'ASSET_CROWDSALE_TOKENRATE' | translate}}" required>
+                    <input name="amount" type="text" ng-model="numberOfTokens" big-number step="{{tokenStep}}" min="{{tokenMin}}" max="{{tokenMax}}" ensure-integer ensure-over="numberOfTokens" ensure-if="!isDivisible()" class="form-control" placeholder="{{ 'ASSET_CROWDSALE_TOKENRATE' | translate}}" required>
                   </div>
                   <div class="form-group col-xs-7">
                     <span>{{'ASSET_CROWDSALE_PER' | translate}}</span>
-                    <select class="form-control" name="currencyDesired" ng-model="investment.selectedCurrency"
-                      ng-options="currency as formatCurrencyDisplay(currency) for currency in investment.availableTokens"
-                      ng-change="setAvailableTokens(investment)">
+                    <select class="form-control" name="currencyDesired" ng-model="selectedCurrency"
+                      ng-options="currency as formatCurrencyDisplay(currency) for currency in availableTokens">
                     </select>
                     <span>{{'ASSET_CROWDSALE_INVESTED' | translate}}</span>
                   </div>
-                  <button type="button" class="close" aria-hidden="true" ng-hide="singleCurrency" ng-click="removeCurrencyDesired(investment)">
-                    &times;
-                  </button>
-                </div>
-              </div>
-            </div>
-            <div class="col-xs-12">
-              <div class="panel panel-form" ng-hide="true">
-                <div class="panel-body">
-                  <button type="button" class="btn btn-link" ng-click="addCurrencyDesired()">
-                    {{'ASSET_CROWDSALE_ADDCURRENCY' | translate}}
-                  </button>
                 </div>
               </div>
             </div>

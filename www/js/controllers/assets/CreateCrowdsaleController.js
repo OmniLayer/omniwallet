@@ -5,12 +5,9 @@ angular.module("omniControllers")
 		  $scope.propertyType = 2;
 		  $scope.tokenStep = $scope.tokenMin =  0.00000001;
 		  $scope.tokenMax = "92233720368.54775807";
-		  $scope.singleCurrency = true;
-		  var availableDesiredCurrencies=[];
-		  var selectedDesiredCurrencies=[];
 		  $scope.categories=[];
 		  $scope.subcategories=[];
-		  $scope.currenciesDesired=[];
+		  $scope.availableTokens=[];
 		  $scope.propertyCategory='';
 		  
 		  var mastercoin, testMastercoin, bitcoin;
@@ -24,17 +21,12 @@ angular.module("omniControllers")
 		    		else if(property.currencyId==2)
 		    			testMastercoin=property;
 		    	})
-		      availableDesiredCurrencies = result.data.properties.sort(function(a, b) {
+		      $scope.availableTokens = result.data.properties.sort(function(a, b) {
 		          var currencyA = a.propertyName.toUpperCase();
 		          var currencyB = b.propertyName.toUpperCase();
 		          return (currencyA < currencyB) ? -1 : (currencyA > currencyB) ? 1 : 0;
 		      });
-		      var availableTokens = availableDesiredCurrencies.filter(function(currency){
-		        return selectedDesiredCurrencies.indexOf(currency) == -1;
-		      });
-		      var selectedCurrency = $scope.ecosystem == 1 ? mastercoin : testMastercoin;
-		      $scope.currenciesDesired =[{numberOfTokens:"", selectedCurrency:selectedCurrency, previousCurrency:selectedCurrency, availableTokens:availableTokens}];
-		      selectedDesiredCurrencies.push(selectedCurrency);
+		      $scope.selectedCurrency = $scope.ecosystem == 1 ? mastercoin : testMastercoin;
 		    });
 		    $scope.categories=[];
 		    $scope.subcategories=[];
@@ -54,61 +46,9 @@ angular.module("omniControllers")
 		    });
 		  };
 		  
-		  // MULTIPLE CURRENCIES SUPPORT
-		  $scope.addCurrencyDesired=function(){
-		    if(availableDesiredCurrencies.length - selectedDesiredCurrencies.length > 0) {
-		      var availableTokens = availableDesiredCurrencies.filter(function(currency){
-		        return selectedDesiredCurrencies.indexOf(currency) == -1;
-		      });
-		      var selectedCurrency = availableTokens.indexOf(mastercoin) > -1 ? mastercoin : availableTokens.indexOf(bitcoin) > -1 ? bitcoin : availableTokens[0];
-		      var newCurrencyDesired = {numberOfTokens:"", selectedCurrency:selectedCurrency, previousCurrency:selectedCurrency, availableTokens:availableTokens};
-		      $scope.setAvailableTokens(newCurrencyDesired);
-		      $scope.currenciesDesired.push(newCurrencyDesired);
-		    }
-		    
-		    $scope.singleCurrency=selectedDesiredCurrencies.length == 1;
-		  };
-		  
-		  $scope.setAvailableTokens=function(currencyDesired){
-		    $scope.currenciesDesired.forEach(function(currency){
-		      if(currency != currencyDesired){
-		        if(currency.availableTokens.indexOf(currencyDesired.previousCurrency) == -1)
-		          currency.availableTokens.push(currencyDesired.previousCurrency);
-		        currency.availableTokens.splice(currency.availableTokens.indexOf(currencyDesired.selectedCurrency),1);
-		        currency.availableTokens.sort(function(a, b) {
-		            var currencyA = a.propertyName.toUpperCase();
-		            var currencyB = b.propertyName.toUpperCase();
-		            return (currencyA < currencyB) ? -1 : (currencyA > currencyB) ? 1 : 0;
-		        });
-		      };
-		    });
-		    if(selectedDesiredCurrencies.indexOf(currencyDesired.previousCurrency) != -1)
-		      selectedDesiredCurrencies.splice(selectedDesiredCurrencies.indexOf(currencyDesired.previousCurrency),1);
-		    selectedDesiredCurrencies.push(currencyDesired.selectedCurrency);
-		    currencyDesired.previousCurrency=currencyDesired.selectedCurrency;
-		  };
-		  
-		  $scope.removeCurrencyDesired = function(currencyDesired){
-		    selectedDesiredCurrencies.splice(selectedDesiredCurrencies.indexOf(currencyDesired.selectedCurrency),1);
-		    $scope.currenciesDesired.splice($scope.currenciesDesired.indexOf(currencyDesired),1);
-		    $scope.currenciesDesired.forEach(function(currency){
-		        currency.availableTokens.push(currencyDesired.selectedCurrency);
-		        currency.availableTokens.sort(function(a, b) {
-		            var currencyA = a.propertyName.toUpperCase();
-		            var currencyB = b.propertyName.toUpperCase();
-		            return (currencyA < currencyB) ? -1 : (currencyA > currencyB) ? 1 : 0;
-		        });
-		    });
-		    $scope.singleCurrency=selectedDesiredCurrencies.length == 1;
-		  };
-		  
 		  $scope.formatCurrencyDisplay = function(currencyDesired){
 		    return currencyDesired.propertyName + " (" + currencyDesired.currencyId + ")";
 		  };
-
-		  $scope.$watch(function(){ return selectedDesiredCurrencies.length;}, function(count){
-		    $scope.singleCurrency = count == 1;
-		  });
 		  
 		  // Initialize the form
 		  $scope.setEcosystem();
