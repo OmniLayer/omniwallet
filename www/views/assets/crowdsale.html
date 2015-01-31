@@ -45,7 +45,7 @@
                   tooltip-placement="top"> <strong>(?)</strong>
                 </a>
               </label>
-              <input name="percentage" type="number" step="1" min="0" max="255" ng-model="percentageForIssuer" class="form-control" ensure-integer ensure-over="percentageForIssuer" ensure-if="true" class="text-right" required>
+              <input name="percentage" type="number" step="1" min="0" max="255" ng-model="percentageForIssuer" class="form-control" class="text-right" required>
             </div>
           </div>
           <div class="row">
@@ -57,7 +57,7 @@
                     tooltip-placement="top"> <strong>(?)</strong>
                   </a>
                 </label>
-                <input name="early" type="number" step="1" min="0" max="255" ng-model="earlyBirdBonus" class="form-control" ensure-integer ensure-over="earlyBirdBonus" ensure-if="true" class="text-right" required>
+                <input name="early" type="number" step="1" min="0" max="255" ng-model="earlyBirdBonus" class="form-control" class="text-right" required>
               </div>
             </div>
             <p class="help-block" ng-show="earlyBirdBonus > 0">{{'ASSET_CROWDSALE_EARLYESTIMATE' | translate}} 
@@ -73,7 +73,7 @@
               <div class="panel panel-form">
                 <div class="panel-body form-inline">
                   <div class="form-group col-xs-5">
-                    <input name="amount" type="text" ng-model="numberOfTokens" big-number step="{{tokenStep}}" min="{{tokenMin}}" max="{{tokenMax}}" ensure-integer ensure-over="numberOfTokens" ensure-if="!isDivisible()" class="form-control" placeholder="{{ 'ASSET_CROWDSALE_TOKENRATE' | translate}}" required>
+                    <input name="amount" type="text" ng-model="numberOfTokens" big-number step="{{tokenStep}}" min="{{tokenMin}}" max="{{tokenMax}}" class="form-control" placeholder="{{ 'ASSET_CROWDSALE_TOKENRATE' | translate}}" required>
                   </div>
                   <div class="form-group col-xs-7">
                     <span>{{'ASSET_CROWDSALE_PER' | translate}}</span>
