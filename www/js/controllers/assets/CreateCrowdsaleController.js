@@ -86,15 +86,13 @@ angular.module("omniControllers")
 		          property_name:$scope.propertyName, 
 		          property_url:$scope.propertyUrl || '\0', 
 		          property_data:$scope.propertyData || '\0', 
-		          number_properties:$scope.isDivisible() ? +new Big(currency.numberOfTokens).times(SATOSHI_UNIT).valueOf() : +currency.numberOfTokens,
+		          number_properties:$scope.isDivisible() ? +new Big($scope.numberOfTokens).times(SATOSHI_UNIT).valueOf() : +$scope.numberOfTokens,
 		          transaction_from: $scope.selectedAddress,
-		          currency_identifier_desired:currency.selectedCurrency.currencyId,
+		          currency_identifier_desired:$scope.selectedCurrency.currencyId,
 		          deadline:Date.UTC($scope.deadline.getFullYear(),$scope.deadline.getMonth(),$scope.deadline.getDate(), $scope.deadline.getHours(), $scope.deadline.getMinutes(), 0, 0) / 1000,
 		          earlybird_bonus:$scope.earlyBirdBonus,
 		          percentage_for_issuer:$scope.percentageForIssuer,
-		          fee: $scope.convertDisplayedValue($scope.minerFees),
-		          testnet: (TESTNET || false),
-		          donate: Account.getSetting("donate")
+		          donate: $scope.account.getSetting("donate")
 		        });
 
 
