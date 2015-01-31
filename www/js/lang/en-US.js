@@ -146,5 +146,6 @@ angular.module("omniConfig")
 	ASSET_CROWDSALE_EARLYESTIMATE_TOOLTIP:'Estimate based on the crowdsale creation being confirmed in the blockchain within 30 minutes after it was calculated.',
 	ASSET_CROWDSALE_PER:'per',
 	ASSET_CROWDSALE_INVESTED:'invested',
-	ASSET_CROWDSALE_ADDCURRENCY:'+ Add investment currency'
+	ASSET_CROWDSALE_ADDCURRENCY:'+ Add investment currency',
+	ASSET_CROWDSALE_TOKENRATE:'# of tokens'
   })
