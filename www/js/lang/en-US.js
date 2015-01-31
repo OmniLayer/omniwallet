@@ -150,6 +150,9 @@ angular.module("omniConfig")
 	ASSET_CROWDSALE_TOKENRATE:'# of tokens',
 	ASSET_CROWDSALE_RATES:"Rates",
 	ASSET_CROWDSALE_RATE:"Rate",
+	ASSET_CROWDSALE_START:"Start Crowdsale",
+	ASSET_CROWDSALE_MODALTITLE:"Confirm Crowdsale Creation",
+	ASSET_CROWDSALE_INITIALEB:"Initial early bird bonus",
 	ASSET_MODAL_DESCRIPTION:"Description",
 	ASSET_CROWDSALE_ACCEPTEDCURRENCY:"Accepted currency"
   })
