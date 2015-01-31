@@ -1,4 +1,4 @@
-<div ng-include="'/views/modals/partials/assets_details.html'"></div>
+<div ng-include="'/views/modals/partials/asset_details.html'"></div>
 <div>
   <div class="modal-row">
     <div class="description-title">{{'ASSET_CROWDSALE_EARLYESTIMATE' | translate}}:</div>
@@ -14,12 +14,12 @@
   </div>
   <div class="modal-row">
     <div class="description-title">{{'ASSET_FORM_ISSUER' | translate}}:</div>
-    <span class="description-text"><a href="{{explorerUrl}}{{selectedAddress}}" target="_blank">{{selectedAddress}}</a></span>
+    <span class="description-text"><a href="{{explorerUrl}}{{fromAddress}}" target="_blank">{{fromAddress}}</a></span>
   </div>
   <div class="modal-row">
     <div class="description-title">{{'ASSET_CROWDSALE_ACCEPTEDCURRENCY' | translate}}:</div>
     <span class="description-text"> 
-      {{selectedCurrency.propertyName}} / {{'ASSET_CROWDSALE_RATE' | translate}}({{numberOfTokens}})
+      {{selectedCurrency.propertyName}}<small ng-show="selectedCurrency.currencyId > 2">({{selectedCurrency.currencyId}})</small> / {{'ASSET_CROWDSALE_RATE' | translate}}({{numberOfTokens}})
     </span>
   </div>
 </div>
