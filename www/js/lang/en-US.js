@@ -148,5 +148,8 @@ angular.module("omniConfig")
 	ASSET_CROWDSALE_INVESTED:'invested',
 	ASSET_CROWDSALE_ADDCURRENCY:'+ Add investment currency',
 	ASSET_CROWDSALE_TOKENRATE:'# of tokens',
-	ASSET_CROWDSALE_RATES:"Rates"
+	ASSET_CROWDSALE_RATES:"Rates",
+	ASSET_CROWDSALE_RATE:"Rate",
+	ASSET_MODAL_DESCRIPTION:"Description",
+	ASSET_CROWDSALE_ACCEPTEDCURRENCY:"Accepted currency"
   })

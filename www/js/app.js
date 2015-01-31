@@ -12,6 +12,12 @@ angular.module("omniConfig")
       return "http://tbtc.blockr.io/tx/info/";
     else
       return "https://blockchain.info/tx/";
+  }])
+  .factory("ADDRESS_EXPLORER_URL",["TESTNET", function AddressExplorerUrlFactory(TESTNET){
+    if(TESTNET)
+      return "http://tbtc.blockr.io/address/info/";
+    else
+      return "https://blockchain.info/address/";
   }]);
 
 angular.module("omniFilters", ["omniConfig"]);

@@ -1,6 +1,6 @@
 angular.module("omniControllers")
-	.controller("CreateCrowdsaleController",["$scope", "PropertyManager", "$timeout", "Transaction", "ModalManager", "SATOSHI_UNIT",
-		function CreateCrowdsaleController($scope, PropertyManager, $timeout, Transaction, ModalManager, SATOSHI_UNIT){
+	.controller("CreateCrowdsaleController",["$scope", "PropertyManager", "$timeout", "Transaction", "SATOSHI_UNIT", "ADDRESS_EXPLORER_URL",
+		function CreateCrowdsaleController($scope, PropertyManager, $timeout, Transaction, SATOSHI_UNIT, ADDRESS_EXPLORER_URL){
 		  $scope.ecosystem = 2;
 		  $scope.tokenStep = $scope.tokenMin =  0.00000001;
 		  $scope.tokenMax = "92233720368.54775807";
@@ -112,7 +112,8 @@ angular.module("omniControllers")
 				    selectedAddress : $scope.issuerData.selectedAddress,
 				    fees : $scope.issuerData.minerFees,
 				    totalCost : crowdsaleCreation.totalCost,
-					confirmText:"ASSETS_CROWDSALE_START"
+					confirmText:"ASSETS_CROWDSALE_START",
+					explorerUrl:ADDRESS_EXPLORER_URL
 				},
 				transaction:crowdsaleCreation
 			})
