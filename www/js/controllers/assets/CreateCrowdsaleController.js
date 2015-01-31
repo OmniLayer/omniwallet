@@ -5,10 +5,12 @@ angular.module("omniControllers")
 		  $scope.propertyType = 2;
 		  $scope.tokenStep = $scope.tokenMin =  0.00000001;
 		  $scope.tokenMax = "92233720368.54775807";
-		  $scope.categories=[];
-		  $scope.subcategories=[];
-		  $scope.availableTokens=[];
-		  $scope.propertyCategory='';
+		  $scope.categories = [];
+		  $scope.subcategories = [];
+		  $scope.availableTokens = [];
+		  $scope.propertyCategory = '';
+		  $scope.issuerData = {};
+		  $scope.propertyDetails = {};
 		  
 		  var mastercoin, testMastercoin, bitcoin;
 		  $scope.setEcosystem = function(){
@@ -40,7 +42,7 @@ angular.module("omniControllers")
 		  };
 
 		  $scope.loadSubcategories=function(category){
-		    $scope.propertySubcategory = '';
+		    $scope.propertyDetails.propertySubcategory = '';
 		    PropertyManager.loadSubcategories($scope.ecosystem, category).then(function(result){  
 		      $scope.subcategories=result.data.subcategories.sort();
 		    });
@@ -54,7 +56,7 @@ angular.module("omniControllers")
 		  $scope.setEcosystem();
 		  
 		  $scope.isDivisible=function(){
-		    return $scope.propertyType == 2 || $scope.propertyType == 66 || $scope.propertyType == 130;
+		    return $scope.propertyDetails.propertyType == 2 || $scope.propertyDetails.propertyType == 66 || $scope.propertyDetails.propertyType == 130;
 		  };
 
 		  // Estimated early bird bonus calculation
@@ -75,19 +77,18 @@ angular.module("omniControllers")
 		  // TRASANCTION GENERATION CONFIG 
 		  $scope.confirm = function(){
 		  	//TODO: VALIDATIONS
-		  	var fee = $scope.minersFee;
-			var crowdsaleCreation = new Transaction(51,$scope.selectedAddress,fee,{
+		  	var fee = $scope.issuerData.minerFees;
+			var crowdsaleCreation = new Transaction(51,$scope.issuerData.selectedAddress,fee,{
 		          transaction_version:0,
 		          ecosystem:$scope.ecosystem,
-		          property_type : $scope.propertyType, 
-		          previous_property_id:$scope.previousPropertyId || 0, 
-		          property_category:$scope.propertyCategory || '\0', 
-		          property_subcategory:$scope.propertySubcategory || '\0', 
-		          property_name:$scope.propertyName, 
-		          property_url:$scope.propertyUrl || '\0', 
-		          property_data:$scope.propertyData || '\0', 
+		          property_type : $scope.propertyDetails.propertyType, 
+		          previous_property_id: 0, 
+		          property_category:$scope.propertyDetails.propertyCategory || '\0', 
+		          property_subcategory:$scope.propertyDetails.propertySubcategory || '\0', 
+		          property_name:$scope.propertyDetails.propertyName, 
+		          property_url:$scope.propertyDetails.propertyUrl || '\0', 
+		          property_data:$scope.propertyDetails.propertyData || '\0', 
 		          number_properties:$scope.isDivisible() ? +new Big($scope.numberOfTokens).times(SATOSHI_UNIT).valueOf() : +$scope.numberOfTokens,
-		          transaction_from: $scope.selectedAddress,
 		          currency_identifier_desired:$scope.selectedCurrency.currencyId,
 		          deadline:Date.UTC($scope.deadline.getFullYear(),$scope.deadline.getMonth(),$scope.deadline.getDate(), $scope.deadline.getHours(), $scope.deadline.getMinutes(), 0, 0) / 1000,
 		          earlybird_bonus:$scope.earlyBirdBonus,
@@ -101,17 +102,17 @@ angular.module("omniControllers")
 				scope:{
 					title:"ASSETS_CROWDSALE_MODALTITLE",
 				    divisible : $scope.isDivisible(),
-				    propertyName : $scope.propertyName,
-				    propertyData : $scope.propertyData,
-				    propertyCategory : $scope.propertyCategory,
-				    propertySubcategory : $scope.propertySubcategory,
-				    propertyUrl : $scope.propertyUrl,
-				    currenciesDesired : $scope.currenciesDesired,
+				    propertyName : $scope.propertyDetails.propertyName,
+				    propertyData : $scope.propertyDetails.propertyData,
+				    propertyCategory : $scope.propertyDetails.propertyCategory,
+				    propertySubcategory : $scope.propertyDetails.propertySubcategory,
+				    propertyUrl : $scope.propertyDetails.propertyUrl,
+				    selectedCurrency : $scope.selectedCurrency,
 				    deadline : (new Date(Date.UTC($scope.deadline.getFullYear(),$scope.deadline.getMonth(),$scope.deadline.getDate(), $scope.deadline.getHours(), $scope.deadline.getMinutes(), 0, 0))).toUTCString(),
 				    earlyBirdBonus : $scope.initialEarlyBirdBonus,
 				    percentageForIssuer : $scope.percentageForIssuer,
-				    selectedAddress : $scope.selectedAddress,
-				    fees : $scope.minerFees,
+				    selectedAddress : $scope.issuerData.selectedAddress,
+				    fees : $scope.issuerData.minerFees,
 				    totalCost : crowdsaleCreation.totalCost,
 					confirmText:"ASSETS_CROWDSALE_START"
 				},
