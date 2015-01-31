@@ -38,7 +38,7 @@
                 </div>
               </div>
               <div class="row">
-                <div class="form-group col-xs-12">
+                <div class="form-group col-xs-6">
                   <label for="percentage">{{'ASSET_CROWDSALE_FORISSUER' | translate}} 
                     <a href=""
                       tooltip="{{'ASSET_CROWDSALE_FORISSUER_TOOLTIP' | translate}}"
@@ -46,11 +46,11 @@
                       tooltip-placement="top"> <strong>(?)</strong>
                     </a>
                   </label>
-                  <input name="percentage" type="number" step="1" min="0" max="255" ng-model="percentageForIssuer" class="form-control" ensure-integer ensure-over="percentageForIssuer" ensure-if="true" required>
+                  <input name="percentage" type="number" step="1" min="0" max="255" ng-model="percentageForIssuer" class="form-control" ensure-integer ensure-over="percentageForIssuer" ensure-if="true" class="text-right" required>
                 </div>
               </div>
               <div class="row">
-                <div class="form-group col-xs-12">
+                <div class="form-group col-xs-6">
                     <label for="early">{{'ASSET_CROWDSALE_EARLYBONUS' | translate}} 
                       <a href=""
                         tooltip="{{'ASSET_CROWDSALE_EARLYBONUS_TOOLTIP' | translate}}"
@@ -58,15 +58,15 @@
                         tooltip-placement="top"> <strong>(?)</strong>
                       </a>
                     </label>
-                    <input name="early" type="number" step="1" min="0" max="255" ng-model="earlyBirdBonus" class="form-control" ensure-integer ensure-over="earlyBirdBonus" ensure-if="true" required>
+                    <input name="early" type="number" step="1" min="0" max="255" ng-model="earlyBirdBonus" class="form-control" ensure-integer ensure-over="earlyBirdBonus" ensure-if="true" class="text-right" required>
                   </div>
-                  <p class="help-block" ng-show="earlyBirdBonus > 0">{{'ASSET_CROWDSALE_EARLYESTIMATE' | translate}} 
+                </div>
+                <p class="help-block" ng-show="earlyBirdBonus > 0">{{'ASSET_CROWDSALE_EARLYESTIMATE' | translate}} 
                     <a href=""
                       tooltip="{{'ASSET_CROWDSALE_EARLYESTIMATE_TOOLTIP' | translate}}"
                       tooltip-append-to-body="true"
                       tooltip-placement="top"> <strong>(?)</strong>
                     </a> {{initialEarlyBirdBonus}}%</p>
-                </div>
               </div>
               <div class="row">
                 <div class="form-group col-xs-12">
