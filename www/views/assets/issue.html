@@ -22,7 +22,7 @@
                     <input name="amount" type="number" step="1" ng-model="numberProperties" step="{{tokenStep}}" min="{{tokenMin}}" max="{{tokenMax}}" ensure-integer ensure-over="numberProperties" ensure-if="!isDivisible()" class="form-control" required>
                 </div>
               </div>
-              <div class="row" ng-include="/views/assets/partials/form_addressfee.html">
+              <div class="row" ng-include="'/views/assets/partials/form_addressfee.html'">
               </div>
               <div class="row">
                 <div class="col-xs-12 text-right">
