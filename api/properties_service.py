@@ -79,7 +79,7 @@ def list():
         issuer = ""
     
     #ROWS= dbSelect("select * from smartproperties where PropertyID > 2 AND ecosystem=%s %s ORDER BY PropertyName,PropertyID", (ecosystem,query))
-    ROWS= dbSelect("select * from smartproperties where PropertyID > 2 AND ecosystem=%s ORDER BY PropertyName,PropertyID", [ecosystem])
+    ROWS= dbSelect("select * from smartproperties where Protocol != 'Fiat' AND ecosystem=%s ORDER BY PropertyName,PropertyID", [ecosystem])
     data=[]
     for property in ROWS:
         data.append({"currencyId":property[1],"propertyName":property[6]}) #get the json representation

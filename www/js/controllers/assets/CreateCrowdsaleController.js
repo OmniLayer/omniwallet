@@ -1,14 +1,6 @@
 angular.module("omniControllers")
-	.controller("CreateCrowdsaleController",["$scope", "PropertyManager", "$timeout",
-		function CreateCrowdsaleController($scope, PropertyManager, $timeout){
-		  $scope.walletAssets = $scope.$parent.$parent;
-		  $scope.walletAssets.currencyList.forEach(function(e, i) {
-		    if (e.symbol == "BTC")
-		      $scope.walletAssets.selectedCoin = e;
-		  });
-		  // Enable the transaction for offline wallets
-		  $scope.walletAssets.offlineSupport=true;
-		  var transactionGenerationController = $scope.$parent;
+	.controller("CreateCrowdsaleController",["$scope", "PropertyManager", "$timeout", "Transaction", "ModalManager", "SATOSHI_UNIT",
+		function CreateCrowdsaleController($scope, PropertyManager, $timeout, Transaction, ModalManager, SATOSHI_UNIT){
 		  $scope.ecosystem = 2;
 		  $scope.propertyType = 2;
 		  $scope.tokenStep = $scope.tokenMin =  0.00000001;
@@ -21,14 +13,18 @@ angular.module("omniControllers")
 		  $scope.currenciesDesired=[];
 		  $scope.propertyCategory='';
 		  
-		  var mastercoin ={currencyId:1,propertyName:"Mastercoin"};
-		  var bitcoin = {currencyId:0,propertyName:"Bitcoin"};
-		  var testMastercoin = {currencyId:2,propertyName:"Test Mastercoin"};
-		  
+		  var mastercoin, testMastercoin, bitcoin;
 		  $scope.setEcosystem = function(){
-		    availableDesiredCurrencies=$scope.ecosystem == 1 ? [mastercoin,bitcoin]:[testMastercoin];
-		    PropertyManager.list($scope.ecosystem).then(function(result){
-		      availableDesiredCurrencies = availableDesiredCurrencies.concat(result.data.properties).sort(function(a, b) {
+		    PropertyManager.listProperties($scope.ecosystem).then(function(result){
+		    	result.data.properties.forEach(function(property){
+		    		if(property.currencyId==0)
+		    			bitcoin=property;
+		    		else if(property.currencyId==1)
+		    			mastercoin=property;
+		    		else if(property.currencyId==2)
+		    			testMastercoin=property;
+		    	})
+		      availableDesiredCurrencies = result.data.properties.sort(function(a, b) {
 		          var currencyA = a.propertyName.toUpperCase();
 		          var currencyB = b.propertyName.toUpperCase();
 		          return (currencyA < currencyB) ? -1 : (currencyA > currencyB) ? 1 : 0;
@@ -50,6 +46,7 @@ angular.module("omniControllers")
 		      $scope.categories=result.data.categories.sort();
 		    });
 		  };
+
 		  $scope.loadSubcategories=function(category){
 		    $scope.propertySubcategory = '';
 		    PropertyManager.loadSubcategories($scope.ecosystem, category).then(function(result){  
@@ -108,6 +105,10 @@ angular.module("omniControllers")
 		  $scope.formatCurrencyDisplay = function(currencyDesired){
 		    return currencyDesired.propertyName + " (" + currencyDesired.currencyId + ")";
 		  };
+
+		  $scope.$watch(function(){ return selectedDesiredCurrencies.length;}, function(count){
+		    $scope.singleCurrency = count == 1;
+		  });
 		  
 		  // Initialize the form
 		  $scope.setEcosystem();
@@ -115,11 +116,8 @@ angular.module("omniControllers")
 		  $scope.isDivisible=function(){
 		    return $scope.propertyType == 2 || $scope.propertyType == 66 || $scope.propertyType == 130;
 		  };
-		  
-		  $scope.$watch(function(){ return selectedDesiredCurrencies.length;}, function(count){
-		    $scope.singleCurrency = count == 1;
-		  });
-		  
+
+		  // Estimated early bird bonus calculation
 		  $scope.$watch(function(){ return $scope.deadline ? $scope.deadline.getTime() + $scope.earlyBirdBonus : 0;}, function(value){
 		    if(value > 0){
 		      var utcNow = new Date((new Date()).getTime() + (new Date()).getTimezoneOffset() * 60000);
@@ -135,80 +133,11 @@ angular.module("omniControllers")
 		  };
 		  
 		  // TRASANCTION GENERATION CONFIG 
-		  transactionGenerationController.validateTransactionData = function(){
-		    var dustValue = 5757;
-		    var minerMinimum = 10000;
-		    var nonZeroValue = 1;
-
-		    var convertToSatoshi = [
-		      $scope.minerFees,
-		      $scope.balanceData[1]
-		    ];
-		    
-		    var convertedValues =$scope.convertDisplayedValue(convertToSatoshi);
-		    var minerFees = +convertedValues[0];
-		    var btcbalance = convertedValues[1];
-		    var propertyName=$scope.propertyName;
-		    
-		    var error = 'Please ';
-		    if ($scope.issuanceForm.$valid == false) {
-		      error += 'make sure all fields are completely filled, ';
-		    }
-		    if (minerFees < minerMinimum)
-		      error += 'make sure your fee entry is at least 0.0001 BTC to cover miner costs, ';
-		    if ((minerFees <= btcbalance) == false)
-		        error += 'make sure you have enough Bitcoin to cover your fees, ';
-		    if (!propertyName || propertyName == '\0')
-		      error += 'make sure you enter a Property Name, ';
-		    
-		    return error;
-		  };
-		  
-		  transactionGenerationController.modalTemplateUrl = '/partials/wallet_assets_crowdsale_modal.html';
-		  
-		  transactionGenerationController.setModalScope = function($modalScope){
-		    $modalScope.issueSuccess = false, $modalScope.issueError = false, $modalScope.waiting = false, $modalScope.privKeyPass = {};
-		    $modalScope.convertSatoshiToDisplayedValue=  $scope.convertSatoshiToDisplayedValue,
-		    $modalScope.getDisplayedAbbreviation=  $scope.getDisplayedAbbreviation,
-		    $modalScope.divisible= $scope.isDivisible() ? 'Yes' : 'No',
-		    $modalScope.propertyName= $scope.propertyName,
-		    $modalScope.propertyData= $scope.propertyData,
-		    $modalScope.propertyCategory= $scope.propertyCategory,
-		    $modalScope.propertySubcategory= $scope.propertySubcategory,
-		    $modalScope.propertyUrl= $scope.propertyUrl,
-		    $modalScope.currenciesDesired=$scope.currenciesDesired,
-		    $modalScope.deadline=(new Date(Date.UTC($scope.deadline.getFullYear(),$scope.deadline.getMonth(),$scope.deadline.getDate(), $scope.deadline.getHours(), $scope.deadline.getMinutes(), 0, 0))).toUTCString(),
-		    $modalScope.earlyBirdBonus= $scope.initialEarlyBirdBonus,
-		    $modalScope.percentageForIssuer=$scope.percentageForIssuer;
-		    $modalScope.selectedAddress=$scope.selectedAddress;
-		    $modalScope.minerFees= +$scope.convertDisplayedValue($scope.minerFees);
-		    $modalScope.totalCost= +$scope.convertDisplayedValue($scope.totalCost);
-		    $modalScope.expanded = true;
-		    $modalScope.rendered = false;
-		    $modalScope.setExpandableDiv = function(){
-		      $timeout(function(){
-		        $scope.$apply(function(){
-		          var offsetHeight = document.getElementById('expandable-div').offsetHeight;
-		          var lines = offsetHeight/25;
-		          if (lines > 2) {
-		            $modalScope.longText = true;
-		            $modalScope.expanded = false;
-		          }
-		          else {
-		            $modalScope.longText = false;
-		            $modalScope.expanded = true;
-		          } 
-		        });   
-		      },0,false);  
-		    }
-		  };
-		  
-		  transactionGenerationController.generateData = function(){
-		    var transactionData = [];
-		    $scope.currenciesDesired.forEach(function(currency,index){
-		      if(index == 0){
-		        transactionData.push({
-		          transaction_version:1,
+		  $scope.confirm = function(){
+		  	//TODO: VALIDATIONS
+		  	var fee = $scope.minersFee;
+			var crowdsaleCreation = new Transaction(51,$scope.selectedAddress,fee,{
+		          transaction_version:0,
 		          ecosystem:$scope.ecosystem,
 		          property_type : $scope.propertyType, 
 		          previous_property_id:$scope.previousPropertyId || 0, 
@@ -217,7 +146,7 @@ angular.module("omniControllers")
 		          property_name:$scope.propertyName, 
 		          property_url:$scope.propertyUrl || '\0', 
 		          property_data:$scope.propertyData || '\0', 
-		          number_properties:$scope.isDivisible() ? +$scope.convertDisplayedValue(currency.numberOfTokens) : +currency.numberOfTokens,
+		          number_properties:$scope.isDivisible() ? +new Big(currency.numberOfTokens).times(SATOSHI_UNIT).valueOf() : +currency.numberOfTokens,
 		          transaction_from: $scope.selectedAddress,
 		          currency_identifier_desired:currency.selectedCurrency.currencyId,
 		          deadline:Date.UTC($scope.deadline.getFullYear(),$scope.deadline.getMonth(),$scope.deadline.getDate(), $scope.deadline.getHours(), $scope.deadline.getMinutes(), 0, 0) / 1000,
@@ -227,37 +156,32 @@ angular.module("omniControllers")
 		          testnet: (TESTNET || false),
 		          donate: Account.getSetting("donate")
 		        });
-		      } else {
-		        transactionData.push({
-		          transaction_version:1,
-		          ecosystem:$scope.ecosystem,
-		          property_type : 0, 
-		          previous_property_id:0, 
-		          property_category:'\0', 
-		          property_subcategory:'\0', 
-		          property_name:'\0', 
-		          property_url:'\0', 
-		          property_data:'\0', 
-		          number_properties: $scope.isDivisible() ? +$scope.convertDisplayedValue(currency.numberOfTokens) : +currency.numberOfTokens,
-		          transaction_from: $scope.selectedAddress,
-		          currency_identifier_desired:currency.selectedCurrency.currencyId,
-		          deadline:0,
-		          earlybird_bonus:0,
-		          percentage_for_issuer:0,
-		          fee: $scope.convertDisplayedValue($scope.minerFees),
-		          testnet: (TESTNET || false),
-		          donate: Account.getSetting("donate")
-		        });
-		      }
-		    });
-		    return {
-		      from:$scope.selectedAddress,
-		      transactionType:51,
-		      transactionData:transactionData
-		    };
-		  };
+
+
+			$scope.modalManager.openConfirmationModal({
+				dataTemplate: '/views/modals/partials/crowdsale.html',
+				scope:{
+					title:"ASSETS_CROWDSALE_MODALTITLE",
+				    divisible : $scope.isDivisible(),
+				    propertyName : $scope.propertyName,
+				    propertyData : $scope.propertyData,
+				    propertyCategory : $scope.propertyCategory,
+				    propertySubcategory : $scope.propertySubcategory,
+				    propertyUrl : $scope.propertyUrl,
+				    currenciesDesired : $scope.currenciesDesired,
+				    deadline : (new Date(Date.UTC($scope.deadline.getFullYear(),$scope.deadline.getMonth(),$scope.deadline.getDate(), $scope.deadline.getHours(), $scope.deadline.getMinutes(), 0, 0))).toUTCString(),
+				    earlyBirdBonus : $scope.initialEarlyBirdBonus,
+				    percentageForIssuer : $scope.percentageForIssuer,
+				    selectedAddress : $scope.selectedAddress,
+				    fees : $scope.minerFees,
+				    totalCost : crowdsaleCreation.totalCost,
+					confirmText:"ASSETS_CROWDSALE_START"
+				},
+				transaction:crowdsaleCreation
+			})
+		  }
 		  
-		  // DATEPICKER OPTIONS
+		  // DATEPICKER CONFIGURATION
 		  var nextMonth = new Date();
 		  var offset = nextMonth.getTimezoneOffset() * 60000;
 		  var minDeadline = new Date((new Date()).getTime() + 1800000 + offset);
@@ -275,7 +199,7 @@ angular.module("omniControllers")
 		    $scope.opened = true;
 		  };
 		  
-		  // Disable weekend selection
+		  // Disable past dates
 		  $scope.disabled = function(date, mode) {
 		    return ( mode === 'day' && date.getTime() < (new Date()).getTime());
 		  };
@@ -286,7 +210,7 @@ angular.module("omniControllers")
 		    minDate:minDeadline
 		  };
 		  
-		  $scope.format = 'dd-MMMM-yyyy';
+		  $scope.format = 'dd MMMM yyyy';
 		  
 		  $scope.$watch('deadline', function(value){
 		    if (value < minDeadline) $scope.deadline = minDeadline;
