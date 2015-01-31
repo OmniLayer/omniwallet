@@ -7,11 +7,11 @@
 <div class="row">
   <div class="form-group col-sm-6">
       <label for="name"> {{ 'COMMON_NAME' | translate }} <small>({{ 'ASSET_FORM_DETAILS_NAME_HINT' | translate }})</small></label>
-      <input name="name" type="text" ng-model="propertyName" class="form-control" maxlength="255" ng-maxlength="255" required>
+      <input name="name" type="text" ng-model="$parent.propertyName" class="form-control" maxlength="255" ng-maxlength="255" required>
   </div>
   <div class="form-group col-sm-6">
       <label for="type"> {{ 'ASSET_FORM_DETAILS_DIVISIBLE' | translate }}</label>
-      <select name="type" class="form-control" ng-model="propertyType" ng-change="typeChanged()" required>
+      <select name="type" class="form-control" ng-model="$parent.propertyType" ng-change="typeChanged()" required>
         <option value="2"> {{ 'COMMON_YES' | translate }} </option>
         <option value="1"> {{ 'COMMON_NO' | translate }} </option>
       </select>
@@ -20,25 +20,25 @@
 <div class="row">
   <div class="form-group col-sm-6">
     <label for="category">{{ 'ASSET_FORM_DETAILS_CATEGORY' | translate }}</label>
-    <combobox name="category" model-value="propertyCategory" placeholder="{{ 'COMMON_SELECT' | translate }}" 
+    <combobox name="category" model-value="$parent.propertyCategory" placeholder="{{ 'COMMON_SELECT' | translate }}" 
     option-list="categories" value-selected="loadSubcategories(category)"></combobox>
   </div>  
   <div class="form-group col-sm-6" ng-show="propertyCategory != ''">
     <label for="subcategory">{{ 'ASSET_FORM_DETAILS_SUBCATEGORY' | translate }}</label>
-    <combobox name="subcategory" model-value="propertySubcategory" placeholder="{{ 'COMMON_SELECT' | translate }}" 
+    <combobox name="subcategory" model-value="$parent.propertySubcategory" placeholder="{{ 'COMMON_SELECT' | translate }}" 
     option-list="subcategories"></combobox>
   </div>
 </div>
 <div class="row">
   <div class="form-group col-sm-6">
       <label for="url"> {{ 'ASSET_FORM_DETAILS_URL' | translate }} <small>({{ 'ASSET_FORM_DETAILS_URL_HINT' | translate }})</small></label>
-      <input name="url" type="url" ng-model="propertyUrl" class="form-control" maxlength="255" ng-maxlength="255" >
+      <input name="url" type="url" ng-model="$parent.propertyUrl" class="form-control" maxlength="255" ng-maxlength="255" >
   </div>
 </div>
 <div class="row">
   <div class="form-group col-sm-12">
     <label for="description">{{ 'ASSET_FORM_DETAILS_DESCRIPTION' | translate }}</label>
-    <textarea name="description" class="form-control" ng-model="propertyData" maxlength="255" ng-maxlength="255" rows="3"></textarea>
+    <textarea name="description" class="form-control" ng-model="$parent.propertyData" maxlength="255" ng-maxlength="255" rows="3"></textarea>
     <div style="position: absolute;right: 20px;bottom: 0px;color: #ccc;">{{255 - propertyData.length}} {{'ASSET_FORM_DETAILS_DESCRIPTION_HINT' | translate}}</div>
   </div>
 </div>
