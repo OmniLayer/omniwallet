@@ -1457,7 +1457,7 @@ i.icon-l{
     padding-right: 25px;
 }
 
-.asset-history .row:last-of-type{
+.asset-history .row:nth-last-of-type(2){
   border-bottom: 1px solid #e9e9e9;
 }
 
