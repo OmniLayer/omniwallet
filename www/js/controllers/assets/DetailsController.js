@@ -45,9 +45,9 @@ angular.module("omniControllers")
 		    loading:false,
 		    loaded:false
 		  };
-		  $scope.infoMessage = $scope.account.loggedIn() ? "You don't have the desired currency" : "Login to participate";
+		  $scope.infoMessage = $scope.account.loggedIn ? "You don't have the desired currency" : "Login to participate";
 		  $scope.canParticipate = false;
-		  $scope.loggedIn = $scope.account.loggedIn();
+		  $scope.loggedIn = $scope.account.loggedIn;
 		  $scope.standoutError = $scope.loggedIn;
 		  $scope.standoutInfo = !$scope.standoutError;
 
@@ -138,7 +138,7 @@ angular.module("omniControllers")
 		      var totalTokens = new Big($scope.crowdsale.totaltokens);
 		      $scope.crowdsale.issuertokens = totalTokens.minus($scope.crowdsale.participanttokens);
 		      
-		      $scope.isOwner = $scope.account.loggedIn() && $scope.account.getAddressesWithPrivkey().indexOf($scope.crowdsale.issuer) > -1;
+		      $scope.isOwner = $scope.account.loggedIn && $scope.account.getAddressesWithPrivkey().indexOf($scope.crowdsale.issuer) > -1;
 		      PropertyManager.getProperty($scope.crowdsale.propertyiddesired).then(function(result){
 		        $scope.acceptedCurrencies = [{propertyid:$scope.crowdsale.propertyiddesired,name:result.data.name,rate:$scope.crowdsale.tokensperunit}];
 		      });
