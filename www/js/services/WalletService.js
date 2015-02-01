@@ -163,7 +163,12 @@ angular.module("omniServices")
 	        	return self.assets.map(function(asset){
 	        		return asset.tradableAddresses;
 	        	}).reduce(function(previous,current){
-	        		return previous.concat(current);
+	        		var next = previous;
+	        		current.forEach(function(address){
+	        			if(previous.indexOf(address)==-1)
+	        				next.push(address)
+	        		})
+	        		return next;
 	        	})
 	        }
 			// self.initialize = function(){				  
