@@ -142,7 +142,7 @@ angular.module("omniControllers")
 		      					.map(function(address){return address.hash})
 		      					.indexOf($scope.property.issuer) > -1;
 		      PropertyManager.getProperty($scope.property.propertyiddesired).then(function(result){
-		        $scope.currency = result.data;
+		        $scope.acceptedCurrency = result.data;
 		      });
 		      
 		      var startDate = new Date($scope.property.starttime*1000);
