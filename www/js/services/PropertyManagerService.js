@@ -6,10 +6,38 @@ angular.module('omniServices')
       return $http.get('/v1/properties/getdata/' + propertyId )
     }
     
+    self.getActiveCrowdsales = function(ecosystem) {
+      var url = '/v1/properties/listactivecrowdsales';
+      var data = {
+        ecosystem: ecosystem
+      };
+      var promise = $http.post(url, data);
+      return promise;
+    }
+
     self.listProperties=function(ecosystem) {
       var url = '/v1/properties/list';
       var data = {
         ecosystem: ecosystem
+      };
+      var promise = $http.post(url, data);
+      return promise;
+    }
+
+    self.listPropertiesByOwner=function(addresses) {
+      var url = '/v1/properties/listbyowner';
+      var data = {
+        issuer_addresses: addresses
+      };
+      var promise = $http.post(url, data);
+      return promise;
+    }
+
+    self.getHistory = function(propertyId,from,count){
+      var url = '/v1/properties/gethistory/'+propertyId;
+      var data = {
+        start: from,
+        count: count
       };
       var promise = $http.post(url, data);
       return promise;
