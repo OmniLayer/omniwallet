@@ -1,5 +1,4 @@
-<h2>{{property.fixedissuance | assetIssuedType}} history</h2>
-<span>Found {{history.total}} transactions</span>
+<h2 class="om-subtitle">{{property.fixedissuance | assetIssuedType}} history <small>({{history.total}} transactions)</small></h2>
 <div class="scroll">
   <div class="scroll-body" infinite-scroll='loadHistory()' infinite-scroll-disabled='history.loading || history.loaded' infinite-scroll-distance='3'>
     <div class="panel panel-asset-history" ng-repeat="transaction in history.transactions" 
