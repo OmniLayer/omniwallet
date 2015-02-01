@@ -159,6 +159,13 @@ angular.module("omniServices")
 	        	})
 	        }
 
+	        self.tradableAddresses = function(){
+	        	return self.assets.map(function(asset){
+	        		return asset.tradableAddresses;
+	        	}).reduce(function(previous,current){
+	        		return previous.concat(current);
+	        	})
+	        }
 			// self.initialize = function(){				  
 			//     self.selectedCoin = self.currencyList[0];
 			//     self.currencyList.forEach(function(e, i) {
