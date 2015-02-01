@@ -4,7 +4,7 @@
   </div>
   <div class="row">
     <div class="col-xs-12">
-      <form name="issuanceForm" ng-submit="validateIssuanceForm()">
+      <form name="issuanceForm">
         <div class="container-fluid" ng-include="'/views/assets/partials/form_details.html'">
         </div>
         <div class="container-fluid">
@@ -17,7 +17,7 @@
           <div class="row">
             <div class="form-group col-sm-6">
                 <label for="amount"> {{'ASSET_ISSUANCE_AMOUNT' | translate}} <small>({{'ASSET_ISSUANCE_AMOUNT_HINT' | translate}})</small></label>
-                <input name="amount" type="number" step="1" ng-model="numberProperties" step="{{tokenStep}}" min="{{tokenMin}}" max="{{tokenMax}}" ensure-integer ensure-over="numberProperties" ensure-if="!isDivisible()" class="form-control" required>
+                <input name="amount" type="number" step="1" ng-model="numberProperties" step="{{tokenStep}}" min="{{tokenMin}}" max="{{tokenMax}}" class="form-control" required>
             </div>
           </div>
           <div class="row" ng-include="'/views/assets/partials/form_addressfee.html'">
@@ -25,7 +25,7 @@
           <div class="row">
             <div class="col-xs-12 text-right">
               <a class="btn btn-tertiary" href="/wallet/assets">{{'COMMON_CANCEL' | translate }}</a>
-              <input class="btn btn-main" type="submit" value="{{'COMMON_NEXT' | translate }}" ng-click="validateForm()">
+              <input class="btn btn-main" type="submit" value="{{'COMMON_NEXT' | translate }}" ng-click="confirm()">
             </div>
           </div>
         </div>
