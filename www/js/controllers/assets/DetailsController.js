@@ -139,7 +139,7 @@ angular.module("omniControllers")
 		      
 		      $scope.isOwner = $scope.account.loggedIn && 
 		      					$scope.wallet.tradableAddresses()
-		      					.map(function(address){return address.hash)
+		      					.map(function(address){return address.hash})
 		      					.indexOf($scope.property.issuer) > -1;
 		      PropertyManager.getProperty($scope.property.propertyiddesired).then(function(result){
 		        $scope.currency = result.data;
