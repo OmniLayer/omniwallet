@@ -66,7 +66,7 @@ angular.module("omniControllers")
 				    propertyCategory : $scope.propertyDetails.propertyCategory,
 				    propertySubcategory : $scope.propertyDetails.propertySubcategory,
 				    propertyUrl : $scope.propertyDetails.propertyUrl,
-				    numberProperties: $scope.numberOfTokens,
+				    numberProperties: $scope.numberProperties,
 				    totalCost : assetCreation.totalCost,
 					confirmText:"ASSET_ISSUANCE_CREATE",
 					explorerUrl:ADDRESS_EXPLORER_URL
