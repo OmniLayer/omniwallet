@@ -134,7 +134,7 @@ angular.module("omniControllers")
 		      // format data
 		      if($scope.property.tokensissued > 0){
 			      var totalTokens = new Big($scope.property.totaltokens);
-			      $scope.property.issuertokens = totalTokens.minus($scope.property.participanttokens);
+			      $scope.property.issuertokens = totalTokens.minus($scope.property.tokensissued);
 		      }
 		      
 		      $scope.isOwner = $scope.account.loggedIn && 

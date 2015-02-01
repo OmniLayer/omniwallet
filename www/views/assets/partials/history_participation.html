@@ -7,12 +7,12 @@
       <span ng-bind-html="transaction.amount | numeraljs: '0,0'"></span> {{acceptedCurrency.name}} 
     </div>
     <div ng-if="property.divisible">
-      <span ng-bind-html="transaction.amount | numeraljs: '0,0.00000000'"></span> {{formatCurrencyName(transaction.propertyid)}}
+      <span ng-bind-html="transaction.amount | numeraljs: '0,0.00000000'"></span> {{acceptedCurrency.name}} 
     </div>
     <div>
       <a href="{{explorerUrl}}{{transaction.sendingaddress}}">{{transaction.sendingaddress}}</a>
-      <span class="label label-omni">
-        <div ng-hide="transaction.confirmations > 100"> {{transaction.confirmations}} Confirmations</div>
+      <span ng-hide="transaction.confirmations > 100" class="label label-omni">
+         {{transaction.confirmations}} Confirmations
       </span>
     </div>
   </div>
