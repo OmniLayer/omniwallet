@@ -1235,7 +1235,7 @@ a:hover i.icon-google{
 }
 
 i.icon-twitter {
-  background-image: url("/assets/img/icons/twitter-on.png");
+  background-image: url("/assets/img/icons/twitter-off.png");
   background-position: 0pt;
   width: 30px;
   height: 30px; 
@@ -1457,22 +1457,14 @@ i.icon-l{
     padding-right: 25px;
 }
 
-.panel-asset-history{
-  margin-bottom: 5px;
-  border-width: 5px;
+.asset-history{
+  border-bottom: 1px solid #eeeeee
 }
-.panel-asset-history-purchase{
-  border-color:lightgray;
-  color:lightgray;
+
+.asset-history .row{
+  border-top: 1px solid #eeeeee
 }
-.panel-asset-history-close{
-  border-color:darkgray;
-  color:darkgray;
-}
-.panel-asset-history-create{
-  border-color:lightgreen;
-  color:lightgreen;
-}
+
 .badge{
   border: 1px solid #ccc;
   padding: 3px;
