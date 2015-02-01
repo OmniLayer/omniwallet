@@ -1213,6 +1213,7 @@ i.icon-facebook {
   background-position: 0pt;
   width: 30px;
   height: 30px;
+  float: left; 
   margin-right: 5px;
   margin-top: -6px;
 }
@@ -1225,6 +1226,7 @@ i.icon-google {
   background-position: 0pt;
   width: 30px;
   height: 30px; 
+  float: left;
   margin-right: 5px;
   margin-top: -6px;
 }
@@ -1233,10 +1235,11 @@ a:hover i.icon-google{
 }
 
 i.icon-twitter {
-  background-image: url("/assets/img/icons/twitter-off.png");
+  background-image: url("/assets/img/icons/twitter-on.png");
   background-position: 0pt;
   width: 30px;
   height: 30px; 
+  float: left;
   margin-right: 5px;
   margin-top: -6px;
 }
@@ -1249,6 +1252,7 @@ i.icon-linkedin {
   background-position: 0pt;
   width: 30px;
   height: 30px; 
+  float: left;
   margin-right: 5px;
   margin-top: -6px;
 }
