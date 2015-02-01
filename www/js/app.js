@@ -79,7 +79,7 @@ var app = angular.module('omniwallet', [
     });
   
   $routeProvider.when('/assets/details/:propertyId', {
-      templateUrl:  '/partials/wallet_assets_details.html'
+      templateUrl:  '/views/assets/details.html'
     }).otherwise({
       redirectTo:'/explorer/assets'
     });
