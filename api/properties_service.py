@@ -102,7 +102,7 @@ def listByEcosystem():
 def listbyowner():
     # I can't believe flask can't parse properly arrays from the frontend, using values() as a hack.
     try:
-        addresses = [re.sub(r'^[a-zA-Z0-9]+$', '', address) for address in request.form.values()]  #check alphanumeric
+        addresses = request.form.values()
     except KeyError:
         abort(make_response('No field \'issuer_addresses\' in request, request failed', 400))
 
