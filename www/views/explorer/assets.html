@@ -1,0 +1,21 @@
+<div ng-controller="ExplorerAssetsController">
+  <div class="row">
+    <div class="col-xs-12">
+      <div class="text-left om-title" >
+        {{'EXPLORER_ASSETS_TITLE' | translate}}
+      </div>
+    </div>
+  </div>
+  <div class="row hidden-xs">
+    <div class="col-sm-3">ID</div>
+    <div class="col-sm-3">NAME</div>
+    <div class="col-sm-3">AMOUNT</div>
+    <div class="col-sm-3">TYPE</div>
+  </div>
+  <div class="row" ng-repeat="asset in assets">
+    <div class="col-xs-12 col-sm-3"><label class="visible-xs">ID</label>asset.propertyid</div>
+    <div class="col-xs-12 col-sm-3"><label class="visible-xs">NAME</label><a href="/assets/details/{{asset.propertyid}}">asset.name</a></div>
+    <div class="col-xs-12 col-sm-3"><label class="visible-xs">AMOUNT</label></div>
+    <div class="col-xs-12 col-sm-3"><label class="visible-xs">TYPE</label></div>
+  </div>
+</div>

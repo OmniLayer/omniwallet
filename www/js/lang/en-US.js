@@ -156,5 +156,6 @@ angular.module("omniConfig")
 	ASSET_CROWDSALE_MODALTITLE:"Confirm Crowdsale Creation",
 	ASSET_CROWDSALE_INITIALEB:"Initial early bird bonus",
 	ASSET_MODAL_DESCRIPTION:"Description",
-	ASSET_CROWDSALE_ACCEPTEDCURRENCY:"Accepted currency"
+	ASSET_CROWDSALE_ACCEPTEDCURRENCY:"Accepted currency",
+	EXPLORER_ASSETS_TITLE:'Assets'
   })

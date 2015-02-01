@@ -15,19 +15,26 @@ angular.module('omniServices')
       return promise;
     }
 
-    self.listProperties=function(ecosystem) {
+    self.list=function() {
       var url = '/v1/properties/list';
+
+      var promise = $http.get(url);
+      return promise;
+    }
+
+    self.listByOwner=function(addresses) {
+      var url = '/v1/properties/listbyowner';
       var data = {
-        ecosystem: ecosystem
+        issuer_addresses: addresses
       };
       var promise = $http.post(url, data);
       return promise;
     }
 
-    self.listPropertiesByOwner=function(addresses) {
-      var url = '/v1/properties/listbyowner';
+    self.listByEcosystem=function(ecosystem) {
+      var url = '/v1/properties/listbyecosystem';
       var data = {
-        issuer_addresses: addresses
+        ecosystem: ecosystem
       };
       var promise = $http.post(url, data);
       return promise;

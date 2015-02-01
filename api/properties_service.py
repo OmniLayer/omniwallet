@@ -58,8 +58,22 @@ def subcategories():
 
     return jsonify(response)
 
-@app.route('/list', methods=['POST'])
+@app.route('/list')
 def list():
+    
+    ROWS= dbSelect("select PropertyData from smartproperties where Protocol != 'Fiat' ORDER BY PropertyName,PropertyID")
+    
+    data=[prop[0] for prop in ROWS]
+        
+    response = {
+                'status' : 'OK',
+                'properties' : data
+                }
+
+    return jsonify(response)
+
+@app.route('/listbyecosystem', methods=['POST'])
+def listByEcosystem():
     try:
         value = int(re.sub(r'\D+', '', request.form['ecosystem']))
         valid_values = [1,2]
