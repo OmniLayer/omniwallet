@@ -157,5 +157,8 @@ angular.module("omniConfig")
 	ASSET_CROWDSALE_INITIALEB:"Initial early bird bonus",
 	ASSET_MODAL_DESCRIPTION:"Description",
 	ASSET_CROWDSALE_ACCEPTEDCURRENCY:"Accepted currency",
-	EXPLORER_ASSETS_TITLE:'Assets'
+	ASSETS_TABLE_ID:'Property ID',
+	ASSETS_TABLE_NAME:'Property Name',
+	ASSETS_TABLE_AMOUNT:'Total Amount',
+	ASSETS_TABLE_URL:'Url'
   })
