@@ -174,7 +174,7 @@ angular.module("omniControllers")
 		        var endtime = $scope.crowdsale.deadline * 1000;
 		        $timeout(function (){
 		        	return $http.get("/views/assets/partials/timer.html", {cache: $templateCache}).success(function(template) {
-				      var timerNode = $(template);
+				      var timerNode = $(template.replace("{{endtime}}",endtime));
 			          $element.find('#timerWrapper').append(timerNode);
 			          $compile(timerNode)($scope);
 				    });
