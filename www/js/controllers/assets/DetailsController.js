@@ -169,32 +169,35 @@ angular.module("omniControllers")
 		              }
 		        	});
 		        }
+
 		        // we need to compile the timer dinamically to get the appropiate end-date set.
 		        var endtime = $scope.crowdsale.deadline * 1000;
 		        $timeout(function (){
-		          var timerNode = $('<timer end-time='+endtime+'> \
-		            <span class="countdown-group"> \
-		              <span class="countdown-number">{{days}}</span> \
-		              <div class="countdown-label">day{{daysS}}</div> \
-		            </span> \
-		            : \
-		            <span class="countdown-group"> \
-		              <span class="countdown-number">{{hours}}</span> \
-		              <div class="countdown-label">hour{{hoursS}}</div> \
-		            </span> \
-		            : \
-		            <span class="countdown-group"> \
-		              <span class="countdown-number">{{minutes}}</span> \
-		              <div class="countdown-label">minute{{minutesS}}</div> \
-		            </span> \
-		            : \
-		            <span class="countdown-group"> \
-		              <span class="countdown-number">{{seconds}}</span> \
-		              <div class="countdown-label">second{{secondsS}}</div> \
-		            </span> \
-		          </timer>');
-		          $element.find('#timerWrapper').append(timerNode);
-		          $compile(timerNode)($scope);
+		        	return $http.get("/views/assets/partials/timer.html", {cache: $templateCache}).success(function(userComments) {
+				      var timerNode = $('<timer end-time='+endtime+'> \
+			            <span class="countdown-group"> \
+			              <span class="countdown-number">{{days}}</span> \
+			              <div class="countdown-label">day{{daysS}}</div> \
+			            </span> \
+			            : \
+			            <span class="countdown-group"> \
+			              <span class="countdown-number">{{hours}}</span> \
+			              <div class="countdown-label">hour{{hoursS}}</div> \
+			            </span> \
+			            : \
+			            <span class="countdown-group"> \
+			              <span class="countdown-number">{{minutes}}</span> \
+			              <div class="countdown-label">minute{{minutesS}}</div> \
+			            </span> \
+			            : \
+			            <span class="countdown-group"> \
+			              <span class="countdown-number">{{seconds}}</span> \
+			              <div class="countdown-label">second{{secondsS}}</div> \
+			            </span> \
+			          </timer>');
+			          $element.find('#timerWrapper').append(timerNode);
+			          $compile(timerNode)($scope);
+				    });
 		        });
 		      }
 		    }
