@@ -6,7 +6,11 @@ angular.module("omniControllers")
 		  $scope.propertyId = $route.current.params.propertyId;
 		  $scope.shareUrl = $location.absUrl();
 		  $scope.property = {
-		    "name" : "",
+		    
+		  };
+		  
+		  $scope.property = {
+		  	"name" : "",
 		    "category" : "",
 		    "subcategory" : "",
 		    "data" : "",
@@ -15,13 +19,8 @@ angular.module("omniControllers")
 		    "issuer" : "",
 		    "creationtxid" : "",
 		    "fixedissuance" : true,
-		    "totaltokens" : 0
-		  };
-		  
-		  $scope.crowdsale = {
-		    "name" : "",
+		    "totaltokens" : 0,
 		    "active" : true,
-		    "issuer" : "",
 		    "propertyiddesired" : null,
 		    "tokensperunit" : 0,
 		    "earlybonus" : 0,
@@ -30,8 +29,7 @@ angular.module("omniControllers")
 		    "deadline" : 0,
 		    "amountraised" : 0,
 		    "tokensissued" : 0,
-		    "issuertokens" : 0,
-		    "participanttokens" : 0
+		    "issuertokens" : 0
 		  };
 		  
 		  $scope.isOwner = false;
@@ -133,33 +131,36 @@ angular.module("omniControllers")
 		  PropertyManager.getProperty($scope.propertyId).then(function(result){
 		    $scope.property = result.data;
 		    if(!$scope.property.fixedissuance){
-		      $scope.crowdsale = result.data;
 		      // format data
-		      $scope.crowdsale.participanttokens = new Big($scope.crowdsale.tokensissued);
-		      var totalTokens = new Big($scope.crowdsale.totaltokens);
-		      $scope.crowdsale.issuertokens = totalTokens.minus($scope.crowdsale.participanttokens);
+		      if($scope.property.tokensissued){
+			      var totalTokens = new Big($scope.property.totaltokens);
+			      $scope.property.issuertokens = totalTokens.minus($scope.property.participanttokens);
+		      }
 		      
-		      $scope.isOwner = $scope.account.loggedIn && $scope.account.getAddressesWithPrivkey().indexOf($scope.crowdsale.issuer) > -1;
-		      PropertyManager.getProperty($scope.crowdsale.propertyiddesired).then(function(result){
-		        $scope.currency = angular.extend(result.data,{rate:$scope.crowdsale.tokensperunit});
+		      $scope.isOwner = $scope.account.loggedIn && 
+		      					$scope.wallet.tradableAddresses()
+		      					.map(function(address){return address.hash)
+		      					.indexOf($scope.property.issuer) > -1;
+		      PropertyManager.getProperty($scope.property.propertyiddesired).then(function(result){
+		        $scope.currency = result.data;
 		      });
 		      
-		      var startDate = new Date($scope.crowdsale.starttime*1000);
+		      var startDate = new Date($scope.property.starttime*1000);
 		      $scope.formatedStartDate = startDate.toLocaleDateString();
 		      
 		      var now = new Date();
 		      $scope.daysAgo = Math.round((now.getTime() - startDate.getTime()) / (1000*60*60*24));
-		      $scope.earlyBirdBonus =  ((($scope.crowdsale.deadline - (now.getTime()/1000)) / 604800) * $scope.crowdsale.earlybonus).toFixed(1);
+		      $scope.earlyBirdBonus =  ((($scope.property.deadline - (now.getTime()/1000)) / 604800) * $scope.property.earlybonus).toFixed(1);
 		      $scope.estimatedWorth = "0";
 
-		      if($scope.crowdsale.active){
+		      if($scope.property.active){
 		        // Participate form data
-		        $scope.sendTo = $scope.crowdsale.issuer;
+		        $scope.sendTo = $scope.property.issuer;
 		        if($scope.account.loggedIn){
 			        $scope.wallet.assets.filter(function(currency){
 			             return currency.tradable;
 			        }).forEach(function(coin){
-			          if(coin.id==$scope.crowdsale.propertyiddesired){
+			          if(coin.id==$scope.property.propertyiddesired){
 			            $scope.selectedCoin = coin;    
 			            $scope.canParticipate = true;
 			            $scope.infoMessage = "Get some tokens!";
@@ -172,7 +173,7 @@ angular.module("omniControllers")
 		        }
 
 		        // we need to compile the timer dinamically to get the appropiate end-date set.
-		        var endtime = $scope.crowdsale.deadline * 1000;
+		        var endtime = $scope.property.deadline * 1000;
 		        $timeout(function (){
 		        	return $http.get("/views/assets/partials/timer.html", {cache: $templateCache}).success(function(template) {
 				      var timerNode = $(template.replace("{{endtime}}",endtime));

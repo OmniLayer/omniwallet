@@ -4,7 +4,7 @@
 </div>
   <div class="col-xs-9">
     <div ng-if="!property.divisible">
-      <span ng-bind-html="transaction.amount | numeraljs: '0,0'"></span> {{formatCurrencyName(transaction.propertyid)}} 
+      <span ng-bind-html="transaction.amount | numeraljs: '0,0'"></span> {{acceptedCurrency.name}} 
     </div>
     <div ng-if="property.divisible">
       <span ng-bind-html="transaction.amount | numeraljs: '0,0.00000000'"></span> {{formatCurrencyName(transaction.propertyid)}}
