@@ -1,6 +1,6 @@
 angular.module("omniControllers")
-	.controller("AssetsIssuanceController",["$scope", "PropertyManager", "Transaction",
-		function AssetsIssuanceController($scope, PropertyManager, Transaction){
+	.controller("AssetsIssuanceController",["$scope", "PropertyManager", "Transaction", "ADDRESS_EXPLORER_URL", "SATOSHI_UNIT"
+		function AssetsIssuanceController($scope, PropertyManager, Transaction, ADDRESS_EXPLORER_URL, SATOSHI_UNIT){
 		  $scope.ecosystem = 2;
 		  $scope.tokenStep = $scope.tokenMin =  0.00000001;
 		  $scope.tokenMax = "92233720368.54775807";
