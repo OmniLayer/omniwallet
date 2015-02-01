@@ -41,7 +41,7 @@ angular.module("omniControllers")
 		  $scope.confirm =function(){
 			//TODO: VALIDATIONS
 		  	var fee = new Big($scope.issuerData.minerFees);
-			var crowdsaleCreation = new Transaction(51,$scope.issuerData.selectedAddress,fee,{
+			var assetCreation = new Transaction(50,$scope.issuerData.selectedAddress,fee,{
 		          transaction_version:0,
 		          ecosystem:$scope.ecosystem,
 		          property_type : $scope.propertyDetails.propertyType, 
@@ -51,96 +51,28 @@ angular.module("omniControllers")
 		          property_name:$scope.propertyDetails.propertyName, 
 		          property_url:$scope.propertyDetails.propertyUrl || '\0', 
 		          property_data:$scope.propertyDetails.propertyData || '\0', 
-		          number_properties:$scope.isDivisible() ? +new Big($scope.numberOfTokens).times(SATOSHI_UNIT).valueOf() : +$scope.numberOfTokens,
-		          currency_identifier_desired:$scope.selectedCurrency.currencyId,
-		          deadline:Date.UTC($scope.deadline.getFullYear(),$scope.deadline.getMonth(),$scope.deadline.getDate(), $scope.deadline.getHours(), $scope.deadline.getMinutes(), 0, 0) / 1000,
-		          earlybird_bonus:$scope.earlyBirdBonus,
-		          percentage_for_issuer:$scope.percentageForIssuer,
+		          number_properties:$scope.isDivisible() ? +new Big($scope.numberProperties).times(SATOSHI_UNIT).valueOf() : +$scope.numberProperties,
 		          donate: $scope.account.getSetting("donate")
 		        });
 
 
 			$scope.modalManager.openConfirmationModal({
-				dataTemplate: '/views/modals/partials/crowdsale.html',
+				dataTemplate: '/views/modals/partials/issuance.html',
 				scope:{
-					title:"ASSET_CROWDSALE_MODALTITLE",
+					title:"ASSET_ISSUANCE_MODALTITLE",
 				    divisible : $scope.isDivisible(),
 				    propertyName : $scope.propertyDetails.propertyName,
 				    propertyData : $scope.propertyDetails.propertyData,
 				    propertyCategory : $scope.propertyDetails.propertyCategory,
 				    propertySubcategory : $scope.propertyDetails.propertySubcategory,
 				    propertyUrl : $scope.propertyDetails.propertyUrl,
-				    selectedCurrency : $scope.selectedCurrency,
-				    numberOfTokens: $scope.numberOfTokens,
-				    deadline : (new Date(Date.UTC($scope.deadline.getFullYear(),$scope.deadline.getMonth(),$scope.deadline.getDate(), $scope.deadline.getHours(), $scope.deadline.getMinutes(), 0, 0))).toUTCString(),
-				    earlyBirdBonus : $scope.initialEarlyBirdBonus,
-				    percentageForIssuer : $scope.percentageForIssuer,
-				    fees : $scope.issuerData.minerFees,
-				    totalCost : crowdsaleCreation.totalCost,
-					confirmText:"ASSET_CROWDSALE_START",
+				    numberProperties: $scope.numberOfTokens,
+				    totalCost : assetCreation.totalCost,
+					confirmText:"ASSET_ISSUANCE_CREATE",
 					explorerUrl:ADDRESS_EXPLORER_URL
 				},
-				transaction:crowdsaleCreation
+				transaction:assetCreation
 			})
 		  }
-		  
-		  transactionGenerationController.setModalScope = function($modalScope){
-		    $modalScope.transactionSuccess = false, $modalScope.transactionError = false, $modalScope.waiting = false, $modalScope.privKeyPass = {};
-		    $modalScope.convertSatoshiToDisplayedValue=  $scope.convertSatoshiToDisplayedValue,
-		    $modalScope.getDisplayedAbbreviation=  $scope.getDisplayedAbbreviation,
-		    $modalScope.numberProperties=  $scope.numberProperties,
-		    $modalScope.divisible= $scope.isDivisible() ? 'divisible' : 'indivisible',
-		    $modalScope.propertyName= $scope.propertyName,
-		    $modalScope.propertyCategory= $scope.propertyCategory,
-		    $modalScope.propertySubcategory= $scope.propertySubcategory,
-		    $modalScope.propertyUrl= $scope.propertyUrl;
-		    $modalScope.propertyData= $scope.propertyData;
-		    $modalScope.selectedAddress= $scope.selectedAddress;
-		    $modalScope.minerFees= +$scope.convertDisplayedValue($scope.minerFees);
-		    $modalScope.totalCost= +$scope.convertDisplayedValue($scope.totalCost);
-		    $modalScope.expanded = true;
-		    $modalScope.rendered = false;
-		    $modalScope.setExpandableDiv = function(){
-		      $timeout(function(){
-		        $scope.$apply(function(){
-		          var offsetHeight = document.getElementById('expandable-div').offsetHeight;
-		          var lines = offsetHeight/25;
-		          if (lines > 2) {
-		            $modalScope.longText = true;
-		            $modalScope.expanded = false;
-		          }
-		          else {
-		            $modalScope.longText = false;
-		            $modalScope.expanded = true;
-		          } 
-		        });   
-		      },0,false);  
-		    }
-
-		    
-		  };
-		  
-		  transactionGenerationController.generateData = function(){
-		    return {
-		      from:$scope.selectedAddress,
-		      transactionType: 50,
-		      transactionData: {
-		        transaction_version:0,
-		        ecosystem:$scope.ecosystem,
-		        property_type : $scope.propertyType, 
-		        previous_property_id:$scope.previousPropertyId || 0, 
-		        property_category:$scope.propertyCategory || '\0', 
-		        property_subcategory:$scope.propertySubcategory || '\0', 
-		        property_name:$scope.propertyName, 
-		        property_url:$scope.propertyUrl || '\0', 
-		        property_data:$scope.propertyData || '\0', 
-		        number_properties: $scope.isDivisible() ? +$scope.convertDisplayedValue($scope.numberProperties) : +$scope.numberProperties,
-		        transaction_from: $scope.selectedAddress,
-		        fee: $scope.convertDisplayedValue($scope.minerFees),
-		        testnet: (TESTNET || false),
-		        donate: Account.getSetting("donate")
-		      }
-		    };
-		  };
 		}
 		])
