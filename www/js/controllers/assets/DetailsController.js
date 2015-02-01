@@ -154,20 +154,21 @@ angular.module("omniControllers")
 		      if($scope.crowdsale.active){
 		        // Participate form data
 		        $scope.sendTo = $scope.crowdsale.issuer;
-		        $scope.account.getCurrencies().filter(function(currency){
-		             return currency.tradable;
-		        }).forEach(function(coin){
-		          if(coin.id==$scope.crowdsale.propertyiddesired){
-		            $scope.selectedCoin = coin;    
-		            $scope.canParticipate = true;
-		            $scope.infoMessage = "Get some tokens!";
-		            $scope.standoutError = false;
-		            $scope.standoutInfo = true
-		            $scope.tokenStep = $scope.tokenMin = coin.divisible ? 0.00000001 : 1;
-		            $scope.tokenMax = coin.divisible ? "92233720368.54775807" : "9223372036854775807";
-		          }
-		        });
-
+		        if($scope.account.loggedIn){
+			        $scope.wallet.assets.filter(function(currency){
+			             return currency.tradable;
+			        }).forEach(function(coin){
+			          if(coin.id==$scope.crowdsale.propertyiddesired){
+			            $scope.selectedCoin = coin;    
+			            $scope.canParticipate = true;
+			            $scope.infoMessage = "Get some tokens!";
+			            $scope.standoutError = false;
+			            $scope.standoutInfo = true
+			            $scope.tokenStep = $scope.tokenMin = coin.divisible ? 0.00000001 : 1;
+			            $scope.tokenMax = coin.divisible ? "92233720368.54775807" : "9223372036854775807";
+		              }
+		        	});
+		        }
 		        // we need to compile the timer dinamically to get the appropiate end-date set.
 		        var endtime = $scope.crowdsale.deadline * 1000;
 		        $timeout(function (){
