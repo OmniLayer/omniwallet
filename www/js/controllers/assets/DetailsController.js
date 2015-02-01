@@ -140,7 +140,7 @@ angular.module("omniControllers")
 		      
 		      $scope.isOwner = $scope.account.loggedIn && $scope.account.getAddressesWithPrivkey().indexOf($scope.crowdsale.issuer) > -1;
 		      PropertyManager.getProperty($scope.crowdsale.propertyiddesired).then(function(result){
-		        $scope.acceptedCurrencies = [{propertyid:$scope.crowdsale.propertyiddesired,name:result.data.name,rate:$scope.crowdsale.tokensperunit}];
+		        $scope.currency = angular.extend(result.data,{rate:$scope.crowdsale.tokensperunit});
 		      });
 		      
 		      var startDate = new Date($scope.crowdsale.starttime*1000);

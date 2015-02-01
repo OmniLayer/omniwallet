@@ -1209,7 +1209,7 @@ form.form-search:before {
 }
 
 i.icon-facebook {
-  background-image: url("/assets/img/footer-icons/facebook.png");
+  background-image: url("/assets/img/icons/fb-off.png");
   background-position: 0pt;
   width: 30px;
   height: 30px;
@@ -1218,11 +1218,11 @@ i.icon-facebook {
   margin-top: -6px;
 }
 a:hover i.icon-facebook{
-  background-image: url("/assets/img/footer-icons/facebook_roll.png")
+  background-image: url("/assets/img/icons/fb-on.png")
 }
 
 i.icon-google {
-  background-image: url("/assets/img/footer-icons/google.png");
+  background-image: url("/assets/img/icons/googleplus-off.png");
   background-position: 0pt;
   width: 30px;
   height: 30px; 
@@ -1231,11 +1231,11 @@ i.icon-google {
   margin-top: -6px;
 }
 a:hover i.icon-google{
-  background-image: url("/assets/img/footer-icons/google_roll.png")
+  background-image: url("/assets/img/icons/googleplus-on.png")
 }
 
 i.icon-twitter {
-  background-image: url("/assets/img/footer-icons/twitter.png");
+  background-image: url("/assets/img/icons/twitter.png");
   background-position: 0pt;
   width: 30px;
   height: 30px; 
@@ -1244,7 +1244,20 @@ i.icon-twitter {
   margin-top: -6px;
 }
 a:hover i.icon-twitter{
-  background-image: url("/assets/img/footer-icons/twitter_roll.png")
+  background-image: url("/assets/img/icons/twitter-on.png")
+}
+
+i.icon-linkedin {
+  background-image: url("/assets/img/icons/linkedin-off.png");
+  background-position: 0pt;
+  width: 30px;
+  height: 30px; 
+  float: left;
+  margin-right: 5px;
+  margin-top: -6px;
+}
+a:hover i.icon-linkedin{
+  background-image: url("/assets/img/icons/linkedin-on.png")
 }
 
 .icon-ask {

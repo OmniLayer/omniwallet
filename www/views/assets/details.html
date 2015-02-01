@@ -1,50 +1,48 @@
 <div ng-controller="AssetsDetailsController">
   <div class="row">
   	<div class="col-xs-8">
-	  <div class="panel panel-default">
-	    <div class="panel-body">
-	      <div class="row"> 
-	        <div class="col-xs-12">
-	          <h2>{{property.name}} <span class="label label-asset-id" >(#{{propertyId}})</span></h2>
-	        </div>
-	      </div>
-	      <div class="row" style="margin-bottom: 30px;">
-	        <div class="col-xs-12">
-	          <p>
-	            {{property.data}}
-	          </p>
-	        </div>
-	      </div>
-	      <div class="row" style="margin-bottom: 20px;">
-	        <div class="col-xs-12">
-	          <p>
-	            For more details visit: <a target="_blank" href="{{property.url}}">{{property.url}}</a>
-	          </p>
-	        </div>
-	      </div>
-	      <div class="row" style="margin-bottom: 20px;">
-	        <div class="col-xs-12">
-	          <p>
-	            Issuance Address: <span class="label"><a href="https://blockchain.info/address/{{property.issuer}}?sort=0">{{property.issuer.substr(0,5)}}...{{property.issuer.substr(-5,5)}}</a></span>
-	          </p>
-	        </div>
-	     </div>
-	     <div class="row" style="margin-bottom: 30px;">
-	        <div class="col-xs-12">
-	          <p>
-	            Accepted Currency: <span class="label">{{currency.name}} / Rate ({{currency.rate}})</span>
-	          </p>
-	        </div>
-	      </div>
-	    </div>
-	  </div>
+      <div class="row"> 
+        <div class="col-xs-12">
+          <h2 class="om-title">{{property.name}} <span class="label label-asset-id" >(#{{propertyId}})</span></h2>
+        </div>
+      </div>
+      <div class="row" style="margin-bottom: 30px;">
+        <div class="col-xs-12">
+          <p>
+            {{property.data}}
+          </p>
+        </div>
+      </div>
+      <div class="row" style="margin-bottom: 20px;">
+        <div class="col-xs-12">
+          <p>
+            For more details visit: <a target="_blank" href="{{property.url}}">{{property.url}}</a>
+          </p>
+        </div>
+      </div>
+      <div class="row" style="margin-bottom: 20px;">
+        <div class="col-xs-12">
+          <p>
+            Issuance Address: <a href="https://blockchain.info/address/{{property.issuer}}?sort=0">{{property.issuer}}</a>
+          </p>
+        </div>
+     </div>
+     <div class="row" style="margin-bottom: 30px;">
+        <div class="col-xs-12">
+          <p>
+            Accepted Currency: <span class="label">{{currency.name}} / Rate ({{currency.rate}})</span>
+          </p>
+        </div>
+      </div>
 	  <div class="row">
-	    <h4 class="text-muted">Share this page:
-	      <span class="pull-right"> 
-	        <a href="https://www.linkedin.com/shareArticle?mini=true&url={{shareUrl}}&title=Checkout%20this%20Crowdsale!&summary=&source=" target="_new"><img src="/assets/img/social-icons/linkedIn-round.png" /> </a> 
-	        <a href="https://www.facebook.com/sharer/sharer.php?u={{shareUrl}}" target="_new"><img src="/assets/img/social-icons/facebook-round.png" /> </a> 
-	        <a href="https://twitter.com/home?status={{shareUrl}}" target="_new"><img src="/assets/img/social-icons/twitter-round.png" /> </a>
-	        <a href="https://plus.google.com/share?url={{shareUrl}}" target="_new"><img src="/assets/img/social-icons/gplus-round.png" /> </a>
+	    Share this page:
+	      <span> 
+	        <a href="https://www.linkedin.com/shareArticle?mini=true&url={{shareUrl}}&title=Checkout%20this%20Crowdsale!&summary=&source=" target="_new">
+	        	<i class="icon-linkedin"></i> 
+	        </a> 
+	        <a href="https://www.facebook.com/sharer/sharer.php?u={{shareUrl}}" target="_new"><i class="icon-facebook"></i> </a> 
+	        <a href="https://twitter.com/home?status={{shareUrl}}" target="_new"><i class="icon-twitter"></i></a>
+	        <a href="https://plus.google.com/share?url={{shareUrl}}" target="_new"><i class="icon-google"></i> </a>
 	      </span>
 	    </h4>
 	  </div>
