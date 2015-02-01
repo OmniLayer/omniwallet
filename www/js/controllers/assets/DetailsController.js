@@ -132,7 +132,7 @@ angular.module("omniControllers")
 		    $scope.property = result.data;
 		    if(!$scope.property.fixedissuance){
 		      // format data
-		      if($scope.property.tokensissued){
+		      if($scope.property.tokensissued > 0){
 			      var totalTokens = new Big($scope.property.totaltokens);
 			      $scope.property.issuertokens = totalTokens.minus($scope.property.participanttokens);
 		      }
