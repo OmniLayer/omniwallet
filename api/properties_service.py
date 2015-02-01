@@ -100,11 +100,9 @@ def listByEcosystem():
 
 @app.route('/listbyowner', methods=['POST'])
 def listbyowner():
+    # I can't believe flask can't parse properly arrays from the frontend, using values() as a hack.
     try:
-        if isinstance(request.form['issuer_addresses'], list):
-            addresses = [re.sub(r'\D+', '', address) for address in request.form['issuer_addresses']]  #check alphanumeric
-        else:
-            abort(make_response('\'issuer_addresses\' must be a list of addresses', 400))
+        addresses = [re.sub(r'\D+', '', address) for address in request.form.values()]  #check alphanumeric
     except KeyError:
         abort(make_response('No field \'issuer_addresses\' in request, request failed', 400))
 
