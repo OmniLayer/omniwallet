@@ -1,0 +1,19 @@
+<div class="col-sm-3">
+  <h6 class="text-black">{{formatTransactionTime(transaction.blocktime,"elapsed")}}</h6>
+  <span class="text-muted">{{formatTransactionTime(transaction.blocktime)}}</span>
+</div>
+  <div class="col-xs-9">
+    <div ng-if="!property.divisible">
+      <span ng-bind-html="transaction.amount | numeraljs: '0,0'"></span> {{formatCurrencyName(transaction.propertyid)}} 
+    </div>
+    <div ng-if="property.divisible">
+      <span ng-bind-html="transaction.amount | numeraljs: '0,0.00000000'"></span> {{formatCurrencyName(transaction.propertyid)}}
+    </div>
+    <div>
+      <a href="{{explorerUrl}}{{transaction.sendingaddress}}">{{transaction.sendingaddress}}</a>
+      <span class="label label-omni">
+        <div ng-hide="transaction.confirmations > 100"> {{transaction.confirmations}} Confirmations</div>
+      </span>
+    </div>
+  </div>
+</div>

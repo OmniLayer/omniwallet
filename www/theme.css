@@ -1458,11 +1458,11 @@ i.icon-l{
 }
 
 .asset-history{
-  border-bottom: 1px solid #eeeeee
+  border-bottom: 1px solid #e9e9e9
 }
 
 .asset-history .row{
-  border-top: 1px solid #eeeeee
+  border-top: 1px solid #e9e9e9
 }
 
 .badge{
@@ -1502,6 +1502,12 @@ i.icon-l{
   background-color: #EEE;
   color: #666;
 }
+.label-omni{
+  color: #ffffff;
+  background-color: #93a7c5;
+  border-radius: 0;
+}
+
 .text-black{
   color:#000;
 }
