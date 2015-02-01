@@ -3,12 +3,14 @@
   <small class="text-muted">{{transaction.blocktime | date:'MMM dd, yyyy (hh:mma)'}}</small>
 </div>
   <div class="col-xs-9">
-    <div ng-if="!property.divisible">
-      <span ng-bind-html="transaction.amount | numeraljs: '0,0'"></span> {{acceptedCurrency.name}} 
-    </div>
-    <div ng-if="property.divisible">
-      <span ng-bind-html="transaction.amount | numeraljs: '0,0.00000000'"></span> {{acceptedCurrency.name}} 
-    </div>
+    <h5>
+      <div ng-if="!property.divisible">
+        <span ng-bind-html="transaction.amount | numeraljs: '0,0'"></span> {{acceptedCurrency.name}} 
+      </div>
+      <div ng-if="property.divisible">
+        <span ng-bind-html="transaction.amount | numeraljs: '0,0.00000000'"></span> {{acceptedCurrency.name}} 
+      </div>
+    </h5>
     <div>
       <a href="{{explorerUrl}}{{transaction.sendingaddress}}">{{transaction.sendingaddress}}</a>
       <span ng-hide="transaction.confirmations > 100" class="label label-omni">

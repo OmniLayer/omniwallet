@@ -29,7 +29,8 @@ angular.module("omniControllers")
 		    "deadline" : 0,
 		    "amountraised" : 0,
 		    "tokensissued" : 0,
-		    "issuertokens" : 0
+		    "issuertokens" : 0,
+		    "iscrowdsale":false
 		  };
 		  
 		  $scope.isOwner = false;
@@ -136,14 +137,18 @@ angular.module("omniControllers")
 			      var totalTokens = new Big($scope.property.totaltokens);
 			      $scope.property.issuertokens = totalTokens.minus($scope.property.tokensissued);
 		      }
+		      if($scope.property.deadline)
+		      	$scope.property.iscrowdsale = true;
 		      
 		      $scope.isOwner = $scope.account.loggedIn && 
 		      					$scope.wallet.tradableAddresses()
 		      					.map(function(address){return address.hash})
 		      					.indexOf($scope.property.issuer) > -1;
-		      PropertyManager.getProperty($scope.property.propertyiddesired).then(function(result){
-		        $scope.acceptedCurrency = result.data;
-		      });
+
+		      if($scope.property.propertyiddesired>0)
+			      PropertyManager.getProperty($scope.property.propertyiddesired).then(function(result){
+			        $scope.acceptedCurrency = result.data;
+			      });
 		      
 		      var startDate = new Date($scope.property.starttime*1000);
 		      $scope.formatedStartDate = startDate.toLocaleDateString();
