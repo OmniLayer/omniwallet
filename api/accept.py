@@ -7,11 +7,15 @@ lib_path = os.path.abspath(tools_dir)
 sys.path.append(lib_path)
 from msc_utils_parsing import *
 from msc_apps import *
+import config
+
+donate=False
 
 #data_dir_root = os.environ.get('DATADIR')
 
 
 def accept_form_response(response_dict):
+    print response_dict
     expected_fields = ('buyer', 'amount', 'tx_hash', 'fee')
     for field in expected_fields:
         if field not in response_dict:
@@ -25,6 +29,14 @@ def accept_form_response(response_dict):
     else:
         pubkey = None
         response_status = 'invalid pubkey'
+
+    try:
+      if config.D_PUBKEY and ( 'donate' in response_dict ) and ( response_dict['donate'][0] in ['true', 'True'] ):
+        print "We're Donating to pubkey for: "+pybitcointools.pubkey_to_address(config.D_PUBKEY)
+        global donate
+        donate=True
+    except NameError, e:
+      print e
 
     buyer = response_dict['buyer'][0].strip()
     if not is_valid_bitcoin_address_or_pubkey(buyer):
@@ -72,6 +84,9 @@ def accept_form_response(response_dict):
 
 
 def prepare_accept_tx_for_signing(buyer, amount, tx_hash, min_btc_fee=10000):
+
+    print "buyer, amount, tx_hash, min_btc_fee=10000"
+    print buyer, amount, tx_hash, min_btc_fee
 
     # check if address or pubkey was given as buyer
     if buyer.startswith('0'): # a pubkey was given
@@ -170,7 +185,13 @@ def prepare_accept_tx_for_signing(buyer, amount, tx_hash, min_btc_fee=10000):
     info('obfus dataHex: '+hacked_dataHex_obfuscated)
     valid_dataHex_obfuscated=get_nearby_valid_pubkey(hacked_dataHex_obfuscated)
     info('valid dataHex: '+valid_dataHex_obfuscated)
-    script_str='1 [ '+change_address_pub+' ] [ '+valid_dataHex_obfuscated+' ] 2 checkmultisig'
+
+    #check if user preference for donation is set
+    if donate:
+        script_str='1 [ '+config.D_PUBKEY+' ] [ '+valid_dataHex_obfuscated+' ] 2 checkmultisig'
+    else:
+        script_str='1 [ '+change_address_pub+' ] [ '+valid_dataHex_obfuscated+' ] 2 checkmultisig'
+
     info('change address is '+changeAddress)
     info('to_address is '+seller)
     info('total inputs value is '+str(inputs_total_value))

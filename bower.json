@@ -13,7 +13,6 @@
     "html5shiv": "~3.6",
     "angular-bootstrap": "~0.11.0",
     "angular-ui-bootstrap": "~0.11.0",
-    "d3": "~3.4.2",
     "jsrsasign": "~4.2.1",
     "FileSaver": null,
     "big.js": "x.x.x",
@@ -24,6 +23,11 @@
     "numeraljs": "https://github.com/adamwdraper/Numeral-js.git#master",
     "angular-numeraljs": "https://github.com/sagyeli/angular-numeraljs.git#master",
     "angular-idle": "https://github.com/hackedbychinese/ng-idle.git#master",
-    "angular-re-captcha": "~0.0.3"
+    "angular-re-captcha": "~0.0.3",
+    "angular-translate": "~2.4.2",
+    "angular-nvd3": "~0.0.9"
+  },
+  "resolutions": {
+    "d3": "~3.4"
   }
 }

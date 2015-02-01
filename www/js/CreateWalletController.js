@@ -1,61 +1,38 @@
-function CreateWalletController($scope, $http, $location, $modalInstance, userService) {
+function CreateWalletController($scope, $location, $modalInstance, $idle, Account, AddressManager) {
   $scope.dismiss = $modalInstance.dismiss;
   
   $scope.createWallet = function(create) {
-    var uuid = generateUUID();
-    var wallet = {
-      uuid: uuid,
-      addresses: []
-    };
-    var walletKey = ''
-    var asymKey = {}
     $scope.validating=true;
     $scope.serverError = $scope.invalidCaptcha =false;
-    $http.get('/v1/user/wallet/challenge?uuid=' + uuid)
-      .then(function(result) {
-        var data = result.data;
-        var nonce = CryptUtil.generateNonceForDifficulty(data.pow_challenge);
-        walletKey = CryptUtil.generateSymmetricKey(create.password, data.salt);
-        var encryptedWallet = CryptUtil.encryptObject(wallet, walletKey);
-        asymKey = CryptUtil.generateAsymmetricPair();
-        var createData = {
-            email: create.email,
-            nonce: nonce,
-            public_key: asymKey.pubPem,
-            uuid: uuid,
-            wallet: encryptedWallet
-          };
-
-        if(create.captcha){
-          angular.extend(createData, {
-            recaptcha_challenge_field:create.captcha.challenge,
-            recaptcha_response_field:create.captcha.response
-          })
-        };
-
-        return $http({
-          url: '/v1/user/wallet/create',
-          method: 'POST',
-          data: createData
-        });
-      })
-      .then(function(result) {
-        if(result.data.error =="InvalidCaptcha"){
-          $scope.invalidCaptcha = true;
-          $scope.validating=false;
-          Recaptcha.reload();
-        }else {
-          $scope.validating=false;
-
-          userService.login(wallet, walletKey, asymKey);
-          ga('send', 'event', 'button', 'click', 'Create Wallet');
-          $modalInstance.close()
-          $location.path('/wallet/addresses');
-        }
-      }, function(result) {
-        $scope.validating=false;
-        $scope.serverError = true;
+    Account.create(create).then(function(account){
+      var address = AddressManager.createAddress();
+      account.addAddress(address.hash,address.privkey).then(function(result){
+        $modalInstance.close()
+        $location.path('/wallet');
+        $idle.watch();
       });
+    },function(error){
+      angular.extend($scope,error);
+    })
+  }
+}
+
+function WalletPasswordController($scope, $location, $modalInstance, $http, Account) {
+  $scope.dismiss = $modalInstance.dismiss;
+
+  $scope.changePassword = function(change) {
+    $scope.validating=true;
+    $scope.serverError = false;
+
+    $http.get('/v1/user/wallet/challenge?uuid=' + Account.uuid)
+    .success(function(data, status) {
+      Account.walletKey = CryptUtil.generateSymmetricKey(change.password, data.salt);
+      Account.saveSession();
+      $modalInstance.close()
+    }).error(function() {
+      $scope.validating=false;
+      $scope.serverError = true;    
+    });
   }
 }
 

@@ -1,5 +1,5 @@
 WHOLE_UNIT = new Big(0.00000001);
-function WalletSendAssetsController($modal, $scope, $http, $q, userService, walletTransactionService) {
+function WalletSendAssetsController($modal, $scope, $http, $q, walletTransactionService, Account) {
   $scope.walletAssets =  $scope.$parent.$parent;
   var transactionGenerationController = $scope.$parent;
   // Enable the transaction for offline wallets
@@ -123,7 +123,9 @@ function WalletSendAssetsController($modal, $scope, $http, $q, userService, wall
         amount_to_transfer : $scope.selectedCoin.divisible ? +$scope.convertDisplayedValue($scope.sendAmount) : +$scope.sendAmount,
         transaction_to: $scope.sendTo,
         fee: $scope.convertDisplayedValue($scope.minerFees),
-        marker: $scope.marked
+        marker: $scope.marked,
+        testnet: (TESTNET || false),
+        donate: Account.getSetting("donate")
       }
     }; 
   };
@@ -142,6 +144,7 @@ function WalletSendAssetsController($modal, $scope, $http, $q, userService, wall
             $scope.btcValueChanged = true;
             $scope.newBtcAmount = parseFloat(new Big($scope.value/$scope.getBitcoinValue()).toFixed(8));
             $scope.newValue = parseFloat(new Big($scope.convertSatoshiToDisplayedValue($scope.sendAmount)*$scope.getBitcoinValue()).toFixed(3));
+            //$scope.newValue = numeral($scope.newValue).format("$0,0.00");
           }
     };      
     $scope.goBack = function(){

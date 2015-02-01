@@ -1,88 +1,11 @@
 
-function SimpleSendController($scope, userService) {
-  var wallet = userService.getWallet();
+function SimpleSendController($scope, Account) {
+  var wallet = Account.wallet;
 
   MySimpleSendHelpers(wallet);
 
 }
-function HomeCtrl($scope, $templateCache, $injector, $location, $http, $q) {
-  if ($injector.get('userService').getUUID()) {
-    $location.url('/wallet/overview');
-  } else {
-    //DEV ONLY
-    console.log('cleared cache');
-    $templateCache.removeAll();
 
-    $scope.balanceAddress = "";
-    $scope.hasBalances = false;
-    $scope.total = 0;
-    $scope.validate = function(address) {
-     //console.log('checking '+address);
-      return Bitcoin.Address.validate(address);
-    };
-    $scope.checkBalance = function() {
-      var balances = {};
-      var appraiser = $injector.get('appraiser');
-      $injector.get('balanceService').balance($scope.balanceAddress).then(function(result) {
-        result.data.balance.forEach(function(currencyItem, index, collection) {
-          if(currencyItem.divisible)
-            var value=new Big(currencyItem.value).times(WHOLE_UNIT).valueOf();
-
-          appraiser.updateValue(function() {
-            balances[currencyItem.symbol] = {
-              "symbol": currencyItem.symbol,
-              "balance": +value || currencyItem.value,
-              "value": appraiser.getValue(currencyItem.value, currencyItem.symbol, currencyItem.divisible),
-            };
-            if (currencyItem.symbol == 'BTC') {
-              balances[currencyItem.symbol].name = "Bitcoin";
-            }
-
-            if (Object.keys(balances).length < collection.length)
-              return;
-          
-            $http.get('/v1/transaction/values.json').then(function(result) {
-              currencyInfo = result.data;
-
-              currencyInfo.forEach(function(item) {
-                if (balances.hasOwnProperty(item.currency))
-                  balances[item.currency].name = item.name;
-              });
-
-              // Now, any applicable smart properties.
-              var spReqs = [];
-
-              for (var b in balances) {
-                var spMatch = balances[b].symbol.match(/^SP([0-9]+)$/);
-
-                if (spMatch != null) {
-                  var updateFunction = function(result) {
-                    if (result.status == 200) {
-                      this.property_type = result.data[0].formatted_property_type;
-                      this.name = result.data[0].propertyName + ' (' + this.symbol.match(/^SP([0-9]+)$/)[1] + ')';
-                    }
-                  };
-                  spReqs.push($http.get('/v1/property/' + spMatch[1] + '.json').then(updateFunction.bind(balances[b])));
-                }
-              }
-
-              if (spReqs.length > 0) {
-                $q.all(spReqs).then(function() {
-                  $scope.balances = balances;
-                  $scope.hasBalances = true;
-                });
-              } else {
-                $scope.balances = balances;
-                $scope.hasBalances = true;
-              }
-            });
-          }, currencyItem.symbol);
-        });
-      });
-    };
-
-  }
-}
 function StatsCtrl($scope, $route, $routeParams, $http) {
 
   $http.get('/v1/system/stats.json', {}).success(function(data) {
@@ -90,12 +13,12 @@ function StatsCtrl($scope, $route, $routeParams, $http) {
   });
 }
 
-function Ctrl($scope, $route, $routeParams, $modal, $location, browser, userService) {
+function Ctrl($scope, $route, $routeParams, $modal, $location, browser, Account) {
 
   $scope.$route = $route;
   $scope.$location = $location;
   $scope.browser = browser;
-  $scope.userService = userService;
+  $scope.Account = Account;
 
   /*$scope.$on('$locationChangeStart', function(event, next) {
     if (browser === 'chrome') {
@@ -121,7 +44,7 @@ function Ctrl($scope, $route, $routeParams, $modal, $location, browser, userServ
   $scope.events = [];
 
   $scope.$on('$idleStart', function() {
-    if (userService.loggedIn()) {
+    if (Account.loggedIn) {
       var originalTitle = document.title;
 
       $modal.open({
@@ -157,7 +80,7 @@ function Ctrl($scope, $route, $routeParams, $modal, $location, browser, userServ
             $scope.idleEndTime--;
             if ($scope.idleEndTime === 0) {
               $interval.cancel(timer);
-              location = location.origin + '/login/' + userService.getUUID()
+              location = location.origin + '/login/' + Account.uuid
             }
 
             $scope.idleEndTimeFormatted = idleEndTimeFormat($scope.idleEndTime);
@@ -187,8 +110,8 @@ function Ctrl($scope, $route, $routeParams, $modal, $location, browser, userServ
   });
 
   $scope.$on('$idleTimeout', function() {
-    /*if (userService.loggedIn()) {
-      location = location.origin + '/login/' + userService.getUUID()
+    /*if (Account.isLoggedOn) {
+      location = location.origin + '/login/' + Account.uuid
     }*/
   });
 
@@ -234,8 +157,81 @@ function FailedSaveLoginController($scope, $modal, $location) {
   }
 }
 
+function AccountSettingsController($modal, $injector, $scope, $http, Account) {
 
-function RevisionController($scope, $http, $modal, userService) {
+  mywallet = Account.wallet;
+  $scope.wallet = mywallet;
+  $scope.uuid = mywallet['uuid'];
+
+  $scope.email = Account.getSetting('email');
+
+  $http.get('/v1/values/currencylist').success(function(data) {
+    $scope.currencylist = data;    
+  }).error(function(){
+    $scope.currencylist = [{'value':'USD','label':'United States Dollar'}];
+  });
+
+  $scope.selectedCurrency = Account.getSetting("usercurrency")
+  $scope.filterdexdust = Account.getSetting("filterdexdust")
+  $scope.donate = Account.getSetting("donate")
+  $scope.showtesteco = Account.getSetting("showtesteco")
+
+  $scope.label=function (name, abv) {
+     return name+" ("+abv+")";
+  }
+
+  $scope.save = function() {
+      if ($scope.myForm.$error.email) {
+        $scope.saved = false;
+        $scope.error = true;   
+      } else {
+        mywallet['email'] = $scope.email;
+        mywallet['settings'] = { 'usercurrency':$scope.selectedCurrency,
+                               'filterdexdust':$scope.filterdexdust, 
+                               'donate':$scope.donate, 
+                               'showtesteco':$scope.showtesteco };
+        Account.wallet = mywallet;
+        Account.saveSession();
+        $scope.saved = true;
+        $scope.error = false;
+        Account.setCurrencySymbol($scope.selectedCurrency);
+        var appraiser= $injector.get("appraiser");
+        appraiser.updateValues();
+      }
+    };
+
+  $scope.changePassword = function() {
+    $scope.login = {
+        uuid: Account.uuid,
+        action: 'verify',
+        title: 'Verify Current Password',
+        button: 'Validate',
+        disable: true //disable UUID field in template
+      };
+      var modalInstance = $modal.open({
+        templateUrl: '/partials/login_modal.html',
+        controller: LoginController,
+        scope: $scope
+      });
+      modalInstance.result.then(function() {
+          var newPasswordModal = $modal.open({
+            templateUrl: '/partials/wallet_password_modal.html',
+            controller: WalletPasswordController,
+            scope: $scope
+          });
+          newPasswordModal.result.then(function() {
+            $scope.saved = true;
+            $scope.error = false;
+          }, function() {
+            $scope.saved = false;
+            //Closing modal shouldn't generate an error
+            //$scope.error = true;
+          });
+      });
+  };
+}
+
+function RevisionController($scope, $http, $modal) {
 
   $scope.getData = function() {
     console.log('init 0');
@@ -243,91 +239,6 @@ function RevisionController($scope, $http, $modal, userService) {
       $scope.rev = data;
     });
   };
-}
-
-function NavigationController($scope, $http, $modal, userService) {
-
-  $scope.getNavData = function() {
-    console.log('init 0');
-  };
-  
-  $scope.openCreateModal = function() {
-    if (!$scope.modalOpened) {
-      $scope.modalOpened = true;
-      var modalInstance = $modal.open({
-      templateUrl: '/partials/wallet_create_modal.html',
-      controller: CreateWalletController,
-      backdrop:'static'
-      });
-      modalInstance.result.then(
-      function(){
-        // reset modal status when wallet created successfully
-        $scope.modalOpened = false;
-      },
-      function(){
-        $scope.modalOpened = false;
-      });
-    }
-  };
-
-  $scope.openImportModal = function() {
-    $modal.open({
-      templateUrl: '/partials/wallet_import_modal.html',
-      controller: WalletController
-    });
-  };
-
-  $scope.openLoginModal = function() {        
-    $scope.login ={
-      title:'Login',
-      button:'Open Wallet'
-    };
-    if (!$scope.modalOpened) {
-      $scope.modalOpened = true;
-      var modalInstance = $modal.open({
-      templateUrl: '/partials/login_modal.html',
-      controller: LoginController,
-      scope: $scope,
-      backdrop:'static'
-      });
-      modalInstance.result.then(
-      function(){
-        // reset modal state when user logs in successfully
-        $scope.modalOpened = false;
-      },
-      function(){
-        $scope.modalOpened = false;
-      });
-    }
-  };
-
-  $scope.openUUIDmodal = function() {
-    if (!$scope.modalOpened) {
-      $scope.modalOpened = true;
-      var modalInstance = $modal.open({
-      templateUrl: '/partials/wallet_uuid_modal.html',
-      controller: WalletController
-      });
-      modalInstance.result.then(function(){},
-      function(){
-        $scope.modalOpened = false;
-      });
-    }
-  };
-
-  $scope.openNewUUIDmodal = function() {
-    $modal.open({
-      templateUrl: '/partials/wallet_new_modal.html',
-      controller: WalletController
-    });
-  };
-
-  $scope.logout = function() {
-    userService.logout();
-    //window.location.reload(false);
-  };
-
-  $scope.user = userService.data;
 }
 
 function ExplorerController($scope, $http, hashExplorer) {
@@ -418,7 +329,7 @@ function ExplorerInspectorController($scope, $location, $http, hashExplorer) {
     });
   }
 }
-function SidecarController($rootScope, $scope, $http, $modal, $location, userService, balanceService) {
+function SidecarController($rootScope, $scope, $http, $modal, $location, Account, balanceService, Wallet) {
   $scope.values = {};
   $scope.setView = function(viewName) {
     $scope.view = $scope.sidecarTemplates[viewName];
@@ -432,11 +343,11 @@ function SidecarController($rootScope, $scope, $http, $modal, $location, userSer
     'wallet': '/partials/wallet_sc.html'
   };
 
-  $scope.hasAddresses = userService.data.loggedIn && userService.getAllAddresses().length != 0 ? true : false;
-  $scope.hasAddressesWithPrivkey = userService.data.loggedIn && getAddressesWithPrivkey().length != 0 ? true : false;
+  $scope.hasAddresses = Account.loggedIn && Wallet.addresses.length != 0 ? true : false;
+  $scope.hasAddressesWithPrivkey = Account.loggedIn && getAddressesWithPrivkey().length != 0 ? true : false;
   $scope.hasTradableCoins = false;
   $scope.hasBTC = false;
-  if (userService.data.loggedIn) checkBalance(getAddressesWithPrivkey());
+  if (Account.loggedIn) checkBalance(Wallet.addresses);
   
   $scope.goToTradePage = function($event){
     if($location.path() == "/wallet/trade")
@@ -483,16 +394,16 @@ function SidecarController($rootScope, $scope, $http, $modal, $location, userSer
   };
 
   $scope.$watch(function() {
-    return userService.getAllAddresses()
+    return Wallet.addresses
   }, function(result) {
-    $scope.hasAddresses = userService.data.loggedIn && result.length != 0 ? true : false;
-    $scope.hasAddressesWithPrivkey = userService.data.loggedIn && getAddressesWithPrivkey().length != 0 ? true : false;
-    if (userService.data.loggedIn) checkBalance(getAddressesWithPrivkey());
+    $scope.hasAddresses = Account.loggedIn && result.length != 0 ? true : false;
+    $scope.hasAddressesWithPrivkey = Account.loggedIn && getAddressesWithPrivkey().length != 0 ? true : false;
+    if (Account.loggedIn) checkBalance(Wallet.addresses);
   }, true);
 
   function getAddressesWithPrivkey() {
     var addresses = []
-    userService.getAllAddresses().map(function(e, i, a) {
+    Wallet.addresses.map(function(e, i, a) {
       if (e.privkey && e.privkey.length == 58) {
         addresses.push(e.address);
       }
@@ -506,15 +417,12 @@ function SidecarController($rootScope, $scope, $http, $modal, $location, userSer
     $scope.hasBTC = false;
     if(addresses instanceof Array){
       addresses.forEach(function(address){
-        balanceService.balance(address).then(function(result){
-          var balances = result.data.balance;
-          balances.forEach(function(balance){
+          address.balance.forEach(function(balance){
             if(balance.value > 0)
               $scope.hasTradableCoins = true;
             if(balance.symbol == "BTC" && balance.value > 0)
               $scope.hasBTC = true;
           });
-        });
       });
     }
   }

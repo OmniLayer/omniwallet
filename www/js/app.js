@@ -1,4 +1,23 @@
-//global config goes here
+//Define Modules here first
+angular.module("omniConfig")
+  .factory("TESTNET",["$location",function TestnetFactory($location){
+    if($location.host().match('testnet') != null){
+      Bitcoin.setNetwork('test');
+      return true;
+    } else
+      return false;
+  }])
+  .factory("TX_DATA_URL",["TESTNET", function TxDataUrlFactory(TESTNET){
+    if(TESTNET)
+      return "http://tbtc.blockr.io/tx/info/";
+    else
+      return "https://blockchain.info/tx/";
+  }]);
+
+angular.module("omniFilters", ["omniConfig"]);
+angular.module("omniFactories", ["omniConfig"]);
+angular.module("omniServices", ["omniConfig", "omniFactories"]);
+angular.module("omniControllers", ["omniConfig", "omniFactories", "omniServices"]);
 
 var app = angular.module('omniwallet', [
   'ngRoute',
@@ -9,7 +28,14 @@ var app = angular.module('omniwallet', [
   'infinite-scroll',
   'ngNumeraljs',
   'ngIdle',
-  'reCAPTCHA'
+  'reCAPTCHA',
+  'pascalprecht.translate',
+  'nvd3',
+  'omniConfig',
+  'omniFilters',
+  'omniFactories',
+  'omniServices',
+  'omniControllers'
 ], function($routeProvider, $locationProvider, $httpProvider) {
 
   if (!$httpProvider.defaults.headers.get)
@@ -19,6 +45,13 @@ var app = angular.module('omniwallet', [
   $httpProvider.defaults.headers.get['Expires'] = '0'; 
   $httpProvider.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded;charset=utf-8';
   $httpProvider.defaults.transformRequest = [TransformRequest];
+
+  if (document.location.href.match('testnet') != null) {
+    Bitcoin.setNetwork('test');
+    TESTNET=true;
+  } else {
+    TESTNET=false;
+  }
 
   $routeProvider.when('/assets/:page?', {
       templateUrl: function(route) {
@@ -30,7 +63,7 @@ var app = angular.module('omniwallet', [
         if (viewFound != -1)
           view = '/partials/wallet_assets_' + route.page + '.html';
         else
-          view = '/partials/explorer_assets.html';
+          view = '/views/wallet/assets.html';
 
         ga('send', 'event', 'button', 'click', route.page);
         return view;
@@ -48,13 +81,13 @@ var app = angular.module('omniwallet', [
   $routeProvider.when('/wallet/:page?', {
       templateUrl: function(route) {
         //new views added here
-        var availableViews = ['overview', 'addresses', 'trade', 'history', 'send', 'myoffers'];
+        var availableViews = ['overview', 'assets', 'addresses', 'trade', 'history', 'send', 'myoffers', 'settings'];
 
         var viewFound = availableViews.indexOf(route.page);
         if (viewFound == -1)
           route.page = 'overview';
 
-        var view = '/partials/wallet_' + route.page + '.html';
+        var view = '/views/wallet/' + route.page + '.html';
         //DEBUG console.log(view, route.page, view == '/wallet_addresses.html')
 
         ga('send', 'event', 'button', 'click', route.page);
@@ -97,8 +130,7 @@ var app = angular.module('omniwallet', [
         return view
       }
     }).when('/', {
-      templateUrl: '/homepage.html',
-      controller: HomeCtrl
+      templateUrl: '/homepage.html'
     }).when('/login/:uuid', {
       template: '<div ng-controller="HiddenLoginController" ng-init="open()"></div>',
       controller: HiddenLoginController
@@ -117,24 +149,27 @@ var app = angular.module('omniwallet', [
   $locationProvider.html5Mode(true).hashPrefix('!');
 });
 
-app.config(function($idleProvider, $keepaliveProvider, reCAPTCHAProvider) {
-  $idleProvider.idleDuration(config.idleDuration);
-  $idleProvider.warningDuration(config.idleWarningDuration);
+app.config(function($idleProvider, $keepaliveProvider, reCAPTCHAProvider, idleDuration, idleWarningDuration, reCaptchaKey, $translateProvider, EnglishTranslation) {
+  $idleProvider.idleDuration(idleDuration);
+  $idleProvider.warningDuration(idleWarningDuration);
   // $keepaliveProvider.interval(2);
-
   // required: please use your own key :)
-  reCAPTCHAProvider.setPublicKey(config.reCaptchaKey);
+  reCAPTCHAProvider.setPublicKey(reCaptchaKey);
 
   // optional: gets passed into the Recaptcha.create call
   reCAPTCHAProvider.setOptions({
       theme: 'clean'
   });
+
+  $translateProvider.translations('en', EnglishTranslation);
+   
+  $translateProvider.preferredLanguage('en');
 })
-.run(function(userService, $location) {
+.run(function(Account, $location, TESTNET, BalanceSocket) {
   //Whitelist pages
   whitelisted = ['login', 'about', 'status', 'explorer', 'details'];
 
-  if (!userService.loggedIn()) {
+  if (!Account.loggedIn) {
     for (var i = 0; i < whitelisted.length; i++) {
       if ($location.path().search(whitelisted[i]) != -1) {
         return;
@@ -142,6 +177,7 @@ app.config(function($idleProvider, $keepaliveProvider, reCAPTCHAProvider) {
     }
     $location.path('/');
   }
+  BalanceSocket.connect();
 });
 
 //app helpers

@@ -6,9 +6,9 @@ import json
 #sys.path.append(lib_path)
 from msc_apps import *
 from debug import *
+from balancehelper import *
 
-
-TIMEOUT='timeout -s 9 60 '
+TIMEOUT='timeout -s 9 10 '
 # Get the Mastercoin balances.  Not that this is also creating the default balance
 # object, and should run before all the other currency checks.
 def get_msc_balances( addr ):
@@ -71,19 +71,22 @@ def get_balance_response(request_dict):
 
   addr = re.sub(r'\W+', '', addr) #check alphanumeric
 
-  address_data, err = get_msc_balances( addr )
-  if err != None:
-    address_data = {}
-    address_data[ 'address' ] = addr
-    address_data[ 'balance' ] = []
+  #Use new balance function call
+  return (json.dumps( get_balancedata(addr) ), None)
 
-  bitcoin_balances, err = get_btc_balances( addr )
+  #address_data, err = get_msc_balances( addr )
+  #if err != None:
+  #  address_data = {}
+  #  address_data[ 'address' ] = addr
+  #  address_data[ 'balance' ] = []
 
-  if err == None:
-    for i in xrange(0,len( bitcoin_balances )):
-      address_data[ 'balance' ].append( bitcoin_balances[i] )
+  #bitcoin_balances, err = get_btc_balances( addr )
 
-  return (json.dumps( address_data ), None)
+  #if err == None:
+  #  for i in xrange(0,len( bitcoin_balances )):
+  #    address_data[ 'balance' ].append( bitcoin_balances[i] )
+
+  #return (json.dumps( address_data ), None)
 
 def get_balance_handler(environ, start_response):
   return general_handler(environ, start_response, get_balance_response)

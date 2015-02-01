@@ -1,5 +1,5 @@
-function ExplorerAssetsController($scope, userService, propertiesService){
-  $scope.isLoggedIn = userService.loggedIn();
+function ExplorerAssetsController($scope, Account){
+  $scope.isLoggedIn = Account.loggedIn;
   $scope.ecosystem = 2;
   $scope.crowdsales = [];
   $scope.setEcosystem = function(){

@@ -3,6 +3,7 @@ import os, sys, re, random,pybitcointools, bitcoinrpc, math
 from decimal import Decimal
 from flask import Flask, request, jsonify, abort, json, make_response
 from msc_apps import *
+import config
 
 #conn = bitcoinrpc.connect_to_local()
 conn = getRPCconn()
@@ -15,6 +16,11 @@ app = Flask(__name__)
 app.debug = True
 
 HEXSPACE_SECOND='21'
+mainnet_exodus_address='1EXoDusjGwvnjZUyKkxZ4UHEf77z6A5S4P'
+testnet_exodus_address='mpexoDuSkGGqvqrkrjiFng38QPkJQVFyqv'
+magicbyte=0
+testnet=False
+exodus_address=mainnet_exodus_address
 
 @app.route('/<int:tx_type>', methods=['POST'])
 def generate_tx(tx_type):
@@ -42,12 +48,31 @@ def generate_tx(tx_type):
         elif request.form[field] == '':
             return jsonify({ 'status': 403, 'data': 'Empty field in request form '+field })
 
+    if 'testnet' in request.form and ( request.form['testnet'] in ['true', 'True'] ):
+        global testnet
+        testnet =True
+        global magicbyte
+        magicbyte = 111
+        global exodus_address
+        exodus_address=testnet_exodus_address
+
+    try:
+      if config.D_PUBKEY and ( 'donate' in request.form ) and ( request.form['donate'] in ['true', 'True'] ):
+        print "We're Donating to pubkey for: "+pybitcointools.pubkey_to_address(config.D_PUBKEY)
+        pubkey = config.D_PUBKEY
+      else:
+        print "not donating"
+        pubkey = request.form['pubkey']
+    except NameError, e:
+      print e
+      pubkey = request.form['pubkey']
+
     txdata = prepare_txdata(tx_type, request.form)
     if tx_type == 50:
         try:
             tx50bytes = prepare_txbytes(txdata)
             packets = construct_packets( tx50bytes[0], tx50bytes[1], request.form['transaction_from'] )
-            unsignedhex = build_transaction( request.form['fee'], request.form['pubkey'], packets[0], packets[1], packets[2], request.form['transaction_from'])
+            unsignedhex = build_transaction( request.form['fee'], pubkey, packets[0], packets[1], packets[2], request.form['transaction_from'])
             
             #DEBUG print tx50bytes, packets, unsignedhex
             return jsonify({ 'status': 200, 'unsignedhex': unsignedhex[0] , 'sourceScript': unsignedhex[1] });
@@ -58,7 +83,7 @@ def generate_tx(tx_type):
         try:
             tx51bytes = prepare_txbytes(txdata)
             packets = construct_packets( tx51bytes[0], tx51bytes[1], request.form['transaction_from'])
-            unsignedhex= build_transaction( request.form['fee'], request.form['pubkey'], packets[0], packets[1], packets[2], request.form['transaction_from'])
+            unsignedhex= build_transaction( request.form['fee'], pubkey, packets[0], packets[1], packets[2], request.form['transaction_from'])
             #DEBUG print tx51bytes, packets, unsignedhex
             return jsonify({ 'status': 200, 'unsignedhex': unsignedhex[0] , 'sourceScript': unsignedhex[1] });
         except Exception as e:
@@ -68,7 +93,7 @@ def generate_tx(tx_type):
         try:
             tx0bytes = prepare_txbytes(txdata)
             packets = construct_packets( tx0bytes[0], tx0bytes[1], request.form['transaction_from'])
-            unsignedhex= build_transaction( request.form['fee'], request.form['pubkey'], packets[0], packets[1], packets[2], request.form['transaction_from'], request.form['transaction_to'])
+            unsignedhex= build_transaction( request.form['fee'], pubkey, packets[0], packets[1], packets[2], request.form['transaction_from'], request.form['transaction_to'])
             #DEBUG print tx0bytes, packets, unsignedhex
             return jsonify({ 'status': 200, 'unsignedhex': unsignedhex[0] , 'sourceScript': unsignedhex[1] });
         except Exception as e:
@@ -345,7 +370,7 @@ def construct_packets(byte_stream, total_bytes, from_address):
         while invalid:
             obfuscated_randbyte = obfuscated[:-2] + hex(random.randint(0,255))[2:].rjust(2,"0").upper()
             #set the last byte to something random in case we generated an invalid pubkey
-            potential_data_address = pybitcointools.pubkey_to_address(obfuscated_randbyte)
+            potential_data_address = pybitcointools.pubkey_to_address(obfuscated_randbyte, magicbyte)
             
             if bool(conn.validateaddress(potential_data_address).isvalid):
                 final_packets[i] = obfuscated_randbyte
@@ -357,8 +382,8 @@ def construct_packets(byte_stream, total_bytes, from_address):
     return [final_packets,total_packets,total_outs]
     
 def build_transaction(miner_fee_satoshis, pubkey,final_packets, total_packets, total_outs, from_address, to_address=None):
-    print 'pubkey', request.form['pubkey'], len(request.form['pubkey']) 
-    if len(request.form['pubkey']) < 100:
+    print 'pubkey', pubkey, len(pubkey) 
+    if len(pubkey) < 100:
       print "Compressed Key, using hexspace 21"
       HEXSPACE_FIRST='21'
     else:
@@ -423,7 +448,7 @@ def build_transaction(miner_fee_satoshis, pubkey,final_packets, total_packets, t
                         break
 
 
-    validnextoutputs = { "1EXoDusjGwvnjZUyKkxZ4UHEf77z6A5S4P": 0.00005757 }
+    validnextoutputs = { exodus_address: 0.00005757 }
     if to_address != None:
         validnextoutputs[to_address]=0.00005757 #Add for simple send
     
@@ -452,14 +477,14 @@ def build_transaction(miner_fee_satoshis, pubkey,final_packets, total_packets, t
     for i in range(total_outs):
         hex_string = "51" + HEXSPACE_FIRST + pubkey
         asm_string = "1 " + pubkey
-        addresses = [ pybitcointools.pubkey_to_address(pubkey)]
+        addresses = [ pybitcointools.pubkey_to_address(pubkey, magicbyte)]
         n_count = len(validnextoutputs)+i
         total_sig_count = 1
         #DEBUG print [i,'added string', ordered_packets[i]]
         for packet in ordered_packets[i]:
             hex_string = hex_string + HEXSPACE_SECOND + packet.lower() 
             asm_string = asm_string + " " + packet.lower()
-            addresses.append(pybitcointools.pubkey_to_address(packet))
+            addresses.append(pybitcointools.pubkey_to_address(packet, magicbyte))
             total_sig_count = total_sig_count + 1
         hex_string = hex_string + "5" + str(total_sig_count) + "ae"
         asm_string = asm_string + " " + str(total_sig_count) + " " + "OP_CHECKMULTISIG"
@@ -504,7 +529,16 @@ def build_transaction(miner_fee_satoshis, pubkey,final_packets, total_packets, t
     inputsdata = []
     for _input in json_tx['vin']:
         prior_input_txhash = _input['txid'].upper()  
-        prior_input_index = str(hex(_input['vout'])[2:]).rjust(2,"0").ljust(8,"0")
+        ihex = str(hex(_input['vout'])[2:]).rjust(2,"0")
+        lhex = len(ihex)
+        if lhex in [1,2]:
+            prior_input_index = ihex.ljust(8,"0")
+        elif lhex in [3,4]: 
+            prior_input_index = ihex[-2:].rjust(2,"0")+ihex[:-2].rjust(2,"0").ljust(6,"0")
+        elif lhex in [5,6]: 
+            prior_input_index = ihex[-2:].rjust(2,"0")+ihex[-4:-2].rjust(2,"0")+ihex[:-4].rjust(2,"0").ljust(4,"0")
+        elif lhex in [7,8]: 
+            prior_input_index = ihex[-2:].rjust(2,"0")+ihex[-4:-2].rjust(2,"0")+ihex[-6:-4].rjust(2,"0")+ihex[:-6].rjust(2,"0").ljust(2,"0")
         input_raw_signature = _input['scriptSig']['hex']
         
         prior_txhash_bytes =  [prior_input_txhash[ start: start + 2 ] for start in range(0, len(prior_input_txhash), 2)][::-1]

@@ -15,16 +15,32 @@ def getaddress():
     except ValueError:
         abort(make_response('This endpoint only consumes valid input', 400))
 
-    ROWS=dbSelect("select * from transactions t, addressesintxs atx where t.txdbserialnum = atx.txdbserialnum and atx.address=%s order by t.txblocknumber DESC", [address])
+    ROWS=dbSelect("""select t.TxHash, t.TxType, t.TxRecvTime, t.TxState,
+                            atx.AddressRole, atx.BalanceAvailableCreditDebit,
+                            sp.PropertyData
+                      from transactions t, addressesintxs atx, smartproperties sp 
+                      where t.txdbserialnum = atx.txdbserialnum and sp.PropertyID = atx.PropertyID and atx.address=%s and t.txdbserialnum >0 
+                      order by t.txdbserialnum DESC""", [address])
 
-    response = { 'address': {}, 'balance': {}, '0' : { 'transactions': [] } } #To preserve compatability, 'currID': {'txdata'}
+    transactions = []
+
     if len(ROWS) > 0:
-      for addrrow in ROWS:
-        #res = requests.get('http://localhost/v1/transaction/tx/' + addrrow[0] + '.json').json()[0]
-        res = json.loads(gettransaction(addrrow[0]))[0]
-        response['0']['transactions'].append(res)
+      for txrow in ROWS:
+        transaction = {}
 
-    return json.dumps(response)
+        transaction['hash'] = txrow[0]
+        transaction['type'] = txrow[1]
+        transaction['time'] = txrow[2]
+        transaction['state'] = txrow[3]
+        transaction['role'] = txrow[4]
+        transaction['amount'] = txrow[5]
+        transaction['currency'] = txrow[6]
+
+        transactions.append(transaction)
+
+    response = { 'address': address, 'transactions': transactions } 
+
+    return jsonify(response)
 
 @app.route('/general/<currency_page>')
 def getcurrencyrecent(currency_page):
@@ -106,7 +122,7 @@ def gettransaction(hash_id):
       "tx_time": str(txJson['blocktime']) + '000',
     }
 
-    if txType != -22: #Dex purchases don't have these fields 
+    if txType != -22 and  txType != 21: #Dex purchases don't have these fields 
       ret['currencyId'] = txJson['propertyid']
       ret['currency_str'] = 'Mastercoin' if txJson['propertyid'] == 1 else 'Test Mastercoin' if txJson['propertyid'] == 2 else "Smart Property"
       ret['invalid'] = False if txJson['valid'] == True else True

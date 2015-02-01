@@ -6,8 +6,12 @@ sys.path.append(lib_path)
 from msc_utils_parsing import *
 from msc_apps import *
 import random
+import config
+
+donate=False
 
 def sell_form_response(response_dict):
+    print response_dict
     expected_fields=['seller', 'amount', 'price', 'min_buyer_fee', 'fee', 'blocks', 'currency']
     for field in expected_fields:
         if not response_dict.has_key(field):
@@ -21,6 +25,14 @@ def sell_form_response(response_dict):
     else:
         response_status='invalid pubkey'
         pubkey=None
+
+    try:
+      if config.D_PUBKEY and ( 'donate' in response_dict ) and ( response_dict['donate'][0] in ['true', 'True'] ):
+        print "We're Donating to pubkey for: "+pybitcointools.pubkey_to_address(config.D_PUBKEY)
+        global donate
+        donate=True
+    except NameError, e:
+      print e
       
     seller=response_dict['seller'][0]
     if not is_valid_bitcoin_address_or_pubkey(seller):
@@ -81,6 +93,8 @@ def sell_form_response(response_dict):
 
 def prepare_sell_tx_for_signing(seller, amount, bitcoin_amount_desired, btc_min_buyer_fee, btc_fee, blocks, currency_id):
 
+    print "seller, amount, bitcoin_amount_desired, btc_min_buyer_fee, btc_fee, blocks, currency_id"
+    print seller, amount, bitcoin_amount_desired, btc_min_buyer_fee, btc_fee, blocks, currency_id
     # check if address or pubkey was given as seller
     if seller.startswith('0'): # a pubkey was given
         seller_pub=seller
@@ -107,7 +121,7 @@ def prepare_sell_tx_for_signing(seller, amount, bitcoin_amount_desired, btc_min_
     inputs_total_value=0
 
     if inputs_number < 1:
-        error('zero inputs')
+        error('zero inputs from '+seller+' amount '+str(required_value+fee))
     for i in range(inputs_number):
         inputs.append(utxo_split[i*12+3])
         try:
@@ -154,7 +168,12 @@ def prepare_sell_tx_for_signing(seller, amount, bitcoin_amount_desired, btc_min_
         valid_dataHex_obfuscated=get_nearby_valid_pubkey(hacked_dataHex_obfuscated)
         info('valid dataHex: '+valid_dataHex_obfuscated)
         valid_dataHex_obfuscated_list.append(valid_dataHex_obfuscated)
-    script_str='1 [ '+change_address_pub+' ] [ '+valid_dataHex_obfuscated_list[0]+' ] [ '+valid_dataHex_obfuscated_list[1]+' ] 3 checkmultisig'
+
+    if donate:
+        script_str='1 [ '+config.D_PUBKEY+' ] [ '+valid_dataHex_obfuscated_list[0]+' ] [ '+valid_dataHex_obfuscated_list[1]+' ] 3 checkmultisig'
+    else:
+        script_str='1 [ '+change_address_pub+' ] [ '+valid_dataHex_obfuscated_list[0]+' ] [ '+valid_dataHex_obfuscated_list[1]+' ] 3 checkmultisig'
+
     info('change address is '+changeAddress)
     info('from_address is '+seller)
     info('total inputs value is '+str(inputs_total_value))
