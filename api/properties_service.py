@@ -73,9 +73,9 @@ def list():
         abort(make_response('Field \'ecosystem\' invalid value, request failed', 400))
     
     
-    ROWS= dbSelect("select PropertyID,PropertyName,PropertyData from smartproperties where Protocol != 'Fiat' AND ecosystem=%s ORDER BY PropertyName,PropertyID", [ecosystem])
+    ROWS= dbSelect("select PropertyData from smartproperties where Protocol != 'Fiat' AND ecosystem=%s ORDER BY PropertyName,PropertyID", [ecosystem])
     
-    data=[{"currencyId":prop[0],"propertyName":prop[1]} for prop in ROWS]
+    data=[prop[0] for prop in ROWS]
         
     response = {
                 'status' : 'OK',
