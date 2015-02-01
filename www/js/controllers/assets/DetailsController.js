@@ -1,6 +1,6 @@
 angular.module("omniControllers")
-	.controller("AssetsDetailsController",["$location", "$route", "$scope", "$timeout", "$element", "$compile", "$http","PropertyManager",
-		function AssetDetailsController($location, $route, $scope, $timeout, $element, $compile, $http, PropertyManager){
+	.controller("AssetsDetailsController",["$location", "$route", "$scope", "$timeout", "$element", "$compile", "$http", "$templateCache", "PropertyManager",
+		function AssetDetailsController($location, $route, $scope, $timeout, $element, $compile, $http, $templateCache, PropertyManager){
 		  // $scope initialization
 		  $scope.propertyId = $route.current.params.propertyId;
 		  $scope.shareUrl = $location.absUrl();
