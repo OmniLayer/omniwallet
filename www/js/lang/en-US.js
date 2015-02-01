@@ -123,6 +123,8 @@ angular.module("omniConfig")
 	ASSET_ISSUANCE_TYPE:'Issuance type',
 	ASSET_ISSUANCE_FIXED:'Fixed',
 	ASSET_ISSUANCE_MANAGED:'Managed',
+	ASSET_ISSUANCE_CREATE:'Create Property',
+	ASSET_ISSUANCE_MODALTITLE:'Confirm Property Creation',
 	ASSET_FORM_ISSUER:'Issuance Address',
 	ASSET_FORM_FEES:'Miner Fees (BTC)',
 	ASSET_FORM_DETAILS_SUBTITLE:'Smart Property details',
