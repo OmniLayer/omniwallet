@@ -12,6 +12,12 @@ angular.module("omniConfig")
       return "http://tbtc.blockr.io/tx/info/";
     else
       return "https://blockchain.info/tx/";
+  }])
+  .factory("ADDRESS_EXPLORER_URL",["TESTNET", function AddressExplorerUrlFactory(TESTNET){
+    if(TESTNET)
+      return "http://tbtc.blockr.io/address/info/";
+    else
+      return "https://blockchain.info/address/";
   }]);
 
 angular.module("omniFilters", ["omniConfig"]);
@@ -61,7 +67,7 @@ var app = angular.module('omniwallet', [
         var view;
         var viewFound = availableViews.indexOf(route.page);
         if (viewFound != -1)
-          view = '/partials/wallet_assets_' + route.page + '.html';
+          view = '/views/assets/' + route.page + '.html';
         else
           view = '/views/wallet/assets.html';
 
@@ -69,7 +75,7 @@ var app = angular.module('omniwallet', [
         return view;
       }
     }).otherwise({
-      redirectTo:'/explorer/assets'
+      redirectTo:'/wallet/assets'
     });
   
   $routeProvider.when('/assets/details/:propertyId', {

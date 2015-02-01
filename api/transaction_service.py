@@ -20,6 +20,7 @@ def getaddress():
                             sp.PropertyData
                       from transactions t, addressesintxs atx, smartproperties sp 
                       where t.txdbserialnum = atx.txdbserialnum and sp.PropertyID = atx.PropertyID and atx.address=%s and t.txdbserialnum >0 
+                      and sp.Protocol != 'Fiat'
                       order by t.txdbserialnum DESC""", [address])
 
     transactions = []
