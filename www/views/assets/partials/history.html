@@ -1,4 +1,4 @@
-<h2 class="om-subtitle">{{property.fixedissuance | assetIssuedType}} History <small class="text-muted">({{history.total}} transactions)</small></h2>
+<h2 class="om-subtitle">{{ 'ASSET_HISTORY_FIXEDISSUANCE_' + property.fixedissuance.toString().toUpperCase() | translate}} {{'COMMON_HISTORY' | translate}} <small class="text-muted">({{history.total}} {{'ASSET_HISTORY_TRANSACTIONS' | translate}})</small></h2>
 <div class="scroll">
   <div class="scroll-body asset-history" infinite-scroll='loadHistory()' infinite-scroll-disabled='history.loading || history.loaded' infinite-scroll-distance='10'>
     <div class="row" ng-repeat="transaction in history.transactions">
@@ -11,10 +11,13 @@
       <div class="col-xs-12" ng-if="transaction.isClose" ng-include="'/views/assets/partials/history_close.html'">
         
       </div>
+      <div class="col-xs-12 text-center" ng-if="!transaction.isClose && !transaction.isCreate && !transaction.isParticipation">
+        {{tx.type}}
+      </div>
     </div>
     <div class="panel panel-default" ng-show='history.loading'>
       <div class="panel-body text-center">
-        <img src="/assets/img/loading.gif"/>Loading transactions
+        <img src="/assets/img/loading.gif"/>{{'ASSET_HISTORY_LOADING' | translate}}
       </div>
     </div>
   </div>

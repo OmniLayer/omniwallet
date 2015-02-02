@@ -14,7 +14,7 @@
     <div>
       <a href="{{explorerUrl}}{{transaction.sendingaddress}}">{{transaction.sendingaddress}}</a>
       <span ng-hide="transaction.confirmations > 100" class="label label-omni">
-         {{transaction.confirmations}} Confirmations
+         {{transaction.confirmations}} {{'ASSET_HISTORY_TRANSACTION_CONFIRMATIONS' | translate }}
       </span>
     </div>
   </div>

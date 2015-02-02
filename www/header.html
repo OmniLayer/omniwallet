@@ -51,7 +51,7 @@
             <li ng-if="account.loggedIn" ng-class="{active:subsection=='overview'}"><a ng-click="subsection='overview'" href="/wallet/overview">{{'COMMON_OVERVIEW' | translate }}</a></li>
             <li ng-if="account.loggedIn" ng-class="{active:subsection=='myaddresses'}"><a ng-click="subsection='myaddresses'" href="/wallet/addresses">{{ 'NAVIGATION_ADDRESSES' | translate }}</a></li>
             <li ng-if="account.loggedIn" ng-class="{active:subsection=='myassets'}"><a ng-click="subsection='myassets'" href="/wallet/assets">{{ 'NAVIGATION_ASSETS' | translate }}</a></li>
-            <li ng-if="account.loggedIn" ng-class="{active:subsection=='history'}"><a ng-click="subsection='history'" href="/wallet/history">{{'NAVIGATION_HISTORY' | translate}}</a></li>
+            <li ng-if="account.loggedIn" ng-class="{active:subsection=='history'}"><a ng-click="subsection='history'" href="/wallet/history">{{'COMMON_HISTORY' | translate}}</a></li>
             <li ng-if="account.loggedIn" ng-class="{active:subsection=='send'}"><a ng-click="section='wallet';subsection='send'" href="/wallet/send">{{ 'COMMON_SEND' | translate }}</a></li>
             <li class="navbar-header">{{'NAVIGATION_EXCHANGE' | translate}}</li>
             <li ng-class="{active:subsection=='trade'}"><a ng-click="subsection='trade'" href="/wallet/trade">{{'NAVIGATION_TRADE' | translate}}</a></li>
@@ -79,7 +79,7 @@
         <li ng-class="{active:subsection=='overview'}"><a ng-click="subsection='overview'" href="/wallet/overview">{{'COMMON_OVERVIEW' | translate }}</a></li>
         <li ng-class="{active:subsection=='myaddresses'}"><a ng-click="subsection='myaddresses'" href="/wallet/addresses">{{ 'NAVIGATION_ADDRESSES' | translate }}</a></li>
         <li ng-class="{active:subsection=='myassets'}"><a ng-click="subsection='myassets'" href="/wallet/assets">{{'NAVIGATION_ASSETS' | translate}}</a></li>
-        <li ng-class="{active:subsection=='history'}"><a ng-click="subsection='history'" href="/wallet/history">{{'NAVIGATION_HISTORY' | translate}}</a></li>
+        <li ng-class="{active:subsection=='history'}"><a ng-click="subsection='history'" href="/wallet/history">{{'COMMON_HISTORY' | translate}}</a></li>
         <li ng-class="{active:subsection=='send'}"><a ng-click="subsection='send'" href="/wallet/send">{{ 'COMMON_SEND' | translate }}</a></li>
       </ul>
     </div>

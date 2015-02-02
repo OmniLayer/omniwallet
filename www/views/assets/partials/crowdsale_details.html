@@ -1,35 +1,38 @@
 <div class="row">
     <div class="text-center">
-      <h3 class="crowdsale-title"><span ng-show="isOwner">Your </span>{{property.active | crowdsaleStatus}} Crowdsale</h3>
+      <h3 class="crowdsale-title">
+      	<span ng-show="isOwner">{{'CROWDSALE_DETAILS_YOUR' | translate}} </span>
+      	{{'CROWDSALE_DETAILS_ACTIVE_' + property.active.toString().toUpper() | translate}}
+      </h3>
       <p ng-show="property.active">
-        Time until closing:
+        {{'CROWDSALE_DETAILS_TIME' | translate}}:
         <div id="timerWrapper"></div>
       </p>
     </div>
 </div>
 <div class="row">
-	<div class="col-xs-7 small" style="padding-top:10px;">Tokens already bought by participants</div>
+	<div class="col-xs-7 small" style="padding-top:10px;">{{'CROWDSALE_DETAILS_TOKENSBOUGHT' | translate}}</div>
 	<div class="col-xs-5">
 		<div class="tag text-center" ng-if="!property.divisible" ng-bind-html="property.tokensissued | numeraljs: '0,0'"></div>
         <div class="tag text-center" ng-if="property.divisible" ng-bind-html="property.tokensissued | numeraljs: '0,0.00000000'"></div>
     </div>
 </div>
 <div class="row">
-	<div class="col-xs-7 small" style="padding-top:10px;">Tokens created for the issuer ({{property.percenttoissuer}}%)</div>
+	<div class="col-xs-7 small" style="padding-top:10px;">{{'CROWDSALE_DETAILS_TOKENSISSUER' | translate}} ({{property.percenttoissuer}}%)</div>
 	<div class="col-xs-5">
 		<div class="tag text-center" ng-if="!property.divisible" ng-bind-html="(property.totaltokens - property.tokensissued) | numeraljs: '0,0'"></div>
         <div class="tag text-center" ng-if="property.divisible" ng-bind-html="(property.totaltokens - property.tokensissued) | toWhole | numeraljs: '0,0.00000000'"></div>
     </div>
 </div>
  <div class="row" ng-if="property.active" >
- 	<div class="col-xs-7 small" style="padding-top:10px;">Current early bird bonus</div>
+ 	<div class="col-xs-7 small" style="padding-top:10px;">{{'CROWDSALE_DETAILS_CURRENTBONUS' | translate}}</div>
 	<div class="col-xs-5">
 		<div class="tag text-center">+{{earlyBirdBonus}}%</div>
     </div>
 </div>
-<div class="row" ng-if="property.active">
-	<div class="col-xs-12 text-center">
-		Get some tokens!
+<div class="row text-center" ng-if="property.active">
+	<div class="col-xs-12">
+		{{'CROWDSALE_DETAILS_GETTOKENS' | translate}}
 	</div>
-	<a href="#" class="btn btn-main btn-lg">Participate</a>	
+	<a href="#" class="btn btn-main btn-lg">{{'CROWDSALE_DETAILS_PARTICIPATE' | translate}}</a>	
 </div>
