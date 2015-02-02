@@ -194,7 +194,7 @@ angular.module("omniConfig")
 	CROWDSALE_DETAILS_LOGIN:"You need to login or create a wallet to participate",
 	CROWDSALE_REMAINING_DAYS:'Day',
 	CROWDSALE_REMAINING_HOURS:'Hr',
-	CROWDSALE_REMAINING_MINUTES:'Min'
+	CROWDSALE_REMAINING_MINUTES:'Min',
 	ECOSYSTEM: {
 		LABEL:'Ecosystem',
 		PRODUCTION:'Production',
