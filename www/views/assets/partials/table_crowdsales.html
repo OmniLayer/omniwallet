@@ -7,7 +7,7 @@
 </div>
 <div class="row" ng-repeat="crowdsale in crowdsales">
 	<div class="col-xs-12 col-sm-3"><label class="visible-xs">{{'ASSET_HISTORY_FIXEDISSUANCE_FALSE' | translate}}</label>
-		{{crowdsale.name}}
+		<a href="/assets/details/{{crowdsale.propertyid}}">{{crowdsale.name}}</a>
 	</div>
 	<div class="col-xs-12 col-sm-3"><label class="visible-xs">{{'ASSET_CROWDSALE_ACCEPTEDCURRENCY' | translate}}</label>
 		{{crowdsale.propertydesiredName}} / {{'ASSET_CROWDSALE_RATE' | translate}} ({{crowdsale.tokensperunit}})
