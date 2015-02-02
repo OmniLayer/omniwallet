@@ -196,7 +196,7 @@ angular.module("omniConfig")
 	CROWDSALE_REMAINING_HOURS:'Hr',
 	CROWDSALE_REMAINING_MINUTES:'Min',
 	ECOSYSTEM: {
-		LABEL:'Ecosystem',
+		LABEL:'Selected Ecosystem',
 		PRODUCTION:'Production',
 		TEST:'Test'
 	},

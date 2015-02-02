@@ -12,7 +12,7 @@ angular.module("omniControllers")
 				        	return $http.get("/views/assets/partials/remaining_timer.html", {cache: $templateCache}).success(function(template) {
 					            for (var i = 0; i < $scope.crowdsales.length; i++) {
 				        			var endTime = $scope.crowdsales[i].deadline;
-				              		$element.find('#timerWrapper-'+$scope.crowdsales[i].propertyid).append(template.replace("{{endtime}}",endtime));
+				              		$element.find('#timerWrapper-'+$scope.crowdsales[i].propertyid).append(template.replace("{{endtime}}",endTime));
 				        		}
 				        		$compile($element.contents())($scope);
 						    });
