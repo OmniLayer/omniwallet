@@ -113,13 +113,7 @@ angular.module("omniControllers")
 			             return currency.tradable;
 			        }).forEach(function(coin){
 			          if(coin.id==$scope.property.propertyiddesired){
-			            $scope.selectedCoin = coin;    
 			            $scope.canParticipate = true;
-			            $scope.infoMessage = "Get some tokens!";
-			            $scope.standoutError = false;
-			            $scope.standoutInfo = true
-			            $scope.tokenStep = $scope.tokenMin = coin.divisible ? 0.00000001 : 1;
-			            $scope.tokenMax = coin.divisible ? "92233720368.54775807" : "9223372036854775807";
 		              }
 		        	});
 		        }
@@ -127,7 +121,7 @@ angular.module("omniControllers")
 		        // we need to compile the timer dinamically to get the appropiate end-date set.
 		        var endtime = $scope.property.deadline * 1000;
 		        $timeout(function (){
-		        	return $http.get("/views/assets/partials/timer.html", {cache: $templateCache}).success(function(template) {
+		        	return $http.get("/views/assets/partials/crowdsale_timer.html", {cache: $templateCache}).success(function(template) {
 				      var timerNode = $(template.replace("{{endtime}}",endtime));
 			          $element.find('#timerWrapper').append(timerNode);
 			          $compile(timerNode)($scope);

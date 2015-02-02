@@ -35,7 +35,7 @@ angular.module("omniConfig")
 	NAVIGATION_ACCOUNT:'My Account',
 	NAVIGATION_ADDRESSES: 'My Addresses',
 	NAVIGATION_ASSETS: 'My Assets',
-	NAVIGATION_CROWDSALES:'Active Crowdsales',
+	COMMON_ACTIVECROWDSALES:'Active Crowdsales',
 	NAVIGATION_CREATE: 'Create Wallet',
 	NAVIGATION_CONTACT:'Contact Us',
 	NAVIGATION_EXCHANGE: 'Exchange',
@@ -182,12 +182,22 @@ angular.module("omniConfig")
 	CROWDSALE_DETAILS_YOUR :'Your',
 	CROWDSALE_DETAILS_ACTIVE_TRUE:'Active Crowdsale',
 	CROWDSALE_DETAILS_ACTIVE_FALSE:'Finished Crowdsale',
-	CROWDSALE_DETAILS_TIME:'Time until closing',
+	CROWDSALE_DETAILS_TIME:'Time Until Closing',
 	CROWDSALE_DETAILS_TOKENSBOUGHT:'Tokens already bought by participants',
 	CROWDSALE_DETAILS_TOKENSISSUER:'Tokens created for the issuer',
 	CROWDSALE_DETAILS_CURRENTBONUS:'Current early bird bonus',
 	CROWDSALE_DETAILS_GETTOKENS:'Get some tokens!',
 	CROWDSALE_DETAILS_PARTICIPATE:'Participate',
 	ASSET_DETAILS_URL:'For more details visit',
-	ASSET_DETAILS_SHARE: 'Share this page'
+	ASSET_DETAILS_SHARE: 'Share this page',
+	CROWDSALE_DETAILS_NOTOKENS : "You don't have the token accepted by this crowdsale",
+	CROWDSALE_DETAILS_LOGIN:"You need to login or create a wallet to participate",
+	CROWDSALE_REMAINING_DAYS:'Day',
+	CROWDSALE_REMAINING_HOURS:'Hr',
+	CROWDSALE_REMAINING_MINUTES:'Min'
+	ECOSYSTEM: {
+		LABEL:'Ecosystem',
+		PRODUCTION:'Production',
+		TEST:'Test'
+	}
   })
