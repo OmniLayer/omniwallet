@@ -7,6 +7,11 @@ angular.module("omniControllers")
 			  	$scope.ecosystem=ecosystem;
 			    PropertyManager.getActiveCrowdsales($scope.ecosystem).then(function(result){
 			        $scope.crowdsales=result.data.crowdsales;
+			        $scope.crowdsales.forEach(function(crowdsale){
+			        	PropertyManager.getProperty($scope.property.propertyiddesired).then(function(result){
+					        $scope.propertydesired = result.data.name;
+					    });
+			        })
 			        if($scope.crowdsales.length>0)
 				        $timeout(function (){
 				        	return $http.get("/views/assets/partials/timer_remaining.html", {cache: $templateCache}).success(function(template) {
