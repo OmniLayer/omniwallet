@@ -35,7 +35,7 @@
 		{{'CROWDSALE_DETAILS_GETTOKENS' | translate}}
 	</div>
 	<a href="#" ng-click="modalManager.openCrowdsaleParticipationModal()" ng-disabled="(!canParticipate || !account.loggedIn)" class="btn btn-main btn-lg">{{'CROWDSALE_DETAILS_PARTICIPATE' | translate}}</a>	
-  <div class="col-xs-12" ng-hide="canParticipate">
+  <div class="col-xs-12" ng-hide="!account.loggedIn || canParticipate">
     {{'CROWDSALE_DETAILS_NOTOKENS' | translate}}
   </div>
   <div class="col-xs-12" ng-hide="account.loggedIn">
