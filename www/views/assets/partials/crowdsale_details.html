@@ -1,26 +1,33 @@
 <div class="row">
     <div class="text-center">
-      <h3 class="crowdsale-title"><span ng-show="isOwner">Your </span>{{crowdsale.active | crowdsaleStatus}} crowdsale</h3>
-      <p ng-show="crowdsale.active">
+      <h3 class="crowdsale-title"><span ng-show="isOwner">Your </span>{{property.active | propertyStatus}} property</h3>
+      <p ng-show="property.active">
         Time until closing:
         <div id="timerWrapper"></div>
       </p>
     </div>
 </div>
-<div class="row" >
-    
-      Crowdsale started {{formatedStartDate}} (~{{daysAgo}} days ago)
-    
-</div>
- <div class="row" ng-if="!property.fixedissuance && crowdsale.active" >
-    
-      <span class="pull-left shout-label" >Current early bird bonus:</span> <div class="shout pull-right"><span>+{{earlyBirdBonus}}%</span></div>
+<div class="row">
+	<div class="col-xs-7">Tokens already bought by participants</div>
+	<div class="col-xs-5">
+		<div class="tag" ng-if="!property.divisible" ng-bind-html="property.tokensissued | numeraljs: '0,0'"></div>
+        <div class="tag" ng-if="property.divisible" ng-bind-html="property.tokensissued | numeraljs: '0,0.00000000'"></div>
+    </div>
 </div>
 <div class="row">
-      <div class="tag" ng-if="!property.divisible" ng-bind-html="crowdsale.participanttokens.toString() | numeraljs: '0,0'"></div>
-      <div class="tag" ng-if="property.divisible" ng-bind-html="crowdsale.participanttokens.toString() | numeraljs: '0,0.00000000'"></div>
-      <span class="help-block">Tokens already bought by participants</span>
-      <div class="tag" ng-if="!property.divisible" ng-bind-html="crowdsale.issuertokens.toString() | numeraljs: '0,0'"></div>
-      <div class="tag" ng-if="property.divisible" ng-bind-html="crowdsale.issuertokens.toString() | numeraljs: '0,0.00000000'"></div>
-      <span class="help-block">Tokens created for the issuer ({{crowdsale.percenttoissuer}}%)</span>
+	<div class="col-xs-7">Tokens created for the issuer ({{property.percenttoissuer}}%)</div>
+	<div class="col-xs-5">
+		<div class="tag" ng-if="!property.divisible" ng-bind-html="(property.totaltokens - property.tokensissued) | numeraljs: '0,0'"></div>
+        <div class="tag" ng-if="property.divisible" ng-bind-html="(property.totaltokens - property.tokensissued) | toWhole | numeraljs: '0,0.00000000'"></div>
+    </div>
+</div>
+ <div class="row" ng-if="property.active" >
+ 	<div class="col-xs-7">Current early bird bonus</div>
+	<div class="col-xs-5">
+		<div class="tag">+{{earlyBirdBonus}}%</div>
+    </div>
+</div>
+<div class="row" ng-if="property.active">
+	Get some tokens!
+	<a href="#" class="btn btn-main btn-xlarge">Participate</button>
 </div>
