@@ -8,26 +8,28 @@
     </div>
 </div>
 <div class="row">
-	<div class="col-xs-7">Tokens already bought by participants</div>
+	<div class="col-xs-7 small" style="padding-top:10px;">Tokens already bought by participants</div>
 	<div class="col-xs-5">
-		<div class="tag" ng-if="!property.divisible" ng-bind-html="property.tokensissued | numeraljs: '0,0'"></div>
-        <div class="tag" ng-if="property.divisible" ng-bind-html="property.tokensissued | numeraljs: '0,0.00000000'"></div>
+		<div class="tag text-center" ng-if="!property.divisible" ng-bind-html="property.tokensissued | numeraljs: '0,0'"></div>
+        <div class="tag text-center" ng-if="property.divisible" ng-bind-html="property.tokensissued | numeraljs: '0,0.00000000'"></div>
     </div>
 </div>
 <div class="row">
-	<div class="col-xs-7">Tokens created for the issuer ({{property.percenttoissuer}}%)</div>
+	<div class="col-xs-7 small" style="padding-top:10px;">Tokens created for the issuer ({{property.percenttoissuer}}%)</div>
 	<div class="col-xs-5">
-		<div class="tag" ng-if="!property.divisible" ng-bind-html="(property.totaltokens - property.tokensissued) | numeraljs: '0,0'"></div>
-        <div class="tag" ng-if="property.divisible" ng-bind-html="(property.totaltokens - property.tokensissued) | toWhole | numeraljs: '0,0.00000000'"></div>
+		<div class="tag text-center" ng-if="!property.divisible" ng-bind-html="(property.totaltokens - property.tokensissued) | numeraljs: '0,0'"></div>
+        <div class="tag text-center" ng-if="property.divisible" ng-bind-html="(property.totaltokens - property.tokensissued) | toWhole | numeraljs: '0,0.00000000'"></div>
     </div>
 </div>
  <div class="row" ng-if="property.active" >
- 	<div class="col-xs-7">Current early bird bonus</div>
+ 	<div class="col-xs-7 small" style="padding-top:10px;">Current early bird bonus</div>
 	<div class="col-xs-5">
-		<div class="tag">+{{earlyBirdBonus}}%</div>
+		<div class="tag text-center">+{{earlyBirdBonus}}%</div>
     </div>
 </div>
 <div class="row" ng-if="property.active">
-	Get some tokens!
-	<a href="#" class="btn btn-main btn-xlarge">Participate</button>
+	<div class="col-xs-12 text-center">
+		Get some tokens!
+		<a href="#" class="btn btn-main btn-lg">Participate</button>
+	</div>	
 </div>
