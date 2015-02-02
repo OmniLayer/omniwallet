@@ -1,6 +1,6 @@
 <div ng-controller="AssetsDetailsController" id="asset-details">
   <div class="row">
-  	<div class="pane" ng-class="{'col-sm-8':property.iscrowdsale,'col-sm-12':!property.iscrowdsale}">
+  	<div class="pane" ng-class="{'col-sm-9':property.iscrowdsale,'col-sm-12':!property.iscrowdsale}">
       <div class="row"> 
         <div class="col-xs-12">
           <h2 class="om-title">{{property.name}} <span class="label label-asset-id" >(#{{propertyId}})</span></h2>
@@ -52,7 +52,7 @@
 	  <div class="row" ng-include="'/views/assets/partials/history.html'">
 	  </div>
 	</div>
-	<div ng-show="property.iscrowdsale" class="col-xs-4 crowdsale-details pane" ng-include="'/views/assets/partials/crowdsale_details.html'">
+	<div ng-show="property.iscrowdsale" class="col-xs-3 crowdsale-details pane" ng-include="'/views/assets/partials/crowdsale_details.html'">
 	  
 	</div>
   </div>

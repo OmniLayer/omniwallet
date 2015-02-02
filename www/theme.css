@@ -1391,31 +1391,19 @@ i.icon-l{
 }
 
 .countdown-number {
-  padding: 5px;
-  background-color: #fff;
-  border: 3px solid #ccc;
+  padding: 9px 5px;
+  background: url("/assets/img/icons/countdown.png") no-repeat;
   border-radius: 4px;
   display: block;
   text-align: center;
-  min-height: 70px;
+  height: 63px;
   font-size: xx-large;
-  -webkit-box-shadow: 0px 1px 1px #666;
-  -moz-box-shadow: 0px 1px 1px #666;
-  box-shadow: 0px 1px 1px #666;
+  font-weight: bolder;
+  width: 64px;
 }
 
 .countdown-group {
   display: inline-block;
-  min-width: 70px;
-}
-
-.countdown-label {
-  text-align: center;
-  width: 64px;
-  margin-left: 3px;
-  margin-top: 1px;
-  background-color: #ccc;
-  border-radius: 2px;
 }
 
 .tag {
@@ -1574,6 +1562,7 @@ i.icon-l{
     border-top: 0;
     border-bottom: 0;
     border-radius: 0px 4px 0px 0px;
+    padding: 11px 0px;
 }
 
 .crowdsale-details .row:last-of-type {
