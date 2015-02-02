@@ -9,7 +9,7 @@ angular.module("omniControllers")
 			        $scope.crowdsales=result.data.crowdsales;
 			        $scope.crowdsales.forEach(function(crowdsale){
 			        	PropertyManager.getProperty($scope.property.propertyiddesired).then(function(result){
-					        $scope.propertydesired = result.data.name;
+					        $scope.propertydesiredName = result.data.name;
 					    });
 			        })
 			        if($scope.crowdsales.length>0)
