@@ -27,7 +27,7 @@
           </p>
         </div>
      </div>
-     <div ng-show="acceptedCurrecy" class="row" style="margin-bottom: 30px;">
+     <div ng-show="acceptedCurrecy != undefined" class="row" style="margin-bottom: 30px;">
         <div class="col-xs-12">
           <p>
             {{'ASSET_CROWDSALE_ACCEPTEDCURRENCY' | translate}}: <span>{{acceptedCurrency.name}} / Rate ({{property.tokensperunit}})</span>

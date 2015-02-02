@@ -34,7 +34,6 @@ angular.module("omniControllers")
 		  };
 		  
 		  $scope.isOwner = false;
-		  $scope.acceptedCurrencies = [];
 		  $scope.formatedStartDate = "";
 		  $scope.daysAgo = 0;
 		  $scope.earlyBirdBonus =  0;
@@ -59,30 +58,6 @@ angular.module("omniControllers")
 		  $scope.tokenMax = "92233720368.54775807"; 
 		  
 		  // Finish $scope initialization
-
-		  $scope.participate = function(){
-		    $scope.pendingThinking = false;
-		  };
-		  
-		  $scope.goBack = function(){
-		    $scope.pendingThinking = true;
-		  };
-		  // Parsing and format functions
-		  $scope.formatTransactionTime
-		  
-		  $scope.formatCurrencyName = function (propertyid) {
-		    var name = "Unknown";
-		    $scope.acceptedCurrencies.forEach(function(currency){
-		      if(currency.propertyid == propertyid)
-		        name =  currency.name;
-		    });
-		    
-		    return name;
-		  };
-		  
-		  $scope.formatTransactionUrl = function (txid) {
-		    return "http://blockchain.info/tx/"+txid;
-		  };
 		  
 		  // Load property data into the page
 		  $scope.loadHistory = function(){
