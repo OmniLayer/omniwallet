@@ -105,7 +105,7 @@ var app = angular.module('omniwallet', [
 
   $routeProvider.when('/explorer/:page?', {
       templateUrl: function(route) {
-        var availableViews = ['overview', 'assets', 'crowdsale', 'inspector'];
+        var availableViews = ['overview', 'assets', 'crowdsales', 'inspector'];
 
         var viewFound = availableViews.indexOf(route.page);
         if (viewFound == -1)
