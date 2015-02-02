@@ -1369,14 +1369,14 @@ i.icon-l{
   height: 13px;
 }
 
-.asset-details .row:first-of-type{
+.asset-table .row:first-of-type{
   background-color: #fcfcfc;
   border-bottom: 1px solid #e9e9e9;
   font-size: 18px;
   font-weight: bolder;
 }
 
-.asset-details .table > thead > tr {
+.asset-table .table > thead > tr {
   background-color: #f5f5f5;
 }
 
@@ -1542,4 +1542,57 @@ i.icon-l{
 .divider{
   margin: 0px;
   color: #abdb84;
+}
+
+.crowdsale-title{
+  color:#ffffff;
+}
+
+.crowdsale-details .row {
+    padding: 11px 14px;
+    border-top: 1px solid #5a7192;
+    border-bottom: 1px solid #3c5375;
+}
+
+.crowdsale-details .row:first-of-type {
+    background-color: #324a6c;
+    border-top: 0;
+    border-bottom: 0;
+    border-radius: 0px 4px 0px 0px;
+}
+
+.crowdsale-details .row:last-of-type {
+    border-bottom: 0;
+    border-radius: 0px 0px 4px 0px;
+}
+
+.crowdsale-details .row:nth-of-type(2) {
+    border-top: 0;
+}
+
+.crowdsale-details .row:first-of-type > h3 {
+    color: #fff;
+}
+
+.crowdsale-status {
+    color: #fff;
+}
+
+.crowdsale-details {
+    border-radius: 0px 4px 4px 0px;
+    padding-top: 0px !important;
+}
+
+#asset-details > .row {
+    margin-right: -32px;
+    margin-top: -31px;
+    margin-bottom: -31px;
+    display: table;
+}
+
+#asset-details .pane {
+    float: none;
+    display: table-cell;
+    vertical-align: top;
+    padding-top: 31px;
 }
