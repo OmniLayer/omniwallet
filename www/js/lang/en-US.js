@@ -188,4 +188,6 @@ angular.module("omniConfig")
 	CROWDSALE_DETAILS_CURRENTBONUS:'Current early bird bonus',
 	CROWDSALE_DETAILS_GETTOKENS:'Get some tokens!',
 	CROWDSALE_DETAILS_PARTICIPATE:'Participate',
+	ASSET_DETAILS_URL:'For more details visit',
+	ASSET_DETAILS_SHARE: 'Share this page'
   })
