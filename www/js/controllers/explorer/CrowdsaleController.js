@@ -18,6 +18,7 @@ angular.module("omniControllers")
 						    });
 				        });;
 			    });
-
+			}
+			
 			$scope.setEcosystem(1);
 	}])
