@@ -168,7 +168,7 @@ angular.module("omniConfig")
 	ASSET_HISTORY_TRANSACTION_CLOSED: 'Crowdsale was closed from further investments',
 	ASSET_HISTORY_TRANSACTION_CREATE: 'was created',
 	ASSET_HISTORY_TRANSACTION_CONFIRMATIONS: 'Confirmations',	
-	TIMER_DAY:'day'
+	TIMER_DAY:'day',
 	TIMER_HOUR:'hour',
 	TIMER_MINUTE:'minute',
 	TIMER_SECOND:'second',
