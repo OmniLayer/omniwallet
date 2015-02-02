@@ -9,7 +9,8 @@ angular.module("omniControllers")
 		  $scope.issuerData = {};
 		  $scope.propertyDetails = {propertyType : 2, propertyCategory : ''};
 		  
-		  $scope.setEcosystem = function(){
+		  $scope.setEcosystem = function(ecosystem){
+		  	$scope.ecosystem=ecosystem;
 		    $scope.categories=[];
 		    $scope.subcategories=[];
 		    $scope.loadCategories();

@@ -199,5 +199,7 @@ angular.module("omniConfig")
 		LABEL:'Ecosystem',
 		PRODUCTION:'Production',
 		TEST:'Test'
-	}
+	},
+	CROWDSALE_TABLE_BOUGHT:'Tokens Bought',
+	CROWDSALE_TABLE_CREATED:'Tokens Created'
   })

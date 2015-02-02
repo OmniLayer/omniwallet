@@ -1,11 +1,11 @@
 <div ng-controller="ExplorerCrowdsalesController">
   <div class="row">
-    <div class="col-xs-12 col-sm-3 col-md-4 col-lg-4">
+    <div class="col-xs-11 col-sm-3 col-md-4 col-lg-4">
       <div class="text-left om-title" >
         {{'COMMON_ACTIVECROWDSALES' | translate}}
       </div>
     </div>
-    <div class="hidden-xs col-sm-9 col-md-8 col-lg-8">
+    <div class="col-xs-1 col-sm-9 col-md-8 col-lg-8">
       <form class="pull-right form-inline">
         <div class="form-group">
           <label>{{ 'ECOSYSTEM.LABEL' | translate}}</label>
@@ -17,8 +17,8 @@
               {{ 'ECOSYSTEM.TEST' | translate}} <span class="glyphicon glyphicon-chevron-down"></span>
             </button>
             <ul class="dropdown-menu dropdown-menu-right" role="menu">
-              <li><a href="#" ng-click="ecosystem=1">{{ 'ECOSYSTEM.PRODUCTION' | translate}}</a></li>
-              <li><a href="#" ng-click="ecosystem=2">{{ 'ECOSYSTEM.TEST' | translate}}</a></li>
+              <li><a href="#" ng-click="setEcosystem(1)">{{ 'ECOSYSTEM.PRODUCTION' | translate}}</a></li>
+              <li><a href="#" ng-click="setEcosystem(2)">{{ 'ECOSYSTEM.TEST' | translate}}</a></li>
             </ul>
           </div>
         </div>

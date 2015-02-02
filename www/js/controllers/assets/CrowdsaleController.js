@@ -11,7 +11,8 @@ angular.module("omniControllers")
 		  $scope.propertyDetails = {propertyType : 2, propertyCategory : ''};
 		  
 		  var mastercoin, testMastercoin, bitcoin;
-		  $scope.setEcosystem = function(){
+		  $scope.setEcosystem = function(ecosystem){
+		  	$scope.ecosystem=ecosystem;
 		    PropertyManager.listByEcosystem($scope.ecosystem).then(function(result){
 		    	result.data.properties.forEach(function(property){
 		    		if(property.propertyid==0)
