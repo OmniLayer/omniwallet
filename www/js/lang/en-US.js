@@ -72,8 +72,10 @@ angular.module("omniConfig")
 	TX_DETAILS_50_ISSUER: 'You created {{coin}} with an amount of {{amount | toWhole:divisible }}',
 	TX_DETAILS_51_ISSUER: 'You started {{coin}} Crowdsale',
 	'TX_DETAILS_-51_ISSUER': 'You got {{amount | toWhole:divisible }} {{coin}} Crowdsale',
-	TX_DETAILS_54_ISSUER: 'You granted {{amount | toWhole:divisible }} {{coin}}',
-	TX_DETAILS_55_SENDER: 'You granted {{amount | toWhole:divisible }} {{coin}}',
+	'TX_DETAILS_-51_PARTICIPANT': 'You got {{amount | toWhole:divisible }} {{coin}} Crowdsale',
+	'TX_DETAILS_-51_SENDER': 'You sent {{amount | toWhole:divisible }} {{coin}} as crowdsale participation',
+	'TX_DETAILS_-51_RECIPIENT': 'You got {{amount | toWhole:divisible }} {{coin}} from a Crowdsale',
+	TX_DETAILS_54_ISSUER: 'You created {{coin}} managed property',
 	TX_DETAILS_55_ISSUER: 'You granted {{amount | toWhole:divisible }} {{coin}}',
 	TX_DETAILS_55_RECIPIENT: 'You where granted {{amount | toWhole:divisible }} {{coin}}',
 	TX_DETAILS_56_ISSUER: 'You revoked {{coin}}',
@@ -117,6 +119,6 @@ angular.module("omniConfig")
 	WALLET_HISTORY_TYPE:'Type',
 	WALLET_HISTORY_AMOUNT:'Amount',
 	WALLET_HISTORY_TXTIME:'Transaction time',
-	WALLET_HISTORY_TXDETAILS:'Transaction details',
-	WALLET_HISTORY_MOREDETAILS: 'See transaction details'
+	WALLET_HISTORY_MOREDETAILS: 'See transaction details',
+	WALLET_HISTORY_TXDETAILS:'Transaction details'
   })
