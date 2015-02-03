@@ -138,7 +138,7 @@ angular.module("omniControllers")
 			var selectedAddress = propertyDesired.tradableAddresses[0];
 			var participation = new Transaction(0,selectedAddress,fee,{
 		        transaction_version:0,
-		        currency_identifier:selectedAsset.id,
+		        currency_identifier:$scope.property.propertyiddesired,
 		        amount_to_transfer : 0,
 		        transaction_to: $scope.property.issuer,
 		        donate: $scope.account.getSetting("donate")
