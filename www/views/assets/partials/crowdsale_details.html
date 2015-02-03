@@ -20,8 +20,8 @@
 <div class="row">
 	<div class="col-xs-7 small" style="padding-top:10px;">{{'CROWDSALE_DETAILS_TOKENSISSUER' | translate}} ({{property.percenttoissuer}}%)</div>
 	<div class="col-xs-5">
-		<div class="tag text-center" ng-if="!property.divisible" ng-bind-html="(property.totaltokens - property.tokensissued) | numeraljs: '0,0'"></div>
-        <div class="tag text-center" ng-if="property.divisible" ng-bind-html="(property.totaltokens - property.tokensissued) | toWhole | numeraljs: '0,0.00000000'"></div>
+		<div class="tag text-center" ng-if="!property.divisible" ng-bind-html="(property.totaltokens * property.percenttoissuer / 100) | numeraljs: '0,0'"></div>
+        <div class="tag text-center" ng-if="property.divisible" ng-bind-html="(property.totaltokens * property.percenttoissuer / 100) | toWhole | numeraljs: '0,0.00000000'"></div>
     </div>
 </div>
  <div class="row" ng-if="property.active" >
@@ -34,7 +34,7 @@
 	<div class="col-xs-12">
 		{{'CROWDSALE_DETAILS_GETTOKENS' | translate}}
 	</div>
-	<a href="#" ng-click="modalManager.openCrowdsaleParticipationModal()" ng-disabled="(!canParticipate || !account.loggedIn)" class="btn btn-main btn-lg">{{'CROWDSALE_DETAILS_PARTICIPATE' | translate}}</a>	
+	<a href="#" ng-click="participate()" ng-disabled="(!canParticipate || !account.loggedIn)" class="btn btn-main btn-lg">{{'CROWDSALE_DETAILS_PARTICIPATE' | translate}}</a>	
   <div class="col-xs-12" ng-hide="!account.loggedIn || canParticipate">
     {{'CROWDSALE_DETAILS_NOTOKENS' | translate}}
   </div>
