@@ -1,6 +1,6 @@
 angular.module("omniControllers")
-	.controller("AssetsDetailsController",["$location", "$route", "$scope", "$timeout", "$element", "$compile", "$http", "$templateCache", "PropertyManager", "ADDRESS_EXPLORER_URL","MIN_MINER_FEE",
-		function AssetDetailsController($location, $route, $scope, $timeout, $element, $compile, $http, $templateCache, PropertyManager, ADDRESS_EXPLORER_URL, MIN_MINER_FEE){
+	.controller("AssetsDetailsController",["$location", "$route", "$scope", "$timeout", "$element", "$compile", "$http", "$templateCache", "PropertyManager", "ADDRESS_EXPLORER_URL","MIN_MINER_FEE", "Transaction"
+		function AssetDetailsController($location, $route, $scope, $timeout, $element, $compile, $http, $templateCache, PropertyManager, ADDRESS_EXPLORER_URL, MIN_MINER_FEE, Transaction){
 		  // $scope initialization
 		  $scope.explorerUrl=ADDRESS_EXPLORER_URL;
 		  $scope.propertyId = $route.current.params.propertyId;
@@ -153,7 +153,7 @@ angular.module("omniControllers")
 					toAddress:$scope.property.issuer,
 					selectedAddress:selectedAddress,
 					fees:participation.totalCost,
-					confirmText:"WALLET_SEND_FUNDS"
+					confirmText:"CROWDSALE_PARTICIPATE_CONFIRM"
 				},
 				transaction:participation
 			})
