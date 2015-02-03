@@ -1,5 +1,5 @@
 angular.module("omniControllers")
-	.controller("AssetsDetailsController",["$location", "$route", "$scope", "$timeout", "$element", "$compile", "$http", "$templateCache", "PropertyManager", "ADDRESS_EXPLORER_URL","MIN_MINER_FEE", "Transaction"
+	.controller("AssetsDetailsController",["$location", "$route", "$scope", "$timeout", "$element", "$compile", "$http", "$templateCache", "PropertyManager", "ADDRESS_EXPLORER_URL","MIN_MINER_FEE", "Transaction",
 		function AssetDetailsController($location, $route, $scope, $timeout, $element, $compile, $http, $templateCache, PropertyManager, ADDRESS_EXPLORER_URL, MIN_MINER_FEE, Transaction){
 		  // $scope initialization
 		  $scope.explorerUrl=ADDRESS_EXPLORER_URL;
