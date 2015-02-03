@@ -76,7 +76,7 @@ angular.module("omniConfig")
 	TX_DETAILS_55_SENDER: 'You granted {{amount | toWhole:divisible }} {{coin}}',
 	TX_DETAILS_55_ISSUER: 'You granted {{amount | toWhole:divisible }} {{coin}}',
 	TX_DETAILS_55_RECIPIENT: 'You where granted {{amount | toWhole:divisible }} {{coin}}',
-	TX_DETAILS_56_RECIPIENT: 'You revoked {{coin}}',
+	TX_DETAILS_56_ISSUER: 'You revoked {{coin}}',
 	TX_DETAILS_70_ISSUER: '{{coin}} ownership transfered',
 	WALLET_OVERVIEW_BACKUP:'Backup',
 	WALLET_OVERVIEW_ESTIMATED:'Estimated Total value',
@@ -117,5 +117,6 @@ angular.module("omniConfig")
 	WALLET_HISTORY_TYPE:'Type',
 	WALLET_HISTORY_AMOUNT:'Amount',
 	WALLET_HISTORY_TXTIME:'Transaction time',
-	WALLET_HISTORY_TXDETAILS:'Transaction details'
+	WALLET_HISTORY_TXDETAILS:'Transaction details',
+	WALLET_HISTORY_MOREDETAILS: 'See transaction details'
   })

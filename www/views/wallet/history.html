@@ -43,7 +43,10 @@
         <td ng-hide="transaction.currency.divisible" ng-if="transaction.amount" class="number" title="{{transaction.amount}}" ng-bind-html="transaction.amount | numeraljs: '0,0'"></td> 
         <td ng-hide="transaction.amount">--</td>
         <td>{{transaction.currency.name | truncate:14 }}</td>
-        <td>{{'TX_DETAILS_' + transaction.type + '_' + transaction.role.toUpperCase() | translate:'{coin:transaction.currency.name, amount:transaction.amount, divisible:transaction.currency.divisible}'}}</td>
+        <td ng-click="setHashExplorer(transaction)">
+          {{'TX_DETAILS_' + transaction.type + '_' + transaction.role.toUpperCase() | translate:'{coin:transaction.currency.name, amount:transaction.amount, divisible:transaction.currency.divisible}'}}
+          <a href="/explorer/inspector?view={{transaction.hash}}" tooltip="{{ 'WALLET_HISTORY_MOREDETAILS' | translate}}"><i class="glyphicon glyphicon-zoom-in"></i></a>
+        </td>
         <td>{{transaction.time | date:'dd MMM HH:mma Z'}}</td>
       </tr>
     </table>
