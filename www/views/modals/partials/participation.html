@@ -25,14 +25,14 @@
 	<div class="modal-row">
 	  <div class="description-title">{{ 'WALLET_SEND_MODAL_AMOUNT' | translate}}:</div>
 	  <input id="amount" name="amount" type="number" ng-model="sendAmount" 
-            class="form-control" value="sendAmount"
+            class="form-control" value="sendAmount" ng-init="sendAmount = 0"
             placeholder="{{selectedAsset.divisible ? '1.00000000' : '1'}}" step="{{selectedAsset.divisible ? 0.00000001 : 1}}" 
             min="{{selectedAsset.divisible ? 0.00000001 : 1}}" max="{{selectedAddress.getDisplayBalance(selectedAsset.id)}}" required>
 	  <p class="help-block">({{selectedAddress.getDisplayBalance(selectedAsset.id)}} {{selectedAsset.name}} <small class="text-muted" ng-show="selectedAsset.id > 2">({{selectedAsset.id}})</small> {{ 'COMMON_AVAILABLE' | translate}})</p>
 	</div>
 
 	<div class="modal-row">
-	  <div class="description-title">{{ 'COMMON_FEES' | translate}}:</div>
+	  <div class="description-title-xlarge">{{ 'COMMON_FEES' | translate}}:</div>
       <input name="fees" type="number" ng-model="minerFees" class="form-control"
       placeholder="0.0001" step="0.0001" min="0.0001" max="{{selectedAddress.getDisplayBalance(0)}}" required>
 	  <p class="help-block"><small class="text-muted">({{selectedAddress.getDisplayBalance(0)}} BTC {{ 'COMMON_AVAILABLE' | translate}})</small></p>
