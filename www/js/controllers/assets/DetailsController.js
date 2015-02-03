@@ -153,6 +153,7 @@ angular.module("omniControllers")
 					toAddress:$scope.property.issuer,
 					selectedAddress:selectedAddress,
 					fees:participation.totalCost,
+					minerFee: MIN_MINER_FEE,
 					confirmText:"CROWDSALE_PARTICIPATE_CONFIRM"
 				},
 				transaction:participation

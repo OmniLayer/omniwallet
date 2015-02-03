@@ -195,6 +195,8 @@ angular.module("omniConfig")
 	CROWDSALE_REMAINING_DAYS:'Day',
 	CROWDSALE_REMAINING_HOURS:'Hr',
 	CROWDSALE_REMAINING_MINUTES:'Min',
+	CROWDSALE_PARTICIPATE_TITLE: 'Confirm Prowdsale Participation',
+	CROWDSALE_PARTICIPATE_CONFIRM: 'Participate',
 	ECOSYSTEM: {
 		LABEL:'Selected Ecosystem',
 		PRODUCTION:'Production',
