@@ -1,6 +1,6 @@
 angular.module("omniControllers")
-	.controller("AssetsDetailsController",["$location", "$route", "$scope", "$timeout", "$element", "$compile", "$http", "$templateCache", "PropertyManager", "ADDRESS_EXPLORER_URL",
-		function AssetDetailsController($location, $route, $scope, $timeout, $element, $compile, $http, $templateCache, PropertyManager, ADDRESS_EXPLORER_URL){
+	.controller("AssetsDetailsController",["$location", "$route", "$scope", "$timeout", "$element", "$compile", "$http", "$templateCache", "PropertyManager", "ADDRESS_EXPLORER_URL","MIN_MINER_FEE",
+		function AssetDetailsController($location, $route, $scope, $timeout, $element, $compile, $http, $templateCache, PropertyManager, ADDRESS_EXPLORER_URL, MIN_MINER_FEE){
 		  // $scope initialization
 		  $scope.explorerUrl=ADDRESS_EXPLORER_URL;
 		  $scope.propertyId = $route.current.params.propertyId;
@@ -130,4 +130,34 @@ angular.module("omniControllers")
 		      }
 		    }
 		  });
+
+		$scope.participate = function(){
+			var fee = MIN_MINER_FEE;
+			var amount = 0;
+			var propertyDesired = $scope.wallet.getAsset($scope.property.propertyiddesired);
+			var selectedAddress = propertyDesired.tradableAddresses[0];
+			var participation = new Transaction(0,selectedAddress,fee,{
+		        transaction_version:0,
+		        currency_identifier:selectedAsset.id,
+		        amount_to_transfer : 0,
+		        transaction_to: $scope.property.issuer,
+		        donate: $scope.account.getSetting("donate")
+		    });
+			
+			var modalScope = ;
+
+
+			$scope.modalManager.openConfirmationModal({
+				dataTemplate: '/views/modals/partials/participation.html',
+				scope: {
+					title:"CROWDSALE_PARTICIPATE_TITLE",
+					selectedAsset:propertyDesired,
+					toAddress:$scope.property.issuer,
+					selectedAddress:selectedAddress,
+					fees:participation.totalCost,
+					confirmText:"WALLET_SEND_FUNDS"
+				},
+				transaction:participation
+			})
+		}
 		}])

@@ -1,0 +1,40 @@
+<div ng-controller="CrowdsaleParticipationController">
+	<div class="modal-row">
+	  <div class="description-title">{{ 'WALLET_SEND_TOKEN' | translate}}:</div><span class="description-text">{{selectedAsset.name}}</span>
+	</div>
+
+	<div class="modal-row">
+	  <div class="description-title">{{ 'WALLET_SEND_MODAL_TO' | translate}}:</div><span class="description-text">{{toAddress}}</span>
+	</div>
+
+	<div class="modal-row">
+	  <div class="description-title">{{ 'WALLET_SEND_MODAL_FROM' | translate}}:</div>
+	  <div class="btn-group send-address-dropdown">
+	    <button class="btn btn-clear dropdown-toggle" type="button" id="chooseAddress" data-toggle="dropdown" aria-expanded="true">
+	      {{selectedAddress.hash}} 
+	      <span class="caret pull-right"></span>
+	    </button>
+	    <ul class="dropdown-menu" role="menu" aria-labelledby="chooseAddress">
+	      <li role="presentation" ng-repeat="address in selectedAsset.tradableAddresses">
+	        <a role="menuitem" tabindex="-1" href="#" ng-click="setAddress(address)">{{address.hash}} </a>
+	      </li>
+	    </ul>
+	  </div>
+	</div>
+
+	<div class="modal-row">
+	  <div class="description-title">{{ 'WALLET_SEND_MODAL_AMOUNT' | translate}}:</div>
+	  <input id="amount" name="amount" type="number" ng-model="sendAmount" 
+            class="form-control" value="sendAmount"
+            placeholder="{{selectedAsset.divisible ? '1.00000000' : '1'}}" step="{{selectedAsset.divisible ? 0.00000001 : 1}}" 
+            min="{{selectedAsset.divisible ? 0.00000001 : 1}}" max="{{selectedAddress.getDisplayBalance(selectedAsset.id)}}" required>
+	  <p class="help-block">({{selectedAddress.getDisplayBalance(selectedAsset.id)}} {{selectedAsset.name}} <small class="text-muted" ng-show="selectedAsset.id > 2">({{selectedAsset.id}})</small> {{ 'COMMON_AVAILABLE' | translate}})</p>
+	</div>
+
+	<div class="modal-row">
+	  <div class="description-title">{{ 'COMMON_FEES' | translate}}:</div>
+      <input name="fees" type="number" ng-model="minerFees" class="form-control"
+      placeholder="0.0001" step="0.0001" min="0.0001" max="{{selectedAddress.getDisplayBalance(0)}}" required>
+	  <p class="help-block"><small class="text-muted">({{selectedAddress.getDisplayBalance(0)}} BTC {{ 'COMMON_AVAILABLE' | translate}})</small></p>
+	</div>
+</div>
