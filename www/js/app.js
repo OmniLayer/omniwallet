@@ -29,8 +29,10 @@ var app = angular.module('omniwallet', [
   'ngRoute',
   'ui.bootstrap',
   'ui.bootstrap.modal',
-  'ngNumeraljs',
   'vr.filters.passwordStrength',
+  'timer',
+  'infinite-scroll',
+  'ngNumeraljs',
   'ngIdle',
   'reCAPTCHA',
   'pascalprecht.translate',
@@ -75,7 +77,13 @@ var app = angular.module('omniwallet', [
     }).otherwise({
       redirectTo:'/wallet/assets'
     });
-
+  
+  $routeProvider.when('/assets/details/:propertyId', {
+      templateUrl:  '/views/assets/details.html'
+    }).otherwise({
+      redirectTo:'/explorer/assets'
+    });
+    
   $routeProvider.when('/wallet/:page?', {
       templateUrl: function(route) {
         //new views added here
@@ -97,13 +105,13 @@ var app = angular.module('omniwallet', [
 
   $routeProvider.when('/explorer/:page?', {
       templateUrl: function(route) {
-        var availableViews = ['overview', 'assets', 'bookmarks', 'following', 'inspector'];
+        var availableViews = ['overview', 'assets', 'crowdsales', 'inspector'];
 
         var viewFound = availableViews.indexOf(route.page);
         if (viewFound == -1)
           route.page = 'overview';
 
-        var view = '/partials/explorer_' + route.page + '.html';
+        var view = '/views/explorer/' + route.page + '.html';
         //DEBUG console.log(view, route.page, view == '/wallet_addresses.html')
 
         ga('send', 'event', 'button', 'click', route.page);
@@ -165,7 +173,7 @@ app.config(function($idleProvider, $keepaliveProvider, reCAPTCHAProvider, idleDu
 })
 .run(function(Account, $location, TESTNET, BalanceSocket) {
   //Whitelist pages
-  whitelisted = ['login', 'about', 'status', 'explorer'];
+  whitelisted = ['login', 'about', 'status', 'explorer', 'details'];
 
   if (!Account.loggedIn) {
     for (var i = 0; i < whitelisted.length; i++) {

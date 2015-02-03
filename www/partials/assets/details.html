@@ -1,0 +1,115 @@
+<div class="col-xs-8">
+  <div class="panel panel-default">
+    <div class="panel-body">
+      <div class="row"> 
+        <div class="col-xs-12">
+          <h2>{{property.name}} <span class="label label-asset-id" >(#{{propertyId}})</span></h2>
+        </div>
+      </div>
+      <div class="row" style="margin-bottom: 30px;"> 
+        <div class="col-xs-12">
+          <span class="label label-asset-category" >{{property.category}}</span>
+          <span ng-if="property.subcategory" class="label label-asset-category">&gt; {{property.subcategory}}</span>
+        </div>
+      </div>
+      <div class="row" style="margin-bottom: 30px;">
+        <div class="col-xs-12">
+          <p>
+            {{property.data}}
+          </p>
+        </div>
+      </div>
+      <div class="row" style="margin-bottom: 20px;">
+        <div class="col-xs-12">
+          <p>
+            For more details visit: <a target="_blank" href="{{property.url}}">{{property.url}}</a>
+          </p>
+        </div>
+      </div>
+      <div class="row" style="margin-bottom: 20px;">
+        <div class="col-xs-12">
+          <p>
+            Issuance Address: <span class="label"><a href="https://blockchain.info/address/{{property.issuer}}?sort=0">{{property.issuer.substr(0,5)}}...{{property.issuer.substr(-5,5)}}</a></span>
+          </p>
+        </div>
+     </div>
+     <div class="row">
+      <div class="col-xs-12 standout">
+        <div class="alert alert-standout text-center" ng-class="{'alert-info':standoutInfo, 'alert-danger':standoutError}">{{infoMessage}}</div>
+        <button class="btn btn-success btn-lg btn-standout" ng-click="participate()" ng-show="canParticipate" >Participate</button>
+      </div>
+     </div>
+    </div>
+  </div>
+  <div ng-show="!property.fixedissuance" class="panel panel-default">
+    <div class="panel-body">
+      <h3>Accepted Currency</h3>
+      <table class="table">
+        <tr ng-repeat="currency in acceptedCurrencies">
+          <td>{{currency.name}}</td>
+          <td>Rate</td>
+          <td>{{currency.rate}}</td>
+        </tr>
+      </table>
+    </div>
+  </div>
+</div>
+<div class="col-xs-4">
+  <div class="row show-grid">
+    <h4 class="text-muted">Share this page:
+      <span class="pull-right"> 
+        <a href="https://www.linkedin.com/shareArticle?mini=true&url={{shareUrl}}&title=Checkout%20this%20Crowdsale!&summary=&source=" target="_new"><img src="/assets/img/social-icons/linkedIn-round.png" /> </a> 
+        <a href="https://www.facebook.com/sharer/sharer.php?u={{shareUrl}}" target="_new"><img src="/assets/img/social-icons/facebook-round.png" /> </a> 
+        <a href="https://twitter.com/home?status={{shareUrl}}" target="_new"><img src="/assets/img/social-icons/twitter-round.png" /> </a>
+        <a href="https://plus.google.com/share?url={{shareUrl}}" target="_new"><img src="/assets/img/social-icons/gplus-round.png" /> </a>
+      </span>
+    </h4>
+  </div>
+  <div class="row show-grid bg-active" ng-if="!property.fixedissuance">
+    <div class="col-xs-12">
+      <h3><span ng-show="isOwner">Your </span>{{crowdsale.active | crowdsaleStatus}} crowdsale</h3>
+      <p ng-show="crowdsale.active">
+        Time until closing:
+      </p>
+      <div id="timerWrapper"></div>
+    </div>
+  </div>
+  <div class="row show-grid"  ng-if="!property.fixedissuance">
+    <div class="col-xs-12">
+      Crowdsale started {{formatedStartDate}} (~{{daysAgo}} days ago)
+    </div>
+  </div>
+  <div class="row show-grid bg-active" ng-if="!property.fixedissuance && crowdsale.active" >
+    <div class="col-xs-12">
+      <span class="pull-left shout-label" >Current early bird bonus:</span> <div class="shout pull-right"><span>+{{earlyBirdBonus}}%</span></div>
+    </div>
+  </div>
+  <div class="row show-grid bg-active" ng-if="!property.fixedissuance">
+    <div class="col-xs-12">
+      <div class="tag" ng-if="!property.divisible" ng-bind-html="crowdsale.participanttokens.toString() | numeraljs: '0,0'"></div>
+      <div class="tag" ng-if="property.divisible" ng-bind-html="crowdsale.participanttokens.toString() | numeraljs: '0,0.00000000'"></div>
+      <span class="help-block">Tokens already bought by participants</span>
+      <div class="tag" ng-if="!property.divisible" ng-bind-html="crowdsale.issuertokens.toString() | numeraljs: '0,0'"></div>
+      <div class="tag" ng-if="property.divisible" ng-bind-html="crowdsale.issuertokens.toString() | numeraljs: '0,0.00000000'"></div>
+      <span class="help-block">Tokens created for the issuer ({{crowdsale.percenttoissuer}}%)</span>
+    </div>
+  </div>
+  <div class="row show-grid bg-active" ng-if="property.fixedissuance">
+    <div class="col-xs-12">
+      <div class="tag" ng-if="!property.divisible" ng-bind-html="property.totaltokens | numeraljs: '0,0'"></div>
+      <div class="tag" ng-if="property.divisible" ng-bind-html="property.totaltokens | numeraljs: '0,0.00000000'"></div>
+      <span class="help-block">Total tokens</span>
+    </div>
+  </div>
+  <div class="row show-grid bg-active" ng-show="estimatedWorth > 0">
+    <div class="col-xs-12">
+      <h4 class="text-muted">Invested Funds</h4>
+    </div>
+    <div class="col-xs-7">
+      <span>Estimated total worth invested in this crowdsale:</span>
+    </div> 
+    <div class="col-xs-12" >
+      <span class="tag">{{estimatedWorth}}</span> Dollars
+    </div>
+  </div>
+</div>

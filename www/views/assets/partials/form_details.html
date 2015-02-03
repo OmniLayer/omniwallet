@@ -6,7 +6,7 @@
 </div>
 <div class="row">
   <div class="form-group col-sm-6">
-      <label for="name"> {{ 'COMMON_NAME' | translate }} <small>({{ 'ASSET_FORM_DETAILS_NAME_HINT' | translate }})</small></label>
+      <label for="name"> {{ 'COMMON_NAME' | translate }} <small class="text-muted">({{ 'ASSET_FORM_DETAILS_NAME_HINT' | translate }})</small></label>
       <input name="name" type="text" ng-model="propertyDetails.propertyName" class="form-control" maxlength="255" ng-maxlength="255" required>
   </div>
   <div class="form-group col-sm-6">
@@ -31,7 +31,7 @@
 </div>
 <div class="row">
   <div class="form-group col-sm-6">
-      <label for="url"> {{ 'ASSET_FORM_DETAILS_URL' | translate }} <small>({{ 'ASSET_FORM_DETAILS_URL_HINT' | translate }})</small></label>
+      <label for="url"> {{ 'ASSET_FORM_DETAILS_URL' | translate }} <small class="text-muted">({{ 'ASSET_FORM_DETAILS_URL_HINT' | translate }})</small></label>
       <input name="url" type="url" ng-model="propertyDetails.propertyUrl" class="form-control" maxlength="255" ng-maxlength="255" >
   </div>
 </div>

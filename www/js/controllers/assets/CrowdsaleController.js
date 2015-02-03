@@ -11,19 +11,20 @@ angular.module("omniControllers")
 		  $scope.propertyDetails = {propertyType : 2, propertyCategory : ''};
 		  
 		  var mastercoin, testMastercoin, bitcoin;
-		  $scope.setEcosystem = function(){
-		    PropertyManager.listProperties($scope.ecosystem).then(function(result){
+		  $scope.setEcosystem = function(ecosystem){
+		  	$scope.ecosystem=ecosystem;
+		    PropertyManager.listByEcosystem($scope.ecosystem).then(function(result){
 		    	result.data.properties.forEach(function(property){
-		    		if(property.currencyId==0)
+		    		if(property.propertyid==0)
 		    			bitcoin=property;
-		    		else if(property.currencyId==1)
+		    		else if(property.propertyid==1)
 		    			mastercoin=property;
-		    		else if(property.currencyId==2)
+		    		else if(property.propertyid==2)
 		    			testMastercoin=property;
 		    	})
 		      $scope.availableTokens = result.data.properties.sort(function(a, b) {
-		          var currencyA = a.propertyName.toUpperCase();
-		          var currencyB = b.propertyName.toUpperCase();
+		          var currencyA = a.name.toUpperCase();
+		          var currencyB = b.name.toUpperCase();
 		          return (currencyA < currencyB) ? -1 : (currencyA > currencyB) ? 1 : 0;
 		      });
 		      $scope.selectedCurrency = $scope.ecosystem == 1 ? mastercoin : testMastercoin;
@@ -47,7 +48,7 @@ angular.module("omniControllers")
 		  };
 		  
 		  $scope.formatCurrencyDisplay = function(currencyDesired){
-		    return currencyDesired.propertyName + " (" + currencyDesired.currencyId + ")";
+		    return currencyDesired.name + " (" + currencyDesired.propertyid + ")";
 		  };
 		  
 		  // Initialize the form
@@ -87,7 +88,7 @@ angular.module("omniControllers")
 		          property_url:$scope.propertyDetails.propertyUrl || '\0', 
 		          property_data:$scope.propertyDetails.propertyData || '\0', 
 		          number_properties:$scope.isDivisible() ? +new Big($scope.numberOfTokens).times(SATOSHI_UNIT).valueOf() : +$scope.numberOfTokens,
-		          currency_identifier_desired:$scope.selectedCurrency.currencyId,
+		          currency_identifier_desired:$scope.selectedCurrency.propertyid,
 		          deadline:Date.UTC($scope.deadline.getFullYear(),$scope.deadline.getMonth(),$scope.deadline.getDate(), $scope.deadline.getHours(), $scope.deadline.getMinutes(), 0, 0) / 1000,
 		          earlybird_bonus:$scope.earlyBirdBonus,
 		          percentage_for_issuer:$scope.percentageForIssuer,

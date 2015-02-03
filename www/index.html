@@ -39,7 +39,6 @@
     <script src="/bower_components/angular-idle/src/angular-idle.js"></script>
     <script src="/bower_components/angular-password-strength/build/angular-password-strength.js"></script>
     <script src="/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
-    <script src="/bower_components/angular-bootstrap/ui-bootstrap.min.js"></script>
     <script src="/bower_components/angular-bootstrap/ui-bootstrap-tpls.min.js"></script>
     <script src="/bower_components/jsrsasign/jsrsasign-latest-all-min.js"></script>
     <script src="/bower_components/forge/js/forge.min.js"></script>
@@ -50,11 +49,13 @@
     <script src="/bower_components/sjcl/sjcl.js"></script>
     <script src="/bower_components/FileSaver/FileSaver.js"></script>
     <script src="/bower_components/big.js/big.min.js"></script>
-    <script type='text/javascript' src='/bower_components/angular-charts/dist/angular-charts.js'></script>
+    <script src="/bower_components/angular-timer/dist/angular-timer.min.js"></script>
+    <script src="/bower_components/ngInfiniteScroll/build/ng-infinite-scroll.js"></script>
     <script type="text/javascript" src="/bower_components/angular-re-captcha/angular-re-captcha.js"></script>
     <script src="/js/config.js"></script>
     <script src="/js/app.js"></script>
     <script src="/js/filters/ToWhole.js"></script>
+    <script src="/js/filters/TimeAgo.js"></script>
     <script src="/js/factories/AddressModelFactory.js"></script>
     <script src="/js/factories/AssetModelFactory.js"></script>
     <script src="/js/factories/TransactionModelFactory.js"></script>
@@ -73,18 +74,22 @@
     <script src="/js/controllers/Wallet/AddressesController.js"></script>
     <script src="/js/controllers/Wallet/HistoryController.js"></script>
     <script src="/js/controllers/Wallet/SendController.js"></script>
+    <script src="/js/controllers/Wallet/AssetsController.js"></script>
     <script src="/js/controllers/Landing/NavigationController.js"></script>
     <script src="/js/controllers/Landing/SiteController.js"></script>
     <script src="/js/controllers/modals/ConfirmSendFooterController.js"></script>
+    <script src="/js/controllers/modals/CrowdsaleParticipationController.js"></script>
     <script src="/js/controllers/assets/CrowdsaleController.js"></script>
     <script src="/js/controllers/assets/IssuanceController.js"></script>
+    <script src="/js/controllers/assets/DetailsController.js"></script>
+    <script src="/js/controllers/explorer/AssetsController.js"></script>
+    <script src="/js/controllers/explorer/CrowdsaleController.js"></script>
     <script src="/js/directive.js"></script>
     <script src="/js/service.js"></script>
     <script src="/js/controller.js"></script>
     <script src="/js/filter.js"></script>
     <script src="/js/LoginController.js"></script>
     <script src="/js/TransactionGenerationController.js"></script>
-    <script src="/js/ExplorerController.js"></script>
     <script src="/js/WalletAddressesController.js"></script>
     <script src="/js/WalletController.js"></script>
     <script src="/js/WalletAssetsFormController.js"></script>
@@ -92,8 +97,6 @@
     <script src="/js/WalletBuyAssetsController.js"></script>
     <script src="/js/CreateWalletController.js"></script>
     <script src="/js/AssetTypesController.js"></script>
-    <script src="/js/PropertyIssuanceController.js"></script>
-    <script src="/js/CrowdsaleIssuanceController.js"></script>
     <script src="/js/add_address.js"></script>
     <script src="/js/cryptUtil.js"></script>
     <script src="/js/cryptUtilAsync.js"></script>

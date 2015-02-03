@@ -10,6 +10,15 @@ angular.module('omniwallet').factory('propertiesService',['$http',function($http
       return promise;
     },
     
+    getActiveCrowdsales : function(ecosystem) {
+      var url = '/v1/properties/listactivecrowdsales';
+      var data = {
+        ecosystem: ecosystem
+      };
+      var promise = $http.post(url, data);
+      return promise;
+    },
+    
     loadCategories:function(ecosystem) {
       var url = '/v1/properties/categories';
       var data = {
@@ -24,6 +33,22 @@ angular.module('omniwallet').factory('propertiesService',['$http',function($http
       var data = {
         ecosystem: ecosystem,
         category: category
+      };
+      var promise = $http.post(url, data);
+      return promise;
+    },
+    
+    getProperty:function(propertyId){
+      var url = '/v1/properties/getdata/'+propertyId;
+      var promise = $http.get(url);
+      return promise;
+    },
+    
+    getHistory:function(propertyId,from,count){
+      var url = '/v1/properties/gethistory/'+propertyId;
+      var data = {
+        start: from,
+        count: count
       };
       var promise = $http.post(url, data);
       return promise;

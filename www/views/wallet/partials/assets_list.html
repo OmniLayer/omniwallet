@@ -1,5 +1,5 @@
 <div class="container-fluid" ng-repeat="asset in wallet.assets">
-	<div ng-if="(asset.balance>0 || asset.symbol == 'BTC') && ((asset.id < 2147483648 && asset.id != 2) || showtesteco === 'true')" class="asset-details">
+	<div ng-if="(asset.balance>0 || asset.symbol == 'BTC') && ((asset.id < 2147483648 && asset.id != 2) || showtesteco === 'true')" class="asset-table">
 		<div class="row">
 			<div class="col-xs-11">
 				<div class="col-xs-12 col-sm-5" ng-if="asset.symbol!='BTC'">{{asset.name || asset.symbol}} ({{asset.id}})</div>

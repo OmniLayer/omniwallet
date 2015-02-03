@@ -1,6 +1,25 @@
 <div ng-controller="AssetsIssuanceController">
   <div class="row">
-     <div class="col-xs-12 text-left om-title">{{ 'ASSET_ISSUANCE_TITLE' | translate}}</div>
+     <div class="col-xs-11 col-sm-3 col-md-4 col-lg-4 text-left om-title">{{ 'ASSET_ISSUANCE_TITLE' | translate}}</div>
+     <div class="col-xs-1 col-sm-9 col-md-8 col-lg-8">
+      <form class="pull-right form-inline">
+        <div class="form-group">
+          <label>{{ 'ECOSYSTEM.LABEL' | translate}}</label>
+          <div class="btn-group">
+            <button type="button" class="hidden-xs btn btn-tertiary dropdown-toggle" data-toggle="dropdown" aria-expanded="false" ng-if="ecosystem==1">
+              {{ 'ECOSYSTEM.PRODUCTION' | translate}}  <span class="glyphicon glyphicon-chevron-down"></span>
+            </button>
+            <button type="button" class="hidden-xs btn btn-tertiary dropdown-toggle" data-toggle="dropdown" aria-expanded="false" ng-if="ecosystem==2">
+              {{ 'ECOSYSTEM.TEST' | translate}} <span class="glyphicon glyphicon-chevron-down"></span>
+            </button>
+            <ul class="dropdown-menu dropdown-menu-right" role="menu">
+              <li><a href="#" ng-click="setEcosystem(1)">{{ 'ECOSYSTEM.PRODUCTION' | translate}}</a></li>
+              <li><a href="#" ng-click="setEcosystem(2)">{{ 'ECOSYSTEM.TEST' | translate}}</a></li>
+            </ul>
+          </div>
+        </div>
+      </form>
+    </div>
   </div>
   <div class="row">
     <div class="col-xs-12">
@@ -16,7 +35,7 @@
           </div>
           <div class="row">
             <div class="form-group col-sm-6">
-                <label for="amount"> {{'ASSET_ISSUANCE_AMOUNT' | translate}} <small>({{'ASSET_ISSUANCE_AMOUNT_HINT' | translate}})</small></label>
+                <label for="amount"> {{'ASSET_ISSUANCE_AMOUNT' | translate}} <small class="text-muted">({{'ASSET_ISSUANCE_AMOUNT_HINT' | translate}})</small></label>
                 <input name="amount" type="number" step="1" ng-model="numberProperties" step="{{tokenStep}}" min="{{tokenMin}}" max="{{tokenMax}}" class="form-control" required>
             </div>
           </div>
