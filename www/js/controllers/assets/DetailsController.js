@@ -143,8 +143,6 @@ angular.module("omniControllers")
 		        transaction_to: $scope.property.issuer,
 		        donate: $scope.account.getSetting("donate")
 		    });
-			
-			var modalScope = ;
 
 
 			$scope.modalManager.openConfirmationModal({
