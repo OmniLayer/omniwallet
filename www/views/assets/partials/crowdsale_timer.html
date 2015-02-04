@@ -1,18 +1,26 @@
 <timer end-time={{endtime}}>
-    <span class="countdown-group">
-      <span class="countdown-number">{{days}}</span>
-      <p class="text-uppercase">{{'TIMER_DAY' | translate}}{{daysS}}</p>
-    </span>
-    <span class="countdown-group">
-      <span class="countdown-number">{{hours}}</span>
-      <p class="text-uppercase">{{'TIMER_HOUR' | translate}}{{hoursS}}</p>
-    </span>
-    <span class="countdown-group">
-      <span class="countdown-number">{{minutes}}</span>
-      <p class="text-uppercase">{{'TIMER_MINUTE' | translate}}{{minutesS}}</p>
-    </span>
-    <span class="countdown-group">
-      <span class="countdown-number">{{seconds}}</span>
-      <p class="text-uppercase">{{'TIMER_SECOND' | translate}}{{secondsS}}</p>
-    </span>
+  <span class="countdown-group" ng-if="years>0">
+    <span class="countdown-number">{{years}}</span>
+    <p class="text-uppercase">{{'TIMER_YEAR' | translate}}{{yearsS}}</p>
+  </span>
+  <span class="countdown-group" ng-if="months>0">
+    <span class="countdown-number">{{months}}</span>
+    <p class="text-uppercase">{{'TIMER_MONTH' | translate}}{{monthsS}}</p>
+  </span>
+  <span class="countdown-group">
+    <span class="countdown-number">{{days}}</span>
+    <p class="text-uppercase">{{'TIMER_DAY' | translate}}{{daysS}}</p>
+  </span>
+  <span class="countdown-group">
+    <span class="countdown-number">{{hours}}</span>
+    <p class="text-uppercase">{{'TIMER_HOUR' | translate}}{{hoursS}}</p>
+  </span>
+  <span class="countdown-group" ng-if="years==0">
+    <span class="countdown-number">{{minutes}}</span>
+    <p class="text-uppercase">{{'TIMER_MINUTE' | translate}}{{minutesS}}</p>
+  </span>
+  <span class="countdown-group" ng-if="months==0">
+    <span class="countdown-number">{{seconds}}</span>
+    <p class="text-uppercase">{{'TIMER_SECOND' | translate}}{{secondsS}}</p>
+  </span>
 </timer>
