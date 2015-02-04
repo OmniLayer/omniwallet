@@ -46,9 +46,9 @@
               <label for="chooseCoin" >
                 <span>{{ 'COMMON_SEND' | translate}} <span>
                 <span ng-if="selectedAsset.symbol == 'BTC'">
-                  {{sendByValue ? 'BTC' : userCurrency}}
+                  {{sendByValue ? userCurrency : 'BTC'}}
                 </span>
-                <span ng-if="selectedAsset.symbol == 'BTC'">
+                <span ng-if="selectedAsset.symbol != 'BTC'">
                   {{ 'WALLET_SEND_AMOUNT' | translate}}
                 </span>
                 ({{selectedAddress.getDisplayBalance(selectedAsset.id)}} {{selectedAsset.name}} <small class="text-muted" ng-show="selectedAsset.id > 2">({{selectedAsset.id}})</small> {{ 'COMMON_AVAILABLE' | translate}})

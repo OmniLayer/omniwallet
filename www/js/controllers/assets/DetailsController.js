@@ -5,10 +5,9 @@ angular.module("omniControllers")
 		  $scope.explorerUrl=ADDRESS_EXPLORER_URL;
 		  $scope.propertyId = $route.current.params.propertyId;
 		  $scope.shareUrl = $location.absUrl();
-		  $scope.property = {
-		    
-		  };
-		  
+		  $scope.participation = {
+		  	action:'details'
+		  }
 		  $scope.property = {
 		  	"name" : "",
 		    "category" : "",
@@ -131,32 +130,40 @@ angular.module("omniControllers")
 		    }
 		  });
 
-		$scope.participate = function(){
-			var fee = MIN_MINER_FEE;
-			var amount = 0;
-			var propertyDesired = $scope.wallet.getAsset($scope.property.propertyiddesired);
-			var selectedAddress = propertyDesired.tradableAddresses[0];
-			var participation = new Transaction(0,selectedAddress,fee,{
-		        transaction_version:0,
-		        currency_identifier:$scope.property.propertyiddesired,
-		        amount_to_transfer : 0,
-		        transaction_to: $scope.property.issuer,
-		        donate: $scope.account.getSetting("donate")
-		    });
+			$scope.participate = function(){
+				$scope.propertyDesired = $scope.wallet.getAsset($scope.property.propertyiddesired);
+				$scope.selectedAddress = propertyDesired.tradableAddresses[0];
+				$scope.participation.action='form';
+			}
+
+			$scope.setAddress = function(address){
+	      		$scope.selectedAddress = address;
+	      	}
+
+			$scope.confirmParticipation = function(){
+				var fee = $scope.participation.minerFee;
+				var amount = $scope.participation.sendAmount;
+				var participation = new Transaction(0,selectedAddress,fee,{
+			        transaction_version:0,
+			        currency_identifier:$scope.property.propertyiddesired,
+			        amount_to_transfer : amount,
+			        transaction_to: $scope.property.issuer,
+			        donate: $scope.account.getSetting("donate")
+			    });
 
 
-			$scope.modalManager.openConfirmationModal({
-				dataTemplate: '/views/modals/partials/participation.html',
-				scope: {
-					title:"CROWDSALE_PARTICIPATE_TITLE",
-					selectedAsset:propertyDesired,
-					toAddress:$scope.property.issuer,
-					selectedAddress:selectedAddress,
-					fees:participation.totalCost,
-					minerFee: MIN_MINER_FEE,
-					confirmText:"CROWDSALE_PARTICIPATE_CONFIRM"
-				},
-				transaction:participation
-			})
-		}
+				$scope.modalManager.openConfirmationModal({
+					dataTemplate: '/views/modals/partials/participation.html',
+					scope: {
+						title:"CROWDSALE_PARTICIPATE_TITLE",
+						selectedAsset:propertyDesired,
+						toAddress:$scope.property.issuer,
+						selectedAddress:selectedAddress,
+						fees:participation.totalCost,
+						minerFee: MIN_MINER_FEE,
+						confirmText:"CROWDSALE_PARTICIPATE_CONFIRM"
+					},
+					transaction:participation
+				})
+			}
 		}])

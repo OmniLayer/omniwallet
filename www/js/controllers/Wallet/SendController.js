@@ -33,7 +33,7 @@ angular.module("omniControllers")
 			var btcPrice = $scope.selectedAsset.price;
 			
 			var modalScope = {
-				title:"Confirm Send",
+				title:"WALLET_SEND_CONFIRM",
 				token:$scope.selectedAsset.name,
 				sendAmount:$scope.sendAmount,
 				symbol:$scope.selectedAsset.symbol,

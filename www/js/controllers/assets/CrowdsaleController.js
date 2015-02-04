@@ -1,7 +1,6 @@
 angular.module("omniControllers")
 	.controller("AssetsCrowdsaleController",["$scope", "PropertyManager", "$timeout", "Transaction", "SATOSHI_UNIT", "ADDRESS_EXPLORER_URL",
 		function AssetsCrowdsaleController($scope, PropertyManager, $timeout, Transaction, SATOSHI_UNIT, ADDRESS_EXPLORER_URL){
-		  $scope.ecosystem = 2;
 		  $scope.tokenStep = $scope.tokenMin =  0.00000001;
 		  $scope.tokenMax = "92233720368.54775807";
 		  $scope.categories = [];
@@ -52,7 +51,7 @@ angular.module("omniControllers")
 		  };
 		  
 		  // Initialize the form
-		  $scope.setEcosystem();
+		  $scope.setEcosystem(2);
 		  
 		  $scope.isDivisible=function(){
 		    return $scope.propertyDetails.propertyType == 2 || $scope.propertyDetails.propertyType == 66 || $scope.propertyDetails.propertyType == 130;

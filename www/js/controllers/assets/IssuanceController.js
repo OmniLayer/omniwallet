@@ -1,7 +1,6 @@
 angular.module("omniControllers")
 	.controller("AssetsIssuanceController",["$scope", "PropertyManager", "Transaction", "ADDRESS_EXPLORER_URL", "SATOSHI_UNIT",
 		function AssetsIssuanceController($scope, PropertyManager, Transaction, ADDRESS_EXPLORER_URL, SATOSHI_UNIT){
-		  $scope.ecosystem = 2;
 		  $scope.tokenStep = $scope.tokenMin =  0.00000001;
 		  $scope.tokenMax = "92233720368.54775807";
 		  $scope.categories = [];
@@ -28,7 +27,7 @@ angular.module("omniControllers")
 		    });
 		  };
 		  
-		  $scope.setEcosystem();
+		  $scope.setEcosystem(2);
 		  
 		  $scope.isDivisible=function(){
 		    return $scope.propertyDetails.propertyType == 2 || $scope.propertyDetails.propertyType == 66 || $scope.propertyDetails.propertyType == 130
