@@ -80,7 +80,7 @@ angular.module("omniConfig")
 	'TX_DETAILS_-51_ISSUER': 'You got {{amount | toWhole:divisible }} {{coin}}',
 	'TX_DETAILS_-51_PARTICIPANT': 'You got {{amount | toWhole:divisible }} {{coin}}',
 	'TX_DETAILS_-51_SENDER': 'You participated with {{amount | toWhole:divisible }} {{coin}}',
-	'TX_DETAILS_-51_RECIPIENT': 'You got {{amount | toWhole:divisible }} {{coin}} from a Crowdsale',
+	'TX_DETAILS_-51_RECIPIENT': 'You recieved {{amount | toWhole:divisible }} {{coin}}',
 	TX_DETAILS_54_ISSUER: 'You created {{coin}} managed property',
 	TX_DETAILS_55_ISSUER: 'You granted {{amount | toWhole:divisible }} {{coin}}',
 	TX_DETAILS_55_RECIPIENT: 'You where granted {{amount | toWhole:divisible }} {{coin}}',
