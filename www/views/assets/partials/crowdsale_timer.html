@@ -1,26 +1,26 @@
 <timer end-time={{endtime}} max-time-unit="'year'">
   <span class="countdown-group" ng-show="years>0">
-    <span class="countdown-number">{{years}}</span>
+    <span class="countdown-number">{{yyears}}</span>
     <p class="text-uppercase">{{'TIMER_YEAR' | translate}}{{yearsS}}</p>
   </span>
   <span class="countdown-group" ng-show="months>0">
-    <span class="countdown-number">{{months}}</span>
+    <span class="countdown-number">{{mmonths}}</span>
     <p class="text-uppercase">{{'TIMER_MONTH' | translate}}{{monthsS}}</p>
   </span>
   <span class="countdown-group">
-    <span class="countdown-number">{{days}}</span>
+    <span class="countdown-number">{{ddays}}</span>
     <p class="text-uppercase">{{'TIMER_DAY' | translate}}{{daysS}}</p>
   </span>
   <span class="countdown-group">
-    <span class="countdown-number">{{hours}}</span>
+    <span class="countdown-number">{{hhours}}</span>
     <p class="text-uppercase">{{'TIMER_HOUR' | translate}}{{hoursS}}</p>
   </span>
   <span class="countdown-group" ng-show="years==0">
-    <span class="countdown-number">{{minutes}}</span>
+    <span class="countdown-number">{{mminutes}}</span>
     <p class="text-uppercase">{{'TIMER_MINUTE' | translate}}{{minutesS}}</p>
   </span>
   <span class="countdown-group" ng-show="months==0">
-    <span class="countdown-number">{{seconds}}</span>
+    <span class="countdown-number">{{sseconds}}</span>
     <p class="text-uppercase">{{'TIMER_SECOND' | translate}}{{secondsS}}</p>
   </span>
 </timer>
