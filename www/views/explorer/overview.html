@@ -12,11 +12,13 @@
           <input type="text" name="searchEntry" class="form-control search-query" ng-model="searchQueryText" placeholder="{{'EXPLORER.OVERVIEW.PLACEHOLDER' | translate}}" ng-change="searchForm.searchEntry.$error.pattern == false ? doSearch() : null;" ng-pattern="/^[a-zA-Z0-9]+$/"/>
           <span ng-show="searchQueryText.length > 0" class="clear" ng-click="getData()"></span>
         </div>
-      </form>
-      <p class="col-xs-12 alert alert-danger text-center" ng-if="searchForm.searchEntry.$error.pattern">{{'EXPLORER.OVERVIEW.ALPHANUMERIC' | translate}}</p>
-      <p class="col-xs-12 alert alert-danger text-center" ng-if="searchQueryText.length > 3 && transactions.length == 0">{{'EXPLORER.OVERVIEW.NORESULTS' | translate}}</p>
-      <p class="col-xs-12 alert alert-warning text-center" ng-show="searchQueryText.length > 0 && searchQueryText.length < 4" >{{'EXPLORER.OVERVIEW.SHORTQUERY' | translate}}</p>
+      </form>      
     </div>
+  </div>
+  <div class="row">
+    <p class="col-xs-12 alert alert-danger text-center" ng-if="searchForm.searchEntry.$error.pattern">{{'EXPLORER.OVERVIEW.ALPHANUMERIC' | translate}}</p>
+    <p class="col-xs-12 alert alert-danger text-center" ng-if="searchQueryText.length > 3 && transactions.length == 0">{{'EXPLORER.OVERVIEW.NORESULTS' | translate}}</p>
+    <p class="col-xs-12 alert alert-warning text-center" ng-show="searchQueryText.length > 0 && searchQueryText.length < 4" >{{'EXPLORER.OVERVIEW.SHORTQUERY.LEAD' | translate}} {{ 4-searchQueryText.length }} {{'EXPLORER.OVERVIEW.SHORTQUERY.TRAIL' | translate}}</p>
   </div>
   <table class="table table-striped table-hover table-condensed">
     <thead>
