@@ -78,6 +78,7 @@
           <input name="fees" type="number" ng-model="issuerData.minerFees" class="form-control"
           placeholder="0.0001" step="0.0001" min="0.0001" required>
         </div>
+        <p class="help-block">{{'CROWDSALE_PARTICIPATION_ESTIMATE' | translate}} </p>
         <div class="form-group col-sm-12 text-right">
           <a href="/assets/details/{{property.propertyid}}" class="btn btn-tertiary">{{ 'COMMON_CANCEL' | translate}}</a>
           <button type="submit" class="btn btn-main pull-right">{{ 'COMMON_NEXT' | translate}}</button>

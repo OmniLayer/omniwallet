@@ -7,7 +7,10 @@ angular.module("omniControllers")
 		PropertyManager.getProperty($scope.propertyId).then(function(result){
 		    $scope.property = result.data;
 		    $scope.propertyDesired = $scope.wallet.getAsset($scope.property.propertyiddesired)
-		    $scope.selectedAddress = $scope.propertyDesired.tradableAddresses[0]
+		    $scope.selectedAddress = $scope.propertyDesired.tradableAddresses[0];
+			
+			var now = new Date()
+		    $scope.earlybird = ((($scope.property.deadline - (now.getTime()/1000)) / 604800) * $scope.property.earlybonus).toFixed(1);
 		});
 
 		$scope.setAddress = function(address){
@@ -17,7 +20,6 @@ angular.module("omniControllers")
 		$scope.confirmParticipation = function(){
 				var fee = $scope.minerFee;
 				var amount = $scope.sendAmount;
-				var now = new Date()
 				var participation = new Transaction(0,$scope.selectedAddress,fee,{
 			        transaction_version:0,
 			        currency_identifier:$scope.property.propertyiddesired,
@@ -31,10 +33,11 @@ angular.module("omniControllers")
 					dataTemplate: '/views/modals/partials/participation.html',
 					scope: {
 						title:"CROWDSALE_PARTICIPATE_TITLE",
-						selectedAsset:$scope.propertyDesired,
+						token:$scope.propertyDesired.name,
+						tokenRecieved: $scope.property.name,
 						toAddress:$scope.property.issuer,
 						fees:participation.totalCost,
-						earlybird : ((($scope.property.deadline - (now.getTime()/1000)) / 604800) * $scope.property.earlybonus).toFixed(1),
+						earlybird : $scope.earlybird,
 						tokensperunit: $scope.property.tokensperunit,
 						confirmText:"CROWDSALE_PARTICIPATE_CONFIRM"
 					},
