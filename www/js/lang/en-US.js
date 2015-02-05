@@ -201,6 +201,8 @@ angular.module("omniConfig")
 	CROWDSALE_DETAILS_CURRENTBONUS:'Current early bird bonus',
 	CROWDSALE_DETAILS_GETTOKENS:'Get some tokens!',
 	CROWDSALE_DETAILS_PARTICIPATE:'Participate',
+	CROWDSALE_PARTICIPATION_TITLE:'Participate on {{property.name}} Crowdsale',
+	CROWDSALE_PARTICIPATION_DESIREDCOIN: "Token to send",
 	ASSET_DETAILS_URL:'For more details visit',
 	ASSET_DETAILS_SHARE: 'Share this page',
 	CROWDSALE_DETAILS_NOTOKENS : "You don't have the token accepted by this crowdsale",

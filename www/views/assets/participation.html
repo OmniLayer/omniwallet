@@ -17,7 +17,7 @@
               </div>
             </div> 
             <div class="col-sm-6">
-              <label>{{ 'CROWDSALE_PARTICIPATION_TO' | translate}}</label>
+              <label>{{ 'WALLET_SEND_TO' | translate}}</label>
               <div class="form-control">
                 {{property.issuer}}
               </div>
@@ -33,7 +33,7 @@
                   {{sendByValue ? userCurrency : 'BTC'}}
                 </span>
                 <span ng-if="propertyDesired.symbol != 'BTC'">
-                  {{ 'CROWDSALE_PARTICIPATION_AMOUNT' | translate}}
+                  {{ 'WALLET_SEND__AMOUNT' | translate}}
                 </span>
                 ({{selectedAddress.getDisplayBalance(propertyDesired.id)}} {{propertyDesired.name}} <small class="text-muted" ng-show="propertyDesired.id > 2">({{propertyDesired.id}})</small> {{ 'COMMON_AVAILABLE' | translate}})
               </label>
@@ -58,7 +58,7 @@
                     min="{{propertyDesired.divisible ? 0.00000001 : 1}}" max="{{selectedAddress.getDisplayBalance(propertyDesired.id)}}" required>
             </div> 
             <div class="col-sm-6">
-              <label class="text-justify" >{{ 'CROWDSALE_PARTICIPATION_FROM' | translate}}</label>
+              <label class="text-justify" >{{ 'WALLET_SEND_FROM' | translate}}</label>
               <div class="btn-group send-address-dropdown">
                 <button class="btn btn-clear dropdown-toggle" type="button" id="chooseAddress" data-toggle="dropdown" aria-expanded="true">
                   {{selectedAddress.hash}} 
@@ -73,8 +73,15 @@
             </div>
           </div>
         </div>
-        <a href="/assets/details/{{property.propertyid}}" class="btn btn-tertiary">{{ 'COMMON_CANCEL' | translate}}</a>
-        <button type="submit" class="btn btn-main pull-right">{{ 'COMMON_NEXT' | translate}}</button>
+        <div class="form-group col-sm-6">
+          <label for=""> {{'COMMON_FEES' | translate}} <small class="text-muted">({{selectedAddress.getDisplayBalance(0)}} BTC {{ 'COMMON_AVAILABLE' | translate}})</small></label>
+          <input name="fees" type="number" ng-model="issuerData.minerFees" class="form-control"
+          placeholder="0.0001" step="0.0001" min="0.0001" required>
+        </div>
+        <div class="form-group col-sm-12 text-right">
+          <a href="/assets/details/{{property.propertyid}}" class="btn btn-tertiary">{{ 'COMMON_CANCEL' | translate}}</a>
+          <button type="submit" class="btn btn-main pull-right">{{ 'COMMON_NEXT' | translate}}</button>
+        </div>
       </form>
     </div>    
   </div>
