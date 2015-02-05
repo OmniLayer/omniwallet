@@ -1,5 +1,6 @@
 angular.module("omniControllers")
-	.controller("CrowdsaleParticipationController", ["$scope", "SATOSHI_UNIT", "$route", function CrowdsaleParticipationController($scope, SATOSHI_UNIT, $route){
+	.controller("CrowdsaleParticipationController", ["$scope", "SATOSHI_UNIT", "$route", "PropertyManager", "Transaction",
+	  function CrowdsaleParticipationController($scope, SATOSHI_UNIT, $route, PropertyManager, Transaction){
 		$scope.propertyId = $route.current.params.propertyId;
 
 		// Load and initialize the form
