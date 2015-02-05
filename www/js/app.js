@@ -83,6 +83,12 @@ var app = angular.module('omniwallet', [
     }).otherwise({
       redirectTo:'/explorer/assets'
     });
+
+  $routeProvider.when('/crowdsale/participation/:propertyId', {
+      templateUrl:  '/views/assets/participation.html'
+    }).otherwise({
+      redirectTo:'/explorer/crowdsales'
+    });
     
   $routeProvider.when('/wallet/:page?', {
       templateUrl: function(route) {

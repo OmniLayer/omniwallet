@@ -1,4 +1,4 @@
-<div ng-controller="WalletSendController" ng-if="wallet.loaded">
+<div ng-controller="CrowdsaleParticipationController" ng-if="wallet.loaded">
   <div class="row om-row">
     <div class="col-xs-12">
       <div class="text-left om-title">{{ 'CROWDSALE_PARTICIPATION_TITLE' | translate}}</div>
@@ -73,6 +73,7 @@
             </div>
           </div>
         </div>
+        <a href="/assets/details/{{property.propertyid}}" class="btn btn-tertiary">{{ 'COMMON_CANCEL' | translate}}</a>
         <button type="submit" class="btn btn-main pull-right">{{ 'COMMON_NEXT' | translate}}</button>
       </form>
     </div>    

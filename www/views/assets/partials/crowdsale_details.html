@@ -34,7 +34,7 @@
 	<div class="col-xs-12">
 		{{'CROWDSALE_DETAILS_GETTOKENS' | translate}}
 	</div>
-	<a href="#" ng-click="participate()" ng-disabled="(!canParticipate || !account.loggedIn)" class="btn btn-main btn-lg">{{'CROWDSALE_DETAILS_PARTICIPATE' | translate}}</a>	
+	<a href="#" ng-click="/crowdsale/participation/{{property.propertyid}}" ng-disabled="(!canParticipate || !account.loggedIn)" class="btn btn-main btn-lg">{{'CROWDSALE_DETAILS_PARTICIPATE' | translate}}</a>	
   <div class="col-xs-12" ng-hide="!account.loggedIn || canParticipate">
     {{'CROWDSALE_DETAILS_NOTOKENS' | translate}}
   </div>

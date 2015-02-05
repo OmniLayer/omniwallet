@@ -129,41 +129,4 @@ angular.module("omniControllers")
 		      }
 		    }
 		  });
-
-			$scope.participate = function(){
-				$scope.propertyDesired = $scope.wallet.getAsset($scope.property.propertyiddesired);
-				$scope.selectedAddress = propertyDesired.tradableAddresses[0];
-				$scope.participation.action='form';
-			}
-
-			$scope.setAddress = function(address){
-	      		$scope.selectedAddress = address;
-	      	}
-
-			$scope.confirmParticipation = function(){
-				var fee = $scope.participation.minerFee;
-				var amount = $scope.participation.sendAmount;
-				var participation = new Transaction(0,selectedAddress,fee,{
-			        transaction_version:0,
-			        currency_identifier:$scope.property.propertyiddesired,
-			        amount_to_transfer : amount,
-			        transaction_to: $scope.property.issuer,
-			        donate: $scope.account.getSetting("donate")
-			    });
-
-
-				$scope.modalManager.openConfirmationModal({
-					dataTemplate: '/views/modals/partials/participation.html',
-					scope: {
-						title:"CROWDSALE_PARTICIPATE_TITLE",
-						selectedAsset:propertyDesired,
-						toAddress:$scope.property.issuer,
-						selectedAddress:selectedAddress,
-						fees:participation.totalCost,
-						minerFee: MIN_MINER_FEE,
-						confirmText:"CROWDSALE_PARTICIPATE_CONFIRM"
-					},
-					transaction:participation
-				})
-			}
 		}])
