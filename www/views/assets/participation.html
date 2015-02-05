@@ -49,11 +49,11 @@
                 </span>
                 <input id="amount" name="amount" type="number" ng-model="sendAmount" class="form-control" value="sendAmount"
                     placeholder="{{propertyDesired.divisible ? '1.00000000' : '1'}}" step="{{propertyDesired.divisible ? 0.00000001 : 1}}" 
-                    min="{{propertyDesired.divisible ? 0.00000001 : 1}}" required>
+                    min="{{propertyDesired.divisible ? 0.00000001 : 1}}" ng-change="calculateAmount()" required>
                 <div class="hint">({{sendByValue ? ((sendAmount || 0) / propertyDesired.price).toFixed(4) : ((sendAmount || 0) * propertyDesired.price).toFixed(2)}} {{sendByValue ? userCurrency : 'BTC'}})</div>
               </div>
               <input ng-show="propertyDesired.symbol != 'BTC'" id="amount" name="amount" type="number" ng-model="sendAmount" 
-                    class="form-control" value="sendAmount"
+                    class="form-control" value="sendAmount" ng-change="calculateAmount()"
                     placeholder="{{propertyDesired.divisible ? '1.00000000' : '1'}}" step="{{propertyDesired.divisible ? 0.00000001 : 1}}" 
                     min="{{propertyDesired.divisible ? 0.00000001 : 1}}" max="{{selectedAddress.getDisplayBalance(propertyDesired.id)}}" required>
             </div> 

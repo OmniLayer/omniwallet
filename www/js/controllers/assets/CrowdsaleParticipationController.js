@@ -2,7 +2,8 @@ angular.module("omniControllers")
 	.controller("CrowdsaleParticipationController", ["$scope", "SATOSHI_UNIT", "$route", "PropertyManager", "Transaction",
 	  function CrowdsaleParticipationController($scope, SATOSHI_UNIT, $route, PropertyManager, Transaction){
 		$scope.propertyId = $route.current.params.propertyId;
-
+		$scope.property = {};
+		
 		// Load and initialize the form
 		PropertyManager.getProperty($scope.propertyId).then(function(result){
 		    $scope.property = result.data;
@@ -18,30 +19,34 @@ angular.module("omniControllers")
 		}
 
 		$scope.confirmParticipation = function(){
-				var fee = $scope.minerFee;
-				var amount = $scope.sendAmount;
-				var participation = new Transaction(0,$scope.selectedAddress,fee,{
-			        transaction_version:0,
-			        currency_identifier:$scope.property.propertyiddesired,
-			        amount_to_transfer : amount,
-			        transaction_to: $scope.property.issuer,
-			        donate: $scope.account.getSetting("donate")
-			    });
+			var fee = $scope.minerFee;
+			var amount = $scope.sendAmount;
+			var participation = new Transaction(0,$scope.selectedAddress,fee,{
+		        transaction_version:0,
+		        currency_identifier:$scope.property.propertyiddesired,
+		        amount_to_transfer : amount,
+		        transaction_to: $scope.property.issuer,
+		        donate: $scope.account.getSetting("donate")
+		    });
 
 
-				$scope.modalManager.openConfirmationModal({
-					dataTemplate: '/views/modals/partials/participation.html',
-					scope: {
-						title:"CROWDSALE_PARTICIPATE_TITLE",
-						token:$scope.propertyDesired.name,
-						tokenRecieved: $scope.property.name,
-						toAddress:$scope.property.issuer,
-						fees:participation.totalCost,
-						earlybird : $scope.earlybird,
-						tokensperunit: $scope.property.tokensperunit,
-						confirmText:"CROWDSALE_PARTICIPATE_CONFIRM"
-					},
-					transaction:participation
-				})
-			}
+			$scope.modalManager.openConfirmationModal({
+				dataTemplate: '/views/modals/partials/participation.html',
+				scope: {
+					title:"CROWDSALE_PARTICIPATE_TITLE",
+					token:$scope.propertyDesired.name,
+					tokenRecieved: $scope.property.name,
+					toAddress:$scope.property.issuer,
+					fees:participation.totalCost,
+					earlybird : $scope.earlybird,
+					tokensperunit: $scope.property.tokensperunit,
+					confirmText:"CROWDSALE_PARTICIPATE_CONFIRM"
+				},
+				transaction:participation
+			})
+		}
+
+		$scope.calculateAmount = function(){
+			$scope.estimatedAmount = $scope.sendAmount * $scope.property.tokensperunit  + ($scope.earlybird * ($scope.sendAmount * $scope.property.tokensperunit) / 100
+		}
 	}])
