@@ -3,7 +3,7 @@ angular.module("omniControllers")
 	  function CrowdsaleParticipationController($scope, SATOSHI_UNIT, $route, PropertyManager, Transaction){
 		$scope.propertyId = $route.current.params.propertyId;
 		$scope.property = {};
-		
+
 		// Load and initialize the form
 		PropertyManager.getProperty($scope.propertyId).then(function(result){
 		    $scope.property = result.data;
@@ -47,6 +47,7 @@ angular.module("omniControllers")
 		}
 
 		$scope.calculateAmount = function(){
-			$scope.estimatedAmount = $scope.sendAmount * $scope.property.tokensperunit  + ($scope.earlybird * ($scope.sendAmount * $scope.property.tokensperunit) / 100
+			var netValue = ($scope.sendAmount || 0) * $scope.property.tokensperunit;
+			$scope.estimatedAmount = netValue  + ($scope.earlybird * netValue / 100);
 		}
 	}])
