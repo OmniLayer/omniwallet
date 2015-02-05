@@ -220,5 +220,6 @@ angular.module("omniConfig")
 		TEST:'Test'
 	},
 	CROWDSALE_TABLE_BOUGHT:'Tokens Bought',
-	CROWDSALE_TABLE_CREATED:'Tokens Created'
+	CROWDSALE_TABLE_CREATED:'Tokens Created',
+	EXPLORER_OVERVIEW_TITLE: 'Latest Transactions'
   })
