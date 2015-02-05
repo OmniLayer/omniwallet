@@ -4,7 +4,7 @@ angular.module('omniServices')
     var $propertyCache = $cacheFactory("propertyCache")
 
     self.getProperty =function(propertyId){
-      return $http.get('/v1/properties/getdata/' + propertyId, {cache: $templateCache} )
+      return $http.get('/v1/properties/getdata/' + propertyId, {cache: $propertyCache} )
     }
     
     self.getActiveCrowdsales = function(ecosystem) {
