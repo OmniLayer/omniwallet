@@ -1060,23 +1060,23 @@ input[type=number]::-webkit-outer-spin-button {
 }
 
 input.search-query {
-    padding-left:26px;
+    padding-right:26px;
 }
 
 form.form-search {
     position: relative;
 }
 
-form.form-search:before {
+span.clear {
     content:'';
     display: block;
     width: 14px;
     height: 14px;
     background-image: url(assets/img/glyphicons-halflings.png);
-    background-position: -48px 0;
+    background-position: -312px 0;
     position: absolute;
     top:10px;
-    left:8px;
+    right:8px;
     opacity: .5;
     z-index: 1000;
 }
