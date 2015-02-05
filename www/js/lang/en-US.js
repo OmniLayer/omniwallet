@@ -232,7 +232,7 @@ angular.module("omniConfig")
 			ALPHANUMERIC: 'You cannot use non-alphanumeric characters while searching.',
 			PLACEHOLDER:'Search for part of a transaction or a full transaction hash'
 		}
-	}
+	},
 	TABLES:{
 		TRANSACTIONS:{
 			TX:'Transaction',
