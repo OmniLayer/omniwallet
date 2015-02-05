@@ -1,10 +1,10 @@
-<div class="row hidden-xs">
+<div class="col-xs-12 table-header hidden-xs">
 	<div class="col-sm-3">{{'ASSETS_TABLE_ID' | translate}}</div>
 	<div class="col-sm-3">{{'ASSETS_TABLE_NAME' | translate}}</div>
 	<div class="col-sm-3">{{'ASSETS_TABLE_AMOUNT' | translate}}</div>
 	<div class="col-sm-3">{{'ASSETS_TABLE_URL' | translate}}</div>
 </div>
-<div class="row" ng-repeat="asset in assets">
+<div class="col-xs-12 table-row" ng-repeat="asset in assets">
 	<div class="visible-xs col-xs-4">{{'ASSETS_TABLE_ID' | translate}}</div>
 	<div class="col-xs-8 col-sm-3">{{asset.propertyid}}</div>
 	<div class="visible-xs col-xs-4">{{'ASSETS_TABLE_NAME' | translate}}</div>

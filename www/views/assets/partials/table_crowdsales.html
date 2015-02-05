@@ -1,11 +1,11 @@
-<div class="row hidden-xs">
+<div class="col-xs-12 table-header hidden-xs">
 	<div class="col-sm-3">{{'ASSET_HISTORY_FIXEDISSUANCE_FALSE' | translate}}</div>
 	<div class="col-sm-3">{{'ASSET_CROWDSALE_ACCEPTEDCURRENCY' | translate}}</div>
 	<div class="col-sm-2">{{'CROWDSALE_DETAILS_TIME' | translate}}</div>
 	<div class="col-sm-2">{{'CROWDSALE_TABLE_BOUGHT' | translate}}</div>
 	<div class="col-sm-2">{{'CROWDSALE_TABLE_CREATED' | translate}}</div>
 </div>
-<div class="row" ng-repeat="crowdsale in crowdsales">
+<div class="col-xs-12 table-row" ng-repeat="crowdsale in crowdsales">
 	<div class="visible-xs col-xs-4">{{'ASSET_HISTORY_FIXEDISSUANCE_FALSE' | translate}}</div>
 	<div class="col-xs-8 col-sm-3">
 		<a href="/assets/details/{{crowdsale.propertyid}}">{{crowdsale.name}}</a>
