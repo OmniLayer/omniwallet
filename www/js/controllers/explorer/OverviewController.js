@@ -4,11 +4,16 @@ angular.module("omniControllers")
       $scope.setHashExplorer = hashExplorer.setHash.bind(hashExplorer);
       // Scope members
       $scope.searchQueryText = '';
-      $scope.searchRan = false;
-      $scope.searchQueryReturned=false;
       $scope.transactions = [];
-      $scope.currencies = ['MSC', 'TMSC'];
       $scope.currency = 'MSC';
+
+      $scope.clear = function clear(){
+        $scope.searchQueryText = '';
+        if($scope.noResults)
+          $scope.noResults = false;
+        else
+          $scope.getData();
+      }
 
       $scope.getData = function getData() {
         var currency = $scope.currency;
@@ -26,19 +31,15 @@ angular.module("omniControllers")
                 });
 
                 $scope.transactions = data;
-                $scope.searchQueryText = '';
-                $scope.searchRan = false;
-                $scope.searchQueryReturned=false;
               });
             }
           }
         });
       }
+
       $scope.doSearch = function() {
         if( $scope.searchQueryText == undefined || $scope.searchQueryText == '' || $scope.searchQueryText.length < 4 )
           return -1;
-        $scope.searchRan=true;
-        $scope.searchQueryReturned=false;
         var file = '/v1/search/';
         $http.get('/v1/search/?query=' + $scope.searchQueryText, {}).success(function(successData, status, headers, config) {
           angular.forEach(successData.data, function(transaction, index) {
@@ -55,10 +56,12 @@ angular.module("omniControllers")
           if ($scope.searchQueryText == "")
             $scope.searchQueryText = hashExplorer.search
 
-          $scope.transactions = successData.data;
-          $scope.searchQueryReturned=true;
-          $scope.searchQueryReturnedText=[ successData.data.length, $scope.searchQueryText.slice(0,7) + ( $scope.searchQueryText.length > 7 ? '...' : '' ) ];
-          hashExplorer.setSearch( $scope.searchQueryText );
+          $scope.noResults =  successData.data.length==0;
+          if($scope.noResults){
+            $scope.getData();
+          }else{
+            $scope.transactions = successData.data;
+          }
         });
       };
       $scope.searchQuery = function(trans) {
