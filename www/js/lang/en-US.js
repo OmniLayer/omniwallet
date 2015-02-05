@@ -233,5 +233,13 @@ angular.module("omniConfig")
 			PLACEHOLDER:'Search for part of a transaction or a full transaction hash'
 		}
 	}
-
+	TABLES:{
+		TRANSACTIONS:{
+			TX:'Transaction',
+			DETAILS:'Details',
+			AMOUNT:'Amount',
+			BLOCK:'Block',
+			BLOCKTIME:'Block time (UTC)'
+		}
+	}
   })
