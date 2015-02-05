@@ -5,8 +5,12 @@
 	<div class="col-sm-3">{{'ASSETS_TABLE_URL' | translate}}</div>
 </div>
 <div class="row" ng-repeat="asset in assets">
-	<div class="col-xs-12 col-sm-3"><label class="visible-xs">{{'ASSETS_TABLE_ID' | translate}}</label>{{asset.propertyid}}</div>
-	<div class="col-xs-12 col-sm-3"><label class="visible-xs">{{'ASSETS_TABLE_NAME' | translate}}</label><a href="/assets/details/{{asset.propertyid}}">{{asset.name}}</a></div>
-	<div class="col-xs-12 col-sm-3"><label class="visible-xs">{{'ASSETS_TABLE_AMOUNT' | translate}}</label>{{asset.totaltokens}}</div>
-	<div class="col-xs-12 col-sm-3"><label class="visible-xs">{{'ASSETS_TABLE_URL' | translate}}</label><a href="{{url}}" target="_blank">{{asset.url}}</a></div>
+	<div class="visible-xs col-xs-4">{{'ASSETS_TABLE_ID' | translate}}</div>
+	<div class="col-xs-8 col-sm-3">{{asset.propertyid}}</div>
+	<div class="visible-xs col-xs-4">{{'ASSETS_TABLE_NAME' | translate}}</div>
+	<div class="col-xs-8 col-sm-3"><a href="/assets/details/{{asset.propertyid}}">{{asset.name}}</a></div>
+	<div class="visible-xs col-xs-4">{{'ASSETS_TABLE_AMOUNT' | translate}}</div>
+	<div class="col-xs-8 col-sm-3">{{asset.totaltokens}}</div>
+	<div class="visible-xs col-xs-4">{{'ASSETS_TABLE_URL' | translate}}</div>
+	<div class="col-xs-8 col-sm-3"><a href="{{url}}" target="_blank">{{asset.url}}</a></div>
 </div>
