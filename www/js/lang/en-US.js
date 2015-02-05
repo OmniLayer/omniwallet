@@ -221,5 +221,14 @@ angular.module("omniConfig")
 	},
 	CROWDSALE_TABLE_BOUGHT:'Tokens Bought',
 	CROWDSALE_TABLE_CREATED:'Tokens Created',
-	EXPLORER_OVERVIEW_TITLE: 'Latest Transactions'
+	EXPLORER:{
+		OVERVIEW: {
+			TITLE: 'Latest Transactions',
+			SHORTQUERY: 'You need at least {{ 4-searchQueryText.length }} more character(s) to search.',
+			NORESULTS: 'Found 0 transactions for your query.',
+			ALPHANUMERIC: 'You cannot use non-alphanumeric characters while searching.',
+			PLACEHOLDER:'Search for part of a transaction or a full transaction hash'
+		}
+	}
+
   })

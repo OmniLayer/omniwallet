@@ -1079,6 +1079,7 @@ span.clear {
     right:8px;
     opacity: .5;
     z-index: 1000;
+    cursor: pointer;
 }
 
 .form-control{
