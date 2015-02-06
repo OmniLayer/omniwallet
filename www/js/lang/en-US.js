@@ -213,7 +213,7 @@ angular.module("omniConfig")
 	CROWDSALE_REMAINING_DAYS:'Day',
 	CROWDSALE_REMAINING_HOURS:'Hr',
 	CROWDSALE_REMAINING_MINUTES:'Min',
-	CROWDSALE_PARTICIPATE_TITLE: 'Confirm Prowdsale Participation',
+	CROWDSALE_PARTICIPATE_TITLE: 'Confirm Participation',
 	CROWDSALE_PARTICIPATE_CONFIRM: 'Participate',
 	ECOSYSTEM: {
 		LABEL:'Ecosystem',
@@ -232,6 +232,11 @@ angular.module("omniConfig")
 			NORESULTS: 'Found 0 transactions for your query.',
 			ALPHANUMERIC: 'You cannot use non-alphanumeric characters while searching.',
 			PLACEHOLDER:'Search for part of a transaction or a full transaction hash'
+		},
+		INSPECTOR: {
+			TITLE:'Transaction Inspector',
+			FIELD: 'Field Name',
+			DETAILS: 'Details'
 		}
 	},
 	TABLES:{
