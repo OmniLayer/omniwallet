@@ -1,24 +1,29 @@
-<div class="row hidden-xs">
+<div class="row table-header hidden-xs">
 	<div class="col-sm-3">{{'ASSET_HISTORY_FIXEDISSUANCE_FALSE' | translate}}</div>
 	<div class="col-sm-3">{{'ASSET_CROWDSALE_ACCEPTEDCURRENCY' | translate}}</div>
 	<div class="col-sm-2">{{'CROWDSALE_DETAILS_TIME' | translate}}</div>
 	<div class="col-sm-2">{{'CROWDSALE_TABLE_BOUGHT' | translate}}</div>
 	<div class="col-sm-2">{{'CROWDSALE_TABLE_CREATED' | translate}}</div>
 </div>
-<div class="row" ng-repeat="crowdsale in crowdsales">
-	<div class="col-xs-12 col-sm-3"><label class="visible-xs">{{'ASSET_HISTORY_FIXEDISSUANCE_FALSE' | translate}}</label>
+<div class="row table-row" ng-repeat="crowdsale in crowdsales">
+	<div class="visible-xs col-xs-5">{{'ASSET_HISTORY_FIXEDISSUANCE_FALSE' | translate}}</div>
+	<div class="col-xs-7 col-sm-3">
 		<a href="/assets/details/{{crowdsale.propertyid}}">{{crowdsale.name}}</a>
 	</div>
-	<div class="col-xs-12 col-sm-3"><label class="visible-xs">{{'ASSET_CROWDSALE_ACCEPTEDCURRENCY' | translate}}</label>
+	<div class="visible-xs col-xs-5">{{'ASSET_CROWDSALE_ACCEPTEDCURRENCY' | translate}}</div>
+	<div class="col-xs-7 col-sm-3">
 		{{crowdsale.propertydesiredName}} / {{'ASSET_CROWDSALE_RATE' | translate}} ({{crowdsale.tokensperunit}})
 	</div>
-	<div class="col-xs-12 col-sm-2"><label class="visible-xs">{{'CROWDSALE_DETAILS_TIME' | translate}}</label>
+	<div class="visible-xs col-xs-5">{{'CROWDSALE_DETAILS_TIME' | translate}}</div>
+	<div class="col-xs-7 col-sm-2">
 		<div id="timerWrapper-{{crowdsale.propertyid }}"></div>
 	</div>
-	<div class="col-xs-12 col-sm-2"><label class="visible-xs">{{'CROWDSALE_TABLE_BOUGHT' | translate}}</label>
+	<div class="visible-xs col-xs-5">{{'CROWDSALE_TABLE_BOUGHT' | translate}}</div>
+	<div class="col-xs-7 col-sm-2">
 		{{crowdsale.tokensissued}}
 	</div>
-	<div class="col-xs-12 col-sm-2"><label class="visible-xs">{{'CROWDSALE_TABLE_BOUGHT' | translate}}</label>
+	<div class="visible-xs col-xs-5">{{'CROWDSALE_TABLE_CREATED' | translate}}</div>
+	<div class="col-xs-7 col-sm-2">
 		{{crowdsale.totaltokens}}
 	</div>
 </div>

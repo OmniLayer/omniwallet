@@ -204,7 +204,8 @@ angular.module("omniConfig")
 	CROWDSALE_PARTICIPATION_TITLE:'Participate on {{property.name}} Crowdsale',
 	CROWDSALE_PARTICIPATION_DESIREDCOIN: "Token to send",
 	CROWDSALE_PARTICIPATION_MODAL_ESTIMATE: 'Estimated amount of tokens',
-	CROWDSALE_PARTICIPATION_ESTIMATE:'You will recieve {{estimatedAmount}} {{property.name}} if you participate at this level.',
+	CROWDSALE_PARTICIPATION_ESTIMATE_LEAD:'You will recieve',
+	CROWDSALE_PARTICIPATION_ESTIMATE_TRAIL:'if you participate at this level.',
 	ASSET_DETAILS_URL:'For more details visit',
 	ASSET_DETAILS_SHARE: 'Share this page',
 	CROWDSALE_DETAILS_NOTOKENS : "You don't have the token accepted by this crowdsale",
@@ -212,13 +213,39 @@ angular.module("omniConfig")
 	CROWDSALE_REMAINING_DAYS:'Day',
 	CROWDSALE_REMAINING_HOURS:'Hr',
 	CROWDSALE_REMAINING_MINUTES:'Min',
-	CROWDSALE_PARTICIPATE_TITLE: 'Confirm Prowdsale Participation',
+	CROWDSALE_PARTICIPATE_TITLE: 'Confirm Participation',
 	CROWDSALE_PARTICIPATE_CONFIRM: 'Participate',
 	ECOSYSTEM: {
-		LABEL:'Selected Ecosystem',
+		LABEL:'Ecosystem',
 		PRODUCTION:'Production',
 		TEST:'Test'
 	},
 	CROWDSALE_TABLE_BOUGHT:'Tokens Bought',
-	CROWDSALE_TABLE_CREATED:'Tokens Created'
+	CROWDSALE_TABLE_CREATED:'Tokens Created',
+	EXPLORER:{
+		OVERVIEW: {
+			TITLE: 'Latest Transactions',
+			SHORTQUERY: {
+				LEAD: 'You need at least',
+				TRAIL: 'more character(s) to search.'
+			},
+			NORESULTS: 'Found 0 transactions for your query.',
+			ALPHANUMERIC: 'You cannot use non-alphanumeric characters while searching.',
+			PLACEHOLDER:'Search for part of a transaction or a full transaction hash'
+		},
+		INSPECTOR: {
+			TITLE:'Transaction Inspector',
+			FIELD: 'Field Name',
+			DETAILS: 'Details'
+		}
+	},
+	TABLES:{
+		TRANSACTIONS:{
+			TX:'Transaction',
+			DETAILS:'Details',
+			AMOUNT:'Amount',
+			BLOCK:'Block',
+			BLOCKTIME:'Block time (UTC)'
+		}
+	}
   })

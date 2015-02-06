@@ -19,7 +19,7 @@ angular.module("omniControllers")
 		}
 
 		$scope.confirmParticipation = function(){
-			var fee = $scope.minerFee;
+			var fee = new Big($scope.minerFees);
 			var amount = $scope.sendAmount;
 			var participation = new Transaction(0,$scope.selectedAddress,fee,{
 		        transaction_version:0,
@@ -39,6 +39,7 @@ angular.module("omniControllers")
 					toAddress:$scope.property.issuer,
 					fees:participation.totalCost,
 					earlybird : $scope.earlybird,
+					sendAmount: $scope.sendAmount,
 					tokensperunit: $scope.property.tokensperunit,
 					confirmText:"CROWDSALE_PARTICIPATE_CONFIRM"
 				},
