@@ -20,33 +20,33 @@
     <p class="col-xs-12 alert alert-danger text-center" ng-if="searchQueryText.length > 3 && noResults">{{'EXPLORER.OVERVIEW.NORESULTS' | translate}}</p>
     <p class="col-xs-12 alert alert-warning text-center" ng-show="searchQueryText.length > 0 && searchQueryText.length < 4" >{{'EXPLORER.OVERVIEW.SHORTQUERY.LEAD' | translate}} {{ 4-searchQueryText.length }} {{'EXPLORER.OVERVIEW.SHORTQUERY.TRAIL' | translate}}</p>
   </div>
-  <div class="row om-table">
-    <div class="col-xs-12 table-header hidden-xs">
-      <div class="col-sm-4">{{'TABLES.TRANSACTIONS.TX' | translate}}</div>
-      <div class="col-sm-2">{{'TABLES.TRANSACTIONS.DETAILS' | translate}}</div>
+  <div class="om-table">
+    <div class="row table-header hidden-xs">
+      <div class="col-sm-3">{{'TABLES.TRANSACTIONS.TX' | translate}}</div>
+      <div class="col-sm-3">{{'TABLES.TRANSACTIONS.DETAILS' | translate}}</div>
       <div class="col-sm-2">{{'TABLES.TRANSACTIONS.AMOUNT' | translate}}</div>
       <div class="col-sm-1">{{'TABLES.TRANSACTIONS.BLOCK' | translate}}</div>
       <div class="col-sm-3">{{'TABLES.TRANSACTIONS.BLOCKTIME' | translate}}</div>
     </div>
-    <div class="col-xs-12 table-row" ng-repeat="trans in transactions">
-      <div class="visible-xs col-xs-4">{{'TABLES.TRANSACTIONS.TX' | translate}}</div>
-      <div class="col-xs-8 col-sm-4" ng-click="setHashExplorer(trans)"> 
+    <div class="row table-row" ng-repeat="trans in transactions">
+      <div class="visible-xs col-xs-5">{{'TABLES.TRANSACTIONS.TX' | translate}}</div>
+      <div class="col-xs-7 col-sm-3" ng-click="setHashExplorer(trans)"> 
         <a href="/explorer/inspector?view={{trans.tx_hash}}">
           {{trans.tx_hash_concat}}
         </a>
       </div>
 
-      <div class="visible-xs col-xs-4">{{'TABLES.TRANSACTIONS.DETAILS' | translate}}</div>
-      <div class="col-xs-8 col-sm-2">{{trans.tx_type_str}}</div>
+      <div class="visible-xs col-xs-5">{{'TABLES.TRANSACTIONS.DETAILS' | translate}}</div>
+      <div class="col-xs-7 col-sm-3">{{trans.tx_type_str}}</div>
 
-      <div class="visible-xs col-xs-4">{{'TABLES.TRANSACTIONS.AMOUNT' | translate}}</div>
-      <div class="col-xs-8 col-sm-2 number" title="{{trans.accomulated_payment ? trans.accomulated_payment : trans.formatted_amount}}" ng-bind-html="trans.accomulated_payment ? trans.accomulated_payment : trans.formatted_amount | numeraljs: '0,0.00000000'"></div>
+      <div class="visible-xs col-xs-5">{{'TABLES.TRANSACTIONS.AMOUNT' | translate}}</div>
+      <div class="col-xs-7 col-sm-2 number" title="{{trans.accomulated_payment ? trans.accomulated_payment : trans.formatted_amount}}" ng-bind-html="trans.accomulated_payment ? trans.accomulated_payment : trans.formatted_amount | numeraljs: '0,0.00000000'"></div>
 
-      <div class="visible-xs col-xs-4">{{'TABLES.TRANSACTIONS.BLOCK' | translate}}</div>
-      <div class="col-xs-8 col-sm-1">{{trans.block}}</div>
+      <div class="visible-xs col-xs-5">{{'TABLES.TRANSACTIONS.BLOCK' | translate}}</div>
+      <div class="col-xs-7 col-sm-1">{{trans.block}}</div>
 
-      <div class="visible-xs col-xs-4">{{'TABLES.TRANSACTIONS.BLOCKTIME' | translate}}</div>
-      <div class="col-xs-8 col-sm-3">{{trans.utc_time}}</div>
+      <div class="visible-xs col-xs-5">{{'TABLES.TRANSACTIONS.BLOCKTIME' | translate}}</div>
+      <div class="col-xs-7 col-sm-3">{{trans.utc_time}}</div>
     </div>
   </div>
 </div>

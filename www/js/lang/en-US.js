@@ -215,7 +215,7 @@ angular.module("omniConfig")
 	CROWDSALE_PARTICIPATE_TITLE: 'Confirm Prowdsale Participation',
 	CROWDSALE_PARTICIPATE_CONFIRM: 'Participate',
 	ECOSYSTEM: {
-		LABEL:'Selected Ecosystem',
+		LABEL:'Ecosystem',
 		PRODUCTION:'Production',
 		TEST:'Test'
 	},
