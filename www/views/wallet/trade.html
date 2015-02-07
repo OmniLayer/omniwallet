@@ -11,7 +11,7 @@
 	</div>
 	<div class="col-xs-12">
 	  <div ng-show="showNoCoinAlert" class="alert alert-danger alert-dismissible missing-dex-alert" role="alert">
-	    Sorry, you don't have any {{ currAcronyms[ activeCurrencyPair[1] ] }}'s available to sell
+	    Sorry, you don't have any {{ activeCurrencyPair[1].name }} available to sell
 	    <button type="button" class="close" ng-click="hideNoCoinAlert();"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
 	  </div>
 	</div>

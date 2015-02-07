@@ -69,11 +69,11 @@ angular.module("omniControllers")
 		  }
 		  $scope.currPairs = []
 
-		  PropertyManager.getData(1).then(function(result){
+		  PropertyManager.getProperty(1).then(function(result){
 		  	$scope.currPairs.splice(0,0,{0:$scope.wallet.getAsset(0),1:result.data,view:"/views/wallet/partials/trade.html"})
 		  })
 		  if ( $scope.account.getSetting("showtesteco") === 'true'){
-		    PropertyManager.getData(2).then(function(result){
+		    PropertyManager.getProperty(2).then(function(result){
 			  	$scope.currPairs.splice(1,0,{0:$scope.wallet.getAsset(0),1:result.data,view:"/views/wallet/partials/trade.html"})
 			})
 		  } 
