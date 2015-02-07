@@ -18,6 +18,12 @@ angular.module("omniConfig")
       return "http://tbtc.blockr.io/address/info/";
     else
       return "https://blockchain.info/address/";
+  }])
+  .factory("EXODUS_ADDRESS",["TESTNET", function AddressExplorerUrlFactory(TESTNET){
+    if(TESTNET)
+      return "moneyqMan7uh8FqdCA2BV5yZ8qVrc9ikLP";
+    else
+      return "1EXoDusjGwvnjZUyKkxZ4UHEf77z6A5S4P";
   }]);
 
 angular.module("omniFilters", ["omniConfig"]);

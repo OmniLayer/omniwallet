@@ -1,6 +1,6 @@
 angular.module("omniControllers")
-	.controller("ExchangeTradeController",["$scope", "$http", "$q", 
-		function ExchangeTradeController($scope, $http, $q) {
+	.controller("ExchangeTradeController",["$scope", "PropertyManager",
+		function ExchangeTradeController($scope, PropertyManager) {
 
 		  //init and use global to pass data around
 		  $scope.global = {
@@ -46,6 +46,7 @@ angular.module("omniControllers")
 		  {
 		    $scope.showNoCoinAlert = false;
 		  }
+
 		  $scope.$on("setView", function(event, args){
 		    $scope.setView(args.view,args.data);
 		  });
@@ -67,12 +68,16 @@ angular.module("omniControllers")
 		    'MSC': 'Mastercoin',
 		    'TMSC': 'Test Mastercoin'
 		  }
-		  
+		  $scope.currPairs = []
+
+		  PropertyManager.getData(1).then(function(result){
+		  	$scope.currPairs.splice(0,0,[$scope.wallet.getAsset(0),result.data])
+		  })
 		  if ( $scope.account.getSetting("showtesteco") === 'true'){
-		    $scope.currPairs = [['BTC', 'MSC'], ['BTC', 'TMSC']];
-		  } else {
-		    $scope.currPairs = [['BTC', 'MSC']];
-		  }
+		    PropertyManager.getData(2).then(function(result){
+			  	$scope.currPairs.splice(1,0,[$scope.wallet.getAsset(0),result.data])
+			})
+		  } 
 
 		  //Get the active currency pair
 		  $scope.activeCurrencyPair = []

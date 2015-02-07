@@ -30,7 +30,7 @@ angular.module("omniConfig")
 		"FEES":"Miner Fees (BTC)"
 	},
 	"HOMEPAGE":{
-		"ADDRESSEXAMPLE":"(e.g. 1EXoDusjGwvnjZUyKkxZ4UHEf77z6A5S4P)",
+		"ADDRESSEXAMPLE":"e.g.",
    		"BALANCECHECK":"Balance Check",
    		"CHECKBALANCE":"Check Balance",
 		"ENTERVALIDADDRESS":"Enter a valid Bitcoin Address ",

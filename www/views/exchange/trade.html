@@ -1,9 +1,36 @@
-<div class="col-xs-10" ng-controller="WalletTradeController" ng-init="setView('tradeInfo')">
+<div ng-controller="ExchangeTradeController" ng-init="setView('tradeInfo')">
 
   <h4 ng-hide="onTradeView">
-    <a ng-click="setView('tradeInfo')"> <strong> < Go back </strong> </a>
+    <a ng-click="setView('tradeInfo')"> <strong> < {{ 'COMMON_BACK' | translate}} </strong> </a>
   </h4>
-  <div ng-include="tradeView" ng-hide="onSaleView" ng-controller="WalletAssetsFormController"></div>
-  <div ng-include="saleView" ng-show="onSaleView" ng-controller="WalletAssetsFormController"></div>
+  <div ng-hide="onSaleView">
+	<div class="col-sm-9 text-left om-title">{{ 'EXCHANGE.TRADE.TITLE'}}</div>
+
+	<div class="col-sm-3">
+	  <button class="btn btn-main" ng-click="setView('saleOffer')" ng-disabled="showNoCoinAlert"> {{ 'EXCHANGE.TRADE.SELL' | translate }} {{ activeCurrencyPair[1].name }} </button>
+	</div>
+	<div class="col-xs-12">
+	  <div ng-show="showNoCoinAlert" class="alert alert-danger alert-dismissible missing-dex-alert" role="alert">
+	    Sorry, you don't have any {{ currAcronyms[ activeCurrencyPair[1] ] }}'s available to sell
+	    <button type="button" class="close" ng-click="hideNoCoinAlert();"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+	  </div>
+	</div>
+
+	<tabset>
+	  <tab ng-repeat="currencyPair in currPairs" heading="{{currencyPair[0].symbol}} / {{currencyPair[1].symbol}}">
+	    <div class="row" ng-show="onTradeView">
+	      <div class="om-subtitle"> {{ activeCurrencyPair[0].name }} / {{ activeCurrencyPair[1].name }} </div> 
+	    </div>
+	    <div class="row" ng-include="currencyPair.view">
+	    </div>
+	  </tab>
+	  <tab ng-hide="true" select="addCurrencyPair()"> <!-- hidden until DEx Phase 2 -->
+	    <tab-heading>
+	      <a href=""> +{{'EXCHANGE.TRADE.ADD' | translate}} </a>
+	    </tab-heading>
+	  </tab> 
+	</tabset>
+  </div>
+  <div ng-include="saleView" ng-show="onSaleView"></div>
 
 </div>

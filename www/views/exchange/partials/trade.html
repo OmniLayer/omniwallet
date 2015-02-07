@@ -1,76 +1,7 @@
-    <div class="text-left om-title">Trade</div>
-
-  <ul class="row nav nav-pills" ng-init="setActiveCurrencyPair()">
-      <li ng-repeat="currencyPair in currPairs" ng-class="isActiveCurrencyPair(currencyPair)">
-        <a href="" ng-click="setActiveCurrencyPair(currencyPair)"> {{currencyPair[0]}} / {{currencyPair[1]}} </a>
-      </li>
-      <li ng-hide="true" ><a href=""> +Add </a></li> <!-- hidden until user currencies are born -->
-  </ul>
-
-  <div class="row" ng-show="onTradeView">
-    <h3> <strong> {{ currAcronyms[ activeCurrencyPair[0] ] }} / {{ currAcronyms[ activeCurrencyPair[1] ] }} </strong> </h3> 
-    <!--  <button type="button" class="btn btn-primary btn-lg">
-        <span class="glyphicon glyphicon-signal"></span>
-      </button>
-      &nbsp;
-      <button type="button" class="btn btn-default disabled">Last Price <br> <small> 0.00000000 </small> </button>
-      &nbsp;
-      <div class="btn-group">
-      <button type="button" class="btn btn-default disabled">High <br> <small> 0.00000000 </small> </button>
-      <button type="button" class="btn btn-default disabled">Low <br> <small> 0.00000000 </small> </button>
-      <button type="button" class="btn btn-default disabled">Avg Price <br> <small> 0.00000000 </small> </button>
-      <button type="button" class="btn btn-default disabled">Volume <br> <small> 0.00000000 </small> </button>
-      <div class="btn-group">
-            <button type="button" class="btn btn-default dropdown-toggle disabled" data-toggle="dropdown">
-              24 hours 
-              <span class="caret"></span> <br> &nbsp;
-            </button>
-            <ul class="dropdown-menu">
-              <li><a href="#">Dropdown link</a></li>
-              <li><a href="#">Dropdown link</a></li>
-            </ul>
-          </div>
-        </div>  -->
-  </div>
-  <div class="row" ng-controller="WalletTradeOverviewController" ng-init="global.getData()">
-    <div class="row" >
-      <div class="col-xs-9">
-        <div class="row">
-          <!-- <h3 class="col-xs-7"> <strong> Buy {{ currAcronyms[ activeCurrencyPair[1] ] }} </strong>
-              <select ng-model="currPair" ng-options="pairObject as pairObject for pairObject in pairs"
-              ng-change="getData(selectedAddress)">
-            <option value="">-- choose currency pair --</option>
-            </select> 
-              for
-            <select ng-model="selectedAddress" ng-options="addrObject.address as addrObject.address for addrObject in addresses" 
-              ng-change="getData(selectedAddress)">
-            <option value="">-- choose address --</option>
-            </select> -->
-          </h3>
-      </div>
-        <h1 class="col-xs-9"> Active Offers </h1> 
-      </div>
-      <br/>
-      <br/>
-      <br/>
-        <div class="col-xs-9">
-          
-        </div>
-        <div class="col-xs-3">
-          <h3> <strong> Sell {{ currAcronyms[ activeCurrencyPair[1] ] }} </strong> </h3>
-        </div>
-        <div class="col-xs-9">
-          <div ng-show="showNoCoinAlert" class="alert alert-danger alert-dismissible missing-dex-alert" role="alert">
-            <button type="button" class="close" ng-click="hideNoCoinAlert();"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-            Sorry, you don't have any {{ currAcronyms[ activeCurrencyPair[1] ] }}'s available to sell
-          </div>
-        </div>
-        <div class="col-xs-3">
-          <button class="btn btn-primary" ng-click="setView('saleOffer')" type="submit">Start new sell offer</button>
-          <br><br>
-        </div>
+<div ng-controller="ExchangeOverviewController" ng-init="global.getData()">
+    <div class="col-xs-9">
+      <h1> Active Offers </h1> 
     </div>
-
     <div class="col-xs-4">
       Time Frame: <select ng-model="selectedTimeframe"  
           ng-change="global.getData(selectedTimeframe)" ng-options="time.value as time.name for time in timeOptions">
