@@ -7,6 +7,10 @@
             return 301 /wallet/overview;
         }
 
+        location /template/ {
+            proxy_pass http://127.0.0.1/bower_components/angular-ui-bootstrap/template/
+        }
+        
         #Limit Perl Access per phil's recommendation
         if ($http_user_agent ~ "libwww-perl.*"){
             return 403;

@@ -27,6 +27,7 @@ angular.module("omniConfig")
   }]);
 
 angular.module("omniFilters", ["omniConfig"]);
+angular.module("omniDirectives", ["omniConfig"]);
 angular.module("omniFactories", ["omniConfig"]);
 angular.module("omniServices", ["omniConfig", "omniFactories"]);
 angular.module("omniControllers", ["omniConfig", "omniFactories", "omniServices"]);
@@ -45,6 +46,7 @@ var app = angular.module('omniwallet', [
   'nvd3',
   'omniConfig',
   'omniFilters',
+  'omniDirectives',
   'omniFactories',
   'omniServices',
   'omniControllers'
