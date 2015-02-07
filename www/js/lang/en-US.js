@@ -118,7 +118,7 @@ angular.module("omniConfig")
 			"70":{
 				"ISSUER":"{{coin}} ownership transfered"
 			}
-		},
+		}
 	},
 	"WALLET":{
 		"OVERVIEW":{

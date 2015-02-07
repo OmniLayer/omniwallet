@@ -117,7 +117,7 @@
 			"70":{
 				"ISSUER":"{{coin}} ownership transfered"
 			}
-		},
+		}
 	},
 	"WALLET":{
 		"OVERVIEW":{
