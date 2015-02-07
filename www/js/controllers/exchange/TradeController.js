@@ -62,21 +62,20 @@ angular.module("omniControllers")
 		  };
 
 		  //initialize the data used in the template
-		  $scope.currAcronyms = {
-		    'BTC': 'Bitcoin',
-		    'MSC': 'Mastercoin',
-		    'TMSC': 'Test Mastercoin'
-		  }
 		  $scope.currPairs = []
 
 		  PropertyManager.getProperty(1).then(function(result){
-		  	$scope.currPairs.splice(0,0,{0:$scope.wallet.getAsset(0),1:result.data,view:"/views/wallet/partials/trade.html"});
+		  	var omni = result.data;
+		  	omni.symbol  = "OMNI";
+		  	$scope.currPairs.splice(0,0,{0:$scope.wallet.getAsset(0),1:omni,view:"/views/wallet/partials/trade.html"});
 		  	$scope.setActiveCurrencyPair();
 		  	$scope.global.getData();
 		  })
 		  if ( $scope.account.getSetting("showtesteco") === 'true'){
 		    PropertyManager.getProperty(2).then(function(result){
-			  	$scope.currPairs.splice(1,0,{0:$scope.wallet.getAsset(0),1:result.data,view:"/views/wallet/partials/trade.html"});
+		    	var tomni = result.data;
+		  		tomni.symbol  = "T-OMNI";
+			  	$scope.currPairs.splice(1,0,{0:$scope.wallet.getAsset(0),1:tomni,view:"/views/wallet/partials/trade.html"});
 			})
 		  } 
 
@@ -95,14 +94,8 @@ angular.module("omniControllers")
 		    $scope.saleView = '/views/wallet/partials/sale.html?r='+random;
 		    $scope.showNoCoinAlert = false;
 		  }
+		  
 		  $scope.isActiveCurrencyPair = function(currencyPair) {
-		    if (angular.equals(currencyPair, $scope.activeCurrencyPair))
-		      return {
-		        'active': 1
-		      }
-		    else
-		      return {
-		        'active': 0
-		      }
+		    return angular.equals(currencyPair, $scope.activeCurrencyPair)
 		  }
 		}])
