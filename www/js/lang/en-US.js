@@ -225,11 +225,15 @@ angular.module("omniConfig")
 		"HISTORY":{
 			"TRANSACTIONS":"transactions",
 			"LOADING":"Loading transactions",
-			"FIXEDISSUANCE_TRUE":"Property",
-			"FIXEDISSUANCE_FALSE":"Crowdsale",
-			"TRANSACTION_CLOSED":"Crowdsale was closed from further investments",
-			"TRANSACTION_CREATE":"was created",
-			"TRANSACTION_CONFIRMATIONS":"Confirmations"
+			"FIXEDISSUANCE":{
+				"TRUE":"Property",
+				"FALSE":"Crowdsale"
+			},
+			"TRANSACTION":{
+				"CLOSED":"Crowdsale was closed from further investments",
+				"CREATE":"was created",
+				"CONFIRMATIONS":"Confirmations"
+			}
 		},
 		"DETAILS":{
 			"URL":"For more details visit",
