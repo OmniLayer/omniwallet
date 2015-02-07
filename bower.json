@@ -19,15 +19,17 @@
     "forge": "https://github.com/digitalbazaar/forge.git#0.2.30",
     "angular-password-strength": "https://github.com/curtislacy/angular-password-strength.git#Caret-Operator",
     "angular-timer": "~1.1.6",
-    "ngInfiniteScroll":"1.0.0",
+    "ngInfiniteScroll": "1.0.0",
     "numeraljs": "https://github.com/adamwdraper/Numeral-js.git#master",
     "angular-numeraljs": "https://github.com/sagyeli/angular-numeraljs.git#master",
     "angular-idle": "https://github.com/hackedbychinese/ng-idle.git#master",
     "angular-re-captcha": "~0.0.3",
     "angular-translate": "~2.4.2",
-    "angular-nvd3": "~0.0.9"
+    "angular-nvd3": "~0.0.9",
+    "angular-translate-loader-static-files": "~2.5.2"
   },
   "resolutions": {
-    "d3": "~3.4"
+    "d3": "~3.4",
+    "angular-translate": "~2.5.2"
   }
 }

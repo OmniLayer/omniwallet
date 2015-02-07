@@ -161,7 +161,7 @@ var app = angular.module('omniwallet', [
   $locationProvider.html5Mode(true).hashPrefix('!');
 });
 
-app.config(function($idleProvider, $keepaliveProvider, reCAPTCHAProvider, idleDuration, idleWarningDuration, reCaptchaKey, $translateProvider, EnglishTranslation) {
+app.config(function($idleProvider, $keepaliveProvider, reCAPTCHAProvider, idleDuration, idleWarningDuration, reCaptchaKey, $translateProvider, DefaultTranslation) {
   $idleProvider.idleDuration(idleDuration);
   $idleProvider.warningDuration(idleWarningDuration);
   // $keepaliveProvider.interval(2);
@@ -173,8 +173,13 @@ app.config(function($idleProvider, $keepaliveProvider, reCAPTCHAProvider, idleDu
       theme: 'clean'
   });
 
-  $translateProvider.translations('en', EnglishTranslation);
-   
+  $translateProvider.translations('en', DefaultTranslation);
+  
+  $translateProvider.useStaticFilesLoader({
+    prefix: '/locales/',
+    suffix: '.json'
+  });
+  // load 'en' table on startup
   $translateProvider.preferredLanguage('en');
 })
 .run(function(Account, $location, TESTNET, BalanceSocket) {

@@ -1,5 +1,4 @@
-angular.module("omniConfig")
-	.constant("DefaultTranslation",{
+{
    	"COMMON":{
    		"ACTIONS":"Actions",
 		"ADDRESS":"Address",
@@ -327,4 +326,4 @@ angular.module("omniConfig")
 			"CREATED":"Tokens Created"
 		}
 	}
-})
+}
