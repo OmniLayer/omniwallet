@@ -4,7 +4,7 @@
     <a ng-click="setView('tradeInfo')"> <strong> < {{ 'COMMON_BACK' | translate}} </strong> </a>
   </h4>
   <div ng-hide="onSaleView">
-	<div class="col-sm-9 text-left om-title">{{ 'EXCHANGE.TRADE.TITLE'}}</div>
+	<div class="col-sm-9 text-left om-title">{{ 'EXCHANGE.TRADE.TITLE' | translate}}</div>
 
 	<div class="col-sm-3">
 	  <button class="btn btn-main" ng-click="setView('saleOffer')" ng-disabled="showNoCoinAlert"> {{ 'EXCHANGE.TRADE.SELL' | translate }} {{ activeCurrencyPair[1].name }} </button>
@@ -17,7 +17,7 @@
 	</div>
 
 	<tabset>
-	  <tab ng-repeat="currencyPair in currPairs" heading="{{currencyPair[0].symbol}} / {{currencyPair[1].symbol}}">
+	  <tab ng-repeat="currencyPair in currPairs" heading="{{currencyPair[0].symbol}} / {{currencyPair[1].symbol}}" active="isActiveCurrencyPair(currencyPair)">
 	    <div class="row" ng-show="onTradeView">
 	      <div class="om-subtitle"> {{ activeCurrencyPair[0].name }} / {{ activeCurrencyPair[1].name }} </div> 
 	    </div>
