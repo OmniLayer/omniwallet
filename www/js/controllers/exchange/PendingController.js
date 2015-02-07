@@ -100,14 +100,14 @@ angular.module("omniControllers")
 		      //DEBUG console.log('filtered tx data, pending offers',filtered_transaction_data)
 
 		      $scope.filtered_buys = filtered_transaction_data.filter(function(item) {
-		        var orderType = item.TRANSACTION.TYPEstr.toLowerCase()
+		        var orderType = item.tx_type_str.toLowerCase()
 		        var orderStatus = item.status ? item.status.toLowerCase() : undefined;
-		        //DEBUG console.log(item.TRANSACTION.TYPEstr, item.status, orderStatus)
+		        //DEBUG console.log(item.tx_type_str, item.status, orderStatus)
 		        return (orderType == 'sell accept') && (orderStatus != 'expired') && (orderStatus != 'closed')
 		      });
 
 		      $scope.filtered_sells = filtered_transaction_data.filter(function(item) {
-		        var orderType = item.TRANSACTION.TYPEstr.toLowerCase()
+		        var orderType = item.tx_type_str.toLowerCase()
 		        var orderStatus = item.color.match(/(bgc-done|expired|invalid)/gi) || []
 		        //DEBUG console.log(orderStatus, item.color)
 		        return (orderType == 'sell offer') && (orderStatus.length == 0)
