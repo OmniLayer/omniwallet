@@ -55,7 +55,7 @@
 		"TRANSACTIONS":"交易",
 		"WALLET":"我的钱包"
 	},
-	"TX":{
+	"TRANSACTION":{
 		"TYPE":{
 			"0":"发送",
 			"3":"Send To Owners",

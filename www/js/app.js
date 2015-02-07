@@ -188,7 +188,9 @@ app.config(function($idleProvider, $keepaliveProvider, reCAPTCHAProvider, idleDu
     suffix: '.json'
   });
   // load 'en' table on startup
-  $translateProvider.preferredLanguage('en');
+  $translateProvider.fallbackLanguage('en');
+  $translateProvider.determinePreferredLanguage();
+
 })
 .run(function(Account, $location, TESTNET, BalanceSocket) {
   //Whitelist pages

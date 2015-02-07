@@ -57,7 +57,7 @@ angular.module("omniConfig")
 		"TRANSACTIONS":"Transactions",
 		"WALLET":"My Wallet"
 	},
-	"TX":{
+	"TRANSACTION":{
 		"TYPE":{
 			"0":"Simple Send",
 			"3":"Send To Owners",
