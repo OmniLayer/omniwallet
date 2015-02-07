@@ -293,5 +293,5 @@ function ExchangeSaleController($modal, $scope, $http, $q, Wallet, walletTransac
       $scope.$parent.showErrors = true;
     }
   };
-}
+}])
 

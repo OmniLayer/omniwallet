@@ -283,4 +283,4 @@ function ExchangeBuyController($modal, $scope, $http, $q, Wallet, walletTransact
     }
   };
 
-}
+}])
