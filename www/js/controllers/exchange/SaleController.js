@@ -1,56 +1,46 @@
-function WalletBuyAssetsController($modal, $scope, $http, $q, Wallet, walletTransactionService, Account) {
-    // [ Template Initialization ]
-    
-  $scope.currencyList.forEach(function(e, i) {
-    if (e.symbol == "BTC"){
-      $scope.addressList = e.tradableAddresses.filter(function(e) {
-          return (e.privkey && e.privkey.length == 58);
-        }).map(function(e){
-          return e.hash;
-        });
-      $scope.$parent.$parent.selectedAddress = $scope.addressList[0];
-    }
-  });
-  // OInitialize values.
-  var transaction = $scope.global['buyOffer'];
-  $scope.buySaleID = transaction.tx_hash;
-  $http.get('/v1/transaction/tx/' + transaction.tx_hash + '.json').success(function(data) {
-    var tx = data[0];
-    $scope.selectedCoin=tx.currency_str;
+angular.module("omniControllers")
+  .controller("ExchangeSaleController",["$modal", "$scope", "$http", "$q", "Wallet", "walletTransactionService", "Account",
 
-    if(parseInt(tx.currencyId) <3) {
-      $scope.divisible = true;
-      $scope.sendPlaceholderValue = '1.00000000';
-      $scope.sendPlaceholderStep = $scope.sendPlaceholderMin = '0.00000001';
-      $scope.displayedAbbreviation = tx.currency_str;
-    } else {
-      $http.get("/v1/property/"+tx.currencyId.replace(new RegExp("^0+"), "") +".json", function(data) {
-        var property = data[0];
-        if(property.propertyType == "0001"){
-          $scope.divisible =false;
-          $scope.sendPlaceholderValue = $scope.sendPlaceholderStep = $scope.sendPlaceholderMin = '1';
-        } else  {
-          $scope.divisible = true;
-          $scope.sendPlaceholderValue = '1.00000000';
-          $scope.sendPlaceholderStep = $scope.sendPlaceholderMin = '0.00000001';
-        }
-          
-        $scope.displayedAbbreviation = property.propertyName + " #" + property.currencyId;
-      });
-    }
-  });
-  // [ Buy Form Helpers ]
+function ExchangeSaleController($modal, $scope, $http, $q, Wallet, walletTransactionService, Account) {
 
-  function getUnsignedBuyTransaction(buyerAddress, pubKey, buyAmount, fee, saleTransactionHash) {
+
+  // [ Template Initialization ]
+
+  if ($scope.isCancel == true) {
+    $scope.activeCurrencyPair=['BTC','BTC']; // set defaults for Cancel
+  }
+
+  $scope.currencySaleList = $scope.currencyList.filter(function(currency){
+    if (currency.symbol == $scope.activeCurrencyPair[1] )
+      $scope.$parent.$parent.selectedCoin = currency;
+    return currency.symbol == $scope.activeCurrencyPair[1];
+  });
+
+  if( $scope.currencySaleList.length == 0 ) {
+    var noCurrency={
+        symbol: 'No DeX-tradable coins in wallet!',
+        name: 'No DeX-tradable coins in wallet!',
+        tradableAddresses: [] 
+    }
+    $scope.currencySaleList.push(noCurrency);
+    $scope.$parent.$parent.selectedCoin=noCurrency;
+    $scope.hideForm=true
+  }
+  // [ Sale Form Helpers ]
+
+  function getUnsignedSaleTransaction(sellerAddress, pubKey, saleAmount, salePrice, buyersFee, fee, saleBlocks, currency) {
     var deferred = $q.defer();
 
-    var url = '/v1/exchange/accept/';
+    var url = '/v1/exchange/sell/';
     $http.post(url, {
-        buyer: buyerAddress,
+        seller: sellerAddress,
         pubKey: pubKey,
-        amount: buyAmount,
+        amount: saleAmount,
+        price: salePrice,
+        min_buyer_fee: buyersFee,
         fee: fee,
-        tx_hash: saleTransactionHash,
+        blocks: saleBlocks,
+        currency: currency,
         donate: Account.getSetting("donate")
       }).success(function(data) {
         return deferred.resolve(data);
@@ -61,21 +51,22 @@ function WalletBuyAssetsController($modal, $scope, $http, $q, Wallet, walletTran
     return deferred.promise;
   }
 
-  function prepareBuyTransaction(buyer, amt, hash, fee, privkeyphrase, $modalScope) {
-    var addressData = Wallet.getAddress(buyer);
+  function prepareSaleTransaction(seller, amt, price, buyerfee, fee, blocks, currency, privkeyphrase, $modalScope) {
+    var addressData = Wallet.getAddress(seller);
     var privKey = new Bitcoin.ECKey.decodeEncryptedFormat(addressData.privkey, addressData.address); // Using address as temporary password
     var pubKey = privKey.getPubKeyHex();
 
-    $scope.sendTxPromise = getUnsignedBuyTransaction(buyer, pubKey, amt, fee, hash);
+    $scope.sendTxPromise = getUnsignedSaleTransaction(seller, pubKey, amt, price, buyerfee, fee, blocks, currency);
     $scope.sendTxPromise.then(function(successData) {
       //var successData = successData.data;
       if (successData.status != 200 && successData.status != "OK") { /* Backwards compatibility for mastercoin-tools send API */
       //if (successData.status != 'OK') {
         $modalScope.waiting = false;
         $modalScope.sendError = true;
-        $modalScope.error = 'Error preparing buy transaction: ' + successData.error || successData.data; /* Backwards compatibility for mastercoin-tools send API */
+        //$modalScope.error = 'Error preparing sell transaction: ' + successData;
+        $modalScope.error = 'Error preparing transaction: ' + successData.error || successData.data; /* Backwards compatibility for mastercoin-tools send API */
       } else {
-        //var successData = successData.data ??
+        //var successData = successData.data ???
         //var sourceScript = successData.sourceScript;
         //var unsignedTransaction = successData.transaction;
         var unsignedTransaction = successData.unsignedhex || successData.transaction; /* Backwards compatibility for mastercoin-tools send API */
@@ -107,7 +98,7 @@ function WalletBuyAssetsController($modal, $scope, $http, $q, Wallet, walletTran
             if(TESTNET)
               $modalScope.url = 'http://tbtc.blockr.io/tx/info/' + successData.tx;
             else
-              $modalScope.url = 'http://blockchain.info/address/' + buyer + '?sort=0';
+              $modalScope.url = 'http://blockchain.info/address/' + seller + '?sort=0';
             } else {
               $modalScope.waiting = false;
               $modalScope.sendError = true;
@@ -165,83 +156,92 @@ function WalletBuyAssetsController($modal, $scope, $http, $q, Wallet, walletTran
     });
   }
 
-  $scope.validateBuyForm = function() {
+  $scope.validateSaleForm = function() {
     var dustValue = 5757;
     var minerMinimum = 10000;
     var nonZeroValue = 1;
-    var divisible = $scope.divisible; 
+    var cancelFees = (5757*3);
+    var divisible = $scope.selectedCoin.divisible; 
 
     var convertToSatoshi = [
         $scope.minerFees,
-        $scope.buyAmount,
+        $scope.buyersFee,
+        0, //$scope.salePricePerCoin,
+        $scope.saleAmount,
         $scope.balanceData[0], 
         $scope.balanceData[1]
       ];
 
     if (!divisible) {
-      delete convertToSatoshi[ convertToSatoshi.indexOf( $scope.buyAmount ) ];
+      delete convertToSatoshi[ convertToSatoshi.indexOf( $scope.saleAmount ) ];
       delete convertToSatoshi[ convertToSatoshi.indexOf( $scope.balanceData[0] ) ];
     }
 
     var convertedValues = $scope.convertDisplayedValue( convertToSatoshi );
 
     var minerFees = +convertedValues[0];
-    var buyAmount = divisible ? +convertedValues[1] : +$scope.buyAmount;
+    var buyersFee = +convertedValues[1];
+    //var salePricePerCoin = +convertedValues[2];
+    var saleAmount = divisible ? +convertedValues[3] : +$scope.saleAmount;
     
-    var balance = divisible ? +convertedValues[2] : +$scope.balanceData[0];
-    var btcbalance = +convertedValues[3];
+    var balance = divisible ? +convertedValues[4] : +$scope.balanceData[0];
+    var btcbalance = +convertedValues[5];
 
-    var coin = $scope.selectedCoin;
+    var coin = $scope.isCancel != true ? $scope.selectedCoin.symbol : $scope.selectedCoin_extra;
+    var salePricePerCoin = $scope.salePricePerCoin;
     var address = $scope.selectedAddress;
-    var saleHash = $scope.buySaleID;
-    
-    var totalBtcCost = parseFloat($scope.convertDisplayedValue(transaction.formatted_price_per_coin * $scope.convertSatoshiToDisplayedValue(buyAmount)));
+    var saleBlocks = +$scope.saleBlocks;
+
     var totalFeeCost = parseFloat($scope.convertDisplayedValue($scope.totalCost));
-    var insufficientBitcoin = false;
     
-    var required = [coin, address, buyAmount, minerFees, balance, btcbalance, $scope.buyForm.$valid];
-    console.log(required);
+    var required = [coin, address, saleAmount, saleBlocks, salePricePerCoin, minerFees, buyersFee, balance, btcbalance, $scope.saleForm.$valid];
+    
     var error = 'Please ';
-    if ($scope.buyForm.$valid == false) {
+    if ($scope.saleForm.$valid == false) {
       error += 'make sure all fields are completely filled, ';
     }
-    //should be valid hash
-    //if( walletTransactionService.validAddress(sendTo) == false) {
-    //   error += 'make sure you are sending to a valid MSC/BTC address, '
-    //}
-    if (coin == 'Bitcoin') {
+    if ( $scope.isCancel != true && coin == 'BTC') {
       error += 'make sure your sale is for MSC or TMSC, ';
     }
-    if( ((coin == 'Mastercoin') || (coin == 'Test Mastercoin')) ) {
-      if (buyAmount < nonZeroValue)
+    if( $scope.isCancel != true && ((coin == 'MSC') || (coin == 'TMSC')) ) {
+      if (saleAmount < nonZeroValue)
         error += 'make sure your send amount is non-zero, ';
+      if (buyersFee < minerMinimum)
+        error += 'make sure your buyers fee entry is at least 0.0001 BTC, ';
       if (minerFees < minerMinimum)
         error += 'make sure your fee entry is at least 0.0001 BTC, ';
+      if ((saleAmount <= balance) == false)
+        error += 'make sure you aren\'t putting more coins up for sale than you own, ';
       if ((totalFeeCost <= btcbalance) == false)
         error += 'make sure you have enough Bitcoin to cover your fees, ';
-      if ((totalBtcCost+totalFeeCost <= btcbalance) == false) {
-        insufficientBitcoin = true;
-      }
+
+      if (saleBlocks < 1)
+        error += 'make sure your block timeframe is at least 1, ';
     }
+    if ($scope.isCancel == true && (((cancelFees + minerFees) <= btcbalance) == false) )
+      error += 'make sure you have enough Bitcoin to cover your transaction fees, ';
     if (error.length < 8) {
       $scope.$parent.showErrors = false;
 
       // open modal
       var modalInstance = $modal.open({
-        templateUrl: '/partials/wallet_buy_modal.html',
-        controller: function($scope, $modalInstance, $rootScope, data, prepareBuyTransaction, getUnsignedBuyTransaction, convertSatoshiToDisplayedValue) {
+        templateUrl: $scope.isCancel == true ? '/partials/wallet_cancel_modal.html' : '/partials/wallet_sale_modal.html',
+        controller: function($scope, $modalInstance, $rootScope, data, prepareSaleTransaction, getUnsignedSaleTransaction, convertSatoshiToDisplayedValue, getDisplayedAbbreviation) {
           $scope.sendSuccess = false, $scope.sendError = false, $scope.waiting = false, $scope.privKeyPass = {};
           $scope.convertSatoshiToDisplayedValue=convertSatoshiToDisplayedValue,
-          $scope.displayedAbbreviation=data.displayedAbbreviation,
-          $scope.buyAmount=data.amt,
-          $scope.minerFees= data.fee,
-          $scope.selectedCoin= data.selectedCoin;
-          $scope.insufficientBitcoin = data.insufficientBitcoin
-          
+          $scope.getDisplayedAbbreviation=getDisplayedAbbreviation,
+          $scope.saleAmount=data.amt,
+          $scope.buyersFee=data.buyersfee,
+          $scope.selectedCoin=data.selectedCoin,
+          $scope.salePricePerCoin= data.price,
+          $scope.saleBlocks = data.blocks;
+
           $scope.ok = function() {
             $scope.clicked = true;
             $scope.waiting = true;
-            prepareBuyTransaction(data.buyer, data.amt, data.hash, data.fee, $scope.privKeyPass, $scope);
+
+            prepareSaleTransaction(data.seller, data.amt, data.price,
+            data.buyersfee, data.fee, data.blocks, data.currency, $scope.privKeyPass, $scope);
           };
           $scope.cancel = function () {
             $modalInstance.dismiss('cancel');
@@ -250,34 +250,48 @@ function WalletBuyAssetsController($modal, $scope, $http, $q, Wallet, walletTran
         resolve: {
           data: function() {
             return {
-              buyer: address,
-              amt: buyAmount,
-              hash: saleHash,
+              seller: address,
+              amt: saleAmount,
+              price: salePricePerCoin,
+              buyersfee: buyersFee,
               fee: minerFees,
+              blocks: saleBlocks,
+              currency: coin,
               selectedCoin: $scope.selectedCoin,
-              displayedAbbreviation: $scope.displayedAbbreviation,
-              insufficientBitcoin: insufficientBitcoin
+              saleBlocks: saleBlocks
             };
           },
-          prepareBuyTransaction: function() {
-            return prepareBuyTransaction;
+          prepareSaleTransaction: function() {
+            return prepareSaleTransaction;
           },
-          getUnsignedBuyTransaction: function() {
-            return getUnsignedBuyTransaction;
+          getUnsignedSaleTransaction: function() {
+            return getUnsignedSaleTransaction;
           },
           pushSignedTransaction: function() {
             return walletTransactionService.pushSignedTransaction;
           },
           convertSatoshiToDisplayedValue: function() {
             return $scope.convertSatoshiToDisplayedValue;
+          },
+          getDisplayedAbbreviation: function() {
+            return $scope.getDisplayedAbbreviation;
           }
         }
       });
+
+      modalInstance.result.then(function() {
+        if ($scope.isCancel)
+          $scope.$parent.$parent.$parent.cancelTrig = null;
+      }, function() {
+        if ($scope.isCancel)
+          $scope.$parent.$parent.$parent.cancelTrig = null;
+      });
+
     } else {
       error += 'and try again.';
       $scope.error = error;
       $scope.$parent.showErrors = true;
     }
   };
-
 }
+
