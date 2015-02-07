@@ -24,7 +24,7 @@
           <li ng-show="account.loggedIn" ng-class="{active:section=='wallet'}">
             <a href="/wallet/overview" ng-click="section='wallet';subsection='overview'">{{ 'NAVIGATION.WALLET' | translate }} <span class="glyphicon glyphicon-chevron-down"></span></a>
           </li>
-          <li ng-class="{active:section=='exchange'}">
+          <li ng-show="account.loggedIn" ng-class="{active:section=='exchange'}">
             <a href="/wallet/trade" ng-click="section='exchange';subsection='trade'">{{'NAVIGATION.EXCHANGE' | translate}} <span class="glyphicon glyphicon-chevron-down"></span></a>
           </li>
           <li ng-class="{active:section=='explorer'}">

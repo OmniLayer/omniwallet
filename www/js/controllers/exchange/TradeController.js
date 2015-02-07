@@ -56,10 +56,9 @@ angular.module("omniControllers")
 		    $scope.hasCoins = !hideForm;
 		  }
 		  $scope.tradeTemplates = {
-		    'tradeInfo': '/views/exchange/info.html',
 		    'simpleSend': '/views/wallet/send.html',
-		    'buyOffer': '/views/exchange/buy.html',
-		    'saleOffer': '/views/exchange/sale.html'
+		    'buyOffer': '/views/wallet/partials/buy.html',
+		    'saleOffer': '/views/wallet/partials/sale.html'
 		  };
 
 		  //initialize the data used in the template
@@ -71,11 +70,11 @@ angular.module("omniControllers")
 		  $scope.currPairs = []
 
 		  PropertyManager.getData(1).then(function(result){
-		  	$scope.currPairs.splice(0,0,[$scope.wallet.getAsset(0),result.data])
+		  	$scope.currPairs.splice(0,0,{0:$scope.wallet.getAsset(0),1:result.data,view:"/views/wallet/partials/trade.html"})
 		  })
 		  if ( $scope.account.getSetting("showtesteco") === 'true'){
 		    PropertyManager.getData(2).then(function(result){
-			  	$scope.currPairs.splice(1,0,[$scope.wallet.getAsset(0),result.data])
+			  	$scope.currPairs.splice(1,0,{0:$scope.wallet.getAsset(0),1:result.data,view:"/views/wallet/partials/trade.html"})
 			})
 		  } 
 
@@ -91,7 +90,7 @@ angular.module("omniControllers")
 
 		    $scope.global.getData();
 		    var random = Math.random();
-		    $scope.saleView = '/views/exchange/sale.html?r='+random;
+		    $scope.saleView = '/views/wallet/partials/sale.html?r='+random;
 		    $scope.showNoCoinAlert = false;
 		  }
 		  $scope.isActiveCurrencyPair = function(currencyPair) {
