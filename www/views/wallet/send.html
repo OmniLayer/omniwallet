@@ -44,14 +44,14 @@
           <div class="panel-body">
             <div class="col-sm-6">
               <label for="chooseCoin" >
-                <span>{{ 'COMMON_SEND' | translate}} <span>
+                <span>{{ 'COMMON.SEND' | translate}} <span>
                 <span ng-if="selectedAsset.symbol == 'BTC'">
                   {{sendByValue ? userCurrency : 'BTC'}}
                 </span>
                 <span ng-if="selectedAsset.symbol != 'BTC'">
                   {{ 'WALLET_SEND_AMOUNT' | translate}}
                 </span>
-                ({{selectedAddress.getDisplayBalance(selectedAsset.id)}} {{selectedAsset.name}} <small class="text-muted" ng-show="selectedAsset.id > 2">({{selectedAsset.id}})</small> {{ 'COMMON_AVAILABLE' | translate}})
+                ({{selectedAddress.getDisplayBalance(selectedAsset.id)}} {{selectedAsset.name}} <small class="text-muted" ng-show="selectedAsset.id > 2">({{selectedAsset.id}})</small> {{ 'COMMON.AVAILABLE' | translate}})
               </label>
               <div class="input-group" ng-show="selectedAsset.symbol == 'BTC'">
                 <span class="input-group-addon no-padding">
@@ -82,7 +82,7 @@
         <p>
           {{ 'WALLET_SEND_COST' | translate}}: {{selectedAsset.symbol == 'BTC'? minersFee.valueOf() : minersFee.plus(protocolFee).valueOf()}} BTC <button type="button" class="btn btn-xs"><span class="glyphicon glyphicon-pencil small"></span></button>
         </p>  
-        <button type="submit" class="btn btn-main pull-right">{{ 'COMMON_NEXT' | translate}}</button>
+        <button type="submit" class="btn btn-main pull-right">{{ 'COMMON.NEXT' | translate}}</button>
       </form>
     </div>    
   </div>

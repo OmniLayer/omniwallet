@@ -98,7 +98,7 @@ angular.module("omniControllers")
 			$scope.modalManager.openConfirmationModal({
 				dataTemplate: '/views/modals/partials/crowdsale.html',
 				scope:{
-					title:"ASSET_CROWDSALE_MODALTITLE",
+					title:"ASSET.CROWDSALE.MODALTITLE",
 				    divisible : $scope.isDivisible(),
 				    propertyName : $scope.propertyDetails.propertyName,
 				    propertyData : $scope.propertyDetails.propertyData,
@@ -112,7 +112,7 @@ angular.module("omniControllers")
 				    percentageForIssuer : $scope.percentageForIssuer,
 				    fees : $scope.issuerData.minerFees,
 				    totalCost : crowdsaleCreation.totalCost,
-					confirmText:"ASSET_CROWDSALE_START",
+					confirmText:"ASSET.CROWDSALE.START",
 					explorerUrl:ADDRESS_EXPLORER_URL
 				},
 				transaction:crowdsaleCreation

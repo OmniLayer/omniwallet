@@ -44,7 +44,7 @@ angular.module("omniControllers")
         });
 
         transaction_data = transaction_data.filter(function(item) {
-           var orderType = item.tx_type_str.toLowerCase()
+           var orderType = item.TRANSACTION.TYPEstr.toLowerCase()
            var orderStatus = item.color.match(/invalid|expired|bgc-done/gi) || []
            //DEBUG console.log(orderStatus, item.color)
            return (orderType == 'sell offer') && (orderStatus.length == 0)

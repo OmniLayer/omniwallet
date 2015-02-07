@@ -59,7 +59,7 @@ angular.module("omniControllers")
 			$scope.modalManager.openConfirmationModal({
 				dataTemplate: '/views/modals/partials/issuance.html',
 				scope:{
-					title:"ASSET_ISSUANCE_MODALTITLE",
+					title:"ASSET.ISSUANCE.MODALTITLE",
 				    divisible : $scope.isDivisible(),
 				    propertyName : $scope.propertyDetails.propertyName,
 				    propertyData : $scope.propertyDetails.propertyData,
@@ -68,7 +68,7 @@ angular.module("omniControllers")
 				    propertyUrl : $scope.propertyDetails.propertyUrl,
 				    numberProperties: $scope.numberProperties,
 				    totalCost : assetCreation.totalCost,
-					confirmText:"ASSET_ISSUANCE_CREATE",
+					confirmText:"ASSET.ISSUANCE.CREATE",
 					explorerUrl:ADDRESS_EXPLORER_URL
 				},
 				transaction:assetCreation
