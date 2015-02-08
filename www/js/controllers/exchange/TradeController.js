@@ -64,14 +64,14 @@ angular.module("omniControllers")
 
 		  PropertyManager.getProperty(1).then(function(result){
 		  	var omni = result.data;
-		  	omni.symbol  = "OMNI";
+		  	omni.symbol  = "MSC";//"OMNI";
 		  	$scope.currPairs.splice(0,0,{0:$scope.wallet.getAsset(0),1:omni,view:"/views/wallet/partials/trade.html"});
 		  	$scope.setActiveCurrencyPair();
 		  })
 		  if ( $scope.account.getSetting("showtesteco") === 'true'){
 		    PropertyManager.getProperty(2).then(function(result){
 		    	var tomni = result.data;
-		  		tomni.symbol  = "T-OMNI";
+		  		tomni.symbol  = "TMSC"; //"T-OMNI";
 			  	$scope.currPairs.splice(1,0,{0:$scope.wallet.getAsset(0),1:tomni,view:"/views/wallet/partials/trade.html"});
 			})
 		  } 

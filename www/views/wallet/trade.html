@@ -11,15 +11,15 @@
 	</div>
 	<div class="col-xs-12">
 	  <div ng-show="showNoCoinAlert" class="alert alert-danger alert-dismissible missing-dex-alert" role="alert">
-	    Sorry, you don't have any {{ activeCurrencyPair[1].name }} available to sell
-	    <button type="button" class="close" ng-click="hideNoCoinAlert();"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+	    {{ 'EXCHANGE.TRADE.NOCOINS.LEAD' | translate}} {{ activeCurrencyPair[1].name }} {{'EXCHANGE.TRADE.NOCOINS.TRAIL' | translate}} 
+	    <button type="button" class="close" ng-click="hideNoCoinAlert();"><span aria-hidden="true">&times;</span><span class="sr-only">{{ 'COMMON_CLOSE' | translate}}</span></button>
 	  </div>
 	</div>
 
 	<tabset>
 	  <tab ng-repeat="currencyPair in currPairs" heading="{{currencyPair[0].symbol}} / {{currencyPair[1].symbol}}" active="currencyPair.active" select="setActiveCurrencyPair(currencyPair)" >
 	    <div class="row" ng-show="onTradeView">
-	      <div class="om-subtitle"> {{ activeCurrencyPair[0].name }} / {{ activeCurrencyPair[1].name }} </div> 
+	      <div class="col-xs-12 om-subtitle"> {{ activeCurrencyPair[0].name }} / {{ activeCurrencyPair[1].name }} </div> 
 	    </div>
 	    <div class="row" ng-include="currencyPair.view">
 	    </div>

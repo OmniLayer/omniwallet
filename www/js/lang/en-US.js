@@ -330,5 +330,18 @@ angular.module("omniConfig")
 			"BOUGHT":"Tokens Bought",
 			"CREATED":"Tokens Created"
 		}
+	},
+	"EXCHANGE":{
+		"TRADE":{
+			"TITLE":"Trade",
+			"SELL":"Sell",
+			"NOCOINS":{
+				"LEAD":"Sorry, you don't have any",
+				"TRAIL": "available to sell"
+			},
+			"ACTIVE": "Active Offers",
+			"TIMEFRAME" :"Time frame",
+			"TOTAL": "Total Transactions"
+		}
 	}
 })

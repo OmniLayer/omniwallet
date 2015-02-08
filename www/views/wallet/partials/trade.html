@@ -1,14 +1,13 @@
-<div ng-controller="ExchangeOverviewController" ng-init="getData(timeAll, currencyPair[1])">
+<div ng-controller="ExchangeOverviewController" ng-init="getData(timeAll, currencyPair[1].symbol)">
     <div class="col-xs-9">
-      <h1> Active Offers </h1> 
+      <h4><strong>{{ 'EXCHANGE.TRADE.ACTIVE' | translate}}</strong> <small ng-hide="orderbook.length == 0" class="text-muted">{{orderbook.length}} {{'EXCHANGE.TRADE.TOTAL' | translate}}</small>  </h4> 
     </div>
-    <div class="col-xs-4">
-      Time Frame: <select ng-model="selectedTimeframe"  
-          ng-change="global.getData(selectedTimeframe)" ng-options="time.value as time.name for time in timeOptions">
+    <div class="col-xs-3 form-inline">
+      {{'EXCHANGE.TRADE.TIMEFRAME' | translate}}: <select ng-class="form-control" ng-model="selectedTimeframe"  
+          ng-change="getData(selectedTimeframe, currencyPair[1].symbol)" ng-options="time.value as time.name for time in timeOptions">
       </select>
     </div>
-    <h3 ng-show="orderbook.length == 0" class="text-center">Loading...<img src="/assets/img/spinner.gif"></h3>
-    <br /><small><h4 ng-hide="orderbook.length == 0"><span class="text-info text-center"> {{orderbook.length}} Total Transacations </span></h4></small>
+    <div ng-show="orderbook.length == 0" class="col-xs-12 text-center">{{'COMMON.LOADING' | translate}}...<img src="/assets/img/spinner.gif"></div>
     <table ng-hide="orderbook.length == 0" class="table table-striped table-hover table-condensed" fixed-header>
       <thead>
           <tr>
