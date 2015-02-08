@@ -53,7 +53,7 @@ angular.module("omniControllers")
 
         angular.forEach(transaction_data, function(transaction, index) {
           //DEBUG console.log(new Date(Number(transaction.tx_time)))
-          transaction_data[index].tx_hash_concat = transaction.tx_hash.substring(0, 22) + '...'
+          transaction_data[index].tx_hash_concat = transaction.tx_hash.substring(0, 18) + '...'
         });
 
         transaction_data=transaction_data.filter(function(elem) {
