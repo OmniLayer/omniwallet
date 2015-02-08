@@ -13,12 +13,13 @@ angular.module("omniControllers")
     {name:'All', value:$scope.timeAll}
   ];  
   $scope.selectedTimeframe = $scope.timeOptions[4].value;
-  $scope.global.getData = function(time, currency) {
+  $scope.getData = function(time, currency) {
     $scope.orderbook = []
     var transaction_data = []
+    var coin = $scope.activeCurrencyPair[1].propertyid == 1 ? 'MSC' : 'TMSC'
     var postData = {
       type: 'TIME',
-      currencyType: currency || $scope.activeCurrencyPair[1],
+      currencyType: currency || coin,
       time: time || $scope.selectedTimeframe
     };
     $http.post('/v1/exchange/offers', postData).success(function(offerSuccess) {

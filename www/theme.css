@@ -1542,3 +1542,16 @@ i.icon-l{
     vertical-align: top;
     padding-top: 31px;
 }
+
+.nav-tabs>li>a{
+  color: #9f9f9f;
+}
+.nav-tabs>li.active>a, 
+.nav-tabs>li.active>a:hover,
+.nav-tabs>li.active>a:focus {
+  box-shadow: inset 0 4px #b6cceb;
+  color: #404040;
+}
+.nav-tabs>li:first-child>a{
+  margin-left: 7px;
+}

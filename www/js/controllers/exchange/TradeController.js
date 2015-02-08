@@ -3,9 +3,7 @@ angular.module("omniControllers")
 		function ExchangeTradeController($scope, PropertyManager) {
 
 		  //init and use global to pass data around
-		  $scope.global = {
-		    getData: function() {}
-		  }
+		  $scope.global = {}
 
 		  $scope.onTradeView = true
 		  $scope.history = '/views/wallet/history.html';
@@ -69,7 +67,6 @@ angular.module("omniControllers")
 		  	omni.symbol  = "OMNI";
 		  	$scope.currPairs.splice(0,0,{0:$scope.wallet.getAsset(0),1:omni,view:"/views/wallet/partials/trade.html"});
 		  	$scope.setActiveCurrencyPair();
-		  	$scope.global.getData();
 		  })
 		  if ( $scope.account.getSetting("showtesteco") === 'true'){
 		    PropertyManager.getProperty(2).then(function(result){
@@ -89,13 +86,8 @@ angular.module("omniControllers")
 		    else
 		      $scope.activeCurrencyPair = currencyPair
 
-		    $scope.global.getData();
 		    var random = Math.random();
 		    $scope.saleView = '/views/wallet/partials/sale.html?r='+random;
 		    $scope.showNoCoinAlert = false;
-		  }
-		  
-		  $scope.isActiveCurrencyPair = function(currencyPair) {
-		    return angular.equals(currencyPair, $scope.activeCurrencyPair)
 		  }
 		}])
