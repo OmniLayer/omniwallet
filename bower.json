@@ -11,7 +11,7 @@
     "respond": "~1.4",
     "sjcl": "~1.0",
     "html5shiv": "~3.6",
-    "angular-bootstrap": "~0.11.0",
+    "angular-bootstrap": "https://github.com/Nevtep/bootstrap-bower.git#master",
     "angular-ui-bootstrap": "~0.11.0",
     "jsrsasign": "~4.2.1",
     "FileSaver": null,
