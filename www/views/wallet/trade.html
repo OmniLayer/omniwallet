@@ -6,7 +6,7 @@
   <div ng-hide="onSaleView">
 	<div class="col-sm-9 text-left om-title">{{ 'EXCHANGE.TRADE.TITLE' | translate}}</div>
 
-	<div class="col-sm-3">
+	<div class="col-sm-3 text-right">
 	  <button class="btn btn-main" ng-click="setView('saleOffer')" ng-disabled="showNoCoinAlert"> {{ 'EXCHANGE.TRADE.SELL' | translate }} {{ activeCurrencyPair[1].name }} </button>
 	</div>
 	<div class="col-xs-12">

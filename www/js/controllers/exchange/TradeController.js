@@ -65,7 +65,7 @@ angular.module("omniControllers")
 		  PropertyManager.getProperty(1).then(function(result){
 		  	var omni = result.data;
 		  	omni.symbol  = "MSC";//"OMNI";
-		  	$scope.currPairs.splice(0,0,{0:$scope.wallet.getAsset(0),1:omni,view:"/views/wallet/partials/trade.html"});
+		  	$scope.currPairs.splice(0,0,{0:$scope.wallet.getAsset(0),1:omni,view:"/views/wallet/partials/trade.html",active:true});
 		  	$scope.setActiveCurrencyPair();
 		  })
 		  if ( $scope.account.getSetting("showtesteco") === 'true'){
