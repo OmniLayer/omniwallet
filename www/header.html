@@ -33,8 +33,8 @@
           <li ng-class="{active:section=='about'}">
             <a href="/about/omniwallet" ng-click="section='about';subsection='omniwallet'">{{'NAVIGATION.ABOUT' | translate}} <span class="glyphicon glyphicon-chevron-down"></span></a>
           </li>
-          <li ng-show="account.loggedIn" class="dropdown">
-            <a href class="dropdown-toggle">
+          <li ng-show="account.loggedIn" class="dropdown" dropdown>
+            <a href class="dropdown-toggle" dropdown-toggle>
               {{'NAVIGATION.ACCOUNT' | translate}} <span class="glyphicon glyphicon-chevron-down"></span>
             </a>
             <ul class="dropdown-menu" role="menu">
