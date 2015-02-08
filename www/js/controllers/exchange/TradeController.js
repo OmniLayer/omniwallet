@@ -54,6 +54,7 @@ angular.module("omniControllers")
 		    $scope.hasCoins = !hideForm;
 		  }
 		  $scope.tradeTemplates = {
+		    'tradeInfo': '/views/wallet/partials/exchange_overview.html',
 		    'simpleSend': '/views/wallet/send.html',
 		    'buyOffer': '/views/wallet/partials/buy.html',
 		    'saleOffer': '/views/wallet/partials/sale.html'
