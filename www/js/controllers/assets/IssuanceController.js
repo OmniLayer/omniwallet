@@ -74,5 +74,34 @@ angular.module("omniControllers")
 				transaction:assetCreation
 			})
 		  }
+
+		  // transactionGenerationController.validateTransactionData=function(){
+		  //   var dustValue = 5757;
+		  //   var minerMinimum = 10000;
+		  //   var nonZeroValue = 1;
+
+		  //   var convertToSatoshi = [
+		  //     $scope.minerFees,
+		  //     $scope.balanceData[1]
+		  //   ];
+		    
+		  //   var convertedValues =$scope.convertDisplayedValue(convertToSatoshi);
+		  //   var minerFees = +convertedValues[0];
+		  //   var btcbalance = convertedValues[1];
+		  //   var propertyName=$scope.propertyName;
+		    
+		  //   var error = 'Please ';
+		  //   if ($scope.issuanceForm.$valid == false) {
+		  //     error += 'make sure all fields are completely filled, ';
+		  //   }
+		  //   if (minerFees < minerMinimum)
+		  //     error += 'make sure your fee entry is at least 0.0001 BTC to cover miner costs, ';
+		  //   if ((minerFees <= btcbalance) == false)
+		  //       error += 'make sure you have enough Bitcoin to cover your fees, ';
+		  //   if (!propertyName || propertyName == '\0')
+		  //     error += 'make sure you enter a Property Name, ';
+		      
+		  //   return error;
+		  // };
 		}
 		])
