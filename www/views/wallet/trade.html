@@ -21,7 +21,7 @@
 	    <div class="row" ng-show="onTradeView">
 	      <div class="col-xs-12 om-subtitle"> {{ activeCurrencyPair[0].name }} / {{ activeCurrencyPair[1].name }} </div> 
 	    </div>
-	    <div class="row" ng-include="currencyPair.view">
+	    <div ng-include="currencyPair.view">
 	    </div>
 	  </tab>
 	  <tab ng-hide="true" select="addCurrencyPair()"> <!-- hidden until DEx Phase 2 -->
