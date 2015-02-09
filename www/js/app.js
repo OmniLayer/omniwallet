@@ -188,9 +188,9 @@ app.config(function($idleProvider, $keepaliveProvider, reCAPTCHAProvider, idleDu
       suffix: '.json'
     })
     .registerAvailableLanguageKeys(['en', 'zh','ar'], {
-      'en_US': 'en',
-      'en_UK': 'en',
-      'zh_CN': 'zh'
+      'en_us': 'en',
+      'en_uk': 'en',
+      'zh_cn': 'zh'
     })
     .fallbackLanguage('en')
     .determinePreferredLanguage();
