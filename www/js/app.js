@@ -181,15 +181,19 @@ app.config(function($idleProvider, $keepaliveProvider, reCAPTCHAProvider, idleDu
       theme: 'clean'
   });
 
-  $translateProvider.translations('en', DefaultTranslation);
-  
-  $translateProvider.useStaticFilesLoader({
-    prefix: '/locales/',
-    suffix: '.json'
-  });
-  // load 'en' table on startup
-  $translateProvider.fallbackLanguage('en');
-  $translateProvider.determinePreferredLanguage();
+  $translateProvider
+    .translations('en', DefaultTranslation)
+    .useStaticFilesLoader({
+      prefix: '/locales/',
+      suffix: '.json'
+    })
+    .registerAvailableLanguageKeys(['en', 'zh','ar'], {
+      'en_US': 'en',
+      'en_UK': 'en',
+      'zh_CN': 'zh'
+    })
+    .fallbackLanguage('en')
+    .determinePreferredLanguage();
 
 })
 .run(function(Account, $location, TESTNET, BalanceSocket) {
