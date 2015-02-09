@@ -116,7 +116,7 @@
 			"70":{
 				"ISSUER":"{{coin}} 所有权转移"
 			}
-		},
+		}
 	},
 	"WALLET":{
 		"OVERVIEW":{
