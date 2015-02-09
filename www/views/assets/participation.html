@@ -17,7 +17,7 @@
               </div>
             </div> 
             <div class="col-sm-6">
-              <label>{{ 'WALLET_SEND_TO' | translate}}</label>
+              <label>{{ 'WALLET.SEND.TO' | translate}}</label>
               <div class="form-control">
                 {{property.issuer}}
               </div>
@@ -33,7 +33,7 @@
                   {{sendByValue ? userCurrency : 'BTC'}}
                 </span>
                 <span ng-if="propertyDesired.symbol != 'BTC'">
-                  {{ 'WALLET_SEND_MODAL_AMOUNT' | translate}}
+                  {{ 'WALLET.SEND.MODAL.AMOUNT' | translate}}
                 </span>
                 ({{selectedAddress.getDisplayBalance(propertyDesired.id)}} {{propertyDesired.name}} <small class="text-muted" ng-show="propertyDesired.id > 2">({{propertyDesired.id}})</small> {{ 'COMMON.AVAILABLE' | translate}})
               </label>
@@ -58,7 +58,7 @@
                     min="{{propertyDesired.divisible ? 0.00000001 : 1}}" max="{{selectedAddress.getDisplayBalance(propertyDesired.id)}}" required>
             </div> 
             <div class="col-sm-6">
-              <label class="text-justify" >{{ 'WALLET_SEND_FROM' | translate}}</label>
+              <label class="text-justify" >{{ 'WALLET.SEND.FROM' | translate}}</label>
               <div class="btn-group send-address-dropdown">
                 <button class="btn btn-clear dropdown-toggle" type="button" id="chooseAddress" data-toggle="dropdown" aria-expanded="true">
                   {{selectedAddress.hash}} 
