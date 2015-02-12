@@ -58,6 +58,11 @@ angular.module("omniControllers")
         })
       }
 
+      $scope.selectedAddress=$scope.selectedAsset.tradableAddresses[0];
+      $scope.setAddress = function(address){
+            $scope.selectedAddress = address;
+      }
+
       
 
       // $scope.validateSaleForm = function() {
