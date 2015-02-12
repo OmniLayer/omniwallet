@@ -342,6 +342,18 @@ angular.module("omniConfig")
 			"ACTIVE": "Active Offers",
 			"TIMEFRAME" :"Time frame",
 			"TOTAL": "Total Transactions"
+		},
+		"SALE":{
+			"TITLE":"Sell Offer",
+			"CHOOSECOIN":"Selected coin",
+			"FROM":"From address",
+			"QUANTITY":"Sell Quantity",
+			"TOTAL":"Total Bitcoin desired ( # BTC for",
+			"TOTALTOOLTIP":"Enter the total # of bitcoins you would want to receive if you sold all",
+			"PRICE":"Price per coin",
+			"TIME":"Time given to buyer to pay",
+			"TIMETOOLTIP":"Time in blocks the buyer has to complete his purchase (1 block approx. 10 minutes)",
+			"BUYERFEE":"Buyer's fee"
 		}
 	}
 })

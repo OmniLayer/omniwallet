@@ -1,7 +1,8 @@
 angular.module("omniControllers")
-	.controller("ExchangeTradeController",["$scope", "PropertyManager",
-		function ExchangeTradeController($scope, PropertyManager) {
-
+	.controller("ExchangeTradeController",["$scope", "PropertyManager","MIN_MINER_FEE","PROTOCOL_FEE",
+		function ExchangeTradeController($scope, PropertyManager,MIN_MINER_FEE,PROTOCOL_FEE) {
+		  $scope.minersFee = MIN_MINER_FEE;
+		  $scope.protocolFee = PROTOCOL_FEE;
 		  //init and use global to pass data around
 		  $scope.global = {}
 
@@ -77,6 +78,7 @@ angular.module("omniControllers")
 		      $scope.activeCurrencyPair = currencyPair
 
 		  	$scope.hasCoins = $scope.wallet.getAsset($scope.activeCurrencyPair[1].propertyid) != undefined;
+		  	$scope.selectedAsset = $scope.wallet.getAsset($scope.activeCurrencyPair[1].propertyid);
 
 		    var random = Math.random();
 		    $scope.saleView = '/views/wallet/partials/sale.html?r='+random;
