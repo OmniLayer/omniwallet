@@ -13,22 +13,15 @@ angular.module("omniControllers")
 		  $scope.setView = function(view, data) {
 		    if (view != 'tradeInfo'){
 		      if (view == 'saleOffer') {
-		        if ($scope.hasCoins) {
 		          $scope.onSaleView = true;
 		          $scope.saleView = $scope.tradeTemplates[view];
 		          $scope.onTradeView = false;
-		        }
-		        else
-		        {
-		          $scope.showNoCoinAlert = true;
-		        }
 		      }
 		      else
 		      {
 		        $scope.tradeView = $scope.tradeTemplates[view];
 		        $scope.onSaleView = false;
 		        $scope.onTradeView = false;
-		        $scope.showNoCoinAlert = false;
 		      }
 		    }
 		    else
@@ -40,6 +33,7 @@ angular.module("omniControllers")
 		    }
 		    $scope.global[view] = data;
 		  }
+
 		  $scope.hideNoCoinAlert = function()
 		  {
 		    $scope.showNoCoinAlert = false;
@@ -48,11 +42,6 @@ angular.module("omniControllers")
 		  $scope.$on("setView", function(event, args){
 		    $scope.setView(args.view,args.data);
 		  });
-		  
-		  $scope.setHasCoins = function(hideForm)
-		  {
-		    $scope.hasCoins = !hideForm;
-		  }
 		  $scope.tradeTemplates = {
 		    'tradeInfo': '/views/wallet/partials/exchange_overview.html',
 		    'simpleSend': '/views/wallet/send.html',
@@ -86,6 +75,8 @@ angular.module("omniControllers")
 		      $scope.activeCurrencyPair = $scope.currPairs[0]
 		    else
 		      $scope.activeCurrencyPair = currencyPair
+
+		  	$scope.hasCoins = $scope.wallet.getAsset($scope.activeCurrencyPair[1].propertyid) != undefined;
 
 		    var random = Math.random();
 		    $scope.saleView = '/views/wallet/partials/sale.html?r='+random;

@@ -1,7 +1,7 @@
 <div class="col-sm-9 text-left om-title">{{ 'EXCHANGE.TRADE.TITLE' | translate}}</div>
 
 <div class="col-sm-3 text-right">
-  <button class="btn btn-main" ng-click="setView('saleOffer')" ng-disabled="showNoCoinAlert"> {{ 'EXCHANGE.TRADE.SELL' | translate }} {{ activeCurrencyPair[1].name }} </button>
+  <button class="btn btn-main" ng-click="setView('saleOffer')" ng-disabled="!hasCoins"> {{ 'EXCHANGE.TRADE.SELL' | translate }} {{ activeCurrencyPair[1].name }} </button>
 </div>
 <div class="col-xs-12">
   <div ng-show="showNoCoinAlert" class="alert alert-danger alert-dismissible missing-dex-alert" role="alert">
