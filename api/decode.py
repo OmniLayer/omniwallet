@@ -231,20 +231,24 @@ def decode(rawhex):
 
   if long_packet[4:8] == '0037':
     #grant properties
+    spare_bytes = ''.join(long_packet[32:])
     retval = { 'TxVersion': int(long_packet[0:4],16),
                'TxType': int(long_packet[4:8],16),
                'TxTypeString': 'Grant Properties',
                'PropertyID': int(long_packet[8:16],16),
-               'Amount': int(long_packet[16:32],16)
+               'Amount': int(long_packet[16:32],16),
+               'Memo' : spare_bytes.split('00')[0].decode('hex')
              }
 
   if long_packet[4:8] == '0038':
     #revoke properties
+    spare_bytes = ''.join(long_packet[32:])
     retval = { 'TxVersion': int(long_packet[0:4],16),
                'TxType': int(long_packet[4:8],16),
                'TxTypeString': 'Revoke Properties',
                'PropertyID': int(long_packet[8:16],16),
-               'Amount': int(long_packet[16:32],16)
+               'Amount': int(long_packet[16:32],16),
+               'Memo' : spare_bytes.split('00')[0].decode('hex')
              }
 
   if retval == "":

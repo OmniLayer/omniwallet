@@ -115,8 +115,8 @@ def generate_tx(tx_type):
             return error
     elif tx_type in [55,56]:
         try:
-            tx0bytes = prepare_txbytes(txdata)
-            packets = construct_packets( tx0bytes[0], tx0bytes[1], request.form['transaction_from'])
+            txbytes = prepare_txbytes(txdata)
+            packets = construct_packets( txbytes[0], txbytes[1], request.form['transaction_from'])
             if tx_type == 55 and 'transaction_to' in request.form:
               unsignedhex= build_transaction( request.form['fee'], pubkey, packets[0], packets[1], packets[2], request.form['transaction_from'], request.form['transaction_to'])
             else:
@@ -331,7 +331,7 @@ def prepare_txbytes(txdata):
     elif txdata[1] in [55,56]:
         currency_id_bytes = hex(txdata[2])[2:].rstrip('L').rjust(8,"0")  # 4 bytes
         amount_bytes = hex(txdata[3])[2:].rstrip('L').rjust(16,"0")  # 8 bytes
-        memo_byes = ''
+        memo_bytes = ''
 
         for let in txdata[4]:
             memo_bytes += prep_bytes(let)
