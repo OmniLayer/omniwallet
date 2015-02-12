@@ -1,5 +1,5 @@
 angular.module("omniControllers")
-	.controller("ExchangeTradeController",["$scope", "PropertyManager","MIN_MINER_FEE","PROTOCOL_FEE",
+	.controller("ExchangeTradeController",["$scope", "PropertyManager","MIN_MINER_FEE","OMNI_PROTOCOL_COST",
 		function ExchangeTradeController($scope, PropertyManager,MIN_MINER_FEE,PROTOCOL_FEE) {
 		  $scope.minersFee = MIN_MINER_FEE;
 		  $scope.protocolFee = PROTOCOL_FEE;
