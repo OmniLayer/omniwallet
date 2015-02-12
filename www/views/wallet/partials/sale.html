@@ -1,6 +1,6 @@
 <div class="row om-row">
     <div class="col-xs-12">
-      <div class="text-left om-title">{{ 'WALLET.SALE.TITLE' | translate}}</div>
+      <div class="text-left om-title">{{ 'EXCHANGE.SALE.TITLE' | translate}}</div>
       <!-- <div ng-show="showErrors" class="alert alert-danger"> <strong> {{error}} </strong>  -->
     </div>
   </div> 
@@ -10,7 +10,7 @@
         <div class="panel panel-form">
           <div class="panel-body">
             <div class="col-sm-6">
-              <label for="chooseCoin" >{{ 'WALLET.SALE.CHOOSECOIN' | translate}}</label>
+              <label for="chooseCoin" >{{ 'EXCHANGE.SALE.CHOOSECOIN' | translate}}</label>
               <div class="btn-group send-asset-dropdown">
                 <span class="form-controll">
                   {{selectedAsset.name}} <small class="text-muted" ng-show="selectedAsset.id > 2">({{selectedAsset.id}})</small>
@@ -18,7 +18,7 @@
               </div>
             </div> 
             <div class="col-sm-6">
-              <label class="text-justify" >{{ 'WALLET.SALE.FROM' | translate}}</label>
+              <label class="text-justify" >{{ 'EXCHANGE.SALE.FROM' | translate}}</label>
               <div class="btn-group send-address-dropdown">
                 <button class="btn btn-clear dropdown-toggle" type="button" id="chooseAddress" data-toggle="dropdown" aria-expanded="true">
                   {{selectedAddress.hash}} 
@@ -37,16 +37,16 @@
           <div class="panel-body">
             <div class="col-sm-6">
               <div class="form-group">
-                <label>{{ 'WALLET.SALE.QUANTITY' | translate}} ({{selectedAddress.getDisplayBalance(selectedAsset.id)}} {{selectedAsset.name}} {{ 'COMMON.AVAILABLE' | translate}}):</label>
+                <label>{{ 'EXCHANGE.SALE.QUANTITY' | translate}} ({{selectedAddress.getDisplayBalance(selectedAsset.id)}} {{selectedAsset.name}} {{ 'COMMON.AVAILABLE' | translate}}):</label>
                 <input name="amount" type="number" ng-model="saleAmount" class="form-control"
                   step="0.00000001" min="0.00005754" max="{{selectedAddress.getDisplayBalance(selectedAsset.id)}}" required>
               </div>
             </div>
             <div class="col-sm-6">
               <div class="form-group">
-                <label> {{ 'WALLET.SALE.TOTAL' | translate}} {{ saleAmount || 0 }} {{selectedAsset.name}}): 
+                <label> {{ 'EXCHANGE.SALE.TOTAL' | translate}} {{ saleAmount || 0 }} {{selectedAsset.name}}): 
                   <a href=""
-                    tooltip="{{ 'WALLET.SALE.TOTALTOOLTIP' | translate}} {{ saleAmount || 0 }} {{selectedAsset.name}}"
+                    tooltip="{{ 'EXCHANGE.SALE.TOTALTOOLTIP' | translate}} {{ saleAmount || 0 }} {{selectedAsset.name}}"
                     tooltip-append-to-body="true"
                     tooltip-placement="top" > <strong>(?)</strong>
                   </a>
@@ -54,7 +54,7 @@
                 <input name="ppc" type="number" step="0.00000001" ng-model="salePricePerCoin" class="form-control"
                   placeholder="0.10000000" min=".00005750" required>
                 <p class="help-block"> 
-                  {{ 'WALLET.SALE.PRICE' | translate}}: {{  (saleAmount && salePricePerCoin) ? (( salePricePerCoin || 0) / ( saleAmount || 0) | number:8) : 0  }}
+                  {{ 'EXCHANGE.SALE.PRICE' | translate}}: {{  (saleAmount && salePricePerCoin) ? (( salePricePerCoin || 0) / ( saleAmount || 0) | number:8) : 0  }}
                   BTC</p>
               </div>
             </div>
@@ -64,9 +64,9 @@
           <div class="col-sm-6">
             <div class="form-group">
               <label>
-                {{ 'WALLET.SALE.TIME' | translate}}: 
+                {{ 'EXCHANGE.SALE.TIME' | translate}}: 
                 <a href=""
-                  tooltip="{{ 'WALLET.SALE.TIMETOOLTIP' | translate}}"
+                  tooltip="{{ 'EXCHANGE.SALE.TIMETOOLTIP' | translate}}"
                   tooltip-append-to-body="true"
                   tooltip-placement="top" > <strong>(?)</strong>
                 </a>
@@ -76,14 +76,14 @@
           </div>
           <div class="col-sm-6">
             <div class="form-group">
-              <label> {{ 'WALLET.SALE.BUYERFEE' | translate}} ( {{selectedAsset.name}} ): </label>
+              <label> {{ 'EXCHANGE.SALE.BUYERFEE' | translate}} ( {{selectedAsset.name}} ): </label>
               <input name="buyerfee" type="number" step="0.0001" ng-model="buyersFee" class="form-control" 
               placeholder="0.0001 suggested minimum" min="0.0001" required>
             </div>
           </div>
         </div>
         <p>
-          {{ 'WALLET.SEND.COST' | translate}}: {{selectedAsset.symbol == 'BTC'? minersFee.valueOf() : minersFee.plus(protocolFee).valueOf()}} BTC <button type="button" class="btn btn-xs"><span class="glyphicon glyphicon-pencil small"></span></button>
+          {{ 'EXCHANGE.SEND.COST' | translate}}: {{selectedAsset.symbol == 'BTC'? minersFee.valueOf() : minersFee.plus(protocolFee).valueOf()}} BTC <button type="button" class="btn btn-xs"><span class="glyphicon glyphicon-pencil small"></span></button>
         </p>  
         <button type="submit" class="btn btn-main pull-right">{{ 'COMMON.NEXT' | translate}}</button>
       </form>
