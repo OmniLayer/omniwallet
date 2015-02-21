@@ -1,4 +1,3 @@
-<div ng-controller="ExchangeOverviewController" ng-init="getData(timeAll, currencyPair[1].symbol)">
   <div class="row">
     <div class="col-xs-12 col-sm-9">
       <h4><strong>{{ 'EXCHANGE.TRADE.ACTIVE' | translate}}</strong> <small ng-hide="orderbook.length == 0" class="text-muted">({{orderbook.length}} {{'EXCHANGE.TRADE.TOTAL' | translate}})</small>  </h4> 
@@ -48,4 +47,3 @@
       <div class="col-sm-1" ng-show="transaction.from_address == selectedAddress"> Your offer/purchase </div>
     </div>
   </div>
-</div>

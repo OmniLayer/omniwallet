@@ -7,10 +7,13 @@ angular.module("omniControllers")
 		  $scope.global = {}
 
 		  $scope.onTradeView = true
+		  $scope.onSaleView = false;
+		  $scope.onBuyView = false;
 		  $scope.history = '/views/wallet/history.html';
 
 		  $scope.inactive = $scope.account.getSetting("filterdexdust");
 
+		  $scope.goBack
 		  $scope.setView = function(view, data) {
 		    if (view != 'tradeInfo'){
 		      if (view == 'saleOffer') {
@@ -56,14 +59,14 @@ angular.module("omniControllers")
 		  PropertyManager.getProperty(1).then(function(result){
 		  	var omni = result.data;
 		  	omni.symbol  = "MSC";//"OMNI";
-		  	$scope.currPairs.splice(0,0,{0:$scope.wallet.getAsset(0),1:omni,view:"/views/wallet/partials/trade.html",active:true});
+		  	$scope.currPairs.splice(0,0,{0:$scope.wallet.getAsset(0),1:omni,active:true});
 		  	$scope.setActiveCurrencyPair();
 		  })
 		  if ( $scope.account.getSetting("showtesteco") === 'true'){
 		    PropertyManager.getProperty(2).then(function(result){
 		    	var tomni = result.data;
 		  		tomni.symbol  = "TMSC"; //"T-OMNI";
-			  	$scope.currPairs.splice(1,0,{0:$scope.wallet.getAsset(0),1:tomni,view:"/views/wallet/partials/trade.html"});
+			  	$scope.currPairs.splice(1,0,{0:$scope.wallet.getAsset(0),1:tomni});
 			})
 		  } 
 
