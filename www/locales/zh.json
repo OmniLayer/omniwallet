@@ -1,0 +1,328 @@
+﻿{
+   	"COMMON":{
+   		"ACTIONS":"操作",
+		"ADDRESS":"地址",
+		"AVAILABLE":"有效的",
+		"BALANCE":"余额",
+		"BITCOIN":"比特币",
+   		"BROADCAST":"发布交易",
+   		"OVERVIEW":"总览",
+   		"REMOVEADDRESS":"从钱包移除",
+		"ADDRESSES":"地址",
+		"ASSETS":"资产",
+		"ASSET":"资产",
+   		"SEND":"发送",
+   		"VALUE":"价值",
+		"CREATEWALLET":"创建钱包",
+		"LOGIN":"登陆",
+		"LOADING":"载入中",
+		"BACK":"后退",
+		"NAME":"姓名",
+		"SELECT":"选择",
+		"YES":"是",
+		"NO":"否",
+		"CANCEL":"退出",
+		"NEXT":"下一步",
+		"ACTIVECROWDSALES":"有效众筹",
+		"HISTORY":"历史记录",
+		"FEES":"Miner Fees (BTC)"
+	},
+	"HOMEPAGE":{
+		"ADDRESSEXAMPLE":"例如",
+   		"BALANCECHECK":"余额查询",
+   		"CHECKBALANCE":"查询余额",
+		"ENTERVALIDADDRESS":"输入有效的比特币地址",
+		"WELCOME":"欢迎使用Omniwallet"
+	},
+	"NAVIGATION":{
+		"ABOUT":"关于",
+		"ABOUTOMNI":"关于Omniwallet",
+		"ABOUTMSC":"关于OMNI",
+		"ACCOUNT":"我的账户",
+		"ADDRESSES":"我的地址",
+		"ASSETS":"我的资产",
+		"CREATE":"创建钱包",
+		"CONTACT":"联系我们",
+		"EXCHANGE":"交易",
+		"EXPLORER":"浏览",
+		"EXPLOREASSETS":"资产",
+		"FAQ":"常见问题",
+		"LOGIN":"登陆",
+		"LOGOUT":"注销",
+		"OFFERS":"我的报价",
+		"SETTINGS":"账户设置",
+		"TRADE":"交易",
+		"TRANSACTIONS":"交易",
+		"WALLET":"我的钱包"
+	},
+	"TX":{
+		"TYPE":{
+			"0":"发送",
+			"3":"Send To Owners",
+			"20":"卖单",
+			"21":"Dex第二阶段",
+			"22":"接受报价",
+			"-22":"买单",
+			"50":"创建固定资产",
+			"51":"发起众筹",
+			"-51":"参与众筹",
+			"52":"推销资产",
+			"53":"关闭众筹",
+			"54":"创建资产管理",
+			"55":"发放资产令牌",
+			"56":"撤销资产令牌",
+			"70":"更改资产发行人记录"
+		},
+		"DETAILS":{
+			"0":{
+				"SENDER":"您已发送 {{amount | toWhole:divisible }} {{coin}}",
+				"RECIPIENT":"您已收到 {{amount | toWhole:divisible }} {{coin}}"
+			},
+			"3":{
+				"PAYER":"您已发送 {{amount | toWhole:divisible }} {{coin}}",
+				"PAYEE":"您收到付款 {{amount | toWhole:divisible }} {{coin}}",
+				"FEEPAYER":"You paid {{amount | toWhole:divisible }} {{coin}} in fees"
+			},
+			"20":{ 
+				"SELLER":"您挂单 {{amount | toWhole:divisible }} {{coin}} 出售"},
+			"22":{
+				"BUYER":"您收到 {{amount | toWhole:divisible }} {{coin}}",
+				"SELLER":"{{amount | toWhole:divisible }} {{coin}} 来自买家"
+			},
+			"-22":{
+				"BUYER":"您购买 {{amount | toWhole:divisible }} {{coin}}",
+				"SELLER":"您出售 {{amount | toWhole:divisible }} {{coin}}"
+			},
+			"50":{ 
+				"ISSUER":"您创造了 {{coin}} 并且其数量为 {{amount | toWhole:divisible }}"},
+			"51":{ 
+				"ISSUER":"您已发起 {{coin}} 众筹"},
+			"-51":{
+				"ISSUER":"您获得 {{amount | toWhole:divisible }} {{coin}}",
+				"PARTICIPANT":"您获得 {{amount | toWhole:divisible }} {{coin}}",
+				"SENDER":"您参与众筹了 {{amount | toWhole:divisible }} {{coin}}",
+				"RECIPIENT":"您收到 {{amount | toWhole:divisible }} {{coin}}"
+			},
+			"54":{ 
+				"ISSUER":"您创造了 {{coin}} 以便于资产管理" 
+			},
+			"55":{
+				"ISSUER":"您已发放 {{amount | toWhole:divisible }} {{coin}}",
+				"RECIPIENT":"您已被发放 {{amount | toWhole:divisible }} {{coin}}"
+			},
+			"56":{
+				"ISSUER":"您已撤销 {{coin}}"
+			},
+			"70":{
+				"ISSUER":"{{coin}} 所有权转移"
+			}
+		}
+	},
+	"WALLET":{
+		"OVERVIEW":{
+			"BACKUP":"备份",
+			"ESTIMATED":"预计总额",
+			"IMPORT":"输入",
+			"TITLE":"总览",
+			"OPTIONS":"钱包选项",
+			"OPTIONSTOGGLE":"切换选项",
+			"PORTFOLIO":"根据价值组合",
+			"WALLETID":"钱包ID"
+		},
+		"ADDRESSES":{
+			"CREATE":"创建新钱包地址",
+			"IMPORT":"输入带私匙的地址",
+			"TITLE":"我的钱包地址",
+			"VIEW":"浏览",
+			"OPTIONS":"添加钱包地址",
+			"WATCH":"Add Watch Only Address",
+			"OFFLINE":"添加离线地址"
+		},
+		"SEND":{
+			"TITLE":"发送",
+			"CHOOSECOIN":"选择货币",
+			"FROM":"发送地址",
+			"AMOUNT":"数量",
+			"TO":"接收地址",
+			"COST":"全部交易费用",
+			"FUNDS":"发送资产",
+			"TOKEN":"令牌",
+			"MODAL_AMOUNT":"数量",
+			"MODAL_FROM":"来自",
+			"MODAL_TO":"至",
+			"CONFIRM":"确认发送"
+		},
+		"ASSETS":{
+			"ASSETS":"资产",
+			"CREATE":"创建",
+			"CROWDSALE":"众筹",
+			"MYASSETS":"我的资产",
+			"SMARTPROPERTY":"智能资产"
+		},
+		"HISTORY":{
+			"ALLADDRESSES":"-- 全部地址 --",
+			"FILTERLABEL":"钱包完整记录",
+			"TITLE":"历史记录",
+			"CURRENCY":"货币",
+			"TYPE":"类型",
+			"AMOUNT":"数量",
+			"TXTIME":"交易时间",
+			"TXDETAILS":"交易明细",
+			"MOREDETAILS":"查看交易明细"
+		}
+	},
+	"ASSET":{
+		"ISSUANCE":{
+			"TITLE":"创建智能资产",
+			"SUBTITLE":"发行明细",
+			"AMOUNT":"令牌数量",
+			"AMOUNT_HINT":"输入期望的数量",
+			"TYPE":"发行类型",
+			"FIXED":"确定",
+			"MANAGED":"管理",
+			"CREATE":"创建资产",
+			"MODALTITLE":"确定创建资产"
+		},
+		"FORM":{
+			"ISSUER":"发行地址",
+			"DETAILS":{
+				"SUBTITLE":"智能资产描述",
+				"DIVISIBLE":"可分割",
+				"CATEGORY":"分类",
+				"SUBCATEGORY":"子分类",
+				"URL":"资产网址",
+				"URL_HINT":"输入相关网址以帮助用户了解更多关于智能资产的信息",
+				"DESCRIPTION":"智能资产描述",
+				"DESCRIPTION_HINT":"剩余字符",
+				"NAME_HINT":"ex. Bobcoin"
+			}
+		},
+		"CROWDSALE":{
+			"TITLE":"发起众筹",
+			"SUBTITLE":"众筹详情",
+			"DEADLINE":"截止日期",
+			"FORISSUER":"Percentage for issuer",
+			"FORISSUER_TOOLTIP":"Additional percentage created and credited to the issuing address based on the amount created and credited for each investment. Ex:With Percentage to issuer = 10, an investment that credits 100 tokens to an investment will also credit 10 tokens to the issuer.",
+			"UTC":"世界标准时间",
+			"EARLYBONUS":"Weekly early bird bonus percentage",
+			"EARLYBONUS_TOOLTIP":"Bonus percentage created and credited to each investor for each week (7 days) before the deadline (calculated to the second). Ex:With Weekly early bird bonus percentage = 10, a participant investing 14 days before the deadline will get approx 20% bonus. An investor investing with 10 days left will get approx 14% bonus.",
+			"EARLYESTIMATE":"Estimated initial early bird bonus",
+			"EARLYESTIMATE_TOOLTIP":"Estimate based on the crowdsale creation being confirmed in the blockchain within 30 minutes after it was calculated.",
+			"PER":"每个",
+			"INVESTED":"投资",
+			"ADDCURRENCY":"+ Add investment currency",
+			"TOKENRATE":"# of tokens",
+			"RATES":"Rates",
+			"RATE":"Rate",
+			"START":"发起众筹",
+			"MODALTITLE":"确认发起众筹",
+			"ACCEPTEDCURRENCY":"支持的货币",
+			"INITIALEB":"早期参与者的红利"
+		},
+		"MODAL_DESCRIPTION":"说明",
+		"HISTORY":{
+			"TRANSACTIONS":"交易",
+			"LOADING":"交易正在进行",
+			"FIXEDISSUANCE_TRUE":"资产",
+			"FIXEDISSUANCE_FALSE":"众筹",
+			"TRANSACTION_CLOSED":"Crowdsale was closed from further investments",
+			"TRANSACTION_CREATE":"被创建",
+			"TRANSACTION_CONFIRMATIONS":"Confirmations"
+		},
+		"DETAILS":{
+			"URL":"获取更多信息请访问",
+			"SHARE":"分享该页面"
+		}
+	},
+	"TIMER":{
+		"YEAR":"年",
+		"MONTH":"月",
+		"DAY":"日",
+		"HOUR":"时",
+		"MINUTE":"分",
+		"SECOND":"秒"
+	},
+	"TIMEAGO":{
+		"NOW":"刚刚",
+		"MINUTE":"几分钟前",
+		"HOUR":"几小时前",
+		"DAY":"几天前",
+		"WEEK":"几周前",
+		"MONTH":"几个月前",
+		"YEAR":"几年前"
+	},
+	"CROWDSALE":{
+		"DETAILS":{
+			"YOUR":"您的",
+			"ACTIVE":{
+				"TRUE":"正在进行的众筹",
+				"FALSE":"已经结束的众筹"
+			},
+			"TIME":"最后期限",
+			"TOKENSBOUGHT":"已被购买的令牌",
+			"TOKENSISSUER":"已被创建的令牌",
+			"CURRENTBONUS":"目前早期参与众筹者的优惠",
+			"GETTOKENS":"获取令牌!",
+			"PARTICIPATE":"参与",
+			"NOTOKENS":"您不拥有此次众筹的令牌",
+			"LOGIN":"您需要登录或者创建钱包以便于参与众筹"
+		},
+		"PARTICIPATION":{
+			"TITLE":"参与 {{property.name}} 众筹",
+			"DESIREDCOIN":"发送令牌",
+			"MODAL_ESTIMATE":"预计令牌数量",
+			"ESTIMATE_LEAD":"您将会收到",
+			"ESTIMATE_TRAIL":"if you participate at this level."
+		},
+		"REMAINING":{
+			"DAYS":"日",
+			"HOURS":"时",
+			"MINUTES":"分"
+		},
+		"PARTICIPATE":{
+			"TITLE":"确定参与众筹",
+			"CONFIRM":"参与"
+		}
+	},
+	"ECOSYSTEM":{
+		"LABEL":"生态系统",
+		"PRODUCTION":"产品",
+		"TEST":"测试"
+	},
+	"EXPLORER":{
+		"OVERVIEW":{
+			"TITLE":"最新交易",
+			"SHORTQUERY":{
+				"LEAD":"您需要至少",
+				"TRAIL":"more character(s) to search."
+			},
+			"NORESULTS":"发现0个交易记录.",
+			"ALPHANUMERIC":"搜索时不能使用非数字或字母字符.",
+			"PLACEHOLDER":"搜索部分或者完整交易记录"
+		},
+		"INSPECTOR":{
+			"TITLE":"核对交易",
+			"FIELD":"字段名称",
+			"DETAILS":"详细信息"
+		}
+	},
+	"TABLES":{
+		"TRANSACTIONS":{
+			"TX":"交易",
+			"DETAILS":"详细信息",
+			"AMOUNT":"数量",
+			"BLOCK":"区块",
+			"BLOCKTIME":"区块时间 (世界标准时间)"
+		},
+		"ASSETS":{
+			"ID":"资产 ID",
+			"NAME":"资产名称",
+			"AMOUNT":"总数量",
+			"URL":"网址"
+		},
+		"CROWDSALE":{
+			"BOUGHT":"已被购买的令牌",
+			"CREATED":"已被创建的令牌"
+		}
+	}
+}

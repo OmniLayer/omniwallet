@@ -79,6 +79,7 @@ angular.module("omniServices")
                       self.settings.firstLogin = true;
                       self.wallet = wallet;
                       Wallet.initialize(wallet);
+
                       ga('send', 'event', 'button', 'click', 'Create Wallet');
                       self.loggedIn = true;
                       create.resolve(self);

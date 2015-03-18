@@ -1,34 +1,66 @@
 angular.module("omniControllers")
-  .controller("WalletOverviewController", ["$scope","Account","$location","Wallet",
-    function WalletOverviewController($scope,Account,$location,Wallet){
-      $scope.uuid = Account.uuid;
+  .controller("WalletOverviewController", ["$scope","$location","Wallet","ModalManager",
+    function WalletOverviewController($scope,$location,Wallet,ModalManager){
+      $scope.uuid = $scope.account.uuid;
       $scope.loginLink = $location.protocol() + "://" + $location.host() + "/login/" + $scope.uuid;
       //console.log(Wallet.addresses);
-      $scope.firstLogin = Account.firstLogin;
-      // HACK: We check for Account.isLoggedIn since this controller is used when not logged in
-      $scope.addrList = [];
-      $scope.addrListBal = [];
-      $scope.maxCurrencies = [];
-      $scope.totals = {};
+      $scope.firstLogin = $scope.account.firstLogin;
+      $scope.CSYM=$scope.account.getSetting("usercurrency");
+      $scope.total=0;
+      $scope.chartConfig = {
+        chart: {
+                type: 'pieChart',
+                height: 500,
+                x: function(asset){return asset.name;},
+                y: function(asset){return asset.value;},
+                showLabels: true,
+                transitionDuration: 500,
+                labelThreshold: 0.01,
+                legend: {
+                    margin: {
+                        top: 5,
+                        right: 35,
+                        bottom: 5,
+                        left: 0
+                    }
+                }
+            }
+      };
+      
+      $scope.showtesteco = $scope.account.getSetting('showtesteco');
 
-      $scope.addrList =  Wallet.addresses.map(function(e, i, a) {
-        return e.address;
-      });
+      $scope.chartData = Wallet.assets.filter(function(asset){
+        return ((asset.id < 2147483648 && asset.id != 2) || $scope.showtesteco === 'true')
+      })
 
-      Wallet.addresses.forEach(function(address, index) {
-        if (address.balance.length > 0)
-          $scope.maxCurrencies = address.balance;
+      $scope.openBackupModal=function(){
+        ModalManager.openBackupWalletModal();
+      }
 
-        for (var i = 0; i < address.balance.length; i++) {
-          var symbolTotal = $scope.totals[address.balance[i].symbol];
-          //          console.log(symbolTotal, address.balance[i].symbol)
-          if (!symbolTotal)
-            $scope.totals[address.balance[i].symbol] = 0;
-          $scope.totals[address.balance[i].symbol] += +address.balance[i].value;
-        }
-      });
-      $scope.disclaimerSeen = Account.settings.disclaimerSeen;
+      $scope.openImportModal=function(){
+        ModalManager.openImportWalletModal();
+      }
+
+      function refresh(){
+        $scope.total = 0;
+
+        Wallet.assets.forEach(function(asset) {
+          $scope.total += asset.value;
+        });
+
+      }
+
+      $scope.disclaimerSeen = $scope.account.settings.disclaimerSeen;
       $scope.$on('$locationChangeSuccess', function(path) {
-        Account.settings.disclaimerSeen = true;
-      });
+        $scope.account.settings.disclaimerSeen = true;
+      })
+
+      $scope.$on("balance:changed",function(evt,changed,values){
+        refresh();
+      })
+      $scope.$on("APPRAISER_VALUE_CHANGED",function(evt,changed){
+        refresh();
+      })
+
+      refresh();
     }]);

@@ -39,8 +39,8 @@ def get_balancedata(address):
         #1 = new indivisible property, 2=new divisible property (per spec)
         divi = True if int(balrow[1]) == 2 else False
         res = { 'symbol' : sym_t, 'divisible' : divi, 'id' : cID }
-        res['pendingpos'] = ('%.8f' % float(balrow[3])).rstrip('0').rstrip('.')
-        res['pendingneg'] = ('%.8f' % float(balrow[4])).rstrip('0').rstrip('.')
+        res['pendingpos'] = int(('%.8f' % float(balrow[3])).rstrip('0').rstrip('.'))
+        res['pendingneg'] = int(('%.8f' % float(balrow[4])).rstrip('0').rstrip('.'))
         if cID == '0':
           #get btc balance from sx
           if err != None or out == '':
@@ -57,9 +57,9 @@ def get_balancedata(address):
           #get regular balance from db
           if balrow[4] < 0:
             #update the 'available' balance immediately when the sender sent something. prevent double spend
-            res['value'] = ('%.8f' % float( (balrow[2]+balrow[4]) )).rstrip('0').rstrip('.')
+            res['value'] = int(('%.8f' % float( (balrow[2]+balrow[4]) )).rstrip('0').rstrip('.'))
           else:
-            res['value'] = ('%.8f' % float(balrow[2])).rstrip('0').rstrip('.')
+            res['value'] = int(('%.8f' % float(balrow[2])).rstrip('0').rstrip('.'))
 
         #res['reserved_balance'] = ('%.8f' % float(balrow[5])).rstrip('0').rstrip('.')
         balance_data['balance'].append(res)
