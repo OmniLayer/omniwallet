@@ -117,6 +117,25 @@ var app = angular.module('omniwallet', [
     redirectTo: '/wallet'
   });
 
+  $routeProvider.when('/exchange/:page?', {
+      templateUrl: function(route) {
+        //new views added here
+        var availableViews = ['trade', 'buy', 'sell', 'myoffers', 'dex'];
+
+        var viewFound = availableViews.indexOf(route.page);
+        if (viewFound == -1)
+          route.page = 'trade';
+
+        var view = '/views/exchange/' + route.page + '.html';
+        //DEBUG console.log(view, route.page, view == '/wallet_addresses.html')
+
+        ga('send', 'event', 'button', 'click', route.page);
+        return view
+      }
+    }).otherwise({
+    redirectTo: '/exchange'
+  });
+
   $routeProvider.when('/explorer/:page?', {
       templateUrl: function(route) {
         var availableViews = ['overview', 'assets', 'crowdsales', 'inspector'];
