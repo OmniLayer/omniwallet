@@ -58,7 +58,7 @@ angular.module("omniControllers")
         })
       }
 
-      $scope.selectedAddress=$scope.selectedAsset.tradableAddresses[0];
+      $scope.selectedAddress= $scope.hasCoins ? $scope.selectedAsset.tradableAddresses[0] : undefined;
       $scope.setAddress = function(address){
             $scope.selectedAddress = address;
       }
