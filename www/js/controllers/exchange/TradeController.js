@@ -13,7 +13,6 @@ angular.module("omniControllers")
 
 		  $scope.inactive = $scope.account.getSetting("filterdexdust");
 
-		  $scope.goBack
 		  $scope.setView = function(view, data) {
 		    if (view != 'tradeInfo'){
 		      if (view == 'saleOffer') {
@@ -49,8 +48,8 @@ angular.module("omniControllers")
 		  $scope.tradeTemplates = {
 		    'tradeInfo': '/views/wallet/partials/exchange_overview.html',
 		    'simpleSend': '/views/wallet/send.html',
-		    'buyOffer': '/views/wallet/partials/buy.html',
-		    'saleOffer': '/views/wallet/partials/sale.html'
+		    'buyOffer': '/views/exchange/buy.html',
+		    'saleOffer': '/views/exchange/sale.html'
 		  };
 
 		  //initialize the data used in the template
@@ -70,6 +69,9 @@ angular.module("omniControllers")
 			})
 		  } 
 
+		  $scope.hasCoins = $scope.wallet.getAsset(1) != undefined;
+		  $scope.selectedAsset = $scope.wallet.getAsset(1);
+
 		  //Get the active currency pair
 		  $scope.activeCurrencyPair = []
 
@@ -84,7 +86,7 @@ angular.module("omniControllers")
 		  	$scope.selectedAsset = $scope.wallet.getAsset($scope.activeCurrencyPair[1].propertyid);
 
 		    var random = Math.random();
-		    $scope.saleView = '/views/wallet/partials/sale.html?r='+random;
+		    $scope.saleView = '/views/exchange/sale.html?r='+random;
 		    $scope.showNoCoinAlert = false;
 		  }
 		}])
