@@ -46,10 +46,10 @@ angular.module("omniControllers")
 		    $scope.setView(args.view,args.data);
 		  });
 		  $scope.tradeTemplates = {
-		    'tradeInfo': '/views/exchange/overview.html',
+		    'tradeInfo': '/views/exchange/partials/overview.html',
 		    'simpleSend': '/views/wallet/send.html',
-		    'buyOffer': '/views/exchange/buy.html',
-		    'saleOffer': '/views/exchange/sale.html'
+		    'buyOffer': '/views/exchange/partials/buy.html',
+		    'saleOffer': '/views/exchange/partials/sale.html'
 		  };
 
 		  //initialize the data used in the template
@@ -86,7 +86,7 @@ angular.module("omniControllers")
 		  	$scope.selectedAsset = $scope.wallet.getAsset($scope.activeCurrencyPair[1].propertyid);
 
 		    var random = Math.random();
-		    $scope.saleView = '/views/exchange/sale.html?r='+random;
+		    $scope.saleView = '/views/exchange/partials/sale.html?r='+random;
 		    $scope.showNoCoinAlert = false;
 		  }
 		}])
