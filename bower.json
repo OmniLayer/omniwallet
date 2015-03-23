@@ -22,7 +22,7 @@
     "ngInfiniteScroll": "1.0.0",
     "numeraljs": "https://github.com/adamwdraper/Numeral-js.git#master",
     "angular-numeraljs": "https://github.com/sagyeli/angular-numeraljs.git#master",
-    "angular-idle": "0.3.5",
+    "ng-idle": "0.3.5",
     "angular-re-captcha": "~0.0.3",
     "angular-translate": "~2.4.2",
     "angular-nvd3": "~0.0.9",
