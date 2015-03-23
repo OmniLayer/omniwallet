@@ -4,6 +4,4 @@
     <a ng-click="setView('tradeInfo')"> <strong> < {{ 'COMMON.BACK' | translate}} </strong> </a>
   </h4>
   <div ng-include="tradeView"></div>
-  <div ng-include="'/views/exchange/sale.html'" ng-show="onSaleView"></div>
-  <div ng-controller="ExchangeBuyController" ng-include="'/views/exchange/buy.html'" ng-show="onBuyView"></div>
 </div>
