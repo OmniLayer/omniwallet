@@ -272,7 +272,7 @@ angular.module("omniServices")
                 scope: exportScope,
                 resolve:{
                   wallet: function(){
-                    return wallet;
+                    return Wallet;
                   }
                 }
               });
