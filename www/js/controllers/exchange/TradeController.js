@@ -17,7 +17,7 @@ angular.module("omniControllers")
 		    if (view != 'tradeInfo'){
 		      if (view == 'saleOffer') {
 		          $scope.onSaleView = true;
-		          $scope.saleView = $scope.tradeTemplates[view];
+		          $scope.tradeView = $scope.tradeTemplates[view];
 		          $scope.onTradeView = false;
 		      }
 		      else
@@ -46,7 +46,7 @@ angular.module("omniControllers")
 		    $scope.setView(args.view,args.data);
 		  });
 		  $scope.tradeTemplates = {
-		    'tradeInfo': '/views/wallet/partials/exchange_overview.html',
+		    'tradeInfo': '/views/exchange/overview.html',
 		    'simpleSend': '/views/wallet/send.html',
 		    'buyOffer': '/views/exchange/buy.html',
 		    'saleOffer': '/views/exchange/sale.html'
