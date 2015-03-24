@@ -19,7 +19,7 @@ angular.module("omniControllers")
       $http.get('/v1/transaction/tx/' + transaction.tx_hash + '.json').success(function(data) {
         var tx = data[0];
         $scope.selectedCoin=tx.currency_str;
-
+        $scope.bitcoinAddresses = $scope.hasBitcoins ? $scope.wallet.getAsset(0).tradableAddresses : [];
         if(parseInt(tx.currencyId) <3) {
           $scope.divisible = true;
           $scope.sendPlaceholderValue = '1.00000000';
