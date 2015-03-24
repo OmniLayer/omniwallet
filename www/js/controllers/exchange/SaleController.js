@@ -1,15 +1,15 @@
 angular.module("omniControllers")
-  .controller("ExchangeSaleController",["$scope", "Transaction", "MIN_MINER_FEE", "ADDRESS_EXPLORER_URL",
-    function ExchangeSaleController($scope, Transaction, MIN_MINER_FEE, ADDRESS_EXPLORER_URL) {
+  .controller("ExchangeSaleController",["$scope", "Transaction", "MIN_MINER_FEE", "ADDRESS_EXPLORER_URL", "SATOSHI_UNIT",
+    function ExchangeSaleController($scope, Transaction, MIN_MINER_FEE, ADDRESS_EXPLORER_URL, SATOSHI_UNIT) {
       $scope.minerFees = MIN_MINER_FEE;
 
       $scope.confirm = function(){
         //TODO: VALIDATIONS
         var fee = new Big($scope.minerFees);
         var exchangeSale = new Transaction(20,$scope.selectedAddress,fee,{
-            amount: $scope.saleAmount,
-            price: $scope.salePrice,
-            min_buyer_fee: $scope.buyersFee,
+            amount: +new Big($scope.saleAmount).times(SATOSHI_UNIT).valueOf(),
+            price: new Big($scope.salePrice).times(SATOSHI_UNIT).valueOf(),
+            min_buyer_fee: new Big($scope.buyersFee).times(SATOSHI_UNIT).valueOf(),
             blocks: $scope.saleBlocks,
             currency: $scope.selectedAsset.symbol,
             donate: $scope.account.getSetting("donate")
