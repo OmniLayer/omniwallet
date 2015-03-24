@@ -11,7 +11,7 @@ angular.module("omniControllers")
             price: $scope.salePrice,
             min_buyer_fee: $scope.buyersFee,
             blocks: $scope.saleBlocks,
-            currency: $scope.selectedCoin.symbol,
+            currency: $scope.selectedAsset.symbol,
             donate: $scope.account.getSetting("donate")
           });
 
@@ -22,7 +22,7 @@ angular.module("omniControllers")
             title:"EXCHANGE.SALE.MODALTITLE",
             saleAmount: $scope.saleAmount,
             buyersFee: $scope.buyersfee,
-            selectedCoin: $scope.selectedCoin,
+            selectedCoin: $scope.selectedAsset,
             salePricePerCoin: $scope.salePrice,
             saleBlocks : $scope.saleBlocks,
             fees : $scope.minerFees,
