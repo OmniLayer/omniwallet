@@ -35,7 +35,7 @@
             </div>
             <div class="col-sm-6">
               <div class="form-group">
-                <label class="input-group-addon">{{ EXCHANGE.BUY.SELLER | translate }}: </label>
+                <label>{{ EXCHANGE.BUY.SELLER | translate }}: </label>
                 <span class="form-control" >
                   {{global['buyOffer'].from_address}}
                 </span>
@@ -107,7 +107,7 @@
         <p>
           {{ 'WALLET.SEND.COST' | translate}}: {{ minersFee.plus(protocolFee).valueOf()}} BTC <button type="button" class="btn btn-xs"><span class="glyphicon glyphicon-pencil small"></span></button>
         </p>
-        <input class="btn btn-primary btn-lg col-xs-push-3 col-xs-6" type="submit" value="Send Reservation">
+        <button type="submit" class="btn btn-main pull-right">{{ 'COMMON.NEXT' | translate}}</button>
       </form>  
     </div>
   </div>
