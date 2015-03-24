@@ -1,4 +1,5 @@
-<div ng-controller="ExchangeSaleController" class="row om-row">
+<div ng-controller="ExchangeSaleController">
+  <div class="row om-row">
     <div class="col-xs-12">
       <div class="text-left om-title">{{ 'EXCHANGE.SALE.TITLE' | translate}}</div>
       <!-- <div ng-show="showErrors" class="alert alert-danger"> <strong> {{error}} </strong>  -->
@@ -12,7 +13,7 @@
             <div class="col-sm-6">
               <label for="chooseCoin" >{{ 'EXCHANGE.SALE.CHOOSECOIN' | translate}}</label>
               <div class="btn-group send-asset-dropdown">
-                <span class="form-controll">
+                <span class="form-control">
                   {{selectedAsset.name}} <small class="text-muted" ng-show="selectedAsset.id > 2">({{selectedAsset.id}})</small>
                 </span>
               </div>
