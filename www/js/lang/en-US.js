@@ -361,7 +361,7 @@ angular.module("omniConfig")
 			"BLOCKS":"Payment Timeframe",
 			"BUYERSFEE":"Buyer's Fee",
 			"CONFIRM":"Confirm Sale"
-		}
+		},
 		"BUY":{
 			"TITLE":"Accept Offer",
 			"NOFUNDS":"No Funds on Addresses with private keys to complete the purchase!",
@@ -379,8 +379,7 @@ angular.module("omniConfig")
 			"AMOUNTPLACEHOLDER":"For example: {{ sendPlaceholderValue }} (Max {{ global['buyOffer'].formatted_amount_available }})",
 			"AMOUNTAVAILABLE":"Available to accept: {{ global['buyOffer'].formatted_amount_available }} {{ displayedAbbreviation }}",
 			"COST":"Approx Cost",
-			"COSTTOOLTIP":"If your reservation offer is accepted and validated, you will have to pay this amount to complete the transaction.",
-			
+			"COSTTOOLTIP":"If your reservation offer is accepted and validated, you will have to pay this amount to complete the transaction."
 		}
 	}
 })

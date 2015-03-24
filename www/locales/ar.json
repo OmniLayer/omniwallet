@@ -354,7 +354,27 @@
 			"MODAL_FROM":"From",
 			"MODAL_AMOUNT": "Amount",
 			"BLOCKS":"Amount of Blocks",
-			"BUYERSFEE":"Buyer's Fee"
+			"BUYERSFEE":"Buyer's Fee",
+			"CONFIRM":"Confirm Sale"
+		},
+		"BUY":{
+			"TITLE":"Accept Offer",
+			"NOFUNDS":"No Funds on Addresses with private keys to complete the purchase!",
+			"SENDSOME":"Send some funding to an address on the",
+			"ORADD":"page or add an address with funds.",
+			"ADDRESS":"Buying Address",
+			"OFFERTOOLTIP":"Opens in new Window/Tab",
+			"OFFER":"Sale Offer (ID / hash)",
+			"SELLER":"Seller's address",
+			"FEE":"Sale fee",
+			"TIMEFRAME":"Payment Timeframe",
+			"TIMEFRAMETOOLTIP":"If your reservation offer is accepted and validated you will have to complete the payment within this time frame.",
+			"TIMEFRAMEDESCRIPTION":"{{ global['buyOffer'].formatted_block_time_limit }} Blocks. (Approx {{ (global['buyOffer'].formatted_block_time_limit * 10)/60 | number:2}} hours based on an average of 10min/block)",
+			"AMOUNT":"Amount to accept",
+			"AMOUNTPLACEHOLDER":"For example: {{ sendPlaceholderValue }} (Max {{ global['buyOffer'].formatted_amount_available }})",
+			"AMOUNTAVAILABLE":"Available to accept: {{ global['buyOffer'].formatted_amount_available }} {{ displayedAbbreviation }}",
+			"COST":"Approx Cost",
+			"COSTTOOLTIP":"If your reservation offer is accepted and validated, you will have to pay this amount to complete the transaction."
 		}
 	}
 }
