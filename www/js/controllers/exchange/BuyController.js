@@ -1,19 +1,11 @@
 angular.module("omniControllers")
   .controller("ExchangeBuyController",["$scope", "$http", "Transaction",
     function ExchangeBuyController($scope, $http, Transaction) {
-      //   // [ Template Initialization ]
-        
-      // $scope.currencyList.forEach(function(e, i) {
-      //   if (e.symbol == "BTC"){
-      //     $scope.addressList = e.tradableAddresses.filter(function(e) {
-      //         return (e.privkey && e.privkey.length == 58);
-      //       }).map(function(e){
-      //         return e.hash;
-      //       });
-      //     $scope.$parent.$parent.selectedAddress = $scope.addressList[0];
-      //   }
-      // });
-      // OInitialize values.
+
+      $scope.selectedAddress= $scope.hasBitcoins ? $scope.wallet.getAsset(0).tradableAddresses[0] : undefined;
+      $scope.setAddress = function(address){
+            $scope.selectedAddress = address;
+      }
       var transaction = $scope.global['buyOffer'];
       $scope.buySaleID = transaction.tx_hash;
       $http.get('/v1/transaction/tx/' + transaction.tx_hash + '.json').success(function(data) {
