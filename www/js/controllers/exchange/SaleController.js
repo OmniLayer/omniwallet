@@ -7,7 +7,7 @@ angular.module("omniControllers")
         var fee = new Big($scope.minersFee);
         var exchangeSale = new Transaction(20,$scope.selectedAddress,fee,{
             amount: +new Big($scope.saleAmount).times(SATOSHI_UNIT).valueOf(),
-            price: new Big($scope.salePrice).times(SATOSHI_UNIT).valueOf(),
+            price: $scope.salePrice,
             min_buyer_fee: new Big($scope.buyersFee).times(SATOSHI_UNIT).valueOf(),
             blocks: $scope.saleBlocks,
             currency: $scope.selectedAsset.symbol,
