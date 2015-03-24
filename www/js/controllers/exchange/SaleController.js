@@ -1,7 +1,7 @@
 angular.module("omniControllers")
   .controller("ExchangeSaleController",["$scope", "Transaction", "MIN_MINER_FEE",
     function ExchangeSaleController($scope, Transaction, MIN_MINER_FEE) {
-      $scope.minersFee = MIN_MINER_FEE;
+      $scope.minerFees = MIN_MINER_FEE;
 
       $scope.confirm = function(){
         //TODO: VALIDATIONS
