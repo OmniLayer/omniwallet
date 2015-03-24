@@ -66,7 +66,7 @@ angular.module("omniControllers")
             totalCost : exchangeAccept.totalCost,
             confirmText:"EXCHANGE.BUY.CONFIRM",
             explorerUrl:ADDRESS_EXPLORER_URL,
-            successRedirect:"/wallet/trade" 
+            successRedirect:"/exchange/trade" 
           },
           transaction:exchangeAccept
         })
