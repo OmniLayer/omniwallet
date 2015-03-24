@@ -353,7 +353,8 @@ angular.module("omniConfig")
 			"PRICE":"Price per coin",
 			"TIME":"Time given to buyer to pay",
 			"TIMETOOLTIP":"Time in blocks the buyer has to complete his purchase (1 block approx. 10 minutes)",
-			"BUYERFEE":"Buyer's fee"
+			"BUYERFEE":"Buyer's fee",
+			"MODALTITLE": "Confirm Sale"
 		}
 	}
 })
