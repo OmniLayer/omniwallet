@@ -1,32 +1,8 @@
 angular.module("omniControllers")
-  .controller("ExchangeSaleController",["$scope", "Transaction",
-    function ExchangeSaleController($scope, Transaction) {
+  .controller("ExchangeSaleController",["$scope", "Transaction", "MIN_MINER_FEE",
+    function ExchangeSaleController($scope, Transaction, MIN_MINER_FEE) {
+      $scope.minersFee = MIN_MINER_FEE;
 
-
-      // // [ Template Initialization ]
-
-      // if ($scope.isCancel == true) {
-      //   $scope.activeCurrencyPair=['BTC','BTC']; // set defaults for Cancel
-      // }
-
-      // $scope.currencySaleList = $scope.currencyList.filter(function(currency){
-      //   if (currency.symbol == $scope.activeCurrencyPair[1] )
-      //     $scope.$parent.$parent.selectedCoin = currency;
-      //   return currency.symbol == $scope.activeCurrencyPair[1];
-      // });
-
-      // if( $scope.currencySaleList.length == 0 ) {
-      //   var noCurrency={
-      //       symbol: 'No DeX-tradable coins in wallet!',
-      //       name: 'No DeX-tradable coins in wallet!',
-      //       tradableAddresses: [] 
-      //   }
-      //   $scope.currencySaleList.push(noCurrency);
-      //   $scope.$parent.$parent.selectedCoin=noCurrency;
-      //   $scope.hideForm=true
-      // }
-      // [ Sale Form Helpers ]
-      // TRASANCTION GENERATION CONFIG 
       $scope.confirm = function(){
         //TODO: VALIDATIONS
         var fee = new Big($scope.minerFees);
