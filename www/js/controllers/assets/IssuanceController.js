@@ -69,7 +69,8 @@ angular.module("omniControllers")
 				    numberProperties: $scope.numberProperties,
 				    totalCost : assetCreation.totalCost,
 					confirmText:"ASSET.ISSUANCE.CREATE",
-					explorerUrl:ADDRESS_EXPLORER_URL
+					explorerUrl:ADDRESS_EXPLORER_URL,
+            		successRedirect:"/wallet/assets" 
 				},
 				transaction:assetCreation
 			})

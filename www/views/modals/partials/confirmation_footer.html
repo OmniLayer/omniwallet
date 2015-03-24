@@ -17,7 +17,7 @@
     <div ng-show="transactionSuccess">
         <h4 class="pull-left" style="color:green"> {{successMessage}}, 
         check your transaction <a target="_blank" href="{{url}}">here.</a></h4>
-        <a href="/wallet/overview">
+        <a href="{{successRedirect}}">
             <button class="btn btn-main" ng-click="cancel()">Close</button>
         </a>
     </div>

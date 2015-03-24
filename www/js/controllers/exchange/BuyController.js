@@ -65,7 +65,8 @@ angular.module("omniControllers")
             fees : $scope.minerFees,
             totalCost : exchangeAccept.totalCost,
             confirmText:"EXCHANGE.BUY.CONFIRM",
-            explorerUrl:ADDRESS_EXPLORER_URL
+            explorerUrl:ADDRESS_EXPLORER_URL,
+            successRedirect:"/wallet/trade" 
           },
           transaction:exchangeAccept
         })

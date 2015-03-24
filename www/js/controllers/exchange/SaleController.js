@@ -28,7 +28,8 @@ angular.module("omniControllers")
             fees : $scope.minerFees,
             totalCost : exchangeSale.totalCost,
             confirmText:"EXCHANGE.SALE.CONFIRM",
-            explorerUrl:ADDRESS_EXPLORER_URL
+            explorerUrl:ADDRESS_EXPLORER_URL,
+            successRedirect:"/wallet/trade"
           },
           transaction:exchangeSale
         })
