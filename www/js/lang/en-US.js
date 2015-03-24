@@ -359,7 +359,8 @@ angular.module("omniConfig")
 			"MODAL_FROM":"From",
 			"MODAL_AMOUNT": "Amount",
 			"BLOCKS":"Amount of Blocks",
-			"BUYERSFEE":"Buyer's Fee"
+			"BUYERSFEE":"Buyer's Fee",
+			"CONFIRM":"Confirm Sale"
 		}
 	}
 })
