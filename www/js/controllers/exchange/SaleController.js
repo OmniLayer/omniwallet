@@ -1,6 +1,6 @@
 angular.module("omniControllers")
-  .controller("ExchangeSaleController",["$scope", "Transaction", "MIN_MINER_FEE",
-    function ExchangeSaleController($scope, Transaction, MIN_MINER_FEE) {
+  .controller("ExchangeSaleController",["$scope", "Transaction", "MIN_MINER_FEE", "ADDRESS_EXPLORER_URL",
+    function ExchangeSaleController($scope, Transaction, MIN_MINER_FEE, ADDRESS_EXPLORER_URL) {
       $scope.minerFees = MIN_MINER_FEE;
 
       $scope.confirm = function(){
@@ -21,7 +21,7 @@ angular.module("omniControllers")
           scope:{
             title:"EXCHANGE.SALE.MODALTITLE",
             saleAmount: $scope.saleAmount,
-            buyersFee: $scope.buyersfee,
+            buyersFee: $scope.buyersFee,
             selectedCoin: $scope.selectedAsset,
             salePricePerCoin: $scope.salePrice,
             saleBlocks : $scope.saleBlocks,
