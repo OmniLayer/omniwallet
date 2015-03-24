@@ -113,7 +113,8 @@ angular.module("omniControllers")
 				    fees : $scope.issuerData.minerFees,
 				    totalCost : crowdsaleCreation.totalCost,
 					confirmText:"ASSET.CROWDSALE.START",
-					explorerUrl:ADDRESS_EXPLORER_URL
+					explorerUrl:ADDRESS_EXPLORER_URL,
+            		successRedirect:"/wallet/assets"
 				},
 				transaction:crowdsaleCreation
 			})

@@ -40,7 +40,8 @@ angular.module("omniControllers")
 				sendValue:$scope.sendAmount * btcPrice,
 				toAddress:$scope.sendTo,
 				fees:simpleSend.totalCost,
-				confirmText:"WALLET.SEND.FUNDS"
+				confirmText:"WALLET.SEND.FUNDS",
+            	successRedirect:"/wallet" 
 			};
 
 

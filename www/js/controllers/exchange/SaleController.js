@@ -1,11 +1,10 @@
 angular.module("omniControllers")
-  .controller("ExchangeSaleController",["$scope", "Transaction", "MIN_MINER_FEE", "ADDRESS_EXPLORER_URL", "SATOSHI_UNIT",
-    function ExchangeSaleController($scope, Transaction, MIN_MINER_FEE, ADDRESS_EXPLORER_URL, SATOSHI_UNIT) {
-      $scope.minerFees = MIN_MINER_FEE;
+  .controller("ExchangeSaleController",["$scope", "Transaction", "ADDRESS_EXPLORER_URL", "SATOSHI_UNIT",
+    function ExchangeSaleController($scope, Transaction, ADDRESS_EXPLORER_URL, SATOSHI_UNIT) {
 
       $scope.confirm = function(){
         //TODO: VALIDATIONS
-        var fee = new Big($scope.minerFees);
+        var fee = new Big($scope.minersFee);
         var exchangeSale = new Transaction(20,$scope.selectedAddress,fee,{
             amount: +new Big($scope.saleAmount).times(SATOSHI_UNIT).valueOf(),
             price: new Big($scope.salePrice).times(SATOSHI_UNIT).valueOf(),
@@ -25,10 +24,11 @@ angular.module("omniControllers")
             selectedCoin: $scope.selectedAsset,
             salePricePerCoin: $scope.salePrice / $scope.saleAmount,
             saleBlocks : $scope.saleBlocks,
-            fees : $scope.minerFees,
+            fees : $scope.minersFee,
             totalCost : exchangeSale.totalCost,
             confirmText:"EXCHANGE.SALE.CONFIRM",
-            explorerUrl:ADDRESS_EXPLORER_URL
+            explorerUrl:ADDRESS_EXPLORER_URL,
+            successRedirect:"/wallet/trade"
           },
           transaction:exchangeSale
         })
@@ -49,7 +49,7 @@ angular.module("omniControllers")
       //   var divisible = $scope.selectedCoin.divisible; 
 
       //   var convertToSatoshi = [
-      //       $scope.minerFees,
+      //       $scope.minersFee,
       //       $scope.buyersFee,
       //       0, //$scope.salePricePerCoin,
       //       $scope.saleAmount,
@@ -64,7 +64,7 @@ angular.module("omniControllers")
 
       //   var convertedValues = $scope.convertDisplayedValue( convertToSatoshi );
 
-      //   var minerFees = +convertedValues[0];
+      //   var minersFee = +convertedValues[0];
       //   var buyersFee = +convertedValues[1];
       //   //var salePricePerCoin = +convertedValues[2];
       //   var saleAmount = divisible ? +convertedValues[3] : +$scope.saleAmount;
@@ -79,7 +79,7 @@ angular.module("omniControllers")
 
       //   var totalFeeCost = parseFloat($scope.convertDisplayedValue($scope.totalCost));
         
-      //   var required = [coin, address, saleAmount, saleBlocks, salePricePerCoin, minerFees, buyersFee, balance, btcbalance, $scope.saleForm.$valid];
+      //   var required = [coin, address, saleAmount, saleBlocks, salePricePerCoin, minersFee, buyersFee, balance, btcbalance, $scope.saleForm.$valid];
         
       //   var error = 'Please ';
       //   if ($scope.saleForm.$valid == false) {
@@ -93,7 +93,7 @@ angular.module("omniControllers")
       //       error += 'make sure your send amount is non-zero, ';
       //     if (buyersFee < minerMinimum)
       //       error += 'make sure your buyers fee entry is at least 0.0001 BTC, ';
-      //     if (minerFees < minerMinimum)
+      //     if (minersFee < minerMinimum)
       //       error += 'make sure your fee entry is at least 0.0001 BTC, ';
       //     if ((saleAmount <= balance) == false)
       //       error += 'make sure you aren\'t putting more coins up for sale than you own, ';
@@ -103,7 +103,7 @@ angular.module("omniControllers")
       //     if (saleBlocks < 1)
       //       error += 'make sure your block timeframe is at least 1, ';
       //   }
-      //   if ($scope.isCancel == true && (((cancelFees + minerFees) <= btcbalance) == false) )
+      //   if ($scope.isCancel == true && (((cancelFees + minersFee) <= btcbalance) == false) )
       //     error += 'make sure you have enough Bitcoin to cover your transaction fees, ';
       //   if (error.length < 8) {
       //     $scope.$parent.showErrors = false;
@@ -139,7 +139,7 @@ angular.module("omniControllers")
       //             amt: saleAmount,
       //             price: salePricePerCoin,
       //             buyersfee: buyersFee,
-      //             fee: minerFees,
+      //             fee: minersFee,
       //             blocks: saleBlocks,
       //             currency: coin,
       //             selectedCoin: $scope.selectedCoin,
