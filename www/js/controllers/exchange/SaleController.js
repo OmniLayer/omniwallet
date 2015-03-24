@@ -23,7 +23,7 @@ angular.module("omniControllers")
             saleAmount: $scope.saleAmount,
             buyersFee: $scope.buyersFee,
             selectedCoin: $scope.selectedAsset,
-            salePricePerCoin: $scope.salePrice,
+            salePricePerCoin: $scope.salePrice / $scope.saleAmount,
             saleBlocks : $scope.saleBlocks,
             fees : $scope.minerFees,
             totalCost : exchangeSale.totalCost,
