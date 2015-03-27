@@ -1,6 +1,6 @@
 angular.module("omniControllers")
-  .controller("ExchangeBuyController",["$scope", "$http", "Transaction",
-    function ExchangeBuyController($scope, $http, Transaction) {
+  .controller("ExchangeBuyController",["$scope", "$http", "Transaction", "ADDRESS_EXPLORER_URL",
+    function ExchangeBuyController($scope, $http, Transaction, ADDRESS_EXPLORER_URL) {
 
       $scope.selectedAddress= $scope.hasBitcoins ? $scope.wallet.getAsset(0).tradableAddresses[0] : undefined;
       $scope.setAddress = function(address){
