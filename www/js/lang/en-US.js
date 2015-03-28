@@ -329,6 +329,14 @@ angular.module("omniConfig")
 		"CROWDSALE":{
 			"BOUGHT":"Tokens Bought",
 			"CREATED":"Tokens Created"
+		},
+		"OFFERS":{
+			"HASH":"Transaction hash",
+			"PRICE":"Price per Coin",
+			"AMOUNT":"Amount",
+			"TOTAL":"Total Cost",
+			"CANCEL":"Cancel",
+			"BUY":"Buy"
 		}
 	},
 	"EXCHANGE":{
@@ -384,7 +392,10 @@ angular.module("omniConfig")
 		"MYOFFERS":{
 			"TITLE":"My Offers",
 			"BUYTITLE":"Active Buy Offers",
-			"SELLTITLE":"Active Sell Offers"
+			"SELLTITLE":"Active Sell Offers",
+			"PURCHASE":"Purchase coin",
+			"EXPIRED":"Offer Expired",
+			"CANCEL":"Cancel Offer"
 		}
 	}
 })
