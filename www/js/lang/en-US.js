@@ -395,7 +395,14 @@ angular.module("omniConfig")
 			"SELLTITLE":"Active Sell Offers",
 			"PURCHASE":"Purchase coin",
 			"EXPIRED":"Offer Expired",
-			"CANCEL":"Cancel Offer"
+			"CANCEL":"Cancel Offer",
+			"PAYMENT":"Send payment",
+			"COINTYPE":"Send type of coin",
+			"COINMESSAGE":"To complete a pending offer, you must make purchases in Bitcoin.",
+			"FROM":"Send from address",
+			"TO":"Send funds to",
+			"AMOUNT":"Amount to send (in"
+
 		}
 	}
 })
