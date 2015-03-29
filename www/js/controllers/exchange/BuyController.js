@@ -1,6 +1,6 @@
 angular.module("omniControllers")
-  .controller("ExchangeBuyController",["$scope", "$http", "Transaction",
-    function ExchangeBuyController($scope, $http, Transaction) {
+  .controller("ExchangeBuyController",["$scope", "$http", "Transaction", "ADDRESS_EXPLORER_URL",
+    function ExchangeBuyController($scope, $http, Transaction, ADDRESS_EXPLORER_URL) {
 
       $scope.selectedAddress= $scope.hasBitcoins ? $scope.wallet.getAsset(0).tradableAddresses[0] : undefined;
       $scope.setAddress = function(address){
@@ -37,7 +37,7 @@ angular.module("omniControllers")
 
       $scope.confirm = function(){
         //TODO: VALIDATIONS
-        var fee = new Big($scope.minerFees);
+        var fee = new Big($scope.minersFee);
         var exchangeAccept = new Transaction(22,$scope.selectedAddress,fee,{
             amount: $scope.buyAmount,
             tx_hash: $scope.buySaleID,
@@ -51,10 +51,10 @@ angular.module("omniControllers")
             title:"EXCHANGE.BUY.MODALTITLE",
             displayedAbbreviation: $scope.displayedAbbreviation,
             buyAmount: $scope.buyAmount,
-            minerFees: $scope.minerFees,
+            minerFees: $scope.minersFee,
             selectedCoin: $scope.selectedCoin,
             insufficientBitcoin : $scope.insufficientBitcoin,
-            fees : $scope.minerFees,
+            fees : $scope.minersFee,
             totalCost : exchangeAccept.totalCost,
             confirmText:"EXCHANGE.BUY.CONFIRM",
             explorerUrl:ADDRESS_EXPLORER_URL,

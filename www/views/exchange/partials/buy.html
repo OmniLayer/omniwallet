@@ -1,7 +1,7 @@
 <div ng-controller="ExchangeBuyController">
   <div class="row om-row">
     <div class="col-xs-12">
-      <h3 class="text-left om-title" >{{ EXCHANGE.BUY.TITLE | translate}}</h3>
+      <h3 class="text-left om-title" >{{ 'EXCHANGE.BUY.TITLE' | translate}}</h3>
       <div ng-show="showErrors" class="alert alert-danger">
         {{error}}
       </div>
@@ -9,9 +9,9 @@
   </div>
   <div class="row" ng-hide="hasBitcoins">
     <div class="col-sm-12"> 
-      {{ EXCHANGE.BUY.NOFUNDS | translate}}
+      {{ 'EXCHANGE.BUY.NOFUNDS' | translate}}
       <br />
-      {{ EXCHANGE.BUY.SENDSOME | translate}} <a class="" href="/wallet/addresses"> {{ NAVIGATION.ADDRESSES | translate }} </a> {{ EXCHANGE.BUY.ORADD | translate}}
+      {{ 'EXCHANGE.BUY.SENDSOME' | translate}} <a class="" href="/wallet/addresses"> {{ 'NAVIGATION.ADDRESSES' | translate }} </a> {{ 'EXCHANGE.BUY.ORADD' | translate}}
     </div>
   </div>
   <div class="row">
@@ -20,7 +20,7 @@
         <div class="panel panel-form">
           <div class="panel-body">
             <div class="col-sm-6">
-              <label for="chooseAddress" >{{ EXCHANGE.BUY.ADDRESS | translate}}:</label>
+              <label for="chooseAddress" >{{ 'EXCHANGE.BUY.ADDRESS' | translate}}:</label>
               <div class="btn-group send-address-dropdown">
                 <button class="btn btn-clear dropdown-toggle" type="button" id="chooseAddress" data-toggle="dropdown" aria-expanded="true">
                   {{selectedAddress.hash}} 
@@ -35,7 +35,7 @@
             </div>
             <div class="col-sm-6">
               <div class="form-group">
-                <label>{{ EXCHANGE.BUY.SELLER | translate }}: </label>
+                <label>{{ 'EXCHANGE.BUY.SELLER' | translate }}: </label>
                 <span class="form-control" >
                   {{global['buyOffer'].from_address}}
                 </span>
@@ -45,8 +45,8 @@
         </div>
         <div class="row">
           <div class="col-sm-6">
-            <div class="form-group" tooltip="{{ EXCHANGE.BUY.OFFERTOOLTIP | translate }}">
-              <label>{{ EXCHANGE.BUY.OFFER | translate }}:</label>
+            <div class="form-group" tooltip="{{ 'EXCHANGE.BUY.OFFERTOOLTIP' | translate }}">
+              <label>{{ 'EXCHANGE.BUY.OFFER' | translate }}:</label>
               <a href="/explorer/inspector?view={{buySaleID}}" target="_blank">
                 <span class="form-control" ng-init="buySaleID=global['buyOffer'].tx_hash">{{buySaleID}}</span>
               </a>
@@ -54,7 +54,7 @@
           </div>
           <div class="col-sm-6">
             <div class="form-group">
-              <label>{{ EXCHANGE.SALE.PRICE | translate }}: </label>
+              <label>{{ 'EXCHANGE.SALE.PRICE' | translate }}: </label>
               <span class="form-control">{{ global['buyOffer'].formatted_price_per_coin }} BTC </span>
             </div>
           </div>
@@ -62,7 +62,7 @@
         <div class="row">
           <div class="col-sm-6">
             <div class="form-group">
-              <label> {{ EXCHANGE.BUY.FEE | translate }}: </label>
+              <label> {{ 'EXCHANGE.BUY.FEE' | translate }}: </label>
               <span class="form-control">
                 {{ global['buyOffer'].formatted_fee_required }} BTC
               </span>
@@ -70,12 +70,12 @@
           </div>
           <div class="col-sm-6">
             <div class="form-group">
-              <label > {{ EXCHANGE.BUY.TIMEFRAME | translate }}: <a href=""
-                tooltip="{{ EXCHANGE.BUY.TIMEFRAMETOOLTIP | translate }}"
+              <label > {{ 'EXCHANGE.BUY.TIMEFRAME' | translate }}: <a href=""
+                tooltip="{{ 'EXCHANGE.BUY.TIMEFRAMETOOLTIP' | translate }}"
                 tooltip-append-to-body="true"
                 tooltip-placement="top"> <strong>(?)</strong> </a> </label>
               <span class="form-control">
-                {{ EXCHANGE.BUY.TIMEFRAMEDESCRIPTION | translate }}
+                {{ 'EXCHANGE.BUY.TIMEFRAMEDESCRIPTION' | translate }}
               </span>
             </div>
           </div>
@@ -83,19 +83,19 @@
         <div class="row">
           <div class="col-sm-6">
             <div class="form-group">
-              <label> {{ EXCHANGE.BUY.AMOUNT | translate }} ({{ displayedAbbreviation }}): </label>
+              <label> {{ 'EXCHANGE.BUY.AMOUNT' | translate }} ({{ displayedAbbreviation }}): </label>
               <input name="amount" type="number" ng-model="buyAmount" class="form-control"
-              placeholder="{{ EXCHANGE.BUY.AMOUNTPLACEHOLDER | translate }}" step="{{ sendPlaceholderStep }}" min="{{ sendPlaceholderMin }}" 
+              placeholder="{{ 'EXCHANGE.BUY.AMOUNTPLACEHOLDER' | translate }}" step="{{ sendPlaceholderStep }}" min="{{ sendPlaceholderMin }}" 
               max="{{ global['buyOffer'].formatted_amount_available }}" required>
               <p class="help-block">
-                {{ EXCHANGE.BUY.AMOUNTAVAILABLE | translate }} 
+                {{ 'EXCHANGE.BUY.AMOUNTAVAILABLE' | translate }} 
               </p>
             </div>
           </div>
           <div class="col-sm-6">
             <div class="form-group">
-              <label> {{ EXCHANGE.BUY.COST | translate }} : <a href=""
-                tooltip="{{ EXCHANGE.BUY.COSTTOOLTIP | translate }}"
+              <label> {{ 'EXCHANGE.BUY.COST' | translate }} : <a href=""
+                tooltip="{{ 'EXCHANGE.BUY.COSTTOOLTIP' | translate }}"
                 tooltip-append-to-body="true"
                 tooltip-placement="top"> <strong>(?)</strong> </a> </label>
               <span class="form-control">
