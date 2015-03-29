@@ -5,8 +5,8 @@
   <div ng-show="pendingThinking" class="row">
     <div ng-show="orderbook.length == 0" class="col-xs-12 text-center">{{'COMMON.LOADING' | translate}}...<img src="/assets/img/spinner.gif"></div>
     
-    <tabset ng-init="showoffers='buy'" ng-hide="orderbook.length == 0">
-      <tab heading="{{ 'EXCHANGE.MYOFFERS.BUYTITLE' | translate }}" active="showoffers=='buy'" select="showoffers='buy'">
+    <tabset ng-hide="orderbook.length == 0">
+      <tab heading="{{ 'EXCHANGE.MYOFFERS.BUYTITLE' | translate }}" active="true">
         <h3 class="om-subtitle"> {{ 'EXCHANGE.MYOFFERS.BUYTITLE' | translate }} </h3>
         <div class="om-table">
           <div class="row table-header hidden-xs">
@@ -38,7 +38,7 @@
           </div>
         </div>
       </tab>
-      <tab heading="{{ 'EXCHANGE.MYOFFERS.SELLTITLE' | translate }}" active="showoffers=='sell'" select="showoffers='sell'">
+      <tab heading="{{ 'EXCHANGE.MYOFFERS.SELLTITLE' | translate }}">
         <h3 class="om-subtitle"> {{ 'EXCHANGE.MYOFFERS.SELLTITLE' | translate }} </h3>
         <div class="om-table">
           <div class="row table-header hidden-xs">
