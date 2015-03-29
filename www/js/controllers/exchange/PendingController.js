@@ -8,7 +8,7 @@ angular.module("omniControllers")
 		  $scope.hasAddressesWithPrivkey = $scope.wallet.addresses.filter(function(address){
 		    return address.privkey && address.privkey.length == 58
 		  }).map(function(e){
-		          return e.address;
+		          return e.hash;
 		        });
 		  $scope.selectedAddress = $scope.hasAddressesWithPrivkey[0];
 		  $scope.wallet.assets.filter(function(currency){
