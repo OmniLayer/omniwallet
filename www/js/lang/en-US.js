@@ -401,8 +401,10 @@ angular.module("omniConfig")
 			"COINMESSAGE":"To complete a pending offer, you must make purchases in Bitcoin.",
 			"FROM":"Send from address",
 			"TO":"Send funds to",
-			"AMOUNT":"Amount to send (in"
-
+			"AMOUNT":"Amount to send (in",
+			"REMAINING":"Blocks Remaining",
+			"REMAININGTOOLTIP":"Your payment must be received within this many blocks to complete successfully",
+			"BLOCKS":"blocks"
 		}
 	}
 })
