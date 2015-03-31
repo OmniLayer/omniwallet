@@ -75,7 +75,7 @@
                 tooltip-append-to-body="true"
                 tooltip-placement="top"> <strong>(?)</strong> </a> </label>
               <span class="form-control">
-                {{ 'EXCHANGE.BUY.TIMEFRAMEDESCRIPTION' | translate }}
+                 {{ global['buyOffer'].formatted_block_time_limit }} {{ 'EXCHANGE.BUY.TIMEFRAMEDESCRIPTIONLEAD' | translate }} {{ (global['buyOffer'].formatted_block_time_limit * 10)/60 | number:2}} {{ 'EXCHANGE.BUY.TIMEFRAMEDESCRIPTIONTRAIL' | translate }}
               </span>
             </div>
           </div>
@@ -88,7 +88,7 @@
               placeholder="{{ 'EXCHANGE.BUY.AMOUNTPLACEHOLDER' | translate }}" step="{{ sendPlaceholderStep }}" min="{{ sendPlaceholderMin }}" 
               max="{{ global['buyOffer'].formatted_amount_available }}" required>
               <p class="help-block">
-                {{ 'EXCHANGE.BUY.AMOUNTAVAILABLE' | translate }} 
+                {{ 'EXCHANGE.BUY.AMOUNTAVAILABLE' | translate }} ({{selectedAddress.getDisplayBalance(selectedAsset.id)}} {{selectedAsset.name}}
               </p>
             </div>
           </div>
