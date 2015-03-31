@@ -46,7 +46,7 @@ angular.module("omniControllers")
 
 
         $scope.modalManager.openConfirmationModal({
-          dataTemplate: '/views/modals/partials/sale.html',
+          dataTemplate: '/views/modals/partials/accept.html',
           scope:{
             title:"EXCHANGE.BUY.MODALTITLE",
             displayedAbbreviation: $scope.displayedAbbreviation,
@@ -56,6 +56,11 @@ angular.module("omniControllers")
             insufficientBitcoin : $scope.insufficientBitcoin,
             fees : $scope.minersFee,
             totalCost : exchangeAccept.totalCost,
+            selectedAddress : $scope.selectedAddress,
+            sellerAddress: global['buyOffer'].from_address,
+            offerHash:global['buyOffer'].tx_hash,
+            salePricePerCoin:global['buyOffer'].formatted_price_per_coin,
+            saleBlocks:global['buyOffer'].formatted_block_time_limit,
             confirmText:"EXCHANGE.BUY.CONFIRM",
             explorerUrl:ADDRESS_EXPLORER_URL,
             successRedirect:"/exchange/trade" 

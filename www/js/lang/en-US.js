@@ -382,12 +382,17 @@ angular.module("omniConfig")
 			"FEE":"Sale fee",
 			"TIMEFRAME":"Payment Timeframe",
 			"TIMEFRAMETOOLTIP":"If your reservation offer is accepted and validated you will have to complete the payment within this time frame.",
-			"TIMEFRAMEDESCRIPTION":"{{ global['buyOffer'].formatted_block_time_limit }} Blocks. (Approx {{ (global['buyOffer'].formatted_block_time_limit * 10)/60 | number:2}} hours based on an average of 10min/block)",
+			"TIMEFRAMEDESCRIPTIONLEAD":" Blocks. (Approx ",
+			"TIMEFRAMEDESCRIPTIONTRAIL": "hours based on an average of 10min/block)",
 			"AMOUNT":"Amount to accept",
 			"AMOUNTPLACEHOLDER":"For example: {{ sendPlaceholderValue }} (Max {{ global['buyOffer'].formatted_amount_available }})",
 			"AMOUNTAVAILABLE":"Available to accept: {{ global['buyOffer'].formatted_amount_available }} {{ displayedAbbreviation }}",
 			"COST":"Approx Cost",
-			"COSTTOOLTIP":"If your reservation offer is accepted and validated, you will have to pay this amount to complete the transaction."
+			"COSTTOOLTIP":"If your reservation offer is accepted and validated, you will have to pay this amount to complete the transaction.",
+			"MODALTITLE":"Confirm Buy Offer",
+			"CONFIRM":"Accept Offer",
+			"CURRENCY":"Buying",
+			"BLOCKS":"Blocks"
 		},
 		"MYOFFERS":{
 			"TITLE":"My Offers",
