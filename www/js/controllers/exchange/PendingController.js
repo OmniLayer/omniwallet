@@ -146,6 +146,7 @@ angular.module("omniControllers")
 
 		  $scope.isCancel=true;
 		  $scope.confirmCancel = function(tx) {
+		  	// TODO: Open confirm modal with special transaction with required parameters
 		    $scope.selectedAddress = tx.from_address;
 		    $scope.selectedCoin_extra = (+tx.currencyId) == 1 ? 'MSC' : 'TMSC';
 		    $scope.cancelTrig=!$scope.cancelTrig;

@@ -55,7 +55,7 @@ angular.module("omniControllers")
             selectedCoin: $scope.selectedCoin,
             insufficientBitcoin : $scope.insufficientBitcoin,
             fees : $scope.minersFee,
-            totalCost : exchangeAccept.totalCost,
+            totalCost : exchangeAccept.totalCost.valueOf(),
             selectedAddress : $scope.selectedAddress,
             sellerAddress: transaction.from_address,
             offerHash:transaction.tx_hash,
