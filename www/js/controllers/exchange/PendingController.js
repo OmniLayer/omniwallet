@@ -1,6 +1,6 @@
 angular.module("omniControllers")
-	.controller("ExchangePendingController",["$scope", "$http", "$q", "hashExplorer", "ADDRESS_EXPLORER_URL",
-		function ExchangePendingController($scope, $http, $q, hashExplorer, ADDRESS_EXPLORER_URL) {
+	.controller("ExchangePendingController",["$scope", "$http", "hashExplorer", "ADDRESS_EXPLORER_URL", "Transaction",
+		function ExchangePendingController($scope, $http, hashExplorer, ADDRESS_EXPLORER_URL, Transaction) {
 		  $scope.setHashExplorer = hashExplorer.setHash.bind(hashExplorer)
 		  //$scope.selectedAddress = $scope.wallet.addresses[ $scope.wallet.addresses.length-1 ].address;
 		  $scope.currencyUnit = 'stom'
