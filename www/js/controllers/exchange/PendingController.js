@@ -1,6 +1,6 @@
 angular.module("omniControllers")
-	.controller("ExchangePendingController",["$scope", "$http", "$q", "hashExplorer",
-		function ExchangePendingController($scope, $http, $q, hashExplorer) {
+	.controller("ExchangePendingController",["$scope", "$http", "$q", "hashExplorer", "ADDRESS_EXPLORER_URL",
+		function ExchangePendingController($scope, $http, $q, hashExplorer, ADDRESS_EXPLORER_URL) {
 		  $scope.setHashExplorer = hashExplorer.setHash.bind(hashExplorer)
 		  //$scope.selectedAddress = $scope.wallet.addresses[ $scope.wallet.addresses.length-1 ].address;
 		  $scope.currencyUnit = 'stom'
@@ -146,9 +146,26 @@ angular.module("omniControllers")
 
 		  $scope.isCancel=true;
 		  $scope.confirmCancel = function(tx) {
-		  	// TODO: Open confirm modal with special transaction with required parameters
-		    $scope.selectedAddress = tx.from_address;
-		    $scope.selectedCoin_extra = (+tx.currencyId) == 1 ? 'MSC' : 'TMSC';
-		    $scope.cancelTrig=!$scope.cancelTrig;
+		  	var fee = new Big(0.0001);
+	        var exchangeCancel = new Transaction(20,$scope.wallet.getAddress(tx.from_address),fee,{
+	            amount: 0,
+	            price: 0,
+	            min_buyer_fee: 0,
+	            blocks: 10,
+	            currency: (+tx.currencyId) == 1 ? 'MSC' : 'TMSC',
+	            donate: $scope.account.getSetting("donate")
+	          });
+
+
+	        $scope.modalManager.openConfirmationModal({
+	          dataTemplate: '/views/modals/partials/cancel.html',
+	          scope:{
+	            title:"EXCHANGE.MYOFFERS.CANCELTITLE",
+	            confirmText:"EXCHANGE.MYOFFERS.CONFIRMCANCEL",
+	            explorerUrl:ADDRESS_EXPLORER_URL,
+	            successRedirect:"/exchange/myoffers"
+	          },
+	          transaction:exchangeCancel
+	        })
 		  }
 		}])
