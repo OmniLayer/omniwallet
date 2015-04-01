@@ -409,7 +409,10 @@ angular.module("omniConfig")
 			"AMOUNT":"Amount to send (in",
 			"REMAINING":"Blocks Remaining",
 			"REMAININGTOOLTIP":"Your payment must be received within this many blocks to complete successfully",
-			"BLOCKS":"blocks"
+			"BLOCKS":"blocks",
+			"CANCELTITLE":"Confirm Sale Cancellation",
+			"CANCELCONFIRM":"Cancel Sale",
+			"CANCELMESSAGE":"You're about to cancel this sale. If this is correct, please press Cancel Sale below. "
 		}
 	}
 })
