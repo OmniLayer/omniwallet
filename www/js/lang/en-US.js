@@ -36,6 +36,26 @@ angular.module("omniConfig")
 		"ENTERVALIDADDRESS":"Enter a valid Bitcoin Address ",
 		"WELCOME":"Welcome to Omniwallet"
 	},
+	"ABOUT":{
+		"CONTACT":{
+			"WE":"We are a group of developers constantly working to improve Omniwallet.",  
+            "QUESTIONS":"If you have any questions, issues or just want to provide some general feedback feel free to reach out to us at:",
+            "GITHUBTITLE":"Github",
+            "GITHUBDESC":"Search/see our 'Open Issues' and what we are 'Actively Working' on now. Don't see your specific topic? We encourage you to open a new issue to let us know. (Please include as many details as possible including ",
+            "GITHUBLINK":"the output of the developer console",
+            "TALKTITLE":"Mastercoin Talk",
+            "TALKDESC":"There is a support category on the Mastercoin forums where you can ask questions and engage the community for additional help",
+            "EMAILTITLE":"Email",
+            "EMAILDESC":"You can also reach us directly at",
+            "EMAILLINK":"the output of the developer console",
+            "CHATTITLE":"Live Chat",
+            "CHATDESC":"Chat with the developers, share your ideas or ask questions. Availability varies, but we should generally be around Mon-Fri 9-5 CDT",
+            "TITLE":"Contact Us"
+		},
+		"MASTERCOIN":{},
+		"OMNIWALLET":{},
+		"FAQ":{}
+	},
 	"NAVIGATION":{
 		"ABOUT":"About",
 		"ABOUTOMNI":"About Omniwallet",
