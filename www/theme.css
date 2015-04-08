@@ -1555,3 +1555,10 @@ i.icon-l{
 .nav-tabs>li:first-child>a{
   margin-left: 7px;
 }
+
+.media-panel {
+  background-color: #f8f8f8;
+  height: 186px;
+  margin-bottom: 18px;
+  border-radius: 4px;
+}
