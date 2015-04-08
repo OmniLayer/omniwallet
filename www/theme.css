@@ -1559,6 +1559,12 @@ i.icon-l{
 .media-panel {
   background-color: #f8f8f8;
   height: 186px;
-  margin-bottom: 18px;
+  margin-bottom: 16px;
   border-radius: 4px;
+  padding: 0 16px
+}
+
+.media-panel > .media-body {
+  vertical-align: middle;
+  height: 186px;
 }
