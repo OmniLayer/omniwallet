@@ -62,7 +62,7 @@ angular.module("omniConfig")
 			},
 			"PROTOCOL":{
 				"TITLE":"Master Protocol",
-				"PARAGRAPHS":"The Master Protocol is a communications protocol that uses the Bitcoin block chain to enable features such as smart contracts, user currencies and decentralized peer-to-peer exchanges. A common analogy that is used to describe the relation of the Master Protocol to Bitcoin is that of HTTP to TCP/IP: HTTP, like the Master Protocol, is the application layer to the more fundamental transport and internet layer of TCP/IP, like Bitcoin. For more in-depth information and details see the "
+				"PARAGRAPHS":"The Master Protocol is a communications protocol that uses the Bitcoin block chain to enable features such as smart contracts, user currencies and decentralized peer-to-peer exchanges. A common analogy that is used to describe the relation of the Master Protocol to Bitcoin is that of HTTP to TCP/IP: HTTP, like the Master Protocol, is the application layer to the more fundamental transport and internet layer of TCP/IP, like Bitcoin. For more in-depth information and details see the ",
 				"LINK":"<a href=\"https://github.com/mastercoin-MSC/spec#the-master-protocol--mastercoin-complete-specification\" target=\"_new\"><b>Spec</b></a> on github."
 
 			},
