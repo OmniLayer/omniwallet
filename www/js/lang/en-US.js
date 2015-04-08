@@ -62,16 +62,19 @@ angular.module("omniConfig")
 			},
 			"PROTOCOL":{
 				"TITLE":"Master Protocol",
-				"PARAGRAPHS":"The Master Protocol is a communications protocol that uses the Bitcoin block chain to enable features such as smart contracts, user currencies and decentralized peer-to-peer exchanges. A common analogy that is used to describe the relation of the Master Protocol to Bitcoin is that of HTTP to TCP/IP: HTTP, like the Master Protocol, is the application layer to the more fundamental transport and internet layer of TCP/IP, like Bitcoin. For more in-depth information and details see the ",
-				"LINK":"<a href=\"https://github.com/mastercoin-MSC/spec#the-master-protocol--mastercoin-complete-specification\" target=\"_new\"><b>Spec</b></a> on github."
+				"PARAGRAPH":"The Master Protocol is a communications protocol that uses the Bitcoin block chain to enable features such as smart contracts, user currencies and decentralized peer-to-peer exchanges. A common analogy that is used to describe the relation of the Master Protocol to Bitcoin is that of HTTP to TCP/IP: HTTP, like the Master Protocol, is the application layer to the more fundamental transport and internet layer of TCP/IP, like Bitcoin. For more in-depth information and details see the ",
+				"LINK":"Spec",
+				"ONGITHUB":"on github."
 
 			},
 			"TOKEN":{
 				"TITLE":"Mastercoins",
 				"FIRST" : "Mastercoins (symbol MSC) are digital tokens that are necessary for the use of some features of the Master Protocol. The total number of Mastercoins in existence is 619,478.6 and no more MSC will ever be created. Additionally, Mastercoins can not be mined into existence. The 619,478.6 MSC were generated as a result of a public fundraiser in the style of Kickstarter.com. For more details about the algorithm by which Mastercoins were generated, please read the ",
-				"SECOND" : "were generated, please read the <a href=\"http://masterprotocoleducation.org/history-of-the-master-protocol/\" target=\"_new\"><b>History of Mastercoin</b></a>article from Master Protocol Education site. ",
-				"LINK":"Information from the <a href=\"http://masterprotocoleducation.org/\" target=\"_new\"><b>Master Protocol Education</b></a>"
-			}
+				"HISTORY" : "History of Mastercoin",
+				"ARTICLE":"article from Master Protocol Education site. "
+			},
+			"INFO":"Information from the ",
+			"EDUCATION":"Master Protocol Education"
 		},
 		"OMNIWALLET":{},
 		"FAQ":{}
