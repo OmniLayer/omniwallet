@@ -57,7 +57,7 @@ angular.module("omniConfig")
 			"FOUNDATION":{
 				"TITLE":"Mastercoin Foundation",
 				"FIRST":"In September 2013, the Mastercoin Foundation was formed to temporarily manage the funds in the Exodus Address and the distribution of the development MSC. The board of the Mastercoin Foundation has declared its intention to minimize its temporary central role by transitioning the decision making to Mastercoin owners through proof of stake voting.",
-				"SECOND": "The Mastercoin Foundation advocates for the use of the Master Protocol and tries to build a community of people who develop it. All budget items, board minutes, Dev MSC vesting schedule, and bounties are public record and available to anyone on the "
+				"SECOND": "The Mastercoin Foundation advocates for the use of the Master Protocol and tries to build a community of people who develop it. All budget items, board minutes, Dev MSC vesting schedule, and bounties are public record and available to anyone on the ",
 				"LINK": "Foundation's Website"
 			},
 			"PROTOCOL":{
