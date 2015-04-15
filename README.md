@@ -135,13 +135,145 @@ Omniwallet is installed from the command line, so you'll need to open the Termin
 
 You'll need to have Xcode 5.1 (or later) installed and the latest command-line tools (Xcode -> Preferences -> Downloads -> Command Line Tools should have a checkmark).
 
-Next, make sure you have [Ruby](https://www.ruby-lang.org/en/downloads/) installed. If you've installed Xcode, you should have Ruby.
-
+Next, make sure you have [Ruby](https://www.ruby-lang.org/en/downloads/) installed. If you have the [Homebrew](http://brew.sh/) package manager installed, use this command to make sure that the latest version of [Ruby](https://www.ruby-lang.org/en/downloads/) is installed.
+```
+brew install ruby
+```
 If you don't have the [Homebrew](http://brew.sh/) package manager installed, use Ruby to install it:
-
 ```
 ruby -e "$(curl -fsSL https://raw.github.com/Homebrew/homebrew/go/install)"
 ```
+
+### [OS X 10.10 Yosemite Install](http://gilmendes.wordpress.com/2014/07/09/install-nginx-php-fpm-mysql-and-phpmyadmin-on-os-x-yosemite/)
+
+Update and upgrade Homebrew formulas
+```
+brew update
+brew upgrade
+```
+First we need to apply the GCC patch by [James Clarke](https://gcc.gnu.org/bugzilla/attachment.cgi?id=33180&action=diff) by running this command:
+```
+brew edit gcc
+```
+Now add the following lines in the formula you have just opened for editing
+```
+  patch do
+    url "https://gcc.gnu.org/bugzilla/attachment.cgi?id=33180"
+    sha1 "def0cb036a255175db86f106e2bb9dd66d19b702"
+  end
+```
+Here is an example of what your file should look like if you do it right 
+```
+require "formula"
+
+class Gcc < Formula
+        def arch
+            if Hardware::CPU.type == :intel
+                if MacOS.prefer_64_bit?
+                    "x86_64"
+                else
+                    "i686"
+                end
+            elsif Hardware::CPU.type == :ppc
+                if MacOS.prefer_64_bit?
+                    "powerpc64"
+                else
+                    "powerpc"
+                end
+            end
+        end
+
+def osmajor
+            `uname -r`.chomp
+        end
+		
+		# YOU SHOULD ADD THE LINES BELOW
+        # tobinjones patch gcc https://github.com/Homebrew/homebrew/issues/29845
+       patch do
+            url "https://gcc.gnu.org/bugzilla/attachment.cgi?id=33180"
+            sha1 "def0cb036a255175db86f106e2bb9dd66d19b702"
+       end
+```
+After saving and exiting, install GCC
+```
+brew install gcc
+```
+Install the default Nginx with:
+```
+brew install nginx
+```
+Since we want to use port 80 have to start the Nginx process as root:
+```
+sudo cp /usr/local/opt/nginx/*.plist /Library/LaunchDaemons/
+sudo chown root:wheel /Library/LaunchDaemons/homebrew.mxcl.nginx.plist
+```
+Start Nginx for the first time:
+```
+sudo launchctl load /Library/LaunchDaemons/homebrew.mxcl.nginx.plist
+```
+The default configuration is set that it will listen on port 8080 instead of the HTTP standard 80. Ignore that for now:
+```
+curl -IL http://localhost:8080
+```
+The output should look like:
+```
+HTTP/1.1 200 OK
+Server: nginx/1.6.0
+Date: Tue, 08 Jul 2014 21:40:38 GMT
+Content-Type: text/html
+Content-Length: 612
+Last-Modified: Tue, 08 Jul 2014 21:35:25 GMT
+Connection: keep-alive
+ETag: "53bc641d-264"
+Accept-Ranges: bytes
+```
+Stop Nginx again:
+```
+sudo launchctl unload /Library/LaunchDaemons/homebrew.mxcl.nginx.plist
+```
+Create some folders which we are going to use in the configuration files:
+```
+mkdir -p /usr/local/etc/nginx/logs
+mkdir -p /usr/local/etc/nginx/sites-available
+mkdir -p /usr/local/etc/nginx/sites-enabled
+mkdir -p /usr/local/etc/nginx/conf.d
+mkdir -p /usr/local/etc/nginx/ssl
+```
+Remove the current default nginx.conf (is also available as /usr/local/etc/nginx/nginx.conf.default in case you want to take a look)
+```
+rm /usr/local/etc/nginx/nginx.conf
+```
+Now copy the nginx configuration that is in the nginx repository
+```
+cp /PATH_TO_LOCAL_OMNIWALLET_REPOSITORY/etc/nginx/sites-available/default /etc/nginx/sites-available
+```
+Install npm
+```
+brew install npm
+```
+Run the following commands
+```
+sudo npm install -g uglify-js
+npm install grunt-cli
+
+cd omniwallet/
+export OMNIWALLET_SECRET="DONTTELLTHISTOANYONE"
+./app.sh
+
+mkdir ~/tmp
+chmod -R 777 ~/tmp
+
+sudo chmod -R 777 ~/.npm
+
+npm install grunt
+npm install bower
+
+npm install
+```
+Now you are set. Ominiwallet should be accessible on [http://localhost](http://localhost)
+
+### [Snow Leopard Install](http://kevinworthington.com/nginx-mac-os-snow-leopard-2-minutes/) (if the above method did not work)
+
 Install sx using Homebrew. We use the --HEAD uption since we need the latest development version. homebrew/versions is needed for gcc48.
 Note that dependencies need to be installed manually to get the head versions. After building libboost, create symbolics links that are missing for boost_thread.
 ```
@@ -171,7 +303,6 @@ sudo pip install uwsgi
 ```
 Install nginx, and drop in the config included with this codebase.
 
-[Snow Leopard Install](http://kevinworthington.com/nginx-mac-os-snow-leopard-2-minutes/)
 ```
 ## DOWNLOADS
 sudo curl -OL h ftp://ftp.csx.cam.ac.uk/pub/software/programming/pcre/pcre-8.01.tar.gz > /usr/local/src/pcre-8.01.tar.gz
@@ -197,59 +328,7 @@ sudo make install
 ## Start Nginx
 sudo nginx
 ```
-[Lion Install](http://kevinworthington.com/nginx-for-mac-os-x-lion-in-2-minutes/)
-```
-## DOWNLOADS
-sudo curl -OL h ftp://ftp.csx.cam.ac.uk/pub/software/programming/pcre/pcre-8.13.tar.gz > /usr/local/src/pcre-8.13.tar.gz
-sudo curl -OL h http://nginx.org/download/nginx-1.1.4.tar.gz > /usr/local/src/nginx-1.1.4.tar.gz
-
-## Install PCRE
-sudo mkdir -p /usr/local/src
-cd /usr/local/src
-tar xvzf pcre-8.13.tar.gz
-cd pcre-8.13
-./configure --prefix=/usr/local
-make
-sudo make install
-cd ..
-
-## Install Nginx
-tar xvzf nginx-1.1.4.tar.gz
-cd nginx-1.1.4
-./configure --prefix=/usr/local --with-http_ssl_module
-make
-sudo make install
-
-## Start Nginx
-sudo /usr/local/sbin/nginx
-```
-[Mountain Lion Install](http://kevinworthington.com/nginx-for-mac-os-x-mountain-lion-in-2-minutes/)
-```
-# create, then go into the build directory
-sudo mkdir -p /usr/local/src
-cd /usr/local/src
-
-# download, build, and install pcre
-sudo curl -OL ftp://ftp.csx.cam.ac.uk/pub/software/programming/pcre/pcre-8.31.tar.gz
-sudo tar xvzf pcre-8.31.tar.gz
-cd pcre-8.31
-sudo ./configure --prefix=/usr/local
-sudo make
-sudo make install
-cd ..
-
-# download, build, and install nginx
-sudo curl -OL http://nginx.org/download/nginx-1.3.8.tar.gz
-sudo tar xvzf nginx-1.3.8.tar.gz
-cd nginx-1.3.8
-sudo ./configure --prefix=/usr/local --with-http_ssl_module --with-pcre=../pcre-8.31
-sudo make
-sudo make install
-
-# start nginx
-sudo /usr/local/sbin/nginx
-```
-[Mavericks Install](http://kevinworthington.com/nginx-for-mac-os-x-mavericks-in-2-minutes/)
+### [Mavericks Install](http://kevinworthington.com/nginx-for-mac-os-x-mavericks-in-2-minutes/)
 ```
 # Build Nginx 1.5.7 on Mac OS X Mavericks (10.9)
 # This script was created by Kevin Worthington - http://kevinworthington.com/ - 12 December 2013
@@ -313,6 +392,58 @@ Create the parsed blockchain data directory
 ```
 sudo mkdir /var/lib/omniwallet
 sudo chown {user who will run omniwallet} /var/lib/omniwallet
+```
+### [Mountain Lion Install](http://kevinworthington.com/nginx-for-mac-os-x-mountain-lion-in-2-minutes/)
+```
+# create, then go into the build directory
+sudo mkdir -p /usr/local/src
+cd /usr/local/src
+
+# download, build, and install pcre
+sudo curl -OL ftp://ftp.csx.cam.ac.uk/pub/software/programming/pcre/pcre-8.31.tar.gz
+sudo tar xvzf pcre-8.31.tar.gz
+cd pcre-8.31
+sudo ./configure --prefix=/usr/local
+sudo make
+sudo make install
+cd ..
+
+# download, build, and install nginx
+sudo curl -OL http://nginx.org/download/nginx-1.3.8.tar.gz
+sudo tar xvzf nginx-1.3.8.tar.gz
+cd nginx-1.3.8
+sudo ./configure --prefix=/usr/local --with-http_ssl_module --with-pcre=../pcre-8.31
+sudo make
+sudo make install
+
+# start nginx
+sudo /usr/local/sbin/nginx
+```
+### [Lion Install](http://kevinworthington.com/nginx-for-mac-os-x-lion-in-2-minutes/)
+```
+## DOWNLOADS
+sudo curl -OL h ftp://ftp.csx.cam.ac.uk/pub/software/programming/pcre/pcre-8.13.tar.gz > /usr/local/src/pcre-8.13.tar.gz
+sudo curl -OL h http://nginx.org/download/nginx-1.1.4.tar.gz > /usr/local/src/nginx-1.1.4.tar.gz
+
+## Install PCRE
+sudo mkdir -p /usr/local/src
+cd /usr/local/src
+tar xvzf pcre-8.13.tar.gz
+cd pcre-8.13
+./configure --prefix=/usr/local
+make
+sudo make install
+cd ..
+
+## Install Nginx
+tar xvzf nginx-1.1.4.tar.gz
+cd nginx-1.1.4
+./configure --prefix=/usr/local --with-http_ssl_module
+make
+sudo make install
+
+## Start Nginx
+sudo /usr/local/sbin/nginx
 ```
 
 ## Running
