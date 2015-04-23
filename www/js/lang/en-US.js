@@ -114,7 +114,9 @@ angular.module("omniConfig")
 				"VALUE" : "when working with anything of substantial value."
 			}
 		},
-		"FAQ":{}
+		"FAQ":{
+			"TITLE" : "Frequently Asked Questions"
+		}
 	},
 	"NAVIGATION":{
 		"ABOUT":"About",
