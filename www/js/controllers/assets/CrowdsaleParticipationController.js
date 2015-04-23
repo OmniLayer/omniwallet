@@ -41,7 +41,8 @@ angular.module("omniControllers")
 					earlybird : $scope.earlybird,
 					sendAmount: $scope.sendAmount,
 					tokensperunit: $scope.property.tokensperunit,
-					confirmText:"CROWDSALE_PARTICIPATE_CONFIRM"
+					confirmText:"CROWDSALE_PARTICIPATE_CONFIRM",
+            		successRedirect:"/assets/details/" + $scope.propertyId
 				},
 				transaction:participation
 			})

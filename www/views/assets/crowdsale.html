@@ -1,6 +1,6 @@
 <div ng-controller="AssetsCrowdsaleController">
   <div class="row">
-     <div class="col-xs-11 col-sm-3 col-md-4 col-lg-4 text-left om-title">{{'ASSET_CROWDSALE_TITLE' | translate}}</div>
+     <div class="col-xs-11 col-sm-3 col-md-4 col-lg-4 text-left om-title">{{'ASSET.CROWDSALE.TITLE' | translate}}</div>
      <div class="col-xs-1 col-sm-9 col-md-8 col-lg-8" ng-include="'/views/assets/partials/form_ecosystem.html'">
     </div>
   </div>
@@ -12,13 +12,13 @@
         <div class="container-fluid">
           <div class="row">
             <div class="col-xs-12">
-              <h3 class="om-subtitle" >{{'ASSET_CROWDSALE_SUBTITLE' | translate}}</h3>
+              <h3 class="om-subtitle" >{{'ASSET.CROWDSALE.SUBTITLE' | translate}}</h3>
               <hr>
             </div>
           </div>
           <div class="row">
             <div class="form-group col-xs-6">
-              <label for="deadline">{{'ASSET_CROWDSALE_DEADLINE' | translate}}</label>
+              <label for="deadline">{{'ASSET.CROWDSALE.DEADLINE' | translate}}</label>
               <div class="input-group" style="margin-top:11px;">
                 <input name="deadline" type="text" class="form-control" datepicker-append-to-body="true" datepicker-popup="{{format}}" ng-model="deadline"
                   is-open="opened" min-date="today" datepicker-options="dateOptions" date-disabled="disabled(date, mode)" ng-required="true" close-text="Close" />
@@ -34,15 +34,15 @@
                 <timepicker ng-model="deadline"></timepicker>
               </div>
               <div class="col-xs-7" style="margin-top: 45px">
-                {{'ASSET_CROWDSALE_UTC' | translate}}
+                {{'ASSET.CROWDSALE.UTC' | translate}}
               </div>
             </div>
           </div>
           <div class="row">
             <div class="form-group col-xs-6">
-              <label for="percentage">{{'ASSET_CROWDSALE_FORISSUER' | translate}} 
+              <label for="percentage">{{'ASSET.CROWDSALE.FORISSUER' | translate}} 
                 <a href=""
-                  tooltip="{{'ASSET_CROWDSALE_FORISSUER_TOOLTIP' | translate}}"
+                  tooltip="{{'ASSET.CROWDSALE.FORISSUER_TOOLTIP' | translate}}"
                   tooltip-append-to-body="true"
                   tooltip-placement="top"> <strong>(?)</strong>
                 </a>
@@ -52,9 +52,9 @@
           </div>
           <div class="row">
             <div class="form-group col-xs-6">
-                <label for="early">{{'ASSET_CROWDSALE_EARLYBONUS' | translate}} 
+                <label for="early">{{'ASSET.CROWDSALE.EARLYBONUS' | translate}} 
                   <a href=""
-                    tooltip="{{'ASSET_CROWDSALE_EARLYBONUS_TOOLTIP' | translate}}"
+                    tooltip="{{'ASSET.CROWDSALE.EARLYBONUS_TOOLTIP' | translate}}"
                     tooltip-append-to-body="true"
                     tooltip-placement="top"> <strong>(?)</strong>
                   </a>
@@ -62,27 +62,27 @@
                 <input name="early" type="number" step="1" min="0" max="255" ng-model="earlyBirdBonus" class="form-control" class="text-right" required>
               </div>
             </div>
-            <p class="help-block" ng-show="earlyBirdBonus > 0">{{'ASSET_CROWDSALE_EARLYESTIMATE' | translate}} 
+            <p class="help-block" ng-show="earlyBirdBonus > 0">{{'ASSET.CROWDSALE.EARLYESTIMATE' | translate}} 
                 <a href=""
-                  tooltip="{{'ASSET_CROWDSALE_EARLYESTIMATE_TOOLTIP' | translate}}"
+                  tooltip="{{'ASSET.CROWDSALE.EARLYESTIMATE_TOOLTIP' | translate}}"
                   tooltip-append-to-body="true"
                   tooltip-placement="top"> <strong>(?)</strong>
                 </a> {{initialEarlyBirdBonus}}%</p>
           </div>
           <div class="row">
             <div class="form-group col-xs-12">
-              <label for="currencyDesired">{{ 'ASSET_CROWDSALE_RATES' | translate}}</label>
+              <label for="currencyDesired">{{ 'ASSET.CROWDSALE.RATES' | translate}}</label>
               <div class="panel panel-form">
                 <div class="panel-body form-inline">
                   <div class="form-group col-xs-5">
-                    <input name="amount" type="text" ng-model="numberOfTokens" big-number step="{{tokenStep}}" min="{{tokenMin}}" max="{{tokenMax}}" class="form-control" placeholder="{{ 'ASSET_CROWDSALE_TOKENRATE' | translate}}" required>
+                    <input name="amount" type="text" ng-model="numberOfTokens" big-number step="{{tokenStep}}" min="{{tokenMin}}" max="{{tokenMax}}" class="form-control" placeholder="{{ 'ASSET.CROWDSALE.TOKENRATE' | translate}}" required>
                   </div>
                   <div class="form-group col-xs-7">
-                    <span>{{'ASSET_CROWDSALE_PER' | translate}}</span>
+                    <span>{{'ASSET.CROWDSALE.PER' | translate}}</span>
                     <select class="form-control" name="currencyDesired" ng-model="selectedCurrency"
                       ng-options="currency as formatCurrencyDisplay(currency) for currency in availableTokens">
                     </select>
-                    <span>{{'ASSET_CROWDSALE_INVESTED' | translate}}</span>
+                    <span>{{'ASSET.CROWDSALE.INVESTED' | translate}}</span>
                   </div>
                 </div>
               </div>
@@ -92,8 +92,8 @@
           </div>
           <div class="row">
             <div class="col-xs-12 text-right">
-              <a class="btn btn-tertiary" href="/wallet/assets">{{'COMMON_CANCEL' | translate }}</a>
-              <input class="btn btn-main" type="submit" value="{{'COMMON_NEXT' | translate }}" ng-click="confirm()">
+              <a class="btn btn-tertiary" href="/wallet/assets">{{'COMMON.CANCEL' | translate }}</a>
+              <input class="btn btn-main" type="submit" value="{{'COMMON.NEXT' | translate }}" ng-click="confirm()">
             </div>
           </div>
         </div>

@@ -1,21 +1,21 @@
 <div class="main-container" ng-controller="HomeController">
-  <div class="row mobile-centered om-title homepage-welcome">{{ 'HOMEPAGE_WELCOME' | translate }}</div>
-  <div class="row visible-xs text-center"><button type="button" class="btn btn-secondary" ng-click="modalManager.openCreateModal()">{{ 'COMMON_CREATEWALLET' | translate }}</button></div>
-  <div class="row visible-xs text-center"><button type="button" class="btn btn-main" ng-click="modalManager.openLoginModal()">{{ 'COMMON_LOGIN' | translate }}</button></div>
-  <div class="row visible-xs text-center"><a href="/" ng-click="modalManager.openBalanceCheckModal()">{{ 'HOMEPAGE_BALANCECHECK' | translate }}</a></div>
+  <div class="row mobile-centered om-title homepage-welcome">{{ 'HOMEPAGE.WELCOME' | translate }}</div>
+  <div class="row visible-xs text-center"><button type="button" class="btn btn-secondary" ng-click="modalManager.openCreateModal()">{{ 'COMMON.CREATEWALLET' | translate }}</button></div>
+  <div class="row visible-xs text-center"><button type="button" class="btn btn-main" ng-click="modalManager.openLoginModal()">{{ 'COMMON.LOGIN' | translate }}</button></div>
+  <div class="row visible-xs text-center"><a href="/" ng-click="modalManager.openBalanceCheckModal()">{{ 'HOMEPAGE.BALANCECHECK' | translate }}</a></div>
 
   <div class="hidden-xs homepage-form">
     <form role="form" name="addressentry">
       <div class="form-group">
-        <label for="AddressInput" class="om-subtitle homepage-form-title">{{ 'HOMEPAGE_BALANCECHECK' | translate }}</label>
-        <span id="helpBlock" class="help-block help-text">{{ 'HOMEPAGE_ENTERVALIDADDRESS' | translate }}<small class="sm-help-text">{{ 'HOMEPAGE_ADDRESSEXAMPLE' | translate }}</small></span>
+        <label for="AddressInput" class="om-subtitle homepage-form-title">{{ 'HOMEPAGE.BALANCECHECK' | translate }}</label>
+        <span id="helpBlock" class="help-block help-text">{{ 'HOMEPAGE.ENTERVALIDADDRESS' | translate }}<small class="sm-help-text">{{ 'HOMEPAGE.ADDRESSEXAMPLE' | translate }}</small></span>
         <input type="text" class="form-control input-lg input-group input-white" name="AddressInput" id="AddressInput" ng-model="balanceAddress" ng-change="checkAddress=false">
       </div>
-      <button type="submit" ng-click="checkBalance();" ng-disabled="validate(balanceAddress) == false" class="btn btn-main pull-right">{{ 'HOMEPAGE_CHECKBALANCE' | translate }}</button>
+      <button type="submit" ng-click="checkBalance();" ng-disabled="validate(balanceAddress) == false" class="btn btn-main pull-right">{{ 'HOMEPAGE.CHECKBALANCE' | translate }}</button>
     </form>
   </div>
   <div class="om-title text-center" ng-if="checkAddress && !checkAddress.loaded">
-    {{ 'COMMON_LOADING' | translate}}...
+    {{ 'COMMON.LOADING' | translate}}...
   </div>
   <div ng-if="checkAddress && checkAddress.loaded">
     <div class="asset-table">

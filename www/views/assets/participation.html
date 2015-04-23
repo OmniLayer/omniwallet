@@ -1,7 +1,7 @@
 <div ng-controller="CrowdsaleParticipationController" ng-if="wallet.loaded">
   <div class="row om-row">
     <div class="col-xs-12">
-      <div class="text-left om-title">{{ 'CROWDSALE_PARTICIPATION_TITLE' | translate}}</div>
+      <div class="text-left om-title">{{ 'CROWDSALE.PARTICIPATION.TITLE' | translate}}</div>
       <!-- <div ng-show="showErrors" class="alert alert-danger"> <strong> {{error}} </strong>  -->
     </div>
   </div> 
@@ -11,13 +11,13 @@
         <div class="panel panel-form">
           <div class="panel-body">
             <div class="col-sm-6">
-              <label for="chooseCoin" >{{ 'CROWDSALE_PARTICIPATION_DESIREDCOIN' | translate}}</label>
+              <label for="chooseCoin" >{{ 'CROWDSALE.PARTICIPATION.DESIREDCOIN' | translate}}</label>
               <div name="chooseCoin" class="form-control">
                 {{propertyDesired.name}} <small ng-show="propertyDesired.id > 2">({{propertyDesired.id}})</small>
               </div>
             </div> 
             <div class="col-sm-6">
-              <label>{{ 'WALLET_SEND_TO' | translate}}</label>
+              <label>{{ 'WALLET.SEND.TO' | translate}}</label>
               <div class="form-control">
                 {{property.issuer}}
               </div>
@@ -28,14 +28,14 @@
           <div class="panel-body">
             <div class="col-sm-6">
               <label>
-                <span>{{ 'COMMON_SEND' | translate}} </span>
+                <span>{{ 'COMMON.SEND' | translate}} </span>
                 <span ng-if="accepted.symbol == 'BTC'">
                   {{sendByValue ? userCurrency : 'BTC'}}
                 </span>
                 <span ng-if="propertyDesired.symbol != 'BTC'">
-                  {{ 'WALLET_SEND_MODAL_AMOUNT' | translate}}
+                  {{ 'WALLET.SEND.MODAL.AMOUNT' | translate}}
                 </span>
-                ({{selectedAddress.getDisplayBalance(propertyDesired.id)}} {{propertyDesired.name}} <small class="text-muted" ng-show="propertyDesired.id > 2">({{propertyDesired.id}})</small> {{ 'COMMON_AVAILABLE' | translate}})
+                ({{selectedAddress.getDisplayBalance(propertyDesired.id)}} {{propertyDesired.name}} <small class="text-muted" ng-show="propertyDesired.id > 2">({{propertyDesired.id}})</small> {{ 'COMMON.AVAILABLE' | translate}})
               </label>
               <div class="input-group" ng-show="propertyDesired.symbol == 'BTC'">
                 <span class="input-group-addon no-padding">
@@ -58,7 +58,7 @@
                     min="{{propertyDesired.divisible ? 0.00000001 : 1}}" max="{{selectedAddress.getDisplayBalance(propertyDesired.id)}}" required>
             </div> 
             <div class="col-sm-6">
-              <label class="text-justify" >{{ 'WALLET_SEND_FROM' | translate}}</label>
+              <label class="text-justify" >{{ 'WALLET.SEND.FROM' | translate}}</label>
               <div class="btn-group send-address-dropdown">
                 <button class="btn btn-clear dropdown-toggle" type="button" id="chooseAddress" data-toggle="dropdown" aria-expanded="true">
                   {{selectedAddress.hash}} 
@@ -74,14 +74,14 @@
           </div>
         </div>
         <div class="form-group col-sm-6">
-          <label for=""> {{'COMMON_FEES' | translate}} <small class="text-muted">({{selectedAddress.getDisplayBalance(0)}} BTC {{ 'COMMON_AVAILABLE' | translate}})</small></label>
+          <label for=""> {{'COMMON.FEES' | translate}} <small class="text-muted">({{selectedAddress.getDisplayBalance(0)}} BTC {{ 'COMMON.AVAILABLE' | translate}})</small></label>
           <input name="fees" type="number" ng-model="minerFees" class="form-control"
           placeholder="0.0001" step="0.0001" min="0.0001" required>
         </div>
-        <p class="col-xs-12 help-block">{{'CROWDSALE_PARTICIPATION_ESTIMATE_LEAD' | translate}}  {{estimatedAmount}} {{property.name}}  {{'CROWDSALE_PARTICIPATION_ESTIMATE_TRAIL' | translate}}</p>
+        <p class="col-xs-12 help-block">{{'CROWDSALE.PARTICIPATION.ESTIMATE.LEAD' | translate}}  {{estimatedAmount}} {{property.name}}  {{'CROWDSALE.PARTICIPATION.ESTIMATE.TRAIL' | translate}}</p>
         <div class="form-group col-sm-12 text-right">
-          <a href="/assets/details/{{property.propertyid}}" class="btn btn-tertiary">{{ 'COMMON_CANCEL' | translate}}</a>
-          <button type="submit" class="btn btn-main pull-right">{{ 'COMMON_NEXT' | translate}}</button>
+          <a href="/assets/details/{{property.propertyid}}" class="btn btn-tertiary">{{ 'COMMON.CANCEL' | translate}}</a>
+          <button type="submit" class="btn btn-main pull-right">{{ 'COMMON.NEXT' | translate}}</button>
         </div>
       </form>
     </div>    

@@ -18,9 +18,16 @@ angular.module("omniConfig")
       return "http://tbtc.blockr.io/address/info/";
     else
       return "https://blockchain.info/address/";
+  }])
+  .factory("EXODUS_ADDRESS",["TESTNET", function AddressExplorerUrlFactory(TESTNET){
+    if(TESTNET)
+      return "moneyqMan7uh8FqdCA2BV5yZ8qVrc9ikLP";
+    else
+      return "1EXoDusjGwvnjZUyKkxZ4UHEf77z6A5S4P";
   }]);
 
 angular.module("omniFilters", ["omniConfig"]);
+angular.module("omniDirectives", ["omniConfig"]);
 angular.module("omniFactories", ["omniConfig"]);
 angular.module("omniServices", ["omniConfig", "omniFactories"]);
 angular.module("omniControllers", ["omniConfig", "omniFactories", "omniServices"]);
@@ -39,6 +46,7 @@ var app = angular.module('omniwallet', [
   'nvd3',
   'omniConfig',
   'omniFilters',
+  'omniDirectives',
   'omniFactories',
   'omniServices',
   'omniControllers'
@@ -93,7 +101,7 @@ var app = angular.module('omniwallet', [
   $routeProvider.when('/wallet/:page?', {
       templateUrl: function(route) {
         //new views added here
-        var availableViews = ['overview', 'assets', 'addresses', 'trade', 'history', 'send', 'myoffers', 'settings'];
+        var availableViews = ['overview', 'assets', 'addresses', 'history', 'send', 'settings'];
 
         var viewFound = availableViews.indexOf(route.page);
         if (viewFound == -1)
@@ -107,6 +115,25 @@ var app = angular.module('omniwallet', [
       }
     }).otherwise({
     redirectTo: '/wallet'
+  });
+
+  $routeProvider.when('/exchange/:page?', {
+      templateUrl: function(route) {
+        //new views added here
+        var availableViews = ['trade', 'myoffers'];
+
+        var viewFound = availableViews.indexOf(route.page);
+        if (viewFound == -1)
+          route.page = 'trade';
+
+        var view = '/views/exchange/' + route.page + '.html';
+        //DEBUG console.log(view, route.page, view == '/wallet_addresses.html')
+
+        ga('send', 'event', 'button', 'click', route.page);
+        return view
+      }
+    }).otherwise({
+    redirectTo: '/exchange'
   });
 
   $routeProvider.when('/explorer/:page?', {
@@ -161,7 +188,7 @@ var app = angular.module('omniwallet', [
   $locationProvider.html5Mode(true).hashPrefix('!');
 });
 
-app.config(function($idleProvider, $keepaliveProvider, reCAPTCHAProvider, idleDuration, idleWarningDuration, reCaptchaKey, $translateProvider, EnglishTranslation) {
+app.config(function($idleProvider, $keepaliveProvider, reCAPTCHAProvider, idleDuration, idleWarningDuration, reCaptchaKey, $translateProvider, DefaultTranslation) {
   $idleProvider.idleDuration(idleDuration);
   $idleProvider.warningDuration(idleWarningDuration);
   // $keepaliveProvider.interval(2);
@@ -173,9 +200,20 @@ app.config(function($idleProvider, $keepaliveProvider, reCAPTCHAProvider, idleDu
       theme: 'clean'
   });
 
-  $translateProvider.translations('en', EnglishTranslation);
-   
-  $translateProvider.preferredLanguage('en');
+  $translateProvider
+    .translations('en', DefaultTranslation)
+    .useStaticFilesLoader({
+      prefix: '/locales/',
+      suffix: '.json'
+    })
+    .registerAvailableLanguageKeys(['en', 'zh','ar'], {
+      'en_us': 'en',
+      'en_uk': 'en',
+      'zh_cn': 'zh'
+    })
+    .fallbackLanguage('en')
+    .determinePreferredLanguage();
+
 })
 .run(function(Account, $location, TESTNET, BalanceSocket) {
   //Whitelist pages

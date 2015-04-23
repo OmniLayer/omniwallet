@@ -34,9 +34,10 @@
     <script src="/bower_components/angular/angular.js"></script>
     <script src="/bower_components/angular-route/angular-route.js"></script>
     <script src="/bower_components/angular-translate/angular-translate.js"></script>
+    <script src="/bower_components/angular-translate-loader-static-files/angular-translate-loader-static-files.min.js"></script>
     <script src="/bower_components/numeraljs/numeral.js"></script>
     <script src="/bower_components/angular-numeraljs/src/angular-numeraljs.js"></script>
-    <script src="/bower_components/angular-idle/src/angular-idle.js"></script>
+    <script src="/bower_components/ng-idle/angular-idle.js"></script>
     <script src="/bower_components/angular-password-strength/build/angular-password-strength.js"></script>
     <script src="/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
     <script src="/bower_components/angular-bootstrap/ui-bootstrap-tpls.min.js"></script>
@@ -54,14 +55,15 @@
     <script type="text/javascript" src="/bower_components/angular-re-captcha/angular-re-captcha.js"></script>
     <script src="/js/config.js"></script>
     <script src="/js/app.js"></script>
+    <script src="/js/lang/en-US.js"></script>
     <script src="/js/filters/ToWhole.js"></script>
     <script src="/js/filters/TimeAgo.js"></script>
+    <script src="/js/directives/Combobox.js"></script>
     <script src="/js/factories/AddressModelFactory.js"></script>
     <script src="/js/factories/AssetModelFactory.js"></script>
     <script src="/js/factories/TransactionModelFactory.js"></script>
     <script src="/js/services/WalletService.js"></script>
     <script src="/js/services/AccountService.js"></script>
-    <script src="/js/lang/en-US.js"></script>
     <script src="/js/services/AppraiserService.js"></script>
     <script src="/js/services/TransactionGenerationService.js"></script>
     <script src="/js/services/TransactionManagerService.js"></script>
@@ -77,6 +79,7 @@
     <script src="/js/controllers/Wallet/AssetsController.js"></script>
     <script src="/js/controllers/Landing/NavigationController.js"></script>
     <script src="/js/controllers/Landing/SiteController.js"></script>
+    <script src="/js/controllers/Landing/AccountSettingsController.js"></script>
     <script src="/js/controllers/modals/ConfirmSendFooterController.js"></script>
     <script src="/js/controllers/assets/CrowdsaleParticipationController.js"></script>
     <script src="/js/controllers/assets/CrowdsaleController.js"></script>
@@ -86,20 +89,17 @@
     <script src="/js/controllers/explorer/CrowdsaleController.js"></script>
     <script src="/js/controllers/explorer/OverviewController.js"></script>
     <script src="/js/controllers/explorer/InspectorController.js"></script>
+    <script src="/js/controllers/exchange/SaleController.js"></script>
+    <script src="/js/controllers/exchange/BuyController.js"></script>
+    <script src="/js/controllers/exchange/PendingController.js"></script>
+    <script src="/js/controllers/exchange/TradeController.js"></script>
+    <script src="/js/controllers/exchange/OverviewController.js"></script>
     <script src="/js/directive.js"></script>
     <script src="/js/service.js"></script>
     <script src="/js/controller.js"></script>
     <script src="/js/filter.js"></script>
     <script src="/js/LoginController.js"></script>
-    <script src="/js/TransactionGenerationController.js"></script>
-    <script src="/js/WalletAddressesController.js"></script>
-    <script src="/js/WalletController.js"></script>
-    <script src="/js/WalletAssetsFormController.js"></script>
-    <script src="/js/WalletSellAssetsController.js"></script>
-    <script src="/js/WalletBuyAssetsController.js"></script>
     <script src="/js/CreateWalletController.js"></script>
-    <script src="/js/AssetTypesController.js"></script>
-    <script src="/js/add_address.js"></script>
     <script src="/js/cryptUtil.js"></script>
     <script src="/js/cryptUtilAsync.js"></script>
     <script>
@@ -123,7 +123,7 @@
         <div class="main">
             <div class="container">
                 <div class="panel panel-default panel-main">
-                    <div class="om-title text-center" ng-show="account.loggedIn && !wallet.loaded">{{ 'COMMON_LOADING' | translate}}...</div>
+                    <div class="om-title text-center" ng-show="account.loggedIn && !wallet.loaded">{{ 'COMMON.LOADING' | translate}}...</div>
                     <div class="panel-body" ng-view></div>
                 </div>
             </div>
