@@ -76,7 +76,44 @@ angular.module("omniConfig")
 			"INFO":"Information from the ",
 			"EDUCATION":"Master Protocol Education"
 		},
-		"OMNIWALLET":{},
+		"OMNIWALLET":{
+			"TITLE" : "About Omniwallet",
+			"AIM" : "Omniwallet is a new type of web wallet which aims to combine security, usability and multi-currency support.",
+			"SECURITY" : {
+				"TITLE" : "Best in class security",
+				"KEYS" : "Private keys are never sent to the server except in an encrypted form",
+				"OPEN" : "Everything is open source from the ground up!",
+				"REPLICATE" : "You can deploy the Omniwallet on your own server and host your own instance, or use one of the service providers that will host it for you - your money, your choice"
+			},
+			"USABILITY" : {
+				"TITLE" : "Baked in usability",
+				"ONLINE" : "No software to download or install, no blockchain to synchronize and verify - it just works, lightning fast",
+				"PLANNED" : "Carefully planned layout, with common operations emphasized",
+				"INTUITIVE" : "Beautiful and intuitive User Interface",
+				"SPECIAL" : "Special care is taken to smooth out operational edge cases to prevent mistakes and ensure a painless experience for the user"
+			},
+			"MULTICURRENCY" : {
+				"TITLE" : "Multi-currency support",
+				"BUILT" : "Omniwallet comes with a pre-built support for Bitcoin, Mastercoin and Test Mastercoin",
+				"SUPPORT" : "Native support for Smart Property and User-Generated Currencies",
+				"ALT" : "Alt-coin support  - Omniwallet has plans to support coins that go outside of the usual Mastercoin ecosystem, such as Litecoin, Peercoin and more"
+			},
+			"STATUS" :{
+				"TITLE" : "Current Status",
+				"SPEED" : "Omniwallet is in full-speed development. Our vision and goal are well defined, and we are working hard to develop the functionality and continually improve the features",
+				"INVOLVEMENT" : "We would like to get your involvement in the development effort! So go ahead and:",
+				"SUGGESTIONS" : "Play around with it and give us suggestions",
+				"BUGS" : "Report bugs on github",
+				"CODE" : "Code up and send in pull requests that fix some of these issues",
+				"CONTRIBUTIONS" : "Contributions are eligible for the",
+				"BOUNTIES" : "bounties we have in place",
+				"SUBMIT" : "so please be sure to submit any contribution you make to the bounty thread.",
+				"BETA" : "Beta Code:",
+				"MEAN" : "What does this mean? We strive to make sure the features available are working as expected, however",
+				"CAUTION" : "you should still exercise caution",
+				"VALUE" : "when working with anything of substantial value."
+			}
+		},
 		"FAQ":{}
 	},
 	"NAVIGATION":{
