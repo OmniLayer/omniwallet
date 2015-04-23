@@ -316,7 +316,7 @@ h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6{
   margin-top: 150px;
 }
 
-.main > .container > .panel .panel-default {
+.main > .container > .panel .panel-main {
   min-height: 530px;
 }
 .arc path {
@@ -704,7 +704,8 @@ border-left-color: #111111;
   right: 0;
   top: 0px;
   z-index: 1020;
-  max-height: 70px
+  max-height: 70px;
+  min-height: 70px
 }
 
 .navbar-main .container{
@@ -1075,8 +1076,10 @@ input[type=number]::-webkit-outer-spin-button {
 }
 
 .landing-thumbnail {
-	padding-top: 20px;
-	border: 0;
+	margin-top: 20px;
+  background-color: #eee;
+  border: 0;
+  min-height: 480px;
 }
 
 input.search-query {
@@ -1554,4 +1557,17 @@ i.icon-l{
 }
 .nav-tabs>li:first-child>a{
   margin-left: 7px;
+}
+
+.media-panel {
+  background-color: #f8f8f8;
+  height: 186px;
+  margin-bottom: 16px;
+  border-radius: 4px;
+  padding: 0 16px
+}
+
+.media-panel > .media-body {
+  vertical-align: middle;
+  height: 186px;
 }

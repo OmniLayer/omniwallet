@@ -5,7 +5,7 @@
   "dependencies": {
     "underscore": "~1.6.0",
     "jquery": "~1.11",
-    "bootstrap": "~3.0",
+    "bootstrap": "~3.3",
     "angular": "~1.2",
     "angular-route": "~1.2",
     "respond": "~1.4",

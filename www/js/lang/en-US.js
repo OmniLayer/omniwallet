@@ -36,6 +36,88 @@ angular.module("omniConfig")
 		"ENTERVALIDADDRESS":"Enter a valid Bitcoin Address ",
 		"WELCOME":"Welcome to Omniwallet"
 	},
+	"ABOUT":{
+		"CONTACT":{
+			"WE":"We are a group of developers constantly working to improve Omniwallet.",  
+            "QUESTIONS":"If you have any questions, issues or just want to provide some general feedback feel free to reach out to us at:",
+            "GITHUBTITLE":"Github",
+            "GITHUBDESC":"Search/see our 'Open Issues' and what we are 'Actively Working' on now. Don't see your specific topic? We encourage you to open a new issue to let us know. (Please include as many details as possible including ",
+            "GITHUBLINK":"the output of the developer console",
+            "TALKTITLE":"Mastercoin Talk",
+            "TALKDESC":"There is a support category on the Mastercoin forums where you can ask questions and engage the community for additional help",
+            "EMAILTITLE":"Email",
+            "EMAILDESC":"You can also reach us directly at",
+            "EMAILLINK":"the output of the developer console",
+            "CHATTITLE":"Live Chat",
+            "CHATDESC":"Chat with the developers, share your ideas or ask questions. Availability varies, but we should generally be around Mon-Fri 9-5 CDT",
+            "TITLE":"Contact Us"
+		},
+		"MASTERCOIN":{
+			"TITLE":"About Mastercoin",
+			"FOUNDATION":{
+				"TITLE":"Mastercoin Foundation",
+				"FIRST":"In September 2013, the Mastercoin Foundation was formed to temporarily manage the funds in the Exodus Address and the distribution of the development MSC. The board of the Mastercoin Foundation has declared its intention to minimize its temporary central role by transitioning the decision making to Mastercoin owners through proof of stake voting.",
+				"SECOND": "The Mastercoin Foundation advocates for the use of the Master Protocol and tries to build a community of people who develop it. All budget items, board minutes, Dev MSC vesting schedule, and bounties are public record and available to anyone on the ",
+				"LINK": "Foundation's Website"
+			},
+			"PROTOCOL":{
+				"TITLE":"Master Protocol",
+				"PARAGRAPH":"The Master Protocol is a communications protocol that uses the Bitcoin block chain to enable features such as smart contracts, user currencies and decentralized peer-to-peer exchanges. A common analogy that is used to describe the relation of the Master Protocol to Bitcoin is that of HTTP to TCP/IP: HTTP, like the Master Protocol, is the application layer to the more fundamental transport and internet layer of TCP/IP, like Bitcoin. For more in-depth information and details see the ",
+				"LINK":"Spec",
+				"ONGITHUB":"on github."
+
+			},
+			"TOKEN":{
+				"TITLE":"Mastercoins",
+				"FIRST" : "Mastercoins (symbol MSC) are digital tokens that are necessary for the use of some features of the Master Protocol. The total number of Mastercoins in existence is 619,478.6 and no more MSC will ever be created. Additionally, Mastercoins can not be mined into existence. The 619,478.6 MSC were generated as a result of a public fundraiser in the style of Kickstarter.com. For more details about the algorithm by which Mastercoins were generated, please read the ",
+				"HISTORY" : "History of Mastercoin",
+				"ARTICLE":"article from Master Protocol Education site. "
+			},
+			"INFO":"Information from the ",
+			"EDUCATION":"Master Protocol Education"
+		},
+		"OMNIWALLET":{
+			"TITLE" : "About Omniwallet",
+			"AIM" : "Omniwallet is a new type of web wallet which aims to combine security, usability and multi-currency support.",
+			"SECURITY" : {
+				"TITLE" : "Best in class security",
+				"KEYS" : "Private keys are never sent to the server except in an encrypted form",
+				"OPEN" : "Everything is open source from the ground up!",
+				"REPLICATE" : "You can deploy the Omniwallet on your own server and host your own instance, or use one of the service providers that will host it for you - your money, your choice"
+			},
+			"USABILITY" : {
+				"TITLE" : "Baked in usability",
+				"ONLINE" : "No software to download or install, no blockchain to synchronize and verify - it just works, lightning fast",
+				"PLANNED" : "Carefully planned layout, with common operations emphasized",
+				"INTUITIVE" : "Beautiful and intuitive User Interface",
+				"SPECIAL" : "Special care is taken to smooth out operational edge cases to prevent mistakes and ensure a painless experience for the user"
+			},
+			"MULTICURRENCY" : {
+				"TITLE" : "Multi-currency support",
+				"BUILT" : "Omniwallet comes with a pre-built support for Bitcoin, Mastercoin and Test Mastercoin",
+				"SUPPORT" : "Native support for Smart Property and User-Generated Currencies",
+				"ALT" : "Alt-coin support  - Omniwallet has plans to support coins that go outside of the usual Mastercoin ecosystem, such as Litecoin, Peercoin and more"
+			},
+			"STATUS" :{
+				"TITLE" : "Current Status",
+				"SPEED" : "Omniwallet is in full-speed development. Our vision and goal are well defined, and we are working hard to develop the functionality and continually improve the features",
+				"INVOLVEMENT" : "We would like to get your involvement in the development effort! So go ahead and:",
+				"SUGGESTIONS" : "Play around with it and give us suggestions",
+				"BUGS" : "Report bugs on github",
+				"CODE" : "Code up and send in pull requests that fix some of these issues",
+				"CONTRIBUTIONS" : "Contributions are eligible for the",
+				"BOUNTIES" : "bounties we have in place",
+				"SUBMIT" : "so please be sure to submit any contribution you make to the bounty thread.",
+				"BETA" : "Beta Code:",
+				"MEAN" : "What does this mean? We strive to make sure the features available are working as expected, however",
+				"CAUTION" : "you should still exercise caution",
+				"VALUE" : "when working with anything of substantial value."
+			}
+		},
+		"FAQ":{
+			"TITLE" : "Frequently Asked Questions"
+		}
+	},
 	"NAVIGATION":{
 		"ABOUT":"About",
 		"ABOUTOMNI":"About Omniwallet",

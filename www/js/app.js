@@ -162,7 +162,7 @@ var app = angular.module('omniwallet', [
         if (viewFound == -1) //Default view
           route.page = 'omniwallet';
 
-        var view = '/partials/about_' + route.page + '.html';
+        var view = '/views/about/' + route.page + '.html';
         //DEBUG console.log(view, route.page, view == '/wallet_addresses.html')
 
         ga('send', 'event', 'button', 'click', route.page);
