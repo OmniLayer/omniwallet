@@ -704,7 +704,8 @@ border-left-color: #111111;
   right: 0;
   top: 0px;
   z-index: 1020;
-  max-height: 70px
+  max-height: 70px;
+  min-height: 70px
 }
 
 .navbar-main .container{
