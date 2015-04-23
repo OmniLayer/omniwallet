@@ -161,7 +161,7 @@ angular.module("omniControllers")
 	          dataTemplate: '/views/modals/partials/cancel.html',
 	          scope:{
 	            title:"EXCHANGE.MYOFFERS.CANCELTITLE",
-	            confirmText:"EXCHANGE.MYOFFERS.CONFIRMCANCEL",
+	            confirmText:"EXCHANGE.MYOFFERS.CANCELCONFIRM",
 	            explorerUrl:ADDRESS_EXPLORER_URL,
 	            successRedirect:"/exchange/myoffers"
 	          },
