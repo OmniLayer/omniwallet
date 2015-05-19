@@ -27,9 +27,9 @@ Check out the [Omni Devops Project](https://github.com/mastercoin-MSC/omni-devop
 
 ### Manual Install 
 
-The following process is out of date and needs to be updated to properly reflect the dependancies on OmniEngine, Omnicore and postgres.
+The following process is out of date and needs to be updated to properly reflect the dependancies on OmniEngine, Omnicore and psql.
 
-Install dependencies:
+~~Install dependencies:
 ```
 sudo apt-get update
 sudo apt-get install git build-essential autoconf libtool libboost-all-dev pkg-config libcurl4-openssl-dev libleveldb-dev libzmq-dev libconfig++-dev libncurses5-dev python-simplejson python-git python-pip libffi-dev libpq-dev uwsgi uwsgi-plugin-python
@@ -318,6 +318,7 @@ Create the parsed blockchain data directory
 sudo mkdir /var/lib/omniwallet
 sudo chown {user who will run omniwallet} /var/lib/omniwallet
 ```
+~~
 
 ## Running
 
@@ -333,7 +334,7 @@ Set an environment variable containing a secret passphrase - this is used to gen
 ```
 export OMNIWALLET_SECRET="DontTellAnyoneThis"
 ```
-Start the blockchain parser and python services by running:
+Start the python services by running:
 
 ```
 app.sh
