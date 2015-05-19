@@ -20,11 +20,16 @@ You can access the beta site at [https://www.omniwallet.org](https://www.omniwal
 ## Ubuntu Setup
 
 ### Automated Install
-Check out the [Auto Installer Project](https://github.com/mastercoin-MSC/install-omni)
 
-### Manual Install
+It is highly recommended to use the Automated Install method as the Manual method is currently outdated and in process of being updated
 
-Install dependencies:
+Check out the [Omni Devops Project](https://github.com/mastercoin-MSC/omni-devops)
+
+### Manual Install 
+
+The following process is out of date and needs to be updated to properly reflect the dependancies on OmniEngine, Omnicore and psql.
+
+~~Install dependencies:
 ```
 sudo apt-get update
 sudo apt-get install git build-essential autoconf libtool libboost-all-dev pkg-config libcurl4-openssl-dev libleveldb-dev libzmq-dev libconfig++-dev libncurses5-dev python-simplejson python-git python-pip libffi-dev libpq-dev uwsgi uwsgi-plugin-python
@@ -59,12 +64,16 @@ add-apt-repository ppa:nginx/$nginx
 apt-get install nginx
 cp etc/nginx/sites-available/default /etc/nginx/sites-available
 ```
-Find and replace the following section near the beginning of /etc/nginx/sites-available/default:
+Find and replace the following sections near the beginning of /etc/nginx/sites-available/default:
 ```
 nano /etc/nginx/sites-available/default
 
         ## Set this to reflect the location of the www directory within the omniwallet repo.
         root /home/myUser/omniwallet/www/; -> "root /{path to project}/omniwallet/www/;
+
+        ## Set this to reflect the location of the omni-redirects file within the omniwallet repo
+        include /home/myUser/omniwallet/etc/nginx/sites-available/omni-redirects;
+
 ```
 Install npm:
 ```
@@ -89,17 +98,9 @@ nano install-msc/install-msc.sh
 
         INSTALLDIR=$HOME -> INSTALLDIR="../"
 ```
-Install Mastercoin tools:
+Start web server:
 ```
-sudo -s
-bash install-msc/install-msc.sh -os tcp://obelisk.bysh.me:9091
-mkdir /var/lib/omniwallet
-chown {user who will run omniwallet} /var/lib/omniwallet
-cd ~/
-wget https://www.omniwallet.org/assets/snapshots/current.tar.gz
-tar -xzvf current.tar.gz -C /var/lib/omniwallet/
 service nginx start
-exit
 ```
 Install Bitcoind 
 (note: you only need this if you plan on using the send functionality of the wallet, the explorer and wallet feature will work fine without it)
@@ -288,11 +289,14 @@ cp etc/nginx/sites-available/default /usr/local/nginx/sites-available
 ```
 
 
-Find this section near the beginning of /usr/local/nginx/sites-available/default:
+Find these sections near the beginning of /usr/local/nginx/sites-available/default:
 ```
         ## Set this to reflect the location of the www directory within the omniwallet repo.
         root /home/cmlacy/omniwallet/www/;
         index index.html index.htm;
+
+        ## Set this to reflect the location of the omni-redirects file within the omniwallet repo
+        include /home/myUser/omniwallet/etc/nginx/sites-available/omni-redirects;
 ```
 Change the ``root`` directive to reflect the location of your omniwallet codebase (actually the www directory within that codebase).
 
@@ -314,6 +318,7 @@ Create the parsed blockchain data directory
 sudo mkdir /var/lib/omniwallet
 sudo chown {user who will run omniwallet} /var/lib/omniwallet
 ```
+~~
 
 ## Running
 
@@ -329,7 +334,7 @@ Set an environment variable containing a secret passphrase - this is used to gen
 ```
 export OMNIWALLET_SECRET="DontTellAnyoneThis"
 ```
-Start the blockchain parser and python services by running:
+Start the python services by running:
 
 ```
 app.sh
