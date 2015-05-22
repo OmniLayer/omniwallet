@@ -135,11 +135,11 @@ def decode(rawhex):
                'Ecosystem': int(long_packet[8:10],16),
                'Property Type': int(long_packet[10:14],16),
                'Previous Property ID': int(long_packet[14:22],16),
-               'Property Category': spare_bytes.split('00')[0].decode('hex'),
-               'Property Subcategory': spare_bytes.split('00')[1].decode('hex'),
-               'Property Name': spare_bytes.split('00')[2].decode('hex'),
-               'Property URL':  spare_bytes.split('00')[3].decode('hex'),
-               'Property Data':  ''.join(spare_bytes.split('00')[4]).decode('hex'),
+               'Property Category': spare_bytes.split('00')[0].decode('hex') if len(spare_bytes.split('00')[0])%2 == 0 else (spare_bytes.split('00')[0]+"0").decode('hex'),
+               'Property Subcategory': spare_bytes.split('00')[1].decode('hex') if len(spare_bytes.split('00')[1])%2 == 0 else (spare_bytes.split('00')[1]+"0").decode('hex'),
+               'Property Name': spare_bytes.split('00')[2].decode('hex') if len(spare_bytes.split('00')[2])%2 == 0 else (spare_bytes.split('00')[2]+"0").decode('hex'),
+               'Property URL':  spare_bytes.split('00')[3].decode('hex') if len(spare_bytes.split('00')[3])%2 == 0 else (spare_bytes.split('00')[3]+"0").decode('hex'),
+               'Property Data': spare_bytes.split('00')[4].decode('hex') if len(spare_bytes.split('00')[4])%2 == 0 else (spare_bytes.split('00')[4]+"0").decode('hex'),
                'Number of Properties: ': int(str(int(spare_bytes[len_var_fields:len_var_fields+16],16)))
              }
 
@@ -156,11 +156,11 @@ def decode(rawhex):
                'Ecosystem': int(long_packet[8:10],16),
                'Property Type': int(long_packet[10:14],16),
                'Previous Property ID': int(long_packet[14:22],16),
-               'Property Category': spare_bytes.split('00')[0].decode('hex'),
-               'Property Subcategory': spare_bytes.split('00')[1].decode('hex'),
-               'Property Name': spare_bytes.split('00')[2].decode('hex'),
-               'Property URL':  spare_bytes.split('00')[3].decode('hex'),
-               'Property Data':  ''.join(spare_bytes.split('00')[4]).decode('hex'),
+               'Property Category': spare_bytes.split('00')[0].decode('hex') if len(spare_bytes.split('00')[0])%2 == 0 else (spare_bytes.split('00')[0]+"0").decode('hex'),
+               'Property Subcategory': spare_bytes.split('00')[1].decode('hex') if len(spare_bytes.split('00')[1])%2 == 0 else (spare_bytes.split('00')[1]+"0").decode('hex'),
+               'Property Name': spare_bytes.split('00')[2].decode('hex') if len(spare_bytes.split('00')[2])%2 == 0 else (spare_bytes.split('00')[2]+"0").decode('hex'),
+               'Property URL':  spare_bytes.split('00')[3].decode('hex') if len(spare_bytes.split('00')[3])%2 == 0 else (spare_bytes.split('00')[3]+"0").decode('hex'),
+               'Property Data': spare_bytes.split('00')[4].decode('hex') if len(spare_bytes.split('00')[4])%2 == 0 else (spare_bytes.split('00')[4]+"0").decode('hex'),
                'PropertyID Desired': str(int(spare_bytes[len_var_fields:len_var_fields+8],16)),
                'Number of Properties': str(int(spare_bytes[len_var_fields+8:len_var_fields+8+16],16)),
                'Deadline': str(int(spare_bytes[len_var_fields+8+16:len_var_fields+8+16+16],16)),
@@ -215,17 +215,19 @@ def decode(rawhex):
     len_var_fields = len(''.join(spare_bytes.split('00')[0:5])+'0000000000')
     #DEBUG print len_var_fields, spare_bytes[len_var_fields:len_var_fields+16],spare_bytes
 
+    
+
     retval = { 'TxVersion': int(long_packet[0:4],16),
                'TxType': int(long_packet[4:8],16),
                'TxTypeString': 'Create New Grant Property',
                'Ecosystem': int(long_packet[8:10],16),
                'Property Type': int(long_packet[10:14],16),
                'Previous Property ID': int(long_packet[14:22],16),
-               'Property Category': spare_bytes.split('00')[0].decode('hex'),
-               'Property Subcategory': spare_bytes.split('00')[1].decode('hex'),
-               'Property Name': spare_bytes.split('00')[2].decode('hex'),
-               'Property URL':  spare_bytes.split('00')[3].decode('hex'),
-               'Property Data':  ''.join(spare_bytes.split('00')[4]).decode('hex')
+               'Property Category': spare_bytes.split('00')[0].decode('hex') if len(spare_bytes.split('00')[0])%2 == 0 else (spare_bytes.split('00')[0]+"0").decode('hex'),
+               'Property Subcategory': spare_bytes.split('00')[1].decode('hex') if len(spare_bytes.split('00')[1])%2 == 0 else (spare_bytes.split('00')[1]+"0").decode('hex'),
+               'Property Name': spare_bytes.split('00')[2].decode('hex') if len(spare_bytes.split('00')[2])%2 == 0 else (spare_bytes.split('00')[2]+"0").decode('hex'),
+               'Property URL':  spare_bytes.split('00')[3].decode('hex') if len(spare_bytes.split('00')[3])%2 == 0 else (spare_bytes.split('00')[3]+"0").decode('hex'),
+               'Property Data': spare_bytes.split('00')[4].decode('hex') if len(spare_bytes.split('00')[4])%2 == 0 else (spare_bytes.split('00')[4]+"0").decode('hex')
              }
              #'Number of Properties: ': int(str(int(spare_bytes[len_var_fields:len_var_fields+16],16)))
 
