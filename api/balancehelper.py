@@ -32,7 +32,8 @@ def get_balancedata(address):
                      order by f1.propertyid""",(addr,addr))
 
     balance_data = { 'balance': [] }
-    out, err = run_command(TIMEOUT+ 'sx balance -j ' + addr )
+    #out, err = run_command(TIMEOUT+ 'sx balance -j ' + addr )
+    out, err = run_command(TIMEOUT+"curl -s http://btc.blockr.io/api/v1/address/balance/"+addr)
     for balrow in ROWS:
         cID = str(int(balrow[0])) #currency id
         sym_t = ('BTC' if cID == '0' else ('MSC' if cID == '1' else ('TMSC' if cID == '2' else 'SP' + cID) ) ) #symbol template
@@ -48,9 +49,11 @@ def get_balancedata(address):
           else:
             try:
               if balrow[4] < 0:
-                res['value'] = int( json.loads( out )[0][ 'paid' ]) + int(balrow[4])
+                #res['value'] = int( json.loads( out )[0][ 'paid' ]) + int(balrow[4])
+                res['value'] = int( json.loads( out )['data']['balance']*1e8) + int(balrow[4])
               else:
-                res['value'] = int( json.loads( out )[0][ 'paid' ])
+                #res['value'] = int( json.loads( out )[0][ 'paid' ])
+                res['value'] = int( json.loads( out )['data']['balance']*1e8)
             except ValueError:
               btc_balance[ 'value' ] = int(-555)
         else:
