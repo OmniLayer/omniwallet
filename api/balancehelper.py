@@ -108,8 +108,6 @@ def get_bulkbalancedata(addresses):
 
     baldata=bc_getbulkbalance(list)
     btclist = baldata['bal']
-    if btclist == None:
-      #do something snazzy
 
     retval = {}
 
