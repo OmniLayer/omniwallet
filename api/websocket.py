@@ -35,8 +35,10 @@ def balance_thread():
         time.sleep(60)
         count += 1
         printmsg("Tracking "+str(len(addresses))+"/"+str(maxaddresses)+"(max) addresses, for "+str(clients)+"/"+str(maxclients)+"(max) clients, ran "+str(count)+" times")
+        balances=get_bulkbalancedata(addresses)
         for address in addresses:
-          balance_data=get_balancedata(address)
+          #balance_data=get_balancedata(address)
+          balance_data=balances[address]
           socketio.emit('address:'+address,
                       balance_data,
                       namespace='/balance')
