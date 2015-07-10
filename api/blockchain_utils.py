@@ -22,3 +22,12 @@ def bc_getutxo(address, ramount):
     return {"avail": avail, "error": "Low balance error"}
   else:
     return {"error": "Connection error", "code": r.status_code}
+
+
+def bc_getpubkey(address):
+  r = requests.get('https://blockchain.info/q/pubkeyaddr/'+address)
+
+  if r.status_code == 200:
+    return str(r.text)
+  else:
+    return "error"

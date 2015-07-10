@@ -81,7 +81,7 @@ def sell_form_response(response_dict):
             if not is_valid_bitcoin_address(seller):
                 response_status='invalid address'
             else:
-                seller_pubkey=get_pubkey(seller)
+                seller_pubkey=bc_getpubkey(seller)
                 if not is_pubkey_valid(seller_pubkey):
                     response_status='missing pubkey'
                 else:
@@ -101,7 +101,7 @@ def prepare_sell_tx_for_signing(seller, amount, bitcoin_amount_desired, btc_min_
         seller_pub=seller
         seller=get_addr_from_key(seller)
     else: # address was given
-        seller_pub=addrPub=get_pubkey(seller)
+        seller_pub=addrPub=bc_getpubkey(seller)
         seller_pub=seller_pub.strip()
 
     # set change address to from address

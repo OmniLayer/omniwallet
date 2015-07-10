@@ -66,7 +66,7 @@ def accept_form_response(response_dict):
             if not is_valid_bitcoin_address(buyer):
                 response_status = 'invalid address'
             else:
-                buyer_pubkey = get_pubkey(buyer)
+                buyer_pubkey = bc_getpubkey(buyer)
                 if not is_pubkey_valid(buyer_pubkey):
                     response_status = 'missing pubkey'
                 else:
@@ -94,7 +94,7 @@ def prepare_accept_tx_for_signing(buyer, amount, tx_hash, min_btc_fee=10000):
         buyer_pub=buyer
         buyer=get_addr_from_key(buyer)
     else: # address was given
-        buyer_pub=addrPub=get_pubkey(buyer)
+        buyer_pub=addrPub=bc_getpubkey(buyer)
         buyer_pub=buyer_pub.strip()
 
     # set change address to from address

@@ -75,7 +75,7 @@ def send_form_response(response_dict):
             if not is_valid_bitcoin_address(from_addr):
                 response_status='invalid address'
             else:
-                from_pubkey=get_pubkey(from_addr)
+                from_pubkey=bc_getpubkey(from_addr)
                 if not is_pubkey_valid(from_pubkey):
                     response_status='missing pubkey'
                 else:
@@ -109,7 +109,7 @@ def prepare_send_tx_for_signing(from_address, to_address, marker_address, curren
         from_address_pub=from_address
         from_address=get_addr_from_key(from_address)
     else: # address was given
-        from_address_pub=addrPub=get_pubkey(from_address)
+        from_address_pub=addrPub=bc_getpubkey(from_address)
         from_address_pub=from_address_pub.strip()
 
     # set change address to from address
