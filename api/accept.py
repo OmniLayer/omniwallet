@@ -7,6 +7,7 @@ lib_path = os.path.abspath(tools_dir)
 sys.path.append(lib_path)
 from msc_utils_parsing import *
 from msc_apps import *
+from blockchain_utils import *
 import config
 
 donate=False
@@ -65,7 +66,7 @@ def accept_form_response(response_dict):
             if not is_valid_bitcoin_address(buyer):
                 response_status = 'invalid address'
             else:
-                buyer_pubkey = get_pubkey(buyer)
+                buyer_pubkey = bc_getpubkey(buyer)
                 if not is_pubkey_valid(buyer_pubkey):
                     response_status = 'missing pubkey'
                 else:
@@ -93,7 +94,7 @@ def prepare_accept_tx_for_signing(buyer, amount, tx_hash, min_btc_fee=10000):
         buyer_pub=buyer
         buyer=get_addr_from_key(buyer)
     else: # address was given
-        buyer_pub=addrPub=get_pubkey(buyer)
+        buyer_pub=addrPub=bc_getpubkey(buyer)
         buyer_pub=buyer_pub.strip()
 
     # set change address to from address
@@ -133,25 +134,43 @@ def prepare_accept_tx_for_signing(buyer, amount, tx_hash, min_btc_fee=10000):
 
     required_value=4*dust_limit
 
-    # get utxo required for the tx
-    utxo_all=get_utxo(buyer, required_value+fee)
-    utxo_split=utxo_all.split()
-    inputs_number=len(utxo_split)/12
-    inputs=[]
-    inputs_total_value=0
+    #------------------------------------------- New utxo calls
+    dirty_txes = bc_getutxo( from_address, fee_total_satoshi )
 
-    if inputs_number < 1:
-        error('zero inputs')
-    for i in range(inputs_number):
-        inputs.append(utxo_split[i*12+3])
-        try:
-            inputs_total_value += int(utxo_split[i*12+7])
-        except ValueError:
-            error('error parsing value from '+utxo_split[i*12+7])
+    if (dirty_txes['error'][:3]=='Con'):
+        raise Exception({ "status": "NOT OK", "error": "Couldn't get list of unspent tx's. Response Code: " + dirty_txes['code']  })
+
+    if (dirty_txes['error'][:3]=='Low'):
+        raise Exception({ "status": "NOT OK", "error": "Not enough funds, try again. Needed: " + str(fee_total) + " but Have: " + dirty_txes['avail']  })
+
+    inputs_total_value = dirty_txes['avail']
+    inputs = dirty_txes['utxos']
+
+    #------------------------------------------- Old utxo calls
+    # get utxo required for the tx
+    #utxo_all=get_utxo(buyer, required_value+fee)
+    #utxo_split=utxo_all.split()
+    #inputs_number=len(utxo_split)/12
+    #inputs=[]
+    #inputs_total_value=0
+
+    #if inputs_number < 1:
+    #    error('zero inputs')
+    #for i in range(inputs_number):
+    #    inputs.append(utxo_split[i*12+3])
+    #    try:
+    #        inputs_total_value += int(utxo_split[i*12+7])
+    #    except ValueError:
+    #        error('error parsing value from '+utxo_split[i*12+7])
+
+    #inputs_outputs='/dev/stdout'
+    #for i in inputs:
+    #    inputs_outputs+=' -i '+i
+    #---------------------------------------------- End Old utxo calls
 
     inputs_outputs='/dev/stdout'
     for i in inputs:
-        inputs_outputs+=' -i '+i
+        inputs_outputs+=' -i '+str(i[0])+':'+str(i[1])
 
     # calculate change
     change_value=inputs_total_value-required_value-fee
@@ -213,8 +232,11 @@ def prepare_accept_tx_for_signing(buyer, amount, tx_hash, min_btc_fee=10000):
     info('inputs_outputs are '+inputs_outputs)
     info('parsed tx is '+str(get_json_tx(tx)))
 
-    parse_dict=parse_multisig(tx)
-    info(parse_dict)
+    #deprecated command
+    #parse_dict=parse_multisig(tx)
+
+    #parse_dict=decode(tx)
+    #info(parse_dict)
 
     hash160=bc_address_to_hash_160(buyer).encode('hex_codec')
     prevout_script='OP_DUP OP_HASH160 ' + hash160 + ' OP_EQUALVERIFY OP_CHECKSIG'
