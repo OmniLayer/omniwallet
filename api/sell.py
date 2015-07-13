@@ -116,7 +116,7 @@ def prepare_sell_tx_for_signing(seller, amount, bitcoin_amount_desired, btc_min_
 
     #------------------------------------------- New utxo calls
     fee_total_satoshi=required_value+fee
-    dirty_txes = bc_getutxo( from_address, fee_total_satoshi )
+    dirty_txes = bc_getutxo( seller, fee_total_satoshi )
 
     if (dirty_txes['error'][:3]=='Con'):
         raise Exception({ "status": "NOT OK", "error": "Couldn't get list of unspent tx's. Response Code: " + dirty_txes['code']  })
