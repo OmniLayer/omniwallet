@@ -115,13 +115,14 @@ def prepare_sell_tx_for_signing(seller, amount, bitcoin_amount_desired, btc_min_
     required_value=3*dust_limit
 
     #------------------------------------------- New utxo calls
+    fee_total_satoshi=required_value+fee
     dirty_txes = bc_getutxo( from_address, fee_total_satoshi )
 
     if (dirty_txes['error'][:3]=='Con'):
         raise Exception({ "status": "NOT OK", "error": "Couldn't get list of unspent tx's. Response Code: " + dirty_txes['code']  })
 
     if (dirty_txes['error'][:3]=='Low'):
-        raise Exception({ "status": "NOT OK", "error": "Not enough funds, try again. Needed: " + str(fee_total) + " but Have: " + dirty_txes['avail']  })
+        raise Exception({ "status": "NOT OK", "error": "Not enough funds, try again. Needed: " + str(fee_total_satoshi) + " but Have: " + dirty_txes['avail']  })
 
     inputs_total_value = dirty_txes['avail']
     inputs = dirty_txes['utxos']
