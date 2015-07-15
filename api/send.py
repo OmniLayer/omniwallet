@@ -4,6 +4,7 @@ tools_dir = os.environ.get('TOOLSDIR')
 lib_path = os.path.abspath(tools_dir)
 sys.path.append(lib_path)
 from msc_utils_parsing import *
+from blockchain_utils import *
 from msc_apps import *
 import random
 
@@ -74,7 +75,7 @@ def send_form_response(response_dict):
             if not is_valid_bitcoin_address(from_addr):
                 response_status='invalid address'
             else:
-                from_pubkey=get_pubkey(from_addr)
+                from_pubkey=bc_getpubkey(from_addr)
                 if not is_pubkey_valid(from_pubkey):
                     response_status='missing pubkey'
                 else:
@@ -89,8 +90,10 @@ def send_form_response(response_dict):
           tx_to_sign_dict['sourceScript']=response_status
 
       response='{"status":"'+response_status+'", "transaction":"'+tx_to_sign_dict['transaction']+'", "sourceScript":"'+tx_to_sign_dict['sourceScript']+'"}'
+      print "Sending unsigned tx to user for signing", response
       return (response, None)
     except Exception as e:
+      print "error creating unsigned tx", e
       return (None, str(e))
 
 
@@ -106,7 +109,7 @@ def prepare_send_tx_for_signing(from_address, to_address, marker_address, curren
         from_address_pub=from_address
         from_address=get_addr_from_key(from_address)
     else: # address was given
-        from_address_pub=addrPub=get_pubkey(from_address)
+        from_address_pub=addrPub=bc_getpubkey(from_address)
         from_address_pub=from_address_pub.strip()
 
     # set change address to from address
@@ -127,28 +130,48 @@ def prepare_send_tx_for_signing(from_address, to_address, marker_address, curren
         tx_type=0 # only simple send is supported
         required_value=4*dust_limit
  
+    #------------------------------------------- New utxo calls
+    fee_total_satoshi=required_value+fee
+    dirty_txes = bc_getutxo( from_address, fee_total_satoshi )
+
+    if (dirty_txes['error'][:3]=='Con'):
+        raise Exception({ "status": "NOT OK", "error": "Couldn't get list of unspent tx's. Response Code: " + dirty_txes['code'] })
+
+    if (dirty_txes['error'][:3]=='Low'):
+        raise Exception({ "status": "NOT OK", "error": "Not enough funds, try again. Needed: " + str(fee_total_satoshi) + " but Have: " + dirty_txes['avail']  })
+
+    inputs_total_value = dirty_txes['avail']
+    inputs = dirty_txes['utxos']
+
+    #------------------------------------------- Old utxo calls
     # get utxo required for the tx
-    utxo_all=get_utxo(from_address, required_value+fee)
+    #utxo_all=get_utxo(from_address, required_value+fee)
 
-    utxo_split=utxo_all.split()
-    inputs_number=len(utxo_split)/12
-    inputs=[]
-    inputs_total_value=0
+    #utxo_split=utxo_all.split()
+    #inputs_number=len(utxo_split)/12
+    #inputs=[]
+    #inputs_total_value=0
 
-    if inputs_number < 1:
-        info('Error not enough BTC to generate tx - no inputs')
-        raise Exception('This address must have enough BTC for protocol transaction fees and miner fees')
-    for i in range(inputs_number):
-        inputs.append(utxo_split[i*12+3])
-        try:
-            inputs_total_value += int(utxo_split[i*12+7])
-        except ValueError:
-            info('Error parsing utxo, '+ str(utxo_split) )
-            raise Exception('Error: parsing inputs was invalid, do you have enough BTC?')
+    #if inputs_number < 1:
+    #    info('Error not enough BTC to generate tx - no inputs')
+    #    raise Exception('This address must have enough BTC for protocol transaction fees and miner fees')
+    #for i in range(inputs_number):
+    #    inputs.append(utxo_split[i*12+3])
+    #    try:
+    #        inputs_total_value += int(utxo_split[i*12+7])
+    #    except ValueError:
+    #        info('Error parsing utxo, '+ str(utxo_split) )
+    #        raise Exception('Error: parsing inputs was invalid, do you have enough BTC?')
+
+    #inputs_outputs='/dev/stdout'
+    #for i in inputs:
+    #    inputs_outputs+=' -i '+i
+    #---------------------------------------------- End Old utxo calls
 
     inputs_outputs='/dev/stdout'
     for i in inputs:
-        inputs_outputs+=' -i '+i
+        inputs_outputs+=' -i '+str(i[0])+':'+str(i[1])
+
 
     # calculate change
     change_value=inputs_total_value-required_value-fee

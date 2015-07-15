@@ -4,6 +4,7 @@ tools_dir = os.environ.get('TOOLSDIR')
 lib_path = os.path.abspath(tools_dir)
 sys.path.append(lib_path)
 from msc_utils_obelisk import get_utxo
+from blockchain_utils import *
 from rpcclient import *
 
 
@@ -311,28 +312,43 @@ def build_transaction(miner_fee_satoshis, pubkey,final_packets, total_packets, t
         fee_total = Decimal(miner_fee) + Decimal(0.00005757*total_packets+0.00005757*total_outs) + Decimal(2*0.00005757)  #exodus output is last
     fee_total_satoshi = int( round( fee_total * Decimal(1e8) ) )
 
+    #------------------------------------------- New utxo calls
+    dirty_txes = bc_getutxo( from_address, fee_total_satoshi )
+
+    if (dirty_txes['error'][:3]=='Con'):
+        raise Exception({ "status": "NOT OK", "error": "Couldn't get list of unspent tx's. Response Code: " + dirty_txes['code']  })
+
+    if (dirty_txes['error'][:3]=='Low'):
+        raise Exception({ "status": "NOT OK", "error": "Not enough funds, try again. Needed: " + str(fee_total) + " but Have: " + dirty_txes['avail']  })
+
+    total_amount = dirty_txes['avail']
+    unspent_tx = dirty_txes['utxos']
+
+    #------------------------------------------- Old utxo calls
     #clean sx output, initial version by achamely
-    utxo_list = []
+    #utxo_list = []
+
     #round so we aren't under fee amount
-    dirty_txes = get_utxo( from_address, fee_total_satoshi ).replace(" ", "")
+    #dirty_txes = get_utxo( from_address, fee_total_satoshi ).replace(" ", "")
 
-    if (dirty_txes[:3]=='Ass') or (dirty_txes[0][:3]=='Not'):
-        raise Exception({ "status": "NOT OK", "error": "Not enough funds, try again. Needed: " + str(fee_total)  })
+    #if (dirty_txes[:3]=='Ass') or (dirty_txes[0][:3]=='Not'):
+    #    raise Exception({ "status": "NOT OK", "error": "Not enough funds, try again. Needed: " + str(fee_total)  })
 
-    for line in dirty_txes.splitlines():
-        utxo_list.append(line.split(':'))
+    #for line in dirty_txes.splitlines():
+    #    utxo_list.append(line.split(':'))
 
-    z = 0
-    total_amount=0
-    unspent_tx = []
-    for item in utxo_list:
-        # unspent tx: [0] - txid; [1] - vout; [2] - amount;
-        if utxo_list[z][0] == "output":
-            unspent_tx.append( [ utxo_list[z][1] , utxo_list[z][2] ] )
-        if utxo_list[z][0] == "value":
-            unspent_tx[-1] += [ int( utxo_list[z][1] ) ]
-            total_amount += int( utxo_list[z][1] )
-        z += 1
+    #z = 0
+    #total_amount=0
+    #unspent_tx = []
+    #for item in utxo_list:
+    #    if utxo_list[z][0] == "output":
+    #        unspent_tx.append( [ utxo_list[z][1] , utxo_list[z][2] ] )
+    #    if utxo_list[z][0] == "value":
+    #        unspent_tx[-1] += [ int( utxo_list[z][1] ) ]
+    #        total_amount += int( utxo_list[z][1] )
+    #    z += 1
+
+    #---------------------------------------------- End Old utxo calls
 
     # calculate change : 
     # (total input amount) - (broadcast fee)
