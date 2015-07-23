@@ -1,0 +1,10 @@
+<div class="control-group">
+  <div class="controls">
+    <button type="button" class="btn btn-secondary" ng-disabled="loginInProgress" ng-click="dismiss('cancel')">Cancel</button>
+    <input type="submit" class="btn btn-main" value="{{login.button}}" ng-disabled="loginInProgress" >        
+  </div>
+</div>
+<img ng-show="loginInProgress" src="/assets/img/spinner.gif" alt="loading">
+<div ng-show="missingUUID" style="color:red">Please enter a valid wallet id and password</div>
+<div ng-show="badPassword" style="color:red">Please enter a valid wallet id and password</div>
+<div ng-show="serverError" style="color:red">Server error, please try again in 5 min</div>
