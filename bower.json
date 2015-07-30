@@ -18,10 +18,10 @@
     "FileSaver": null,
     "big.js": "x.x.x",
     "forge": "https://github.com/digitalbazaar/forge.git#0.2.30",
-    "numeraljs": "https://github.com/adamwdraper/Numeral-js.git#master",
+    "numeraljs": "https://github.com/adamwdraper/Numeral-js.git#1.5.3",
     "angular-numeraljs": "https://github.com/sagyeli/angular-numeraljs.git#master",
     "angular-password-strength": "https://github.com/curtislacy/angular-password-strength.git#Caret-Operator",
-    "angular-idle": "https://github.com/hackedbychinese/ng-idle.git#master",
+    "angular-idle": "https://github.com/hackedbychinese/ng-idle.git#0.3.5",
     "angular-re-captcha": "~0.0.3",
     "angular-translate": "~2.4.2"
   }
