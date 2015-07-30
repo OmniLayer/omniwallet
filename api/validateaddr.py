@@ -5,6 +5,7 @@ lib_path = os.path.abspath(tools_dir)
 sys.path.append(lib_path)
 from msc_utils_obelisk import *
 from msc_apps import *
+from blockchain_utils import *
 
 def validateaddr_response(response_dict):
     try:
@@ -31,7 +32,7 @@ def validateaddr_response(response_dict):
             debug='invalid address'
             response_status='invalid address'
         else:
-            addr_pubkey=get_pubkey(addr)
+            addr_pubkey=bc_getpubkey(addr)
             if is_pubkey_valid(addr_pubkey):
                 debug='valid address'
                 response_status='OK'
