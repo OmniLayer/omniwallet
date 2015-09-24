@@ -4,7 +4,7 @@ import decimal
 
 
 def bc_getutxo(address, ramount):
-  r = requests.get('http://btc.blockr.io/api/v1/address/unspent/'+address)
+  r = requests.get('http://btc.blockr.io/api/v1/address/unspent/'+address+'?unconfirmed=1')
 
   if r.status_code == 200:
     #Process and format response from blockr.io
@@ -14,11 +14,12 @@ def bc_getutxo(address, ramount):
     retval = []
     avail = 0
     for tx in unspents:
-      tx['amount'] =  int(decimal.Decimal(tx['amount'])*decimal.Decimal(1e8))
-      avail += tx['amount']
-      retval.append([ tx['tx'], tx['n'], tx['amount'] ])
-      if avail >= ramount:
-        return {"avail": avail, "utxos": retval, "error": "none"}
+      if tx['confirmations'] > 2:
+        tx['amount'] =  int(decimal.Decimal(tx['amount'])*decimal.Decimal(1e8))
+        avail += tx['amount']
+        retval.append([ tx['tx'], tx['n'], tx['amount'] ])
+        if avail >= ramount:
+          return {"avail": avail, "utxos": retval, "error": "none"}
     return {"avail": avail, "error": "Low balance error"}
   else:
     return {"error": "Connection error", "code": r.status_code}
