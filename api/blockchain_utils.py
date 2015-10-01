@@ -4,7 +4,7 @@ import decimal
 
 
 def bc_getutxo(address, ramount):
-  r = requests.get('http://btc.blockr.io/api/v1/address/unspent/'+address+'?unconfirmed=1')
+  r = requests.get('http://btc.blockr.io/api/v1/address/unspent/'+address+'?unconfirmed=2')
 
   if r.status_code == 200:
     #Process and format response from blockr.io
