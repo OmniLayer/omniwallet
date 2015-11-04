@@ -28,18 +28,40 @@ def generate_unsigned():
         tnet_ = 0
     #Translate raw txn
     decoded_tx = conn.decoderawtransaction(unsigned_hex)
-    spending_txid= decoded_tx['vin'][0]['txid']
-    spending_tx_raw = conn.getrawtransaction(spending_txid, False)
-    spending_tx_decoded = conn.decoderawtransaction(spending_tx_raw)
+    #spending_txid= decoded_tx['vin'][0]['txid']
+    #spending_tx_raw = conn.getrawtransaction(spending_txid, False)
+    #spending_tx_decoded = conn.decoderawtransaction(spending_tx_raw)
     tnet = 'fabfb5da' if tnet_ else 'f9beb4d9'
 
-    i_vout = -1
-    for each in spending_tx_decoded['vout']:
-      print each['scriptPubKey']['asm'].split(' ')[2], pubKeyHash
-      if each['scriptPubKey']['asm'].split(' ')[2] == pubKeyHash:
-        i_vout = each['n']
+    #i_vout = -1
+    #for each in spending_tx_decoded['vout']:
+    #  print each['scriptPubKey']['asm'].split(' ')[2], pubKeyHash
+    #  if each['scriptPubKey']['asm'].split(' ')[2] == pubKeyHash:
+    #    i_vout = each['n']
 
-    i_k = [{ 'dersighex': '', 'pubkeyhex': pubkey, 'wltlochex': '' }]
+    keys = [{ 'dersighex': '', 'pubkeyhex': pubkey, 'wltlochex': '' }]
+
+    i_k = []
+    for intx in decoded_tx['vin']:
+      spending_txid= intx['txid']
+      spending_tx_raw = conn.getrawtransaction(spending_txid, False)
+      spending_tx_decoded = conn.decoderawtransaction(spending_tx_raw)
+      i_vout = -1
+      for each in spending_tx_decoded['vout']:
+        print each['scriptPubKey']['asm'].split(' ')[2], pubKeyHash
+        if each['scriptPubKey']['asm'].split(' ')[2] == pubKeyHash:
+          i_vout = each['n']
+
+      i_k.append ({'contribid': '',
+                      'contriblabel': '',
+                      'keys': keys,
+                      'magicbytes': tnet,
+                      'numkeys': 1,
+                      'p2shscript': '',
+                      'sequence': 4294967295,
+                      'supporttx': spending_tx_raw,
+                      'supporttxoutindex': i_vout,
+                      'version': 1})
 
     o_k = []
     for o in decoded_tx['vout']:
@@ -59,17 +81,7 @@ def generate_unsigned():
     'locktimeint': 0, 
     'magicbytes': tnet,
     'version': 1,
-    'inputs': [   {   'contribid': '',
-                      'contriblabel': '',
-                      'keys': i_k,
-                      'magicbytes': tnet,
-                      'numkeys': 1,
-                      'p2shscript': '',
-                      'sequence': 4294967295,
-                      'supporttx': spending_tx_raw,
-                      'supporttxoutindex': i_vout,
-                      'version': 1}],
-
+    'inputs': i_k,
     'outputs': o_k
     }
     
