@@ -322,6 +322,10 @@ angular.module("omniServices")
               csym='zł'
               break;
 
+            case "JPY"
+              csym='&#165'
+              break;
+
             default:
               csym = '&#164;'
               break;
