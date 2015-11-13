@@ -612,10 +612,10 @@ def build_transaction(miner_fee_satoshis, pubkey,final_packets, total_packets, t
     version = ['01', '00', '00', '00' ]
     assert len(version) == 4
     
-    num_inputs = [str(len(json_tx['vin'])).rjust(2,"0")]
+    num_inputs = [str(hex(len(json_tx['vin']))[2:]).rjust(2,"0")]
     assert len(num_inputs) == 1
     
-    num_outputs = [str(len(json_tx['vout'])).rjust(2,"0")]
+    num_outputs = [str(hex(len(json_tx['vout']))[2:]).rjust(2,"0")]
     assert len(num_outputs) == 1
     
     sequence = ['FF', 'FF', 'FF', 'FF']
@@ -681,7 +681,11 @@ def build_transaction(miner_fee_satoshis, pubkey,final_packets, total_packets, t
     hex_transaction = hex_transaction + blocklocktime
     
     #verify that transaction is valid
-    decoded_tx = conn.decoderawtransaction(''.join(hex_transaction).lower());
+    try:
+      decoded_tx = conn.decoderawtransaction(''.join(hex_transaction).lower());
+    except Exception as e:
+      raise Exception({ "status": "NOT OK", "error": str(e)+" : Please contact an developer"  })
+
     if 'txid' not in decoded_tx:
         raise Exception({ "status": "NOT OK", "error": "Network byte mismatch: Please try again"  })
 
