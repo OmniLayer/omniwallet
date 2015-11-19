@@ -27,6 +27,7 @@ angular.module("omniControllers")
           $scope.totals[address.balance[i].symbol] += +address.balance[i].value;
         }
       });
+      $scope.firstLogin = Account.settings.firstLogin;
       $scope.disclaimerSeen = Account.settings.disclaimerSeen;
       $scope.$on('$locationChangeSuccess', function(path) {
         Account.settings.disclaimerSeen = true;
