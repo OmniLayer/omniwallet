@@ -9,15 +9,8 @@
   <div class="panel-default">
     <div class="text-left panel-body om-title" >Overview</div>
   </div>
-  <div ng-if="addrList.length == 0">
-    <div class="alert alert-info alert-dismissable">
-      <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-        <strong>Welcome!</strong> We have set up a brand new wallet for you. You can use the links below to get started
-    </div>
-    <div class="alert alert-danger alert-dismissable">
-      <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-        <strong>Warning:</strong> You must <strong>save your login link: <a style="color:black; text-decoration:underline" href="{{loginLink}}">{{loginLink}}</a></strong> to return to your wallet.
-    </div>
+  <div ng-if="firstLogin">
+    <div ng-controller="NavigationController" ng-init="openNewUUIDmodal()"></div>
   </div>
 
   <div class="row" ng-controller="AssetTypesController">
