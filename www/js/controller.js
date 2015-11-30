@@ -9,7 +9,7 @@ function StatsCtrl($scope, $route, $routeParams, $http) {
 
 
 
-function HiddenLoginController($scope, $modal, $location) {
+function HiddenLoginController($rootScope, $scope, $modal, $location) {
   $scope.open = function() {
     var modalScope = $rootScope.$new()
     modalScope.title = 'Login';
@@ -33,7 +33,7 @@ function HiddenLoginController($scope, $modal, $location) {
   }
 }
 
-function FailedSaveLoginController($scope, $modal, $location) {
+function FailedSaveLoginController($rootScope, $scope, $modal, $location) {
   $scope.open = function() {
     var modalScope = $rootScope.$new()
     modalScope.title = 'Login';
