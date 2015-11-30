@@ -45,16 +45,18 @@ def get_msc_balances( addr ):
 # Get the Bitcoin balances - this is a different format from the MSC one above.
 def get_btc_balances( addr ):
   balances = { 'symbol': 'BTC', 'divisible': True }
-  out, err = run_command(TIMEOUT+ 'sx balance -j ' + addr )
+  #out, err = run_command(TIMEOUT+ 'sx balance -j ' + addr )
+  out, err = run_command(TIMEOUT+"curl -s http://btc.blockr.io/api/v1/address/balance/"+addr)
   if err != None:
     return None, err
   elif out == '':
     return None, 'No bitcoin balance available.  Invalid address?: ' + addr
   else:
     try:
-        balances[ 'value' ] = int( json.loads( out )[0][ 'paid' ])
+        #balances[ 'value' ] = int( json.loads( out )[0][ 'paid' ])
+        balances[ 'value' ] = int( json.loads( out )['data']['balance']*1e8 )
     except ValueError:
-        balances[ 'value' ] = int(-666)
+        balances[ 'value' ] = int(-555)
 
   return ( [ balances ], None )
 

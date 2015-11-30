@@ -4,7 +4,7 @@ angular.module("omniControllers")
       $scope.uuid = $scope.account.uuid;
       $scope.loginLink = $location.protocol() + "://" + $location.host() + "/login/" + $scope.uuid;
       //console.log(Wallet.addresses);
-      $scope.firstLogin = $scope.account.firstLogin;
+      $scope.firstLogin = $scope.account.settings.firstLogin;
       $scope.CSYM=$scope.account.getSetting("usercurrency");
       $scope.total=0;
       $scope.chartConfig = {

@@ -30,9 +30,15 @@ angular.module("omniServices")
             var create = $q.defer();
             if(!self.validating){
                 self.uuid = generateUUID();
+                if (form.email == undefined) {
+                  uemail = ""
+                } else {
+                  uemail = form.email
+                }
                 var wallet = {
                   uuid: self.uuid,
-                  addresses: []
+                  addresses: [],
+                  email: uemail
                 };
                 var walletKey = '';
                 var asymKey = {};
@@ -321,6 +327,10 @@ angular.module("omniServices")
 
             case "PLN":
               csym='zł'
+              break;
+
+            case "JPY":
+              csym='&#165'
               break;
 
             default:

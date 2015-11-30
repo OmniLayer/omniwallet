@@ -5,6 +5,7 @@ lib_path = os.path.abspath(tools_dir)
 sys.path.append(lib_path)
 from msc_utils_parsing import *
 from msc_apps import *
+from blockchain_utils import *
 import random
 import config
 
@@ -80,7 +81,7 @@ def sell_form_response(response_dict):
             if not is_valid_bitcoin_address(seller):
                 response_status='invalid address'
             else:
-                seller_pubkey=get_pubkey(seller)
+                seller_pubkey=bc_getpubkey(seller)
                 if not is_pubkey_valid(seller_pubkey):
                     response_status='missing pubkey'
                 else:
@@ -100,7 +101,7 @@ def prepare_sell_tx_for_signing(seller, amount, bitcoin_amount_desired, btc_min_
         seller_pub=seller
         seller=get_addr_from_key(seller)
     else: # address was given
-        seller_pub=addrPub=get_pubkey(seller)
+        seller_pub=addrPub=bc_getpubkey(seller)
         seller_pub=seller_pub.strip()
 
     # set change address to from address
@@ -113,25 +114,44 @@ def prepare_sell_tx_for_signing(seller, amount, bitcoin_amount_desired, btc_min_
 
     required_value=3*dust_limit
 
-    # get utxo required for the tx
-    utxo_all=get_utxo(seller, required_value+fee)
-    utxo_split=utxo_all.split()
-    inputs_number=len(utxo_split)/12
-    inputs=[]
-    inputs_total_value=0
+    #------------------------------------------- New utxo calls
+    fee_total_satoshi=required_value+fee
+    dirty_txes = bc_getutxo( seller, fee_total_satoshi )
 
-    if inputs_number < 1:
-        error('zero inputs from '+seller+' amount '+str(required_value+fee))
-    for i in range(inputs_number):
-        inputs.append(utxo_split[i*12+3])
-        try:
-            inputs_total_value += int(utxo_split[i*12+7])
-        except ValueError:
-            error('error parsing value from '+utxo_split[i*12+7])
+    if (dirty_txes['error'][:3]=='Con'):
+        raise Exception({ "status": "NOT OK", "error": "Couldn't get list of unspent tx's. Response Code: " + dirty_txes['code']  })
+
+    if (dirty_txes['error'][:3]=='Low'):
+        raise Exception({ "status": "NOT OK", "error": "Not enough funds, try again. Needed: " + str(fee_total_satoshi) + " but Have: " + dirty_txes['avail']  })
+
+    inputs_total_value = dirty_txes['avail']
+    inputs = dirty_txes['utxos']
+
+    #------------------------------------------- Old utxo calls
+    # get utxo required for the tx
+    #utxo_all=get_utxo(seller, required_value+fee)
+    #utxo_split=utxo_all.split()
+    #inputs_number=len(utxo_split)/12
+    #inputs=[]
+    #inputs_total_value=0
+
+    #if inputs_number < 1:
+    #    error('zero inputs from '+seller+' amount '+str(required_value+fee))
+    #for i in range(inputs_number):
+    #    inputs.append(utxo_split[i*12+3])
+    #    try:
+    #        inputs_total_value += int(utxo_split[i*12+7])
+    #    except ValueError:
+    #        error('error parsing value from '+utxo_split[i*12+7])
+
+    #inputs_outputs='/dev/stdout'
+    #for i in inputs:
+    #    inputs_outputs+=' -i '+i
+    #---------------------------------------------- End Old utxo calls
 
     inputs_outputs='/dev/stdout'
     for i in inputs:
-        inputs_outputs+=' -i '+i
+        inputs_outputs+=' -i '+str(i[0])+':'+str(i[1])
 
     # calculate change
     change_value=inputs_total_value-required_value-fee
