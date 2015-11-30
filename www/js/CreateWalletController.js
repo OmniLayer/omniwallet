@@ -1,7 +1,5 @@
 function CreateWalletController($scope, $location, $modalInstance, $idle, Account, AddressManager) {
-  $scope.dismiss = function(){
-    $modalInstance.dismiss();
-  }
+  $scope.dismiss = $modalInstance.dismiss;
   
   $scope.createWallet = function(create) {
     $scope.validating=true;
@@ -16,6 +14,10 @@ function CreateWalletController($scope, $location, $modalInstance, $idle, Accoun
     },function(error){
       angular.extend($scope,error);
     })
+  }
+
+  $scope.setFormScope = function(form){
+    $scope.createForm = form;
   }
 }
 
