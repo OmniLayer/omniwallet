@@ -11,32 +11,48 @@ function StatsCtrl($scope, $route, $routeParams, $http) {
 
 function HiddenLoginController($scope, $modal, $location) {
   $scope.open = function() {
+    var modalScope = $rootScope.$new()
+    modalScope.title = 'Login';
+    modalScope.button = 'Open Wallet';
+    modalScope.bodyTemplate = "/views/modals/partials/login.html";
+    modalScope.footerTemplate = "/views/modals/partials/login_footer.html";
+    
     $scope.uuid = $location.path().replace("/login/", "");
 
-    $modal.open({
-      templateUrl: '/partials/login_modal.html',
+    self.modalInstance = $modal.open({
+      templateUrl: '/views/modals/base.html',
       controller: LoginControllerUUID,
       resolve: {
         uuid: function() {
           return $scope.uuid;
         }
-      }
+      },
+      scope: modalScope,
+      backdrop:'static'
     });
   }
 }
 
 function FailedSaveLoginController($scope, $modal, $location) {
   $scope.open = function() {
+    var modalScope = $rootScope.$new()
+    modalScope.title = 'Login';
+    modalScope.button = 'Open Wallet';
+    modalScope.bodyTemplate = "/views/modals/partials/login.html";
+    modalScope.footerTemplate = "/views/modals/partials/login_footer.html";
+    
     $scope.uuid = $location.path().replace("/loginfs/", "");
 
-    $modal.open({
-      templateUrl: '/partials/login_modal_fs.html',
+    self.modalInstance = $modal.open({
+      templateUrl: '/views/modals/base.html',
       controller: LoginControllerUUID,
       resolve: {
         uuid: function() {
           return $scope.uuid;
         }
-      }
+      },
+      scope: modalScope,
+      backdrop:'static'
     });
   }
 }
