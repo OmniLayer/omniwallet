@@ -1,7 +1,7 @@
 <div class="control-group">
   <div class="controls">
     <button type="button" class="btn btn-secondary" ng-disabled="loginInProgress" ng-click="dismiss('cancel')">Cancel</button>
-    <input type="submit" class="btn btn-main" value="{{button}}" ng-disabled="loginInProgress" >        
+    <input type="submit" class="btn btn-main" value="{{button}}" ng-disabled="loginInProgress" ng-click="open(login)" >        
   </div>
 </div>
 <img ng-show="loginInProgress" src="/assets/img/spinner.gif" alt="loading">
