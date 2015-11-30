@@ -1,8 +1,10 @@
-<div class="row" ng-hide="transactionSuccess  || readyToSign">
-    <button ng-disabled="clicked" class="btn btn-main" ng-click="confirm()">
-        {{confirmText | translate}}
-    </button>
-    <img class="" src="/assets/img/spinner.gif" ng-show="waiting">
+<div class="control-group" ng-hide="transactionSuccess  || readyToSign">
+    <div class="controls">
+        <button ng-disabled="clicked" class="btn btn-main" ng-click="confirm()">
+            {{confirmText | translate}}
+        </button>
+        <img class="" src="/assets/img/spinner.gif" ng-show="waiting">
+    </div>  
 </div>
 <div class="row">
     <div ng-show="readyToSign">

@@ -1,0 +1,11 @@
+<div class="control-group">
+  <div class="controls">
+    <img ng-show="validating" src="/assets/img/spinner.gif" alt="loading">
+    <input type="submit" class="btn" ng-disabled="validating || createForm.$invalid || ((create.password | passwordPercent).replace('%', '') < 70)" value="Create Wallet">
+    <button type="button" class="btn btn-warning" ng-disabled="loginInProgress" ng-click="dismiss('close')">Close</button>
+  </div>
+</div>
+<div style="color:red" ng-show="walletExists">This UUID is already in use</div>
+<div style="color:red" ng-show="serverError">Server Error, try again later</div>
+<div style="color:red" ng-show="invalidCaptcha">Invalid Captcha try again.</div>
+<div style="color:green" ng-show="validating">We are validating your data and creating your account</div>
