@@ -33,11 +33,13 @@ angular.module("omniServices")
               var modalScope = $rootScope.$new()
               modalScope.login = {
                 title:'Login',
-                button:'Open Wallet'
+                button:'Open Wallet',
+                bodyTemplate: "/views/modals/partials/login.html",
+                footerTemplate: "/views/modals/partials/login_footer.html"
               }
 
               self.modalInstance = $modal.open({
-                templateUrl: '/partials/login_modal.html',
+                templateUrl: '/views/modals/base.html',
                 controller: LoginController,
                 scope: modalScope,
                 backdrop:'static'
