@@ -945,8 +945,9 @@ border-left-color: #111111;
 .modal-cancel-btn{
   background-color: transparent;
   background-image: url("/assets/img/icons/close.png");
+  border-repeat: no-repeat; 
   width:16px;
-  height: :14px;
+  height: 16px;
 }
 
 /* MODAL WINDOWS STYLES */

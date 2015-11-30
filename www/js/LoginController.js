@@ -15,8 +15,8 @@ function Login($injector, $scope, $http, $location, $modalInstance, $q, Account,
   $scope.dismiss = $modalInstance.dismiss;
   
   $scope.loginInProgress = false;
-  $scope.login.title == undefined ? $scope.login.title = 'Login' : $scope.login.title;
-  $scope.login.button == undefined ? $scope.login.button = 'Open Wallet' : $scope.login.button;
+  $scope.title == undefined ? $scope.title = 'Login' : $scope.title;
+  $scope.button == undefined ? $scope.button = 'Open Wallet' : $scope.button;
   
   $scope.open = function(login) {
     if ( Account.verifyUUID(login.uuid) == false ) {

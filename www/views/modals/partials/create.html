@@ -1,6 +1,13 @@
 <form name="createForm" role="form" novalidate class="form-horizontal" ng-submit="!createForm.$invalid  && createWallet(create)">
   <div class="modal-body">
     <div class="row">
+      <div class="col-md-10 col-md-push-1 alert alert-danger alert-dismissable">
+       <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+       <strong>Don't Forget Your Password!</strong><br />
+              WARNING: Forgotten passwords are UNRECOVERABLE and can result in LOSS of ALL of your coins!<br />
+      </div>
+    </div>
+    <div class="row">
       <div class="form-group col-md-10 col-md-push-1">
         <label class="control-label" for="inputPassword">Password</label>
         <div class="controls">
@@ -40,13 +47,6 @@
    <div class="row">
     <div class ="col-xs-11 col-md-pull-1">
       <div re-captcha ng-model="create.captcha" class="captcha-centered"></div><br>
-   </div>
-   <div class="row">
-    <div class="col-md-9 col-md-push-1 alert alert-info alert-dismissable">
-     <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-     <strong>Don't Forget Your Password!</strong><br />
-            WARNING: Forgotten passwords are UNRECOVERABLE and can result in LOSS of ALL of your coins!<br />
-    </div>
    </div>
 
   </div>
