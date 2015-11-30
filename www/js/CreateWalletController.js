@@ -1,5 +1,7 @@
 function CreateWalletController($scope, $location, $modalInstance, $idle, Account, AddressManager) {
-  $scope.dismiss = $modalInstance.dismiss;
+  $scope.dismiss = function(){
+    $modalInstance.dismiss();
+  }
   
   $scope.createWallet = function(create) {
     $scope.validating=true;
