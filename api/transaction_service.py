@@ -42,7 +42,7 @@ def getcurrencyrecent(currency_page):
     else: c_id = lookup_currency[ c_symbol ] 
 
     #Do we even need per-currency pagination?
-    ROWS=dbSelect("select * from transactions t, txjson txj where t.txdbserialnum = txj.txdbserialnum order by t.txblocknumber DESC limit 10;")
+    ROWS=dbSelect("select * from transactions t, txjson txj where t.protocol != 'Bitcoin' and t.txdbserialnum = txj.txdbserialnum order by t.txblocknumber DESC limit 10;")
 
     response = []
     if len(ROWS) > 0:
