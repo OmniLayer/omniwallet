@@ -27,7 +27,7 @@
         <div class="controls">
           <input name="repeatPassword" type="password" ng-model="create.repeatPassword" class="form-control" id="inputRepeatPassword" required match="create.password">
           <span style="color:red" ng-show="createForm.repeatPassword.$error.required && createForm.repeatPassword.$dirty">{{ 'MODALS.CREATE.REQUIRED' | translate }}</span>
-          <span style="color:red" ng-show="create.password != create.repeatPassword">{{ 'MODALS.CREATE.MESSAGES.PASSWORDMATCH' | translate }</span>
+          <span style="color:red" ng-show="create.password != create.repeatPassword">{{ 'MODALS.CREATE.MESSAGES.PASSWORDMATCH' | translate }}</span>
         </div>
       </div>
     </div>
