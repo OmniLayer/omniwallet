@@ -141,7 +141,7 @@ angular.module("omniConfig")
 	},
 	"MODALS":{
 		"CREATE":{
-			"MESSAGES" {
+			"MESSAGES" : {
 				"UUID":"This UUID is already in use",
 				"SERVERERROR":"Server Error, try again later",
 				"CAPTCHA":"Invalid Captcha try again.",

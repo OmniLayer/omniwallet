@@ -138,6 +138,36 @@
 		"TRANSACTIONS":"Transactions",
 		"WALLET":"My Wallet"
 	},
+	"MODALS":{
+		"CREATE":{
+			"MESSAGES" : {
+				"UUID":"This UUID is already in use",
+				"SERVERERROR":"Server Error, try again later",
+				"CAPTCHA":"Invalid Captcha try again.",
+				"VALIDATING":"We are validating your data and creating your account",
+				"PASSWORDLENGTH":"Password must be at least 8 characters long",
+				"PASSWORDSTRENGTH":"Password strength must be at least 70%",
+				"STRENGTHTIP":"(Try having at least 2: UpperCase/LowerCase/Numbers/Symbols)",
+				"PASSWORDMATCH":"Passwords do not match!",
+				"EMAIL":"We will send you a welcome email containing your unique login link.",
+				"EMAILVALID":"Please enter a valid email address"
+			},
+			"WARNING":{
+				"TITLE":"Don't Forget Your Password!",
+				"MESSAGE":"WARNING: Forgotten passwords are UNRECOVERABLE and can result in LOSS of ALL of your coins!"
+			},
+			"PASSWORD":"Password",
+			"REQUIRED":"Required",
+			"STRENGTH":"Strength",
+			"REPEAT":"Repeat Password",
+			"EMAIL":"Email",
+			"EMAILHOLDER":"Enter an email address (optional)"
+
+		},
+		"LOGIN":{
+			
+		}
+	},
 	"TRANSACTION":{
 		"TYPE":{
 			"0":"Simple Send",
