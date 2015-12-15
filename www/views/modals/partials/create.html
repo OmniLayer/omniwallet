@@ -16,7 +16,7 @@
           <span style="color:red" ng-show="createForm.password.$dirty && createForm.password.$error.minlength">{{ 'MODALS.CREATE.MESSAGES.PASSWORDLENGTH' | translate }}</span>
           <span style="color:red" ng-show="createForm.password.$dirty && ((create.password | passwordPercent).replace('%', '') < 70)"><br/>{{ 'MODALS.CREATE.MESSAGES.PASSWORDSTRENGTH' | translate }} <br/>  &nbsp;&nbsp; {{ 'MODALS.CREATE.MESSAGES.STRENGTHTIP' | translate }}</span>
           <div id="pass-strength" >
-            {{ 'MODALS.CREATE.STRENGTH' | translate }}Strength: {{ create.password | passwordPercent }}
+            {{ 'MODALS.CREATE.STRENGTH' | translate }}: {{ create.password | passwordPercent }}
           </div>
         </div>
       </div>
