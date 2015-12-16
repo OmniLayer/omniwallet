@@ -30,7 +30,32 @@ angular.module("omniServices")
               
               self.modalInstance = $modal.open({
                 templateUrl: '/views/modals/base.html',
-                controller: CreateWalletController,
+                controller: function CreateWalletController($scope, $location, $modalInstance, $idle, Account, AddressManager) {
+                  $scope.dismiss = $modalInstance.dismiss;
+                  
+                  $scope.createWallet = function(create) {
+                    $scope.validating=true;
+                    $scope.serverError = $scope.invalidCaptcha =false;
+                    Account.create(create).then(function(account){
+                      var address = AddressManager.createAddress();
+                      account.addAddress(address.hash,address.privkey).then(function(result){
+                        $modalInstance.close()
+                        $location.path('/wallet');
+                        $idle.watch();
+                      });
+                    },function(error){
+                      angular.extend($scope,error);
+                    })
+                  }
+
+                  $scope.setFormScope = function(form){
+                    $scope.createForm = form;
+                  }
+
+                  $scope.close = function() {
+                    $modalInstance.dismiss('close');
+                  };
+                },
                 scope: modalScope,
                 backdrop:'static'
               });
@@ -461,8 +486,9 @@ angular.module("omniServices")
 
           self.openImportArmoryForm = function() {
             var modalInstance = $modal.open({
-              templateUrl: '/partials/import_armory_offline.html',
-              controller: AddArmoryAddressModal
+              templateUrl: '/views/modals/import_armory_offline.html',
+              controller: AddArmoryAddressModal,
+
             });
         
             modalInstance.result.then(function(result) {
@@ -474,6 +500,7 @@ angular.module("omniServices")
           };
           
           var AddArmoryAddressModal = function($scope, $modalInstance) {
+            $scope.title = "MODALS.IMPORT.OFFLINE.TITLE";
             $scope.validate = function(newAddress) {
               try{
                 var address = new Bitcoin.Address.fromPubKey(Bitcoin.Util.hexToBytes(newAddress.pubkey))
@@ -516,7 +543,7 @@ angular.module("omniServices")
           // Begin Import watch only Form Code
           self.openImportWatchOnlyForm = function() {
             var modalInstance = $modal.open({
-              templateUrl: '/partials/import_watch_only.html',
+              templateUrl: '/views/modals/import_watch_only.html',
               controller: AddBtcAddressModal
             });
         
@@ -529,6 +556,7 @@ angular.module("omniServices")
           };
         
           var AddBtcAddressModal = function($scope, $modalInstance) {
+            $scope.title = "MODALS.IMPORT.WATCH.TITLE"
             $scope.validate = function(address) {
               return Bitcoin.Address.validate(address);
             };
@@ -560,7 +588,7 @@ angular.module("omniServices")
           // Begin Import Private Key Form Code
           self.openImportPrivateKeyForm = function() {
             var modalInstance = $modal.open({
-              templateUrl: '/partials/import_private.html',
+              templateUrl: '/views/modals/import_private.html',
               controller: AddPrivateKeyModal
             });
         
@@ -577,6 +605,7 @@ angular.module("omniServices")
           };
         
           var AddPrivateKeyModal = function($scope, $modalInstance) {
+            $scope.title = "MODALS.IMPORT.PRIVATE.TITLE";
             $scope.validate = function(address) {
               if (!address) return false;
         
@@ -601,7 +630,7 @@ angular.module("omniServices")
           // Begin Import Encrypted Key Form Code
           self.openImportEncryptedKeyForm = function() {
             var modalInstance = $modal.open({
-              templateUrl: '/partials/import_encrypted_private.html',
+              templateUrl: '/views/modals/import_encrypted_private.html',
               controller: AddEncryptedPrivateModal
             });
         
@@ -622,6 +651,7 @@ angular.module("omniServices")
           };
         
           var AddEncryptedPrivateModal = function($scope, $modalInstance) {
+            $scope.title = "MODALS.IMPORT.ENCRYPTED.TITLE";
             $scope.ok = function(result) {
               $modalInstance.close(result);
             };

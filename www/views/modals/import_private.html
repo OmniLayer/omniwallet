@@ -1,0 +1,17 @@
+<div class="modal-header">
+  <div class="text-left modal-title col-md-11">{{title | translate}}</div><div class="text-right"><button ng-disabled="wating" class="btn modal-cancel-btn" ng-click="close()"></button></div>
+</div>
+<form name="privkeyentry" class="form-horizontal" style="margin-bottom:20px, margin-top:20px" ng-submit="validate(newAddressData.privKey) && ok(newAddressData)">
+  <div class="modal-body">
+    <div class="row">
+      <div class="form-group col-md-10 col-md-push-1">
+        <label class="control-label">{{ 'MODALS.IMPORT.PRIVATE.ENTER' | translate}} <a href="/about/faq" target="_new">{{ 'MODALS.IMPORT.PRIVATE.KEY' | translate}}</a> ({{ 'MODALS.IMPORT.PRIVATE.ENABLE' | translate}}):</label>
+        <input type="text" name="privkey" class="form-control" placeholder="{{ 'MODALS.IMPORT.PRIVATE.KEYHOLDER' | translate}}" ng-model="newAddressData.privKey" ng-required="!newAddressData.address">
+        <span style="color:red" ng-show="privkeyentry.privkey.$dirty && !validate(newAddressData.privKey)">{{ 'MODALS.IMPORT.VALID' | translate}}</span>
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <input type="submit" class="btn btn-main" ng-disabled="!validate(newAddressData.privKey)" value="{{ 'MODALS.IMPORT.SUBMIT' | translate}}">
+  </div>
+</form>

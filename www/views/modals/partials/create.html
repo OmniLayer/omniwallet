@@ -9,7 +9,7 @@
     </div>
     <div class="row">
       <div class="form-group col-md-10 col-md-push-1">
-        <label class="control-label" for="inputPassword">{{ 'MODALS.CREATE.PASSWORD' | translate }}</label>
+        <label class="control-label" for="inputPassword">{{ 'COMMON.PASSWORD' | translate}}</label>
         <div class="controls">
           <input name="password" type="password" ng-model="create.password" class="form-control" id="inputPassword" ng-minlength="8" required match="create.repeatPassword" auto-focus="true">
           <span style="color:red" ng-show="createForm.password.$error.required && createForm.password.$dirty">{{ 'MODALS.CREATE.REQUIRED' | translate }}</span>

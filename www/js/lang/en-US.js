@@ -21,13 +21,16 @@ angular.module("omniConfig")
 		"BACK":"Go back",
 		"NAME":"Name",
 		"SELECT":"Select",
+		"SERVERERROR":"Server Error, try again later",
 		"YES":"Yes",
 		"NO":"No",
 		"CANCEL":"Cancel",
+		"CLOSE":"Close",
 		"NEXT":"Next",
 		"ACTIVECROWDSALES":"Active Crowdsales",
 		"HISTORY":"History",
-		"FEES":"Miner Fees (BTC)"
+		"FEES":"Miner Fees (BTC)",
+		"PASSWORD":"Password"
 	},
 	"HOMEPAGE":{
 		"ADDRESSEXAMPLE":"e.g.",
@@ -143,7 +146,6 @@ angular.module("omniConfig")
 		"CREATE":{
 			"MESSAGES" : {
 				"UUID":"This UUID is already in use",
-				"SERVERERROR":"Server Error, try again later",
 				"CAPTCHA":"Invalid Captcha try again.",
 				"VALIDATING":"We are validating your data and creating your account",
 				"PASSWORDLENGTH":"Password must be at least 8 characters long",
@@ -157,7 +159,6 @@ angular.module("omniConfig")
 				"TITLE":"Don't Forget Your Password!",
 				"MESSAGE":"WARNING: Forgotten passwords are UNRECOVERABLE and can result in LOSS of ALL of your coins!"
 			},
-			"PASSWORD":"Password",
 			"REQUIRED":"Required",
 			"STRENGTH":"Strength",
 			"REPEAT":"Repeat Password",
@@ -166,7 +167,59 @@ angular.module("omniConfig")
 
 		},
 		"LOGIN":{
-			
+			"ID":"Wallet ID",
+			"INVALID":"Please enter a valid wallet id and password",
+
+		}, 
+		"CONFIRM":{
+			"OFFLINE":"Your transaction was generated successfully, now save the text above and sign it on your Armory offline computer. Come back with the signed text to broadcast it.",
+			"BROADCAST":"Broadcast",
+			"CHECK":"check your transaction",
+			"HERE":"here",
+			"FROM":"From",
+			"SIGN":"You will need to sign this transaction offline and come back to broadcast it and finish the operation."
+		},
+		"SEND":{
+			"ERROR":"Funds could not be sent",
+			"GOBACK":"Go back and change the amount",
+			"CHANGED":"The value of BTC has changed, Please check the details and choose what you want to do"
+
+		},
+		"BROADCAST":{
+			"TITLE":"Broadcast Signed Transaction",
+			"INSTRUCTIONS":"Please copy the signed transaction on the textbox below to broadcastit",
+			"ADDRESS":"Broadcasting Address",
+			"SIGNED":"Signed Armory Transaction",
+			"SUCCESS":"Transaction broadcasted successfully",
+			"FAIL":"Transaction failed to broadcast"
+		},
+		"IMPORT":{
+			"VALID":"Must be a valid Bitcoin address",
+			"EXISTS":"Bitcoin address is already listed",
+			"SUBMIT":"Add Address",
+			"OFFLINE":{
+				"TITLE":"Import Armory Offline Address",
+				"KEY":"Enter Public Key",
+				"OFFLINE":"Offline"
+			},
+			"WATCH":{
+				"TITLE":"Import a Watch Only BTC/MSC Address",
+				"ADDRESS":"Enter Address",
+				"DESC":"Watch Only"
+			},
+			"ENCRYPTED":{
+				"TITLE":"Import an Encrypted BTC/MSC Private Key",
+				"KEY":"Enter Encrypted Key (Send/Receive)",
+				"KEYHOLDER":"enter your encrypted private key",
+				"PASSHOLDER":"enter your passphrase"
+			},
+			"PRIVATE":{
+				"TITLE":"Import a BTC/MSC Private Key"
+				"ENTER":"Enter",
+				"KEY":"Private Key",
+				"ENABLE":"Enable Sending",
+				"KEYHOLDER":"enter your private key, formats: hex, b64, WIP, compressed WIP"
+			}
 		}
 	},
 	"TRANSACTION":{

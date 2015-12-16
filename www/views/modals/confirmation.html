@@ -2,14 +2,14 @@
 </div>
 <div ng-if="signOffline" collapse="!readyToSign">
   <div class="modal-row">
-    <div class="description-title">From:</div><span class="description-text">{{fromAddress}}</span>
+    <div class="description-title">{{ 'MODALS.CONFIRM.FROM'}}:</div><span class="description-text">{{fromAddress}}</span>
   </div>
   <pre class="armory-unsigned">{{unsignedTransaction}}</pre>
   <hr>
 </div>
 <div ng-if="signOffline">
   <p class="text-warning">
-    You will need to sign this transaction offline and come back to broadcast it and finish the operation.
+    {{ 'MODALS.CONFIRM.SIGN' | translate }} 
   </p>
   <hr>
 </div>

@@ -7,6 +7,9 @@ function LoginControllerUUID($injector, $scope, $http, $location, $modalInstance
 }
 
 function LoginController($injector, $scope, $http, $location, $modalInstance, $q, Account, $idle) {
+  $scope.login = {
+  }
+
   Login($injector, $scope, $http, $location, $modalInstance, $q, Account, $idle);
 }
 
