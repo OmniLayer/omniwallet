@@ -48,4 +48,8 @@ function Login($injector, $scope, $http, $location, $modalInstance, $q, Account,
       })
     }   
   };
+
+  $scope.close = function() {
+    $modalInstance.dismiss('close');
+  };
 }

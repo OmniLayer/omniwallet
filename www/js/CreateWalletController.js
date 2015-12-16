@@ -19,6 +19,10 @@ function CreateWalletController($scope, $location, $modalInstance, $idle, Accoun
   $scope.setFormScope = function(form){
     $scope.createForm = form;
   }
+
+  $scope.close = function() {
+    $modalInstance.dismiss('close');
+  };
 }
 
 function WalletPasswordController($scope, $location, $modalInstance, $http, Account) {
