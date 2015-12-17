@@ -383,7 +383,7 @@ angular.module("omniServices")
                 
                 return deferred.promise;
               };
-          
+              
               $scope.ok = function(wallet) {
                 if (wallet) {
                   $scope.total = wallet.addresses.length;
@@ -482,6 +482,9 @@ angular.module("omniServices")
             $scope.cancel = function() {
               $modalInstance.dismiss('cancel');
             };
+            $scope.close = function() {
+                    $modalInstance.dismiss('close');
+                  };
           };
 
           self.openImportArmoryForm = function() {
@@ -539,6 +542,9 @@ angular.module("omniServices")
             $scope.cancel = function() {
               $modalInstance.dismiss('cancel');
             };
+            $scope.close = function() {
+                    $modalInstance.dismiss('close');
+                  };
           };
           // Begin Import watch only Form Code
           self.openImportWatchOnlyForm = function() {
@@ -582,6 +588,9 @@ angular.module("omniServices")
             $scope.cancel = function() {
               $modalInstance.dismiss('cancel');
             };
+            $scope.close = function() {
+                    $modalInstance.dismiss('close');
+                  };
           };
           // Done Import Watch Only Form Code.
         
@@ -625,6 +634,9 @@ angular.module("omniServices")
             $scope.cancel = function() {
               $modalInstance.dismiss('cancel');
             };
+            $scope.close = function() {
+                    $modalInstance.dismiss('close');
+                  };
           };
           // Done Import Private Key Form Code.
           // Begin Import Encrypted Key Form Code
@@ -659,6 +671,9 @@ angular.module("omniServices")
             $scope.cancel = function() {
               $modalInstance.dismiss('cancel');
             };
+            $scope.close = function() {
+                    $modalInstance.dismiss('close');
+                  };
           };
         }
     ])
