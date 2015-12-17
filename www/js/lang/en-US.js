@@ -214,7 +214,7 @@ angular.module("omniConfig")
 				"PASSHOLDER":"enter your passphrase"
 			},
 			"PRIVATE":{
-				"TITLE":"Import a BTC/MSC Private Key"
+				"TITLE":"Import a BTC/MSC Private Key",
 				"ENTER":"Enter",
 				"KEY":"Private Key",
 				"ENABLE":"Enable Sending",
