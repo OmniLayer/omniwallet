@@ -18,7 +18,7 @@ module.exports = function(grunt) {
 			},
 			"bitcoinjs-lib": {
 				options: {
-					repository: "https://github.com/BitGo/bitcoinjs-lib.git",
+					repository: "https://github.com/Omniwallet/bitcoinjs-lib.git",
 					branch: 'master',
 					directory: 'www/bower_components/bitcoinjs-lib'
 				}
