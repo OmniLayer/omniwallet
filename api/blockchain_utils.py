@@ -51,11 +51,14 @@ def bc_getutxo_blockr(address, ramount):
 
 
 def bc_getpubkey(address):
-  r = requests.get('https://blockchain.info/q/pubkeyaddr/'+address)
+  try:
+    r = requests.get('https://blockchain.info/q/pubkeyaddr/'+address)
 
-  if r.status_code == 200:
-    return str(r.text)
-  else:
+    if r.status_code == 200:
+      return str(r.text)
+    else:
+      return "error"
+  except:
     return "error"
 
 def bc_getbalance(address):
@@ -65,7 +68,7 @@ def bc_getbalance(address):
       balance = int(r.json()['balance'])
       return {"bal":balance , "error": None}
     else:
-      bc_getbalance_blockr(address)
+      return bc_getbalance_blockr(address)
   except:
     return bc_getbalance_blockr(address)
 
@@ -81,15 +84,18 @@ def bc_getbalance_blockr(address):
       return {"bal": 0 , "error": "Couldn't get balance"}
 
 def bc_getbulkbalance(addresses):
-  r= requests.get('http://btc.blockr.io/api/v1/address/balance/'+addresses)
-  if r.status_code == 200:
-    balances = r.json()['data']
-    retval = {}
-    for entry in balances:
-      retval[entry['address']] = int(entry['balance']*1e8)
+  try:
+    r= requests.get('http://btc.blockr.io/api/v1/address/balance/'+addresses)
+    if r.status_code == 200:
+      balances = r.json()['data']
+      retval = {}
+      for entry in balances:
+        retval[entry['address']] = int(entry['balance']*1e8)
 
-    return {"bal": retval, "error": None}
-  else:
+      return {"bal": retval, "error": None}
+    else:
+      return {"bal": None , "error": "Couldn't get balance"}
+  except:
     return {"bal": None , "error": "Couldn't get balance"}
 
 
