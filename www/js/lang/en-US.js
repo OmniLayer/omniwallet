@@ -164,12 +164,10 @@ angular.module("omniConfig")
 			"REPEAT":"Repeat Password",
 			"EMAIL":"Email",
 			"EMAILHOLDER":"Enter an email address (optional)"
-
 		},
 		"LOGIN":{
 			"ID":"Wallet ID",
-			"INVALID":"Please enter a valid wallet id and password",
-
+			"INVALID":"Please enter a valid wallet id and password"
 		}, 
 		"CONFIRM":{
 			"OFFLINE":"Your transaction was generated successfully, now save the text above and sign it on your Armory offline computer. Come back with the signed text to broadcast it.",
@@ -220,6 +218,11 @@ angular.module("omniConfig")
 				"ENABLE":"Enable Sending",
 				"KEYHOLDER":"enter your private key, formats: hex, b64, WIP, compressed WIP"
 			}
+		},
+		"EXPORT":{
+			"TITLE":"Export Wallet",
+			"NAME":"Backup Name",
+			"PASSPHRASE":"Enter Password"
 		}
 	},
 	"TRANSACTION":{

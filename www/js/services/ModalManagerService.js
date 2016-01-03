@@ -204,93 +204,76 @@ angular.module("omniServices")
           };
 
           self.openBackupWalletModal = function() {
-            var scope = $rootScope.$new();
-            scope.login={
-                      uuid: Account.uuid,
-                      action: 'verify',
-                      title: 'Verify Account',
-                      button: 'Validate',
-                      disable: true //disable UUID field in template
-                  }
-            self.modalInstance = $modal.open({
-              templateUrl: '/partials/login_modal.html',
-              controller: LoginController,
-              scope: scope
-            });
-        
-            self.modalInstance.result.then(function(wallet) {
               var exportScope = $rootScope.$new();
               exportScope.exportInProgress=false;
-              exportScope.exportData={
-                    backupName : wallet.uuid,
-                    exportPrivate : true,
-                    exportWatch : true,
-                    exportOffline:true
-                  }
+              exportScope.exportData={}
               var exportModalInstance = $modal.open({
-                templateUrl: '/partials/export_wallet.html',
-                controller: function($scope, $modalInstance, wallet){
+                templateUrl: '/views/modals/export_wallet.html',
+                controller: function($scope, $modalInstance, Account, Wallet){
+                  $scope.exportData.backupName = Account.uuid;
                   $scope.summary = [];
                   $scope.exportFinished = false;
                   $scope.exportWallet = function(exportData){
-                    $scope.exportInProgress=true;
-                    $scope.exported = 0;
-                    var walletAddresses = wallet.addresses;
-                    $scope.total = walletAddresses.length;
-                    var blob = {
-                      addresses: []
-                    };
-                    
-                    var next = function(){
-                      $timeout(function(){
-                        return exportAddress(walletAddresses[$scope.exported]);
-                      },0,false);
-                    };
-                    
-                    var exportAddress = function(obj){
-                      $scope.$apply(function(){
-                        if($scope.exported == $scope.total) {
-                          var exportBlob = new Blob([JSON.stringify(blob)], {
-                            type: 'application/json;charset=utf-8'
-                          });
-                          fileName=exportData.backupName+".json";
-                          saveAs(exportBlob, fileName);
-                          $scope.exportInProgress = false;
-                          return $scope.exportFinished = true;
-                        }
+                    Account.verify(Account.uuid, exportData.passphrase).then(function(result){
+                      $scope.exportInProgress=true;
+                      $scope.exported = 0;
+                      var walletAddresses = wallet.addresses;
+                      $scope.total = walletAddresses.length;
+                      var blob = {
+                        addresses: []
+                      };
                       
-                        try{
-                          if(exportData.exportPrivate && obj.privkey) {
-                            var ecKey = Bitcoin.ECKey.decodeEncryptedFormat(obj.privkey, obj.hash);
-                            var addr = ecKey.getBitcoinAddress().toString();
-                            var key = ecKey.getWalletImportFormat();
-                            blob.addresses.push({ address: addr, privkey: key, pubkey: obj.pubkey });
-                            $scope.progressMessage = "Exported trading address " + addr;
-                            $scope.progressColor = "green";
+                      var next = function(){
+                        $timeout(function(){
+                          return exportAddress(walletAddresses[$scope.exported]);
+                        },0,false);
+                      };
+                      
+                      var exportAddress = function(obj){
+                        $scope.$apply(function(){
+                          if($scope.exported == $scope.total) {
+                            var exportBlob = new Blob([JSON.stringify(blob)], {
+                              type: 'application/json;charset=utf-8'
+                            });
+                            fileName=exportData.backupName+".json";
+                            saveAs(exportBlob, fileName);
+                            $scope.exportInProgress = false;
+                            return $scope.exportFinished = true;
                           }
-                          if(exportData.exportWatch && (!obj.privkey && !obj.pubkey)) {
-                            blob.addresses.push({ address: obj.hash, privkey: "", pubkey:"" });
-                            $scope.progressMessage = "Exported watch address " + obj.hash;
-                            $scope.progressColor = "green";
-                          }
-                          if(exportData.exportOffline && (!obj.privkey && obj.pubkey)) {
-                            blob.addresses.push({ address: obj.hash, privkey: "", pubkey:obj.pubkey });
-                            $scope.progressMessage = "Exported offline address " + obj.hash;
-                            $scope.progressColor = "green";
-                          }
-                        } catch (e) {
-                          $scope.progressMessage = "Error exporting "+obj.hash+": " + e;
-                          $scope.progressColor = "red";
-                        }
-                        $scope.summary.push({color:$scope.progressColor,message: $scope.progressMessage});
-                        $scope.exported++;
                         
-                        return next();
-                      });
-                    };
-                    
-                    // Start the loop
-                    next();
+                          try{
+                            if(obj.privkey) {
+                              var ecKey = Bitcoin.ECKey.decodeEncryptedFormat(obj.privkey, obj.hash);
+                              var addr = ecKey.getBitcoinAddress().toString();
+                              var key = ecKey.getWalletImportFormat();
+                              blob.addresses.push({ address: addr, privkey: key, pubkey: obj.pubkey });
+                              $scope.progressMessage = "Exported trading address " + addr;
+                              $scope.progressColor = "green";
+                            }
+                            if((!obj.privkey && !obj.pubkey)) {
+                              blob.addresses.push({ address: obj.hash, privkey: "", pubkey:"" });
+                              $scope.progressMessage = "Exported watch address " + obj.hash;
+                              $scope.progressColor = "green";
+                            }
+                            if((!obj.privkey && obj.pubkey)) {
+                              blob.addresses.push({ address: obj.hash, privkey: "", pubkey:obj.pubkey });
+                              $scope.progressMessage = "Exported offline address " + obj.hash;
+                              $scope.progressColor = "green";
+                            }
+                          } catch (e) {
+                            $scope.progressMessage = "Error exporting "+obj.hash+": " + e;
+                            $scope.progressColor = "red";
+                          }
+                          $scope.summary.push({color:$scope.progressColor,message: $scope.progressMessage});
+                          $scope.exported++;
+                          
+                          return next();
+                        });
+                      };
+                      
+                      // Start the loop
+                      next();
+                    })
                   };
                   
                   
@@ -302,12 +285,7 @@ angular.module("omniServices")
                     $modalInstance.dismiss('close');
                   };
                 },
-                scope: exportScope,
-                resolve:{
-                  wallet: function(){
-                    return Wallet;
-                  }
-                }
+                scope: exportScope
               });
             });
           };
