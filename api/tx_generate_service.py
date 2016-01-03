@@ -540,7 +540,7 @@ def build_transaction(miner_fee_satoshis, pubkey,final_packets, total_packets, t
         prev_tx = conn.getrawtransaction(unspent[0])
 
         for output in prev_tx.vout:
-            if output['scriptPubKey']['reqSigs'] == 1 and output['scriptPubKey']['type'] != 'multisig':
+            if 'reqSigs' in output['scriptPubKey'] and output['scriptPubKey']['reqSigs'] == 1 and output['scriptPubKey']['type'] != 'multisig':
                 for address in output['scriptPubKey']['addresses']:
                     if address == from_address and int(output['n']) == int(unspent[1]):
                         validnextinputs.append({ "txid": prev_tx.txid, "vout": output['n']})
