@@ -423,7 +423,7 @@ angular.module("omniServices")
               };
             };
             self.modalInstance = $modal.open({
-              templateUrl: '/partials/import_wallet.html',
+              templateUrl: '/views/modals/import_wallet.html',
               controller: ImportWalletModal
             });
             

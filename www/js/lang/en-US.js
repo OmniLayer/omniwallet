@@ -217,6 +217,11 @@ angular.module("omniConfig")
 				"KEY":"Private Key",
 				"ENABLE":"Enable Sending",
 				"KEYHOLDER":"enter your private key, formats: hex, b64, WIP, compressed WIP"
+			},
+			"WALLET":{
+				"TITLE":"Import a Wallet Backup",
+				"UPLOAD":"Upload backup file",
+				"INVALID":"Must be a valid Omnicore backup file"
 			}
 		},
 		"EXPORT":{
