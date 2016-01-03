@@ -435,7 +435,7 @@ angular.module("omniConfig")
 			"YOUR":"Your",
 			"ACTIVE":{
 				"TRUE":"Active Crowdsale",
-				"FALSE":"Finished Crowdsale"
+				"FALSE":"Crowdsale Closed"
 			},
 			"TIME":"Time Until Closing",
 			"TOKENSBOUGHT":"Tokens already bought by participants",

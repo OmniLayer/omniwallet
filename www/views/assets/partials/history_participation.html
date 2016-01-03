@@ -10,7 +10,7 @@
       </div>
     </h5>
     <div>
-      <a href="{{explorerUrl}}{{transaction.sendingaddress}}">{{transaction.sendingaddress}}</a>
+      <a href="{{explorerUrl}}{{transaction.sendingaddress}}" target="_blank">{{transaction.sendingaddress}}</a>
       <span ng-hide="transaction.confirmations > 100" class="label label-omni">
          {{transaction.confirmations}} {{'ASSET.HISTORY.TRANSACTION.CONFIRMATIONS' | translate }}
       </span>
