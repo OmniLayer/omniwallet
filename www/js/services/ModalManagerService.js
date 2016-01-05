@@ -211,6 +211,7 @@ angular.module("omniServices")
                 templateUrl: '/views/modals/export_wallet.html',
                 controller: function($scope, $modalInstance, Account, Wallet){
                   $scope.exportData.backupName = Account.uuid;
+                  $scope.account = Account;
                   $scope.summary = [];
                   $scope.exportFinished = false;
                   $scope.exportWallet = function(exportData){

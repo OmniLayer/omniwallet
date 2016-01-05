@@ -28,7 +28,7 @@
   </div>
   <div class="modal-footer" style="text-align:center">
     <div class="col-xs-8 col-xs-push-2">
-      <input type="submit" class="btn btn-main" value="Validate" ng-disabled="exportInProgress || (!exportData.exportPrivate && !exportData.exportWatch)"  ng-hide="exportFinished">
+      <input type="submit" class="btn btn-main" value="Validate" ng-disabled="exportInProgress"  ng-hide="exportFinished">
       <button type="button" class="btn btn-tertiary" ng-disabled="exportInProgress" ng-click="cancel()" ng-hide="exportFinished">{{ 'COMMON.CANCEL' | translate}}</button>
       <button type="button" class="btn btn-success" ng-click="close()" ng-show="exportFinished">{{ 'COMMON.CLOSE' | translate}}</button>
       <progressbar ng-show="exportInProgress" style="margin-top:10px" animate="false" value="(exported * 100) / total" type="success" max="100"><b ng-show="exported > 0">{{exported}} / {{total}}</b></progressbar>
