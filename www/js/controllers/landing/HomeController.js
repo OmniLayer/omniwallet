@@ -60,7 +60,7 @@ angular.module("omniControllers")
             } else {
               $scope.conversions[currency.symbol] = currency.price;
             }
-            coin.balance = $scope.getValue(coin.balance,coin.symbol,coin.divisible)
+            coin.balance = $scope.getValue(coin.value,coin.symbol,coin.divisible)
             coin.price = $scope.getValue(coin.divisible ? 100000000 : 1,coin.symbol,coin.divisible)
           }, function(error) {
             console.log(error);
