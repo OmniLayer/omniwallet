@@ -16,8 +16,8 @@
 </div>
 <div class="modal-footer">
     <div class="row" ng-hide="transactionSuccess">
-      <button ng-disabled="clicked" class="btn btn-primary" ng-click="ok(transaction.signedHex)">{{ 'MODALS.CONFIRM.BROADCAST' | translate}}</button>
-      <button ng-disabled="wating" class="btn btn-warning" ng-click="cancel()">{{ 'COMMON.CANCEL' | translate}}</button>
+      <button ng-disabled="clicked" class="btn btn-main" ng-click="ok(transaction.signedHex)">{{ 'MODALS.CONFIRM.BROADCAST' | translate}}</button>
+      <button ng-disabled="wating" class="btn btn-tertiary" ng-click="cancel()">{{ 'COMMON.CANCEL' | translate}}</button>
       <img class="" src="/assets/img/spinner.gif" ng-show="waiting">
     </div>
       <br>
