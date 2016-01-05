@@ -652,5 +652,25 @@ angular.module("omniServices")
                     $modalInstance.dismiss('close');
                   };
           };
+
+          self.openTransactionCostModal = function($parentScope){
+            var modalScope = $rootScope.$new();
+            modalScope.title = "WALLET.SEND.MODAL_TRANSACTION_COST";
+            modalScope.parentScope = $parentScope;
+            modalScope.button ='WALLET.SEND.FUNDS';
+            modalScope.bodyTemplate = "/views/modals/partials/transaction_cost.html";
+            modalScope.footerTemplate = "/views/modals/partials/transaction_cost_footer.html";
+
+            self.modalInstance = $modal.open({
+                templateUrl: '/views/modals/base.html',
+                controller: function($scope){
+                  $scope.proceed = function(){
+                    self.modalInstance.dismiss('proceed');
+                    $scope.parentScope.sendTransaction();
+                  };
+                },
+                scope: modalScope
+              });
+          }
         }
     ])

@@ -18,6 +18,10 @@ angular.module("omniControllers")
       		$scope.selectedAddress = address;
       	}
 
+      	$scope.editTransactionCost function(){
+      		$scope.modalManager.openTransactionCostModal($scope);
+      	}
+
       	$scope.sendTransaction = function(){
 			// TODO: Validations
 			var fee = $scope.minersFee;
