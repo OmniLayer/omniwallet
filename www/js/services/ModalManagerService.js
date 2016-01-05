@@ -287,7 +287,6 @@ angular.module("omniServices")
                 },
                 scope: exportScope
               });
-            });
           };
           // Begin Import Backup Form Code
           self.openImportWalletModal = function() {
