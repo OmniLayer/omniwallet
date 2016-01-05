@@ -248,7 +248,7 @@ angular.module("omniServices")
                           
                             try{
                               if(obj.privkey) {
-                                var ecKey = Bitcoin.ECKey.decodeEncryptedFormat(obj.privkey, obj.hash);
+                                var ecKey = Bitcoin.ECKey.decodeEncryptedFormat(obj.privkey, obj.address);
                                 var addr = ecKey.getBitcoinAddress().toString();
                                 var key = ecKey.getWalletImportFormat();
                                 blob.addresses.push({ address: addr, privkey: key, pubkey: obj.pubkey });
@@ -256,17 +256,17 @@ angular.module("omniServices")
                                 $scope.progressColor = "green";
                               }
                               if((!obj.privkey && !obj.pubkey)) {
-                                blob.addresses.push({ address: obj.hash, privkey: "", pubkey:"" });
-                                $scope.progressMessage = "Exported watch address " + obj.hash;
+                                blob.addresses.push({ address: obj.address, privkey: "", pubkey:"" });
+                                $scope.progressMessage = "Exported watch address " + obj.address;
                                 $scope.progressColor = "green";
                               }
                               if((!obj.privkey && obj.pubkey)) {
-                                blob.addresses.push({ address: obj.hash, privkey: "", pubkey:obj.pubkey });
-                                $scope.progressMessage = "Exported offline address " + obj.hash;
+                                blob.addresses.push({ address: obj.address, privkey: "", pubkey:obj.pubkey });
+                                $scope.progressMessage = "Exported offline address " + obj.address;
                                 $scope.progressColor = "green";
                               }
                             } catch (e) {
-                              $scope.progressMessage = "Error exporting "+obj.hash+": " + e;
+                              $scope.progressMessage = "Error exporting "+obj.address+": " + e;
                               $scope.progressColor = "red";
                             }
                             $scope.summary.push({color:$scope.progressColor,message: $scope.progressMessage});
