@@ -70,7 +70,7 @@ angular.module("omniControllers")
           coins.forEach(function(coin) {
             coin.balance = $scope.getValue(coin.value,coin.symbol,coin.divisible)
             coin.price = $scope.getValue(coin.divisible ? 100000000 : 1,coin.symbol,coin.divisible)
-          }
+          });
           $scope.pricesLoaded = true;
         });
       })
