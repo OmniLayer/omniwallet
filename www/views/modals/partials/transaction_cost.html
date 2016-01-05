@@ -4,7 +4,7 @@
 <div class="modal-row">
   <div class="description-title">{{ 'WALLET.SEND.MODAL_MINER' | translate}}:</div>
   <div class="col-sm-4">
-  	<input type="number" class="form-control" ng-model="parentScope.minersFee">
+  	<input type="number" class="form-control" step="0.00001" min="0.0001" ng-model="parentScope.minersFee">
   </div>
 </div>
 <div class="modal-row">
