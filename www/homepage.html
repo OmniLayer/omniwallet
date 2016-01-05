@@ -27,10 +27,10 @@
             </div>
             <div class="asset-item col-xs-4 text-right number">
               <span ng-if="!currency.divisible" class="currency" class="number" title="{{checkAddress.getDisplayBalance(currency.id)}}" ng-bind-html="checkAddress.getDisplayBalance(currency.id) | numeraljs: '0,0'"></span>
-              <span ng-if="currency.divisible" class="currency" class="number" title="{{checkAddress.getDisplayBalance(currency.id)}}" ng-bind-html="checkAddress.getDisplayBalance(currency.id) | numeraljs: '0,0.00000000'"></span>
+              <span ng-if="currency.divisible && currency.symbol != 'BTC'" class="currency" class="number" title="{{checkAddress.getDisplayBalance(currency.id)}}" ng-bind-html="checkAddress.getDisplayBalance(currency.id) | numeraljs: '0,0.00000000'"></span>
               <span ng-if="currency.symbol == 'BTC'" class="currency" title="{{checkAddress.getDisplayBalance(currency.id)}}"><span ng-bind-html="checkAddress.getDisplayBalance(currency.id) | numeraljs: '0,0.00000000'"></span> {{currency.symbol}}</span>
             </div>
-            <div class="asset-item col-xs-2 text-right number" title="{{0 | currency}}" ng-bind-html="0 | numeraljs: '$0,0.00':true">
+            <div class="asset-item col-xs-2 text-right number" title="{{getValue(currency.value, currency.symbol, currency.divisible) | currency}}" ng-bind-html="getValue(currency.value, currency.symbol, currency.divisible | numeraljs: '$0,0.00':true">
             </div>
           </div>
         </div> 
