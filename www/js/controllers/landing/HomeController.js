@@ -1,6 +1,6 @@
 angular.module("omniControllers")
-  .controller("HomeController", ["$scope","$templateCache", "$injector", "$location","$http", "$q", "Account", "Address", 
-    function HomeController($scope, $templateCache, $injector, $location, $http, $q, Account, Address) {
+  .controller("HomeController", ["$scope","$templateCache", "$injector", "$location","$http", "$q", "Account", "Address", "PropertyManager",
+    function HomeController($scope, $templateCache, $injector, $location, $http, $q, Account, Address, PropertyManager) {
     if (Account.uuid) {
       $location.url('/wallet/overview');
     } else {
@@ -46,6 +46,10 @@ angular.module("omniControllers")
         var coins = $scope.checkAddress.balance;
         cursym = "USD";
         coins.forEach(function(coin) {
+          PropertyManager.getProperty(coin.id).then(function(result) {
+            var property = result.data;
+            angular.extend(coin,property);
+          });
           var symbol = "";
           if (coin.symbol === 'BTC') {
             symbol="BTC"+cursym;
