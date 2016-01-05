@@ -17,6 +17,7 @@ angular.module("omniControllers")
         return Bitcoin.Address.validate(address);
       };
       $scope.checkBalance = function() {
+        $scope.pricesLoaded = false;
         $scope.checkAddress = new Address($scope.balanceAddress);
       };
       $scope.openBalanceCheckModal = function(){
@@ -60,14 +61,16 @@ angular.module("omniControllers")
             } else {
               $scope.conversions[currency.symbol] = currency.price;
             }
-            coin.balance = $scope.getValue(coin.value,coin.symbol,coin.divisible)
-            coin.price = $scope.getValue(coin.divisible ? 100000000 : 1,coin.symbol,coin.divisible)
           }, function(error) {
             console.log(error);
           })
           );
         });
         $q.all(requests).then(function(responses) {
+          coins.forEach(function(coin) {
+            coin.balance = $scope.getValue(coin.value,coin.symbol,coin.divisible)
+            coin.price = $scope.getValue(coin.divisible ? 100000000 : 1,coin.symbol,coin.divisible)
+          }
           $scope.pricesLoaded = true;
         });
       })
