@@ -218,7 +218,7 @@ angular.module("omniServices")
                     Account.verify(Account.uuid, exportData.passphrase).then(function(result){
                       $scope.exportInProgress=true;
                       $scope.exported = 0;
-                      var walletAddresses = wallet.addresses;
+                      var walletAddresses = Wallet.addresses;
                       $scope.total = walletAddresses.length;
                       var blob = {
                         addresses: []
