@@ -1,7 +1,9 @@
 angular.module("omniControllers")
   .controller("ExchangeSaleController",["$scope", "Transaction", "ADDRESS_EXPLORER_URL", "SATOSHI_UNIT",
     function ExchangeSaleController($scope, Transaction, ADDRESS_EXPLORER_URL, SATOSHI_UNIT) {
-
+                  $scope.editTransactionCost = function(){
+                  $scope.modalManager.openTransactionCostModal($scope, $scope.confirm);
+            }
       $scope.confirm = function(){
         //TODO: VALIDATIONS
         var fee = new Big($scope.minersFee);

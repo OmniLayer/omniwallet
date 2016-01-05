@@ -653,9 +653,10 @@ angular.module("omniServices")
                   };
           };
 
-          self.openTransactionCostModal = function($parentScope){
+          self.openTransactionCostModal = function($parentScope, next){
             var modalScope = $rootScope.$new();
             modalScope.title = "WALLET.SEND.MODAL_TRANSACTION_COST";
+            modalScope.next = next;
             modalScope.parentScope = $parentScope;
             modalScope.button ='WALLET.SEND.FUNDS';
             modalScope.bodyTemplate = "/views/modals/partials/transaction_cost.html";
@@ -671,7 +672,7 @@ angular.module("omniServices")
                   };
                   $scope.proceed = function(){
                     $modalInstance.dismiss('proceed');
-                    $scope.parentScope.sendTransaction();
+                    $scope.next();
                   };
                   $scope.setMinersFee = function(value){
                     $scope.parentScope.minersFee = new Big(value);

@@ -19,7 +19,7 @@ angular.module("omniControllers")
       	}
 
       	$scope.editTransactionCost = function(){
-      		$scope.modalManager.openTransactionCostModal($scope);
+      		$scope.modalManager.openTransactionCostModal($scope, $scope.sendTransaction);
       	}
 
       	$scope.sendTransaction = function(){
