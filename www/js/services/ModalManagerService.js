@@ -215,65 +215,74 @@ angular.module("omniServices")
                   $scope.summary = [];
                   $scope.exportFinished = false;
                   $scope.exportWallet = function(exportData){
+                    $scope.exportInProgress=true;
                     Account.verify(Account.uuid, exportData.passphrase).then(function(result){
-                      $scope.exportInProgress=true;
-                      $scope.exported = 0;
-                      var walletAddresses = Wallet.addresses;
-                      $scope.total = walletAddresses.length;
-                      var blob = {
-                        addresses: []
-                      };
-                      
-                      var next = function(){
-                        $timeout(function(){
-                          return exportAddress(walletAddresses[$scope.exported]);
-                        },0,false);
-                      };
-                      
-                      var exportAddress = function(obj){
-                        $scope.$apply(function(){
-                          if($scope.exported == $scope.total) {
-                            var exportBlob = new Blob([JSON.stringify(blob)], {
-                              type: 'application/json;charset=utf-8'
-                            });
-                            fileName=exportData.backupName+".json";
-                            saveAs(exportBlob, fileName);
-                            $scope.exportInProgress = false;
-                            return $scope.exportFinished = true;
-                          }
+                      var data = result.data;
+                      try{
+                        var wallet = CryptUtil.decryptObject(data, Account.walletKey);
+
+                        $scope.exported = 0;
+                        var walletAddresses = wallet.addresses;
+                        $scope.total = walletAddresses.length;
+                        var blob = {
+                          addresses: []
+                        };
                         
-                          try{
-                            if(obj.privkey) {
-                              var ecKey = Bitcoin.ECKey.decodeEncryptedFormat(obj.privkey, obj.hash);
-                              var addr = ecKey.getBitcoinAddress().toString();
-                              var key = ecKey.getWalletImportFormat();
-                              blob.addresses.push({ address: addr, privkey: key, pubkey: obj.pubkey });
-                              $scope.progressMessage = "Exported trading address " + addr;
-                              $scope.progressColor = "green";
+                        var next = function(){
+                          $timeout(function(){
+                            return exportAddress(walletAddresses[$scope.exported]);
+                          },0,false);
+                        };
+                        
+                        var exportAddress = function(obj){
+                          $scope.$apply(function(){
+                            if($scope.exported == $scope.total) {
+                              var exportBlob = new Blob([JSON.stringify(blob)], {
+                                type: 'application/json;charset=utf-8'
+                              });
+                              fileName=exportData.backupName+".json";
+                              saveAs(exportBlob, fileName);
+                              $scope.exportInProgress = false;
+                              return $scope.exportFinished = true;
                             }
-                            if((!obj.privkey && !obj.pubkey)) {
-                              blob.addresses.push({ address: obj.hash, privkey: "", pubkey:"" });
-                              $scope.progressMessage = "Exported watch address " + obj.hash;
-                              $scope.progressColor = "green";
-                            }
-                            if((!obj.privkey && obj.pubkey)) {
-                              blob.addresses.push({ address: obj.hash, privkey: "", pubkey:obj.pubkey });
-                              $scope.progressMessage = "Exported offline address " + obj.hash;
-                              $scope.progressColor = "green";
-                            }
-                          } catch (e) {
-                            $scope.progressMessage = "Error exporting "+obj.hash+": " + e;
-                            $scope.progressColor = "red";
-                          }
-                          $scope.summary.push({color:$scope.progressColor,message: $scope.progressMessage});
-                          $scope.exported++;
                           
-                          return next();
-                        });
-                      };
-                      
-                      // Start the loop
-                      next();
+                            try{
+                              if(obj.privkey) {
+                                var ecKey = Bitcoin.ECKey.decodeEncryptedFormat(obj.privkey, obj.hash);
+                                var addr = ecKey.getBitcoinAddress().toString();
+                                var key = ecKey.getWalletImportFormat();
+                                blob.addresses.push({ address: addr, privkey: key, pubkey: obj.pubkey });
+                                $scope.progressMessage = "Exported trading address " + addr;
+                                $scope.progressColor = "green";
+                              }
+                              if((!obj.privkey && !obj.pubkey)) {
+                                blob.addresses.push({ address: obj.hash, privkey: "", pubkey:"" });
+                                $scope.progressMessage = "Exported watch address " + obj.hash;
+                                $scope.progressColor = "green";
+                              }
+                              if((!obj.privkey && obj.pubkey)) {
+                                blob.addresses.push({ address: obj.hash, privkey: "", pubkey:obj.pubkey });
+                                $scope.progressMessage = "Exported offline address " + obj.hash;
+                                $scope.progressColor = "green";
+                              }
+                            } catch (e) {
+                              $scope.progressMessage = "Error exporting "+obj.hash+": " + e;
+                              $scope.progressColor = "red";
+                            }
+                            $scope.summary.push({color:$scope.progressColor,message: $scope.progressMessage});
+                            $scope.exported++;
+                            
+                            return next();
+                          });
+                        };
+                        
+                        // Start the loop
+                        next();
+                      } catch (e) {
+                        $scope.exportInProgress=false;
+                        $scope.progressMessage = "Error decrypting wallet. Wrong passphrase";
+                        $scope.progressColor = "red";
+                      }
                     })
                   };
                   
