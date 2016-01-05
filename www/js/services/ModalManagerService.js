@@ -215,6 +215,8 @@ angular.module("omniServices")
                   $scope.summary = [];
                   $scope.exportFinished = false;
                   $scope.exportWallet = function(exportData){
+                    $scope.progressMessage = "";
+                    $scope.progressColor = "";
                     $scope.exportInProgress=true;
                     Account.verify(Account.uuid, exportData.passphrase).then(function(result){
                       var data = result.data;
