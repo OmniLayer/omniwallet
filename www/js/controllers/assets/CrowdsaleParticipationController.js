@@ -3,6 +3,7 @@ angular.module("omniControllers")
 	  function CrowdsaleParticipationController($scope, SATOSHI_UNIT, $route, PropertyManager, Transaction){
 		$scope.propertyId = $route.current.params.propertyId;
 		$scope.property = {};
+		$scope.estimatedAmount = 0;
 
 		// Load and initialize the form
 		PropertyManager.getProperty($scope.propertyId).then(function(result){
@@ -33,7 +34,7 @@ angular.module("omniControllers")
 			$scope.modalManager.openConfirmationModal({
 				dataTemplate: '/views/modals/partials/participation.html',
 				scope: {
-					title:"CROWDSALE_PARTICIPATE_TITLE",
+					title:"CROWDSALE.PARTICIPATE.TITLE",
 					token:$scope.propertyDesired.name,
 					tokenRecieved: $scope.property.name,
 					toAddress:$scope.property.issuer,
@@ -41,7 +42,7 @@ angular.module("omniControllers")
 					earlybird : $scope.earlybird,
 					sendAmount: $scope.sendAmount,
 					tokensperunit: $scope.property.tokensperunit,
-					confirmText:"CROWDSALE_PARTICIPATE_CONFIRM",
+					confirmText:"CROWDSALE.PARTICIPATE.CONFIRM",
             		successRedirect:"/assets/details/" + $scope.propertyId
 				},
 				transaction:participation

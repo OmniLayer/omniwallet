@@ -3,17 +3,17 @@
 </div>
 
 <div class="modal-row">
-  <div class="description-title">{{ 'WALLET.SEND.MODAL.AMOUNT' | translate}}:</div><span class="description-text">{{sendAmount}} <span ng-show="symbol=='BTC'">(<span title="{{sendValue}}" ng-bind-html="sendValue | numeraljs: '$0,0.00':true"></span>)</span></span>
+  <div class="description-title">{{ 'WALLET.SEND.MODAL_AMOUNT' | translate}}:</div><span class="description-text">{{sendAmount}} <span ng-show="symbol=='BTC'">(<span title="{{sendValue}}" ng-bind-html="sendValue | numeraljs: '$0,0.00':true"></span>)</span></span>
 </div>
 
 <div class="modal-row">
-  <div class="description-title">{{ 'WALLET.SEND.MODAL.FROM' | translate}}:</div><span class="description-text">{{fromAddress}}</span>
+  <div class="description-title">{{ 'WALLET.SEND.MODAL_FROM' | translate}}:</div><span class="description-text">{{fromAddress}}</span>
 </div>
 
 <div class="modal-row">
-  <div class="description-title">{{ 'WALLET.SEND.MODAL.TO' | translate}}:</div><span class="description-text">{{toAddress}}</span>
+  <div class="description-title">{{ 'WALLET.SEND.MODAL_TO' | translate}}:</div><span class="description-text">{{toAddress}}</span>
 </div>
 
 <div class="modal-row">
-  <div class="description-title-xxlarge">{{ 'CROWDSALE.PARTICIPATION.MODAL.ESTIMATE' | translate}}:</div><span class="description-text">{{sendAmount * tokensperunit  + (earlybird * (sendAmount * tokensperunit) / 100)}} {{tokenRecieved}}</span>
+  <div class="description-title-xxlarge">{{ 'CROWDSALE.PARTICIPATION.MODAL_ESTIMATE' | translate}}:</div><span class="description-text">{{sendAmount * tokensperunit  + (earlybird * (sendAmount * tokensperunit) / 100)}} {{tokenRecieved}}</span>
 </div>

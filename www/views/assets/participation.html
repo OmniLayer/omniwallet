@@ -33,7 +33,7 @@
                   {{sendByValue ? userCurrency : 'BTC'}}
                 </span>
                 <span ng-if="propertyDesired.symbol != 'BTC'">
-                  {{ 'WALLET.SEND.MODAL.AMOUNT' | translate}}
+                  {{ 'WALLET.SEND.AMOUNT' | translate}}
                 </span>
                 ({{selectedAddress.getDisplayBalance(propertyDesired.id)}} {{propertyDesired.name}} <small class="text-muted" ng-show="propertyDesired.id > 2">({{propertyDesired.id}})</small> {{ 'COMMON.AVAILABLE' | translate}})
               </label>
@@ -78,7 +78,7 @@
           <input name="fees" type="number" ng-model="minerFees" class="form-control"
           placeholder="0.0001" step="0.0001" min="0.0001" required>
         </div>
-        <p class="col-xs-12 help-block">{{'CROWDSALE.PARTICIPATION.ESTIMATE.LEAD' | translate}}  {{estimatedAmount}} {{property.name}}  {{'CROWDSALE.PARTICIPATION.ESTIMATE.TRAIL' | translate}}</p>
+        <p class="col-xs-12 help-block">{{'CROWDSALE.PARTICIPATION.ESTIMATE_LEAD' | translate}}  {{estimatedAmount}} {{property.name}}  {{'CROWDSALE.PARTICIPATION.ESTIMATE_TRAIL' | translate}}</p>
         <div class="form-group col-sm-12 text-right">
           <a href="/assets/details/{{property.propertyid}}" class="btn btn-tertiary">{{ 'COMMON.CANCEL' | translate}}</a>
           <button type="submit" class="btn btn-main pull-right">{{ 'COMMON.NEXT' | translate}}</button>
