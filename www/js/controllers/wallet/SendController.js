@@ -18,7 +18,7 @@ angular.module("omniControllers")
       		$scope.selectedAddress = address;
       	}
 
-      	$scope.editTransactionCost function(){
+      	$scope.editTransactionCost = function(){
       		$scope.modalManager.openTransactionCostModal($scope);
       	}
 
