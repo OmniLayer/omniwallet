@@ -1,5 +1,5 @@
 angular.module("omniControllers")
-  .controller("HomeController", ["$scope","$templateCache", "$injector", "$location","$http", "$q", "Account", "Address",
+  .controller("HomeController", ["$scope","$templateCache", "$injector", "$location","$http", "$q", "Account", "Address", "appraiser",
     function HomeController($scope, $templateCache, $injector, $location, $http, $q, Account, Address, appraiser) {
     if (Account.uuid) {
       $location.url('/wallet/overview');
