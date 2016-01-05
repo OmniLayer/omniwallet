@@ -665,7 +665,7 @@ angular.module("omniServices")
                 templateUrl: '/views/modals/base.html',
                 controller: function($scope, $modalInstance, OMNI_PROTOCOL_COST){
                   $scope.PROTOCOL_COST = parseFloat(OMNI_PROTOCOL_COST.valueOf());
-
+                  $scope.minersFee = parseFloat($scope.parentScope.minersFee.valueOf())
                   $scope.close = function() {
                     $modalInstance.dismiss('close');
                   };
@@ -673,6 +673,9 @@ angular.module("omniServices")
                     $modalInstance.dismiss('proceed');
                     $scope.parentScope.sendTransaction();
                   };
+                  $scope.setMinersFee = function(value){
+                    $scope.parentScope.minersFee = new Big(value);
+                  }
                 },
                 scope: modalScope
               });
