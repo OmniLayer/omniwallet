@@ -14,10 +14,10 @@
       <button type="submit" ng-click="checkBalance();" ng-disabled="validate(balanceAddress) == false" class="btn btn-main pull-right">{{ 'HOMEPAGE.CHECKBALANCE' | translate }}</button>
     </form>
   </div>
-  <div class="om-title text-center" ng-if="checkAddress && !checkAddress.loaded">
+  <div class="om-title text-center" ng-show="checkAddress && !checkAddress.loaded">
     {{ 'COMMON.LOADING' | translate}}...
   </div>
-  <div ng-if="checkAddress && checkAddress.loaded">
+  <div ng-show="checkAddress && checkAddress.loaded">
     <div class="asset-table">
       <div ng-repeat="currency in checkAddress.balance">
         <div class="row">

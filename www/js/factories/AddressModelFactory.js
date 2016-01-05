@@ -5,6 +5,8 @@ angular.module("omniFactories")
 				var self = this;
 
 				self.initialize = function(){
+					if(!BalanceSocket.connected)
+						BalanceSocket.connect();
 					self.loaded = false;
 					self.hash = hash;
 					self.privkey = privkey;

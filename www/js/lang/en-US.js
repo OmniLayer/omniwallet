@@ -251,7 +251,7 @@ angular.module("omniConfig")
 		"DETAILS":{
 			"0":{
 				"SENDER":"You sent {{amount | toWhole:divisible }} {{coin}}",
-				"RECIPIENT":"You recieved {{amount | toWhole:divisible }} {{coin}}"
+				"RECIPIENT":"You received {{amount | toWhole:divisible }} {{coin}}"
 			},
 			"3":{
 				"PAYER":"You sent {{amount | toWhole:divisible }} {{coin}}",
@@ -276,7 +276,7 @@ angular.module("omniConfig")
 				"ISSUER":"You got {{amount | toWhole:divisible }} {{coin}}",
 				"PARTICIPANT":"You got {{amount | toWhole:divisible }} {{coin}}",
 				"SENDER":"You participated with {{amount | toWhole:divisible }} {{coin}}",
-				"RECIPIENT":"You recieved {{amount | toWhole:divisible }} {{coin}}"
+				"RECIPIENT":"You received {{amount | toWhole:divisible }} {{coin}}"
 			},
 			"54":{ 
 				"ISSUER":"You created {{coin}} managed property" 
@@ -450,7 +450,7 @@ angular.module("omniConfig")
 			"TITLE":"Participate on {{property.name}} Crowdsale",
 			"DESIREDCOIN":"Token to send",
 			"MODAL_ESTIMATE":"Estimated amount of tokens",
-			"ESTIMATE_LEAD":"You will recieve",
+			"ESTIMATE_LEAD":"You will receive",
 			"ESTIMATE_TRAIL":"if you participate at this level."
 		},
 		"REMAINING":{
