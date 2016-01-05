@@ -956,6 +956,7 @@ border-left-color: #111111;
 }
 .modal-row{
   margin-bottom: 5px;
+  height: 30px;
 }
 .description-title{
   font-size: 18px;
@@ -987,6 +988,14 @@ border-left-color: #111111;
   font-weight: bold;
   float: left;
   width: 235px;
+  height:30px;
+}
+.description-title-wide{
+  font-size: 18px;
+  color: #b8b7b7;
+  font-weight: bold;
+  float: left;
+  width: 265px;
   height:30px;
 }
 .description-text{

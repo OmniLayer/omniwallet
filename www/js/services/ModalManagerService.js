@@ -664,7 +664,7 @@ angular.module("omniServices")
             self.modalInstance = $modal.open({
                 templateUrl: '/views/modals/base.html',
                 controller: function($scope, OMNI_PROTOCOL_COST){
-                  $scope.PROTOCOL_COST = OMNI_PROTOCOL_COST;
+                  $scope.PROTOCOL_COST = parseInt(OMNI_PROTOCOL_COST);
                   $scope.proceed = function(){
                     self.modalInstance.dismiss('proceed');
                     $scope.parentScope.sendTransaction();

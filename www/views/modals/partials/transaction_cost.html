@@ -1,10 +1,12 @@
 <div class="modal-row">
-  <div class="description-title">{{ 'WALLET.SEND.PROTOCOL_COST' | translate}}:</div><span class="description-text">{{PROTOCOL_COST}}</span>
+  <div class="description-title-wide">{{ 'WALLET.SEND.PROTOCOL_COST' | translate}}:</div><span class="description-text">{{PROTOCOL_COST}}</span>
 </div>
 <div class="modal-row">
   <div class="description-title">{{ 'WALLET.SEND.MODAL_MINER' | translate}}:</div>
-  <input type="text" class="form-control" ng-model="parentScope.minersFee">
+  <div class="col-sm-4">
+  	<input type="text" class="form-control" ng-model="parentScope.minersFee">
+  </div>
 </div>
 <div class="modal-row">
-  <div class="description-title">{{ 'WALLET.SEND.COST' | translate}}:</div><span class="description-text">{{PROTOCOL_COST + parentScope.minersFee}}</span>
+  <div class="description-title-xlarge">{{ 'WALLET.SEND.COST' | translate}}:</div><span class="description-text">{{PROTOCOL_COST + parentScope.minersFee}}</span>
 </div>
