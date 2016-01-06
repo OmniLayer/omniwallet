@@ -523,9 +523,21 @@ angular.module("omniConfig")
 				"LEAD":"Sorry, you don't have any",
 				"TRAIL": "available to sell"
 			},
+			"NOORDERS":"No offers/bids found for this timeframe",
 			"ACTIVE": "Active Offers",
 			"TIMEFRAME" :"Time frame",
-			"TOTAL": "Total Transactions"
+			"TOTAL": "Total Transactions",
+			"TXHASH":"Transaction hash",
+			"PRICE":"Price",
+			"AMOUNT":"Amount Remaining",
+			"COST":"Cost",
+			"FEE":"Fee",
+			"PAYMENT":"Payment Window (Blocks)",
+			"ENDED":"User Ended",
+			"SOLD":"Sold out!",
+			"BUYERFEE":"Buyer Fee",
+			"ACCEPT": "Accept Offer",
+			"YOURS":"Your offer/purchase"
 		},
 		"SALE":{
 			"TITLE":"Sell Offer",
