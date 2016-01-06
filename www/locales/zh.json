@@ -11,6 +11,7 @@
 		"ADDRESSES":"地址",
 		"ASSETS":"资产",
 		"ASSET":"资产",
+		"OVERVIEW":"Overview",
    		"SEND":"发送",
    		"VALUE":"价值",
 		"CREATEWALLET":"创建钱包",
@@ -19,13 +20,16 @@
 		"BACK":"后退",
 		"NAME":"姓名",
 		"SELECT":"选择",
+		"SERVERERROR":"Server Error, try again later",
 		"YES":"是",
 		"NO":"否",
 		"CANCEL":"退出",
+		"CLOSE":"Close",
 		"NEXT":"下一步",
 		"ACTIVECROWDSALES":"有效众筹",
 		"HISTORY":"历史记录",
-		"FEES":"Miner Fees (BTC)"
+		"FEES":"Miner Fees (BTC)",
+		"PASSWORD":"Password"
 	},
 	"HOMEPAGE":{
 		"ADDRESSEXAMPLE":"例如",
@@ -137,7 +141,95 @@
 		"TRANSACTIONS":"交易",
 		"WALLET":"我的钱包"
 	},
-	"TX":{
+	"MODALS":{
+		"CREATE":{
+			"MESSAGES" : {
+				"UUID":"This UUID is already in use",
+				"CAPTCHA":"Invalid Captcha try again.",
+				"VALIDATING":"We are validating your data and creating your account",
+				"PASSWORDLENGTH":"Password must be at least 8 characters long",
+				"PASSWORDSTRENGTH":"Password strength must be at least 70%",
+				"STRENGTHTIP":"(Try having at least 2: UpperCase/LowerCase/Numbers/Symbols)",
+				"PASSWORDMATCH":"Passwords do not match!",
+				"EMAIL":"We will send you a welcome email containing your unique login link.",
+				"EMAILVALID":"Please enter a valid email address"
+			},
+			"WARNING":{
+				"TITLE":"Don't Forget Your Password!",
+				"MESSAGE":"WARNING: Forgotten passwords are UNRECOVERABLE and can result in LOSS of ALL of your coins!"
+			},
+			"REQUIRED":"Required",
+			"STRENGTH":"Strength",
+			"REPEAT":"Repeat Password",
+			"EMAIL":"Email",
+			"EMAILHOLDER":"Enter an email address (optional)"
+		},
+		"LOGIN":{
+			"ID":"Wallet ID",
+			"INVALID":"Please enter a valid wallet id and password"
+		}, 
+		"CONFIRM":{
+			"OFFLINE":"Your transaction was generated successfully, now save the text above and sign it on your Armory offline computer. Come back with the signed text to broadcast it.",
+			"BROADCAST":"Broadcast",
+			"CHECK":"check your transaction",
+			"HERE":"here",
+			"FROM":"From",
+			"SIGN":"You will need to sign this transaction offline and come back to broadcast it and finish the operation."
+		},
+		"SEND":{
+			"ERROR":"Funds could not be sent",
+			"GOBACK":"Go back and change the amount",
+			"CHANGED":"The value of BTC has changed, Please check the details and choose what you want to do"
+
+		},
+		"BROADCAST":{
+			"TITLE":"Broadcast Signed Transaction",
+			"INSTRUCTIONS":"Please copy the signed transaction on the textbox below to broadcastit",
+			"ADDRESS":"Broadcasting Address",
+			"SIGNED":"Signed Armory Transaction",
+			"SUCCESS":"Transaction broadcasted successfully",
+			"FAIL":"Transaction failed to broadcast"
+		},
+		"IMPORT":{
+			"VALID":"Must be a valid Bitcoin address",
+			"EXISTS":"Bitcoin address is already listed",
+			"SUBMIT":"Add Address",
+			"OFFLINE":{
+				"TITLE":"Import Armory Offline Address",
+				"KEY":"Enter Public Key",
+				"OFFLINE":"Offline"
+			},
+			"WATCH":{
+				"TITLE":"Import a Watch Only BTC/MSC Address",
+				"ADDRESS":"Enter Address",
+				"DESC":"Watch Only"
+			},
+			"ENCRYPTED":{
+				"TITLE":"Import an Encrypted BTC/MSC Private Key",
+				"KEY":"Enter Encrypted Key (Send/Receive)",
+				"KEYHOLDER":"enter your encrypted private key",
+				"PASSHOLDER":"enter your passphrase"
+			},
+			"PRIVATE":{
+				"TITLE":"Import a BTC/MSC Private Key",
+				"ENTER":"Enter",
+				"KEY":"Private Key",
+				"ENABLE":"Enable Sending",
+				"KEYHOLDER":"enter your private key, formats: hex, b64, WIP, compressed WIP"
+			},
+			"WALLET":{
+				"TITLE":"Import a Wallet Backup",
+				"UPLOAD":"Upload backup file",
+				"INVALID":"Must be a valid Omnicore backup file"
+			}
+		},
+		"EXPORT":{
+			"TITLE":"Export Wallet",
+			"NAME":"Backup Name",
+			"PASSPHRASE":"Enter Password"
+		}
+	},
+	"TRANSACTION":{
 		"TYPE":{
 			"0":"发送",
 			"3":"Send To Owners",
@@ -227,6 +319,9 @@
 			"AMOUNT":"数量",
 			"TO":"接收地址",
 			"COST":"全部交易费用",
+			"PROTOCOL_COST": "Omni Protocol Transaction Cost",
+			"MODAL_TRANSACTION_COST":"Transaction Cost",
+			"MODAL_MINER": "Miner Fee",
 			"FUNDS":"发送资产",
 			"TOKEN":"令牌",
 			"MODAL_AMOUNT":"数量",
@@ -305,11 +400,15 @@
 		"HISTORY":{
 			"TRANSACTIONS":"交易",
 			"LOADING":"交易正在进行",
-			"FIXEDISSUANCE_TRUE":"资产",
-			"FIXEDISSUANCE_FALSE":"众筹",
-			"TRANSACTION_CLOSED":"Crowdsale was closed from further investments",
-			"TRANSACTION_CREATE":"被创建",
-			"TRANSACTION_CONFIRMATIONS":"Confirmations"
+			"FIXEDISSUANCE":{
+				"TRUE":"资产",
+				"FALSE":"众筹"
+			},
+			"TRANSACTION":{
+				"CLOSED":"Crowdsale was closed from further investments",
+				"CREATE":"被创建",
+				"CONFIRMATIONS":"Confirmations"
+			}
 		},
 		"DETAILS":{
 			"URL":"获取更多信息请访问",
@@ -458,12 +557,17 @@
 			"FEE":"Sale fee",
 			"TIMEFRAME":"Payment Timeframe",
 			"TIMEFRAMETOOLTIP":"If your reservation offer is accepted and validated you will have to complete the payment within this time frame.",
-			"TIMEFRAMEDESCRIPTION":"{{ global['buyOffer'].formatted_block_time_limit }} Blocks. (Approx {{ (global['buyOffer'].formatted_block_time_limit * 10)/60 | number:2}} hours based on an average of 10min/block)",
+			"TIMEFRAMEDESCRIPTIONLEAD":" Blocks. (Approx ",
+			"TIMEFRAMEDESCRIPTIONTRAIL": "hours based on an average of 10min/block)",
 			"AMOUNT":"Amount to accept",
 			"AMOUNTPLACEHOLDER":"For example: {{ sendPlaceholderValue }} (Max {{ global['buyOffer'].formatted_amount_available }})",
 			"AMOUNTAVAILABLE":"Available to accept: {{ global['buyOffer'].formatted_amount_available }} {{ displayedAbbreviation }}",
 			"COST":"Approx Cost",
-			"COSTTOOLTIP":"If your reservation offer is accepted and validated, you will have to pay this amount to complete the transaction."
+			"COSTTOOLTIP":"If your reservation offer is accepted and validated, you will have to pay this amount to complete the transaction.",
+			"MODALTITLE":"Confirm Buy Offer",
+			"CONFIRM":"Accept Offer",
+			"CURRENCY":"Buying",
+			"BLOCKS":"Blocks"
 		},
 		"MYOFFERS":{
 			"TITLE":"My Offers",
@@ -480,7 +584,10 @@
 			"AMOUNT":"Amount to send (in",
 			"REMAINING":"Blocks Remaining",
 			"REMAININGTOOLTIP":"Your payment must be received within this many blocks to complete successfully",
-			"BLOCKS":"blocks"
+			"BLOCKS":"blocks",
+			"CANCELTITLE":"Confirm Sale Cancellation",
+			"CANCELCONFIRM":"Cancel Sale",
+			"CANCELMESSAGE":"You're about to cancel this sale. If this is correct, please press Cancel Sale below. "
 		}
 	}
 }
