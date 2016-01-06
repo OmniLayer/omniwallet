@@ -89,5 +89,8 @@ angular.module("omniControllers")
 		    var random = Math.random();
 		    $scope.saleView = '/views/exchange/partials/sale.html?r='+random;
 		    $scope.showNoCoinAlert = false;
+
+		    // trigger getData
+		    return true;
 		  }
 		}])
