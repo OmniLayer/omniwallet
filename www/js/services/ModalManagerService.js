@@ -670,7 +670,7 @@ angular.module("omniServices")
             modalScope.title = "WALLET.SEND.MODAL_TRANSACTION_COST";
             modalScope.next = next;
             modalScope.parentScope = $parentScope;
-            modalScope.button ='WALLET.SEND.FUNDS';
+            modalScope.button ='COMMON.NEXT';
             modalScope.bodyTemplate = "/views/modals/partials/transaction_cost.html";
             modalScope.footerTemplate = "/views/modals/partials/transaction_cost_footer.html";
 
