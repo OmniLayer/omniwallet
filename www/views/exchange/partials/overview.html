@@ -12,7 +12,7 @@
 	</div>
 
 	<tabset>
-	  <tab ng-repeat="currencyPair in currPairs" heading="{{currencyPair[0].symbol}} / {{currencyPair[1].symbol}}" active="currencyPair.active" select="setActiveCurrencyPair(currencyPair)" >
+	  <tab ng-repeat="currencyPair in currPairs" heading="{{currencyPair[0].symbol}} / {{currencyPair[1].symbol}}" active="currencyPair.active" select="setActiveCurrencyPair(currencyPair) && getData(selectedTimeframe, currencyPair[1].symbol)" >
 	    <div class="row" ng-show="onTradeView">
 	      <div class="col-xs-12 om-subtitle"> {{ activeCurrencyPair[0].name }} / {{ activeCurrencyPair[1].name }} </div> 
 	    </div>

@@ -77,7 +77,7 @@ angular.module("omniFactories")
 						return asset.id == assetId;
 					})[0];
 					
-					if(currencyItem.divisible)
+					if(currencyItem && currencyItem.divisible)
 	                    var value=new Big(currencyItem.pendingpos).times(WHOLE_UNIT).valueOf();
 					
 					return value || currencyItem.pendingpos;
