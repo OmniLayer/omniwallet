@@ -14,7 +14,7 @@ angular.module("omniControllers")
   ];  
   $scope.selectedTimeframe = $scope.timeOptions[4].value;
   $scope.getData = function(time, currency) {
-    $scope.noorders=false;
+    $scope.noOrders=false;
     $scope.loading = true;
     $scope.orderbook = [];
     var transaction_data = [];
@@ -67,7 +67,7 @@ angular.module("omniControllers")
         }); // sort cheapest; sort most recent (b.tx_time - a.tx_time)
         transaction_data.length == 0 ? transaction_data.push({ tx_hash_concat: 'No offers/bids found for this timeframe', tx_hash: 'No offers/bids found for this timeframe'  }) : transaction_data;
       } else 
-          $scope.noorders = true;
+          $scope.noOrders = true;
       $scope.orderbook = transaction_data;
       $scope.loading = false;
     }
