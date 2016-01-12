@@ -1,6 +1,6 @@
 angular.module("omniControllers")
-	.controller("AssetsCrowdsaleController",["$scope", "PropertyManager", "$timeout", "Transaction", "SATOSHI_UNIT", "ADDRESS_EXPLORER_URL",
-		function AssetsCrowdsaleController($scope, PropertyManager, $timeout, Transaction, SATOSHI_UNIT, ADDRESS_EXPLORER_URL){
+	.controller("AssetsCrowdsaleController",["$scope", "PropertyManager", "$timeout", "Transaction", "SATOSHI_UNIT", "ADDRESS_EXPLORER_URL", "$filter",
+		function AssetsCrowdsaleController($scope, PropertyManager, $timeout, Transaction, SATOSHI_UNIT, ADDRESS_EXPLORER_URL, $filter){
 		  $scope.tokenStep = $scope.tokenMin =  0.00000001;
 		  $scope.tokenMax = "92233720368.54775807";
 		  $scope.categories = [];
@@ -47,7 +47,7 @@ angular.module("omniControllers")
 		  };
 		  
 		  $scope.formatCurrencyDisplay = function(currencyDesired){
-		    return currencyDesired.name + " (" + currencyDesired.propertyid + ")";
+		    return $filter('limitTo')(currencyDesired.name, 15, 0) + " (" + currencyDesired.propertyid + ")";
 		  };
 		  
 		  // Initialize the form

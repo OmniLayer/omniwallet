@@ -1,6 +1,6 @@
 angular.module("omniControllers")
-  .controller("WalletOverviewController", ["$scope","$location","Wallet","ModalManager",
-    function WalletOverviewController($scope,$location,Wallet,ModalManager){
+  .controller("WalletOverviewController", ["$scope","$location","Wallet","ModalManager","$filter",
+    function WalletOverviewController($scope,$location,Wallet,ModalManager,$filter){
       $scope.uuid = $scope.account.uuid;
       $scope.loginLink = $location.protocol() + "://" + $location.host() + "/login/" + $scope.uuid;
       //console.log(Wallet.addresses);
@@ -11,7 +11,7 @@ angular.module("omniControllers")
         chart: {
                 type: 'pieChart',
                 height: 500,
-                x: function(asset){return asset.name;},
+                x: function(asset){return $filter('limitTo')(asset.name,15,0);},
                 y: function(asset){return asset.value;},
                 showLabels: true,
                 transitionDuration: 500,

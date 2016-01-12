@@ -4,7 +4,7 @@
     	<div class="pane" ng-class="{'col-sm-9':property.iscrowdsale,'col-sm-12':!property.iscrowdsale}">
         <div class="row"> 
           <div class="col-xs-12">
-            <h2 class="om-title">{{property.name}} <span class="label label-asset-id" >(#{{propertyId}})</span></h2>
+            <h2 class="om-title">{{property.name | limitTo:20}} <span class="label label-asset-id" >(#{{propertyId}})</span></h2>
           </div>
         </div>
         <div class="row" style="margin-bottom: 30px;">
@@ -31,7 +31,7 @@
        <div ng-show="property.iscrowdsale" class="row" style="margin-bottom: 30px;">
           <div class="col-xs-12">
             <p>
-              {{'ASSET.CROWDSALE.ACCEPTEDCURRENCY' | translate}}: <span>{{acceptedCurrency.name}} / Rate ({{property.tokensperunit}})</span>
+              {{'ASSET.CROWDSALE.ACCEPTEDCURRENCY' | translate}}: <span>{{acceptedCurrency.name | limiTo:20}} ({{acceptedCurrency.id}}) / Rate ({{property.tokensperunit}})</span>
             </p>
           </div>
         </div>

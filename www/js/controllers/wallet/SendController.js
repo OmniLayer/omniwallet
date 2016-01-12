@@ -1,5 +1,5 @@
 angular.module("omniControllers")
-	.controller("WalletSendController",["$scope", "MIN_MINER_FEE", "OMNI_PROTOCOL_COST", "SATOSHI_UNIT", "Transaction", function WalletSendController($scope, MIN_MINER_FEE, PROTOCOL_FEE,SATOSHI_UNIT,Transaction){
+	.controller("WalletSendController",["$scope", "MIN_MINER_FEE", "OMNI_PROTOCOL_COST", "SATOSHI_UNIT", "Transaction", "$filter", function WalletSendController($scope, MIN_MINER_FEE, PROTOCOL_FEE,SATOSHI_UNIT,Transaction,$filter){
 		$scope.minersFee = MIN_MINER_FEE;
 		$scope.protocolFee = PROTOCOL_FEE;
 
@@ -38,7 +38,7 @@ angular.module("omniControllers")
 			
 			var modalScope = {
 				title:"WALLET.SEND.CONFIRM",
-				token:$scope.selectedAsset.name,
+				token:$filter('limitTo')($scope.selectedAsset.name,15,0),
 				sendAmount:$scope.sendAmount,
 				symbol:$scope.selectedAsset.symbol,
 				sendValue:$scope.sendAmount * btcPrice,

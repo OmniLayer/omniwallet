@@ -8,7 +8,7 @@
 <div class="row table-row" ng-repeat="crowdsale in crowdsales">
 	<div class="visible-xs col-xs-5">{{'ASSET.HISTORY.FIXEDISSUANCE.FALSE' | translate}}</div>
 	<div class="col-xs-7 col-sm-3">
-		<a href="/assets/details/{{crowdsale.propertyid}}">{{crowdsale.name}}</a>
+		<a href="/assets/details/{{crowdsale.propertyid}}">{{crowdsale.name | limitTo:15}}</a>
 	</div>
 	<div class="visible-xs col-xs-5">{{'ASSET.CROWDSALE.ACCEPTEDCURRENCY' | translate}}</div>
 	<div class="col-xs-7 col-sm-3">

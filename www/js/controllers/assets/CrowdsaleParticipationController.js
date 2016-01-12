@@ -1,6 +1,6 @@
 angular.module("omniControllers")
-	.controller("CrowdsaleParticipationController", ["$scope", "SATOSHI_UNIT", "$route", "PropertyManager", "Transaction",
-	  function CrowdsaleParticipationController($scope, SATOSHI_UNIT, $route, PropertyManager, Transaction){
+	.controller("CrowdsaleParticipationController", ["$scope", "SATOSHI_UNIT", "$route", "PropertyManager", "Transaction","$filter",
+	  function CrowdsaleParticipationController($scope, SATOSHI_UNIT, $route, PropertyManager, Transaction, $filter){
 		$scope.propertyId = $route.current.params.propertyId;
 		$scope.property = {};
 		$scope.estimatedAmount = 0;
@@ -35,8 +35,8 @@ angular.module("omniControllers")
 				dataTemplate: '/views/modals/partials/participation.html',
 				scope: {
 					title:"CROWDSALE.PARTICIPATE.TITLE",
-					token:$scope.propertyDesired.name,
-					tokenRecieved: $scope.property.name,
+					token:$filter('limitTo')($scope.propertyDesired.name,15,0),
+					tokenRecieved: $filter('limitTo')($scope.property.name,15,0),
 					toAddress:$scope.property.issuer,
 					fees:participation.totalCost,
 					earlybird : $scope.earlybird,
