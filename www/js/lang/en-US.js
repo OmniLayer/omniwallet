@@ -33,7 +33,7 @@ angular.module("omniConfig")
 		"PASSWORD":"Password"
 	},
 	"HOMEPAGE":{
-		"ADDRESSEXAMPLE":"e.g.",
+		"ADDRESSEXAMPLE":"(e.g. 1EXoDusjGwvnjZUyKkxZ4UHEf77z6A5S4P)",
    		"BALANCECHECK":"Balance Check",
    		"CHECKBALANCE":"Check Balance",
 		"ENTERVALIDADDRESS":"Enter a valid Bitcoin Address ",
@@ -250,46 +250,46 @@ angular.module("omniConfig")
 		},
 		"DETAILS":{
 			"0":{
-				"SENDER":"You sent {{amount | toWhole:divisible }} {{coin | limitTo:15}}",
-				"RECIPIENT":"You received {{amount | toWhole:divisible }} {{coin | limitTo:15}}"
+				"SENDER":"You sent {{amount | toWhole:divisible }} {{coin | truncate:15}}",
+				"RECIPIENT":"You received {{amount | toWhole:divisible }} {{coin | truncate:15}}"
 			},
 			"3":{
-				"PAYER":"You sent {{amount | toWhole:divisible }} {{coin | limitTo:15}}",
-				"PAYEE":"You got payed {{amount | toWhole:divisible }} {{coin | limitTo:15}}",
-				"FEEPAYER":"You paid {{amount | toWhole:divisible }} {{coin | limitTo:15}} in fees"
+				"PAYER":"You sent {{amount | toWhole:divisible }} {{coin | truncate:15}}",
+				"PAYEE":"You got payed {{amount | toWhole:divisible }} {{coin | truncate:15}}",
+				"FEEPAYER":"You paid {{amount | toWhole:divisible }} {{coin | truncate:15}} in fees"
 			},
 			"20":{ 
-				"SELLER":"You put {{amount | toWhole:divisible }} {{coin | limitTo:15}} for sale"},
+				"SELLER":"You put {{amount | toWhole:divisible }} {{coin | truncate:15}} for sale"},
 			"22":{
-				"BUYER":"You reserved {{amount | toWhole:divisible }} {{coin | limitTo:15}}",
-				"SELLER":"{{amount | toWhole:divisible }} {{coin | limitTo:15}} reserved from buyer"
+				"BUYER":"You reserved {{amount | toWhole:divisible }} {{coin | truncate:15}}",
+				"SELLER":"{{amount | toWhole:divisible }} {{coin | truncate:15}} reserved from buyer"
 			},
 			"-22":{
-				"BUYER":"You bought {{amount | toWhole:divisible }} {{coin | limitTo:15}}",
-				"SELLER":"you sold {{amount | toWhole:divisible }} {{coin | limitTo:15}}"
+				"BUYER":"You bought {{amount | toWhole:divisible }} {{coin | truncate:15}}",
+				"SELLER":"you sold {{amount | toWhole:divisible }} {{coin | truncate:15}}"
 			},
 			"50":{ 
-				"ISSUER":"You created {{coin | limitTo:15}} with an amount of {{amount | toWhole:divisible }}"},
+				"ISSUER":"You created {{coin | truncate:15}} with an amount of {{amount | toWhole:divisible }}"},
 			"51":{ 
-				"ISSUER":"You started {{coin | limitTo:15}} Crowdsale"},
+				"ISSUER":"You started {{coin | truncate:15}} Crowdsale"},
 			"-51":{
-				"ISSUER":"You got {{amount | toWhole:divisible }} {{coin | limitTo:15}}",
-				"PARTICIPANT":"You got {{amount | toWhole:divisible }} {{coin | limitTo:15}}",
-				"SENDER":"You participated with {{amount | toWhole:divisible }} {{coin | limitTo:15}}",
-				"RECIPIENT":"You received {{amount | toWhole:divisible }} {{coin | limitTo:15}}"
+				"ISSUER":"You got {{amount | toWhole:divisible }} {{coin | truncate:15}}",
+				"PARTICIPANT":"You got {{amount | toWhole:divisible }} {{coin | truncate:15}}",
+				"SENDER":"You participated with {{amount | toWhole:divisible }} {{coin | truncate:15}}",
+				"RECIPIENT":"You received {{amount | toWhole:divisible }} {{coin | truncate:15}}"
 			},
 			"54":{ 
-				"ISSUER":"You created {{coin | limitTo:15}} managed property" 
+				"ISSUER":"You created {{coin | truncate:15}} managed property" 
 			},
 			"55":{
-				"ISSUER":"You granted {{amount | toWhole:divisible }} {{coin | limitTo:15}}",
-				"RECIPIENT":"You where granted {{amount | toWhole:divisible }} {{coin | limitTo:15}}"
+				"ISSUER":"You granted {{amount | toWhole:divisible }} {{coin | truncate:15}}",
+				"RECIPIENT":"You where granted {{amount | toWhole:divisible }} {{coin | truncate:15}}"
 			},
 			"56":{
-				"ISSUER":"You revoked {{coin | limitTo:15}}"
+				"ISSUER":"You revoked {{coin | truncate:15}}"
 			},
 			"70":{
-				"ISSUER":"{{coin | limitTo:15}} ownership transfered"
+				"ISSUER":"{{coin | truncate:15}} ownership transfered"
 			}
 		}
 	},
@@ -450,7 +450,7 @@ angular.module("omniConfig")
 			"LOGIN":"You need to login or create a wallet to participate"
 		},
 		"PARTICIPATION":{
-			"TITLE":"Participate on {{property.name | limitTo:15}} Crowdsale",
+			"TITLE":"Participate on {{property.name | truncate:15}} Crowdsale",
 			"DESIREDCOIN":"Token to send",
 			"MODAL_ESTIMATE":"Estimated amount of tokens",
 			"ESTIMATE_LEAD":"You will receive",

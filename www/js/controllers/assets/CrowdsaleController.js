@@ -47,7 +47,7 @@ angular.module("omniControllers")
 		  };
 		  
 		  $scope.formatCurrencyDisplay = function(currencyDesired){
-		    return $filter('limitTo')(currencyDesired.name, 15, 0) + " (" + currencyDesired.propertyid + ")";
+		    return $filter('truncate')(currencyDesired.name, 15, 0) + " (" + currencyDesired.propertyid + ")";
 		  };
 		  
 		  // Initialize the form

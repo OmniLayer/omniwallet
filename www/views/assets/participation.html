@@ -13,7 +13,7 @@
             <div class="col-sm-6">
               <label for="chooseCoin" >{{ 'CROWDSALE.PARTICIPATION.DESIREDCOIN' | translate}}</label>
               <div name="chooseCoin" class="form-control">
-                {{propertyDesired.name | limitTo:15}} <small ng-show="propertyDesired.id > 2">({{propertyDesired.id}})</small>
+                {{propertyDesired.name | truncate:15}} <small ng-show="propertyDesired.id > 2">({{propertyDesired.id}})</small>
               </div>
             </div> 
             <div class="col-sm-6">
@@ -35,7 +35,7 @@
                 <span ng-if="propertyDesired.symbol != 'BTC'">
                   {{ 'WALLET.SEND.AMOUNT' | translate}}
                 </span>
-                ({{selectedAddress.getDisplayBalance(propertyDesired.id)}} {{propertyDesired.name | limitTo:15}} <small class="text-muted" ng-show="propertyDesired.id > 2">({{propertyDesired.id}})</small> {{ 'COMMON.AVAILABLE' | translate}})
+                ({{selectedAddress.getDisplayBalance(propertyDesired.id)}} {{propertyDesired.name | truncate:15}} <small class="text-muted" ng-show="propertyDesired.id > 2">({{propertyDesired.id}})</small> {{ 'COMMON.AVAILABLE' | translate}})
               </label>
               <div class="input-group" ng-show="propertyDesired.symbol == 'BTC'">
                 <span class="input-group-addon no-padding">
@@ -78,7 +78,7 @@
           <input name="fees" type="number" ng-model="minerFees" class="form-control"
           placeholder="0.0001" step="0.0001" min="0.0001" required>
         </div>
-        <p class="col-xs-12 help-block">{{'CROWDSALE.PARTICIPATION.ESTIMATE_LEAD' | translate}}  {{estimatedAmount}} {{property.name | limitTo:10}}  {{'CROWDSALE.PARTICIPATION.ESTIMATE_TRAIL' | translate}}</p>
+        <p class="col-xs-12 help-block">{{'CROWDSALE.PARTICIPATION.ESTIMATE_LEAD' | translate}}  {{estimatedAmount}} {{property.name | truncate:10}}  {{'CROWDSALE.PARTICIPATION.ESTIMATE_TRAIL' | translate}}</p>
         <div class="form-group col-sm-11 text-right">
           <a href="/assets/details/{{property.propertyid}}" class="btn btn-tertiary">{{ 'COMMON.CANCEL' | translate}}</a>
         </div>

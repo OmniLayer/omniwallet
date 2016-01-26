@@ -35,8 +35,8 @@ angular.module("omniControllers")
 				dataTemplate: '/views/modals/partials/participation.html',
 				scope: {
 					title:"CROWDSALE.PARTICIPATE.TITLE",
-					token:$filter('limitTo')($scope.propertyDesired.name,15,0),
-					tokenRecieved: $filter('limitTo')($scope.property.name,15,0),
+					token:$filter('truncate')($scope.propertyDesired.name,15,0),
+					tokenRecieved: $filter('truncate')($scope.property.name,15,0),
 					toAddress:$scope.property.issuer,
 					fees:participation.totalCost,
 					earlybird : $scope.earlybird,

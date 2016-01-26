@@ -32,7 +32,7 @@
 		"PASSWORD":"Password"
 	},
 	"HOMEPAGE":{
-		"ADDRESSEXAMPLE":"例如",
+		"ADDRESSEXAMPLE":"(例如 1EXoDusjGwvnjZUyKkxZ4UHEf77z6A5S4P)",
    		"BALANCECHECK":"余额查询",
    		"CHECKBALANCE":"查询余额",
 		"ENTERVALIDADDRESS":"输入有效的比特币地址",
@@ -249,46 +249,46 @@
 		},
 		"DETAILS":{
 			"0":{
-				"SENDER":"您已发送 {{amount | toWhole:divisible }} {{coin | limitTo:15}}",
-				"RECIPIENT":"您已收到 {{amount | toWhole:divisible }} {{coin | limitTo:15}}"
+				"SENDER":"您已发送 {{amount | toWhole:divisible }} {{coin | truncate:15}}",
+				"RECIPIENT":"您已收到 {{amount | toWhole:divisible }} {{coin | truncate:15}}"
 			},
 			"3":{
-				"PAYER":"您已发送 {{amount | toWhole:divisible }} {{coin | limitTo:15}}",
-				"PAYEE":"您收到付款 {{amount | toWhole:divisible }} {{coin | limitTo:15}}",
-				"FEEPAYER":"You paid {{amount | toWhole:divisible }} {{coin | limitTo:15}} in fees"
+				"PAYER":"您已发送 {{amount | toWhole:divisible }} {{coin | truncate:15}}",
+				"PAYEE":"您收到付款 {{amount | toWhole:divisible }} {{coin | truncate:15}}",
+				"FEEPAYER":"You paid {{amount | toWhole:divisible }} {{coin | truncate:15}} in fees"
 			},
 			"20":{ 
-				"SELLER":"您挂单 {{amount | toWhole:divisible }} {{coin | limitTo:15}} 出售"},
+				"SELLER":"您挂单 {{amount | toWhole:divisible }} {{coin | truncate:15}} 出售"},
 			"22":{
-				"BUYER":"您收到 {{amount | toWhole:divisible }} {{coin | limitTo:15}}",
-				"SELLER":"{{amount | toWhole:divisible }} {{coin | limitTo:15}} 来自买家"
+				"BUYER":"您收到 {{amount | toWhole:divisible }} {{coin | truncate:15}}",
+				"SELLER":"{{amount | toWhole:divisible }} {{coin | truncate:15}} 来自买家"
 			},
 			"-22":{
-				"BUYER":"您购买 {{amount | toWhole:divisible }} {{coin | limitTo:15}}",
-				"SELLER":"您出售 {{amount | toWhole:divisible }} {{coin | limitTo:15}}"
+				"BUYER":"您购买 {{amount | toWhole:divisible }} {{coin | truncate:15}}",
+				"SELLER":"您出售 {{amount | toWhole:divisible }} {{coin | truncate:15}}"
 			},
 			"50":{ 
-				"ISSUER":"您创造了 {{coin | limitTo:15}} 并且其数量为 {{amount | toWhole:divisible }}"},
+				"ISSUER":"您创造了 {{coin | truncate:15}} 并且其数量为 {{amount | toWhole:divisible }}"},
 			"51":{ 
-				"ISSUER":"您已发起 {{coin | limitTo:15}} 众筹"},
+				"ISSUER":"您已发起 {{coin | truncate:15}} 众筹"},
 			"-51":{
-				"ISSUER":"您获得 {{amount | toWhole:divisible }} {{coin | limitTo:15}}",
-				"PARTICIPANT":"您获得 {{amount | toWhole:divisible }} {{coin | limitTo:15}}",
-				"SENDER":"您参与众筹了 {{amount | toWhole:divisible }} {{coin | limitTo:15}}",
-				"RECIPIENT":"您收到 {{amount | toWhole:divisible }} {{coin | limitTo:15}}"
+				"ISSUER":"您获得 {{amount | toWhole:divisible }} {{coin | truncate:15}}",
+				"PARTICIPANT":"您获得 {{amount | toWhole:divisible }} {{coin | truncate:15}}",
+				"SENDER":"您参与众筹了 {{amount | toWhole:divisible }} {{coin | truncate:15}}",
+				"RECIPIENT":"您收到 {{amount | toWhole:divisible }} {{coin | truncate:15}}"
 			},
 			"54":{ 
-				"ISSUER":"您创造了 {{coin | limitTo:15}} 以便于资产管理" 
+				"ISSUER":"您创造了 {{coin | truncate:15}} 以便于资产管理" 
 			},
 			"55":{
-				"ISSUER":"您已发放 {{amount | toWhole:divisible }} {{coin | limitTo:15}}",
-				"RECIPIENT":"您已被发放 {{amount | toWhole:divisible }} {{coin | limitTo:15}}"
+				"ISSUER":"您已发放 {{amount | toWhole:divisible }} {{coin | truncate:15}}",
+				"RECIPIENT":"您已被发放 {{amount | toWhole:divisible }} {{coin | truncate:15}}"
 			},
 			"56":{
-				"ISSUER":"您已撤销 {{coin | limitTo:15}}"
+				"ISSUER":"您已撤销 {{coin | truncate:15}}"
 			},
 			"70":{
-				"ISSUER":"{{coin | limitTo:15}} 所有权转移"
+				"ISSUER":"{{coin | truncate:15}} 所有权转移"
 			}
 		}
 	},
@@ -449,7 +449,7 @@
 			"LOGIN":"您需要登录或者创建钱包以便于参与众筹"
 		},
 		"PARTICIPATION":{
-			"TITLE":"参与 {{property.name | limitTo:15}} 众筹",
+			"TITLE":"参与 {{property.name | truncate:15}} 众筹",
 			"DESIREDCOIN":"发送令牌",
 			"MODAL_ESTIMATE":"预计令牌数量",
 			"ESTIMATE_LEAD":"您将会收到",

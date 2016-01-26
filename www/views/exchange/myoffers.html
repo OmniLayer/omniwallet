@@ -87,7 +87,7 @@
               <label >{{ 'EXCHANGE.MYOFFERS.COINTYPE' | translate }}:</label>
               <div class="btn-group send-asset-dropdown">
                 <span class="form-control">
-                  {{selectedAsset.name | limitTo:15}} <small class="text-muted" ng-show="selectedAsset.id > 2">({{selectedAsset.id}})</small>
+                  {{selectedAsset.name | truncate:15}} <small class="text-muted" ng-show="selectedAsset.id > 2">({{selectedAsset.id}})</small>
                 </span>
               </div> 
               <h6 class="text-justify"> {{ 'EXCHANGE.MYOFFERS.COINMESSAGE' | translate }}</h6> 

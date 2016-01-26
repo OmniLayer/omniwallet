@@ -3,10 +3,10 @@
   <div class="col-xs-9">
     <h5>
       <div ng-if="!property.divisible">
-        <span ng-bind-html="transaction.amount | numeraljs: '0,0'"></span> {{acceptedCurrency.name | limitTo:20}} 
+        <span ng-bind-html="transaction.amount | numeraljs: '0,0'"></span> {{acceptedCurrency.name | truncate:20}} 
       </div>
       <div ng-if="property.divisible">
-        <span ng-bind-html="transaction.amount | numeraljs: '0,0.00000000'"></span> {{acceptedCurrency.name | limitTo:20}} 
+        <span ng-bind-html="transaction.amount | numeraljs: '0,0.00000000'"></span> {{acceptedCurrency.name | truncate:20}} 
       </div>
     </h5>
     <div>
