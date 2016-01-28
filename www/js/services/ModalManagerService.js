@@ -80,7 +80,7 @@ angular.module("omniServices")
           self.openConfirmationModal = function(modalConfig) {
               self.modalInstance = $modal.open({
                   templateUrl: "/views/modals/base.html",
-                  controller: function ConfirmationModalController($scope, $modalInstance, modalConfig, modalManager) {                        
+                  controller: function ConfirmationModalController($scope, $rootScope, $modalInstance, $location, modalConfig, modalManager) {                        
                       angular.extend($scope, modalConfig.scope);
 
                       $scope.bodyTemplate = modalConfig.bodyTemplate || "/views/modals/confirmation.html";
@@ -96,7 +96,15 @@ angular.module("omniServices")
                           $scope.waiting = true;
 
                           TransactionManager.processTransaction($scope.transaction).then(function(result){
-                          	angular.extend($scope,result)
+                            angular.extend($scope,result)
+                            if(result.transactionSuccess){
+                              $modalInstance.dismiss('close');
+                              $location.path($scope.successRedirect)
+                              $rootScope.notify({
+                                message: "Operation success",
+                                url : result.url
+                              })
+                            }
                           }, function(errorData){
                           	angular.extend($scope,errorData)
                           });
@@ -447,7 +455,7 @@ angular.module("omniServices")
 
           self.openDeleteConfirmModal = function(addritem) {
               self.modalInstance = $modal.open({
-                templateUrl: '/partials/delete_address_modal.html',
+                templateUrl: '/views/modals/delete_address.html',
                 controller: DeleteBtcAddressModal,
                 resolve: {
                   address: function() {

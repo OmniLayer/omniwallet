@@ -1,4 +1,4 @@
-<div class="control-group" ng-hide="transactionSuccess  || readyToSign">
+<div class="control-group" ng-hide="readyToSign">
     <div class="controls">
         <button ng-disabled="clicked" class="btn btn-main" ng-click="confirm()">
             {{confirmText | translate}}
@@ -14,13 +14,6 @@
         <button ng-click="saveUnsigned(unsignedTransaction)" class="btn btn-main" ng-hide="saved">Save</button>
         <a href="/wallet/overview">
             <button ng-click="close()" class="btn" ng-class="{'btn-tertiary':unsaved,'btn-main':saved}">{{ 'COMMON.CLOSE' | translate }} </button>
-        </a>
-    </div>
-    <div ng-show="transactionSuccess">
-        <h4 class="pull-left" style="color:green"> {{successMessage}}, 
-        {{ 'MODALS.CONFIRM.CHECK' | translate }} <a target="_blank" href="{{url}}">{{ 'MODALS.CONFIRM.HERE' | translate }}.</a></h4>
-        <a href="{{successRedirect}}">
-            <button class="btn btn-main" ng-click="cancel()">{{ 'COMMON.CLOSE' | translate }}</button>
         </a>
     </div>
     <div ng-show="transactionError">

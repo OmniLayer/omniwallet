@@ -9,12 +9,6 @@
       $scope.wallet = Wallet;
       $scope.modalManager = ModalManager;
 
-      $scope.templates = {
-        'sidecar': '/partials/sidecar.html',
-        'add_address': '/partials/add_address.html',
-        'disclaimer': '/partials/disclaimer.html'
-      };
-
       $scope.events = [];
 
       $scope.$on('$idleStart', function() {
@@ -74,7 +68,7 @@
                 }
               );
             },
-            templateUrl: '/partials/idle_warning_modal.html'
+            templateUrl: '/views/modals/idle_warning.html'
           });
         }
       });
@@ -96,5 +90,15 @@
       $scope.$on('$keepalive', function() {
         
       });
+
+      $scope.showNotify = false;
+      $scope.success = {};
+      $rootScope.notify = function(options){
+        $scope.success = {
+          message : options.message,
+          url : options.url
+        }
+        $scope.showNotify = true;
+      }
 
     }])

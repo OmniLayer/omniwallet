@@ -228,6 +228,29 @@ angular.module("omniConfig")
 			"TITLE":"Export Wallet",
 			"NAME":"Backup Name",
 			"PASSPHRASE":"Enter Password"
+		},
+		"IDLE":{
+			"TITLE":"Do you want to continue your session?",
+			"BODY":"For security reasons your session will time out {{ idleEndTimeFormatted }} unless you continue.",
+			"FOOTER":"Continue Session"
+		},
+		"DELETE":{
+			"TITLE":"Remove from your wallet",
+			"SURE":"Are you sure?",
+			"DESCRIPTION":{
+				"LEAD":"Removing this address from your wallet won't destroy any funds kept in it, but if this is the only place you have your private key stored, you ",
+				"BOLD":"will permanently lose",
+				"TRAIL":"the ability to move or cash them in!"
+			
+			},
+			"BACKUP":{
+				"LEAD":"Be VERY sure your keys are ",
+				"LINK":"backed up",
+				"TRAIL":"and you mean to do this!"
+			
+			},
+			"WATCH":"Removing this WatchOnly address from your wallet only affects the displayed balances. All funds on this address will continue to remain on it and you can add it back at anytime if you wish to track them again.",
+			"CONFIRM":"Yes, Remove Address"
 		}
 	},
 	"TRANSACTION":{
