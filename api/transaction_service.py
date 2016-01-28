@@ -34,7 +34,7 @@ def getaddress():
         transaction['time'] = txrow[2]
         transaction['state'] = txrow[3]
         transaction['role'] = txrow[4]
-        transaction['amount'] = txrow[5]
+        transaction['amount'] = str(txrow[5])
         transaction['currency'] = txrow[6]
 
         transactions.append(transaction)
@@ -127,7 +127,7 @@ def gettransaction(hash_id):
       ret['currencyId'] = txJson['propertyid']
       ret['currency_str'] = 'Mastercoin' if txJson['propertyid'] == 1 else 'Test Mastercoin' if txJson['propertyid'] == 2 else "Smart Property"
       ret['invalid'] = False if txJson['valid'] == True else True
-      ret['amount'] = txJson['amount']
+      ret['amount'] = str(txJson['amount'])
       ret['formatted_amount'] = txJson['amount']
       ret['divisible'] = txJson['divisible']
       ret['fee'] = txJson['fee']
@@ -160,10 +160,10 @@ def gettransaction(hash_id):
       ret['propertyType'] = '0002' if mpData['divisible'] == True else '0001' 
       ret['formatted_property_type'] = int('0002' if mpData['divisible'] == True else '0001')
 
-      if txType == 50 or txType == 54: ret['numberOfProperties'] = mpData['totaltokens']; 
+      if txType == 50 or txType == 54: ret['numberOfProperties'] = str(mpData['totaltokens']); 
       
       if txType == 51:
-        ret['numberOfProperties'] = mpData['tokensperunit']; 
+        ret['numberOfProperties'] = str(mpData['tokensperunit']); 
         ret['currencyIdentifierDesired'] = mpData['propertyiddesired']
         ret['deadline'] = mpData['deadline']
         ret['earlybirdBonus'] = mpData['earlybonus']
