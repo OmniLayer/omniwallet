@@ -99,6 +99,11 @@
           url : options.url
         }
         $scope.showNotify = true;
+        setTimeout(function(){
+          $scope.$apply(function(){
+            $scope.showNotify = false;
+          })
+        }, 30000)
       }
 
     }])
