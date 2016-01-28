@@ -1527,14 +1527,12 @@ i.icon-l{
     margin-right: -32px;
     margin-top: -31px;
     margin-bottom: -31px;
-    display: table;
 }
 
 #asset-details .pane {
-    float: none;
-    display: table-cell;
     vertical-align: top;
     padding-top: 31px;
+    height: 1012px;
 }
 
 .nav-tabs>li>a{
