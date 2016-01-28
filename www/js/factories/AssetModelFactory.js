@@ -34,9 +34,9 @@ angular.module("omniFactories")
                       self.displayPendingPos = new Big(self.pendingpos).times(WHOLE_UNIT).valueOf()
                       self.displayPendingNeg = new Big(self.pendingneg).times(WHOLE_UNIT).valueOf()
                     } else {
-                      self.displayBalance = self.balance;
-                      self.displayPendingPos = self.pendingpos
-                      self.displayPendingNeg = self.pendingneg
+                      self.displayBalance = new Big(self.balance).valueOf();
+                      self.displayPendingPos = new Big(self.pendingpos).valueOf();
+                      self.displayPendingNeg = new Big(self.pendingneg).valueOf();
                     }
                   $rootScope.$broadcast("asset:loaded", {data:self})
                 });
@@ -50,9 +50,9 @@ angular.module("omniFactories")
                       self.displayPendingPos = new Big(self.pendingpos).times(WHOLE_UNIT).valueOf()
                       self.displayPendingNeg = new Big(self.pendingneg).times(WHOLE_UNIT).valueOf()
                     } else {
-                      self.displayBalance = self.balance;
-                      self.displayPendingPos = self.pendingpos
-                      self.displayPendingNeg = self.pendingneg
+                      self.displayBalance = new Big(self.balance).valueOf();
+                      self.displayPendingPos = new Big(self.pendingpos).valueOf();
+                      self.displayPendingNeg = new Big(self.pendingneg).valueOf();
                     }
             		    self.value = appraiser.getValue(self.balance, self.symbol, self.divisible);
                 });

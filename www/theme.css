@@ -1002,6 +1002,7 @@ border-left-color: #111111;
   font-size: 18px;
   color: #696969;
   font-weight: bold;
+  overflow: hidden;
 }
 .description-extra{
   font-size: 18px;
