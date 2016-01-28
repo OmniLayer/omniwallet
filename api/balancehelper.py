@@ -55,7 +55,7 @@ def get_balancedata(address):
               if balrow[4] < 0:
                 #res['value'] = str(long( json.loads( out )[0][ 'paid' ]) + str(long(balrow[4]))
                 #res['value'] = str(long( json.loads( out )['data']['balance']*1e8) + str(long(balrow[4]))
-                res['value'] = str(long( out ) + str(long(balrow[4]))
+                res['value'] = str(long( out )) + str(long(balrow[4]))
               else:
                 #res['value'] = str(long( json.loads( out )[0][ 'paid' ]))
                 #res['value'] = str(long( json.loads( out )['data']['balance']*1e8))
@@ -157,8 +157,8 @@ def get_bulkbalancedata(addresses):
         #1 = new indivisible property, 2=new divisible property (per spec)
         divi = True if int(balrow[1]) == 2 else False
         res = { 'symbol' : sym_t, 'divisible' : divi, 'id' : cID }
-        res['pendingpos'] = ('%.8f' % float(balrow[3])).rstrip('0').rstrip('.')
-        res['pendingneg'] = ('%.8f' % float(balrow[4])).rstrip('0').rstrip('.')
+        res['pendingpos'] = str(long(('%.8f' % float(balrow[3])).rstrip('0').rstrip('.')))
+        res['pendingneg'] = str(long(('%.8f' % float(balrow[4])).rstrip('0').rstrip('.')))
         if cID == '0':
           #get btc balance from sx
           if err != None or out == '':
@@ -167,7 +167,7 @@ def get_bulkbalancedata(addresses):
             try:
               if balrow[4] < 0:
                 #res['value'] = str(long( json.loads( out )[0][ 'paid' ]) + str(long(balrow[4]))
-                res['value'] = str(long( out ) + str(long(balrow[4]))
+                res['value'] = str(long( out )) + str(long(balrow[4]))
               else:
                 #res['value'] = str(long( json.loads( out )[0][ 'paid' ]))
                 res['value'] = str(long( out ))
@@ -179,7 +179,7 @@ def get_bulkbalancedata(addresses):
             #update the 'available' balance immediately when the sender sent something. prevent double spend
             res['value'] = str(long(('%.8f' % float( (balrow[2]+balrow[4]) )).rstrip('0').rstrip('.')))
           else:
-            res['value'] = str(long(('%.8f' % float(balrow[2])).rstrip('0').rstrip('.'))))
+            res['value'] = str(long(('%.8f' % float(balrow[2])).rstrip('0').rstrip('.')))
 
         #res['reserved_balance'] = ('%.8f' % float(balrow[5])).rstrip('0').rstrip('.')
         balance_data['balance'].append(res)
