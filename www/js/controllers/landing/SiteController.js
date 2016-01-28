@@ -1,6 +1,6 @@
  angular.module("omniControllers")
-  .controller("SiteController",["$scope", "$route", "$routeParams", "$modal", "$location", "browser", "Account", "Wallet", "ModalManager",
-    function SiteController($scope, $route, $routeParams, $modal, $location, browser, Account, Wallet, ModalManager) {
+  .controller("SiteController",["$scope", "$rootScope", "$route", "$routeParams", "$modal", "$location", "browser", "Account", "Wallet", "ModalManager",
+    function SiteController($scope, $rootScope, $route, $routeParams, $modal, $location, browser, Account, Wallet, ModalManager) {
 
       $scope.$route = $route;
       $scope.$location = $location;
