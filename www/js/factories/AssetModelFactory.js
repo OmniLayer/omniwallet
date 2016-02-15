@@ -5,9 +5,9 @@ angular.module("omniFactories")
 			var appraiser = $injector.get('appraiser');
 			self.initialize = function(){
                 self.symbol = symbol;
-                self.balance = balance;
-                self.pendingneg = 0;
-                self.pendingpos = 0;
+                self.balance = new Big(balance);
+                self.pendingneg = new Big(0);
+                self.pendingpos = new Big(0);
                 self.tradableAddresses = tradable ? [address] : [];
                 self.watchAddresses = !tradable ? [address] : [];
                 self.price = 0;
@@ -30,29 +30,30 @@ angular.module("omniFactories")
                   if (self.name == "BTC") self.name = "Bitcoin";
                   self.value = appraiser.getValue(self.balance, self.symbol, self.divisible);
                   if(self.divisible){
-                      self.displayBalance = new Big(self.balance).times(WHOLE_UNIT).valueOf() 
-                      self.displayPendingPos = new Big(self.pendingpos).times(WHOLE_UNIT).valueOf()
-                      self.displayPendingNeg = new Big(self.pendingneg).times(WHOLE_UNIT).valueOf()
+                      self.displayBalance = self.balance.times(WHOLE_UNIT).valueOf() 
+                      self.displayPendingPos = self.pendingpos.times(WHOLE_UNIT).valueOf()
+                      self.displayPendingNeg = self.pendingneg.times(WHOLE_UNIT).valueOf()
                     } else {
-                      self.displayBalance = new Big(self.balance).valueOf();
-                      self.displayPendingPos = new Big(self.pendingpos).valueOf();
-                      self.displayPendingNeg = new Big(self.pendingneg).valueOf();
+                      self.displayBalance = self.balance.valueOf();
+                      self.displayPendingPos = self.pendingpos.valueOf();
+                      self.displayPendingNeg = self.pendingneg.valueOf();
                     }
                   $rootScope.$broadcast("asset:loaded", {data:self})
                 });
 
                 $rootScope.$on("balance:"+self.symbol,function(evt, delta, dneg, dpos){
-            		    self.balance += delta;
-                    self.pendingneg += dneg;
-                    self.pendingpos += dpos;
+
+            		    self.balance = self.balance.plus(delta);
+                    self.pendingneg = self.pendingneg.plus(dneg);
+                    self.pendingpos = self.pendingpos.plus(dpos);
                     if(self.divisible){
-                      self.displayBalance = new Big(self.balance).times(WHOLE_UNIT).valueOf() 
-                      self.displayPendingPos = new Big(self.pendingpos).times(WHOLE_UNIT).valueOf()
-                      self.displayPendingNeg = new Big(self.pendingneg).times(WHOLE_UNIT).valueOf()
+                      self.displayBalance = self.balance.times(WHOLE_UNIT).valueOf() 
+                      self.displayPendingPos = self.pendingpos.times(WHOLE_UNIT).valueOf()
+                      self.displayPendingNeg = self.pendingneg.times(WHOLE_UNIT).valueOf()
                     } else {
-                      self.displayBalance = new Big(self.balance).valueOf();
-                      self.displayPendingPos = new Big(self.pendingpos).valueOf();
-                      self.displayPendingNeg = new Big(self.pendingneg).valueOf();
+                      self.displayBalance = self.balance.valueOf();
+                      self.displayPendingPos = self.pendingpos.valueOf();
+                      self.displayPendingNeg = self.pendingneg.valueOf();
                     }
             		    self.value = appraiser.getValue(self.balance, self.symbol, self.divisible);
                 });
