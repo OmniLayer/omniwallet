@@ -79,7 +79,7 @@ angular.module('omniServices').service('appraiser', ['$rootScope', '$http', '$q'
     self.getValue = function(amount, symbol, divisible) {
       if (symbol == 'BTC') {
         if (self.conversions.BTC)
-          return amount.times(self.conversions.BTC);
+          return amount.times(self.conversions.BTC).valueOf();
         else
           return 0;
       } else {        
