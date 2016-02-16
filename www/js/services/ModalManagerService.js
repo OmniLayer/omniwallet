@@ -111,7 +111,7 @@ angular.module("omniServices")
                           }, function(errorData){
                           	$modalInstance.dismiss('close');
                               $rootScope.notifyError({
-                                message: errorData.error || "Unknown Error"
+                                message: errorData.errorMessage || "Unknown Error"
                               })
                           });
                       };
