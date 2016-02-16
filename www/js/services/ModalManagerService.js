@@ -96,17 +96,23 @@ angular.module("omniServices")
                           $scope.waiting = true;
 
                           TransactionManager.processTransaction($scope.transaction).then(function(result){
-                            angular.extend($scope,result)
                             if(result.transactionSuccess){
-                              $modalInstance.dismiss('close');
                               $location.path($scope.successRedirect)
                               $rootScope.notify({
                                 message: "Operation success",
                                 url : result.url
                               })
+                            } else {
+                              $rootScope.notifyError({
+                                message: result.error || "Unknown Error"
+                              })
                             }
+                            $modalInstance.dismiss('close');
                           }, function(errorData){
-                          	angular.extend($scope,errorData)
+                          	$modalInstance.dismiss('close');
+                              $rootScope.notifyError({
+                                message: errorData.error || "Unknown Error"
+                              })
                           });
                       };
 

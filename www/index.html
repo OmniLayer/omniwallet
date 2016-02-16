@@ -126,6 +126,7 @@
             <div class="container">
                 <div class="alert alert-success text-center animate-show" ng-show="showNotify"><h4 > {{success.message}}, 
         {{ 'MODALS.CONFIRM.CHECK' | translate }} <a target="_blank" href="{{success.url}}">{{ 'MODALS.CONFIRM.HERE' | translate }}.</a></h4></div>
+                <div class="alert alert-error text-center animate-show" ng-show="showError"><h4> {{error.message}}</h4></div>
                 <div class="panel panel-default panel-main">
                     <div class="om-title text-center" ng-show="account.loggedIn && !wallet.loaded">{{ 'COMMON.LOADING' | translate}}...</div>
                     <div class="panel-body" ng-view></div>

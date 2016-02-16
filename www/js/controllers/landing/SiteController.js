@@ -92,7 +92,9 @@
       });
 
       $scope.showNotify = false;
+      $scope.showError = false;
       $scope.success = {};
+      $scope.error = {};
       $rootScope.notify = function(options){
         $scope.success = {
           message : options.message,
@@ -102,6 +104,18 @@
         setTimeout(function(){
           $scope.$apply(function(){
             $scope.showNotify = false;
+          })
+        }, 30000)
+      }
+
+      $rootScope.notifyError = function(options){
+        $scope.error = {
+          message : options.message
+        }
+        $scope.showError = true;
+        setTimeout(function(){
+          $scope.$apply(function(){
+            $scope.showError = false;
           })
         }, 30000)
       }
