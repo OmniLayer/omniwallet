@@ -1,6 +1,6 @@
 angular.module("omniControllers")
-  .controller("ExchangeBuyController",["$scope", "$http", "Transaction", "ADDRESS_EXPLORER_URL",
-    function ExchangeBuyController($scope, $http, Transaction, ADDRESS_EXPLORER_URL) {
+  .controller("ExchangeBuyController",["$scope", "$http", "Transaction", "ADDRESS_EXPLORER_URL", "SATOSHI_UNIT",
+    function ExchangeBuyController($scope, $http, Transaction, ADDRESS_EXPLORER_URL, SATOSHI_UNIT) {
         $scope.editTransactionCost = function(){
           $scope.modalManager.openTransactionCostModal($scope, $scope.confirm);
         }
