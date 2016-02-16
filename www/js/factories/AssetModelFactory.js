@@ -30,9 +30,9 @@ angular.module("omniFactories")
                   if (self.name == "BTC") self.name = "Bitcoin";
                   self.value = appraiser.getValue(self.balance, self.symbol, self.divisible);
                   if(self.divisible){
-                      self.displayBalance = self.balance.times(WHOLE_UNIT).valueOf() 
-                      self.displayPendingPos = self.pendingpos.times(WHOLE_UNIT).valueOf()
-                      self.displayPendingNeg = self.pendingneg.times(WHOLE_UNIT).valueOf()
+                      self.displayBalance = self.balance.times(WHOLE_UNIT).toFixed() 
+                      self.displayPendingPos = self.pendingpos.times(WHOLE_UNIT).toFixed()
+                      self.displayPendingNeg = self.pendingneg.times(WHOLE_UNIT).toFixed()
                     } else {
                       self.displayBalance = self.balance.valueOf();
                       self.displayPendingPos = self.pendingpos.valueOf();
@@ -47,9 +47,9 @@ angular.module("omniFactories")
                     self.pendingneg = self.pendingneg.plus(dneg);
                     self.pendingpos = self.pendingpos.plus(dpos);
                     if(self.divisible){
-                      self.displayBalance = self.balance.times(WHOLE_UNIT).valueOf() 
-                      self.displayPendingPos = self.pendingpos.times(WHOLE_UNIT).valueOf()
-                      self.displayPendingNeg = self.pendingneg.times(WHOLE_UNIT).valueOf()
+                      self.displayBalance = self.balance.times(WHOLE_UNIT).toFixed() 
+                      self.displayPendingPos = self.pendingpos.times(WHOLE_UNIT).toFixed()
+                      self.displayPendingNeg = self.pendingneg.times(WHOLE_UNIT).toFixed()
                     } else {
                       self.displayBalance = self.balance.valueOf();
                       self.displayPendingPos = self.pendingpos.valueOf();
