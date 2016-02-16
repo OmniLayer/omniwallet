@@ -27,7 +27,7 @@
                   <span class="caret pull-right"></span>
                 </button>
                 <ul class="dropdown-menu" role="menu" aria-labelledby="chooseAddress">
-                  <li role="presentation" ng-repeat="address in bitcoinAddresses">
+                  <li role="presentation" ng-repeat="address in wallet.getAsset(0).tradableAddresses">
                     <a role="menuitem" tabindex="-1" href="#" ng-click="setAddress(address)">{{address.hash}} </a>
                   </li>
                 </ul>
