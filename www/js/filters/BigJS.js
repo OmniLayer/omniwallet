@@ -13,7 +13,7 @@ angular.module('omniFilters', [])
                 dropFraction = true;
             }
 
-            var nums = Big(input).valueOf();
+            var nums = Big(input).toFixed();
             if (!noZerosTrimming && nums !== '0') {
                 nums = nums.replace(/0+(?=\D+$)|0+$/g, '').replace(/(^\D*|:)?0+/g, function(str, p1) {return p1 ? p1 + '0' : str;});
             }
