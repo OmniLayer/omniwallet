@@ -1,5 +1,5 @@
 'use strict';
-angular.module('omniFilters', [])
+angular.module('omniFilters')
     .filter('bigjs', ['$sce', function ($sce) {
         return function (input, format, noZerosTrimming) {
             var dropFraction = false;
