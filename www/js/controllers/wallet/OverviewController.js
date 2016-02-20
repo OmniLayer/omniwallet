@@ -45,7 +45,7 @@ angular.module("omniControllers")
         $scope.total = 0;
 
         Wallet.assets.forEach(function(asset) {
-          $scope.total += asset.value;
+          $scope.total += parseInt(asset.value);
         });
 
       }
