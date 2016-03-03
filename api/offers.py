@@ -35,7 +35,7 @@ def filterOffersByTime( currency_type , time_seconds):
 
     atleast_now = int( str( int(time.time() - time_seconds) ) + '000' )
 
-    ROWS=dbSelect("select * from activeoffers ao, transactions t, txjson tj where ao.propertyidselling=%s and "
+    ROWS=dbSelect("select * from activeoffers ao, transactions t, txjson tj where ao.propertyidselling=%s and ao.propertyiddesired='0' and "
                   "ao.createtxdbserialnum=t.txdbserialnum and ao.createtxdbserialnum=tj.txdbserialnum", [currency])
 
     response = [ mapSchema(row) for row in ROWS if int(mapSchema(row)['tx_time']) > atleast_now ]
