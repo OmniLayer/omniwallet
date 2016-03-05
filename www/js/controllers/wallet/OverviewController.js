@@ -21,7 +21,7 @@ angular.module("omniControllers")
                         top: 5,
                         right: 35,
                         bottom: 5,
-                        left: 
+                        left: 0
                     }
                 }
             }
