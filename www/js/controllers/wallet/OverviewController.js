@@ -11,7 +11,7 @@ angular.module("omniControllers")
         chart: {
                 type: 'pieChart',
                 height: 500,
-                x: function(asset){return $filter('truncate')(asset.name,15,0);},
+                x: function(asset){return $filter('truncate')(asset.name,15);},
                 y: function(asset){return asset.value;},
                 showLabels: true,
                 transitionDuration: 500,
@@ -21,7 +21,7 @@ angular.module("omniControllers")
                         top: 5,
                         right: 35,
                         bottom: 5,
-                        left: 0
+                        left: 
                     }
                 }
             }
