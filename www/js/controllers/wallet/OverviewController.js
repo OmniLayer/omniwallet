@@ -30,7 +30,7 @@ angular.module("omniControllers")
       $scope.showtesteco = $scope.account.getSetting('showtesteco');
 
       $scope.chartData = Wallet.assets.filter(function(asset){
-        return ((asset.id < 2147483648 && asset.id != 2) || $scope.showtesteco === 'true')
+        return ((asset.id < 2147483648 && asset.id != 2) || $scope.showtesteco === 'true') && asset.balance.gt(0)
       })
 
       $scope.openBackupModal=function(){
