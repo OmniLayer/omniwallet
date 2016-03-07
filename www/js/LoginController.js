@@ -55,4 +55,8 @@ function Login($injector, $scope, $http, $location, $modalInstance, $q, Account,
   $scope.close = function() {
     $modalInstance.dismiss('close');
   };
+
+  $scope.keyPress = function($event){
+    if($event.keyCode == 13) $scope.open($scope.login)
+  }
 }

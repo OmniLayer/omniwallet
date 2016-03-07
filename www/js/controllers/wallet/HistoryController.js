@@ -2,7 +2,8 @@ angular.module('omniControllers')
 	.controller('WalletHistoryController', ["$scope", "$q", "$http", "hashExplorer", "$translate",
 		function WalletHistoryController($scope, $q, $http, hashExplorer, $translate) {
 		    $scope.setHashExplorer = hashExplorer.setHash.bind(hashExplorer);
-  			$scope.history = $scope.wallet.transactions();		
+  			var showtesteco = $scope.account.getSetting('showtesteco');
+  			$scope.history = $scope.wallet.transactions(showtesteco);		
 
 
 		    $scope.changeAddress=function(address){
