@@ -75,8 +75,7 @@ function TransactionGenerationController($scope, $modal, Wallet, walletTransacti
               });    
           } else {
             try {
-              //DEBUG 
-              console.log('before',transaction, Bitcoin.Util.bytesToHex(transaction.serialize()));
+              //DEBUG console.log('before',transaction, Bitcoin.Util.bytesToHex(transaction.serialize()));
               var signedSuccess = transaction.signWithKey(privKey);
     
               var finalTransaction = Bitcoin.Util.bytesToHex(transaction.serialize());
