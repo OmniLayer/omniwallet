@@ -5,6 +5,7 @@ angular.module("omniControllers")
       mywallet = Account.wallet;
       $scope.wallet = mywallet;
       $scope.uuid = mywallet['uuid'];
+      $scope.error = false;
 
       $scope.email = Account.getSetting('email');
 

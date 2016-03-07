@@ -31,7 +31,8 @@ angular.module("omniControllers")
 		        currency_identifier:$scope.selectedAsset.id,
 		        amount_to_transfer : $scope.selectedAsset.divisible ? +new Big(amount).times(SATOSHI_UNIT).valueOf() : +amount,
 		        transaction_to: $scope.sendTo,
-		        donate: $scope.account.getSetting("donate")
+		        donate: $scope.account.getSetting("donate"),
+		        marker: $scope.marker || false
 		    });
 		    
 			var btcPrice = $scope.selectedAsset.price;

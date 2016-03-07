@@ -73,7 +73,7 @@
     <h4>
       <a ng-click="pendingThinking = true"> <strong> < {{ 'COMMON.BACK' | translate}} </strong> </a>
     </h4>
-    <div ng-controller="WalletSendController">
+    <div ng-controller="WalletSendController" ng-init="marker=true">
       <div class="row om-row">
         <div class="col-xs-12">
           <div class="text-left om-title">{{ 'EXCHANGE.MYOFFERS.PAYMENT' | translate }}</div>
