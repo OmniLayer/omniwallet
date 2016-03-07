@@ -30,6 +30,20 @@ function TransactionGenerationController($scope, $modal, Wallet, walletTransacti
           var transaction = Bitcoin.Transaction.deserialize(bytes);
           var script = parseScript(successData.sourceScript);
 
+          //DEBUG console.log(addressData, privKey, bytes, transaction, script, signedSuccess, finalTransaction );
+          function parseScript(script) {
+            var newScript = new Bitcoin.Script();
+            var s = script.split(" ");
+            for (var i = 0; i < s.length; i++) {
+              if (Bitcoin.Opcode.map.hasOwnProperty(s[i])) {
+                newScript.writeOp(Bitcoin.Opcode.map[s[i]]);
+              } else {
+                newScript.writeBytes(Bitcoin.Util.hexToBytes(s[i]));
+              }
+            }
+            return newScript;
+          }
+
           if(transaction.ins.length == 0){
             $modalScope.waiting = false;
             $modalScope.transactionError = true;
@@ -61,7 +75,8 @@ function TransactionGenerationController($scope, $modal, Wallet, walletTransacti
               });    
           } else {
             try {
-              //DEBUG console.log('before',transaction, Bitcoin.Util.bytesToHex(transaction.serialize()));
+              //DEBUG 
+              console.log('before',transaction, Bitcoin.Util.bytesToHex(transaction.serialize()));
               var signedSuccess = transaction.signWithKey(privKey);
     
               var finalTransaction = Bitcoin.Util.bytesToHex(transaction.serialize());
@@ -101,19 +116,6 @@ function TransactionGenerationController($scope, $modal, Wallet, walletTransacti
                 console.error(errorData);
               });
     
-              //DEBUG console.log(addressData, privKey, bytes, transaction, script, signedSuccess, finalTransaction );
-              function parseScript(script) {
-                var newScript = new Bitcoin.Script();
-                var s = script.split(" ");
-                for (var i = 0; i < s.length; i++) {
-                  if (Bitcoin.Opcode.map.hasOwnProperty(s[i])) {
-                    newScript.writeOp(Bitcoin.Opcode.map[s[i]]);
-                  } else {
-                    newScript.writeBytes(Bitcoin.Util.hexToBytes(s[i]));
-                  }
-                }
-                return newScript;
-              }
             } catch (e) {
               $modalScope.sendError = true;
               if (e.message)
