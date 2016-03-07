@@ -7,6 +7,6 @@
 <div class="row">
   <div class="form-group col-xs-12">
     <label for="inputPassword">{{ 'COMMON.PASSWORD' | translate}}</label>
-    <input type="password" class="form-control" ng-disabled="loginInProgress" ng-model="login.password" id="inputPassword" ng-keypress+"if($event.keyCode == 13) { open(login) }">
+    <input type="password" class="form-control" ng-disabled="loginInProgress" ng-model="login.password" id="inputPassword" ng-keypress="if($event.keyCode == 13) { open(login) }">
   </div>
 </div>
