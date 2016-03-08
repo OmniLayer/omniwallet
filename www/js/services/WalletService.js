@@ -157,8 +157,8 @@ angular.module("omniServices")
 	        	}).reduce(function(previous,current){
 	        		return previous.concat(current);
 	        	}).filter(function(tx){
-			        return ((tx.currency.propertyid < 2147483648 && tx.currency.property != 2) || showtesteco === 'true'); 
-			    })
+			        return ((tx.currency.propertyid < 2147483648 && tx.currency.propertyid != 2) || showtesteco === 'true'); 
+			    });
 	        }
 
 	        self.tradableAddresses = function(){
