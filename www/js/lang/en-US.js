@@ -46,8 +46,8 @@ angular.module("omniConfig")
             "GITHUBTITLE":"Github",
             "GITHUBDESC":"Search/see our 'Open Issues' and what we are 'Actively Working' on now. Don't see your specific topic? We encourage you to open a new issue to let us know. (Please include as many details as possible including ",
             "GITHUBLINK":"the output of the developer console",
-            "TALKTITLE":"Mastercoin Talk",
-            "TALKDESC":"There is a support category on the Mastercoin forums where you can ask questions and engage the community for additional help",
+            "TALKTITLE":"Knowledge Base/Support Center",
+            "TALKDESC":"This is a support knowledge base where you can review common topics, post questions asking for help or help answer other users questions",
             "EMAILTITLE":"Email",
             "EMAILDESC":"You can also reach us directly at",
             "EMAILLINK":"the output of the developer console",
@@ -269,7 +269,8 @@ angular.module("omniConfig")
 			"54":"Create a Managed Property",
 			"55":"Grant Property Tokens",
 			"56":"Revoke Property Tokens",
-			"70":"Change Property Issuer on Record"
+			"70":"Change Property Issuer on Record",
+			"-1":"Unknown Transaction"
 		},
 		"DETAILS":{
 			"0":{
@@ -313,6 +314,9 @@ angular.module("omniConfig")
 			},
 			"70":{
 				"ISSUER":"{{coin | truncate:15}} ownership transfered"
+			},
+			"-1":{
+				"SENDER":"OmiProtocol Transaction, Unknown Type"
 			}
 		}
 	},
