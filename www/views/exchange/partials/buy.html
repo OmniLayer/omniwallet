@@ -83,9 +83,9 @@
         <div class="row">
           <div class="col-sm-6">
             <div class="form-group">
-              <label> {{ 'EXCHANGE.BUY.AMOUNT' | translate }} ({{ displayedAbbreviation }}): </label>
+              <label> {{ 'EXCHANGE.BUY.AMOUNT' | translate }} {{ global['buyOffer'].formatted_amount_available }} {{ displayedAbbreviation }}: </label>
               <input name="amount" type="number" ng-model="buyAmount" class="form-control"
-              placeholder="{{ 'EXCHANGE.BUY.AMOUNTPLACEHOLDER' | translate }}" step="{{ sendPlaceholderStep }}" min="{{ sendPlaceholderMin }}" 
+              placeholder="{{ 'EXCHANGE.BUY.AMOUNTPLACEHOLDER' | translate:'{available:global['buyOffer'].formatted_amount_available}' }}" step="{{ sendPlaceholderStep }}" min="{{ sendPlaceholderMin }}" 
               max="{{ global['buyOffer'].formatted_amount_available }}" required>
               <p class="help-block">
                 {{ 'EXCHANGE.BUY.AMOUNTAVAILABLE' | translate }} ({{selectedAddress.getDisplayBalance(0)}} BTC)
