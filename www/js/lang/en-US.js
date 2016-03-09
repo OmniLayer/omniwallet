@@ -602,6 +602,7 @@ angular.module("omniConfig")
 			"AMOUNT":"Amount to accept",
 			"AMOUNTPLACEHOLDER":"For example: {{ sendPlaceholderValue }} (Max {{ global['buyOffer'].formatted_amount_available }})",
 			"AMOUNTAVAILABLE":"Available to accept: {{ global['buyOffer'].formatted_amount_available }} {{ displayedAbbreviation }}",
+			"AMOUNTAVAILABLEBTC":"Current Address Balance",
 			"COST":"Approx Cost",
 			"COSTTOOLTIP":"If your reservation offer is accepted and validated, you will have to pay this amount to complete the transaction.",
 			"MODALTITLE":"Confirm Buy Offer",
