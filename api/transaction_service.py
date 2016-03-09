@@ -178,7 +178,8 @@ def gettransaction(hash_id):
       # 22 - Dex Accepts - referenceaddress 
     
       if txType == 20:
-        cancel = True if txJson['subaction'] == 'Cancel' else False
+        action = 'subaction' if 'subaction' in txJson else 'action'
+        cancel = True if txJson[action] == 'Cancel' else False
 
         if not cancel:
           ROWS=dbSelect("select * from transactions t, activeoffers ao, txjson txj where t.txhash=%s "
@@ -198,12 +199,12 @@ def gettransaction(hash_id):
           ret['formatted_fee_required'] = str(mpData['feerequired'])
           ret['formatted_price_per_coin'] = '%.8f' % ppc
           ret['bitcoin_required'] = '%.8f' % ( Decimal( ppc ) * Decimal( mpData['amount'] ) )
-          ret['subaction'] = mpData['subaction']
+          ret['subaction'] = mpData[action]
 
         if cancel:
           ret['formatted_block_time_limit'] = str(txJson['timelimit'])
           ret['formatted_fee_required'] = str(txJson['feerequired'])
-          ret['subaction'] = txJson['subaction']
+          ret['subaction'] = txJson[action]
           ret['tx_type_str'] = 'Sell cancel'
 
       if txType == 22:
