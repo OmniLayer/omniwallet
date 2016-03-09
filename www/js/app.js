@@ -17,7 +17,7 @@ angular.module("omniConfig")
     if(TESTNET)
       return "http://tbtc.blockr.io/address/info/";
     else
-      return "https://blockchain.info/address/";
+      return "http://omnichest.info/lookupadd.aspx?address=";
   }])
   .factory("EXODUS_ADDRESS",["TESTNET", function AddressExplorerUrlFactory(TESTNET){
     if(TESTNET)
