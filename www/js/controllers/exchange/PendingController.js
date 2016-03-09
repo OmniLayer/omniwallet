@@ -205,7 +205,7 @@ angular.module("omniControllers")
 					bitcoinValue:btcPrice,
 					bitcoin:$scope.selectedAsset
 				}),
-				transaction:simpleSend
+				transaction:acceptSend
 			})
 		};
 		}])
