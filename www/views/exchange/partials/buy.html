@@ -88,7 +88,7 @@
               placeholder="{{ 'EXCHANGE.BUY.AMOUNTPLACEHOLDER' | translate:'{available:global['buyOffer'].formatted_amount_available}' }}" step="{{ sendPlaceholderStep }}" min="{{ sendPlaceholderMin }}" 
               max="{{ global['buyOffer'].formatted_amount_available }}" required>
               <p class="help-block">
-                {{ 'EXCHANGE.BUY.AMOUNTAVAILABLE' | translate }} ({{selectedAddress.getDisplayBalance(0)}} BTC)
+                {{ 'EXCHANGE.BUY.AMOUNTAVAILABLE' | translate }} ({{ global['buyOffer'].formatted_amount_available }} {{ displayedAbbreviation }})
               </p>
             </div>
           </div>
@@ -101,6 +101,9 @@
               <span class="form-control">
                 {{ ( global['buyOffer'].formatted_price_per_coin * buyAmount ) | number:8 }} BTC
               </span>
+              <p class="help-block">
+                {{ 'EXCHANGE.BUY.AMOUNTAVAILABLE' | translate }} ({{selectedAddress.getDisplayBalance(0)}} BTC)
+              </p>
             </div>
           </div>
         </div>
