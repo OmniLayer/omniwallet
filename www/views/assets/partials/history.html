@@ -11,7 +11,10 @@
       <div class="col-xs-12" ng-if="transaction.isClose" ng-include="'/views/assets/partials/history_close.html'">
         
       </div>
-      <div class="col-xs-12" ng-if="!transaction.isClose && !transaction.isCreate && !transaction.isParticipation">
+      <div class="col-xs-12" ng-if="transaction.isGrant" ng-include="'/views/assets/partials/history_grant.html'">
+        
+      </div>
+      <div class="col-xs-12" ng-if="!transaction.isClose && !transaction.isCreate && !transaction.isParticipation && !transaction.isGrant">
         <div class="col-sm-3" ng-include="'/views/assets/partials/history_time.html'">
   
         </div>

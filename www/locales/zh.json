@@ -434,7 +434,8 @@
 			"TRANSACTION":{
 				"CLOSED":"Crowdsale was closed from further investments",
 				"CREATE":"被创建",
-				"CONFIRMATIONS":"Confirmations"
+				"CONFIRMATIONS":"Confirmations", 
+				"GRANT":"Granted {{amount}} tokens to {{to}}"
 			}
 		},
 		"DETAILS":{

@@ -435,7 +435,8 @@ angular.module("omniConfig")
 			"TRANSACTION":{
 				"CLOSED":"Crowdsale was closed from further investments",
 				"CREATE":"was created",
-				"CONFIRMATIONS":"Confirmations"
+				"CONFIRMATIONS":"Confirmations", 
+				"GRANT":"Granted {{amount}} tokens to {{to}}"
 			}
 		},
 		"DETAILS":{

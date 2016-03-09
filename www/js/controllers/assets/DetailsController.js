@@ -69,6 +69,7 @@ angular.module("omniControllers")
 		        var tx = result.data.transactions[i];
 		        tx.isParticipation = tx.type == 'Crowdsale Purchase';
 		        tx.isClose = tx.type == 'Close Crowdsale';
+		        tx.isGrant = tx.type == 'Grant Property Tokens';
 		        tx.isCreate = tx.type.indexOf('Create Property') > -1;
 		        $scope.history.transactions.push(tx);
 		      }
