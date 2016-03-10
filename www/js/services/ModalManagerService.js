@@ -407,7 +407,7 @@ angular.module("omniServices")
                       }
                       
                       // Use address as passphrase for now
-                      if(addr.privkey) 
+                      if(addr.privkey) {
                         Account.addAddress(
                           addr.address,
                           encodePrivateKey(addr.privkey, addr.address))
@@ -419,7 +419,8 @@ angular.module("omniServices")
                             $scope.completed++;
                             return next();
                           });
-                      else
+                      }
+                      else if (addr.pubkey) {
                         Account.addAddress(
                           addr.address, undefined, addr.pubkey)
                           .then(function(){
@@ -430,6 +431,18 @@ angular.module("omniServices")
                             $scope.completed++;
                             return next();
                           });   
+                      } else {
+                        Account.addAddress(
+                          addr.address)
+                          .then(function(){
+                            $scope.progressMessage="Imported address " + addr.address;
+                            $scope.progressColor = "green";
+                            
+                            $scope.summary.push({message:$scope.progressMessage,color:$scope.progressColor});
+                            $scope.completed++;
+                            return next();
+                          }); 
+                      }
                           
                       
                     });
