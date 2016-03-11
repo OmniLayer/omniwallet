@@ -431,6 +431,7 @@
 				"TRUE":"资产",
 				"FALSE":"众筹"
 			},
+			"TITLE":"Asset History",
 			"TRANSACTION":{
 				"CLOSED":"Crowdsale was closed from further investments",
 				"CREATE":"被创建",

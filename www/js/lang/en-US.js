@@ -366,7 +366,7 @@ angular.module("omniConfig")
 		},
 		"HISTORY":{
 			"ALLADDRESSES":"-- All Addresses --",
-			"FILTERLABEL":"Full Wallet History for",
+			"FILTERLABEL":"Omni Protocol History for",
 			"TITLE":"History",
 			"CURRENCY":"Currency",
 			"TYPE":"Type",
@@ -432,6 +432,7 @@ angular.module("omniConfig")
 				"TRUE":"Property",
 				"FALSE":"Crowdsale"
 			},
+			"TITLE":"Asset History",
 			"TRANSACTION":{
 				"CLOSED":"Crowdsale was closed from further investments",
 				"CREATE":"was created",
