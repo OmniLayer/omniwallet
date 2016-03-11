@@ -39,7 +39,7 @@
             </a>
             <ul class="dropdown-menu" role="menu">
               <li><a ng-click="section='account'" href="/wallet/settings">{{'NAVIGATION.SETTINGS' | translate}}</a></li>
-              <li><a href="/" ng-click="logout()">{{'NAVIGATION.LOGOUT' | translate}}</a></li>
+              <li><a href="/" ng-click="logout(); section='';">{{'NAVIGATION.LOGOUT' | translate}}</a></li>
             </ul>
         </ul>
         <div class="arrow_box" ng-hide="section==''" ng-class="{'login':account.loggedIn, 'wallet':section=='wallet', 'exchange':section=='exchange', 'explorer':section=='explorer', 'about':section=='about'}"></div>
