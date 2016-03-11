@@ -1,4 +1,4 @@
-<h2 class="om-subtitle">{{ 'ASSET.HISTORY.TITLE' | translate}} {{'COMMON.HISTORY' | translate}} <small class="text-muted">({{history.total}} {{'ASSET.HISTORY.TRANSACTIONS' | translate}})</small></h2>
+<h2 class="om-subtitle">{{ 'ASSET.HISTORY.TITLE' | translate}} <small class="text-muted">({{history.total}} {{'ASSET.HISTORY.TRANSACTIONS' | translate}})</small></h2>
 <div class="scroll">
   <div class="scroll-body asset-history" infinite-scroll='loadHistory()' infinite-scroll-disabled='history.loading || history.loaded' infinite-scroll-distance='10'>
     <div class="row" ng-repeat="transaction in history.transactions">
