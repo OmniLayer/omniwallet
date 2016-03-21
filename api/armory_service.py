@@ -48,8 +48,9 @@ def generate_unsigned():
       spending_tx_decoded = conn.decoderawtransaction(spending_tx_raw)
       i_vout = -1
       for each in spending_tx_decoded['vout']:
-        print each['scriptPubKey']['asm'].split(' ')[2], pubKeyHash
-        if each['scriptPubKey']['asm'].split(' ')[2] == pubKeyHash:
+        info=each['scriptPubKey']['asm'].split(' ')
+        print "\nArmoryService: Searching for pubKey:", pubKeyHash, "| ASM Info:",info
+        if len(info) > 3 and info[0] != "OP_RETURN" and info[2] == pubKeyHash:
           i_vout = each['n']
 
       i_k.append ({'contribid': '',
@@ -87,7 +88,7 @@ def generate_unsigned():
     
     unsigned_tx_ascii= UnsignedTransaction().fromJSONMap(json_nosig, True).serializeAscii()
 
-    print("\n\nOutput is:\n%s" % unsigned_tx_ascii)  
+    print("\n\nArmoryService: Output is:\n%s" % unsigned_tx_ascii)  
     return jsonify({'armoryUnsigned':unsigned_tx_ascii})  
 
 @app.route('/getrawtransaction', methods=['POST'])
@@ -95,7 +96,7 @@ def get_raw():
   """Converts a signed tx from armory's offline format to a raw hex tx that bitcoind can broadcast/use"""
   
   signed_tx_ascii = request.form['signed_hex']
-  print("REQUEST(convert_signed_tx_to_raw_hex) -- signed_tx_ascii:\n'%s'\n" % (signed_tx_ascii,))
+  print("\nArmoryService: REQUEST(convert_signed_tx_to_raw_hex) -- signed_tx_ascii:\n'%s'\n" % (signed_tx_ascii,))
 
   try:
       utx = UnsignedTransaction()
