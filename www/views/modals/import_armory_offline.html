@@ -1,0 +1,21 @@
+<div class="modal-header">
+  <div class="text-left modal-title col-md-11">{{title | translate}}</div><div class="text-right"><button ng-disabled="wating" class="btn modal-cancel-btn" ng-click="close()"></button></div>
+</div>
+<form name="addressentry" class="form-horizontal" style="margin-bottom:20px, margin-top:20px" ng-submit="(validate(newAddressData) != false) && ok(newAddressData)">
+	<div class="modal-body">
+		<div class="row">
+			<div class="form-group col-md-10 col-md-push-1">
+				<label class="control-label">{{ 'MODALS.IMPORT.OFFLINE.KEY' | translate}} (<a href="/about/faq" target="_new">{{ 'MODALS.IMPORT.OFFLINE.OFFLINE' | translate}}</a>):</label>
+				<input type="text" name="pubkey" class="form-control" placeholder="Enter your offline address public key" ng-model="newAddressData.pubkey" required>
+				<span ng-show="validate(newAddressData) != false">
+					{{ 'COMMON.ADDRESS' | translate}}: {{newAddressData.address}}
+				</span>
+				<span style="color:red" ng-show="addressentry.pubkey.$dirty && !validate(newAddressData)">{{ 'MODALS.IMPORT.VALID' | translate}} </span>
+				<span style="color:red" ng-show="addressentry.pubkey.$dirty && !addressNotListed(newAddressData.pubkey)">{{ 'MODALS.IMPORT.EXISTS' | translate}} </span>
+			</div>
+		</div>
+	</div>
+	<div class="modal-footer">
+		<input type="submit" class="btn btn-main" ng-disabled="validate(newAddressData) === false || addressNotListed(newAddressData.pubkey) === false" value="{{ 'MODALS.IMPORT.SUBMIT' | translate}}">
+	</div>
+</form>
