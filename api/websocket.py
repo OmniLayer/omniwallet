@@ -25,7 +25,6 @@ def printmsg(msg):
     print msg
     sys.stdout.flush()
 
-
 def balance_thread():
     """Send balance data for the connected clients."""
     global addresses, maxaddresses, clients, maxclients

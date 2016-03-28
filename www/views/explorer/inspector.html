@@ -1,0 +1,23 @@
+<div ng-controller="ExplorerInspectorController">
+
+  <h4>
+    <a href="/{{pastLoc}}"> <strong> < {{ 'COMMON.BACK' | translate}} </strong> </a>
+  </h4>
+  <div class="table-responsive">
+    <table class="table table-striped table-hover table-condensed">
+      <caption>{{ 'EXPLORER.INSPECTOR.TITLE' | translate}}</caption>
+      <thead>
+          <tr>
+            <th>{{ 'EXPLORER.INSPECTOR.FIELD' | translate}}</th>
+            <th>{{ 'EXPLORER.INSPECTOR.DETAILS' | translate}}</th>
+          </tr>
+      </thead>
+      <tbody>
+        <tr ng-repeat="field in fieldlist track by $index">
+         <td>{{field}}</td>
+         <td>{{transactionData[tx_keys[$index]]}}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

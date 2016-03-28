@@ -1,0 +1,19 @@
+<div class="col-sm-3" ng-include="'/views/assets/partials/history_time.html'">
+</div>
+  <div class="col-xs-9">
+    <h5>
+      <div ng-if="!property.divisible">
+        <span ng-bind-html="transaction.amount | bigjs: '0,0'"></span> {{acceptedCurrency.name | truncate:20}} 
+      </div>
+      <div ng-if="property.divisible">
+        <span ng-bind-html="transaction.amount | bigjs: '0,0.00000000'"></span> {{acceptedCurrency.name | truncate:20}} 
+      </div>
+    </h5>
+    <div>
+      <a href="{{explorerUrl}}{{transaction.sendingaddress}}" target="_blank">{{transaction.sendingaddress}}</a>
+      <span ng-hide="transaction.confirmations > 100" class="label label-omni">
+         {{transaction.confirmations}} {{'ASSET.HISTORY.TRANSACTION.CONFIRMATIONS' | translate }}
+      </span>
+    </div>
+  </div>
+</div>

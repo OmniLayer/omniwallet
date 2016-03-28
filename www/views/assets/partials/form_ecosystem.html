@@ -1,0 +1,20 @@
+<form class="pull-right form-inline">
+  <div class="form-group">
+    <label>{{ 'ECOSYSTEM.LABEL' | translate}}</label>
+    <div class="btn-group">
+      <button type="button" class="visible-xs btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+         <span class="glyphicon glyphicon-options-vertical"></span>
+      </button>
+      <button type="button" class="hidden-xs btn btn-tertiary dropdown-toggle" data-toggle="dropdown" aria-expanded="false" ng-if="ecosystem==1">
+        {{ 'ECOSYSTEM.PRODUCTION' | translate}}  <span class="glyphicon glyphicon-chevron-down"></span>
+      </button>
+      <button type="button" class="hidden-xs btn btn-tertiary dropdown-toggle" data-toggle="dropdown" aria-expanded="false" ng-if="ecosystem==2">
+        {{ 'ECOSYSTEM.TEST' | translate}} <span class="glyphicon glyphicon-chevron-down"></span>
+      </button>
+      <ul class="dropdown-menu dropdown-menu-right" role="menu">
+        <li><a href="#" ng-click="setEcosystem(1)">{{ 'ECOSYSTEM.PRODUCTION' | translate}}</a></li>
+        <li><a href="#" ng-click="setEcosystem(2)">{{ 'ECOSYSTEM.TEST' | translate}}</a></li>
+      </ul>
+    </div>
+  </div>
+</form>

@@ -5,24 +5,31 @@
   "dependencies": {
     "underscore": "~1.6.0",
     "jquery": "~1.11",
-    "bootstrap": "~3.0",
+    "bootstrap": "~3.3",
     "angular": "~1.2",
     "angular-route": "~1.2",
     "respond": "~1.4",
     "sjcl": "~1.0",
     "html5shiv": "~3.6",
-    "angular-bootstrap": "~0.11.0",
-    "angular-ui-bootstrap": "~0.11.0",
-    "d3": "~3.4.2",
+    "angular-bootstrap": "https://github.com/Omniwallet/bootstrap-bower.git#master",
+    "angular-ui-bootstrap": "~0.12.0",
     "jsrsasign": "~4.2.1",
     "FileSaver": null,
     "big.js": "x.x.x",
-    "forge": "https://github.com/digitalbazaar/forge.git#0.2.30",
-    "numeraljs": "https://github.com/adamwdraper/Numeral-js.git#1.5.3",
-    "angular-numeraljs": "https://github.com/sagyeli/angular-numeraljs.git#master",
-    "angular-password-strength": "https://github.com/curtislacy/angular-password-strength.git#Caret-Operator",
-    "angular-idle": "https://github.com/hackedbychinese/ng-idle.git#0.3.5",
+    "forge": "https://github.com/Omniwallet/forge.git#0.2.30",
+    "angular-password-strength": "https://github.com/Omniwallet/angular-password-strength.git#Caret-Operator",
+    "angular-timer": "~1.1.6",
+    "ngInfiniteScroll": "1.0.0",
+    "numeraljs": "https://github.com/Omniwallet/Numeral-js.git#1.5.3",
+    "angular-numeraljs": "https://github.com/Omniwallet/angular-numeraljs.git#master",
+    "ng-idle": "https://github.com/Omniwallet/ng-idle.git#0.3.5",
     "angular-re-captcha": "~0.0.3",
-    "angular-translate": "~2.4.2"
+    "angular-translate": "~2.4.2",
+    "angular-nvd3": "~0.0.9",
+    "angular-translate-loader-static-files": "~2.5.2"
+  },
+  "resolutions": {
+    "d3": "~3.4",
+    "angular-translate": "~2.5.2"
   }
 }
