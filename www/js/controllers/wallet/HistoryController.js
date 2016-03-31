@@ -19,7 +19,7 @@ angular.module('omniControllers')
 		    }
 
 		    $scope.setHashExplorer=function(transaction){
-		    	$http.get('/v1/transaction/tx/' + transaction.hash + '.json'). success(function(data) {
+		    	$http.get('/v1/transaction/tx/' + transaction + '.json'). success(function(data) {
 			      hashExplorer.setHash(data[0]);
 			    });
 		    }
