@@ -1,7 +1,6 @@
 angular.module('omniControllers')
 	.controller('WalletHistoryController', ["$scope", "$q", "$http", "hashExplorer", "$translate",
 		function WalletHistoryController($scope, $q, $http, hashExplorer, $translate) {
-		    $scope.setHashExplorer = hashExplorer.setHash.bind(hashExplorer);
   			$scope.showtesteco = $scope.account.getSetting('showtesteco');
   			$scope.history = $scope.wallet.transactions($scope.showtesteco);		
 
@@ -17,5 +16,11 @@ angular.module('omniControllers')
 			  		$scope.history = $scope.wallet.transactions($scope.showtesteco);
 			  	
 			  	}
+		    }
+
+		    $scope.setHashExplorer=function(transaction){
+		    	$http.get('/v1/transaction/tx/' + transaction.hash + '.json'). success(function(data) {
+			      hashExplorer.setHash(data[0]);
+			    });
 		    }
 		}])
