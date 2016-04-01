@@ -156,7 +156,7 @@ var app = angular.module('omniwallet', [
 
   $routeProvider.when('/about/:page?', {
       templateUrl: function(route) {
-        var availableViews = ['omniwallet', 'mastercoin', 'contact', 'faq' ];
+        var availableViews = ['omniwallet', 'omni', 'contact', 'faq' ];
 
         var viewFound = availableViews.indexOf(route.page);
         if (viewFound == -1) //Default view

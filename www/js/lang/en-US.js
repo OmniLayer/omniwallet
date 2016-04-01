@@ -55,29 +55,27 @@ angular.module("omniConfig")
             "CHATDESC":"Chat with the developers, share your ideas or ask questions. Availability varies, but we should generally be around Mon-Fri 9-5 CDT",
             "TITLE":"Contact Us"
 		},
-		"MASTERCOIN":{
-			"TITLE":"About Omni Foundation",
-			"FOUNDATION":{
-				"TITLE":"Omni Foundation",
-				"FIRST":"In September 2013, the Omni Foundation was formed to temporarily manage the funds in the Exodus Address and the distribution of the development OMNI. The board of the Omni Foundation has declared its intention to minimize its temporary central role by transitioning the decision making to Omni owners through proof of stake voting.",
-				"SECOND": "The Omni Foundation advocates for the use of the Omni Protocol and tries to build a community of people who develop it. All budget items, board minutes, Dev OMNI vesting schedule, and bounties are public record and available to anyone on the ",
-				"LINK": "Foundation's Website"
-			},
-			"PROTOCOL":{
-				"TITLE":"Omni Protocol",
-				"PARAGRAPH":"The Omni Protocol is a communications protocol that uses the Bitcoin block chain to enable features such as smart contracts, user currencies and decentralized peer-to-peer exchanges. A common analogy that is used to describe the relation of the Omni Protocol to Bitcoin is that of HTTP to TCP/IP: HTTP, like the Omni Protocol, is the application layer to the more fundamental transport and internet layer of TCP/IP, like Bitcoin. For more in-depth information and details see the ",
-				"LINK":"Spec",
-				"ONGITHUB":"on github."
+		"OMNI":{
+                        "TITLE":"About Omni",
+                        "FOUNDATION":{
+                                "TITLE":"Omni Foundation",
+                                "FIRST":"In September 2013, the Mastercoin Foundation was formed to temporarily manage the funds in the Exodus Address and the distribution of the development MSC. The board of the Mastercoin Foundation has declared its intention to minimize its temporary central role by transitioning the decision making to Mastercoin owners through proof of stake voting.",
+                                "SECOND": "In January 2016 the Mastercoin Foundation was rebranded to the Omni Foundation and the primary tokens of the project, MSC, where renamed to OMNI. The Foundation advocates for the use of the Omni Protocol and tries to build a community of people who develop it. All budget items, board minutes, Dev OMNI vesting schedule, and bounties are public record and available to anyone on the ",
+                                "LINK": "Foundation's Website"
+                        },
+                        "PROTOCOL":{
+                                "TITLE":"Omni Protocol",
+                                "PARAGRAPH":"The Omni Protocol is a communications protocol that uses the Bitcoin block chain to enable features such as smart contracts, user currencies and decentralized peer-to-peer exchanges. A common analogy that is used to describe the relation of the Omni Protocol to Bitcoin is that of HTTP to TCP/IP: HTTP, like the Omni Protocol, is the application layer to the more fundamental transport and internet layer of TCP/IP, like Bitcoin. For more in-depth information and details see the ",
+                                "LINK":"Spec",
+                                "ONGITHUB":"on github."
 
-			},
-			"TOKEN":{
-				"TITLE":"Omnis",
-				"FIRST" : "Omnis (symbol OMNI) are digital tokens that are necessary for the use of some features of the Omni Protocol. The total number of Omnis in existence is 619,478.6 and no more OMNI will ever be created. Additionally, Omnis can not be mined into existence. The 619,478.6 OMNI were generated as a result of a public fundraiser in the style of Kickstarter.com. For more details about the algorithm by which Omnis were generated, please read the ",
-				"HISTORY" : "History of Omni",
-				"ARTICLE":"article from Omni Protocol Education site. "
-			},
-			"INFO":"Information from the ",
-			"EDUCATION":"Omni Protocol Education"
+                        },
+                        "TOKEN":{
+                                "TITLE":"Omnis",
+                                "FIRST" : "Omnis (symbol OMNI) are digital tokens that are necessary for the use of some features of the Omni Protocol. The total number of Omnis in existence is 619,478.6 and no more MSC will ever be created. Additionally, Omnis can not be mined into existence. The 619,478.6 OMNI were generated as a result of a public fundraiser in the style of Kickstarter.com.",
+                        },
+                        "INFO":"Information from the ",
+                        "EDUCATION":"Master Protocol Education"
 		},
 		"OMNIWALLET":{
 			"TITLE" : "About Omniwallet",
