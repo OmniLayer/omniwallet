@@ -1,6 +1,6 @@
 angular.module('omniControllers')
-	.controller('WalletHistoryController', ["$scope", "$q", "$http", "hashExplorer", "$translate",
-		function WalletHistoryController($scope, $q, $http, hashExplorer, $translate) {
+	.controller('WalletHistoryController', ["$scope", "$location", "$http", "hashExplorer", "$translate",
+		function WalletHistoryController($scope, $location, $http, hashExplorer, $translate) {
   			$scope.showtesteco = $scope.account.getSetting('showtesteco');
   			$scope.history = $scope.wallet.transactions($scope.showtesteco);		
 
