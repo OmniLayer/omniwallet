@@ -29,7 +29,7 @@ def get_balancedata(address):
                              atx.propertyid) s2
                         on s1.propertyid=s2.propertyid) f1
                      inner join smartproperties sp
-                     on f1.propertyid=sp.propertyid and (sp.protocol='Mastercoin' or sp.protocol='Bitcoin')
+                     on f1.propertyid=sp.propertyid and (sp.protocol='Omni' or sp.protocol='Bitcoin')
                      order by f1.propertyid""",(addr,addr))
 
     balance_data = { 'balance': [] }
@@ -40,7 +40,7 @@ def get_balancedata(address):
     err = ret['error']
     for balrow in ROWS:
         cID = str(int(balrow[0])) #currency id
-        sym_t = ('BTC' if cID == '0' else ('MSC' if cID == '1' else ('TMSC' if cID == '2' else 'SP' + cID) ) ) #symbol template
+        sym_t = ('BTC' if cID == '0' else ('OMNI' if cID == '1' else ('T-OMNI' if cID == '2' else 'SP' + cID) ) ) #symbol template
         #1 = new indivisible property, 2=new divisible property (per spec)
         divi = True if int(balrow[1]) == 2 else False
         res = { 'symbol' : sym_t, 'divisible' : divi, 'id' : cID }
@@ -138,7 +138,7 @@ def get_bulkbalancedata(addresses):
                              atx.propertyid) s2
                         on s1.propertyid=s2.propertyid) f1
                      inner join smartproperties sp
-                     on f1.propertyid=sp.propertyid and (sp.protocol='Mastercoin' or sp.protocol='Bitcoin')
+                     on f1.propertyid=sp.propertyid and (sp.protocol='Omni' or sp.protocol='Bitcoin')
                      order by f1.propertyid""",(addr,addr))
 
       balance_data = { 'balance': [] }
@@ -153,7 +153,7 @@ def get_bulkbalancedata(addresses):
 
       for balrow in ROWS:
         cID = str(int(balrow[0])) #currency id
-        sym_t = ('BTC' if cID == '0' else ('MSC' if cID == '1' else ('TMSC' if cID == '2' else 'SP' + cID) ) ) #symbol template
+        sym_t = ('BTC' if cID == '0' else ('OMNI' if cID == '1' else ('T-OMNI' if cID == '2' else 'SP' + cID) ) ) #symbol template
         #1 = new indivisible property, 2=new divisible property (per spec)
         divi = True if int(balrow[1]) == 2 else False
         res = { 'symbol' : sym_t, 'divisible' : divi, 'id' : cID }

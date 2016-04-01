@@ -152,7 +152,7 @@ angular.module("omniControllers")
 	            price: 0,
 	            min_buyer_fee: 0,
 	            blocks: 10,
-	            currency: (+tx.currencyId) == 1 ? 'MSC' : 'TMSC',
+	            currency: (+tx.currencyId) == 1 ? 'OMNI' : 'T-OMNI',
 	            donate: $scope.account.getSetting("donate")
 	          });
 

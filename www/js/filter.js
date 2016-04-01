@@ -50,8 +50,8 @@ var conversionFactor = {
   'stom': 100000, //satoshi to millibit
   //These are original values and are not consistent
   'BTC': 100000,
-  'MSC': 100000000,
-  'TMSC': 100000000,
+  'OMNI': 100000000,
+  'T-OMNI': 100000000,
 
   'mtow': 1000,
   'wtom': 0.001,

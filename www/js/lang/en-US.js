@@ -56,28 +56,28 @@ angular.module("omniConfig")
             "TITLE":"Contact Us"
 		},
 		"MASTERCOIN":{
-			"TITLE":"About Mastercoin",
+			"TITLE":"About Omni Foundation",
 			"FOUNDATION":{
-				"TITLE":"Mastercoin Foundation",
-				"FIRST":"In September 2013, the Mastercoin Foundation was formed to temporarily manage the funds in the Exodus Address and the distribution of the development MSC. The board of the Mastercoin Foundation has declared its intention to minimize its temporary central role by transitioning the decision making to Mastercoin owners through proof of stake voting.",
-				"SECOND": "The Mastercoin Foundation advocates for the use of the Master Protocol and tries to build a community of people who develop it. All budget items, board minutes, Dev MSC vesting schedule, and bounties are public record and available to anyone on the ",
+				"TITLE":"Omni Foundation",
+				"FIRST":"In September 2013, the Omni Foundation was formed to temporarily manage the funds in the Exodus Address and the distribution of the development OMNI. The board of the Omni Foundation has declared its intention to minimize its temporary central role by transitioning the decision making to Omni owners through proof of stake voting.",
+				"SECOND": "The Omni Foundation advocates for the use of the Omni Protocol and tries to build a community of people who develop it. All budget items, board minutes, Dev OMNI vesting schedule, and bounties are public record and available to anyone on the ",
 				"LINK": "Foundation's Website"
 			},
 			"PROTOCOL":{
-				"TITLE":"Master Protocol",
-				"PARAGRAPH":"The Master Protocol is a communications protocol that uses the Bitcoin block chain to enable features such as smart contracts, user currencies and decentralized peer-to-peer exchanges. A common analogy that is used to describe the relation of the Master Protocol to Bitcoin is that of HTTP to TCP/IP: HTTP, like the Master Protocol, is the application layer to the more fundamental transport and internet layer of TCP/IP, like Bitcoin. For more in-depth information and details see the ",
+				"TITLE":"Omni Protocol",
+				"PARAGRAPH":"The Omni Protocol is a communications protocol that uses the Bitcoin block chain to enable features such as smart contracts, user currencies and decentralized peer-to-peer exchanges. A common analogy that is used to describe the relation of the Omni Protocol to Bitcoin is that of HTTP to TCP/IP: HTTP, like the Omni Protocol, is the application layer to the more fundamental transport and internet layer of TCP/IP, like Bitcoin. For more in-depth information and details see the ",
 				"LINK":"Spec",
 				"ONGITHUB":"on github."
 
 			},
 			"TOKEN":{
-				"TITLE":"Mastercoins",
-				"FIRST" : "Mastercoins (symbol MSC) are digital tokens that are necessary for the use of some features of the Master Protocol. The total number of Mastercoins in existence is 619,478.6 and no more MSC will ever be created. Additionally, Mastercoins can not be mined into existence. The 619,478.6 MSC were generated as a result of a public fundraiser in the style of Kickstarter.com. For more details about the algorithm by which Mastercoins were generated, please read the ",
-				"HISTORY" : "History of Mastercoin",
-				"ARTICLE":"article from Master Protocol Education site. "
+				"TITLE":"Omnis",
+				"FIRST" : "Omnis (symbol OMNI) are digital tokens that are necessary for the use of some features of the Omni Protocol. The total number of Omnis in existence is 619,478.6 and no more OMNI will ever be created. Additionally, Omnis can not be mined into existence. The 619,478.6 OMNI were generated as a result of a public fundraiser in the style of Kickstarter.com. For more details about the algorithm by which Omnis were generated, please read the ",
+				"HISTORY" : "History of Omni",
+				"ARTICLE":"article from Omni Protocol Education site. "
 			},
 			"INFO":"Information from the ",
-			"EDUCATION":"Master Protocol Education"
+			"EDUCATION":"Omni Protocol Education"
 		},
 		"OMNIWALLET":{
 			"TITLE" : "About Omniwallet",
@@ -97,9 +97,9 @@ angular.module("omniConfig")
 			},
 			"MULTICURRENCY" : {
 				"TITLE" : "Multi-currency support",
-				"BUILT" : "Omniwallet comes with a pre-built support for Bitcoin, Mastercoin and Test Mastercoin",
+				"BUILT" : "Omniwallet comes with a pre-built support for Bitcoin, Omni and Test Omni",
 				"SUPPORT" : "Native support for Smart Property and User-Generated Currencies",
-				"ALT" : "Alt-coin support  - Omniwallet has plans to support coins that go outside of the usual Mastercoin ecosystem, such as Litecoin, Peercoin and more"
+				"ALT" : "Alt-coin support  - Omniwallet has plans to support coins that go outside of the usual Omni ecosystem, such as Litecoin, Peercoin and more"
 			},
 			"STATUS" :{
 				"TITLE" : "Current Status",
@@ -124,7 +124,7 @@ angular.module("omniConfig")
 	"NAVIGATION":{
 		"ABOUT":"About",
 		"ABOUTOMNI":"About Omniwallet",
-		"ABOUTMSC":"About Mastercoin",
+		"ABOUTMSC":"About Omni",
 		"ACCOUNT":"My Account",
 		"ADDRESSES":"My Addresses",
 		"ASSETS":"My Assets",
@@ -201,18 +201,18 @@ angular.module("omniConfig")
 				"OFFLINE":"Offline"
 			},
 			"WATCH":{
-				"TITLE":"Import a Watch Only BTC/MSC Address",
+				"TITLE":"Import a Watch Only BTC/OMNI Address",
 				"ADDRESS":"Enter Address",
 				"DESC":"Watch Only"
 			},
 			"ENCRYPTED":{
-				"TITLE":"Import an Encrypted BTC/MSC Private Key",
+				"TITLE":"Import an Encrypted BTC/OMNI Private Key",
 				"KEY":"Enter Encrypted Key (Send/Receive)",
 				"KEYHOLDER":"enter your encrypted private key",
 				"PASSHOLDER":"enter your passphrase"
 			},
 			"PRIVATE":{
-				"TITLE":"Import a BTC/MSC Private Key",
+				"TITLE":"Import a BTC/OMNI Private Key",
 				"ENTER":"Enter",
 				"KEY":"Private Key",
 				"ENABLE":"Enable Sending",

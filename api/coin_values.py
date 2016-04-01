@@ -18,13 +18,13 @@ def get_prices():
       atomic_json_dump(btcvalue,filename)
       write_history(btcvalue)
 
-    filename = data_dir_root + '/www/values/MSC.json'
+    filename = data_dir_root + '/www/values/OMNI.json'
     mscvalue=get_msc_price()
     if mscvalue['price'] > 0:
       atomic_json_dump(mscvalue, filename)
       write_history(mscvalue)
 
-    filename = data_dir_root + '/www/values/TMSC.json'
+    filename = data_dir_root + '/www/values/T-OMNI.json'
     atomic_json_dump(0, filename)
     for root, _, files in os.walk(data_dir_root + '/www/properties'):
         for f in files:
@@ -98,12 +98,12 @@ def get_msc_price():
           sum += float( trade['amount'] ) * float(trade['price'] )
 
       result_dict = {
-         'symbol' : 'MSC',
+         'symbol' : 'OMNI',
          'price' : sum / volume
       }
     except requests.exceptions.RequestException:
       result_dict = {
-         'symbol' : 'MSC',
+         'symbol' : 'OMNI',
          'price' : 0
       }
 
