@@ -50,7 +50,7 @@ def getcurrencyrecent(currency_page):
     except ValueError:
         abort(make_response('This endpoint only consumes valid input', 400))
 
-    lookup_currency = { 'OMNI': '1', 'T-OMNI': '2', 'BTC': '0' }
+    lookup_currency = { 'MSC' : '1', 'TMSC' : '2', 'OMNI': '1', 'T-OMNI': '2', 'BTC': '0' }
 
     c_symbol = currency_.split('_')[0]
     c_page = currency_.split('_')[1]
