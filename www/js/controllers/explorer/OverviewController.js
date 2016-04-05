@@ -5,7 +5,7 @@ angular.module("omniControllers")
       // Scope members
       $scope.searchQueryText = '';
       $scope.transactions = [];
-      $scope.currency = 'MSC';
+      $scope.currency = 'OMNI';
 
       $scope.clear = function clear(){
         $scope.searchQueryText = '';

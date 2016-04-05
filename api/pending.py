@@ -68,7 +68,7 @@ def insertmsc(rawtx):
     txtype = rawtx['MP']['TxType']
     txversion = rawtx['MP']['TxVersion']
     txhash = rawtx['BTC']['txid']
-    protocol = "Mastercoin"
+    protocol = "Mastercoin" #protocol = "Omni"
     addresstxindex=0
     txdbserialnum = dbSelect("select least(-1,min(txdbserialnum)) from transactions;")[0][0]
     txdbserialnum -= 1
@@ -108,6 +108,6 @@ def insertmsc(rawtx):
       #dbExecute("update addressbalances set balancepending=balancepending+%s::numeric where address=%s and propertyid=%s and protocol=%s", (recvamount,address,propertyid,protocol))
     dbCommit()
   except Exception,e:
-    print "Error: ", e, "\n Could not add MSC PendingTx: ", rawtx
+    print "Error: ", e, "\n Could not add OMNI PendingTx: ", rawtx
     dbRollback()
 

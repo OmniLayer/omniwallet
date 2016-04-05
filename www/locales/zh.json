@@ -94,9 +94,9 @@
 			},
 			"MULTICURRENCY" : {
 				"TITLE" : "Multi-currency support",
-				"BUILT" : "Omniwallet comes with a pre-built support for Bitcoin, Mastercoin and Test Mastercoin",
+				"BUILT" : "Omniwallet comes with a pre-built support for Bitcoin, Omni and Test Omni",
 				"SUPPORT" : "Native support for Smart Property and User-Generated Currencies",
-				"ALT" : "Alt-coin support  - Omniwallet has plans to support coins that go outside of the usual Mastercoin ecosystem, such as Litecoin, Peercoin and more"
+				"ALT" : "Alt-coin support  - Omniwallet has plans to support coins that go outside of the usual Omni ecosystem, such as Litecoin, Peercoin and more"
 			},
 			"STATUS" :{
 				"TITLE" : "Current Status",
@@ -121,7 +121,7 @@
 	"NAVIGATION":{
 		"ABOUT":"关于",
 		"ABOUTOMNI":"关于Omniwallet",
-		"ABOUTMSC":"关于OMNI",
+		"ABOUTOMNI":"关于OMNI",
 		"ACCOUNT":"我的账户",
 		"ADDRESSES":"我的地址",
 		"ASSETS":"我的资产",
@@ -198,18 +198,18 @@
 				"OFFLINE":"Offline"
 			},
 			"WATCH":{
-				"TITLE":"Import a Watch Only BTC/MSC Address",
+				"TITLE":"Import a Watch Only BTC/OMNI Address",
 				"ADDRESS":"Enter Address",
 				"DESC":"Watch Only"
 			},
 			"ENCRYPTED":{
-				"TITLE":"Import an Encrypted BTC/MSC Private Key",
+				"TITLE":"Import an Encrypted BTC/OMNI Private Key",
 				"KEY":"Enter Encrypted Key (Send/Receive)",
 				"KEYHOLDER":"enter your encrypted private key",
 				"PASSHOLDER":"enter your passphrase"
 			},
 			"PRIVATE":{
-				"TITLE":"Import a BTC/MSC Private Key",
+				"TITLE":"Import a BTC/OMNI Private Key",
 				"ENTER":"Enter",
 				"KEY":"Private Key",
 				"ENABLE":"Enable Sending",

@@ -40,7 +40,7 @@ def main(argv):
     STATUSSTREAM+=('</div>')
 
     STATUSSTREAM+="""<div class="block-tx">
-                 <span style=""><strong>MSC-Tools Change Log</strong></span><br/>"""
+                 <span style=""><strong>OMNI-Tools Change Log</strong></span><br/>"""
 
     for x in mclog.split('\n'):
         y=x.split('|', 3)
