@@ -68,7 +68,7 @@ def insertmsc(rawtx):
     txtype = rawtx['MP']['TxType']
     txversion = rawtx['MP']['TxVersion']
     txhash = rawtx['BTC']['txid']
-    protocol = "Omni"
+    protocol = "Mastercoin" #protocol = "Omni"
     addresstxindex=0
     txdbserialnum = dbSelect("select least(-1,min(txdbserialnum)) from transactions;")[0][0]
     txdbserialnum -= 1

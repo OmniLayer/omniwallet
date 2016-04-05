@@ -19,7 +19,7 @@ def getCurrentPrice(currency=None):
   if input[:2].upper() == "SP":
     protocol1='Bitcoin'
     pid1=getPropertyid('BTC', protocol1)
-    protocol2='Omni'
+    protocol2 = 'Mastercoin' #protocol2='Omni'
     #strip off the SP and grab just the numbers
     pid2=input[2:]
 
@@ -42,14 +42,14 @@ def getCurrentPrice(currency=None):
   elif input == 'OMNI':
     protocol1='Bitcoin'
     pid1=getPropertyid('BTC', protocol1)
-    protocol2='Omni'
+    protocol2 = 'Mastercoin' #protocol2='Omni'
     #strip off the SP and grab just the numbers
     pid2=1
 
   elif input == 'T-OMNI':
     protocol1='Bitcoin'
     pid1=getPropertyid('BTC', protocol1)
-    protocol2='Omni'
+    protocol2 = 'Mastercoin' #protocol2='Omni'
     #strip off the SP and grab just the numbers
     pid2=2
 
@@ -114,7 +114,7 @@ def history(currency=None):
   if input[:2].upper() == "SP":
     protocol1='Bitcoin'
     pid1=getPropertyid('BTC', protocol1)
-    protocol2='Omni'
+    protocol2 = 'Mastercoin' #protocol2='Omni'
     #strip off the SP and grab just the numbers
     pid2=input[2:]
 
@@ -137,16 +137,16 @@ def history(currency=None):
   elif input == 'OMNI':
     protocol1='Bitcoin'
     pid1=getPropertyid('BTC', protocol1)
-    protocol2='Omni'
+    protocol2 = 'Mastercoin' #protocol2='Omni'
     #strip off the SP and grab just the numbers
-    pid2=getPropertyid('OMNI', protocol2)
+    pid2=getPropertyid('MSC', protocol2) #pid2=getPropertyid('OMNI', protocol2)
 
   elif input == 'T-OMNI':
     protocol1='Bitcoin'
     pid1=getPropertyid('BTC', protocol1)
-    protocol2='Omni'
+    protocol2 = 'Mastercoin' #protocol2='Omni'
     #strip off the SP and grab just the numbers
-    pid2=getPropertyid('T-OMNI', protocol2)
+    pid2=getPropertyid('TMSC', protocol2) #pid2=getPropertyid('T-OMNI', protocol2)
 
   else:
     return json.dumps([0])
