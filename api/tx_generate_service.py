@@ -130,10 +130,10 @@ def generate_tx(tx_type):
             return error
         
 def prepare_txdata(txtype,form):
-        print "txtype"
-        print txtype
-        print "form"
-        print form
+        #print "txtype"
+        #print txtype
+        #print "form"
+        #print form
         txdata=[]
 
         txdata.append(int(form['transaction_version']))
@@ -194,8 +194,8 @@ def prepare_txdata(txtype,form):
 
 # helper funcs
 def prep_bytes(letter):
-    print "prep bytes"
-    print letter
+    #print "prep bytes"
+    #print letter
     hex_bytes = hex(ord(letter))[2:]
     if len(hex_bytes) % 2 == 1:
         hex_bytes = hex_bytes[:len(hex_bytes)-1]
@@ -205,8 +205,8 @@ def prep_bytes(letter):
     return hex_bytes
 
 def prepare_txbytes(txdata):
-    print "prepare txbytes"
-    print txdata
+    #print "prepare txbytes"
+    #print txdata
     #calculate bytes
     tx_ver_bytes = hex(txdata[0])[2:].rstrip('L').rjust(4,"0") # 2 bytes
     tx_type_bytes = hex(txdata[1])[2:].rstrip('L').rjust(4,"0")   # 2 bytes
@@ -376,8 +376,8 @@ def prepare_txbytes(txdata):
     return [byte_stream, total_bytes]
 
 def construct_packets(byte_stream, total_bytes, from_address):
-    print "construct packets byte_stream, total_bytes, from_address"
-    print byte_stream, total_bytes, from_address
+    #print "construct packets byte_stream, total_bytes, from_address"
+    #print byte_stream, total_bytes, from_address
 
     import math
     total_packets = int(math.ceil(float(total_bytes)/30)) #get # of packets
