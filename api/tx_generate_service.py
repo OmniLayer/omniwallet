@@ -130,6 +130,10 @@ def generate_tx(tx_type):
             return error
         
 def prepare_txdata(txtype,form):
+        print "txtype"
+        print txtype
+        print "form"
+        print form
         txdata=[]
 
         txdata.append(int(form['transaction_version']))
@@ -190,6 +194,8 @@ def prepare_txdata(txtype,form):
 
 # helper funcs
 def prep_bytes(letter):
+    print "prep bytes"
+    print letter
     hex_bytes = hex(ord(letter))[2:]
     if len(hex_bytes) % 2 == 1:
         hex_bytes = hex_bytes[:len(hex_bytes)-1]
@@ -199,6 +205,8 @@ def prep_bytes(letter):
     return hex_bytes
 
 def prepare_txbytes(txdata):
+    print "prepare txbytes"
+    print txdata
     #calculate bytes
     tx_ver_bytes = hex(txdata[0])[2:].rstrip('L').rjust(4,"0") # 2 bytes
     tx_type_bytes = hex(txdata[1])[2:].rstrip('L').rjust(4,"0")   # 2 bytes
@@ -368,6 +376,9 @@ def prepare_txbytes(txdata):
     return [byte_stream, total_bytes]
 
 def construct_packets(byte_stream, total_bytes, from_address):
+    print "construct packets byte_stream, total_bytes, from_address"
+    print byte_stream, total_bytes, from_address
+
     import math
     total_packets = int(math.ceil(float(total_bytes)/30)) #get # of packets
     
@@ -466,6 +477,7 @@ def construct_packets(byte_stream, total_bytes, from_address):
     return [final_packets,total_packets,total_outs]
     
 def build_transaction(miner_fee_satoshis, pubkey,final_packets, total_packets, total_outs, from_address, to_address=None):
+    print "build_transaction", miner_fee_satoshis, pubkey,final_packets, total_packets, total_outs, from_address, to_address
     print 'pubkey', pubkey, len(pubkey) 
     if len(pubkey) < 100:
       print "Compressed Key, using hexspace 21"
@@ -486,7 +498,9 @@ def build_transaction(miner_fee_satoshis, pubkey,final_packets, total_packets, t
     fee_total_satoshi = int( round( fee_total * Decimal(1e8) ) )
 
     #------------------------------------------- New utxo calls
+    print "Calling bc_getutxo with ", from_address, fee_total_satoshi
     dirty_txes = bc_getutxo( from_address, fee_total_satoshi )
+    print "received", dirty_txes
 
     if (dirty_txes['error'][:3]=='Con'):
         raise Exception({ "status": "NOT OK", "error": "Couldn't get list of unspent tx's. Response Code: " + dirty_txes['code']  })
