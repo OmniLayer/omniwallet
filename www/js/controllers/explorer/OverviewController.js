@@ -17,11 +17,14 @@ angular.module("omniControllers")
 
       $scope.getData = function getData() {
         var currency = $scope.currency;
-        $http.get('/v1/transaction/values.json', {}). success(function(data) {
-          for (var i = 0; i < data.length; i++) {
-            if (currency == data[i].currency) {
-              var file = '/v1/transaction/general/' + currency + '_0001.json';
-              $http.get(file, {}).success(function(data, status, headers, config) {
+
+        //$http.get('/v1/transaction/values.json', {}). success(function(data) {
+        //  for (var i = 0; i < data.length; i++) {
+        //    if (currency == data[i].currency) {
+        //      var file = '/v1/transaction/general/' + currency + '_0001.json';
+
+        //      $http.get(file, {}).success(function(data, status, headers, config) {
+              $http.get('/v1/transaction/general/', {}).success(function(data, status, headers, config) {
 
                 angular.forEach(data, function(transaction, index) {
 
@@ -32,9 +35,9 @@ angular.module("omniControllers")
 
                 $scope.transactions = data;
               });
-            }
-          }
-        });
+         //   }
+         // }
+        //});
       }
 
       $scope.doSearch = function() {

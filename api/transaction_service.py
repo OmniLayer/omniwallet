@@ -43,20 +43,20 @@ def getaddress():
 
     return jsonify(response)
 
-@app.route('/general/<currency_page>')
-def getcurrencyrecent(currency_page):
-    try:
-        currency_ = str(re.sub(r'\W+', '', currency_page.split('.')[0] ) ) #check alphanumeric
-    except ValueError:
-        abort(make_response('This endpoint only consumes valid input', 400))
+@app.route('/general/')
+def getcurrencyrecent():
+    #try:
+    #    currency_ = str(re.sub(r'\W+', '', currency_page.split('.')[0] ) ) #check alphanumeric
+    #except ValueError:
+    #    abort(make_response('This endpoint only consumes valid input', 400))
 
-    lookup_currency = { 'MSC' : '1', 'TMSC' : '2', 'OMNI': '1', 'T-OMNI': '2', 'BTC': '0' }
+    #lookup_currency = { 'MSC' : '1', 'TMSC' : '2', 'OMNI': '1', 'T-OMNI': '2', 'BTC': '0' }
 
-    c_symbol = currency_.split('_')[0]
-    c_page = currency_.split('_')[1]
+    #c_symbol = currency_.split('_')[0]
+    #c_page = currency_.split('_')[1]
 
-    if c_symbol[:2] == 'SP': c_id = c_symbol[2:]
-    else: c_id = lookup_currency[ c_symbol ] 
+    #if c_symbol[:2] == 'SP': c_id = c_symbol[2:]
+    #else: c_id = lookup_currency[ c_symbol ] 
 
     #Do we even need per-currency pagination?
     ROWS=dbSelect("select * from transactions t, txjson txj where t.protocol != 'Bitcoin' and t.txdbserialnum = txj.txdbserialnum order by t.txblocknumber DESC limit 10;")
