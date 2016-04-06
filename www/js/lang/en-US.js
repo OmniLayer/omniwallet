@@ -121,8 +121,8 @@ angular.module("omniConfig")
 	},
 	"NAVIGATION":{
 		"ABOUT":"About",
-		"ABOUTOMNI":"About Omniwallet",
-		"ABOUTMSC":"About Omni",
+		"ABOUTOMNIWALLET":"About Omniwallet",
+		"ABOUTOMNI":"About Omni",
 		"ACCOUNT":"My Account",
 		"ADDRESSES":"My Addresses",
 		"ASSETS":"My Assets",
