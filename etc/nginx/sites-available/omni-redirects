@@ -32,9 +32,9 @@
             proxy_set_header Connection "Upgrade";
         }
 
-        location ~ "^/v1/transaction/values.json$" {
-                alias /var/lib/omniwallet/www/values.json;
-        }
+        #location ~ "^/v1/transaction/values.json$" {
+        #        alias /var/lib/omniwallet/www/values.json;
+        #}
 
         location ~ "^/v1/system/stats.json$" {
                 #alias /var/lib/omniwallet/www/stats.json;
