@@ -9,11 +9,12 @@ def bc_getutxo(address, ramount):
 
     if r.status_code == 200:
       unspents = r.json()['txrefs']
+      print "got unspent list", unspents
 
       retval = []
       avail = 0
       for tx in unspents:
-        if tx['confirmations'] > 2:
+        if tx['confirmations'] > 0:
           avail += tx['value']
           retval.append([ tx['tx_hash'], tx['tx_output_n'], tx['value'] ])
           if avail >= ramount:
@@ -34,10 +35,11 @@ def bc_getutxo_blockr(address, ramount):
 
       unspents = r.json()['data']['unspent']
 
+      print "blockcypher failed, blockr unspents", unspents
       retval = []
       avail = 0
       for tx in unspents:
-        if tx['confirmations'] > 2:
+        if tx['confirmations'] > 0:
           tx['amount'] =  int(decimal.Decimal(tx['amount'])*decimal.Decimal(1e8))
           avail += tx['amount']
           retval.append([ tx['tx'], tx['n'], tx['amount'] ])

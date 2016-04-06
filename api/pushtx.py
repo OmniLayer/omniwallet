@@ -53,7 +53,10 @@ def pushtxnode(signed_tx):
     import commands, json
     signed_tx = re.sub(r'\W+', '', signed_tx) #check alphanumeric
     #output=commands.getoutput('bitcoind sendrawtransaction ' +  str(signed_tx) )
+    print "final signed", signed_tx
     output=sendrawtransaction(str(signed_tx))
+
+    print 'raw response',output,'\n'
 
     ret=re.findall('{.+',str(output))
     if 'code' in ret[0]:
