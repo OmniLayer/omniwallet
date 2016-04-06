@@ -16,7 +16,7 @@ def insertpending(txhex):
 
   if 'Amount' in rawtx['MP'] and rawtx['MP']['Amount']>0:
     #only run if we have a non zero positive amount to process, otherwise exit
-    insertmsc(rawtx)
+    insertomni(rawtx)
 
 def insertbtc(rawtx):
   try:
@@ -60,7 +60,7 @@ def insertbtc(rawtx):
     print "Error: ", e, "\n Could not add BTC PendingTx: ", rawtx
     dbRollback()  
 
-def insertmsc(rawtx):
+def insertomni(rawtx):
   try:
     sender = rawtx['Sender']
     receiver = rawtx['Receiver']
@@ -68,7 +68,7 @@ def insertmsc(rawtx):
     txtype = rawtx['MP']['TxType']
     txversion = rawtx['MP']['TxVersion']
     txhash = rawtx['BTC']['txid']
-    protocol = "Mastercoin" #protocol = "Omni"
+    protocol = "Omni"
     addresstxindex=0
     txdbserialnum = dbSelect("select least(-1,min(txdbserialnum)) from transactions;")[0][0]
     txdbserialnum -= 1
