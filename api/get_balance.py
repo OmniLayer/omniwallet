@@ -62,6 +62,8 @@ def get_btc_balances( addr ):
 
 def get_balance_response(request_dict):
   import re
+  print "get_balance_response(request_dict)",request_dict
+
   try:
       addrs_list=request_dict['addr']
   except KeyError:
