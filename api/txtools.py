@@ -293,6 +293,8 @@ def construct_packets(byte_stream, total_bytes, from_address):
     return [final_packets,total_packets,total_outs]
     
 def build_transaction(miner_fee_satoshis, pubkey,final_packets, total_packets, total_outs, from_address, to_address=None):
+    print "Debug: miner_fee_satoshis, pubkey,final_packets, total_packets, total_outs, from_address, to_address"
+    print miner_fee_satoshis, pubkey,final_packets, total_packets, total_outs, from_address, to_address
     print 'pubkey', request.form['pubkey'], len(request.form['pubkey']) 
     if len(request.form['pubkey']) < 100:
       print "Compressed Key, using hexspace 21"
@@ -313,7 +315,9 @@ def build_transaction(miner_fee_satoshis, pubkey,final_packets, total_packets, t
     fee_total_satoshi = int( round( fee_total * Decimal(1e8) ) )
 
     #------------------------------------------- New utxo calls
+    print "calling bc_getutxo with",from_address, fee_total_satoshi
     dirty_txes = bc_getutxo( from_address, fee_total_satoshi )
+    print "received", dirty_txes
 
     if (dirty_txes['error'][:3]=='Con'):
         raise Exception({ "status": "NOT OK", "error": "Couldn't get list of unspent tx's. Response Code: " + dirty_txes['code']  })

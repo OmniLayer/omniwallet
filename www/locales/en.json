@@ -71,10 +71,10 @@
 			},
 			"TOKEN":{
 				"TITLE":"Omnis",
-				"FIRST" : "Omnis (symbol OMNI) are digital tokens that are necessary for the use of some features of the Omni Protocol. The total number of Omnis in existence is 619,478.6 and no more MSC will ever be created. Additionally, Omnis can not be mined into existence. The 619,478.6 OMNI were generated as a result of a public fundraiser in the style of Kickstarter.com. "
+				"FIRST" : "Omnis (symbol OMNI) are digital tokens that are necessary for the use of some features of the Omni Protocol. The total number of Omnis in existence is 619,478.6 and no more OMNI will ever be created. Additionally, Omnis can not be mined into existence. The 619,478.6 OMNI were generated as a result of a public fundraiser in the style of Kickstarter.com.",
 			},
 			"INFO":"Information from the ",
-			"EDUCATION":"Master Protocol Education"
+			"EDUCATION":"Omni Protocol Education"
 		},
 		"OMNIWALLET":{
 			"TITLE" : "About Omniwallet",
@@ -94,9 +94,9 @@
 			},
 			"MULTICURRENCY" : {
 				"TITLE" : "Multi-currency support",
-				"BUILT" : "Omniwallet comes with a pre-built support for Bitcoin, Mastercoin and Test Mastercoin",
+				"BUILT" : "Omniwallet comes with a pre-built support for Bitcoin, Omni and Test Omni",
 				"SUPPORT" : "Native support for Smart Property and User-Generated Currencies",
-				"ALT" : "Alt-coin support  - Omniwallet has plans to support coins that go outside of the usual Mastercoin ecosystem, such as Litecoin, Peercoin and more"
+				"ALT" : "Alt-coin support  - Omniwallet has plans to support coins that go outside of the usual Omni ecosystem, such as Litecoin, Peercoin and more"
 			},
 			"STATUS" :{
 				"TITLE" : "Current Status",
@@ -121,7 +121,7 @@
 	"NAVIGATION":{
 		"ABOUT":"About",
 		"ABOUTOMNI":"About Omniwallet",
-		"ABOUTMSC":"About Mastercoin",
+		"ABOUTMSC":"About Omni",
 		"ACCOUNT":"My Account",
 		"ADDRESSES":"My Addresses",
 		"ASSETS":"My Assets",
@@ -198,18 +198,18 @@
 				"OFFLINE":"Offline"
 			},
 			"WATCH":{
-				"TITLE":"Import a Watch Only BTC/MSC Address",
+				"TITLE":"Import a Watch Only BTC/OMNI Address",
 				"ADDRESS":"Enter Address",
 				"DESC":"Watch Only"
 			},
 			"ENCRYPTED":{
-				"TITLE":"Import an Encrypted BTC/MSC Private Key",
+				"TITLE":"Import an Encrypted BTC/OMNI Private Key",
 				"KEY":"Enter Encrypted Key (Send/Receive)",
 				"KEYHOLDER":"enter your encrypted private key",
 				"PASSHOLDER":"enter your passphrase"
 			},
 			"PRIVATE":{
-				"TITLE":"Import a BTC/MSC Private Key",
+				"TITLE":"Import a BTC/OMNI Private Key",
 				"ENTER":"Enter",
 				"KEY":"Private Key",
 				"ENABLE":"Enable Sending",
@@ -599,8 +599,8 @@
 			"TIMEFRAMEDESCRIPTIONLEAD":" Blocks. (Approx ",
 			"TIMEFRAMEDESCRIPTIONTRAIL": "hours based on an average of 10min/block)",
 			"AMOUNT":"Amount to accept",
-			"AMOUNTPLACEHOLDER":"For example: {{ sendPlaceholderValue }} (Max {{ available }})",
-			"AMOUNTAVAILABLE":"Available to accept:",
+			"AMOUNTPLACEHOLDER":"For example: {{ sendPlaceholderValue }} (Max {{ global['buyOffer'].formatted_amount_available }})",
+			"AMOUNTAVAILABLE":"Available to accept: {{ global['buyOffer'].formatted_amount_available }} {{ displayedAbbreviation }}",
 			"AMOUNTAVAILABLEBTC":"Current Address Balance",
 			"COST":"Approx Cost",
 			"COSTTOOLTIP":"If your reservation offer is accepted and validated, you will have to pay this amount to complete the transaction.",

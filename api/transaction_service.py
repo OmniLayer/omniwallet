@@ -50,7 +50,7 @@ def getcurrencyrecent(currency_page):
     except ValueError:
         abort(make_response('This endpoint only consumes valid input', 400))
 
-    lookup_currency = { 'MSC': '1', 'TMSC': '2', 'BTC': '0' }
+    lookup_currency = { 'MSC' : '1', 'TMSC' : '2', 'OMNI': '1', 'T-OMNI': '2', 'BTC': '0' }
 
     c_symbol = currency_.split('_')[0]
     c_page = currency_.split('_')[1]
@@ -125,7 +125,7 @@ def gettransaction(hash_id):
 
     if txType != -22 and  txType != 21: #Dex purchases don't have these fields 
       ret['currencyId'] = txJson['propertyid']
-      ret['currency_str'] = 'Mastercoin' if txJson['propertyid'] == 1 else 'Test Mastercoin' if txJson['propertyid'] == 2 else "Smart Property"
+      ret['currency_str'] = 'Omni' if txJson['propertyid'] == 1 else 'Test Omni' if txJson['propertyid'] == 2 else "Smart Property"
       ret['invalid'] = False if txJson['valid'] == True else True
       ret['amount'] = str(txJson['amount'])
       ret['formatted_amount'] = txJson['amount']
