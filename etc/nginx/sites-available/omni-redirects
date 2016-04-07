@@ -43,7 +43,8 @@
         }
 
         location ~ "^/v1/system/status.html$" {
-                alias /var/lib/omniwallet/www/status.html;
+                #alias /var/lib/omniwallet/www/status.html;
+                rewrite ^ /status;
         }
 
         location ~ "^/v1/system/revision.json$" {

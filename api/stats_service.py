@@ -1,10 +1,36 @@
 from flask import Flask, request, jsonify, abort, json
 from sqltools import *
+import commands
 
 app = Flask(__name__)
 app.debug = True
 
-#TODO COnversion
+@app.route('/status')
+def status():
+  rev=revision()
+  try:
+    rev=json.loads(rev)
+  except:
+    rev={'revision':rev}
+
+  st=stats()
+  try:
+    st=json.loads(st)
+  except:
+    st={'stats':st}
+
+  coms=commits()
+  try:
+    coms=json.loads(coms)
+  except:
+    coms={'commits':coms}
+
+  #print rev, st, coms
+  merged_response = {key: value for (key, value) in (rev.items() + st.items() + coms.items())}
+  json_response = json.dumps( merged_response )
+  return json_response
+
+
 @app.route('/revision')
 def revision():
   ROWS=dbSelect("select blocknumber, blocktime from blocks order by blocknumber desc limit 1")
@@ -27,4 +53,22 @@ def stats():
       }
 
   json_response = json.dumps( response)
+  return json_response
+
+
+@app.route('/commits')
+def commits():
+  owlog=commands.getoutput('git --git-dir=../.git log --pretty=tformat:"%cd | %h | %H | %s" --date=short -n 12 --no-merges')
+
+  response=[]
+  for x in owlog.split('\n'):
+    y=x.split('|', 3)
+    response.append({
+      'date': str(y[0]),
+      'commitshort': str(y[1].strip()),
+      'commitlong': str(y[2].strip()),
+      'msg': str(y[3].strip())
+    })
+
+  json_response = json.dumps({'commits': response})
   return json_response
