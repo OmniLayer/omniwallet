@@ -23,7 +23,7 @@
         <div class="row">
           <div class="container-fluid input-dark">
             <div class="asset-item col-xs-6 text-left">
-              <span>{{currency.name ? currency.name + " (#"+currency.id+")" : currency.symbol | truncate:15}}</span>
+              <span>{{(currency.name ? currency.name : currency.symbol | truncate:15) + " (#"+currency.id+")"}}</span>
             </div>
             <div class="asset-item col-xs-4 text-right number">
               <span ng-if="!currency.divisible" class="currency" class="number" title="{{checkAddress.getDisplayBalance(currency.id)}}" ng-bind-html="checkAddress.getDisplayBalance(currency.id) | bigjs: '0,0'"></span>
