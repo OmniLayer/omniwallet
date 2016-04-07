@@ -92,6 +92,9 @@ def createrawtransaction(ins,outs):
 def decoderawtransaction(rawtx):
     return host.call("decoderawtransaction", rawtx)
 
+def estimateFee(blocks=4):
+    return host.call("estimatefee", blocks)
+
 ## Mastercoin Specific RPC calls
 def getbalance_MP(addr, propertyid):
     return host.call("getbalance_MP", addr, propertyid)
