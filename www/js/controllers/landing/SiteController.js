@@ -1,6 +1,6 @@
  angular.module("omniControllers")
-  .controller("SiteController",["$scope", "$rootScope", "$route", "$routeParams", "$modal", "$location", "browser", "Account", "Wallet", "ModalManager",
-    function SiteController($scope, $rootScope, $route, $routeParams, $modal, $location, browser, Account, Wallet, ModalManager) {
+  .controller("SiteController",["$http", "$scope", "$rootScope", "$route", "$routeParams", "$modal", "$location", "browser", "Account", "Wallet", "ModalManager",
+    function SiteController($http, $scope, $rootScope, $route, $routeParams, $modal, $location, browser, Account, Wallet, ModalManager) {
 
       $scope.$route = $route;
       $scope.$location = $location;
@@ -8,6 +8,10 @@
       $scope.account = Account;
       $scope.wallet = Wallet;
       $scope.modalManager = ModalManager;
+
+      $http.get('/v1/system/commits', {}).success(function(data) {
+        $scope.version = data.commits[0].commitshort;
+      });
 
       $scope.events = [];
 

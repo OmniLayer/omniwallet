@@ -2,8 +2,8 @@
 
 function StatsCtrl($scope, $route, $routeParams, $http) {
 
-  $http.get('/v1/system/stats.json', {}).success(function(data) {
-    $scope.stats = data;
+  $http.get('/v1/system/status', {}).success(function(data) {
+    $scope.status = data;
   });
 }
 
