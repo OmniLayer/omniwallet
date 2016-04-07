@@ -14,7 +14,7 @@
       <button type="submit" ng-click="checkBalance();" ng-disabled="validate(balanceAddress) == false" class="btn btn-main pull-right">{{ 'HOMEPAGE.CHECKBALANCE' | translate }}</button>
     </form>
   </div>
-  <div class="om-title text-center" ng-show="checkAddress && !checkAddress.loaded && !pricesLoaded">
+  <div class="om-title text-center" ng-show="checkAddress && !pricesLoaded">
     {{ 'COMMON.LOADING' | translate}}...
   </div>
   <div ng-show="checkAddress && checkAddress.loaded && pricesLoaded">
