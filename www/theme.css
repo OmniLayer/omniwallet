@@ -1155,7 +1155,32 @@ span.clear {
     width:48%;
     height:320px;
 }
-
+.block-tx2 {
+    -moz-border-radius:2px;
+    -webkit-border-radius:2px;
+    background-color:#E4F1F2;
+    border-radius:2px;
+    margin:20px 0 10px;
+    overflow:hidden;
+    padding:15px;
+    border:1px solid #eee;
+    float:left;
+    width:58%;
+    height:320px;
+}
+.block-tx3 {
+    -moz-border-radius:2px;
+    -webkit-border-radius:2px;
+    background-color:#E4F1F2;
+    border-radius:2px;
+    margin:20px 0 10px;
+    overflow:hidden;
+    padding:15px;
+    border:1px solid #eee;
+    float:left;
+    width:38%;
+    height:320px;
+}
 .number {
     /*font-family: Inconsolata;*/
     overflow: hidden;
