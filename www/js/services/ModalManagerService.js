@@ -190,6 +190,10 @@ angular.module("omniServices")
                                   $modalScope.waiting = false;
                                   $modalScope.transactionSuccess = true;
                                   $modalScope.url = 'http://blockchain.info/address/' + from + '?sort=0';
+                                } else if (successData.status.match(/NOTOK/gi)) {
+                                  $modalScope.waiting = false;
+                                  $modalScope.transactionError = true;
+                                  $modalScope.error = successData.pushed+" Reason: "+successData.message;
                                 } else {
                                   $modalScope.waiting = false;
                                   $modalScope.transactionError = true;

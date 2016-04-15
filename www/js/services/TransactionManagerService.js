@@ -68,22 +68,31 @@ angular.module("omniServices")
                                     TransactionGenerator.pushSignedTransaction(finalTransaction).then(
                                         function(successData) {
                                             var successData = successData.data;
+                                            //console.log(successData);
                                             if (successData.pushed.match(/submitted|success/gi) != null) {
                                                 deferred.resolve({
                                                     waiting: false,
                                                     transactionSuccess: true,
                                                     url : TX_DATA_URL + successData.tx
                                                 })
+                                            } else if (successData.status.match(/NOTOK/gi)) {
+                                                deferred.reject({
+                                                    waiting: false,
+                                                    transactionError: true,
+                                                    error: successData.pushed, //Unspecified error, show user
+                                                    errorMessage: successData.pushed+" Reason: "+successData.message
+                                                })
                                             } else {
                                                 deferred.reject({
                                                     waiting: false,
                                                     transactionError: true,
-                                                    error: successData.pushed, //Unspecified error, show user}
+                                                    error: successData.pushed, //Unspecified error, show user
                                                     errorMessage: "Invalid transaction"
                                                 })
                                             }
                                         },
                                         function(errorData) {
+                                            //console.log(errorData);
                                             deferred.reject({
                                                 waiting: false,
                                                 transactionError: true,
