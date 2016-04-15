@@ -79,7 +79,7 @@ angular.module("omniServices")
                                                 deferred.reject({
                                                     waiting: false,
                                                     transactionError: true,
-                                                    error: successData.pushed, //Unspecified error, show user
+                                                    error: successData.pushed, //known error, show user
                                                     errorMessage: successData.pushed+" Reason: "+successData.message
                                                 })
                                             } else {
