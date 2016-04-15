@@ -21,12 +21,12 @@ error_codez= {
  '-20': 'Database error. Contact a developer.',
  '-22': 'Error parsing transaction. Contact a developer.',
  '-25': 'General error. Contact a developer.',
- '-26': 'Transaction rejected by the network. Contact a developer.',
+ '-26': 'Transaction rejected by the network.',
  '-27': 'Transaction already in chain. Contact a developer.',
  '1': 'Transaction malformed. Contact a developer.',
  '16': 'Transaction was invalid. Contact a developer.',
  '65': 'Transaction sent was under dust limit. Contact a developer.',
- '66': 'Transaction did not meet fees. Contact a developer.',
+ '66': 'Transaction did not meet fees. Try increasing Miner Fee.',
  '69.2': 'Your hair is on fire. Contact a stylist.'
 }
 
@@ -55,6 +55,7 @@ def pushtxnode(signed_tx):
     #output=commands.getoutput('bitcoind sendrawtransaction ' +  str(signed_tx) )
     print "final signed", signed_tx
     output=sendrawtransaction(str(signed_tx))
+    #output="Test output for error code handling: : {u'message': u'66: insufficient priority', u'code': -26}"
 
     print 'raw response',output,'\n'
 
@@ -70,9 +71,14 @@ def pushtxnode(signed_tx):
 
         response_status='NOTOK'
         try:
-            response=json.dumps({"status":response_status, "pushed": error_codez[ str(output['code']) ], "message": output['message'], "code": output['code'] })
+          message=error_codez[ output['message'].split(":")[0] ]
+        except:
+          message=output['message']
+
+        try:
+          response=json.dumps({"status":response_status, "pushed": error_codez[ str(output['code']) ], "message": message, "code": output['code'] })
         except KeyError, e:
-            response=json.dumps({"status":response_status, "pushed": str(e), "message": output['message'], "code": output['code'] })
+          response=json.dumps({"status":response_status, "pushed": str(e), "message": message, "code": output['code'] })
     else:
         response_status='OK'
         response=json.dumps({"status":response_status, "pushed": 'success', "tx": output['result'] })
