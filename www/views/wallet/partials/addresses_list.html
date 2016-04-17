@@ -14,16 +14,16 @@
 				<img ng-src="{{address.qr}}" ng-show="showqr">{{address.hash}}
 				<a href ng-click="showqr = !showqr">
 					<span class="glyphicon glyphicon-qrcode"></span>
-			    </a> 
-            	<a href="/about/faq" target="_new">
-            		<span class="glyphicon glyphicon-lock" tooltip="Your Wallet has the Private key for this address. (Click for more info)"></span>
-            	</a>
+				</a>
+				<a href="/about/faq" target="_new">
+					<span class="glyphicon glyphicon-lock" tooltip="Your Wallet has the Private key for this address. (Click for more info)"></span>
+				</a>
 			</div>
 			<div class="col-xs-12 col-sm-6" ng-if="address.privkey == undefined && address.pubkey == undefined">
 				<img ng-src="{{address.qr}}" ng-show="showqr">{{address.hash}}
 				<a href ng-click="showqr = !showqr">
 					<span class="glyphicon glyphicon-qrcode"></span>
-			    </a> 
+				</a>
 			</div>
 
 			<div class="col-xs-5 col-sm-2 text-right"></div>

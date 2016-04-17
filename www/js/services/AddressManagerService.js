@@ -39,7 +39,10 @@ angular.module("omniServices")
 			var data = {
 			  addr: address
 			};
-			var promise = $http.post(url, data);
-			return promise;
+			//var promise = $http.post(url, data);
+			//return promise;
+			return $http.post(url, data).then(function(response) {
+				return response;
+			});
 	    }
 	}]);
