@@ -3,12 +3,16 @@ angular.module('omniControllers')
 		function WalletHistoryController($scope, $location, $http, hashExplorer, $translate) {
   			$scope.showtesteco = $scope.account.getSetting('showtesteco');
 			$scope.history=[]
-			$scope.wallet.transactions($scope.showtesteco).forEach(function(adrtx){
+			$scope.isLoading=true;
+			$scope.wallet.transactions($scope.showtesteco).forEach(function(adrtx, index, array){
 				adrtx.then(function(txs){
 					//console.log(txs);
 					txs.forEach(function(tx){
 						$scope.history.push(tx);
 					});
+					if ( index == array.length-1 ) {
+						$scope.isLoading=false;
+					}
 				});
 			});
 
@@ -18,20 +22,26 @@ angular.module('omniControllers')
 					//address=address.updateTransactions();
 					$scope.selectedAddress = address;
 					$scope.history = [];
+					$scope.isLoading=true;
 					address.transactions($scope.showtesteco).then(function(txs){
 						txs.forEach(function(tx){
 							$scope.history.push(tx);
 						});
-				    });
+						$scope.isLoading=false;
+					});
 			  	} else {
 			  		$scope.selectedAddress = undefined;
 					$scope.history=[]
-					$scope.wallet.transactions($scope.showtesteco).forEach(function(adrtx){
+					$scope.isLoading=true;
+					$scope.wallet.transactions($scope.showtesteco).forEach(function(adrtx, index, array){
 						adrtx.then(function(txs){
 							//console.log(txs);
 							txs.forEach(function(tx){
 								$scope.history.push(tx);
 							});
+							if ( index == array.length-1 ) {
+								$scope.isLoading=false;
+							}
 						});
 					});			  	
 			  	}
