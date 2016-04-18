@@ -14,24 +14,20 @@
 				<img ng-src="{{address.qr}}" ng-show="showqr">{{address.hash}}
 				<a href ng-click="showqr = !showqr">
 					<span class="glyphicon glyphicon-qrcode"></span>
-			    </a> 
-            	<a href="/about/faq" target="_new">
-            		<span class="glyphicon glyphicon-lock" tooltip="Your Wallet has the Private key for this address. (Click for more info)"></span>
-            	</a>
+				</a>
+				<a href="/about/faq" target="_new">
+					<span class="glyphicon glyphicon-lock" tooltip="Your Wallet has the Private key for this address. (Click for more info)"></span>
+				</a>
 			</div>
 			<div class="col-xs-12 col-sm-6" ng-if="address.privkey == undefined && address.pubkey == undefined">
 				<img ng-src="{{address.qr}}" ng-show="showqr">{{address.hash}}
 				<a href ng-click="showqr = !showqr">
 					<span class="glyphicon glyphicon-qrcode"></span>
-			    </a> 
+				</a>
 			</div>
-			<div class="col-xs-5 col-sm-2 text-right">
-                <span class="currency" title="{{address.getDisplayBalance(0)}}" ng-bind-html="address.getDisplayBalance(0) | bigjs: '0,0.00000000'"></span>
-                <span ng-show="address.getPendingNeg(0)<0" tooltip="This balance reflects Omni's pending transaction(s) with a total outgoing amount of {{address.getPendingNeg(0)*-1}} {{currency.name ? currency.name : currency.symbol | truncate:14}}">
-                    <a href="/about/faq" target="_new"><span class="glyphicon glyphicon-export"></span></a></span>
-                 <span ng-show="address.getPendingPos(0)>0" tooltip="Oh Boy, Someone sent you something from Omni. When it confirms this balance will be updated">
-                    <br><a href="/about/faq" target="_new"><span class="glyphicon glyphicon-import"></span></a> (+<span ng-bind-html="address.getPendingPos(0) | bigjs: '0,0.00000000'"></span> Unconfirmed)</span>
-			</div>
+
+			<div class="col-xs-5 col-sm-2 text-right"></div>
+
 			<div class="col-xs-5 col-sm-2 text-right" title="{{address.getDisplayBalance(0) * wallet.getAsset('0').price}}" ng-bind-html="address.getDisplayBalance(0) * wallet.getAsset(0).price | numeraljs: '$0,0.00':true"></div>
 			<div class="col-xs-2">
 				<div class="dropdown pull-right">

@@ -11,6 +11,8 @@
 
       $http.get('/v1/system/commits', {}).success(function(data) {
         $scope.version = data.commits[0].commitshort;
+      }).error(function(){
+        $scope.version = "Info: Click";
       });
 
       $scope.events = [];

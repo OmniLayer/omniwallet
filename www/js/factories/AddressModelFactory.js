@@ -12,14 +12,13 @@ angular.module("omniFactories")
 					self.privkey = privkey;
 					self.pubkey = pubkey;
 					self.balance = [];
-					self.transactions = [];
+					//self.transactions = [];
 					self.qr = "https://chart.googleapis.com/chart?chs=150x150&cht=qr&chl="+hash+"&choe=UTF-8";
 					
-					AddressManager.getTransactions(hash).then(function(result){
-						var data = result.data;
-
-						self.transactions = data.transactions;
-					})
+					//AddressManager.getTransactions(hash).then(function(result){
+					//	var data = result.data;
+					//	self.transactions = data.transactions;
+					//})
 
 					BalanceSocket.on("address:"+hash, function(data){
 						if(self.balance != data.balance){
@@ -50,13 +49,28 @@ angular.module("omniFactories")
 					BalanceSocket.emit("address:add", {data:hash});
 				}
 
+				self.transactions = function(showtesteco){
+					address=self.hash;
+					//console.log("Starting "+address);
+					return AddressManager.getTransactions(address).then(function(result){
+						var data = result.data;
+						//console.log("found data for "+data.address+" its length is "+data.transactions.length);
+						txs=data.transactions;
+						return txs.map(function(tx){
+							if ((tx.currency.propertyid < 2147483648 && tx.currency.propertyid != 2) || showtesteco === 'true') {
+								return tx;
+							}
+						});
+					});
+				}
+
 				self.getDisplayBalance = function(assetId){
 					var currencyItem = self.balance.filter(function(asset){
 						return asset.id == assetId;
 					})[0];
 
 					if(currencyItem.divisible)
-	                    var value=new Big(currencyItem.value).times(WHOLE_UNIT).valueOf();
+						var value=new Big(currencyItem.value).times(WHOLE_UNIT).valueOf();
 					
 					return value || currencyItem.value;
 				}
@@ -67,7 +81,7 @@ angular.module("omniFactories")
 					})[0];
 
 					if(currencyItem.divisible)
-	                    var value=new Big(currencyItem.pendingneg).times(WHOLE_UNIT).valueOf();
+						var value=new Big(currencyItem.pendingneg).times(WHOLE_UNIT).valueOf();
 					
 					return value || currencyItem.pendingneg;
 				}
@@ -78,7 +92,7 @@ angular.module("omniFactories")
 					})[0];
 					
 					if(currencyItem && currencyItem.divisible)
-	                    var value=new Big(currencyItem.pendingpos).times(WHOLE_UNIT).valueOf();
+						var value=new Big(currencyItem.pendingpos).times(WHOLE_UNIT).valueOf();
 					
 					return value || currencyItem.pendingpos;
 				}
