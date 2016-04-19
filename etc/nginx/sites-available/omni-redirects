@@ -1,3 +1,5 @@
+	set $MY_ROOT $document_root;
+
         #Re-route nested routed through index
         location / {
             try_files $uri $uri/ /index.html =404;
@@ -8,7 +10,8 @@
         }
 
         location /template/ {
-            proxy_pass http://127.0.0.1/bower_components/angular-ui-bootstrap/template/;
+            #proxy_pass http://127.0.0.1/bower_components/angular-ui-bootstrap/template/;
+	    alias $MY_ROOT/bower_components/angular-ui-bootstrap/template/;
         }
 
         #Limit Perl Access per phil's recommendation
@@ -52,9 +55,9 @@
                  rewrite ^ /v1/system/revision;
         }
 
-        location ~ "^/v1/exchange/offers/(.*)$" {
-                alias /var/lib/omniwallet/www/offers/$1;
-        }
+        #location ~ "^/v1/exchange/offers/(.*)$" {
+        #        alias /var/lib/omniwallet/www/offers/$1;
+        #}
 
         include uwsgi_params;
         uwsgi_param SCRIPT_NAME   $app;
