@@ -7,6 +7,10 @@
             return 301 /wallet/overview;
         }
 
+        location /template/ {
+            proxy_pass http://127.0.0.1/bower_components/angular-ui-bootstrap/template/;
+        }
+
         #Limit Perl Access per phil's recommendation
         if ($http_user_agent ~ "libwww-perl.*"){
             return 403;
@@ -28,9 +32,9 @@
             proxy_set_header Connection "Upgrade";
         }
 
-        location ~ "^/v1/transaction/values.json$" {
-                alias /var/lib/omniwallet/www/values.json;
-        }
+        #location ~ "^/v1/transaction/values.json$" {
+        #        alias /var/lib/omniwallet/www/values.json;
+        #}
 
         location ~ "^/v1/system/stats.json$" {
                 #alias /var/lib/omniwallet/www/stats.json;
@@ -39,7 +43,8 @@
         }
 
         location ~ "^/v1/system/status.html$" {
-                alias /var/lib/omniwallet/www/status.html;
+                #alias /var/lib/omniwallet/www/status.html;
+                rewrite ^ /status;
         }
 
         location ~ "^/v1/system/revision.json$" {

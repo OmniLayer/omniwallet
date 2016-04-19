@@ -33,4 +33,16 @@ angular.module("omniServices")
 
 	      return {hash:address,privkey:encryptedPrivateKey}
 	    };
+
+	    self.getTransactions = function(address) {
+	    	var url = '/v1/transaction/address';
+			var data = {
+			  addr: address
+			};
+			//var promise = $http.post(url, data);
+			//return promise;
+			return $http.post(url, data).then(function(response) {
+				return response;
+			});
+	    }
 	}]);

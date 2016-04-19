@@ -39,10 +39,10 @@ def send_form_response(response_dict):
     if float(btc_fee)<0 or float( from_satoshi(btc_fee))>max_currency_value:
         return (None, 'Invalid fee: ' + str( from_satoshi( amount )) + ', max: ' + str( max_currency_value ))
     currency=response_dict['currency'][0]
-    if currency=='MSC':
+    if currency=='OMNI':
         currency_id=1
     else:
-        if currency=='TMSC':
+        if currency=='T-OMNI':
             currency_id=2
         else:
             if currency=='BTC':

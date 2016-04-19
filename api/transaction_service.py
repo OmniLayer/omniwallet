@@ -15,31 +15,48 @@ def getaddress():
     except ValueError:
         abort(make_response('This endpoint only consumes valid input', 400))
 
-    ROWS=dbSelect("select * from transactions t, addressesintxs atx where t.txdbserialnum = atx.txdbserialnum and atx.address=%s and t.txdbserialnum >0 order by t.txdbserialnum DESC", [address])
+    ROWS=dbSelect("""select t.TxHash, t.TxType, t.TxRecvTime, t.TxState,
+                            atx.AddressRole, atx.BalanceAvailableCreditDebit,
+                            sp.PropertyData
+                      from transactions t, addressesintxs atx, smartproperties sp 
+                      where t.txdbserialnum = atx.txdbserialnum and sp.PropertyID = atx.PropertyID and atx.address=%s and t.txdbserialnum >0 
+                      and sp.Protocol != 'Fiat'
+                      order by t.txdbserialnum DESC""", [address])
 
-    response = { 'address': {}, 'balance': {}, '0' : { 'transactions': [] } } #To preserve compatability, 'currID': {'txdata'}
+    transactions = []
+
     if len(ROWS) > 0:
-      for addrrow in ROWS:
-        #res = requests.get('http://localhost/v1/transaction/tx/' + addrrow[0] + '.json').json()[0]
-        res = json.loads(gettransaction(addrrow[0]))[0]
-        response['0']['transactions'].append(res)
+      for txrow in ROWS:
+        transaction = {}
 
-    return json.dumps(response)
+        transaction['hash'] = txrow[0]
+        transaction['type'] = txrow[1]
+        transaction['time'] = txrow[2]
+        transaction['state'] = txrow[3]
+        transaction['role'] = txrow[4]
+        transaction['amount'] = str(txrow[5])
+        transaction['currency'] = txrow[6]
 
-@app.route('/general/<currency_page>')
-def getcurrencyrecent(currency_page):
-    try:
-        currency_ = str(re.sub(r'\W+', '', currency_page.split('.')[0] ) ) #check alphanumeric
-    except ValueError:
-        abort(make_response('This endpoint only consumes valid input', 400))
+        transactions.append(transaction)
 
-    lookup_currency = { 'MSC': '1', 'TMSC': '2', 'BTC': '0' }
+    response = { 'address': address, 'transactions': transactions } 
 
-    c_symbol = currency_.split('_')[0]
-    c_page = currency_.split('_')[1]
+    return jsonify(response)
 
-    if c_symbol[:2] == 'SP': c_id = c_symbol[2:]
-    else: c_id = lookup_currency[ c_symbol ] 
+@app.route('/general/')
+def getcurrencyrecent():
+    #try:
+    #    currency_ = str(re.sub(r'\W+', '', currency_page.split('.')[0] ) ) #check alphanumeric
+    #except ValueError:
+    #    abort(make_response('This endpoint only consumes valid input', 400))
+
+    #lookup_currency = { 'MSC' : '1', 'TMSC' : '2', 'OMNI': '1', 'T-OMNI': '2', 'BTC': '0' }
+
+    #c_symbol = currency_.split('_')[0]
+    #c_page = currency_.split('_')[1]
+
+    #if c_symbol[:2] == 'SP': c_id = c_symbol[2:]
+    #else: c_id = lookup_currency[ c_symbol ] 
 
     #Do we even need per-currency pagination?
     ROWS=dbSelect("select * from transactions t, txjson txj where t.protocol != 'Bitcoin' and t.txdbserialnum = txj.txdbserialnum order by t.txblocknumber DESC limit 10;")
@@ -108,9 +125,9 @@ def gettransaction(hash_id):
 
     if txType != -22 and  txType != 21: #Dex purchases don't have these fields 
       ret['currencyId'] = txJson['propertyid']
-      ret['currency_str'] = 'Mastercoin' if txJson['propertyid'] == 1 else 'Test Mastercoin' if txJson['propertyid'] == 2 else "Smart Property"
+      ret['currency_str'] = 'Omni' if txJson['propertyid'] == 1 else 'Test Omni' if txJson['propertyid'] == 2 else "Smart Property"
       ret['invalid'] = False if txJson['valid'] == True else True
-      ret['amount'] = txJson['amount']
+      ret['amount'] = str(txJson['amount'])
       ret['formatted_amount'] = txJson['amount']
       ret['divisible'] = txJson['divisible']
       ret['fee'] = txJson['fee']
@@ -143,10 +160,10 @@ def gettransaction(hash_id):
       ret['propertyType'] = '0002' if mpData['divisible'] == True else '0001' 
       ret['formatted_property_type'] = int('0002' if mpData['divisible'] == True else '0001')
 
-      if txType == 50 or txType == 54: ret['numberOfProperties'] = mpData['totaltokens']; 
+      if txType == 50 or txType == 54: ret['numberOfProperties'] = str(mpData['totaltokens']); 
       
       if txType == 51:
-        ret['numberOfProperties'] = mpData['tokensperunit']; 
+        ret['numberOfProperties'] = str(mpData['tokensperunit']); 
         ret['currencyIdentifierDesired'] = mpData['propertyiddesired']
         ret['deadline'] = mpData['deadline']
         ret['earlybirdBonus'] = mpData['earlybonus']
@@ -161,7 +178,8 @@ def gettransaction(hash_id):
       # 22 - Dex Accepts - referenceaddress 
     
       if txType == 20:
-        cancel = True if txJson['subaction'] == 'Cancel' else False
+        action = 'subaction' if 'subaction' in txJson else 'action'
+        cancel = True if txJson[action] == 'Cancel' else False
 
         if not cancel:
           ROWS=dbSelect("select * from transactions t, activeoffers ao, txjson txj where t.txhash=%s "
@@ -181,12 +199,12 @@ def gettransaction(hash_id):
           ret['formatted_fee_required'] = str(mpData['feerequired'])
           ret['formatted_price_per_coin'] = '%.8f' % ppc
           ret['bitcoin_required'] = '%.8f' % ( Decimal( ppc ) * Decimal( mpData['amount'] ) )
-          ret['subaction'] = mpData['subaction']
+          ret['subaction'] = mpData[action]
 
         if cancel:
           ret['formatted_block_time_limit'] = str(txJson['timelimit'])
           ret['formatted_fee_required'] = str(txJson['feerequired'])
-          ret['subaction'] = txJson['subaction']
+          ret['subaction'] = txJson[action]
           ret['tx_type_str'] = 'Sell cancel'
 
       if txType == 22:

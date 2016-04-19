@@ -1,0 +1,21 @@
+<div class="modal-header">
+  <div class="text-left modal-title col-md-11">{{title | translate}}</div><div class="text-right"><button ng-disabled="wating" class="btn modal-cancel-btn" ng-click="close()"></button></div>
+</div>
+<form name=privkeyentry class="form-horizontal" style="margin-bottom:20px, margin-top:20px" ng-submit="!privkeyentry.$error.required && ok(newAddressData)">
+  <div class="modal-body">
+    <div class="row">
+        <div class="form-group col-md-10 col-md-push-1">
+          <label class="control-label">{{ 'MODALS.IMPORT.ENCRYPTED.KEY' | translate}}:</label>
+          <input type="text" name="privkey" class="form-control" placeholder="{{ 'MODALS.IMPORT.ENCRYPTED.KEYHOLDER' | translate}}" ng-model="newAddressData.encryptedPrivKey" required>
+        </div>
+    </div>
+    <div class="row">
+      <div class="form-group col-md-10 col-md-push-1">
+        <input type="password" name="password" class="form-control" placeholder="{{ 'MODALS.IMPORT.ENCRYPTED.PASSHOLDER' | translate}}" ng-model="newAddressData.password" required>
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <input type="submit" class="btn btn-main" ng-disabled="privkeyentry.$error.required" value="{{ 'MODALS.IMPORT.SUBMIT' | translate}}">
+  </div>
+</form>
