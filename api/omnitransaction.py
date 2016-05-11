@@ -507,7 +507,7 @@ class OmniTransaction:
                             break
 
 
-        validnextoutputs = { exodus_address: 0.00005757 }
+        validnextoutputs = { self.exodus_address: 0.00005757 }
         if to_address != None:
             validnextoutputs[to_address]=0.00005757 #Add for simple send
         
