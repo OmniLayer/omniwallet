@@ -16,12 +16,12 @@ class OmniTransaction:
         self.conn = getRPCconn()
         self.testnet = False
         self.magicbyte = 0
-        self.exodus_address=OmniTransaction.mainnet_exodus_address
+        self.exodus_address=self.mainnet_exodus_address
 
         if 'testnet' in form and ( form['testnet'] in ['true', 'True'] ):
             self.testnet =True
             self.magicbyte = 111
-            self.exodus_address=OmniTransaction.testnet_exodus_address
+            self.exodus_address=self.testnet_exodus_address
 
         try:
           if config.D_PUBKEY and ( 'donate' in form ) and ( form['donate'] in ['true', 'True'] ):
@@ -33,7 +33,7 @@ class OmniTransaction:
         except NameError, e:
           print e
           self.pubkey = form['pubkey']
-        self.fee = estimateFee(OmniTransaction.confirm_target)['result']
+        self.fee = estimateFee(self.confirm_target)['result']
         self.rawdata = form
         self.tx_type = tx_type
 
@@ -541,7 +541,7 @@ class OmniTransaction:
             total_sig_count = 1
             #DEBUG print [i,'added string', ordered_packets[i]]
             for packet in ordered_packets[i]:
-                hex_string = hex_string + OmniTransaction.HEXSPACE_SECOND + packet.lower() 
+                hex_string = hex_string + self.HEXSPACE_SECOND + packet.lower() 
                 asm_string = asm_string + " " + packet.lower()
                 addresses.append(pybitcointools.pubkey_to_address(packet, self.magicbyte))
                 total_sig_count = total_sig_count + 1
