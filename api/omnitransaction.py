@@ -413,7 +413,7 @@ class OmniTransaction:
                 #set the last byte to something random in case we generated an invalid pubkey
                 potential_data_address = pybitcointools.pubkey_to_address(obfuscated_randbyte, self.magicbyte)
                 
-                if bool(conn.validateaddress(potential_data_address).isvalid):
+                if bool(self.conn.validateaddress(potential_data_address).isvalid):
                     final_packets[i] = obfuscated_randbyte
                     invalid = False
             #make sure the public key is valid using pybitcointools, if not, regenerate 
@@ -497,7 +497,7 @@ class OmniTransaction:
         validnextinputs = []   #get valid redeemable inputs
         for unspent in unspent_tx:
             #retrieve raw transaction to spend it
-            prev_tx = conn.getrawtransaction(unspent[0])
+            prev_tx = self.conn.getrawtransaction(unspent[0])
 
             for output in prev_tx.vout:
                 if 'reqSigs' in output['scriptPubKey'] and output['scriptPubKey']['reqSigs'] == 1 and output['scriptPubKey']['type'] != 'multisig':
@@ -514,11 +514,11 @@ class OmniTransaction:
         if change >= 5757: # send anything above dust to yourself
             validnextoutputs[ from_address ] = float( Decimal(change)/Decimal(1e8) )
         
-        unsigned_raw_tx = conn.createrawtransaction(validnextinputs, validnextoutputs)
+        unsigned_raw_tx = self.conn.createrawtransaction(validnextinputs, validnextoutputs)
         
         #DEBUG print change,unsigned_raw_tx
 
-        json_tx =  conn.decoderawtransaction(unsigned_raw_tx)
+        json_tx =  self.conn.decoderawtransaction(unsigned_raw_tx)
         
         #append  data structure
         ordered_packets = []
@@ -642,7 +642,7 @@ class OmniTransaction:
         
         #verify that transaction is valid
         try:
-          decoded_tx = conn.decoderawtransaction(''.join(hex_transaction).lower());
+          decoded_tx = self.conn.decoderawtransaction(''.join(hex_transaction).lower());
         except Exception as e:
           raise Exception({ "status": "NOT OK", "error": str(e)+" : Please contact an developer"  })
 
@@ -651,7 +651,7 @@ class OmniTransaction:
 
         #DEBUG 
         print 'final hex ', ''.join(hex_transaction).lower()
-        #DEBUG print pprint.pprint(conn.decoderawtransaction(''.join(hex_transaction).lower()))
+        #DEBUG print pprint.pprint(self.conn.decoderawtransaction(''.join(hex_transaction).lower()))
 
         unsigned_hex=''.join(hex_transaction).lower()
 
