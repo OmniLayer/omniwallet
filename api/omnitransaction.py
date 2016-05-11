@@ -58,7 +58,7 @@ class OmniTransaction:
             try:
                 tx0bytes = self.__prepare_txbytes(self.txdata)
                 packets = self.__construct_packets( tx0bytes[0], tx0bytes[1], self.rawdata['transaction_from'])
-                unsignedhex= self.__build_transaction( fee, pubkey, packets[0], packets[1], packets[2], self.rawdata['transaction_from'], self.rawdata['transaction_to'])
+                unsignedhex= self.__build_transaction( self.fee, self.pubkey, packets[0], packets[1], packets[2], self.rawdata['transaction_from'], self.rawdata['transaction_to'])
                 #DEBUG print tx0bytes, packets, unsignedhex
                 return { 'status': 200, 'unsignedhex': unsignedhex[0] , 'sourceScript': unsignedhex[1] }
             except Exception as e:
@@ -68,9 +68,9 @@ class OmniTransaction:
                 txbytes = self.__prepare_txbytes(self.txdata)
                 packets = self.__construct_packets( txbytes[0], txbytes[1], self.rawdata['transaction_from'])
                 if self.tx_type == 55 and 'transaction_to' in self.rawdata:
-                  unsignedhex= self.__build_transaction( fee, pubkey, packets[0], packets[1], packets[2], self.rawdata['transaction_from'], self.rawdata['transaction_to'])
+                  unsignedhex= self.__build_transaction( self.fee, self.pubkey, packets[0], packets[1], packets[2], self.rawdata['transaction_from'], self.rawdata['transaction_to'])
                 else:
-                  unsignedhex= self.__build_transaction( fee, pubkey, packets[0], packets[1], packets[2], self.rawdata['transaction_from'])
+                  unsignedhex= self.__build_transaction( self.fee, self.pubkey, packets[0], packets[1], packets[2], self.rawdata['transaction_from'])
 
                 #DEBUG print tx0bytes, packets, unsignedhex
                 return { 'status': 200, 'unsignedhex': unsignedhex[0] , 'sourceScript': unsignedhex[1] }
