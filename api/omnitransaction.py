@@ -52,7 +52,7 @@ class OmniTransaction:
                 packets = self.__construct_packets( txbytes[0], txbytes[1], self.rawdata['transaction_from'] )
                 unsignedhex = self.__build_transaction( self.fee, self.pubkey, packets[0], packets[1], packets[2], self.rawdata['transaction_from'])
                 #DEBUG print txbytes, packets, unsignedhex
-                return { 'status':200 'unsignedhex': unsignedhex[0] , 'sourceScript': unsignedhex[1] }
+                return { 'status':200, 'unsignedhex': unsignedhex[0] , 'sourceScript': unsignedhex[1] }
             except Exception as e:
                 return { 'status': 502, 'data': 'Unspecified error '+str(e)}
         elif self.tx_type == 0:
