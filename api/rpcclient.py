@@ -131,3 +131,36 @@ def getdivisible_MP(propertyid):
 
 def getgrants_MP(propertyid):
     return host.call("getgrants_MP", propertyid)
+
+def getsimplesendPayload(propertyid, amount):
+    return host.call("omni_createpayload_simplesend", propertyid, amount)
+def getsendallPayload(ecosystem):
+    return host.call("omni_createpayload_sendall", ecosystem)
+def getdexsellPayload(propertyidforsale, amountforsale, amountdesired, paymentwindow, minacceptfee, action):
+    return host.call("omni_createpayload_dexsell", propertyidforsale, amountforsale, amountdesired, paymentwindow, minacceptfee, action)
+def getdexacceptPayload(propertyid, amount):
+    return host.call("omni_createpayload_dexaccept", propertyid, amount)
+def getstoPayload(propertyid, amount):
+    return host.call("omni_createpayload_sto", propertyid, amount)
+def getgrantPayload(propertyid, amount, memo):
+    return host.call("omni_createpayload_grant", propertyid, amount, memo)
+def getrevokePayload(propertyid, amount, memo):
+    return host.call("omni_createpayload_revoke", propertyid, amount, memo)
+def getchangeissuerPayload(propertyid):
+    return host.call("omni_createpayload_changeissuer", propertyid)
+def gettradePayload(propertyidforsale, amountforsale, propertiddesired, amountdesired):
+    return host.call("omni_createpayload_trade", propertyidforsale, amountforsale, propertiddesired, amountdesired)
+def getissuancefixedPayload(ecosystem, divisible, previousid, category,subcategory, name, url, data, amount):
+    return host.call("omni_createpayload_issuancefixed", ecosystem, divisible, previousid, category,subcategory, name, url, data, amount)
+def getissuancecrowdsalePayload(ecosystem, divisible, previousid, category,subcategory, name, url, data, propertyiddesired, tokensperunit, deadline, earlybonus, issuerpercentage):
+    return host.call("omni_createpayload_issuancecrowdsale", ecosystem, divisible, previousid, category,subcategory, name, url, data, propertyiddesired, tokensperunit, deadline, earlybonus, issuerpercentage)
+def getissuancemanagedPayload(ecosystem, divisible, previousid, category,subcategory, name, url, data):
+    return host.call("omni_createpayload_issuancemanaged", ecosystem, divisible, previousid, category,subcategory, name, url, data)
+def getclosecrowdsalePayload(propertyid):
+    return host.call("omni_createpayload_closecrowdsale", propertyid)
+def getcanceltradesbypricePayload(propertyidforsale, amountforsale, propertiddesired, amountdesired):
+    return host.call("omni_createpayload_canceltradesbyprice", propertyidforsale, amountforsale, propertiddesired, amountdesired)
+def getcanceltradesbypairPayload(propertyidforsale, propertiddesired):
+    return host.call("omni_createpayload_canceltradesbypair", propertyidforsale, propertiddesired)
+def getcancelalltradesPayload(ecosystem):
+    return host.call("omni_createpayload_cancelalltrades", ecosystem)
