@@ -56,21 +56,21 @@ class OmniTransaction:
                 return { 'status': 502, 'data': 'Unspecified error '+str(e)}
         elif self.tx_type == 0:
             try:
-                tx0bytes = prepare_txbytes(self.txdata)
-                packets = construct_packets( tx0bytes[0], tx0bytes[1], self.rawdata['transaction_from'])
-                unsignedhex= build_transaction( fee, pubkey, packets[0], packets[1], packets[2], self.rawdata['transaction_from'], self.rawdata['transaction_to'])
+                tx0bytes = self.__prepare_txbytes(self.txdata)
+                packets = self.__construct_packets( tx0bytes[0], tx0bytes[1], self.rawdata['transaction_from'])
+                unsignedhex= self.__build_transaction( fee, pubkey, packets[0], packets[1], packets[2], self.rawdata['transaction_from'], self.rawdata['transaction_to'])
                 #DEBUG print tx0bytes, packets, unsignedhex
                 return { 'status': 200, 'unsignedhex': unsignedhex[0] , 'sourceScript': unsignedhex[1] }
             except Exception as e:
                 return { 'status': 502, 'data': 'Unspecified error '+str(e)}
         elif self.tx_type in [55,56]:
             try:
-                txbytes = prepare_txbytes(self.txdata)
-                packets = construct_packets( txbytes[0], txbytes[1], self.rawdata['transaction_from'])
+                txbytes = self.__prepare_txbytes(self.txdata)
+                packets = self.__construct_packets( txbytes[0], txbytes[1], self.rawdata['transaction_from'])
                 if self.tx_type == 55 and 'transaction_to' in self.rawdata:
-                  unsignedhex= build_transaction( fee, pubkey, packets[0], packets[1], packets[2], self.rawdata['transaction_from'], self.rawdata['transaction_to'])
+                  unsignedhex= self.__build_transaction( fee, pubkey, packets[0], packets[1], packets[2], self.rawdata['transaction_from'], self.rawdata['transaction_to'])
                 else:
-                  unsignedhex= build_transaction( fee, pubkey, packets[0], packets[1], packets[2], self.rawdata['transaction_from'])
+                  unsignedhex= self.__build_transaction( fee, pubkey, packets[0], packets[1], packets[2], self.rawdata['transaction_from'])
 
                 #DEBUG print tx0bytes, packets, unsignedhex
                 return { 'status': 200, 'unsignedhex': unsignedhex[0] , 'sourceScript': unsignedhex[1] }
