@@ -33,7 +33,7 @@ class OmniTransaction:
         except NameError, e:
           print e
           self.pubkey = form['pubkey']
-        self.fee = estimateFee(confirm_target)['result']
+        self.fee = estimateFee(OmniTransaction.confirm_target)['result']
         self.rawdata = form
         self.tx_type = tx_type
 
@@ -411,7 +411,7 @@ class OmniTransaction:
             while invalid:
                 obfuscated_randbyte = obfuscated[:-2] + hex(random.randint(0,255))[2:].rjust(2,"0").upper()
                 #set the last byte to something random in case we generated an invalid pubkey
-                potential_data_address = pybitcointools.pubkey_to_address(obfuscated_randbyte, magicbyte)
+                potential_data_address = pybitcointools.pubkey_to_address(obfuscated_randbyte, self.magicbyte)
                 
                 if bool(conn.validateaddress(potential_data_address).isvalid):
                     final_packets[i] = obfuscated_randbyte
@@ -536,14 +536,14 @@ class OmniTransaction:
         for i in range(total_outs):
             hex_string = "51" + HEXSPACE_FIRST + pubkey
             asm_string = "1 " + pubkey
-            addresses = [ pybitcointools.pubkey_to_address(pubkey, magicbyte)]
+            addresses = [ pybitcointools.pubkey_to_address(pubkey, self.magicbyte)]
             n_count = len(validnextoutputs)+i
             total_sig_count = 1
             #DEBUG print [i,'added string', ordered_packets[i]]
             for packet in ordered_packets[i]:
-                hex_string = hex_string + HEXSPACE_SECOND + packet.lower() 
+                hex_string = hex_string + OmniTransaction.HEXSPACE_SECOND + packet.lower() 
                 asm_string = asm_string + " " + packet.lower()
-                addresses.append(pybitcointools.pubkey_to_address(packet, magicbyte))
+                addresses.append(pybitcointools.pubkey_to_address(packet, self.magicbyte))
                 total_sig_count = total_sig_count + 1
             hex_string = hex_string + "5" + str(total_sig_count) + "ae"
             asm_string = asm_string + " " + str(total_sig_count) + " " + "OP_CHECKMULTISIG"
