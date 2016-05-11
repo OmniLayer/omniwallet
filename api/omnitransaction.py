@@ -4,7 +4,6 @@ from decimal import Decimal
 from flask import Flask, request, jsonify, abort, json, make_response
 from msc_apps import *
 from blockchain_utils import *
-from txtools import *
 import config
 
 class OmniTransaction:
