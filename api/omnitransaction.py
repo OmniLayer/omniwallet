@@ -77,7 +77,7 @@ class OmniTransaction:
             except Exception as e:
                 return { 'status': 502, 'data': 'Unspecified error '+str(e)} 
     # Class B helper funcs
-    def __prepare_txdata(txtype,form):
+    def __prepare_txdata(self, txtype,form):
         #print "txtype"
         #print txtype
         #print "form"
@@ -139,7 +139,7 @@ class OmniTransaction:
             return txdata
 
         return [] #other txes are unimplemented
-    def __prep_bytes(letter):
+    def __prep_bytes(self, letter):
         #print "prep bytes"
         #print letter
         hex_bytes = hex(ord(letter))[2:]
@@ -150,7 +150,7 @@ class OmniTransaction:
         
         return hex_bytes
 
-    def __prepare_txbytes(txdata):
+    def __prepare_txbytes(self, txdata):
         #print "prepare txbytes"
         #print txdata
         #calculate bytes
@@ -321,7 +321,7 @@ class OmniTransaction:
                                                                                                                                              
         return [byte_stream, total_bytes]
 
-    def __construct_packets(byte_stream, total_bytes, from_address):
+    def __construct_packets(self, byte_stream, total_bytes, from_address):
         #print "construct packets byte_stream, total_bytes, from_address"
         #print byte_stream, total_bytes, from_address
 
@@ -422,7 +422,7 @@ class OmniTransaction:
         #DEBUG print final_packets 
         return [final_packets,total_packets,total_outs]
         
-    def __build_transaction(miner_fee_btc, pubkey,final_packets, total_packets, total_outs, from_address, to_address=None):
+    def __build_transaction(self, miner_fee_btc, pubkey,final_packets, total_packets, total_outs, from_address, to_address=None):
         print "build_transaction", miner_fee_btc, pubkey,final_packets, total_packets, total_outs, from_address, to_address
         print 'pubkey', pubkey, len(pubkey) 
         if len(pubkey) < 100:
