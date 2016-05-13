@@ -1,7 +1,6 @@
 import urlparse
 import os, sys, re, random, pybitcointools, bitcoinrpc, math
 from decimal import Decimal
-from flask import Flask, request, jsonify, abort, json, make_response
 from msc_apps import *
 from blockchain_utils import *
 import config
@@ -44,18 +43,19 @@ class OmniTransaction:
         #   return self.__generate_class_C_tx()
 
         return self.__generate_class_B_tx()
+        
     def __generate_class_B_tx(self):
         self.txdata = self.__prepare_txdata(self.tx_type, self.rawdata)
         txbytes = self.__prepare_txbytes(self.txdata)
         packets = self.__construct_packets( txbytes[0], txbytes[1], self.rawdata['transaction_from'] )
-        if self.tx_type in [20, 50,51,54,56]:
+        if self.tx_type in [20,50,51,54,56]:
             try:
                 unsignedhex = self.__build_transaction( self.fee, self.pubkey, packets[0], packets[1], packets[2], self.rawdata['transaction_from'])
                 #DEBUG print txbytes, packets, unsignedhex
                 return { 'status':200, 'unsignedhex': unsignedhex[0] , 'sourceScript': unsignedhex[1] }
             except Exception as e:
                 return { 'status': 502, 'data': 'Unspecified error '+str(e)}
-        elif self.tx_type == 0:
+        elif self.tx_type in [0,22]:
             try:
                 unsignedhex= self.__build_transaction( self.fee, self.pubkey, packets[0], packets[1], packets[2], self.rawdata['transaction_from'], self.rawdata['transaction_to'])
                 #DEBUG print tx0bytes, packets, unsignedhex
@@ -91,7 +91,31 @@ class OmniTransaction:
             txdata.append(int(form['amount_desired']))
             txdata.append(int(form['blocks']))
             txdata.append(int(form['min_buyer_fee']))
-        #elif txtype == 22:
+        elif txtype == 22:
+            ROWS = dbSelect("select * from activeoffers ao, transactions t, txjson txj where t.txhash=%s "
+                    "and ao.createtxdbserialnum=t.txdbserialnum and ao.createtxdbserialnum=txj.txdbserialnum", [form['tx_hash']] )
+
+            # sanity check
+            if len(ROWS) == 0:
+               error('no sell offer found for tx '+form['tx_hash'])
+
+            row = ROWS[0]
+
+            try:
+                rawdata = json.loads(row[-1])
+            except TypeError:
+                rawdata = row[-1]
+
+            self.rawdata['transaction_to']=rawdata['sendingaddress']
+            formatted_fee_required=str(row[3])
+
+            # fee is max between min_btc_fee and required_fee
+            required_fee=int( formatted_fee_required )
+            satoshi_min_fee=int( self.fee * Decimal(1e8) )
+            self.fee= '%.8f' % ( max(satoshi_min_fee,required_fee) / Decimal(1e8) )
+
+            txdata.append(int(rawdata['propertyid']))
+            txdata.append(int(form['amount'] * Decimal(1e8)))
         elif txtype in [50,51,54]:
             txdata.append(int(form['ecosystem']))
             txdata.append(int(form['property_type']))
@@ -322,7 +346,7 @@ class OmniTransaction:
                         tx_type_bytes + 
                         currency_id_bytes + 
                         amount_bytes)
-        elif txdata[1] == 20:
+         elif txdata[1] == 20:
             currency_id_bytes = hex(txdata[2])[2:].rstrip('L').rjust(8,"0")  # 4 bytes
             amount_for_sale_bytes = hex(txdata[3])[2:].rstrip('L').rjust(16,"0")  # 8 bytes
             amount_desired_bytes = hex(txdata[4])[2:].rstrip('L').rjust(16,"0")  # 8 bytes
@@ -344,7 +368,19 @@ class OmniTransaction:
                         amount_desired_bytes + 
                         blocks + 
                         min_buyer_fee)  
-
+        elif txdata[1] == 22:
+            currency_id_bytes = hex(txdata[2])[2:].rstrip('L').rjust(8,"0")  # 4 bytes
+            amount_bytes = hex(txdata[3])[2:].rstrip('L').rjust(16,"0")  # 8 bytes
+            
+            total_bytes = (len(tx_ver_bytes) + 
+                            len(tx_type_bytes) + 
+                            len(currency_id_bytes) + 
+                            len(amount_bytes))/2
+        
+            byte_stream = (tx_ver_bytes + 
+                        tx_type_bytes + 
+                        currency_id_bytes + 
+                        amount_bytes)
         return [byte_stream, total_bytes]
 
     def __construct_packets(self, byte_stream, total_bytes, from_address):
