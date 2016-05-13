@@ -16,14 +16,14 @@ angular.module('omniServices')
             'from_address':data.pubkey, 'to_address':data.transaction_to, 'amount':data.amount_to_transfer, 'currency':'BTC', 'fee':data.fee,'marker': (data.marker || false)
           };
           var url = '/v1/transaction/send/';
-        } else if (type == 20) { // sell tx
-          var url = '/v1/exchange/sell/';
-          data["seller"] = data["transaction_from"]
-          data["pubKey"] = data["pubkey"]
-        }else if (type==22){ // accept tx
-          var url = '/v1/exchange/accept/';
-          data["buyer"] = data["transaction_from"]
-          data["pubKey"] = data["pubkey"]
+        // } else if (type == 20) { // sell tx
+        //   var url = '/v1/exchange/sell/';
+        //   data["seller"] = data["transaction_from"]
+        //   data["pubKey"] = data["pubkey"]
+        // }else if (type==22){ // accept tx
+        //   var url = '/v1/exchange/accept/';
+        //   data["buyer"] = data["transaction_from"]
+        //   data["pubKey"] = data["pubkey"]
         }else{ // SP and simple send tx
           var url = '/v1/transaction/getunsigned/'+type;
         } 

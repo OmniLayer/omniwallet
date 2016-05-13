@@ -40,15 +40,16 @@ class OmniTransaction:
     def get_unsigned(self):
         # get payload for class C tx
         #payload = self.__generate_payload(self.tx_type, self.rawdata)
-        
-        #if payload > 80 bytes
+        #if payload > 80 bytes:
+        #   return self.__generate_class_C_tx()
+
         return self.__generate_class_B_tx()
     def __generate_class_B_tx(self):
         self.txdata = self.__prepare_txdata(self.tx_type, self.rawdata)
-        if self.tx_type in [50,51,54]:
+        txbytes = self.__prepare_txbytes(self.txdata)
+        packets = self.__construct_packets( txbytes[0], txbytes[1], self.rawdata['transaction_from'] )
+        if self.tx_type in [20, 50,51,54,56]:
             try:
-                txbytes = self.__prepare_txbytes(self.txdata)
-                packets = self.__construct_packets( txbytes[0], txbytes[1], self.rawdata['transaction_from'] )
                 unsignedhex = self.__build_transaction( self.fee, self.pubkey, packets[0], packets[1], packets[2], self.rawdata['transaction_from'])
                 #DEBUG print txbytes, packets, unsignedhex
                 return { 'status':200, 'unsignedhex': unsignedhex[0] , 'sourceScript': unsignedhex[1] }
@@ -56,18 +57,14 @@ class OmniTransaction:
                 return { 'status': 502, 'data': 'Unspecified error '+str(e)}
         elif self.tx_type == 0:
             try:
-                tx0bytes = self.__prepare_txbytes(self.txdata)
-                packets = self.__construct_packets( tx0bytes[0], tx0bytes[1], self.rawdata['transaction_from'])
                 unsignedhex= self.__build_transaction( self.fee, self.pubkey, packets[0], packets[1], packets[2], self.rawdata['transaction_from'], self.rawdata['transaction_to'])
                 #DEBUG print tx0bytes, packets, unsignedhex
                 return { 'status': 200, 'unsignedhex': unsignedhex[0] , 'sourceScript': unsignedhex[1] }
             except Exception as e:
                 return { 'status': 502, 'data': 'Unspecified error '+str(e)}
-        elif self.tx_type in [55,56]:
+        elif self.tx_type == 55:
             try:
-                txbytes = self.__prepare_txbytes(self.txdata)
-                packets = self.__construct_packets( txbytes[0], txbytes[1], self.rawdata['transaction_from'])
-                if self.tx_type == 55 and 'transaction_to' in self.rawdata:
+                if 'transaction_to' in self.rawdata:
                   unsignedhex= self.__build_transaction( self.fee, self.pubkey, packets[0], packets[1], packets[2], self.rawdata['transaction_from'], self.rawdata['transaction_to'])
                 else:
                   unsignedhex= self.__build_transaction( self.fee, self.pubkey, packets[0], packets[1], packets[2], self.rawdata['transaction_from'])
@@ -88,7 +85,14 @@ class OmniTransaction:
         txdata.append(int(txtype))
         
         #if txtype == 50 or txtype == 51:
-        if txtype in [50,51,54]:
+        if txtype == 20:
+            txdata.append(int(form['currency_identifier']))
+            txdata.append(int(form['amount_for_sale']))
+            txdata.append(int(form['amount_desired']))
+            txdata.append(int(form['blocks']))
+            txdata.append(int(form['min_buyer_fee']))
+        #elif txtype == 22:
+        elif txtype in [50,51,54]:
             txdata.append(int(form['ecosystem']))
             txdata.append(int(form['property_type']))
             txdata.append(int(form['previous_property_id']))
@@ -318,7 +322,29 @@ class OmniTransaction:
                         tx_type_bytes + 
                         currency_id_bytes + 
                         amount_bytes)
-                                                                                                                                             
+        elif txdata[1] == 20:
+            currency_id_bytes = hex(txdata[2])[2:].rstrip('L').rjust(8,"0")  # 4 bytes
+            amount_for_sale_bytes = hex(txdata[3])[2:].rstrip('L').rjust(16,"0")  # 8 bytes
+            amount_desired_bytes = hex(txdata[4])[2:].rstrip('L').rjust(16,"0")  # 8 bytes
+            blocks = hex(txdata[5])[2:].rstrip('L').rjust(2,"0")        # 1 byte
+            min_buyer_fee = hex(txdata[6])[2:].rstrip('L').rjust(16,"0") # 8 bytes
+
+            total_bytes = (len(tx_ver_bytes) + 
+                            len(tx_type_bytes) + 
+                            len(currency_id_bytes) + 
+                            len(amount_for_sale_bytes) + 
+                            len(amount_desired_bytes) + 
+                            len(blocks) + 
+                            len(min_buyer_fee))/2
+        
+            byte_stream = (tx_ver_bytes + 
+                        tx_type_bytes + 
+                        currency_id_bytes + 
+                        amount_for_sale_bytes + 
+                        amount_desired_bytes + 
+                        blocks + 
+                        min_buyer_fee)  
+
         return [byte_stream, total_bytes]
 
     def __construct_packets(self, byte_stream, total_bytes, from_address):
@@ -457,34 +483,6 @@ class OmniTransaction:
         total_amount = dirty_txes['avail']
         unspent_tx = dirty_txes['utxos']
 
-        #------------------------------------------- Old utxo calls
-        #clean sx output, initial version by achamely
-        #utxo_list = []
-        #round so we aren't under fee amount
-        #dirty_txes = get_utxo( from_address, fee_total_satoshi ).replace(" ", "")
-
-        #if (dirty_txes[:3]=='Ass') or (dirty_txes[0][:3]=='Not'):
-        #    raise Exception({ "status": "NOT OK", "error": "Not enough funds, try again. Needed: " + str(fee_total)  })
-
-        #for line in dirty_txes.splitlines():
-        #    utxo_list.append(line.split(':'))
-
-        #z = 0
-        #total_amount=0
-        #unspent_tx = []
-        #for item in utxo_list:
-        #    # unspent tx: [0] - txid; [1] - vout; [2] - amount;
-        #    if utxo_list[z][0] == "output":
-        #        unspent_tx.append( [ utxo_list[z][1] , utxo_list[z][2] ] )
-        #    if utxo_list[z][0] == "value":
-        #        unspent_tx[-1] += [ int( utxo_list[z][1] ) ]
-        #        total_amount += int( utxo_list[z][1] )
-        #    z += 1
-        #------------------------------------------- end Old utxo calls
-
-
-        # calculate change : 
-        # (total input amount) - (broadcast fee)
         change = total_amount - fee_total_satoshi
 
         #DEBUG 
