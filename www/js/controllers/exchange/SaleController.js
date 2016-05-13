@@ -8,12 +8,13 @@ angular.module("omniControllers")
         //TODO: VALIDATIONS
         var fee = new Big($scope.minersFee);
         var exchangeSale = new Transaction(20,$scope.selectedAddress,fee,{
-            transaction_version:0,
+            transaction_version:1,
             amount_for_sale: +new Big($scope.saleAmount).times(SATOSHI_UNIT).valueOf(),
             amount_desired: $scope.salePrice,
             min_buyer_fee: new Big($scope.buyersFee).times(SATOSHI_UNIT).valueOf(),
             blocks: $scope.saleBlocks,
             currency_identifier: $scope.selectedAsset.symbol,
+            action:1,
             donate: $scope.account.getSetting("donate")
           });
 
