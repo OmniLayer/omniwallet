@@ -38,12 +38,31 @@ class OmniTransaction:
 
     def get_unsigned(self):
         # get payload for class C tx
-        #payload = self.__generate_payload(self.tx_type, self.rawdata)
-        #if payload > 80 bytes:
-        #   return self.__generate_class_C_tx()
-
+        #payload = self.__generate_payload()
+        #if len(payload) <= 160:  #80bytes
+        #   return self.__generate_class_C_tx(payload)
+        #else:
         return self.__generate_class_B_tx()
-        
+    def __generate_payload(self):
+        if self.tx_type == 0:
+            return getsimplesendPayload(self.rawdata['currency_identifier'], self.rawdata['amount_to_transfer'])['result']
+        if self.tx_type == 20:
+            return getdexsellPayload(self.rawdata['currency_identifier'], self.rawdata['amount_for_sale'], self.rawdata['amount_desired'], self.rawdata['blocks'], self.rawdata['min_buyer_fee'], self.rawdata['action'])['result']
+        if self.tx_type == 22:
+            return getdexacceptPayload(self.rawdata['currency_identifier'], self.rawdata['amount'])['result']
+        if self.tx_type == 50:
+            return getissuancefixedPayload(self.rawdata['ecosystem'],self.rawdata['property_type'],self.rawdata['previous_property_id'],self.rawdata['property_category'],self.rawdata['property_subcategory'],self.rawdata['property_name'],self.rawdata['property_url'],self.rawdata['property_data'],self.rawdata['number_properties'])['result']
+        if self.tx_type == 51:
+            return getissuancecrowdsalePayload(self.rawdata['ecosystem'],self.rawdata['property_type'],self.rawdata['previous_property_id'],self.rawdata['property_category'],self.rawdata['property_subcategory'],self.rawdata['property_name'],self.rawdata['property_url'],self.rawdata['property_data'],self.rawdata['currency_identifier_desired'],self.rawdata['number_properties'], self.rawdata['deadline'], self.rawdata['earlybird_bonus'], self.rawdata['percentage_for_issuer'])['result']
+        if self.tx_type == 54:
+            return getissuancemanagedPayload(self.rawdata['ecosystem'],self.rawdata['property_type'],self.rawdata['previous_property_id'],self.rawdata['property_category'],self.rawdata['property_subcategory'],self.rawdata['property_name'],self.rawdata['property_url'],self.rawdata['property_data'])['result']
+        if self.tx_type == 55:
+            return getgrantPayload(self.rawdata['currency_identifier'], self.rawdata['amount'], self.rawdata['memo'])['result']
+        if self.tx_type == 56:
+            return getrevokePayload(self.rawdata['currency_identifier'], self.rawdata['amount'], self.rawdata['memo'])['result']
+
+    def __generate_class_C_tx(self, payload):
+
     def __generate_class_B_tx(self):
         self.txdata = self.__prepare_txdata(self.tx_type, self.rawdata)
         txbytes = self.__prepare_txbytes(self.txdata)
