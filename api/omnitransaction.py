@@ -57,7 +57,7 @@ class OmniTransaction:
         # Sumup the outputs
         fee_total = 0
         for output in decodedtx['vout']:
-            fee_total += output.value
+            fee_total += output['value']
 
         fee_total_satoshi = int( round( fee_total * Decimal(1e8) ) )
 
