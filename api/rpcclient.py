@@ -164,3 +164,13 @@ def getcanceltradesbypairPayload(propertyidforsale, propertiddesired):
     return host.call("omni_createpayload_canceltradesbypair", propertyidforsale, propertiddesired)
 def getcancelalltradesPayload(ecosystem):
     return host.call("omni_createpayload_cancelalltrades", ecosystem)
+def createrawtx_opreturn(payload, rawtx=None):
+    return host.call("omni_createrawtx_opreturn", rawtx, payload)
+def createrawtx_multisig(payload, rawtx=None):
+    return host.call("omni_createrawtx_multisig", rawtx, payload)
+def createrawtx_input(txhash, index, rawtx=None):
+    return host.call("omni_createrawtx_input", rawtx, txhash, index)
+def createrawtx_reference(destination, rawtx=None):
+    return host.call("omni_createrawtx_reference", rawtx, destination)
+def createrawtx_change(rawtx, previnputs, destination, fee):
+    return host.call("omni_createrawtx_change", rawtx, previnputs, destination, fee)
