@@ -101,7 +101,7 @@ class OmniTransaction:
 
         # Add the change if above dust
         if change > 5757:
-            rawtx = createrawtx_change(rawtx, validnextinputs, self.rawdata['transaction_from'], fee_total)['result']
+            rawtx = createrawtx_change(rawtx, validnextinputs, self.rawdata['transaction_from'], float(fee_total))['result']
 
         return { 'status':200, 'unsignedhex': rawtx , 'sourceScript': prevout_script }
 
