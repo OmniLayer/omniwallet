@@ -174,3 +174,4 @@ def createrawtx_reference(destination, rawtx=None):
     return host.call("omni_createrawtx_reference", rawtx, destination)
 def createrawtx_change(rawtx, previnputs, destination, fee):
     return host.call("omni_createrawtx_change", rawtx, previnputs, destination, fee)
+ 
