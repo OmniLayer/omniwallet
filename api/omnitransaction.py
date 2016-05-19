@@ -89,11 +89,11 @@ class OmniTransaction:
             #retrieve raw transaction to spend it
             prev_tx = getrawtransaction(unspent[0])['result']
 
-            for output in prev_tx.vout:
+            for output in prev_tx['vout']:
                 if 'reqSigs' in output['scriptPubKey'] and output['scriptPubKey']['reqSigs'] == 1 and output['scriptPubKey']['type'] != 'multisig':
                     for address in output['scriptPubKey']['addresses']:
                         if address == self.rawdata['transaction_from'] and int(output['n']) == int(unspent[1]):
-                            validnextinputs.append({ "txid": prev_tx.txid, "vout": output['n'], "scriptPubKey" : output['scriptPubKey']['hex'], "value" : output['value']})
+                            validnextinputs.append({ "txid": prev_tx['txid'], "vout": output['n'], "scriptPubKey" : output['scriptPubKey']['hex'], "value" : output['value']})
                             break
         # Add the inputs
         for input in validnextinputs:
