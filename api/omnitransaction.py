@@ -87,7 +87,7 @@ class OmniTransaction:
         validnextinputs = []   #get valid redeemable inputs
         for unspent in unspent_tx:
             #retrieve raw transaction to spend it
-            prev_tx = getrawtransaction(unspent[0])
+            prev_tx = getrawtransaction(unspent[0])['result']
 
             for output in prev_tx.vout:
                 if 'reqSigs' in output['scriptPubKey'] and output['scriptPubKey']['reqSigs'] == 1 and output['scriptPubKey']['type'] != 'multisig':
@@ -97,7 +97,7 @@ class OmniTransaction:
                             break
         # Add the inputs
         for input in validnextinputs:
-            rawtx = createrawtx_input(input['txid'],input['vout'],rawtx)
+            rawtx = createrawtx_input(input['txid'],input['vout'],rawtx)['result']
 
         # Add the change if above dust
         if change > 5757:
