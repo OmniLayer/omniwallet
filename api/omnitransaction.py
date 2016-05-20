@@ -40,13 +40,13 @@ class OmniTransaction:
         # get payload
         payload = self.__generate_payload()
         # Add exodous output
-        rawtx = createrawtx_reference(self.exodus_address)['result']
+        rawtx = None
         if 'transaction_to' in self.rawdata:
             # Add reference for reciever
             rawtx = createrawtx_reference(self.rawdata['transaction_to'], rawtx)['result']
 
         # Add the payload    
-        if len(payload) <= 160:  #80bytes
+        if len(payload) <= 152:  #80bytes - 4 bytes for omni marker
             rawtx = createrawtx_opreturn(payload, rawtx)['result']
         else:
             rawtx = createrawtx_multisig(payload, rawtx)['result']
@@ -99,9 +99,8 @@ class OmniTransaction:
         for input in validnextinputs:
             rawtx = createrawtx_input(input['txid'],input['vout'],rawtx)['result']
 
-        # Add the change if above dust
-        if change > 5757:
-            rawtx = createrawtx_change(rawtx, validnextinputs, self.rawdata['transaction_from'], float(fee_total))['result']
+        # Add the change
+        rawtx = createrawtx_change(rawtx, validnextinputs, self.rawdata['transaction_from'], float(fee_total))['result']
 
         return { 'status':200, 'unsignedhex': rawtx , 'sourceScript': prevout_script }
 
