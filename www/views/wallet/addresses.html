@@ -1,0 +1,43 @@
+<div ng-controller="WalletAddressesController">
+  <div class="row om-row">
+    <div class="col-xs-12 col-sm-3 col-md-4 col-lg-4">
+      <div class="text-left om-title">{{ 'WALLET.ADDRESSES.TITLE' | translate}}</div>
+    </div>
+    <div class="hidden-xs col-sm-9 col-md-8 col-lg-8">
+      <form class="pull-right form-inline">
+        <div class="form-group">
+          <label>{{ 'WALLET.ADDRESSES.VIEW' | translate}}</label>
+          <div class="btn-group">
+            <button type="button" class="hidden-xs btn btn-tertiary dropdown-toggle" data-toggle="dropdown" aria-expanded="false" ng-if="listTemplate==templates['addresses']">
+              {{ 'COMMON.ADDRESSES' | translate}}  <span class="glyphicon glyphicon-chevron-down"></span>
+            </button>
+            <button type="button" class="hidden-xs btn btn-tertiary dropdown-toggle" data-toggle="dropdown" aria-expanded="false" ng-if="listTemplate==templates['assets']">
+              {{ 'COMMON.ASSETS' | translate}} <span class="glyphicon glyphicon-chevron-down"></span>
+            </button>
+            <ul class="dropdown-menu dropdown-menu-right" role="menu">
+              <li><a href="#" ng-click="listTemplate=templates['addresses']">{{ 'COMMON.ADDRESSES' | translate}}</a></li>
+              <li><a href="#" ng-click="listTemplate=templates['assets']">{{ 'COMMON.ASSETS' | translate}}</a></li>
+            </ul>
+          </div>
+        </div>
+        <a class="btn btn-secondary" href="/wallet/send">{{ 'COMMON.SEND' |  translate }}</a>
+        <div class="form-group btn-group">
+          <button type="button" class="hidden-xs btn btn-main dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+            {{ 'WALLET.ADDRESSES.OPTIONS' | translate}} <span class="glyphicon glyphicon-chevron-down"></span>
+          </button>
+          <ul class="dropdown-menu dropdown-menu-main dropdown-menu-right" role="menu">
+            <li><a href="#" ng-click="createBTCAddress()">{{ 'WALLET.ADDRESSES.CREATE' | translate}}</a></li>
+            <li><a href="#" ng-click="modalManager.openImportPrivateKeyForm()">{{ 'WALLET.ADDRESSES.IMPORT' | translate}}</a></li>
+            <li><a href="#" ng-click="modalManager.openImportWatchOnlyForm()">{{ 'WALLET.ADDRESSES.WATCH' | translate}}</a></li>
+            <li><a href="#" ng-click="modalManager.openImportArmoryForm()">{{ 'WALLET.ADDRESSES.OFFLINE' | translate}}</a></li>
+          </ul>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-xs-12" ng-include="listTemplate">
+    </div>
+  </div>
+ </div>

@@ -86,9 +86,9 @@ do
     cd $DATADIR
     mkdir -p wallets sessions www
 
-    echo "Updating Stats/Status File"
+    #echo "Updating Stats/Status File"
     #$PYTHONBIN $APPDIR/api/stats.py
-    $PYTHONBIN $APPDIR/api/status.py -o $APPDIR -d $DATADIR
+    #$PYTHONBIN $APPDIR/api/status.py -o $APPDIR -d $DATADIR
 
     # unlock
     rm -f $LOCK_FILE

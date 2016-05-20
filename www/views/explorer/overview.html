@@ -1,0 +1,52 @@
+<div ng-controller="ExplorerOverviewController" ng-init="getData()">
+  <div class="row om-row">
+    <div class="col-sm-4 text-left om-title">
+      {{'EXPLORER.OVERVIEW.TITLE' | translate}}
+    </div>
+    <div class="col-sm-8">
+      <form class="form-search form-inline" name="searchForm">
+        <div class="input-group col-xs-12">
+          <span class="input-group-addon">
+            <i class="glyphicon glyphicon-search"></i>
+          </span>
+          <input type="text" name="searchEntry" class="form-control search-query" ng-model="searchQueryText" placeholder="{{'EXPLORER.OVERVIEW.PLACEHOLDER' | translate}}" ng-change="searchForm.searchEntry.$error.pattern == false ? doSearch() : null;" ng-pattern="/^[a-zA-Z0-9]+$/"/>
+          <span ng-show="searchQueryText.length > 0" class="clear" ng-click="clear()"></span>
+        </div>
+      </form>      
+    </div>
+  </div>
+  <div class="row">
+    <p class="col-xs-12 alert alert-danger text-center" ng-if="searchForm.searchEntry.$error.pattern">{{'EXPLORER.OVERVIEW.ALPHANUMERIC' | translate}}</p>
+    <p class="col-xs-12 alert alert-danger text-center" ng-if="searchQueryText.length > 3 && noResults">{{'EXPLORER.OVERVIEW.NORESULTS' | translate}}</p>
+    <p class="col-xs-12 alert alert-warning text-center" ng-show="searchQueryText.length > 0 && searchQueryText.length < 4" >{{'EXPLORER.OVERVIEW.SHORTQUERY.LEAD' | translate}} {{ 4-searchQueryText.length }} {{'EXPLORER.OVERVIEW.SHORTQUERY.TRAIL' | translate}}</p>
+  </div>
+  <div class="om-table">
+    <div class="row table-header hidden-xs">
+      <div class="col-sm-3">{{'TABLES.TRANSACTIONS.TX' | translate}}</div>
+      <div class="col-sm-3">{{'TABLES.TRANSACTIONS.DETAILS' | translate}}</div>
+      <div class="col-sm-2">{{'TABLES.TRANSACTIONS.AMOUNT' | translate}}</div>
+      <div class="col-sm-1">{{'TABLES.TRANSACTIONS.BLOCK' | translate}}</div>
+      <div class="col-sm-3">{{'TABLES.TRANSACTIONS.BLOCKTIME' | translate}}</div>
+    </div>
+    <div class="row table-row" ng-repeat="trans in transactions">
+      <div class="visible-xs col-xs-5">{{'TABLES.TRANSACTIONS.TX' | translate}}</div>
+      <div class="col-xs-7 col-sm-3" ng-click="setHashExplorer(trans)"> 
+        <a href="/explorer/inspector?view={{trans.tx_hash}}">
+          {{trans.tx_hash_concat}}
+        </a>
+      </div>
+
+      <div class="visible-xs col-xs-5">{{'TABLES.TRANSACTIONS.DETAILS' | translate}}</div>
+      <div class="col-xs-7 col-sm-3">{{trans.tx_type_str}}</div>
+
+      <div class="visible-xs col-xs-5">{{'TABLES.TRANSACTIONS.AMOUNT' | translate}}</div>
+      <div class="col-xs-7 col-sm-2 number" title="{{trans.accomulated_payment ? trans.accomulated_payment : trans.formatted_amount}}" ng-bind-html="trans.accomulated_payment ? trans.accomulated_payment : trans.formatted_amount | bigjs: '0,0.00000000'"></div>
+
+      <div class="visible-xs col-xs-5">{{'TABLES.TRANSACTIONS.BLOCK' | translate}}</div>
+      <div class="col-xs-7 col-sm-1">{{trans.block}}</div>
+
+      <div class="visible-xs col-xs-5">{{'TABLES.TRANSACTIONS.BLOCKTIME' | translate}}</div>
+      <div class="col-xs-7 col-sm-3">{{trans.utc_time}}</div>
+    </div>
+  </div>
+</div>
