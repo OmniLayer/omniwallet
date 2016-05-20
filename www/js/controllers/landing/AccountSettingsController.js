@@ -45,21 +45,24 @@ angular.module("omniControllers")
         };
 
       $scope.changePassword = function() {
-        $scope.login = {
+          $scope.login = {
             uuid: Account.uuid,
             action: 'verify',
             title: 'Verify Current Password',
             button: 'Validate',
+            bodyTemplate: "/views/modals/partials/login.html",
+            footerTemplate: "/views/modals/partials/login_footer.html",
             disable: true //disable UUID field in template
           };
           var modalInstance = $modal.open({
-            templateUrl: '/partials/login_modal.html',
+            templateUrl: '/views/modals/base.html',
             controller: LoginController,
-            scope: $scope
+            scope: $scope,
+            backdrop:'static'
           });
           modalInstance.result.then(function() {
               var newPasswordModal = $modal.open({
-                templateUrl: '/partials/wallet_password_modal.html',
+                templateUrl: '/views/modals/change_password.html',
                 controller: WalletPasswordController,
                 scope: $scope
               });

@@ -7,7 +7,10 @@ function LoginControllerUUID($injector, $scope, $http, $location, $modalInstance
 }
 
 function LoginController($injector, $scope, $http, $location, $modalInstance, $q, Account, $idle) {
-  $scope.login = {
+  if ( $scope != undefined && $scope.login != undefined && $scope.login.action != undefined && $scope.login.action == 'verify' ) {
+    console.log("sync 1");
+  } else {
+    $scope.login = {}
   }
 
   Login($injector, $scope, $http, $location, $modalInstance, $q, Account, $idle);
@@ -18,8 +21,10 @@ function Login($injector, $scope, $http, $location, $modalInstance, $q, Account,
   $scope.dismiss = $modalInstance.dismiss;
   
   $scope.loginInProgress = false;
-  $scope.title == undefined ? $scope.title = 'Login' : $scope.title;
-  $scope.button == undefined ? $scope.button = 'Open Wallet' : $scope.button;
+  $scope.login.title == undefined ? $scope.title = 'Login' : $scope.title = $scope.login.title;
+  $scope.login.button == undefined ? $scope.button = 'Open Wallet' : $scope.button = $scope.login.button;
+  $scope.login.bodyTemplate != undefined ? $scope.bodyTemplate = $scope.login.bodyTemplate : null;
+  $scope.login.footerTemplate != undefined ? $scope.footerTemplate = $scope.login.footerTemplate : null;
   
   $scope.open = function(login) {
     if ( Account.verifyUUID(login.uuid) == false ) {
@@ -33,6 +38,7 @@ function Login($injector, $scope, $http, $location, $modalInstance, $q, Account,
     $scope.serverError = false;
 
     if($scope.login.action == 'verify'){
+      console.log("verifying");	
       Account.verify(login.uuid,login.password).then(function(){
         $modalInstance.close(Account.wallet) //pass wallet as verification
         $idle.watch();
@@ -41,6 +47,7 @@ function Login($injector, $scope, $http, $location, $modalInstance, $q, Account,
         angular.extend($scope,error);
       });
     } else {
+
       Account.login(login.uuid,login.password).then(function(wallet){
           $modalInstance.close()
           $location.path('/wallet');
