@@ -43,13 +43,13 @@ class OmniTransaction:
         rawtx = None
         if 'transaction_to' in self.rawdata:
             # Add reference for reciever
-            rawtx = createrawtx_reference(self.rawdata['transaction_to'], self.pubkey, rawtx)['result']
+            rawtx = createrawtx_reference(self.rawdata['transaction_to'], rawtx)['result']
 
         # Add the payload    
         if len(payload) <= 152:  #80bytes - 4 bytes for omni marker
             rawtx = createrawtx_opreturn(payload, rawtx)['result']
         else:
-            rawtx = createrawtx_multisig(payload, self.rawdata['transaction_from'], rawtx)['result']
+            rawtx = createrawtx_multisig(payload, self.rawdata['transaction_from'], self.pubkey, rawtx)['result']
 
         # Decode transaction to get total needed amount
         decodedtx = decoderawtransaction(rawtx)['result']
