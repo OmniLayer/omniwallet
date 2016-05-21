@@ -78,7 +78,7 @@ class OmniTransaction:
         change = total_amount - fee_total_satoshi
 
         #DEBUG 
-        print [ "Debugging...", dirty_txes,"miner fee sats: ", self.fee, "change: ",change,"total_amt: ", total_amount,"fee tot sat: ", fee_total_satoshi,"utxo ",  unspent_tx,"to ", self.rawdata['transaction_to'] ]
+        #print [ "Debugging...", dirty_txes,"miner fee sats: ", self.fee, "change: ",change,"total_amt: ", total_amount,"fee tot sat: ", fee_total_satoshi,"utxo ",  unspent_tx,"to ", self.rawdata['transaction_to'] ]
 
         #source script is needed to sign on the client credit grazcoin
         hash160=bc_address_to_hash_160(self.rawdata['transaction_from']).encode('hex_codec')
