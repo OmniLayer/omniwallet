@@ -30,8 +30,8 @@ angular.module("omniControllers")
 			$scope.setEcosystem = function(){
 			    PropertyManager.listByEcosystem($scope.ecosystem).then(function(result){
 			      var availableTokens = result.data.properties.sort(function(a, b) {
-			          var currencyA = a.propertyName.toUpperCase();
-			          var currencyB = b.propertyName.toUpperCase();
+			          var currencyA = a.name.toUpperCase();
+			          var currencyB = b.name.toUpperCase();
 			          return (currencyA < currencyB) ? -1 : (currencyA > currencyB) ? 1 : (a.currencyId < b.currencyId) ? -1 : (a.currencyId > b.currencyId) ? 1 : 0 ;
 			      });
 			      $scope.availableTokens = availableTokens.filter(function(currency){
@@ -42,7 +42,7 @@ angular.module("omniControllers")
 			};
 
 			$scope.formatCurrencyDisplay = function(currencyDesired){
-			    return currencyDesired.propertyName + " (" + currencyDesired.currencyId + ")";
+			    return currencyDesired.name + " (" + currencyDesired.currencyId + ")";
 			};
 			
 			$scope.updateAmounts = function(order,price){
