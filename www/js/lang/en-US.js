@@ -138,7 +138,8 @@ angular.module("omniConfig")
 		"SETTINGS":"Account Settings",
 		"TRADE":"Trade",
 		"TRANSACTIONS":"Transactions",
-		"WALLET":"My Wallet"
+		"WALLET":"My Wallet",
+		"OMNIDEX":"OmniDex"
 	},
 	"MODALS":{
 		"CREATE":{
