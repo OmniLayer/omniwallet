@@ -42,7 +42,7 @@ def decode(rawhex):
     except:
       reference = ""
   except Exception as e:
-    rawOMNI=e
+    rawOMNI=e.message
     sia=0
     sender=""
     reference=""
