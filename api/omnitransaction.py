@@ -130,8 +130,8 @@ class OmniTransaction:
  
             # fee is max between min_btc_fee and required_fee
             required_fee=int( formatted_fee_required )
-            satoshi_min_fee=int( self.fee * Decimal(1e8) )
-            self.fee= '%.8f' % ( max(satoshi_min_fee,required_fee) / Decimal(1e8) )
+            satoshi_min_fee=int( Decimal(self.fee) * Decimal(1e8) )
+            self.fee= '%.8f' % ( Decimal(max(satoshi_min_fee,required_fee)) / Decimal(1e8) )
             return getdexacceptPayload(rawdata['propertyid'], self.rawdata['amount'])['result']
         if self.tx_type == 50:
             return getissuancefixedPayload(self.rawdata['ecosystem'],self.rawdata['property_type'],self.rawdata['previous_property_id'],self.rawdata['property_category'],self.rawdata['property_subcategory'],self.rawdata['property_name'],self.rawdata['property_url'],self.rawdata['property_data'],self.rawdata['number_properties'])['result']
