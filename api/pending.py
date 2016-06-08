@@ -63,16 +63,16 @@ def insertbtc(rawtx):
 def insertomni(rawtx):
   try:
     sender = rawtx['Sender']
-    receiver = rawtx['Receiver']
-    propertyid = rawtx['MP']['PropertyID']
-    txtype = rawtx['MP']['TxType']
-    txversion = rawtx['MP']['TxVersion']
+    receiver = rawtx['Reference']
+    propertyid = rawtx['MP']['propertyid']
+    txtype = rawtx['MP']['type_int']
+    txversion = rawtx['MP']['version']
     txhash = rawtx['BTC']['txid']
     protocol = "Omni"
     addresstxindex=0
     txdbserialnum = dbSelect("select least(-1,min(txdbserialnum)) from transactions;")[0][0]
     txdbserialnum -= 1
-    amount = rawtx['MP']['Amount']
+    amount = rawtx['MP']['amount']
 
     if txtype == 55:
       #handle grants to ourself or others
