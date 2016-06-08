@@ -110,8 +110,10 @@ class OmniTransaction:
         if self.tx_type == 20:
             return getdexsellPayload(self.rawdata['currency_identifier'], self.rawdata['amount_for_sale'], self.rawdata['amount_desired'], self.rawdata['blocks'], self.rawdata['min_buyer_fee'], self.rawdata['action'])['result']
         if self.tx_type == 22:
+            txhash = self.rawdata['tx_hash']
+            txhash = re.sub(r'\W+', '', txhash)
             ROWS = dbSelect("select * from activeoffers ao, transactions t, txjson txj where t.txhash=%s "
-                     "and ao.createtxdbserialnum=t.txdbserialnum and ao.createtxdbserialnum=txj.txdbserialnum", [self.rawdata['tx_hash']] )
+                     "and ao.createtxdbserialnum=t.txdbserialnum and ao.createtxdbserialnum=txj.txdbserialnum", [txhash] )
  
             # sanity check
             if len(ROWS) == 0:
