@@ -22,7 +22,7 @@ angular.module("omniFactories")
 				self.data = data;
 
                 self.data['pubkey'] = self.pubKey;
-                self.data['fee']= fee.times(SATOSHI_UNIT).valueOf();
+                self.data['fee']= fee.valueOf();
                 self.data['transaction_from'] = self.address.hash;
                 self.data['testnet'] = TESTNET || false;
 

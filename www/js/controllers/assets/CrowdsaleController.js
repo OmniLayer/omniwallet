@@ -86,7 +86,7 @@ angular.module("omniControllers")
 		          property_name:$scope.propertyDetails.propertyName, 
 		          property_url:$scope.propertyDetails.propertyUrl || '\0', 
 		          property_data:$scope.propertyDetails.propertyData || '\0', 
-		          number_properties:$scope.isDivisible() ? +new Big($scope.numberOfTokens).times(SATOSHI_UNIT).valueOf() : +$scope.numberOfTokens,
+		          number_properties: +new Big($scope.numberOfTokens).valueOf(),
 		          currency_identifier_desired:$scope.selectedCurrency.propertyid,
 		          deadline:Date.UTC($scope.deadline.getFullYear(),$scope.deadline.getMonth(),$scope.deadline.getDate(), $scope.deadline.getHours(), $scope.deadline.getMinutes(), 0, 0) / 1000,
 		          earlybird_bonus:$scope.earlyBirdBonus,

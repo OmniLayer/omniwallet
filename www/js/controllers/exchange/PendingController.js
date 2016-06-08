@@ -148,11 +148,13 @@ angular.module("omniControllers")
 		  $scope.confirmCancel = function(tx) {
 		  	var fee = new Big(0.0001);
 	        var exchangeCancel = new Transaction(20,$scope.wallet.getAddress(tx.from_address),fee,{
-	            amount: 0,
-	            price: 0,
+	            transaction_version:1,
+	            amount_for_sale: 0,
+	            amount_desired: 0,
 	            min_buyer_fee: 0,
 	            blocks: 10,
-	            currency: (+tx.currencyId) == 1 ? 'OMNI' : 'T-OMNI',
+	            currency_identifier: (+tx.currencyId) == 1 ? 'OMNI' : 'T-OMNI',
+	            action:3,
 	            donate: $scope.account.getSetting("donate")
 	          });
 

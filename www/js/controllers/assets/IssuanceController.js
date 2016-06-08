@@ -51,7 +51,7 @@ angular.module("omniControllers")
 		          property_name:$scope.propertyDetails.propertyName, 
 		          property_url:$scope.propertyDetails.propertyUrl || '\0', 
 		          property_data:$scope.propertyDetails.propertyData || '\0', 
-		          number_properties:$scope.isDivisible() ? +new Big($scope.numberProperties).times(SATOSHI_UNIT).valueOf() : +$scope.numberProperties,
+		          number_properties: +new Big($scope.numberProperties).valueOf(),
 		          donate: $scope.account.getSetting("donate")
 		        });
 
