@@ -17,7 +17,7 @@ angular.module("omniControllers")
 
 	    $scope.sendByValue = function(){
 	      $scope.sendAmount = $scope.newBtcAmount;
-	      $scope.transaction.data['amount_to_transfer'] = +new Big($scope.newBtcAmount).times(SATOSHI_UNIT).valueOf();
+	      $scope.transaction.data['amount_to_transfer'] = +new Big($scope.newBtcAmount).valueOf();
 	      $scope.btcValueChanged = false;
 	      $scope.transactionError = false;
 	      $scope.clicked = false;
