@@ -46,7 +46,7 @@ def insertbtc(rawtx):
     addressrole="recipient"
     for output in rawtx['BTC']['vout']:
       outputamount = int(decimal.Decimal(str(output['value']))*decimal.Decimal(1e8))
-      if output['scriptPubKey']['type'] != "nulldata"":
+      if output['scriptPubKey']['type'] != "nulldata":
         for addr in output['scriptPubKey']['addresses']:
            address=addr
            dbExecute("insert into addressesintxs (address,propertyid,protocol,txdbserialnum,addresstxindex,addressrole,balanceavailablecreditdebit) "
