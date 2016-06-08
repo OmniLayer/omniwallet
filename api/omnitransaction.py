@@ -110,7 +110,29 @@ class OmniTransaction:
         if self.tx_type == 20:
             return getdexsellPayload(self.rawdata['currency_identifier'], self.rawdata['amount_for_sale'], self.rawdata['amount_desired'], self.rawdata['blocks'], self.rawdata['min_buyer_fee'], self.rawdata['action'])['result']
         if self.tx_type == 22:
-            return getdexacceptPayload(self.rawdata['currency_identifier'], self.rawdata['amount'])['result']
+            txhash = self.rawdata['tx_hash']
+            txhash = re.sub(r'\W+', '', txhash)
+            ROWS = dbSelect("select * from activeoffers ao, transactions t, txjson txj where t.txhash=%s "
+                     "and ao.createtxdbserialnum=t.txdbserialnum and ao.createtxdbserialnum=txj.txdbserialnum", [txhash] )
+ 
+            # sanity check
+            if len(ROWS) == 0:
+               error('no sell offer found for tx '+self.rawdata['tx_hash'])
+            row = ROWS[0]
+ 
+            try:
+                rawdata = json.loads(row[-1])
+            except TypeError:
+                rawdata = row[-1]
+ 
+            self.rawdata['transaction_to']=rawdata['sendingaddress']
+            formatted_fee_required=str(row[3])
+ 
+            # fee is max between min_btc_fee and required_fee
+            required_fee=int( formatted_fee_required )
+            satoshi_min_fee=int( self.fee * Decimal(1e8) )
+            self.fee= '%.8f' % ( max(satoshi_min_fee,required_fee) / Decimal(1e8) )
+            return getdexacceptPayload(rawdata['propertyid'], self.rawdata['amount'])['result']
         if self.tx_type == 50:
             return getissuancefixedPayload(self.rawdata['ecosystem'],self.rawdata['property_type'],self.rawdata['previous_property_id'],self.rawdata['property_category'],self.rawdata['property_subcategory'],self.rawdata['property_name'],self.rawdata['property_url'],self.rawdata['property_data'],self.rawdata['number_properties'])['result']
         if self.tx_type == 51:
