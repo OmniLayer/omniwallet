@@ -33,7 +33,7 @@ class OmniTransaction:
           print e
           self.pubkey = form['pubkey']
         self.fee = estimateFee(self.confirm_target)['result']
-        self.rawdata = form
+        self.rawdata = form.copy()
         self.tx_type = tx_type
 
     def get_unsigned(self):
