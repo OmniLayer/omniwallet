@@ -153,7 +153,7 @@ angular.module("omniControllers")
 	            amount_desired: 0,
 	            min_buyer_fee: 0,
 	            blocks: 10,
-	            currency_identifier: (+tx.currencyId) == 1 ? 'OMNI' : 'T-OMNI',
+	            currency_identifier: tx.currencyId,
 	            action:3,
 	            donate: $scope.account.getSetting("donate")
 	          });
