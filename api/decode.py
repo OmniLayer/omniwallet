@@ -53,9 +53,9 @@ def decode(rawhex):
         print sia
 
   if sender == "":
-    error = {"Error":"Can\'t decode MP TX. No valid sending address found."}
+    error = "Can\'t decode MP TX. No valid sending address found."
   else:
-    error = {"None"}
+    error = "None"
 
   print {'Sender':sender,'Reference':reference,'BTC':rawBTC, 'MP':rawOMNI,'inputs':inputs, 'error':error}
   return {'Sender':sender,'Reference':reference,'BTC':rawBTC, 'MP':rawOMNI,'inputs':inputs, 'error':error}
