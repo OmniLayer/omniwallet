@@ -46,10 +46,10 @@ def decode(rawhex):
     sia=0
     sender=""
     reference=""
-    for s in senders:
-      if senders[s] > sia:
+    for s in inputs:
+      if inputs[s] > sia:
         sender = s
-        sia = senders[s]
+        sia = inputs[s]
         print sia
 
   if sender == "":
