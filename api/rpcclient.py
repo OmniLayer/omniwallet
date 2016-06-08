@@ -92,6 +92,10 @@ def createrawtransaction(ins,outs):
 def decoderawtransaction(rawtx):
     return host.call("decoderawtransaction", rawtx)
 
+def omni_decodetransaction(rawtx):
+    return host.call("omni_decodetransaction", rawtx)
+
+
 def estimateFee(blocks=4):
     return host.call("estimatefee", blocks)
 
