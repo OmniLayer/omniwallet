@@ -179,7 +179,7 @@ def gettransaction(hash_id):
     
       if txType == 20:
         action = 'subaction' if 'subaction' in txJson else 'action'
-        cancel = True if txJson[action] == 'Cancel' else False
+        cancel = True if txJson[action] == 'cancel' else False
 
         if not cancel:
           ROWS=dbSelect("select * from transactions t, activeoffers ao, txjson txj where t.txhash=%s "
