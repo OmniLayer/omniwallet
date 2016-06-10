@@ -3,7 +3,13 @@ angular.module("omniControllers")
 		function DExSaleController($scope, TransactionManager, WalletAssets, ModalManager ){
 			$scope.walletAssets = WalletAssets;
 
-			$scope.DExSaleTransaction = new TransactionManager(21);
+			$scope.DExSaleTransaction = new TransactionManager(25,{
+						transaction_version:0,
+						sale_currency_id:$scope.saleCurrency,
+						sale_amount:$scope.saleAmount,
+						desired_currency_id:$scope.desiredCurrency,
+						desired_amount:$scope.desiredAmount
+					});
 
 			$scope.setSelectedCoin = function(currencyId){
 				WalletAssets.currencyList.forEach(function(currency){
@@ -26,14 +32,6 @@ angular.module("omniControllers")
 						action:$scope.action,
 						totalCost:WalletAssets.totalCost,
 						confirmText: "Create Sale"
-					},
-					transactionData:{
-						transaction_version:0,
-						sale_currency_id:$scope.saleCurrency,
-						sale_amount:$scope.saleAmount,
-						desired_currency_id:$scope.desiredCurrency,
-						desired_amount:$scope.desiredAmount,
-						action:$scope.action
 					},
 					transactionManager: $scope.DExSaleTransaction
 				})

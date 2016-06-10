@@ -631,5 +631,20 @@ angular.module("omniConfig")
 			"CANCELCONFIRM":"Cancel Sale",
 			"CANCELMESSAGE":"You're about to cancel this sale. If this is correct, please press Cancel Sale below. "
 		}
+	},
+	"OMNIDEX" : {
+		"MARKETS" : {
+			"TITLE" : "Markets",
+			"NEW" : "Start New Market",
+			"SYMBOL" : "Symbol",
+			"NAME" : "Name",
+			"PRICE" : "Price",
+			"VOLUME" : "24h Volume",
+			"SUPPLY" : "Total Supply",
+			"CAP" : "Market Cap",
+			"CHANGE" : "24h Change",
+			"NOMARKETS" : "There are currently no open markets"
+		}
 	}
+
 })
