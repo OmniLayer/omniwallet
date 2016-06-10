@@ -4,6 +4,7 @@ angular.module("omniControllers")
 			$scope.isLoggedIn = Account.isLoggedIn;
 			$scope.markets = [];
 			$scope.noMarkets = true;
+			$scope.ecosystem = 1;
 			$scope.setEcosystem = function(ecosystem){
 				$scope.ecosystem = ecosystem;
 			};
