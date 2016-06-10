@@ -1,55 +1,34 @@
 <div ng-controller="DExOverviewController">
     <div class="row">
-        <div class="col-sm-7 text-left om-title">
+        <div class="col-xs-3 col-sm-3 col-md-4 col-lg-4 text-left om-title">
             {{ 'OMNIDEX.MARKETS.TITLE' | translate }}
         </div>
-        <div class="col-sm-2 text-right">
+        <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2 text-right">
             <a class="btn btn-main" href="/dex/create"> {{ 'OMNIDEX.MARKETS.NEW' | translate }} </a>
         </div>
-        <div class="col-sm-3">
-            <form class="pull-right form-inline">
-              <div class="form-group">
-                <label>{{ 'ECOSYSTEM.LABEL' | translate}}</label>
-                <div class="btn-group">
-                  <button type="button" class="visible-xs btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-                     <span class="glyphicon glyphicon-options-vertical"></span>
-                  </button>
-                  <button type="button" class="hidden-xs btn btn-tertiary dropdown-toggle" data-toggle="dropdown" aria-expanded="false" ng-if="ecosystem==1">
-                    {{ 'ECOSYSTEM.PRODUCTION' | translate}}  <span class="glyphicon glyphicon-chevron-down"></span>
-                  </button>
-                  <button type="button" class="hidden-xs btn btn-tertiary dropdown-toggle" data-toggle="dropdown" aria-expanded="false" ng-if="ecosystem==2">
-                    {{ 'ECOSYSTEM.TEST' | translate}} <span class="glyphicon glyphicon-chevron-down"></span>
-                  </button>
-                  <ul class="dropdown-menu dropdown-menu-right" role="menu">
-                    <li><a href="#" ng-click="setEcosystem(1)">{{ 'ECOSYSTEM.PRODUCTION' | translate}}</a></li>
-                    <li><a href="#" ng-click="setEcosystem(2)">{{ 'ECOSYSTEM.TEST' | translate}}</a></li>
-                  </ul>
-                </div>
-              </div>
-            </form>
-        </div>
+        <div class="col-xs-7 col-sm-7 col-md-6 col-lg-6" ng-include="'/views/assets/partials/form_ecosystem.html'">
     </div>
     <div class="row">
     	<div class="col-xs-12 om-table">
     		<div class="row table-header hidden-xs">
-          <div class="col-sm-2">{{ 'OMNIDEX.MARKETS.SYMBOL' | translate}}</div>
-          <div class="col-sm-3">{{ 'OMNIDEX.MARKETS.NAME' | translate}}</div>
+          <div class="col-sm-1">{{ 'OMNIDEX.MARKETS.SYMBOL' | translate}}</div>
+          <div class="col-sm-2">{{ 'OMNIDEX.MARKETS.NAME' | translate}}</div>
           <div class="col-sm-1">{{ 'OMNIDEX.MARKETS.PRICE' | translate}}</div>
           <div class="col-sm-2">{{ 'OMNIDEX.MARKETS.VOLUME' | translate}}</div>
           <div class="col-sm-2">{{ 'OMNIDEX.MARKETS.SUPPLY' | translate}}</div>
-          <div class="col-sm-1">{{ 'OMNIDEX.MARKETS.CAP' | translate}}</div>
-          <div class="col-sm-1">{{ 'OMNIDEX.MARKETS.CHANGE' | translate}}</div>
+          <div class="col-sm-2">{{ 'OMNIDEX.MARKETS.CAP' | translate}}</div>
+          <div class="col-sm-2">{{ 'OMNIDEX.MARKETS.CHANGE' | translate}}</div>
         </div>
         <div class="row table-row text-center" ng-show="!loading && noMarkets">
           <h3>{{ 'OMNIDEX.MARKETS.NOMARKETS' | translate }}</h3>
         </div>
         <div ng-repeat="market in markets" class="row table-row check-element animate-hide">
           <div class="visible-xs col-xs-7">{{ 'OMNIDEX.MARKETS.SYMBOL' | translate}}</div>
-          <div class="col-xs-5 col-sm-2">
+          <div class="col-xs-5 col-sm-1">
             {{market.symbol}}
           </div>
           <div class="visible-xs col-xs-7">{{ 'OMNIDEX.MARKETS.NAME' | translate}}</div>
-          <div class="col-xs-5 col-sm-3">
+          <div class="col-xs-5 col-sm-2">
             {{market.propertyname}} (#{{market.propertyid}})
           </div>
           <div class="visible-xs col-xs-7">{{ 'OMNIDEX.MARKETS.PRICE' | translate}}</div>
@@ -65,11 +44,11 @@
             {{market.supply}}
           </div>
           <div class="visible-xs col-xs-7">{{ 'OMNIDEX.MARKETS.CAP' | translate}}</div>
-          <div class="col-xs-5 col-sm-1">
+          <div class="col-xs-5 col-sm-2">
             {{market.cap}}
           </div>
           <div class="visible-xs col-xs-7">{{ 'OMNIDEX.MARKETS.CHANGE' | translate}}</div>
-          <div class="col-xs-5 col-sm-1">
+          <div class="col-xs-5 col-sm-2">
             {{market.change}}
           </div>
         </div>
