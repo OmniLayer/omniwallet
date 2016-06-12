@@ -9,11 +9,7 @@ angular.module("omniControllers")
 				$scope.ecosystem = ecosystem;
 			};
 
-			$http.post('/v1/markets/designatingcurrencies',{ecosystem:$scope.ecosystem}).success(
-				function(response) {
-					$scope.designatingcurrencies = response.data.currencies;
-				}
-			);
+			$http.post('/v1/markets/designatingcurrencies',{ecosystem:$scope.ecosystem}).success(function(response) {$scope.designatingcurrencies = response.data.currencies;});
 
 
 	}]);
