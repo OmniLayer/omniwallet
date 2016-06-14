@@ -178,7 +178,7 @@ angular.module("omniControllers")
 			var acceptSend = new Transaction(0,$scope.selectedAddress,fee,{
 		        transaction_version:0,
 		        currency_identifier:$scope.selectedAsset.id,
-		        amount_to_transfer : $scope.selectedAsset.divisible ? +new Big(amount).times(SATOSHI_UNIT).valueOf() : +amount,
+		        amount_to_transfer : +new Big(amount).valueOf(),
 		        transaction_to: $scope.sendTo,
 		        donate: $scope.account.getSetting("donate"),
 		        marker: true
