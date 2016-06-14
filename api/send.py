@@ -99,8 +99,8 @@ def send_form_response(response_dict):
 
 # simple send and bitcoin send (with or without marker)
 def prepare_send_tx_for_signing(from_address, to_address, marker_address, currency_id, amount, btc_fee=500000):
-    print '*** send tx for signing, amount: ' + amount
-    print '    btc_fee: ' + str(btc_fee)
+    print '*** send.py tx for signing: from_address, to_address, marker_address, currency_id, amount, btc_fee'
+    print from_address, to_address, marker_address, currency_id, amount, btc_fee
 
     # consider a more general func that covers also sell offer and sell accept
 
@@ -138,7 +138,7 @@ def prepare_send_tx_for_signing(from_address, to_address, marker_address, curren
         raise Exception({ "status": "NOT OK", "error": "Couldn't get list of unspent tx's. Response Code: " + dirty_txes['code'] })
 
     if (dirty_txes['error'][:3]=='Low'):
-        raise Exception({ "status": "NOT OK", "error": "Not enough funds, try again. Needed: " + str(fee_total_satoshi) + " but Have: " + dirty_txes['avail']  })
+        raise Exception({ "status": "NOT OK", "error": "Not enough funds, try again. Needed: " + str(fee_total_satoshi) + " but Have: " + str(dirty_txes['avail'])  })
 
     inputs_total_value = dirty_txes['avail']
     inputs = dirty_txes['utxos']
