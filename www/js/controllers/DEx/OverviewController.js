@@ -7,9 +7,14 @@ angular.module("omniControllers")
 			$scope.ecosystem = 1;
 			$scope.setEcosystem = function(ecosystem){
 				$scope.ecosystem = ecosystem;
+				$scope.loadDesignatingCurrencies()
 			};
 
-			$http.post('/v1/markets/designatingcurrencies',{ecosystem:$scope.ecosystem}).success(function(response) {$scope.designatingcurrencies = response.data.currencies;});
+			$scope.loadDesignatingCurrencies = function(){
+				$http.post('/v1/markets/designatingcurrencies',{ecosystem:$scope.ecosystem}).then(function success(response) {$scope.designatingcurrencies = response.data.currencies;}, function(error){console.log(error)});
+			}
 
-
+			$scope.showMarkets = function(currency){
+				console.log("display markets for " + currency.propertyid);
+			}
 	}]);

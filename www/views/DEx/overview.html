@@ -9,11 +9,21 @@
         </div>
     </div>
     <div class="row">
-    	<div class="col-xs-12 om-table">
+    	<div class="col-xs-12 om-table" ng-init="loadDesignatingCurrencies()">
     		<div class="row table-header hidden-xs">
           <div class="col-sm-1">{{ 'OMNIDEX.MARKETS.SYMBOL' | translate}}</div>
           <div class="col-sm-2">{{ 'OMNIDEX.MARKETS.NAME' | translate}}</div>
-          <div class="col-sm-1">{{ 'OMNIDEX.MARKETS.PRICE' | translate}}</div>
+          <div class="col-sm-1">
+            <div class="form-group btn-group">
+              <button type="button" class="hidden-xs btn btn-main dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                {{ 'OMNIDEX.MARKETS.PRICE' | translate}} <span class="glyphicon glyphicon-chevron-down"></span>
+              </button>
+              <ul class="dropdown-menu dropdown-menu-main dropdown-menu-right" role="menu">
+                <li><a href="#" ng-click="showMarkets(currency.propertyid)" ng-repeat="currency in designatingcurrencies">{{ currency.propertyname}} (#{{currency.propertyid}})</a></li>
+              </ul>
+            </div>
+
+          </div>
           <div class="col-sm-2">{{ 'OMNIDEX.MARKETS.VOLUME' | translate}}</div>
           <div class="col-sm-2">{{ 'OMNIDEX.MARKETS.SUPPLY' | translate}}</div>
           <div class="col-sm-2">{{ 'OMNIDEX.MARKETS.CAP' | translate}}</div>
