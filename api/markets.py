@@ -22,3 +22,18 @@ def getDesignatingCurrencies():
 
     designating_currencies = dbSelect("select distinct ao.propertyiddesired as propertyid, sp.propertyname from activeoffers ao inner join SmartProperties sp on ao.propertyiddesired = sp.propertyid and sp.ecosystem = %s where ao.propertyidselling not in (1, 2, 31)  order by ao.propertyiddesired ",[ecosystem])
     return jsonify({"status" : 200, "currencies": [{"propertyid":currency[0], "propertyname" : currency[1] } for currency in designating_currencies]})
+
+
+@app.route('/<int:propertyid_desired>')
+def get_markets_by_propertyid_desired(propertyid_desired):
+    try:
+        value = int(re.sub(r'\D+', '', propertyid_desired))
+    except ValueError:
+        abort(make_response('Field \'propertyid\' invalid value, request failed', 400))
+
+    markets = dbSelect("select distinct ao.propertyidselling, sp.propertyname from activeoffers ao inner join SmartProperties sp on ao.propertyidselling = sp.propertyid and sp.protocol = 'Omni' where ao.propertyiddesired = %s  order by sp.propertyname;",[value])
+    return jsonify({"status" : 200, "markets": [
+    	{
+    		"propertyid":currency[0], 
+    		"propertyname" : currency[1] 
+		} for currency in markets]})
