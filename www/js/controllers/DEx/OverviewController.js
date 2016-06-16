@@ -11,7 +11,14 @@ angular.module("omniControllers")
 			};
 
 			$scope.loadDesignatingCurrencies = function(){
-				$http.post('/v1/markets/designatingcurrencies',{ecosystem:$scope.ecosystem}).then(function success(response) {$scope.designatingcurrencies = response.data.currencies;}, function(error){console.log(error)});
+				$http.post('/v1/markets/designatingcurrencies',{ecosystem:$scope.ecosystem}).then(
+					function success(response) {
+						$scope.designatingcurrencies = response.data.currencies;
+					}, 
+					function(error){
+						console.log(error)
+					}
+				);
 			}
 
 			$scope.showMarkets = function(currency){
