@@ -21,4 +21,4 @@ def getDesignatingCurrencies():
         abort(make_response('Field \'ecosystem\' invalid value, request failed', 400))
 
     designating_currencies = dbSelect("select distinct ao.propertyiddesired as propertyid, sp.propertyname from activeoffers ao inner join SmartProperties sp on ao.propertyiddesired = sp.propertyid and sp.ecosystem = %s where ao.propertyidselling not in (1, 2, 31)  order by ao.propertyiddesired ",[ecosystem])
-    return jsonify({"status" : 200, "currencies": designating_currencies})
+    return jsonify({"status" : 200, "currencies": [{"propertyid":currency[0], "propertyname" : currency[1] } for currency in designating_currencies]})
