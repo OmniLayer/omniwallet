@@ -26,12 +26,7 @@ def getDesignatingCurrencies():
 
 @app.route('/<int:propertyid_desired>')
 def get_markets_by_propertyid_desired(propertyid_desired):
-    try:
-        value = int(re.sub(r'\D+', '', propertyid_desired))
-    except ValueError:
-        abort(make_response('Field \'propertyid\' invalid value, request failed', 400))
-
-    markets = dbSelect("select distinct ao.propertyidselling, sp.propertyname from activeoffers ao inner join SmartProperties sp on ao.propertyidselling = sp.propertyid and sp.protocol = 'Omni' where ao.propertyiddesired = %s  order by sp.propertyname;",[value])
+    markets = dbSelect("select distinct ao.propertyidselling, sp.propertyname from activeoffers ao inner join SmartProperties sp on ao.propertyidselling = sp.propertyid and sp.protocol = 'Omni' where ao.propertyiddesired = %s  order by sp.propertyname;",[propertyid_desired])
     return jsonify({"status" : 200, "markets": [
     	{
     		"propertyid":currency[0], 
