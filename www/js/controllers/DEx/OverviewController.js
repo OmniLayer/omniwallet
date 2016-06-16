@@ -14,6 +14,7 @@ angular.module("omniControllers")
 				$http.post('/v1/markets/designatingcurrencies',{ecosystem:$scope.ecosystem}).then(
 					function success(response) {
 						$scope.designatingcurrencies = response.data.currencies;
+						$scope.showMarkets(response.data.currencies[0])
 					}, 
 					function(error){
 						console.log(error)
@@ -22,6 +23,14 @@ angular.module("omniControllers")
 			}
 
 			$scope.showMarkets = function(currency){
-				console.log("display markets for " + currency.propertyid);
+				$http.get('/v1/markets/'+ currency.propertyid).then(
+					function success(response) {
+						$scope.markets = response.data.markets;
+						$scope.noMarkets = $scope.markets.length == 0;
+					}, 
+					function(error){
+						console.log(error)
+					}
+				);
 			}
 	}]);
