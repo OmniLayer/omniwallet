@@ -8,7 +8,7 @@ app.debug = True
 
 @app.route('/designatingcurrencies', methods=['POST'])
 def getDesignatingCurrencies():
-	try:
+    try:
         value = int(re.sub(r'\D+', '', request.form['ecosystem']))
         valid_values = [1,2]
         if value not in valid_values:
@@ -19,7 +19,6 @@ def getDesignatingCurrencies():
         abort(make_response('No field \'ecosystem\' in request, request failed', 400))
     except ValueError:
         abort(make_response('Field \'ecosystem\' invalid value, request failed', 400))
-    
-	designating_currencies = dbSelect("select distinct ao.propertyiddesired as propertyid, sp.propertyname from activeoffers ao inner join SmartProperties sp on ao.propertyiddesired = sp.propertyid and sp.ecosystem = %s where ao.propertyidselling not in (1, 2, 31)  order by ao.propertyiddesired ",[ecosystem])
 
-	return jsonify({"status" : 200, "currencies": designating_currencies})
+    designating_currencies = dbSelect("select distinct ao.propertyiddesired as propertyid, sp.propertyname from activeoffers ao inner join SmartProperties sp on ao.propertyiddesired = sp.propertyid and sp.ecosystem = %s where ao.propertyidselling not in (1, 2, 31)  order by ao.propertyiddesired ",[ecosystem])
+    return jsonify({"status" : 200, "currencies": designating_currencies})
