@@ -652,7 +652,8 @@ angular.module("omniConfig")
 			"BALANCE" : "Your balance",
 			"TOTALPRICE" : "Total price",
 			"UNITPRICE" :"Price Per",
-			"AMOUNT" : "Amount"
+			"AMOUNT" : "Amount",
+			"NOCOINS" : "You don't have any {{propertyName}} available"
 		}
 
 	}
