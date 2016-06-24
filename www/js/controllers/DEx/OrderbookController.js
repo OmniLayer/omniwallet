@@ -4,7 +4,7 @@ angular.module("omniControllers")
 			$scope.isLoggedIn = Account.isLoggedIn;
 			$scope.orderbook = [];
 			$scope.noOrders = true;
-			PropertyManager.getProperty($route.current.params.propertyiddesired).then(function(result){
+			PropertyManager.getProperty($route.current.params.propertyIdDesired).then(function(result){
 				$scope.propertyDesired = result.data;
 				PropertyManager.getProperty($route.current.params.propertyidselling).then(function(result){
 					$scope.propertySelling = result.data;

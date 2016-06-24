@@ -19,6 +19,12 @@ angular.module("omniFactories")
 					self.addresses = Wallet.addresses.filter(function(address){
 						return ((address.privkey && address.privkey.length == 58) || address.pubkey)
 					});
+					self.buyAddresses = self.addresses.filter(function(address){
+						return address.getBalance(self.desired.propertyid) > 0;
+					});
+					self.sellAddresses = self.addresses.filter(function(address){
+						return address.getBalance(self.selling.propertyid) > 0;
+					});
 
 					self.buyBook = []
 					self.sellBook = []
@@ -86,6 +92,18 @@ angular.module("omniFactories")
 						})
 
 				};
+
+				self.setBuyAddress = function(address){
+					$scope.orderbook.buyOrder.address = address;
+				};
+
+				self.setSellAddress = function(address){
+					$scope.orderbook.sellOrder.address = address;
+				};
+
+				self.updateAmount = function(offer) {
+					offer.amounts.desired= offer.amounts.selling * offer.price
+				}
 
 				self.submitBuyOffer = function(){
 					// TODO: Validations

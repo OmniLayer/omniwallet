@@ -1,9 +1,6 @@
-<div class="sidecar col-xs-2" ng-controller="SidecarController" ng-init="setView('wallet')">
-    <div ng-include="templates['sidecar']"></div>
-</div>
-<div class="col-xs-10" ng-controller="DExSaleController">
+<div ng-controller="DExSaleController">
     <h4>
-        <a href="/dex/overview"> <strong> &lt; Go back </strong> </a>
+        <a href="/dex/overview"> <strong> &lt; {{ 'COMMON.BACK' | translate}}  </strong> </a>
       </h4>
     <div class="row">
         <div class="row panel-default">

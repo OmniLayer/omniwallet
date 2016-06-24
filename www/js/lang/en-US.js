@@ -645,7 +645,16 @@ angular.module("omniConfig")
 			"CHANGE" : "24h Change",
 			"NOMARKETS" : "There are currently no open markets",
 			"DENOMINATOR" : "Choose Denominating Currency"
+		},
+		"ORDERBOOK" : {
+			"BUY" : "Buy",
+			"SELL": "Sell",
+			"BALANCE" : "Your balance",
+			"TOTALPRICE" : "Total price",
+			"UNITPRICE" :"Price Per",
+			"AMOUNT" : "Amount"
 		}
+
 	}
 
 })

@@ -100,9 +100,9 @@ angular.module("omniFactories")
 				self.getBalance = function(assetId){
 					var currencyItem = self.balance.filter(function(asset){
 						return asset.id == assetId;
-					})[0];
+					});
 
-					return currencyItem.value;
+					return (currencyItem && currencyItem[0].value) || 0;
 				}
 
 				self.initialize();
