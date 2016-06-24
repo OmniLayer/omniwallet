@@ -69,7 +69,7 @@
 	</div>
 	<div class="row">
 		<div class="col-xs-12">
-			<form role="form" name="sell_form" ng-show="orderbook.sellAddresses.length > 0" ng-submit="orderbook.submitSellOffer(orderbook.sellOrder)" class="form-horizontal">
+			<form role="form" name="sell_form" ng-submit="orderbook.submitSellOffer(orderbook.sellOrder)" class="form-horizontal">
 				<div class="panel panel-form">
 					<div class="panel-body" ng-hide="orderbook.sellAddresses.length > 0">
 						{{ 'OMNIDEX.ORDERBOOK.NOCOINS' | translate:'{propertyName : orderbook.tradingPair.selling.name}'}}
