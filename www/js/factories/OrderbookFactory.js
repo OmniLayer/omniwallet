@@ -119,9 +119,9 @@ angular.module("omniFactories")
 					var dexOffer = new Transaction(25,offer.address,fee,{
 							transaction_version:0,
 							propertyidforsale:offer.selling.propertyid,
-							amountforsale: offer.selling.divisible ? new Big(offer.amounts.selling).times(SATOSHI_UNIT).valueOf() : new Big(offer.amounts.selling).valueOf(),
+							amountforsale: new Big(offer.amounts.selling).valueOf(),
 							propertiddesired:offer.desired.propertyid,
-							amountdesired: offer.desired.divisible ? new Big(offer.amounts.desired).times(SATOSHI_UNIT).valueOf() : new Big(offer.amounts.desired).times(SATOSHI_UNIT).valueOf()
+							amountdesired: new Big(offer.amounts.desired).valueOf()
 						});
 					ModalManager.openConfirmationModal({
 						dataTemplate: '/views/modals/partials/dex_offer.html',
