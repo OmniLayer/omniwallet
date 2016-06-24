@@ -22,9 +22,11 @@ angular.module("omniFactories")
 					self.buyAddresses = self.addresses.filter(function(address){
 						return address.getBalance(self.desired.propertyid) > 0;
 					});
+					self.buyOrder.address = self.buyAddresses.length > 0 ? self.buyAddresses[0] : undefined;
 					self.sellAddresses = self.addresses.filter(function(address){
 						return address.getBalance(self.selling.propertyid) > 0;
 					});
+					self.sellOrder.address = self.sellAddresses.length > 0 ? self.sellAddresses[0] : undefined;
 
 					self.buyBook = []
 					self.sellBook = []
