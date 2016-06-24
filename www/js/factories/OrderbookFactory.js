@@ -6,7 +6,7 @@ angular.module("omniFactories")
 
 				self.initialize = function(){
 					self.tradingPair=tradingPair;
-					self.title = "Trade " + tradingPair.selling.propertyName + " for " + tradingPair.desired.propertyName;
+					self.title = "Trade " + tradingPair.selling.name + " for " + tradingPair.desired.name;
 					self.active = true;
 					self.disabled = !self.active;
 					self.buyOrder = {};

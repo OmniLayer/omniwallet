@@ -8,7 +8,7 @@ angular.module("omniControllers")
 				$scope.propertyDesired = result.data;
 				PropertyManager.getProperty($route.current.params.propertyIdSelling).then(function(result){
 					$scope.propertySelling = result.data;
-					$scope.orderbook = new Orderbook({desired:$scope.propertyDesired,selling:$propertySelling});
+					$scope.orderbook = new Orderbook({desired:$scope.propertyDesired,selling:$scope.propertySelling});
 				});
 			});
 	}]);
