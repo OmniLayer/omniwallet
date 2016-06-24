@@ -9,8 +9,14 @@ angular.module("omniFactories")
 					self.title = "Trade " + tradingPair.selling.name + " for " + tradingPair.desired.name;
 					self.active = true;
 					self.disabled = !self.active;
-					self.buyOrder = {};
-					self.sellOrder = {};
+					self.buyOrder = {
+						desired : tradingPair.selling,
+						selling : tradingPair.desired
+					};
+					self.sellOrder = {
+						desired : tradingPair.desired,
+						selling : tradingPair.selling
+					};
 
 					self.selling = tradingPair.selling;
 					self.desired = tradingPair.desired;
@@ -107,15 +113,15 @@ angular.module("omniFactories")
 					offer.amounts.desired= offer.amounts.selling * offer.price
 				}
 
-				self.submitBuyOffer = function(){
+				self.submitOffer = function(offer){
 					// TODO: Validations
 					var fee = Account.settings.minerFee || MIN_MINER_FEE;
-					var dexOffer = new Transaction(25,self.buyOrder.address,fee,{
+					var dexOffer = new Transaction(25,offer.address,fee,{
 							transaction_version:0,
-							propertyidforsale:self.tradingPair.desired.propertyid,
-							amountforsale: self.tradingPair.desired.divisible ? new Big(self.sellOrder.amounts.desired).times(SATOSHI_UNIT).valueOf() : new Big(self.sellOrder.amounts.desired).valueOf(),
-							propertiddesired:self.tradingPair.selling.propertyid,
-							amountdesired: self.tradingPair.selling.divisible ? new Big(self.sellOrder.amounts.selling).times(SATOSHI_UNIT).valueOf() : new Big(self.sellOrder.amounts.selling).times(SATOSHI_UNIT).valueOf()
+							propertyidforsale:offer.selling.propertyid,
+							amountforsale: self.tradingPair.selling.divisible ? new Big(offer.amounts.selling).times(SATOSHI_UNIT).valueOf() : new Big(offer.amounts.selling).valueOf(),
+							propertiddesired:offer.desired.propertyid,
+							amountdesired: self.tradingPair.desired.divisible ? new Big(offer.amounts.desired).times(SATOSHI_UNIT).valueOf() : new Big(offer.amounts.desired).times(SATOSHI_UNIT).valueOf()
 						});
 					ModalManager.openConfirmationModal({
 						dataTemplate: '/views/modals/partials/dex_offer.html',
@@ -138,7 +144,7 @@ angular.module("omniFactories")
 				self.submitSellOffer = function(){
 					// TODO: Validations
 					var fee = Account.settings.minerFee || MIN_MINER_FEE;
-					var dexOffer = new Transaction(25,self.sellOrder.address,fee,{
+					var dexOffer = new Transaction(25,offer.address,fee,{
 							transaction_version:0,
 							propertyidforsale:self.tradingPair.selling.propertyid,
 							amountforsale: self.tradingPair.selling.divisible ? new Big(self.sellOrder.amounts.selling).times(SATOSHI_UNIT).valueOf() : new Big(self.sellOrder.amounts.selling).valueOf(),
