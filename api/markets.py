@@ -45,5 +45,5 @@ def get_orders_by_market(propertyid_desired, propertyid_selling):
             "desired_amount" : str(order[3]),
             "selling_amount" : str(order[4]),
             "accepted_amount": str(order[5]),
-            "unit_price" : str(ordere[6])
+            "unit_price" : str(order[6])
         } for order in orderbook]})
