@@ -5,13 +5,13 @@ angular.module("omniFactories")
 
 			self.initialize = function(){
 				self.offers = [offer];
-				self.price = (new Big(offer.amountforsale)).div(new Big(offer.amountdesired)).times(WHOLE_UNIT);
+				self.price = new Big(offer.unit_price);
 
-				self.totalforsale = (new Big(offer.amountforsale)).times(WHOLE_UNIT);
-				self.totaldesired = (new Big(offer.amountdesired)).times(WHOLE_UNIT);
+				self.totalforsale = (new Big(offer.selling_amount)).times(WHOLE_UNIT);
+				self.totaldesired = (new Big(offer.desired_amount)).times(WHOLE_UNIT);
 
-				self.remainingforsale = (new Big(offer.remainingforsale)).times(WHOLE_UNIT);
-				self.desiredreceived = (new Big(offer.desiredreceived)).times(WHOLE_UNIT);
+				self.remainingforsale = (new Big(offer.available_amount)).times(WHOLE_UNIT);
+				self.desiredreceived = (new Big(offer.accepted_amount)).times(WHOLE_UNIT);
 			};
 
 			self.addOffer = function(offer){

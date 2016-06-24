@@ -1,6 +1,6 @@
 angular.module("omniControllers")
-	.controller("DExOverviewController", ["$scope","Account","Orderbook","Wallet","PropertyManager","$http",
-		function DExOverviewController($scope,Account,Orderbook,Wallet,PropertyManager,$http){
+	.controller("DExOverviewController", ["$scope","Account","$http",
+		function DExOverviewController($scope,Account,$http){
 			$scope.isLoggedIn = Account.isLoggedIn;
 			$scope.markets = [];
 			$scope.noMarkets = true;

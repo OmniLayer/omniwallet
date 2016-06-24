@@ -36,11 +36,14 @@ def get_markets_by_propertyid_desired(propertyid_desired):
 
 @app.route('/<int:propertyid_desired>/<int:propertyid_selling>')
 def get_orders_by_market(propertyid_desired, propertyid_selling):
-    orderbook = dbSelect("select propertyiddesired, propertyid_selling, AmountAvailable, UnitPrice from activeoffers ao where (ao.propertyiddesired = %s and ao.propertyidselling = %s) or (ao.propertyiddesired = %s and ao.propertyidselling = %s) order by propertyiddesired, UnitPrice DESC;",[propertyid_desired,propertyid_selling,propertyid_selling,propertyid_desired])
+    orderbook = dbSelect("select propertyiddesired, propertyidselling, AmountAvailable, AmountDesired, TotalSelling, AmountAccepted, UnitPrice from activeoffers ao where ao.propertyiddesired = %s and ao.propertyidselling = %s order by propertyiddesired, UnitPrice DESC;",[propertyid_desired,propertyid_selling])
     return jsonify({"status" : 200, "orderbook": [
         {
             "propertyid_desired":order[0], 
             "propertyid_selling":order[1],
-            "available" : str(order[2]),
-            "unit_price" : str(ordere[3])
+            "available_amount" : str(order[2]),
+            "desired_amount" : str(order[3]),
+            "selling_amount" : str(order[4]),
+            "accepted_amount": str(order[5]),
+            "unit_price" : str(ordere[6])
         } for order in orderbook]})
