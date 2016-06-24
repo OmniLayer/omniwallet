@@ -14,7 +14,8 @@ angular.module("omniControllers")
 				$http.post('/v1/markets/designatingcurrencies',{ecosystem:$scope.ecosystem}).then(
 					function success(response) {
 						$scope.designatingcurrencies = response.data.currencies;
-						$scope.showMarkets(response.data.currencies[0])
+						$scope.designatingCurrency = response.data.currencies[0];
+						$scope.showMarkets($scope.designatingCurrency);
 					}, 
 					function(error){
 						console.log(error)
