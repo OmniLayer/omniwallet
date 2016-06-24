@@ -643,7 +643,8 @@ angular.module("omniConfig")
 			"SUPPLY" : "Total Supply",
 			"CAP" : "Market Cap",
 			"CHANGE" : "24h Change",
-			"NOMARKETS" : "There are currently no open markets"
+			"NOMARKETS" : "There are currently no open markets",
+			"DENOMINATOR" : "Choose Denominating Currency"
 		}
 	}
 

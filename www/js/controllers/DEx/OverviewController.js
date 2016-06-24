@@ -23,6 +23,7 @@ angular.module("omniControllers")
 			}
 
 			$scope.showMarkets = function(currency){
+				$scope.designatingCurrency = currency;
 				$http.get('/v1/markets/'+ currency.propertyid).then(
 					function success(response) {
 						$scope.markets = response.data.markets;

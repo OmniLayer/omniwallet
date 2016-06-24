@@ -5,7 +5,17 @@
         </div>
         <div class="col-xs-7 col-sm-7 col-md-6 col-lg-6" ng-include="'/views/assets/partials/form_ecosystem.html'"></div>
         <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2 text-right">
-            <a class="btn btn-main" href="/dex/create"> {{ 'OMNIDEX.MARKETS.NEW' | translate }} </a>
+          <span>{{ 'OMNIDEX.MARKETS.DENOMINATOR' | translate }}</span>
+          <div class="form-group btn-group">
+            <button type="button" class="hidden-xs btn btn-main dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+              {{ designatingCurrency.propertyname }} <span class="glyphicon glyphicon-chevron-down"></span>
+            </button>
+            <ul class="dropdown-menu dropdown-menu-main dropdown-menu-right" role="menu">
+              <li><a href="#" ng-click="showMarkets(currency.propertyid)" ng-repeat="currency in designatingcurrencies">{{ currency.propertyname }} (#{{currency.propertyid}})</a></li>
+            </ul>
+          </div>
+          
+          <a class="btn btn-main" href="/dex/sale"> {{ 'OMNIDEX.MARKETS.NEW' | translate }} </a>
         </div>
     </div>
     <div class="row">
@@ -14,15 +24,7 @@
           <div class="col-sm-1">{{ 'OMNIDEX.MARKETS.SYMBOL' | translate}}</div>
           <div class="col-sm-2">{{ 'OMNIDEX.MARKETS.NAME' | translate}}</div>
           <div class="col-sm-1">
-            <div class="form-group btn-group">
-              <button type="button" class="hidden-xs btn btn-main dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-                {{ 'OMNIDEX.MARKETS.PRICE' | translate}} <span class="glyphicon glyphicon-chevron-down"></span>
-              </button>
-              <ul class="dropdown-menu dropdown-menu-main dropdown-menu-right" role="menu">
-                <li><a href="#" ng-click="showMarkets(currency.propertyid)" ng-repeat="currency in designatingcurrencies">{{ currency.propertyname}} (#{{currency.propertyid}})</a></li>
-              </ul>
-            </div>
-
+            {{ 'OMNIDEX.MARKETS.PRICE' | translate}}
           </div>
           <div class="col-sm-2">{{ 'OMNIDEX.MARKETS.VOLUME' | translate}}</div>
           <div class="col-sm-2">{{ 'OMNIDEX.MARKETS.SUPPLY' | translate}}</div>
@@ -39,7 +41,7 @@
           </div>
           <div class="visible-xs col-xs-7">{{ 'OMNIDEX.MARKETS.NAME' | translate}}</div>
           <div class="col-xs-5 col-sm-2">
-            {{market.propertyname}} (#{{market.propertyid}})
+            <a href="/dex/orderbook/{{designatingCurrency.propertyId}}/{{market.propertyid}}">{{market.propertyname}} (#{{market.propertyid}})</a>
           </div>
           <div class="visible-xs col-xs-7">{{ 'OMNIDEX.MARKETS.PRICE' | translate}}</div>
           <div class="col-xs-5 col-sm-1">

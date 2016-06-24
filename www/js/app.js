@@ -70,7 +70,7 @@ var app = angular.module('omniwallet', [
   $routeProvider.when('/dex/:page?', {
       templateUrl: function(route) {
         //new views added here
-        var availableViews = ['overview','sale', 'create'];
+        var availableViews = ['overview','sale'];
 
         var view;
         var viewFound = availableViews.indexOf(route.page);
@@ -82,6 +82,12 @@ var app = angular.module('omniwallet', [
         ga('send', 'event', 'button', 'click', route.page);
         return view;
       }
+    }).otherwise({
+      redirectTo:'/dex/overview'
+    });
+
+    $routeProvider.when('/dex/orderbook/:propertyIdDesired/:propertyIdSelling', {
+      templateUrl:  '/views/dex/orderbook.html'
     }).otherwise({
       redirectTo:'/dex/overview'
     });
