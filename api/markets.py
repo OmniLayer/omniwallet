@@ -31,5 +31,16 @@ def get_markets_by_propertyid_desired(propertyid_desired):
     	{
     		"propertyid":currency[0], 
     		"propertyname" : currency[1],
-    		"supply" : currency[2]
+    		"supply" : str(currency[2])
 		} for currency in markets]})
+
+@app.route('/<int:propertyid_desired>/<int:propertyid_selling>')
+def get_orders_by_market(propertyid_desired, propertyid_selling):
+    orderbook = dbSelect("select propertyiddesired, propertyid_selling, AmountAvailable, UnitPrice from activeoffers ao where (ao.propertyiddesired = %s and ao.propertyidselling = %s) or (ao.propertyiddesired = %s and ao.propertyidselling = %s) order by propertyiddesired, UnitPrice DESC;",[propertyid_desired,propertyid_selling,propertyid_selling,propertyid_desired])
+    return jsonify({"status" : 200, "orderbook": [
+        {
+            "propertyid_desired":order[0], 
+            "propertyid_selling":order[1],
+            "available" : str(order[2]),
+            "unit_price" : str(ordere[3])
+        } for order in orderbook]})
