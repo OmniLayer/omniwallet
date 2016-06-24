@@ -102,7 +102,7 @@ angular.module("omniFactories")
 						return asset.id == assetId;
 					});
 
-					return (currencyItem && currencyItem[0].value) || 0;
+					return currencyItem.length > 0 ? currencyItem[0].value : 0;
 				}
 
 				self.initialize();
