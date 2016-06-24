@@ -12,7 +12,7 @@
 			<form role="form" name="buy_form" ng-submit="orderbook.submitOffer(orderbook.buyOrder)" class="form-horizontal">
 				<div class="panel panel-form">
 					<div class="panel-body" ng-hide="orderbook.buyAddresses.length > 0">
-						{{ 'OMNIDEX.ORDERBOOK.NOCOINS' | translate:{propertyName : orderbook.tradingPair.desired.name}}}
+						{{ 'OMNIDEX.ORDERBOOK.NOCOINS' | translate:'{propertyName : orderbook.tradingPair.desired.name}'}}
 					</div>
           			<div class="panel-body" ng-show="orderbook.buyAddresses.length > 0">
 						<div class="form-group">
@@ -72,7 +72,7 @@
 			<form role="form" name="sell_form" ng-show="orderbook.sellAddresses.length > 0" ng-submit="orderbook.submitSellOffer(orderbook.sellOrder)" class="form-horizontal">
 				<div class="panel panel-form">
 					<div class="panel-body" ng-hide="orderbook.sellAddresses.length > 0">
-						{{ 'OMNIDEX.ORDERBOOK.NOCOINS' | translate:{propertyName : orderbook.tradingPair.selling.name}}}
+						{{ 'OMNIDEX.ORDERBOOK.NOCOINS' | translate:'{propertyName : orderbook.tradingPair.selling.name}'}}
 					</div>
           			<div class="panel-body" ng-show="orderbook.sellAddresses.length > 0">
 						<div class="form-group">
