@@ -11,11 +11,21 @@ angular.module("omniFactories")
 					self.disabled = !self.active;
 					self.buyOrder = {
 						desired : tradingPair.selling,
-						selling : tradingPair.desired
+						selling : tradingPair.desired,
+						amounts : {
+							desired: 0,
+							selling: 0
+						},
+						price: 0
 					};
 					self.sellOrder = {
 						desired : tradingPair.desired,
-						selling : tradingPair.selling
+						selling : tradingPair.selling,
+						amounts : {
+							desired: 0,
+							selling: 0
+						},
+						price: 0
 					};
 
 					self.selling = tradingPair.selling;
