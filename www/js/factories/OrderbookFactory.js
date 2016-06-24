@@ -33,11 +33,11 @@ angular.module("omniFactories")
 
 					$http.get("/v1/markets/"+tradingPair.desired.propertyid+"/"+tradingPair.selling.propertyid)
 						.then(function(response){
-							if(response.status != "200" || response.data.status !="OK")
+							if(response.status != 200 || response.data.status !=200)
 								return // handle errors
 
 							
-							var offers = response.data.orderbook
+							var offers = response.data.orderbook;
 							offers.forEach(function(offerData){
 								var order = null;
 								var offer = new DExOffer(offerData);
@@ -64,11 +64,11 @@ angular.module("omniFactories")
 						})
 					$http.get("/v1/markets/"+tradingPair.selling.propertyid+"/"+tradingPair.desired.propertyid)
 						.then(function(response){
-							if(response.status != "200" || response.data.status !="OK")
+							if(response.status != 200 || response.data.status != 200)
 								return // handle errors
 
 							
-							var offers = response.data.orders
+							var offers = response.data.orderbook;
 							offers.forEach(function(offerData){
 								var order = null;
 								var offer = new DExOffer(offerData);
