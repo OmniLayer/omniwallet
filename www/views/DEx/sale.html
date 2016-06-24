@@ -2,78 +2,52 @@
     <h4>
         <a href="/dex/overview"> <strong> &lt; {{ 'COMMON.BACK' | translate}}  </strong> </a>
       </h4>
+    <div class="row om-row">
+    <div class="col-xs-12">
+      <div class="text-left om-title">{{ 'OMNIDEX.SALE.TITLE' | translate}}</div>
+    </div>
+  </div> 
     <div class="row">
         <div class="row panel-default">
-            <div class="col-xs-9 text-left panel-body om-title">Create DEx Sale</div>
+            <div class="col-xs-9 text-left panel-body om-title"></div>
         </div>
         <div class="row">
             <div class="col-xs-12">
-                <form name="dexSaleForm" ng-submit="validateDexSaleForm()">
-                    <div class="row">
+                <div class="row">
                         <h3 class="col-xs-12" style="color:lightgrey">Sale details</h3>
                     </div>
-                    <div class="form-group">
-                        <div class="input-group">
-                            <span class="input-group-addon"> Address: </span>
-                            <select name="issuer" class="form-control" ng-model="walletAssets.selectedAddress" ng-options="address for address in walletAssets.addressList" required>
-                                <option value=""> -- Choose Address -- </option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <div class="row">
-                            <div class="col-xs-6">
-                                <div class="input-group">
-                                    <span class="input-group-addon"> Currency Id for sale: </span>
-                                    <input name="saleCurrency" type="number" ng-model="saleCurrency" class="form-control" placeholder="Select a currency to sell" step="1" ensure-integer ensure-over="saleCurrency" ensure-if="true" max="4294967295" required>
-                                </div>
+                <form name="dexSaleForm" ng-submit="validateDexSaleForm()">
+                    <div class="panel panel-form">
+                        <div class="panel-body">
+                            <div class="col-sm-6">
+                              <label class="text-justify" >{{ 'WALLET.SEND.FROM' | translate}}</label>
+                              <div class="btn-group send-address-dropdown">
+                                <button class="btn btn-clear dropdown-toggle" type="button" id="chooseAddress" data-toggle="dropdown" aria-expanded="true">
+                                  {{selectedAddress.hash}} 
+                                  <span class="caret pull-right"></span>
+                                </button>
+                                <ul class="dropdown-menu" role="menu" aria-labelledby="chooseAddress">
+                                  <li role="presentation" ng-repeat="address in wallet.tradableAddresses()">
+                                    <a role="menuitem" tabindex="-1" href="#" ng-click="setAddress(address)">{{address.hash}} </a>
+                                  </li>
+                                </ul>
+                              </div>
                             </div>
-                            <div class="col-xs-6">
-                                <div class="input-group">
-                                    <span class="input-group-addon"> Currency Id desired: </span>
-                                    <input name="desiredCurrency" type="number" ng-model="desiredCurrency" class="form-control" placeholder="Select a currency to receive" step="1" ensure-integer ensure-over="desiredCurrency" ensure-if="true" max="4294967295" required>
-                                </div>
-
-                            </div>
+                            <div class="col-sm-6">
+                              <label for="chooseCoin" >{{ 'WALLET.SEND.CHOOSECOIN' | translate}}</label>
+                              <div class="btn-group send-asset-dropdown">
+                                <button class="btn btn-clear dropdown-toggle" type="button" id="chooseCoin" data-toggle="dropdown" aria-expanded="false">
+                                  {{selectedAsset.name | truncate:14}} <small class="text-muted" ng-show="selectedAsset.id > 0">({{selectedAsset.id}})</small>
+                                  <span class="caret pull-right"></span>
+                                </button>
+                                <ul class="dropdown-menu" role="menu" aria-labelledby="chooseCoin">
+                                  <li role="presentation" ng-repeat="asset in selectedAddress.balance" ng-if="asset.tradable && ((asset.id < 2147483648 && asset.id != 2) || showtesteco === 'true')">
+                                    <a role="menuitem" tabindex="-1" href="#" ng-click="setAsset(asset)">{{asset.name | truncate:14}} <small class="text-muted" ng-show="asset.id > 0">({{asset.id}})</small></a>
+                                  </li>
+                                </ul>
+                              </div>
+                            </div> 
                         </div>
-                    </div>
-                    <div class="form-group">
-                        <div class="row">
-                            <div class="col-xs-6">
-                                <div class="input-group">
-                                    <span class="input-group-addon"> Amount for sale: </span>
-                                    <input name="saleAmount" type="number" ng-model="saleAmount" class="form-control"  required>
-                                </div>
-                            </div>
-                            <div class="col-xs-6">
-                                <div class="input-group">
-                                    <span class="input-group-addon"> Amount desired: </span>
-                                    <input name="desiredAmount" type="number" ng-model="desiredAmount" class="form-control" required>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <div class="input-group">
-                            <span class="input-group-addon"> Action: </span>
-                            <select name="action" class="form-control" ng-model="action" required>
-                                <option value=""> -- Choose an Action -- </option>
-                                <option value="1"> -- ADD -- </option>
-                                <option value="2"> -- CANCEL AT PRICE -- </option>
-                                <option value="3"> -- CANCEL ALL FOR CURRENCY PAIR -- </option>
-                                <option value="4"> -- CANCEL EVERYTHING -- </option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <div class="input-group">
-                            <span class="input-group-addon"> Miner fees ( BTC ): </span>
-                            <input name="fees" type="number" ng-model="walletAssets.minerFees" class="form-control" placeholder="0.0001 suggested minimum" step="0.0001" min="0.0001" ng-change="walletAssets.calculateTotal(minerFees)" required>
-                            <span class="input-group-addon"> Available Bitcoin: {{ walletAssets.balanceData[1] }} BTC </span>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <input class="btn btn-primary btn-lg col-xs-push-3 col-xs-6" type="submit" value="Create" ng-click="validateForm()">
                     </div>
                 </form>
                 <div class="row">

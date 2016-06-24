@@ -24,9 +24,9 @@ def getDesignatingCurrencies():
     return jsonify({"status" : 200, "currencies": [{"propertyid":currency[0], "propertyname" : currency[1] } for currency in designating_currencies]})
 
 
-@app.route('/<int:propertyid_desired>')
-def get_markets_by_propertyid_desired(propertyid_desired):
-    markets = dbSelect("select distinct ao.propertyidselling, sp.propertyname, sum(ao.amountavailable) from activeoffers ao inner join SmartProperties sp on ao.propertyidselling = sp.propertyid and sp.protocol = 'Omni' where ao.propertyiddesired = %s and ao.OfferState = 'active' group by ao.propertyidselling, sp.propertyname order by sp.propertyname;",[propertyid_desired])
+@app.route('/<int:denominator>')
+def get_markets_by_denominator(denominator):
+    markets = dbSelect("select distinct CASE WHEN ao.propertyiddesired = %s THEN ao.propertyidselling WHEN ao.propertyidselling = %s THEN ao.propertyiddesired END as marketid, CASE WHEN ao.propertyiddesired = %s THEN selling.propertyname WHEN ao.propertyidselling = %s THEN desired.propertyname END as marketname, sum(ao.amountavailable) from activeoffers ao inner join SmartProperties selling on ao.propertyidselling = selling.propertyid and selling.protocol = 'Omni' inner join SmartProperties desired on ao.propertyiddesired = desired.propertyid and desired.protocol = 'Omni' where ao.propertyiddesired = %s or ao.propertyidselling = %s and ao.OfferState = 'active' group by marketid, marketname order by marketname;",[denominator,denominator,denominator,denominator,denominator,denominator])
     return jsonify({"status" : 200, "markets": [
     	{
     		"propertyid":currency[0], 

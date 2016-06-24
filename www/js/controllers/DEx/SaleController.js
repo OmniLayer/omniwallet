@@ -1,40 +1,30 @@
 angular.module("omniControllers")
-	.controller("DExSaleController", ["$scope","TransactionManager","Wallet","ModalManager", 
-		function DExSaleController($scope, TransactionManager, Wallet, ModalManager ){
-			$scope.walletAssets = Wallet;
-
-			$scope.DExSaleTransaction = new TransactionManager(25,{
-						transaction_version:0,
-						sale_currency_id:$scope.saleCurrency,
-						sale_amount:$scope.saleAmount,
-						desired_currency_id:$scope.desiredCurrency,
-						desired_amount:$scope.desiredAmount
-					});
-
+	.controller("DExSaleController", ["$scope", "Orderbook", "PropertyManager",
+		function DExSaleController($scope, Orderbook, PropertyManager ){
+			$scope.selectedAddress = $scope.wallet.tradableAddresses()[0]
+			$scope.ecosystem = 1;
+			$scope.setAddress = function(address){
+				$scope.selectedAddress = address;
+			}
 			
+			$scope.setAsset = function(asset){
+				$scope.sellingAsset = asset;
+				$scope.ecosystem = (asset.id < 2147483648 && asset.id != 2) ? 1 : 2;;
+			}
+
+			$scope.loadCurrencies = function(ecosystem){
+				PropertyManager.listByEcosystem($scope.ecosystem).then(function(result){
+			      $scope.availableTokens = result.data.properties.sort(function(a, b) {
+			          var currencyA = a.name.toUpperCase();
+			          var currencyB = b.name.toUpperCase();
+			          return (currencyA < currencyB) ? -1 : (currencyA > currencyB) ? 1 : 0;
+			      });
+			      $scope.desiredAsset = $scope.availableTokens[0];
+			  	});
+			}
 			$scope.validateDexSaleForm = function(){
-				// TODO: Validations
-				$scope.DExSaleTransaction = new TransactionManager(25,{
-						transaction_version:0,
-						sale_currency_id:$scope.saleCurrency,
-						sale_amount:$scope.saleAmount,
-						desired_currency_id:$scope.desiredCurrency,
-						desired_amount:$scope.desiredAmount
-					});
-				ModalManager.openConfirmationModal({
-					dataTemplate: '/views/modals/partials/dex_sale.html',
-					scope: {
-						title:"Confirm DEx Sale",
-						address:WalletAssets.selectedAddress,
-						saleCurrency:$scope.saleCurrency,
-						saleAmount:$scope.saleAmount,
-						desiredCurrency:$scope.desiredCurrency,
-						desiredAmount:$scope.desiredAmount,
-						action:$scope.action,
-						totalCost:WalletAssets.totalCost,
-						confirmText: "Create Sale"
-					},
-					transactionManager: $scope.DExSaleTransaction
-				})
+
+				var orderbook = new Orderbook({desired:$scope.propertyDesired, selling:$scope.propertySelling});
+
 			};
 		}])
