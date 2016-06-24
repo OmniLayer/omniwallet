@@ -162,7 +162,7 @@ angular.module("omniFactories")
 				};
 
 				self.getBalance = function(address, assetId){
-					return address && address.getBalance(assetId) ? new Big(address.getBalance(assetId).value).times(WHOLE_UNIT).valueOf() : 0;
+					return address && address.getBalance(assetId) ? new Big(address.getBalance(assetId)).times(WHOLE_UNIT).valueOf() : 0;
 				}
 
 				self.initialize();
