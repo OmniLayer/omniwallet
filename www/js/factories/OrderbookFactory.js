@@ -110,7 +110,7 @@ angular.module("omniFactories")
 				};
 
 				self.updateAmount = function(offer) {
-					offer.amounts.desired= offer.amounts.selling * offer.price
+					offer.amounts.selling= (offer.amounts.desired * offer.price) ||0;
 				}
 
 				self.submitOffer = function(offer){
@@ -119,9 +119,9 @@ angular.module("omniFactories")
 					var dexOffer = new Transaction(25,offer.address,fee,{
 							transaction_version:0,
 							propertyidforsale:offer.selling.propertyid,
-							amountforsale: self.tradingPair.selling.divisible ? new Big(offer.amounts.selling).times(SATOSHI_UNIT).valueOf() : new Big(offer.amounts.selling).valueOf(),
+							amountforsale: offer.selling.divisible ? new Big(offer.amounts.selling).times(SATOSHI_UNIT).valueOf() : new Big(offer.amounts.selling).valueOf(),
 							propertiddesired:offer.desired.propertyid,
-							amountdesired: self.tradingPair.desired.divisible ? new Big(offer.amounts.desired).times(SATOSHI_UNIT).valueOf() : new Big(offer.amounts.desired).times(SATOSHI_UNIT).valueOf()
+							amountdesired: offer.desired.divisible ? new Big(offer.amounts.desired).times(SATOSHI_UNIT).valueOf() : new Big(offer.amounts.desired).times(SATOSHI_UNIT).valueOf()
 						});
 					ModalManager.openConfirmationModal({
 						dataTemplate: '/views/modals/partials/dex_offer.html',
@@ -132,34 +132,6 @@ angular.module("omniFactories")
 							saleAmount:self.buyOrder.amounts.desired,
 							desiredCurrency:self.tradingPair.selling.propertyid,
 							desiredAmount:self.buyOrder.amounts.selling,
-							totalCost:dexOffer.totalCost,
-							action:"Add",
-							confirmText: "Create Transaction",
-							successMessage: "Your order was placed successfully"
-						},
-						transaction:dexOffer
-					})
-				};
-
-				self.submitSellOffer = function(){
-					// TODO: Validations
-					var fee = Account.settings.minerFee || MIN_MINER_FEE;
-					var dexOffer = new Transaction(25,offer.address,fee,{
-							transaction_version:0,
-							propertyidforsale:self.tradingPair.selling.propertyid,
-							amountforsale: self.tradingPair.selling.divisible ? new Big(self.sellOrder.amounts.selling).times(SATOSHI_UNIT).valueOf() : new Big(self.sellOrder.amounts.selling).valueOf(),
-							propertiddesired:self.tradingPair.desired.propertyid,
-							amountdesired: self.tradingPair.desired.divisible ? new Big(self.sellOrder.amounts.desired).times(SATOSHI_UNIT).valueOf() : new Big(self.sellOrder.amounts.desired).times(SATOSHI_UNIT).valueOf()
-						});
-					ModalManager.openConfirmationModal({
-						dataTemplate: '/views/modals/partials/dex_offer.html',
-						scope: {
-							title:"Confirm DEx Transaction",
-							address:self.sellOrder.address,
-							saleCurrency:self.tradingPair.selling.propertyid,
-							saleAmount:self.sellOrder.amounts.selling,
-							desiredCurrency:self.tradingPair.desired.propertyid,
-							desiredAmount:self.sellOrder.amounts.desired,
 							totalCost:dexOffer.totalCost,
 							action:"Add",
 							confirmText: "Create Transaction",

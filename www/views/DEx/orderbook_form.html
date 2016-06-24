@@ -46,7 +46,7 @@
 						<div class="form-group">
 							<label class="col-xs-5 text-align-right" for="buy_amount_offered">{{ 'OMNIDEX.ORDERBOOK.TOTALPRICE' | translate}}:</label>
 							<div class="col-xs-4">
-								<p class="form-control-static">{{orderbook.buyOrder.amounts.selling}}</p>
+								<p class="form-control-static">{{orderbook.buyOrder.amounts.selling}} {{orderbook.buyOrder.selling.name}}</p>
 							</div>
 						</div>
 						<button type="submit" class="btn btn-default" >
@@ -106,7 +106,7 @@
 						<div class="form-group">
 							<label class="col-xs-5 text-align-right" for="sell_amount_offered">{{ 'OMNIDEX.ORDERBOOK.TOTALPRICE' | translate}}:</label>
 							<div class="col-xs-4">
-								<p class="form-control-static">{{orderbook.sellOrder.amounts.selling}}</p>
+								<p class="form-control-static">{{orderbook.sellOrder.amounts.selling}} {{orderbook.sellOrder.selling.name}}</p>
 							</div>
 						</div>
 						<button type="submit" class="btn btn-default" >
