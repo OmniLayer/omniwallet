@@ -21,11 +21,11 @@ angular.module("omniFactories")
 
 				self.offers.push(offer);
 
-				self.totaldesired = self.totaldesired.plus((new Big(offer.amountdesired)).times(WHOLE_UNIT));
-				self.totalforsale = self.totalforsale.plus((new Big(offer.amountforsale)).times(WHOLE_UNIT));
+				self.totaldesired = self.totaldesired.plus((new Big(offer.desired_amount)).times(WHOLE_UNIT));
+				self.totalforsale = self.totalforsale.plus((new Big(offer.selling_amount)).times(WHOLE_UNIT));
 
-				self.remainingforsale = self.remainingforsale.plus((new Big(offer.remainingforsale)).times(WHOLE_UNIT));
-				self.desiredreceived = self.desiredreceived.plus((new Big(offer.desiredreceived)).times(WHOLE_UNIT));
+				self.remainingforsale = self.remainingforsale.plus((new Big(offer.available_amount)).times(WHOLE_UNIT));
+				self.desiredreceived = self.desiredreceived.plus((new Big(offer.accepted_amount)).times(WHOLE_UNIT));
 			};
 
 
