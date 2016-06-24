@@ -87,7 +87,7 @@ var app = angular.module('omniwallet', [
     });
 
     $routeProvider.when('/dex/orderbook/:propertyIdDesired/:propertyIdSelling', {
-      templateUrl:  '/views/dex/orderbook.html'
+      templateUrl:  '/views/DEx/orderbook.html'
     }).otherwise({
       redirectTo:'/dex/overview'
     });
