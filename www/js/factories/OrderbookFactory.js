@@ -96,11 +96,11 @@ angular.module("omniFactories")
 				};
 
 				self.setBuyAddress = function(address){
-					$scope.orderbook.buyOrder.address = address;
+					self.buyOrder.address = address;
 				};
 
 				self.setSellAddress = function(address){
-					$scope.orderbook.sellOrder.address = address;
+					self.sellOrder.address = address;
 				};
 
 				self.updateAmount = function(offer) {
