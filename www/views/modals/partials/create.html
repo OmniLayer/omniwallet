@@ -39,7 +39,7 @@
                 popover-placement="top"> <strong>(?)</strong>
                 </a></label>
         <div class="controls">
-          <input name="email" type="email" ng-model="create.email" class="form-control" id="inputEmail" placeholder="{{ 'MODALS.CREATE.EMAILHOLDER' | translate }}">
+          <input name="email" type="email" ng-model="create.email" class="form-control" id="inputEmail" required placeholder="{{ 'MODALS.CREATE.EMAILHOLDER' | translate }}">
           <span style="color:red" ng-show="createForm.email.$error.email">{{ 'MODALS.CREATE.MESSAGES.EMAILVALID' | translate }}</span>
         </div>
       </div>
