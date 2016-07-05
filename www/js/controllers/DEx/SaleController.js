@@ -2,16 +2,20 @@ angular.module("omniControllers")
 	.controller("DExSaleController", ["$scope", "Orderbook", "PropertyManager",
 		function DExSaleController($scope, Orderbook, PropertyManager ){
 			$scope.selectedAddress = $scope.wallet.tradableAddresses()[0]
-			$scope.selectedAsset = $scope.selectedAddress.balances[0];
+			$scope.selectedAsset = $scope.wallet.getAsset($scope.selectedAddress.balance[0].id);
 			$scope.ecosystem = 1;
 			$scope.setAddress = function(address){
 				$scope.selectedAddress = address;
+				$scope.selectedAsset = $scope.wallet.getAsset($scope.selectedAddress.balance[0].id);
 			}
 			
 			$scope.setAsset = function(asset){
 				$scope.sellingAsset = asset;
 				$scope.ecosystem = (asset.id < 2147483648 && asset.id != 2) ? 1 : 2;
 				$scope.loadCurrencies();
+			}
+			$scope.setDesiredAsset = function(asset){
+				$scope.desiredAsset = asset;
 			}
 
 			$scope.loadCurrencies = function(){
@@ -24,7 +28,7 @@ angular.module("omniControllers")
 			      $scope.desiredAsset = $scope.availableTokens[0];
 			  	});
 			}
-			
+
 			$scope.validateDexSaleForm = function(){
 
 				var orderbook = new Orderbook({desired:$scope.propertyDesired, selling:$scope.propertySelling});
