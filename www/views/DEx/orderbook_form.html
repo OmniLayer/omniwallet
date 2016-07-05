@@ -11,10 +11,12 @@
 		<div class="col-xs-12" >
 			<form role="form" name="buy_form" ng-submit="orderbook.submitOffer(orderbook.buyOrder)" class="form-horizontal">
 				<div class="panel panel-form">
-					<div class="panel-body" ng-hide="orderbook.buyAddresses.length > 0">
-						{{ 'OMNIDEX.ORDERBOOK.NOCOINS' | translate:'{propertyName : orderbook.tradingPair.desired.name}'}}
-					</div>
-          			<div class="panel-body" ng-show="orderbook.buyAddresses.length > 0">
+          			<div class="panel-body">
+	          			<div class="row" ng-hide="orderbook.buyAddresses.length > 0">
+		          			<div class="col-xs-12">
+								{{ 'OMNIDEX.ORDERBOOK.NOCOINS' | translate:'{propertyName : orderbook.tradingPair.desired.name}'}}
+							</div>
+						</div>
 						<div class="form-group">
 							<label class="col-xs-2" for="buy_address">{{ 'COMMON.ADDRESS' | translate}}:</label>
 				            <div class="col-xs-10 btn-group send-address-dropdown">
@@ -49,7 +51,7 @@
 								<p class="form-control-static">{{orderbook.buyOrder.amounts.selling}} {{orderbook.buyOrder.selling.name}}</p>
 							</div>
 						</div>
-						<button type="submit" class="btn btn-main btn-lg" >
+						<button type="submit" class="btn btn-main btn-lg" ng-disabled="orderbook.buyAddresses.length == 0" >
 							{{ 'OMNIDEX.ORDERBOOK.BUY' | translate}} {{orderbook.tradingPair.selling.name}}
 			            </button>
 		            </div>
@@ -71,10 +73,12 @@
 		<div class="col-xs-12">
 			<form role="form" name="sell_form" ng-submit="orderbook.submitSellOffer(orderbook.sellOrder)" class="form-horizontal">
 				<div class="panel panel-form">
-					<div class="panel-body" ng-hide="orderbook.sellAddresses.length > 0">
-						{{ 'OMNIDEX.ORDERBOOK.NOCOINS' | translate:'{propertyName : orderbook.tradingPair.selling.name}'}}
-					</div>
-          			<div class="panel-body container-fluid" ng-show="orderbook.sellAddresses.length > 0">
+          			<div class="panel-body container-fluid">
+						<div class="row" ng-hide="orderbook.sellAddresses.length > 0">
+							<div class="col-xs-12">
+								{{ 'OMNIDEX.ORDERBOOK.NOCOINS' | translate:'{propertyName : orderbook.tradingPair.selling.name}'}}
+							</div>
+						</div>
 						<div class="form-group row">
 							<label class="col-xs-2" for="sell_address">{{ 'COMMON.ADDRESS' | translate}}:</label>
 				            <div class="col-xs-10 btn-group send-address-dropdown">
@@ -111,7 +115,7 @@
 								<p class="form-control-static">{{orderbook.sellOrder.amounts.selling}} {{orderbook.sellOrder.selling.name}}</p>
 							</div>
 						</div>
-						<button type="submit" class="btn btn-secondary btn-lg" >
+						<button type="submit" class="btn btn-secondary btn-lg" ng-disabled="orderbook.sellAddresses.length == 0" >
 							{{ 'OMNIDEX.ORDERBOOK.SELL' | translate}} {{orderbook.tradingPair.selling.name}}
 			            </button>
 		            </div>
