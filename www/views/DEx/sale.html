@@ -42,6 +42,45 @@
                             </div> 
                         </div>
                     </div>
+                    <div class="panel panel-form">
+                      <div class="panel-body">
+                        <div class="col-sm-6">
+                          <label for="chooseCoin" >
+                            <span>{{ 'COMMON.SEND' | translate}} <span>
+                            <span ng-if="selectedAsset.symbol == 'BTC'">
+                              {{sendByValue ? userCurrency : 'BTC'}}
+                            </span>
+                            <span ng-if="selectedAsset.symbol != 'BTC'">
+                              {{ 'WALLET.SEND.AMOUNT' | translate}}
+                            </span>
+                            ({{selectedAddress.getDisplayBalance(selectedAsset.id)}} {{selectedAsset.name | truncate:14}} <small class="text-muted" ng-show="selectedAsset.id > 0">({{selectedAsset.id}})</small> {{ 'COMMON.AVAILABLE' | translate}})
+                          </label>
+                          <div class="input-group" ng-show="selectedAsset.symbol == 'BTC'">
+                            <span class="input-group-addon no-padding">
+                              <div class="send-toggle">
+                                <div class="btn-sendbyvalue">
+                                  <span></span>
+                                  <input type="checkbox" name="sendByValue" ng-init="sendByValue = false" ng-model="sendByValue" ng-change="convertAmount()">
+                                  <span></span>
+                                </div>
+                              </div>
+                            </span>
+                            <input id="amount" name="amount" type="number" ng-model="sendAmount" class="form-control" value="sendAmount"
+                                placeholder="{{selectedAsset.divisible ? '1.00000000' : '1'}}" step="{{selectedAsset.divisible ? 0.00000001 : 1}}" 
+                                min="{{selectedAsset.divisible ? 0.00000001 : 1}}" required>
+                            <div class="hint">({{sendByValue ? ((sendAmount || 0) / selectedAsset.price).toFixed(4) : ((sendAmount || 0) * selectedAsset.price).toFixed(2)}} {{sendByValue ? 'BTC' : userCurrency}})</div>
+                          </div>
+                          <input ng-show="selectedAsset.symbol != 'BTC'" id="amount" name="amount" type="number" ng-model="sendAmount" 
+                                class="form-control" value="sendAmount"
+                                placeholder="{{selectedAsset.divisible ? '1.00000000' : '1'}}" step="{{selectedAsset.divisible ? 0.00000001 : 1}}" 
+                                min="{{selectedAsset.divisible ? 0.00000001 : 1}}" required>
+                        </div> 
+                        <div class="col-sm-6">
+                          <label class="text-justify" >{{ 'WALLET.SEND.TO' | translate}}</label>
+                          <input name="reciever" type="text" ng-model="sendTo" class="form-control" required>
+                        </div>
+                      </div>
+                    </div>
                 </form>
                 <div class="row">
                     <div ng-show="showErrors" class="alert alert-danger">
