@@ -2,13 +2,13 @@
 	<table>
 		<caption>SELL OFFERS</caption>
 		<thead>
-			<th>Total MSC</th>
-			<th>Total SP#{{orderbook.tradingPair.property.currencyId}}</th>
+			<th>Total {{orderbook.tradingPair.pair.symbol}}</th>
+			<th>Total {{orderbook.tradingPair.property.symbol}}</th>
 			<th>Unit Price</th>
 		</thead>
 		<tbody>
 			<tr ng-repeat="order in orderbook.sellBook">
-				<td>{{order.desiredreceived.toFixed(8)}}</td>
+				<td>{{order.total.toFixed(8)}}</td>
 				<td>{{order.remainingforsale.toFixed(8)}}</td>
 				<td>{{order.price.toFixed(8)}}</td>
 			</tr>
@@ -20,8 +20,8 @@
 		<caption>BUY OFFERS</caption>
 		<thead>
 			<th>Unit Price</th>
-			<th>Total SP#{{orderbook.tradingPair.property.currencyId}}</th>
-			<th>Total MSC</th>
+			<th>Total {{orderbook.tradingPair.property.symbol}}</th>
+			<th>Total {{orderbook.tradingPair.pair.symbol}}</th>
 		</thead>
 		<tbody>
 			<tr ng-repeat="order in orderbook.buyBook">

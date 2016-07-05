@@ -1602,3 +1602,28 @@ i.icon-l{
   vertical-align: middle;
   height: 186px;
 }
+
+
+
+/* DEx Styles */
+
+.orderbook-header-buy {
+  color: #ffffff;
+    background-color: #7ed933;
+    border-color: #7ed933;
+    margin-left: 0px;
+    margin-right: 0px;
+    border-radius: 5px 5px 0px 0px;
+    font-size: 26px;
+}
+
+.orderbook-header-sell {
+  color: #ffffff;
+  background-color: #ffb839;
+  border-color: #ffb839;
+    margin-left: 0px;
+    margin-right: 0px;
+    border-radius: 5px 5px 0px 0px;
+    font-size: 26px;
+}
+
