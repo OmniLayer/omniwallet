@@ -98,6 +98,7 @@ angular.module("omniServices")
                             asset = new Asset(balanceItem.symbol,balanceItem.value, tradable, address)
 
                             self.assets.push(asset);
+                            address.assets.push(asset);
                             update=true;
                         }
                     });

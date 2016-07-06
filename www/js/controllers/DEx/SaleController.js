@@ -1,12 +1,10 @@
 angular.module("omniControllers")
 	.controller("DExSaleController", ["$scope", "Orderbook", "PropertyManager",
 		function DExSaleController($scope, Orderbook, PropertyManager ){
-			$scope.selectedAddress = $scope.wallet.tradableAddresses()[0]
-			$scope.selectedAsset = $scope.wallet.getAsset($scope.selectedAddress.balance[0].id);
-			$scope.ecosystem = 1;
+			
 			$scope.setAddress = function(address){
 				$scope.selectedAddress = address;
-				$scope.selectedAsset = $scope.wallet.getAsset($scope.selectedAddress.balance[0].id);
+				$scope.setAsset($scope.wallet.getAsset($scope.selectedAddress.balance[0].id));
 			}
 			
 			$scope.setAsset = function(asset){
@@ -37,4 +35,6 @@ angular.module("omniControllers")
 				var orderbook = new Orderbook({desired:$scope.propertyDesired, selling:$scope.propertySelling});
 
 			};
+
+			$scope.setAddress($scope.wallet.tradableAddresses()[0])
 		}])
