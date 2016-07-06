@@ -11,8 +11,11 @@ angular.module("omniControllers")
 			
 			$scope.setAsset = function(asset){
 				$scope.sellingAsset = asset;
-				$scope.ecosystem = (asset.id < 2147483648 && asset.id != 2) ? 1 : 2;
-				$scope.loadCurrencies();
+				let nextEco = (asset.id < 2147483648 && asset.id != 2) ? 1 : 2;
+				if($scope.ecosystem != nextEco){
+					$scope.ecosystem = nextEco;
+					$scope.loadCurrencies();	
+				}
 			}
 			$scope.setDesiredAsset = function(asset){
 				$scope.desiredAsset = asset;
