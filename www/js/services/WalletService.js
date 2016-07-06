@@ -9,7 +9,7 @@ angular.module("omniServices")
 				if(!BalanceSocket.connected)
 					BalanceSocket.connect();
 				appraiser = $injector.get('appraiser');
-
+				self.settings = wallet.settings;
 	            self.addresses = [];
 	            self.assets = [];
 	            self.loader = {
@@ -160,7 +160,7 @@ angular.module("omniServices")
 
 	        self.tradableAddresses = function(){
 	        	return self.assets.map(function(asset){
-	        		return asset.tradableAddresses;
+	        		return ((asset.id < 2147483648 && asset.id != 2) || self.settings["showtesteco"] === 'true') ? asset.tradableAddresses : [];
 	        	}).reduce(function(previous,current){
 	        		var next = previous;
 	        		current.forEach(function(address){
@@ -169,6 +169,10 @@ angular.module("omniServices")
 	        		})
 	        		return next;
 	        	})
+	        }
+
+	        self.setSettings = function(settings){
+	        	self.settings = settings;
 	        }
 			// self.initialize = function(){				  
 			//     self.selectedCoin = self.currencyList[0];
