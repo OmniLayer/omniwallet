@@ -102,15 +102,19 @@ angular.module("omniServices")
                                 message: "Operation success",
                                 url : result.url
                               })
+                              $modalInstance.dismiss('close');
+                            } else if(result.readyToSign){
+                              $scope.readyToSign = result.readyToSign;
+                              $scope.unsignedTransaction = result.unsignedTransaction;
                             } else {
                               $rootScope.notifyError({
                                 message: result.error || "Unknown Error"
                               })
+                              $modalInstance.dismiss('close');
                             }
-                            $modalInstance.dismiss('close');
                           }, function(errorData){
                           	$modalInstance.dismiss('close');
-                              $rootScope.notifyError({
+                                $rootScope.notifyError({
                                 message: errorData.errorMessage || "Unknown Error"
                               })
                           });
