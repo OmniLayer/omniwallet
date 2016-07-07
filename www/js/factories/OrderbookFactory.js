@@ -67,7 +67,7 @@ angular.module("omniFactories")
 										
 								})
 								if(Wallet.tradableAddresses().find(function(elem){
-									elem.hash == offerData.seller
+									return elem.hash == offerData.seller
 								})){
 									orderbook.activeOffers.push(offer);
 								}
@@ -102,7 +102,7 @@ angular.module("omniFactories")
 									}
 								})
 								if(Wallet.tradableAddresses().find(function(elem){
-									elem.hash == offerData.seller
+									return elem.hash == offerData.seller
 								})){
 									orderbook.activeOffers.push(offer);
 								}
