@@ -47,7 +47,7 @@ angular.module("omniFactories")
 					self.buyBook = []
 					self.sellBook = []
 
-					$http.get("/v1/markets/"+tradingPair.desired.propertyid+"/"+tradingPair.selling.propertyid)
+					$http.get("/v1/omnidex/"+tradingPair.desired.propertyid+"/"+tradingPair.selling.propertyid)
 						.then(function(response){
 							if(response.status != 200 || response.data.status !=200)
 								return // handle errors
@@ -78,7 +78,7 @@ angular.module("omniFactories")
 					          return priceA.gt(priceB) ? -1 : priceA.lt(priceB) ? 1 : 0;
 					        });
 						})
-					$http.get("/v1/markets/"+tradingPair.selling.propertyid+"/"+tradingPair.desired.propertyid)
+					$http.get("/v1/omnidex/"+tradingPair.selling.propertyid+"/"+tradingPair.desired.propertyid)
 						.then(function(response){
 							if(response.status != 200 || response.data.status != 200)
 								return // handle errors

@@ -1627,3 +1627,6 @@ i.icon-l{
     font-size: 26px;
 }
 
+.no-coins {
+  min-height: 49px
+}
