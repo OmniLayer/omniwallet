@@ -120,6 +120,7 @@ angular.module("omniFactories")
 				for (let i = 0; i <= index; i++){
 					cumulative = cumulative.plus(self.askBook[i].remainingforsale)
 				}
+				return cumulative;
 			}
 			self.bidCumulative = function(order){
 				let index = self.bidBook.indexOf(order);
