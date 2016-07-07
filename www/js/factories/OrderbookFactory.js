@@ -69,7 +69,7 @@ angular.module("omniFactories")
 								if(Wallet.tradableAddresses().find(function(elem){
 									return elem.hash == offerData.seller
 								})){
-									orderbook.activeOffers.push(offer);
+									self.activeOffers.push(offer);
 								}
 
 								if(order == null){
@@ -104,7 +104,7 @@ angular.module("omniFactories")
 								if(Wallet.tradableAddresses().find(function(elem){
 									return elem.hash == offerData.seller
 								})){
-									orderbook.activeOffers.push(offer);
+									self.activeOffers.push(offer);
 								}
 								if(order == null){
 									order = new DExOrder(offer);
