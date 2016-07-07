@@ -11,4 +11,8 @@ angular.module("omniControllers")
 					$scope.orderbook = new Orderbook({desired:$scope.propertyDesired,selling:$scope.propertySelling});
 				});
 			});
+
+			 $scope.confirmCancel = function(offer){
+			 	// TODO: Cancel offer at specific price
+			 }
 	}]);

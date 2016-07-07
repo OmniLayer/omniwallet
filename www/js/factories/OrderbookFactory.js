@@ -44,8 +44,9 @@ angular.module("omniFactories")
 					});
 					self.sellOrder.address = self.sellAddresses.length > 0 ? self.sellAddresses[0] : undefined;
 
-					self.askBook = []
-					self.bidBook = []
+					self.askBook = [];
+					self.bidBook = [];
+					self.activeOffers = [];
 
 					// I get the orders for property selling asks
 					$http.get("/v1/omnidex/"+tradingPair.desired.propertyid+"/"+tradingPair.selling.propertyid)
@@ -65,6 +66,11 @@ angular.module("omniFactories")
 									}
 										
 								})
+								if($scope.wallet.tradableAddresses().find(function(elem){
+									elem.hash == offerData.seller
+								})){
+									orderbook.activeOffers.push(offer);
+								}
 
 								if(order == null){
 									order = new DExOrder(offer);
@@ -95,6 +101,11 @@ angular.module("omniFactories")
 										order.addOffer(offer)
 									}
 								})
+								if($scope.wallet.tradableAddresses().find(function(elem){
+									elem.hash == offerData.seller
+								})){
+									orderbook.activeOffers.push(offer);
+								}
 								if(order == null){
 									order = new DExOrder(offer);
 									self.bidBook.push(order);

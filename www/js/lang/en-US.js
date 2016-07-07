@@ -647,13 +647,15 @@ angular.module("omniConfig")
 			"DENOMINATOR" : "Choose Denominating Currency"
 		},
 		"ORDERBOOK" : {
+			"TITLE" : "{{ currency }} Exchange",
 			"BUY" : "Buy",
 			"SELL": "Sell",
 			"BALANCE" : "Your balance",
 			"TOTALPRICE" : "Total price",
 			"UNITPRICE" :"Price Per",
 			"AMOUNT" : "Amount",
-			"NOCOINS" : "You don't have any {{propertyName}} available"
+			"NOCOINS" : "You don't have any {{propertyName}} available",
+			"ACTIVEOFFERS" : "Your Offers"
 		},
 		"SALE" : {
 			"TITLE" : "Open New Market"
