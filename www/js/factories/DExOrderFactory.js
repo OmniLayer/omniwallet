@@ -5,13 +5,13 @@ angular.module("omniFactories")
 
 			self.initialize = function(){
 				self.offers = [offer];
-				self.price = new Big(offer.unit_price);
+				self.price = offer.price;
 
-				self.totalforsale = (new Big(offer.total_amount)).times(WHOLE_UNIT);
-				self.totaldesired = (new Big(offer.desired_amount)).times(WHOLE_UNIT);
+				self.totalforsale = offer.selling_amount;
+				self.totaldesired = offer.desired_amount;
 
-				self.remainingforsale = (new Big(offer.available_amount)).times(WHOLE_UNIT);
-				self.desiredreceived = (new Big(offer.accepted_amount)).times(WHOLE_UNIT);
+				self.remainingforsale = offer.available_amount;
+				//self.desiredreceived = offer.accepted_amount; /* Accepted amount is not in db */
 			};
 
 			self.addOffer = function(offer){
@@ -21,13 +21,12 @@ angular.module("omniFactories")
 
 				self.offers.push(offer);
 
-				self.totaldesired = self.totaldesired.plus((new Big(offer.desired_amount)).times(WHOLE_UNIT));
-				self.totalforsale = self.totalforsale.plus((new Big(offer.total_amount)).times(WHOLE_UNIT));
+				self.totaldesired = self.totaldesired.plus(offer.desired_amount);
+				self.totalforsale = self.totalforsale.plus(offer.selling_amount);
 
-				self.remainingforsale = self.remainingforsale.plus((new Big(offer.available_amount)).times(WHOLE_UNIT));
-				self.desiredreceived = self.desiredreceived.plus((new Big(offer.accepted_amount)).times(WHOLE_UNIT));
+				self.remainingforsale = self.remainingforsale.plus(offer.available_amount);
+				//self.desiredreceived = self.desiredreceived.plus(offer.accepted_amount);
 			};
-
 
 			self.initialize();
 		}

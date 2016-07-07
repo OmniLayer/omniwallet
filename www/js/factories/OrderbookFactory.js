@@ -44,9 +44,10 @@ angular.module("omniFactories")
 					});
 					self.sellOrder.address = self.sellAddresses.length > 0 ? self.sellAddresses[0] : undefined;
 
-					self.buyBook = []
-					self.sellBook = []
+					self.askBook = []
+					self.bidBook = []
 
+					// I get the orders for property selling asks
 					$http.get("/v1/omnidex/"+tradingPair.desired.propertyid+"/"+tradingPair.selling.propertyid)
 						.then(function(response){
 							if(response.status != 200 || response.data.status !=200)
@@ -56,8 +57,8 @@ angular.module("omniFactories")
 							var offers = response.data.orderbook;
 							offers.forEach(function(offerData){
 								var order = null;
-								var offer = new DExOffer(offerData);
-								self.buyBook.forEach(function(orderData){
+								var offer = new DExOffer(offerData,tradingPair.desired,tradingPair.selling);
+								self.askBook.forEach(function(orderData){
 									if(orderData.price.eq(offer.price)){
 										order = orderData;
 										order.addOffer(offer)
@@ -67,12 +68,12 @@ angular.module("omniFactories")
 
 								if(order == null){
 									order = new DExOrder(offer);
-									self.buyBook.push(order);
+									self.askBook.push(order);
 								}
 
 							});
 
-							self.buyBook.sort(function(a, b) {
+							self.askBook.sort(function(a, b) {
 					          var priceA = a.price;
 					          var priceB = b.price;
 					          return priceA.gt(priceB) ? -1 : priceA.lt(priceB) ? 1 : 0;
@@ -87,8 +88,8 @@ angular.module("omniFactories")
 							var offers = response.data.orderbook;
 							offers.forEach(function(offerData){
 								var order = null;
-								var offer = new DExOffer(offerData);
-								self.sellBook.forEach(function(orderData){
+								var offer = new DExOffer(offerData,tradingPair.selling,tradingPair.desired);
+								self.bidBook.forEach(function(orderData){
 									if(orderData.price.eq(offer.price)){
 										order = orderData;
 										order.addOffer(offer)
@@ -96,13 +97,13 @@ angular.module("omniFactories")
 								})
 								if(order == null){
 									order = new DExOrder(offer);
-									self.sellBook.push(order);
+									self.bidBook.push(order);
 								}
 
 
 							});
 
-							self.sellBook.sort(function(a, b) {
+							self.bidBook.sort(function(a, b) {
 					          var priceA = a.price;
 					          var priceB = b.price;
 					          return priceA.lt(priceB) ? -1 : priceA.gt(priceB) ? 1 : 0;
@@ -110,6 +111,24 @@ angular.module("omniFactories")
 						})
 
 				};
+
+
+
+			self.askCumulative = function(order){
+				let index = self.askBook.indexOf(order);
+				let cumulative = new Big(0);
+				for (let i = 0; i <= index; i++){
+					cumulative.sum(self.askBook[i].remainingforsale)
+				}
+			}
+			self.bidCumulative = function(order){
+				let index = self.bidBook.indexOf(order);
+				let cumulative = new Big(0);
+				for (let i = 0; i <= index; i++){
+					cumulative.sum(self.bidBook[i].remainingforsale)
+				}
+				return cumulative;
+			}
 
 				self.setBuyAddress = function(address){
 					self.buyOrder.address = address;

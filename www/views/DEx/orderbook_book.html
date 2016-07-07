@@ -1,33 +1,37 @@
 <div class="col-xs-6">
-	<table>
-		<caption>SELL OFFERS</caption>
+	<table class="orderbook-orders-table bids">
+		<caption>Bids</caption>
 		<thead>
-			<th>Total {{orderbook.tradingPair.pair.symbol}}</th>
-			<th>Total {{orderbook.tradingPair.property.symbol}}</th>
-			<th>Unit Price</th>
+			<th>Order Count</th>
+			<th>Price ({{orderbook.tradingPair.selling.symbol}})</th>
+			<th>Amount ({{orderbook.tradingPair.desired.symbol}})</th>
+			<th>Cumulative</th>
 		</thead>
 		<tbody>
-			<tr ng-repeat="order in orderbook.sellBook">
-				<td>{{order.total.toFixed(8)}}</td>
-				<td>{{order.remainingforsale.toFixed(8)}}</td>
+			<tr ng-repeat="order in orderbook.bidBook">
+				<td>{{order.offers.length}}</td>
 				<td>{{order.price.toFixed(8)}}</td>
+				<td>{{order.remainingforsale.toFixed(8)}}</td>
+				<td>{{orderbook.bidCumulative(order)}}</td>
 			</tr>
 		</tbody>
 	</table>
 </div>
 <div class="col-xs-6">
-	<table>
-		<caption>BUY OFFERS</caption>
+	<table class="orderbook-orders-table asks">
+		<caption>Asks</caption>
 		<thead>
-			<th>Unit Price</th>
-			<th>Total {{orderbook.tradingPair.property.symbol}}</th>
-			<th>Total {{orderbook.tradingPair.pair.symbol}}</th>
+			<th>Order Count</th>
+			<th>Price ({{orderbook.tradingPair.pair.symbol}})</th>
+			<th>Amount ({{orderbook.tradingPair.property.symbol}})</th>
+			<th>Cumulative</th>
 		</thead>
 		<tbody>
-			<tr ng-repeat="order in orderbook.buyBook">
+			<tr ng-repeat="order in orderbook.askBook">
+				<td>{{order.offers.length}}</td>
 				<td>{{order.price.toFixed(8)}}</td>
-				<td>{{order.desiredreceived.toFixed(8)}}</td>
 				<td>{{order.remainingforsale.toFixed(8)}}</td>
+				<td>{{orderbook.askCumulative(order)}}</td>
 			</tr>
 		</tbody>
 	</table>
