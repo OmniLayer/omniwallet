@@ -25,7 +25,7 @@ angular.module("omniControllers")
 					dataTemplate: '/views/modals/partials/dex_offer.html',
 					scope: {
 						title:"Cancel DEx Offer",
-						address:offer.address,
+						address:offer.ownerAddress,
 						saleCurrency:offer.propertyselling.propertyid,
 						saleAmount:offer.selling_amount.valueOf(),
 						desiredCurrency:offer.propertydesired.propertyid,
