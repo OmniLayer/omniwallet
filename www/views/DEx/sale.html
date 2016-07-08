@@ -11,22 +11,22 @@
             <div class="col-xs-12">
                 <form name="dexSaleForm" ng-submit="validateDexSaleForm()">
                     <div class="panel panel-form">
-                        <div class="panel-body">
-                            <div class="col-sm-6">
-                              <label class="text-justify" >{{ 'WALLET.SEND.FROM' | translate}}</label>
-                              <div class="btn-group send-address-dropdown">
-                                <button class="btn btn-clear dropdown-toggle" type="button" id="chooseAddress" data-toggle="dropdown" aria-expanded="true">
-                                  {{selectedAddress.hash}} 
-                                  <span class="caret pull-right"></span>
-                                </button>
-                                <ul class="dropdown-menu" role="menu" aria-labelledby="chooseAddress">
-                                  <li role="presentation" ng-repeat="address in wallet.tradableAddresses()">
-                                    <a role="menuitem" tabindex="-1" href="#" ng-click="setAddress(address)">{{address.hash}} </a>
-                                  </li>
-                                </ul>
-                              </div>
-                            </div>
+                      <div class="panel-body">
+                        <div class="col-sm-6">
+                          <label class="text-justify" >{{ 'WALLET.SEND.FROM' | translate}}</label>
+                          <div class="btn-group send-address-dropdown">
+                            <button class="btn btn-clear dropdown-toggle" type="button" id="chooseAddress" data-toggle="dropdown" aria-expanded="true">
+                              {{selectedAddress.hash}} 
+                              <span class="caret pull-right"></span>
+                            </button>
+                            <ul class="dropdown-menu" role="menu" aria-labelledby="chooseAddress">
+                              <li role="presentation" ng-repeat="address in wallet.omniTradableAddresses()">
+                                <a role="menuitem" tabindex="-1" href="#" ng-click="setAddress(address)">{{address.hash}} </a>
+                              </li>
+                            </ul>
+                          </div>
                         </div>
+                      </div>
                     </div>
                     <div class="panel panel-form">
                       <div class="panel-body">
@@ -34,7 +34,7 @@
                           <label for="chooseCoin" >{{ 'WALLET.SEND.CHOOSECOIN' | translate}}</label>
                           <div class="btn-group send-asset-dropdown">
                             <button class="btn btn-clear dropdown-toggle" type="button" id="chooseCoin" data-toggle="dropdown" aria-expanded="false">
-                              {{sellingAsset.name | truncate:14}} <small class="text-muted" ng-show="sellingAsset.id > 0">({{sellingAsset.id}})</small>
+                              {{sellingAsset.name | truncate:14}}
                               <span class="caret pull-right"></span>
                             </button>
                             <ul class="dropdown-menu" role="menu" aria-labelledby="chooseCoin">
@@ -43,7 +43,24 @@
                               </li>
                             </ul>
                           </div>
+                        </div>                 
+                        <div class="col-sm-6">
+                          <label for="chooseCoin" >
+                            <span>{{ 'COMMON.SEND' | translate}} </span>
+                            <span>
+                              {{ 'WALLET.SEND.AMOUNT' | translate}}
+                            </span>
+                            ({{selectedAddress.getDisplayBalance(sellingAsset.id)}} {{sellingAsset.name | truncate:14}} <small class="text-muted" ng-show="sellingAsset.id > 0">({{sellingAsset.id}})</small> {{ 'COMMON.AVAILABLE' | translate}})
+                          </label>
+                          <input id="sellingamount" name="sellingamount" type="number" ng-model="sellingAmount"
+                                class="form-control" value="sellingAmount"
+                                placeholder="{{sellingAsset.divisible ? '1.00000000' : '1'}}" step="{{sellingAsset.divisible ? 0.00000001 : 1}}" 
+                                min="{{sellingAsset.divisible ? 0.00000001 : 1}}" required>
                         </div> 
+                      </div>
+                    </div>
+                    <div class="panel panel-form">
+                      <div class="panel-body">
                         <div class="col-sm-6">
                           <label for="chooseCoin" >{{ 'WALLET.SEND.CHOOSECOIN' | translate}}</label>
                           <div class="btn-group send-asset-dropdown">
@@ -58,23 +75,6 @@
                             </ul>
                           </div>
                         </div> 
-                      </div>
-                    </div>
-                    <div class="panel panel-form">
-                      <div class="panel-body">                    
-                        <div class="col-sm-6">
-                          <label for="chooseCoin" >
-                            <span>{{ 'COMMON.SEND' | translate}} </span>
-                            <span>
-                              {{ 'WALLET.SEND.AMOUNT' | translate}}
-                            </span>
-                            ({{selectedAddress.getDisplayBalance(sellingAsset.id)}} {{sellingAsset.name | truncate:14}} <small class="text-muted" ng-show="sellingAsset.id > 0">({{sellingAsset.id}})</small> {{ 'COMMON.AVAILABLE' | translate}})
-                          </label>
-                          <input id="sellingamount" name="sellingamount" type="number" ng-model="sellingAmount"
-                                class="form-control" value="sellingAmount"
-                                placeholder="{{sellingAsset.divisible ? '1.00000000' : '1'}}" step="{{sellingAsset.divisible ? 0.00000001 : 1}}" 
-                                min="{{sellingAsset.divisible ? 0.00000001 : 1}}" required>
-                        </div> 
                         <div class="col-sm-6">
                           <label for="chooseCoin" >
                             <span>{{ 'COMMON.SEND' | translate}} </span>
@@ -86,7 +86,7 @@
                                 class="form-control" value="desiredAmount"
                                 placeholder="{{desiredAsset.divisible ? '1.00000000' : '1'}}" step="{{desiredAsset.divisible ? 0.00000001 : 1}}" 
                                 min="{{desiredAsset.divisible ? 0.00000001 : 1}}" required>
-                        </div>
+                        </div>    
                       </div>
                     </div>
                 </form>

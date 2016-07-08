@@ -171,6 +171,19 @@ angular.module("omniServices")
 	        	})
 	        }
 
+	        self.omniTradableAddresses = function(){
+	        	return self.assets.map(function(asset){
+	        		return ((asset.id < 2147483648 && asset.id != 2 && asset.id != 0) || self.settings["showtesteco"] === 'true') ? asset.tradableAddresses : [];
+	        	}).reduce(function(previous,current){
+	        		var next = previous;
+	        		current.forEach(function(address){
+	        			if(previous.indexOf(address)==-1)
+	        				next.push(address)
+	        		})
+	        		return next;
+	        	})
+	        }
+
 	        self.setSettings = function(settings){
 	        	self.settings = settings;
 	        }
