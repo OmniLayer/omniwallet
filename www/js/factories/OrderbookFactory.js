@@ -82,7 +82,7 @@ angular.module("omniFactories")
 					orderbook.forEach(function(offerData){
 						var order = null;
 						var offer = new DExOffer(offerData,self.tradingPair.selling,self.tradingPair.desired);
-						orderbook.forEach(function(orderData){
+						side.forEach(function(orderData){
 							if(orderData.price.eq(offer.price)){
 								order = orderData;
 								order.addOffer(offer)
@@ -97,7 +97,7 @@ angular.module("omniFactories")
 						}
 						if(order == null){
 							order = new DExOrder(offer);
-							orderbook.push(order);
+							side.push(order);
 						}
 
 
