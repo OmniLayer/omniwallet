@@ -1,6 +1,6 @@
 angular.module("omniControllers")
-	.controller("DExOrderbookController", ["$scope","Account","Orderbook","Wallet","PropertyManager","$http","$route",
-		function DExOrderbookController($scope,Account,Orderbook,Wallet,PropertyManager,$http,$route){
+	.controller("DExOrderbookController", ["$scope","Account","Orderbook","PropertyManager","ModalManager","$route", "Transaction", "MIN_MINER_FEE",
+		function DExOrderbookController($scope,Account,Orderbook,PropertyManager,ModalManager,$route, Transaction, MIN_MINER_FEE){
 			$scope.isLoggedIn = Account.isLoggedIn;
 			$scope.orderbook = {};
 			$scope.noOrders = true;
