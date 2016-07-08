@@ -13,6 +13,28 @@ angular.module("omniControllers")
 			});
 
 			 $scope.confirmCancel = function(offer){
-			 	// TODO: Cancel offer at specific price
+			 	var fee = Account.settings.minerFee || MIN_MINER_FEE;
+				var dexOffer = new Transaction(26,offer.ownerAddress,fee,{
+						transaction_version:0,
+						propertyidforsale:offer.propertyselling.propertyid,
+						amountforsale: offer.selling_amount.valueOf(),
+						propertiddesired:offer.propertydesired.propertyid,
+						amountdesired: offer.desired_amount.valueOf()
+					});
+				ModalManager.openConfirmationModal({
+					dataTemplate: '/views/modals/partials/dex_offer.html',
+					scope: {
+						title:"Cancel DEx Offer",
+						address:offer.address,
+						saleCurrency:offer.selling.propertyid,
+						saleAmount:offer.amounts.selling,
+						desiredCurrency:offer.desired.propertyid,
+						desiredAmount:offer.amounts.desired,
+						totalCost:dexOffer.totalCost,
+						confirmText: "Cancel Offer",
+						successMessage: "Your order was cancelled successfully"
+					},
+					transaction:dexOffer
+				});
 			 }
 	}]);

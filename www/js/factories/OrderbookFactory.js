@@ -54,30 +54,7 @@ angular.module("omniFactories")
 							if(response.status != 200 || response.data.status !=200)
 								return // handle errors
 
-							
-							var offers = response.data.orderbook;
-							offers.forEach(function(offerData){
-								var order = null;
-								var offer = new DExOffer(offerData,tradingPair.desired,tradingPair.selling);
-								self.askBook.forEach(function(orderData){
-									if(orderData.price.eq(offer.price)){
-										order = orderData;
-										order.addOffer(offer)
-									}
-										
-								})
-								if(Wallet.tradableAddresses().find(function(elem){
-									return elem.hash == offerData.seller
-								})){
-									self.activeOffers.push(offer);
-								}
-
-								if(order == null){
-									order = new DExOrder(offer);
-									self.askBook.push(order);
-								}
-
-							});
+							self.parseOrderbook(response.data.orderbook, self.askBook);
 
 							self.askBook.sort(function(a, b) {
 					          var priceA = a.price;
@@ -89,30 +66,8 @@ angular.module("omniFactories")
 						.then(function(response){
 							if(response.status != 200 || response.data.status != 200)
 								return // handle errors
-
 							
-							var offers = response.data.orderbook;
-							offers.forEach(function(offerData){
-								var order = null;
-								var offer = new DExOffer(offerData,tradingPair.selling,tradingPair.desired);
-								self.bidBook.forEach(function(orderData){
-									if(orderData.price.eq(offer.price)){
-										order = orderData;
-										order.addOffer(offer)
-									}
-								})
-								if(Wallet.tradableAddresses().find(function(elem){
-									return elem.hash == offerData.seller
-								})){
-									self.activeOffers.push(offer);
-								}
-								if(order == null){
-									order = new DExOrder(offer);
-									self.bidBook.push(order);
-								}
-
-
-							});
+							self.parseOrderbook(response.data.orderbook, self.bidBook);
 
 							self.bidBook.sort(function(a, b) {
 					          var priceA = a.price;
@@ -123,7 +78,31 @@ angular.module("omniFactories")
 
 				};
 
+				self.parseOrderbook =function(orderbook,side){
+					orderbook.forEach(function(offerData){
+						var order = null;
+						var offer = new DExOffer(offerData,self.tradingPair.selling,self.tradingPair.desired);
+						orderbook.forEach(function(orderData){
+							if(orderData.price.eq(offer.price)){
+								order = orderData;
+								order.addOffer(offer)
+							}
+						})
+						let owner = Wallet.tradableAddresses().find(function(elem){
+							return elem.hash == offerData.seller
+						})
+						if(owner){
+							offer.ownerAddress = owner;
+							self.activeOffers.push(offer);
+						}
+						if(order == null){
+							order = new DExOrder(offer);
+							orderbook.push(order);
+						}
 
+
+					});
+				}
 
 			self.askCumulative = function(order){
 				let index = self.askBook.indexOf(order);
@@ -179,7 +158,7 @@ angular.module("omniFactories")
 							successMessage: "Your order was placed successfully"
 						},
 						transaction:dexOffer
-					})
+					});
 				};
 
 				self.getBalance = function(address, assetId){
