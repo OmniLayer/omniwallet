@@ -26,10 +26,10 @@ angular.module("omniControllers")
 					scope: {
 						title:"Cancel DEx Offer",
 						address:offer.address,
-						saleCurrency:offer.selling.propertyid,
-						saleAmount:offer.amounts.selling,
-						desiredCurrency:offer.desired.propertyid,
-						desiredAmount:offer.amounts.desired,
+						saleCurrency:offer.propertyselling.propertyid,
+						saleAmount:offer.selling_amount.valueOf(),
+						desiredCurrency:offer.propertydesired.propertyid,
+						desiredAmount:offer.desired_amount.valueOf(),
 						totalCost:dexOffer.totalCost,
 						confirmText: "Cancel Offer",
 						successMessage: "Your order was cancelled successfully"
