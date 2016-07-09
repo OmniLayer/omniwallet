@@ -11,7 +11,7 @@ angular.module("omniConfig")
     if(TESTNET)
       return "http://tbtc.blockr.io/tx/info/";
     else
-      return "https://blockchain.info/tx/";
+      return "https://www.blocktrail.com/BTC/tx/";
   }])
   .factory("ADDRESS_EXPLORER_URL",["TESTNET", function AddressExplorerUrlFactory(TESTNET){
     if(TESTNET)

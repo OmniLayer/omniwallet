@@ -46,11 +46,12 @@ def insertbtc(rawtx):
     addressrole="recipient"
     for output in rawtx['BTC']['vout']:
       outputamount = int(decimal.Decimal(str(output['value']))*decimal.Decimal(1e8))
-      for addr in output['scriptPubKey']['addresses']:
-         address=addr
-         dbExecute("insert into addressesintxs (address,propertyid,protocol,txdbserialnum,addresstxindex,addressrole,balanceavailablecreditdebit) "
-                   "values(%s,%s,%s,%s,%s,%s,%s)", (address,propertyid,protocol,txdbserialnum,addresstxindex,addressrole,outputamount))
-      addresstxindex+=1
+      if output['scriptPubKey']['type'] != "nulldata":
+        for addr in output['scriptPubKey']['addresses']:
+           address=addr
+           dbExecute("insert into addressesintxs (address,propertyid,protocol,txdbserialnum,addresstxindex,addressrole,balanceavailablecreditdebit) "
+                     "values(%s,%s,%s,%s,%s,%s,%s)", (address,propertyid,protocol,txdbserialnum,addresstxindex,addressrole,outputamount))
+        addresstxindex+=1
 
     #store signed tx until it confirms
     dbExecute("insert into txjson (txdbserialnum, protocol, txdata) values (%s,%s,%s)", (txdbserialnum, protocol, json.dumps(rawtx['BTC'])) )
@@ -63,16 +64,16 @@ def insertbtc(rawtx):
 def insertomni(rawtx):
   try:
     sender = rawtx['Sender']
-    receiver = rawtx['Receiver']
-    propertyid = rawtx['MP']['PropertyID']
-    txtype = rawtx['MP']['TxType']
-    txversion = rawtx['MP']['TxVersion']
+    receiver = rawtx['Reference']
+    propertyid = rawtx['MP']['propertyid']
+    txtype = rawtx['MP']['type_int']
+    txversion = rawtx['MP']['version']
     txhash = rawtx['BTC']['txid']
     protocol = "Omni"
     addresstxindex=0
     txdbserialnum = dbSelect("select least(-1,min(txdbserialnum)) from transactions;")[0][0]
     txdbserialnum -= 1
-    amount = rawtx['MP']['Amount']
+    amount = rawtx['MP']['amount']
 
     if txtype == 55:
       #handle grants to ourself or others

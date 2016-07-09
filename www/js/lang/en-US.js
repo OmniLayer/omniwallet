@@ -354,7 +354,9 @@ angular.module("omniConfig")
 			"MODAL_AMOUNT":"Amount",
 			"MODAL_FROM":"From",
 			"MODAL_TO":"To",
-			"CONFIRM":"Confirm Send"
+			"CONFIRM":"Confirm Send",
+                        "AVAIL":"From address available",
+                        "LOWFEE":"Your 'From Address' does not have enough BTC to complete this transaction. Please select a different address or send enough BTC to cover the Total transaction cost."
 		},
 		"ASSETS":{
 			"ASSETS":"Assets",

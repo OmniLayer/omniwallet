@@ -13,7 +13,7 @@ angular.module("omniControllers")
             amount_desired: $scope.salePrice,
             min_buyer_fee: new Big($scope.buyersFee).valueOf(),
             blocks: $scope.saleBlocks,
-            currency_identifier: $scope.selectedAsset.symbol,
+            currency_identifier: $scope.selectedAsset.propertyid,
             action:1,
             donate: $scope.account.getSetting("donate")
           });
