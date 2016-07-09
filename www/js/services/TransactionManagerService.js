@@ -32,8 +32,8 @@ angular.module("omniServices")
                             deferred.reject({
                                 waiting: false,
                                 transactionError: true,
-                                error: successData.error || successData.data.error, /* Backwards compatibility for mastercoin-tools send API */
-                                errorMessage: successData.data.error || "Error preparing transaction"
+                                error: successData.error || successData.data, /* Backwards compatibility for mastercoin-tools send API */
+                                errorMessage: successData.error || "Error preparing transaction"
                             });
                         } else {
                             var tx = self.prepareTransaction(successData.unsignedhex || successData.transaction, successData.sourceScript)
