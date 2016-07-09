@@ -38,7 +38,7 @@ angular.module("omniControllers")
 						transaction_version:0,
 						propertyidforsale:$scope.sellingAsset.id,
 						amountforsale: new Big($scope.sellingAmount).valueOf(),
-						propertiddesired:$scope.desiredAsset.id,
+						propertiddesired:$scope.desiredAsset.propertyid,
 						amountdesired: new Big($scope.desiredAmount).valueOf()
 					});
 				ModalManager.openConfirmationModal({
@@ -48,12 +48,12 @@ angular.module("omniControllers")
 						address:$scope.selectedAddress,
 						saleCurrency:$scope.sellingAsset.id,
 						saleAmount:$scope.sellingAmount,
-						desiredCurrency:$scope.desiredAsset.id,
+						desiredCurrency:$scope.desiredAsset.propertyid,
 						desiredAmount:$scope.desiredAmount,
 						totalCost:dexOffer.totalCost,
 						confirmText: "Create Transaction",
 						successMessage: "Your order was placed successfully",
-						successRedirect:"/dex/orderbook/"+$scope.desiredAsset.id+"/"+$scope.sellingAsset.id
+						successRedirect:"/dex/orderbook/"+$scope.desiredAsset.propertyid+"/"+$scope.sellingAsset.id
 					},
 					transaction:dexOffer
 				});
