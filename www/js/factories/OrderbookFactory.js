@@ -130,8 +130,11 @@ angular.module("omniFactories")
 					self.sellOrder.address = address;
 				};
 
-				self.updateAmount = function(offer) {
-					offer.amounts.selling= (offer.amounts.desired * offer.price) ||0;
+				self.updateAmount = function(offer, side) {
+					if(side == "bid")
+						offer.amounts.selling= (offer.amounts.desired * offer.price) ||0;
+					else
+						offer.amounts.desired= (offer.amounts.selling * offer.price) ||0;
 				}
 
 				self.submitOffer = function(offer){
