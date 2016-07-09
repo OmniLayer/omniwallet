@@ -560,6 +560,9 @@ fieldset[disabled] .btn-clear.active {
 
 .send-asset-dropdown .dropdown-menu {
     width: 60%;
+    z-index: 10000;
+    height: 200px;
+    overflow-y: scroll;
 }
 
 .send-asset-dropdown .caret {
