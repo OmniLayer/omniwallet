@@ -4,7 +4,7 @@ angular.module("omniControllers")
 			
 			$scope.setAddress = function(address){
 				$scope.selectedAddress = address;
-				$scope.setAsset($scope.wallet.getAsset($scope.selectedAddress.balance[0].id));
+				$scope.setAsset($scope.wallet.getAsset($scope.selectedAddress.assets[0].id));
 			}
 			
 			$scope.setAsset = function(asset){

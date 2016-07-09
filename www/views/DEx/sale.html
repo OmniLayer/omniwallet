@@ -46,7 +46,6 @@
             </div>                 
             <div class="col-sm-6">
               <label for="chooseCoin" >
-                <span>{{ 'COMMON.SEND' | translate}} </span>
                 <span>
                   {{ 'OMNIDEX.SALE.SELLINGAMOUNT' | translate}}
                 </span>
@@ -70,14 +69,13 @@
                 </button>
                 <ul class="dropdown-menu" role="menu" aria-labelledby="chooseCoin">
                   <li role="presentation" ng-repeat="asset in availableTokens">
-                    <a role="menuitem" tabindex="-1" href="#" ng-click="setDesiredAsset(asset)">{{asset.name | truncate:14}} <small class="text-muted">({{asset.id}})</small></a>
+                    <a role="menuitem" tabindex="-1" href="#" ng-click="setDesiredAsset(asset)">{{asset.name | truncate:14}} <small class="text-muted">({{asset.propertyid}})</small></a>
                   </li>
                 </ul>
               </div>
             </div> 
             <div class="col-sm-6">
               <label for="chooseCoin" >
-                <span>{{ 'COMMON.SEND' | translate}} </span>
                 <span>
                   {{ 'OMNIDEX.SALE.DESIREDAMOUNT' | translate}}
                 </span>
