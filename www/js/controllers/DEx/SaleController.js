@@ -41,6 +41,7 @@ angular.module("omniControllers")
 						propertiddesired:$scope.desiredAsset.propertyid,
 						amountdesired: new Big($scope.desiredAmount).valueOf()
 					});
+				let redirectUrl = [1,31].indexOf($scope.sellingAsset.id) == -1 ? "/dex/orderbook/"+$scope.desiredAsset.propertyid+"/"+$scope.sellingAsset.id : "/dex/orderbook/"+$scope.sellingAsset.id+"/"+$scope.desiredAsset.propertyid;
 				ModalManager.openConfirmationModal({
 					dataTemplate: '/views/modals/partials/dex_offer.html',
 					scope: {
@@ -53,7 +54,7 @@ angular.module("omniControllers")
 						totalCost:dexOffer.totalCost,
 						confirmText: "Create Transaction",
 						successMessage: "Your order was placed successfully",
-						successRedirect:"/dex/orderbook/"+$scope.desiredAsset.propertyid+"/"+$scope.sellingAsset.id
+						successRedirect:redirectUrl
 					},
 					transaction:dexOffer
 				});
