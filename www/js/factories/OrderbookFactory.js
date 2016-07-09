@@ -54,7 +54,7 @@ angular.module("omniFactories")
 							if(response.status != 200 || response.data.status !=200)
 								return // handle errors
 
-							self.parseOrderbook(response.data.orderbook, self.askBook,tradingPair.selling,tradingPair.desired);
+							self.parseOrderbook(response.data.orderbook, self.askBook,tradingPair.desired,tradingPair.selling);
 
 							self.askBook.sort(function(a, b) {
 					          var priceA = a.price;
@@ -67,7 +67,7 @@ angular.module("omniFactories")
 							if(response.status != 200 || response.data.status != 200)
 								return // handle errors
 							
-							self.parseOrderbook(response.data.orderbook, self.bidBook,tradingPair.desired,tradingPair.selling);
+							self.parseOrderbook(response.data.orderbook, self.bidBook,tradingPair.selling,tradingPair.desired);
 
 							self.bidBook.sort(function(a, b) {
 					          var priceA = a.price;
