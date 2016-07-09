@@ -109,7 +109,7 @@ angular.module("omniFactories")
 				let index = self.askBook.indexOf(order);
 				let cumulative = new Big(0);
 				for (let i = 0; i <= index; i++){
-					cumulative = cumulative.plus(self.askBook[i].remainingforsale)
+					cumulative = cumulative.plus(self.askBook[i].totaldesired)
 				}
 				return cumulative;
 			}

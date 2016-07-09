@@ -3,15 +3,15 @@
 		<caption>Bids</caption>
 		<thead>
 			<th>Order Count</th>
-			<th>Price ({{orderbook.tradingPair.selling.name}})</th>
-			<th>Amount ({{orderbook.tradingPair.desired.name}})</th>
+			<th>Price</th>
+			<th>Amount</th>
 			<th>Cumulative</th>
 		</thead>
 		<tbody>
 			<tr ng-repeat="order in orderbook.bidBook">
 				<td>{{order.offers.length}}</td>
 				<td>{{order.price.toFixed(8)}}</td>
-				<td>{{order.remainingforsale.toFixed(8)}}</td>
+				<td>{{order.totaldesired.toFixed(8)}}</td>
 				<td>{{orderbook.bidCumulative(order)}}</td>
 			</tr>
 		</tbody>
@@ -22,8 +22,8 @@
 		<caption>Asks</caption>
 		<thead>
 			<th>Order Count</th>
-			<th>Price ({{orderbook.tradingPair.desired.name}})</th>
-			<th>Amount ({{orderbook.tradingPair.selling.name}})</th>
+			<th>Price</th>
+			<th>Amount</th>
 			<th>Cumulative</th>
 		</thead>
 		<tbody>
