@@ -13,7 +13,7 @@ angular.module("omniFactories")
 				self.selling_amount = propertyselling.divisible ? new Big(data.total_amount).times(WHOLE_UNIT) : new Big(data.total_amount);
 				self.desired_amount = propertydesired.divisible ? new Big(data.desired_amount).times(WHOLE_UNIT) : new Big(data.desired_amount);
 				if(side == "ask"){
-					
+					self.price = self.desired_amount.div(self.selling_amount);
 				} else {
 					self.price = self.selling_amount.div(self.desired_amount);
 				}
