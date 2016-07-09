@@ -69,7 +69,7 @@
                 </button>
                 <ul class="dropdown-menu" role="menu" aria-labelledby="chooseCoin">
                   <li role="presentation" ng-repeat="asset in availableTokens">
-                    <a role="menuitem" tabindex="-1" href="#" ng-click="setDesiredAsset(asset)">{{asset.name | truncate:14}} <small class="text-muted">({{asset.propertyid}})</small></a>
+                    <a role="menuitem" tabindex="-1" href="#" ng-click="setDesiredAsset(asset)">{{asset.name | truncate:14}} <small class="text-muted">({{asset.propertyid.toString()}})</small></a>
                   </li>
                 </ul>
               </div>
@@ -87,6 +87,10 @@
             </div>    
           </div>
         </div>
+        <p>
+          {{ 'WALLET.SEND.COST' | translate}}: {{selectedAsset.symbol == 'BTC'? minersFee.valueOf() : minersFee.plus(protocolFee).valueOf()}} BTC <button type="button" class="btn btn-xs" ng-click="editTransactionCost()"><span class="glyphicon glyphicon-pencil small"></span></button>
+        </p>  
+        <button type="submit" class="btn btn-main pull-right">{{ 'COMMON.NEXT' | translate}}</button>
       </form>
       <div class="row">
         <div ng-show="showErrors" class="alert alert-danger">

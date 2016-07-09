@@ -539,7 +539,8 @@
 			"AMOUNT":"Amount",
 			"TOTAL":"Total Cost",
 			"CANCEL":"Cancel",
-			"BUY":"Buy"
+			"BUY":"Buy",
+			"SIDE": "Side"
 		}
 	},
 	"EXCHANGE":{
@@ -646,12 +647,22 @@
 			"DENOMINATOR" : "Choose Denominating Currency"
 		},
 		"ORDERBOOK" : {
+			"TITLE" : "{{ currency }} Exchange",
 			"BUY" : "Buy",
 			"SELL": "Sell",
 			"BALANCE" : "Your balance",
 			"TOTALPRICE" : "Total price",
 			"UNITPRICE" :"Price Per",
-			"AMOUNT" : "Amount"
+			"AMOUNT" : "Amount",
+			"NOCOINS" : "You don't have any {{propertyName}} available",
+			"ACTIVEOFFERS" : "Your Offers"
+		},
+		"SALE" : {
+			"TITLE" : "Open New Market",
+			"CHOOSECOINSELLING" : "Choose coin to sell",
+			"SELLINGAMOUNT" : "Amount to sell",
+			"CHOOSECOINDESIRED" : "Choose coin desired",
+			"DESIREDAMOUNT" : "Amount desired"
 		}
 	}
 }

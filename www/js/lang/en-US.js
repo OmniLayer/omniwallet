@@ -540,7 +540,8 @@ angular.module("omniConfig")
 			"AMOUNT":"Amount",
 			"TOTAL":"Total Cost",
 			"CANCEL":"Cancel",
-			"BUY":"Buy"
+			"BUY":"Buy",
+			"SIDE": "Side"
 		}
 	},
 	"EXCHANGE":{

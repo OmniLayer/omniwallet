@@ -1,6 +1,6 @@
 angular.module("omniControllers")
-	.controller("DExSaleController", ["$scope", "Orderbook", "PropertyManager",
-		function DExSaleController($scope, Orderbook, PropertyManager ){
+	.controller("DExSaleController", ["$scope",  "PropertyManager","Account","Transaction","MIN_MINER_FEE","ModalManager",
+		function DExSaleController($scope,PropertyManager,Account,Transaction,MIN_MINER_FEE,ModalManager ){
 			
 			$scope.setAddress = function(address){
 				$scope.selectedAddress = address;
@@ -15,6 +15,7 @@ angular.module("omniControllers")
 					$scope.loadCurrencies();	
 				}
 			}
+
 			$scope.setDesiredAsset = function(asset){
 				$scope.desiredAsset = asset;
 			}
@@ -31,10 +32,33 @@ angular.module("omniControllers")
 			}
 
 			$scope.validateDexSaleForm = function(){
-
-				var orderbook = new Orderbook({desired:$scope.propertyDesired, selling:$scope.propertySelling});
+				// TODO: Validations
+				var fee = Account.settings.minerFee || MIN_MINER_FEE;
+				var dexOffer = new Transaction(25,$scope.selectedAddress,fee,{
+						transaction_version:0,
+						propertyidforsale:$scope.sellingAsset.id,
+						amountforsale: new Big($scope.sellingAmount).valueOf(),
+						propertiddesired:$scope.desiredAsset.id,
+						amountdesired: new Big($scope.desiredAmount).valueOf()
+					});
+				ModalManager.openConfirmationModal({
+					dataTemplate: '/views/modals/partials/dex_offer.html',
+					scope: {
+						title:"Confirm DEx Transaction",
+						address:$scope.selectedAddress,
+						saleCurrency:$scope.sellingAsset.id,
+						saleAmount:$scope.sellingAmount,
+						desiredCurrency:$scope.desiredAsset.id,
+						desiredAmount:$scope.desiredAmount,
+						totalCost:dexOffer.totalCost,
+						confirmText: "Create Transaction",
+						successMessage: "Your order was placed successfully",
+						successRedirect:"/dex/orderbook/"+$scope.desiredAsset.id+"/"+$scope.sellingAsset.id
+					},
+					transaction:dexOffer
+				});
 
 			};
 
-			$scope.setAddress($scope.wallet.tradableAddresses()[0])
+			$scope.setAddress($scope.wallet.omniTradableAddresses()[0])
 		}])
