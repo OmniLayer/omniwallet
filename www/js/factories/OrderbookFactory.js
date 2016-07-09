@@ -54,7 +54,7 @@ angular.module("omniFactories")
 							if(response.status != 200 || response.data.status !=200)
 								return // handle errors
 
-							self.parseOrderbook(response.data.orderbook, self.askBook,tradingPair.desired,tradingPair.selling,"ask");
+							self.parseOrderbook(response.data.orderbook, self.askBook,tradingPair.desired,tradingPair.selling);
 
 							self.askBook.sort(function(a, b) {
 					          var priceA = a.price;
@@ -67,7 +67,7 @@ angular.module("omniFactories")
 							if(response.status != 200 || response.data.status != 200)
 								return // handle errors
 							
-							self.parseOrderbook(response.data.orderbook, self.bidBook,tradingPair.selling,tradingPair.desired,"bid");
+							self.parseOrderbook(response.data.orderbook, self.bidBook,tradingPair.selling,tradingPair.desired);
 
 							self.bidBook.sort(function(a, b) {
 					          var priceA = a.price;
@@ -81,7 +81,7 @@ angular.module("omniFactories")
 				self.parseOrderbook =function(orderbook,side,selling,desired){
 					orderbook.forEach(function(offerData){
 						var order = null;
-						var offer = new DExOffer(offerData,selling,desired);
+						var offer = new DExOffer(offerData,selling,desired,selling == self.tradingPair.selling ? "bid":"ask");
 						side.forEach(function(orderData){
 							if(orderData.price.eq(offer.price)){
 								order = orderData;
@@ -93,7 +93,7 @@ angular.module("omniFactories")
 						})
 						if(owner){
 							offer.ownerAddress = owner;
-							offer.side = selling == self.tradingPair.selling ? "ask":"bid";
+							offer.side = selling == self.tradingPair.selling ? "bid":"ask";
 							self.activeOffers.push(offer);
 						}
 						if(order == null){
