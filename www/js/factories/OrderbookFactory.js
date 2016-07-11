@@ -59,7 +59,7 @@ angular.module("omniFactories")
 							self.askBook.sort(function(a, b) {
 					          var priceA = a.price;
 					          var priceB = b.price;
-					          return priceA.gt(priceB) ? -1 : priceA.lt(priceB) ? 1 : 0;
+					          return priceA.gt(priceB) ? 1 : priceA.lt(priceB) ? -1 : 0;
 					        });
 						})
 					$http.get("/v1/omnidex/"+tradingPair.selling.propertyid+"/"+tradingPair.desired.propertyid)
@@ -72,7 +72,7 @@ angular.module("omniFactories")
 							self.bidBook.sort(function(a, b) {
 					          var priceA = a.price;
 					          var priceB = b.price;
-					          return priceA.lt(priceB) ? -1 : priceA.gt(priceB) ? 1 : 0;
+					          return priceA.lt(priceB) ? 1 : priceA.gt(priceB) ? -1 : 0;
 					        });
 						})
 
