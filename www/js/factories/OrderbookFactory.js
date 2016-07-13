@@ -131,12 +131,11 @@ angular.module("omniFactories")
 					      "left": 55
 					    },
 					    x: function(offer){return offer.time;},
-			            y: function(offer){return parseFloat(offer.price.valueOf());},
+			            y: function(offer){return offer.price.valueOf();},
 					    "useInteractiveGuideline": true,
 					    "dispatch": {},
 					    "xAxis": {
-					      "axisLabel": "Date",
-					      tickFormat : function(d) { return d3.time.format('%b %d')(new Date(d)); }
+					      "axisLabel": "Date"
 					    },
 					    "yAxis": {
 					      "axisLabel": "Price (omni)",
