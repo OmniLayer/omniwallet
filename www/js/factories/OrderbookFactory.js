@@ -31,6 +31,7 @@ angular.module("omniFactories")
 					self.selling = tradingPair.selling;
 					self.desired = tradingPair.desired;
 					self.marketData = [];
+					self.chartData = [];
 					// TODO:  list only addresses with balance > 0
 					self.addresses = Wallet.addresses.filter(function(address){
 						return ((address.privkey && address.privkey.length == 58) || address.pubkey)
@@ -108,6 +109,15 @@ angular.module("omniFactories")
 					          var dateB = b.time;
 					          return dateA < dateB ? -1 : dateA > dateB ? 1 : 0;
 					        });
+					self.chartData = [
+								{
+		                    values: self.marketData,      //values - represents the array of {x,y} data points
+		                    key: 'Offers', //key  - the name of the series.
+		                    color: '#ff7f0e',  //color - optional: choose your own line color.
+		                    strokeWidth: 2,
+		                    classed: 'dashed'
+		                }
+					]
 				}
 
 				self.chartConfig = {

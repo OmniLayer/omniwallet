@@ -7,7 +7,7 @@
 		    {{ 'OMNIDEX.ORDERBOOK.TITLE' | translate:{currency: orderbook.tradingPair.selling.name} }}
 		</div>
 	</div>
-	<nvd3 data="orderbook.marketData" 
+	<nvd3 data="orderbook.chartData" 
                 options="orderbook.chartConfig" 
                 class="panel-body">
             </nvd3>
