@@ -36,7 +36,7 @@ def get_markets_by_denominator(denominator):
 
 @app.route('/<int:propertyid_desired>/<int:propertyid_selling>')
 def get_orders_by_market(propertyid_desired, propertyid_selling):
-    orderbook = dbSelect("select propertyiddesired, propertyidselling, AmountAvailable, AmountDesired, TotalSelling, AmountAccepted, UnitPrice, Seller from activeoffers ao where ao.propertyiddesired = %s and ao.propertyidselling = %s and ao.OfferState = 'active' order by propertyiddesired, UnitPrice DESC;",[propertyid_desired,propertyid_selling])
+    orderbook = dbSelect("select ao.propertyiddesired, ao.propertyidselling, ao.AmountAvailable, ao.AmountDesired, ao.TotalSelling, ao.AmountAccepted, ao.UnitPrice, ao.Seller, tx.TxRecvTime from activeoffers ao, transactions tx where ao.CreateTxDBSerialNum = tx.TxDBSerialNum and ao.propertyiddesired = %s and ao.propertyidselling = %s and ao.OfferState = 'active' order by ao.propertyiddesired, ao.UnitPrice DESC;",[propertyid_desired,propertyid_selling])
     return jsonify({"status" : 200, "orderbook": [
         {
             "propertyid_desired":order[0], 
@@ -46,5 +46,6 @@ def get_orders_by_market(propertyid_desired, propertyid_selling):
             "total_amount" : str(order[4]),
             "accepted_amount": str(order[5]),
             "unit_price" : str(order[6]),
-            "seller" : str(order[7])
+            "seller" : str(order[7]),
+            "time" : order[8]
         } for order in orderbook]})
