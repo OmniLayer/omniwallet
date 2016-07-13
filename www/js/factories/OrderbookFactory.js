@@ -130,7 +130,7 @@ angular.module("omniFactories")
 					      "bottom": 40,
 					      "left": 55
 					    },
-					    x: function(offer){return new Date(offer.time);},
+					    x: function(offer){return new Date(offer.time).toLocaleString();},
 			            y: function(offer){return offer.price.valueOf();},
 					    "useInteractiveGuideline": true,
 					    "dispatch": {},
@@ -139,6 +139,9 @@ angular.module("omniFactories")
 					    },
 					    "yAxis": {
 					      "axisLabel": "Price (omni)",
+					      tickFormat: function(d){
+		                        return d3.format('.0001f')(d);
+		                    },
 					      "axisLabelDistance": -10
 					    }
 					  },
