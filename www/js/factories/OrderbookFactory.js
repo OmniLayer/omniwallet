@@ -69,6 +69,7 @@ angular.module("omniFactories")
 							
 							self.parseOrderbook(response.data.orderbook, self.bidBook,tradingPair.selling,tradingPair.desired);
 
+							self.marketData=response.data.orderbook;
 							self.bidBook.sort(function(a, b) {
 					          var priceA = a.price;
 					          var priceB = b.price;
