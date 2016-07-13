@@ -130,8 +130,8 @@ angular.module("omniFactories")
 					      "bottom": 40,
 					      "left": 55
 					    },
-					    x: function(offer){return new Date(offer.time).toLocaleString();},
-			            y: function(offer){return offer.price.valueOf();},
+					    x: function(offer){return offer.time;},
+			            y: function(offer){return parseFloat(offer.price.valueOf());},
 					    "useInteractiveGuideline": true,
 					    "dispatch": {},
 					    "xAxis": {
