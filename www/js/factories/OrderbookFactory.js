@@ -111,23 +111,31 @@ angular.module("omniFactories")
 				}
 
 				self.chartConfig = {
-			        chart: {
-			                type: 'lineChart',
-			                height: 500,
-			                x: function(offer){return offer.time;},
-			                y: function(offer){return parseFloat(offer.price.valueOf());},
-			                showLabels: true,
-			                transitionDuration: 500,
-			                labelThreshold: 0.01,
-			                legend: {
-			                    margin: {
-			                        top: 5,
-			                        right: 35,
-			                        bottom: 5,
-			                        left: 0
-			                    }
-			                }
-			            }
+					"chart": {
+					    "type": "lineChart",
+					    "height": 450,
+					    "margin": {
+					      "top": 20,
+					      "right": 20,
+					      "bottom": 40,
+					      "left": 55
+					    },
+					    x: function(offer){return offer.time;},
+			            y: function(offer){return offer.price.valueOf();},
+					    "useInteractiveGuideline": true,
+					    "dispatch": {},
+					    "xAxis": {
+					      "axisLabel": "Date"
+					    },
+					    "yAxis": {
+					      "axisLabel": "Price (omni)",
+					      "axisLabelDistance": -10
+					    }
+					  },
+					  "title": {
+					    "enable": true,
+					    "text": "Market Data"
+					  }
 			      };
 
 			self.askCumulative = function(order){
