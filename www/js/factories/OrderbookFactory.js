@@ -141,7 +141,7 @@ angular.module("omniFactories")
 					    "yAxis": {
 					      "axisLabel": "Price (omni)",
 					      tickFormat: function(d){
-		                        return d3.format('.0001f')(d);
+		                        return d3.format('.04f')(d);
 		                    },
 					      "axisLabelDistance": -10
 					    }
