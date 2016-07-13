@@ -135,7 +135,8 @@ angular.module("omniFactories")
 					    "useInteractiveGuideline": true,
 					    "dispatch": {},
 					    "xAxis": {
-					      "axisLabel": "Date"
+					      "axisLabel": "Date",
+					      tickFormat : function(d) { return d3.time.format('%b %d')(new Date(d)); }
 					    },
 					    "yAxis": {
 					      "axisLabel": "Price (omni)",
