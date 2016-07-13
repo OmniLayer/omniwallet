@@ -17,6 +17,7 @@ angular.module("omniFactories")
 				} else {
 					self.price = self.selling_amount.div(self.desired_amount);
 				}
+				self.time = Date.parse(data.time);
 
 
 			};

@@ -7,6 +7,10 @@
 		    {{ 'OMNIDEX.ORDERBOOK.TITLE' | translate:{currency: orderbook.tradingPair.selling.name} }}
 		</div>
 	</div>
+	<nvd3 data="orderbook.marketData" 
+                options="orderbook.chartConfig" 
+                class="panel-body">
+            </nvd3>
     <div class="row om-row" ng-include="'/views/DEx/orderbook_orders.html'">
 		
 	</div>

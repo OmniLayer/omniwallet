@@ -30,7 +30,7 @@ angular.module("omniFactories")
 
 					self.selling = tradingPair.selling;
 					self.desired = tradingPair.desired;
-
+					self.marketData = [];
 					// TODO:  list only addresses with balance > 0
 					self.addresses = Wallet.addresses.filter(function(address){
 						return ((address.privkey && address.privkey.length == 58) || address.pubkey)
@@ -69,7 +69,6 @@ angular.module("omniFactories")
 							
 							self.parseOrderbook(response.data.orderbook, self.bidBook,tradingPair.selling,tradingPair.desired);
 
-							self.marketData=response.data.orderbook;
 							self.bidBook.sort(function(a, b) {
 					          var priceA = a.price;
 					          var priceB = b.price;
@@ -101,10 +100,35 @@ angular.module("omniFactories")
 							order = new DExOrder(offer);
 							side.push(order);
 						}
-
+						self.marketData.push(offer);
 
 					});
+					self.marketData=self.marketData.sort(function(a, b) {
+					          var dateA = a.time;
+					          var dateB = b.time;
+					          return dateA < dateB ? -1 : dateA > dateB ? 1 : 0;
+					        });
 				}
+
+				self.chartConfig = {
+			        chart: {
+			                type: 'lineChart',
+			                height: 500,
+			                x: function(offer){return offer.time;},
+			                y: function(offer){return parseFloat(offer.price.valueOf());},
+			                showLabels: true,
+			                transitionDuration: 500,
+			                labelThreshold: 0.01,
+			                legend: {
+			                    margin: {
+			                        top: 5,
+			                        right: 35,
+			                        bottom: 5,
+			                        left: 0
+			                    }
+			                }
+			            }
+			      };
 
 			self.askCumulative = function(order){
 				let index = self.askBook.indexOf(order);
