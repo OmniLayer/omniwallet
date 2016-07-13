@@ -130,7 +130,7 @@ angular.module("omniFactories")
 					      "bottom": 40,
 					      "left": 55
 					    },
-					    x: function(offer){return offer.time;},
+					    x: function(offer){return new Date(offer.time);},
 			            y: function(offer){return offer.price.valueOf();},
 					    "useInteractiveGuideline": true,
 					    "dispatch": {},
