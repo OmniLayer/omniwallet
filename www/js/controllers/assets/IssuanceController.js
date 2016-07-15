@@ -46,11 +46,11 @@ angular.module("omniControllers")
 		          ecosystem:$scope.ecosystem,
 		          property_type : $scope.propertyDetails.propertyType, 
 		          previous_property_id: 0, 
-		          property_category:$scope.propertyDetails.propertyCategory || '\0', 
-		          property_subcategory:$scope.propertyDetails.propertySubcategory || '\0', 
+		          property_category:$scope.propertyDetails.propertyCategory || '', 
+		          property_subcategory:$scope.propertyDetails.propertySubcategory || '', 
 		          property_name:$scope.propertyDetails.propertyName, 
-		          property_url:$scope.propertyDetails.propertyUrl || '\0', 
-		          property_data:$scope.propertyDetails.propertyData || '\0', 
+		          property_url:$scope.propertyDetails.propertyUrl || '', 
+		          property_data:$scope.propertyDetails.propertyData || '', 
 		          number_properties: +new Big($scope.numberProperties).valueOf(),
 		          donate: $scope.account.getSetting("donate")
 		        });
