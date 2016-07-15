@@ -34,6 +34,7 @@ def generate_tx(tx_type):
         return jsonify({ 'status': 400, 'data': 'Unsupported transaction type '+str(tx_type) })
     
     expected_fields=['transaction_version', 'transaction_from','pubkey','fee']
+    null_fields=['property_category', 'property_subcategory','property_url', 'property_data']
 
     print "Form ",request.form
 
@@ -55,7 +56,7 @@ def generate_tx(tx_type):
     for field in expected_fields:
         if field not in request.form:
             return jsonify({ 'status': 403, 'data': 'No field in request form '+field })
-        elif request.form[field] == '':
+        elif request.form[field] == '' and field not in null_fields:
             return jsonify({ 'status': 403, 'data': 'Empty field in request form '+field })
 
     
