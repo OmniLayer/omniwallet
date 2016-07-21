@@ -77,6 +77,35 @@ angular.module("omniFactories")
 					        });
 						})
 
+					$http.get("/v1/omnidex/history/"+tradingPair.desired.propertyid+"/"+tradingPair.selling.propertyid)
+						.then(function(response){
+							if(response.status != 200 || response.data.status !=200)
+								return // handle errors
+
+							response.data.orderbook.forEach(function(offerData){
+								var order = null;
+								var offer = new DExOffer(offerData,tradingPair.selling,tradingPair.desired,"bid");
+								
+								self.marketData.push(offer);
+
+							});
+							self.marketData=self.marketData.sort(function(a, b) {
+							          var dateA = a.time;
+							          var dateB = b.time;
+							          return dateA < dateB ? -1 : dateA > dateB ? 1 : 0;
+							        });
+							self.chartData = [
+										{
+				                    values: self.marketData,      //values - represents the array of {x,y} data points
+				                    key: 'Offers', //key  - the name of the series.
+				                    color: '#ff7f0e',  //color - optional: choose your own line color.
+				                    strokeWidth: 2,
+				                    classed: 'dashed'
+				                }
+							]
+							
+						})
+
 				};
 
 				self.parseOrderbook =function(orderbook,side,selling,desired){
@@ -101,24 +130,7 @@ angular.module("omniFactories")
 							order = new DExOrder(offer);
 							side.push(order);
 						}
-						self.marketData.push(offer);
-
-					});
-					self.marketData=self.marketData.sort(function(a, b) {
-					          var dateA = a.time;
-					          var dateB = b.time;
-					          return dateA < dateB ? -1 : dateA > dateB ? 1 : 0;
-					        });
-					self.chartData = [
-								{
-		                    values: self.marketData,      //values - represents the array of {x,y} data points
-		                    key: 'Offers', //key  - the name of the series.
-		                    color: '#ff7f0e',  //color - optional: choose your own line color.
-		                    strokeWidth: 2,
-		                    classed: 'dashed'
-		                }
-					]
-				}
+					});				}
 
 				self.chartConfig = {
 					"chart": {

@@ -49,3 +49,19 @@ def get_orders_by_market(propertyid_desired, propertyid_selling):
             "seller" : str(order[7]),
             "time" : order[8]
         } for order in orderbook]})
+
+@app.route('/history/<int:propertyid_desired>/<int:propertyid_selling>')
+def get_market_history(propertyid_desired, propertyid_selling):
+    orderbook = dbSelect("select ao.propertyiddesired, ao.propertyidselling, ao.AmountAvailable, ao.AmountDesired, ao.TotalSelling, ao.AmountAccepted, txj.txdata->'unitprice', ao.Seller, tx.TxRecvTime from activeoffers ao, transactions tx, txjson txj where ao.CreateTxDBSerialNum = txj.TxDBSerialNum and ao.CreateTxDBSerialNum = tx.TxDBSerialNum and ao.propertyiddesired = %s and ao.propertyidselling = %s and ao.OfferState = 'sold';",[propertyid_desired,propertyid_selling])
+    return jsonify({"status" : 200, "orderbook": [
+        {
+            "propertyid_desired":order[0], 
+            "propertyid_selling":order[1],
+            "available_amount" : str(order[2]),
+            "desired_amount" : str(order[3]),
+            "total_amount" : str(order[4]),
+            "accepted_amount": str(order[5]),
+            "unit_price" : str(order[6]),
+            "seller" : str(order[7]),
+            "time" : order[8]
+        } for order in orderbook]})
