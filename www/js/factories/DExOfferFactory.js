@@ -14,8 +14,10 @@ angular.module("omniFactories")
 				self.desired_amount = propertydesired.divisible ? new Big(data.desired_amount).times(WHOLE_UNIT) : new Big(data.desired_amount);
 				if(side == "ask"){
 					self.price = self.desired_amount.div(self.selling_amount);
-				} else {
+				} else if (side == "bid"){
 					self.price = self.selling_amount.div(self.desired_amount);
+				} else if(side = "market"){
+					self.price = new Big(data.unit_price);
 				}
 				self.time = Date.parse(data.time);
 
