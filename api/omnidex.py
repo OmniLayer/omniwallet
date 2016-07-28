@@ -52,7 +52,7 @@ def get_orders_by_market(propertyid_desired, propertyid_selling):
 
 @app.route('/history/<int:propertyid_desired>/<int:propertyid_selling>')
 def get_market_history(propertyid_desired, propertyid_selling):
-    orderbook = dbSelect("select ao.propertyiddesired, ao.propertyidselling, ao.AmountAvailable, ao.AmountDesired, ao.TotalSelling, ao.AmountAccepted, txj.txdata->'unitprice', ao.Seller, tx.TxRecvTime from activeoffers ao, transactions tx, txjson txj where ao.CreateTxDBSerialNum = txj.TxDBSerialNum and ao.CreateTxDBSerialNum = tx.TxDBSerialNum and ao.propertyiddesired = %s and ao.propertyidselling = %s and ao.OfferState = 'sold';",[propertyid_desired,propertyid_selling])
+    orderbook = dbSelect("select ao.propertyiddesired, ao.propertyidselling, ao.AmountAvailable, ao.AmountDesired, ao.TotalSelling, ao.AmountAccepted, txj.txdata->'unitprice', ao.Seller, tx.TxRecvTime from activeoffers ao, transactions tx, txjson txj where ao.CreateTxDBSerialNum = txj.TxDBSerialNum and ao.CreateTxDBSerialNum = tx.TxDBSerialNum and ao.propertyiddesired = %s and ao.propertyidselling = %s;",[propertyid_desired,propertyid_selling])
     return jsonify({"status" : 200, "orderbook": [
         {
             "propertyid_desired":order[0], 
