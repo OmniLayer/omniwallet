@@ -77,14 +77,14 @@ angular.module("omniFactories")
 					        });
 						})
 
-					$http.get("/v1/omnidex/history/"+tradingPair.desired.propertyid+"/"+tradingPair.selling.propertyid)
+					$http.get("/v1/omnidex/history/"+tradingPair.selling.propertyid+"/"+tradingPair.desired.propertyid)
 						.then(function(response){
 							if(response.status != 200 || response.data.status !=200)
 								return // handle errors
 
 							response.data.orderbook.forEach(function(offerData){
 								var order = null;
-								var offer = new DExOffer(offerData,tradingPair.selling,tradingPair.desired,"market");
+								var offer = new DExOffer(offerData,tradingPair.desired,tradingPair.selling,"market");
 								
 								self.marketData.push(offer);
 
