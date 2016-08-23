@@ -195,6 +195,12 @@ angular.module("omniFactories")
 					else
 						offer.amounts.desired= (offer.amounts.selling * offer.price) ||0;
 				}
+				self.updateTotal = function(offer, side) {
+					if(side == "bid")
+						offer.amounts.desired= (offer.amounts.selling / offer.price) ||0;
+					else
+						offer.amounts.selling= (offer.amounts.desired / offer.price) ||0;
+				}
 
 				self.submitOffer = function(offer){
 					// TODO: Validations

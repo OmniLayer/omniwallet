@@ -654,8 +654,8 @@ angular.module("omniConfig")
 			"BUY" : "Buy",
 			"SELL": "Sell",
 			"BALANCE" : "Your balance",
-			"TOTALPRICE" : "Total price",
-			"UNITPRICE" :"Price Per",
+			"TOTALPRICE" : "Total",
+			"UNITPRICE" :"Price",
 			"AMOUNT" : "Amount",
 			"NOCOINS" : "You don't have any {{propertyName}} available",
 			"ACTIVEOFFERS" : "Your Offers"
