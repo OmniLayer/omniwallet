@@ -60,7 +60,7 @@
 								{{ 'OMNIDEX.ORDERBOOK.BALANCE' | translate}}: {{orderbook.getBalance(orderbook.buyOrder.address, orderbook.tradingPair.desired.propertyid)}} {{orderbook.tradingPair.desired.name}}
 							</div>
 							<div class="col-xs-4 text-right">
-								<button type="submit" class="btn btn-main btn-lg" ng-disabled="orderbook.buyAddresses.length == 0" >
+								<button type="submit" class="btn btn-main" ng-disabled="orderbook.buyAddresses.length == 0" >
 									{{ 'OMNIDEX.ORDERBOOK.BUY' | translate}} {{orderbook.tradingPair.selling.name}}
 					            </button>
 				            </div>
@@ -120,7 +120,7 @@
 							</div>
 						</div>
 						<div class="form-group row">
-							<div class="col-xs-6">
+							<div class="col-xs-12">
 								<label for="sell_amount_offered">{{ 'OMNIDEX.ORDERBOOK.TOTALPRICE' | translate}}:</label>
 								<div class="input-group">
 									<input type="number" class="form-control" id="sell_amount_desired" placeholder="Enter desired amount" ng-model="orderbook.sellOrder.amounts.desired" ng-change="orderbook.updateTotal(orderbook.sellOrder,'ask')" step="0.00000001" min="0.00000001">
@@ -133,7 +133,7 @@
 								{{ 'OMNIDEX.ORDERBOOK.BALANCE' | translate}}: {{orderbook.getBalance(orderbook.sellOrder.address, orderbook.tradingPair.selling.propertyid)}} {{orderbook.tradingPair.selling.name}}
 							</div>
 							<div class="col-xs-4 text-right">
-								<button type="submit" class="btn btn-secondary btn-lg" ng-disabled="orderbook.sellAddresses.length == 0" >
+								<button type="submit" class="btn btn-secondary" ng-disabled="orderbook.sellAddresses.length == 0" >
 									{{ 'OMNIDEX.ORDERBOOK.SELL' | translate}} {{orderbook.tradingPair.selling.name}}
 					            </button>
 				            </div>
