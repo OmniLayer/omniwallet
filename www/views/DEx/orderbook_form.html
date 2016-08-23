@@ -3,9 +3,6 @@
 		<div class="col-xs-12">
 			<strong> {{ 'OMNIDEX.ORDERBOOK.BUY' | translate}} {{orderbook.tradingPair.selling.name}} </strong>
 		</div>
-		<div class="col-xs-12">
-			{{ 'OMNIDEX.ORDERBOOK.BALANCE' | translate}}: {{orderbook.getBalance(orderbook.buyOrder.address, orderbook.tradingPair.desired.propertyid)}} {{orderbook.tradingPair.desired.name}}
-		</div>
 	</div>
 	<div class="row">
 		<div class="col-xs-12" >
@@ -50,14 +47,19 @@
 							</div>
 						</div>
 						<div class="form-group row">
-							<label class="col-xs-12" for="buy_amount_offered">{{ 'OMNIDEX.ORDERBOOK.TOTALPRICE' | translate}}:</label>
-							<div class="input-group">
-								<input type="number" class="form-control" id="buy_amount_offered" placeholder="Total amount" ng-model="orderbook.buyOrder.amounts.selling" ng-change="orderbook.updateTotal(orderbook.buyOrder,'bid')" step="0.00000001" min="0.00000001">
-								<span class="input-group-addon">{{orderbook.tradingPair.desired.name}}</span>
+							<div class="col-xs-12">
+								<label for="buy_amount_offered">{{ 'OMNIDEX.ORDERBOOK.TOTALPRICE' | translate}}:</label>
+								<div class="input-group">
+									<input type="number" class="form-control" id="buy_amount_offered" placeholder="Total amount" ng-model="orderbook.buyOrder.amounts.selling" ng-change="orderbook.updateTotal(orderbook.buyOrder,'bid')" step="0.00000001" min="0.00000001">
+									<span class="input-group-addon">{{orderbook.tradingPair.desired.name}}</span>
+								</div>
 							</div>
 						</div>
 						<div class="row">
-							<div class="col-xs-12 text-center">
+							<div class="col-xs-8">
+								{{ 'OMNIDEX.ORDERBOOK.BALANCE' | translate}}: {{orderbook.getBalance(orderbook.buyOrder.address, orderbook.tradingPair.desired.propertyid)}} {{orderbook.tradingPair.desired.name}}
+							</div>
+							<div class="col-xs-4 text-right">
 								<button type="submit" class="btn btn-main btn-lg" ng-disabled="orderbook.buyAddresses.length == 0" >
 									{{ 'OMNIDEX.ORDERBOOK.BUY' | translate}} {{orderbook.tradingPair.selling.name}}
 					            </button>
@@ -73,9 +75,6 @@
 	<div class="row orderbook-header-sell">
 		<div class="col-xs-12">
 			<strong> {{ 'OMNIDEX.ORDERBOOK.SELL' | translate}} {{orderbook.tradingPair.selling.name}} </strong>
-		</div>
-		<div class="col-xs-12">
-			{{ 'OMNIDEX.ORDERBOOK.BALANCE' | translate}}: {{orderbook.getBalance(orderbook.sellOrder.address, orderbook.tradingPair.selling.propertyid)}} {{orderbook.tradingPair.selling.name}}
 		</div>
 	</div>
 	<div class="row">
@@ -103,33 +102,37 @@
 				              </div>
 						</div>
 						<div class="row">
-							<div class="col-xs-6">
-								<label for="sell_amount_desired">{{ 'OMNIDEX.ORDERBOOK.AMOUNT' | translate}}  ({{orderbook.tradingPair.selling.name}}):</label>
+							<div class="col-xs-12">
+								<label for="sell_price">{{ 'OMNIDEX.ORDERBOOK.UNITPRICE' | translate}}:</label>
+								<div class="input-group">
+									<input type="number" class="form-control" id="sell_price" ng-model="orderbook.sellOrder.price" placeholder="Enter price" ng-change="orderbook.updateAmount(orderbook.sellOrder,'ask')" step="0.00000001" min="0.00000001">
+									<span class="input-group-addon">{{orderbook.tradingPair.desired.name}}</span>
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-xs-12">
+								<label for="sell_amount_desired">{{ 'OMNIDEX.ORDERBOOK.AMOUNT' | translate}}:</label>
 								<div class="input-group">
 									<input type="number" class="form-control" id="sell_amount_desired" placeholder="Enter desired amount" ng-model="orderbook.sellOrder.amounts.selling" ng-change="orderbook.updateAmount(orderbook.sellOrder,'ask')" step="0.00000001" min="0.00000001">
 									<span class="input-group-addon">{{orderbook.tradingPair.selling.name}}</span>
 								</div>
 							</div>
+						</div>
+						<div class="form-group row">
 							<div class="col-xs-6">
-								<label for="sell_price">{{ 'OMNIDEX.ORDERBOOK.UNITPRICE' | translate}} {{orderbook.tradingPair.selling.name}}:</label>
+								<label for="sell_amount_offered">{{ 'OMNIDEX.ORDERBOOK.TOTALPRICE' | translate}}:</label>
 								<div class="input-group">
-									<input type="number" class="form-control" id="sell_price" ng-model="orderbook.sellOrder.price"  placeholder="Enter price" ng-change="orderbook.updateAmount(orderbook.sellOrder,'ask')" step="0.00000001" min="0.00000001">
-									<span class="input-group-addon">{{orderbook.tradingPair.desired.name}}</span>
+									<input type="number" class="form-control" id="sell_amount_desired" placeholder="Enter desired amount" ng-model="orderbook.sellOrder.amounts.desired" ng-change="orderbook.updateTotal(orderbook.sellOrder,'ask')" step="0.00000001" min="0.00000001">
+									<span class="input-group-addon">{{orderbook.sellOrder.desired.name}}</span>
 								</div>
 							</div>
 						</div>
-					</div>
-				</div>
-				<div class="panel panel-form">
-          			<div class="panel-body">
-						<div class="form-group row">
-							<label class="col-xs-6 text-right form-control-static" for="sell_amount_offered">{{ 'OMNIDEX.ORDERBOOK.TOTALPRICE' | translate}}:</label>
-							<div class="col-xs-6">
-								<p class="form-control-static">{{orderbook.sellOrder.amounts.desired}} {{orderbook.sellOrder.desired.name}}</p>
-							</div>
-						</div>
 						<div class="row">
-							<div class="col-xs-12 text-center">
+							<div class="col-xs-8">
+								{{ 'OMNIDEX.ORDERBOOK.BALANCE' | translate}}: {{orderbook.getBalance(orderbook.sellOrder.address, orderbook.tradingPair.selling.propertyid)}} {{orderbook.tradingPair.selling.name}}
+							</div>
+							<div class="col-xs-4 text-right">
 								<button type="submit" class="btn btn-secondary btn-lg" ng-disabled="orderbook.sellAddresses.length == 0" >
 									{{ 'OMNIDEX.ORDERBOOK.SELL' | translate}} {{orderbook.tradingPair.selling.name}}
 					            </button>
