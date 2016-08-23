@@ -164,22 +164,22 @@ angular.module("omniFactories")
 					  }
 			      };
 
-			self.askCumulative = function(order){
-				let index = self.askBook.indexOf(order);
-				let cumulative = new Big(0);
-				for (let i = 0; i <= index; i++){
-					cumulative = cumulative.plus(self.askBook[i].totaldesired)
+				self.askCumulative = function(order){
+					let index = self.askBook.indexOf(order);
+					let cumulative = new Big(0);
+					for (let i = 0; i <= index; i++){
+						cumulative = cumulative.plus(self.askBook[i].totaldesired)
+					}
+					return cumulative;
 				}
-				return cumulative;
-			}
-			self.bidCumulative = function(order){
-				let index = self.bidBook.indexOf(order);
-				let cumulative = new Big(0);
-				for (let i = 0; i <= index; i++){
-					cumulative = cumulative.plus(self.bidBook[i].remainingforsale)
+				self.bidCumulative = function(order){
+					let index = self.bidBook.indexOf(order);
+					let cumulative = new Big(0);
+					for (let i = 0; i <= index; i++){
+						cumulative = cumulative.plus(self.bidBook[i].remainingforsale)
+					}
+					return cumulative;
 				}
-				return cumulative;
-			}
 
 				self.setBuyAddress = function(address){
 					self.buyOrder.address = address;

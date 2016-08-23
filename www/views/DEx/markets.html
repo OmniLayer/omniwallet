@@ -1,0 +1,63 @@
+<div ng-controller="DExOverviewController">
+    <div class="row">
+        <div class="col-xs-3 col-sm-3 col-md-4 col-lg-4 text-left om-title">
+            {{ 'OMNIDEX.MARKETS.TITLE' | translate }}
+        </div>
+        <div class="col-xs-6 col-sm-6 col-md-5 col-lg-5">          
+          <a class="btn btn-main" href="/dex/sale"> {{ 'OMNIDEX.MARKETS.NEW' | translate }} </a>
+        </div>
+        <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3 text-right" ng-include="'/views/assets/partials/form_ecosystem.html'"></div>
+    </div>
+    <tabset ng-init="loadDesignatingCurrencies()">
+      <tab heading="{{ currency.propertyname }}" select="showMarkets(currency)" ng-repeat="currency in designatingcurrencies">
+        <div class="row">
+        	<div class="col-xs-12 om-table">
+        		<div class="row table-header hidden-xs">
+              <div class="col-sm-1">{{ 'OMNIDEX.MARKETS.SYMBOL' | translate}}</div>
+              <div class="col-sm-2">{{ 'OMNIDEX.MARKETS.NAME' | translate}}</div>
+              <div class="col-sm-1">
+                {{ 'OMNIDEX.MARKETS.PRICE' | translate}}
+              </div>
+              <div class="col-sm-2">{{ 'OMNIDEX.MARKETS.VOLUME' | translate}}</div>
+              <div class="col-sm-2">{{ 'OMNIDEX.MARKETS.SUPPLY' | translate}}</div>
+              <div class="col-sm-2">{{ 'OMNIDEX.MARKETS.CAP' | translate}}</div>
+              <div class="col-sm-2">{{ 'OMNIDEX.MARKETS.CHANGE' | translate}}</div>
+            </div>
+            <div class="row table-row text-center" ng-show="!loading && noMarkets">
+              <h3>{{ 'OMNIDEX.MARKETS.NOMARKETS' | translate }}</h3>
+            </div>
+            <div ng-repeat="market in markets" class="row table-row check-element animate-hide">
+              <div class="visible-xs col-xs-7">{{ 'OMNIDEX.MARKETS.SYMBOL' | translate}}</div>
+              <div class="col-xs-5 col-sm-1">
+                {{market.symbol}}
+              </div>
+              <div class="visible-xs col-xs-7">{{ 'OMNIDEX.MARKETS.NAME' | translate}}</div>
+              <div class="col-xs-5 col-sm-2">
+                <a ng-click="$parent.$parent.showOrderbook($parent.designatingCurrency.propertyid,market.propertyid)">{{market.propertyname}} (#{{market.propertyid}})</a>
+              </div>
+              <div class="visible-xs col-xs-7">{{ 'OMNIDEX.MARKETS.PRICE' | translate}}</div>
+              <div class="col-xs-5 col-sm-1">
+                {{market.price}}
+              </div>
+              <div class="visible-xs col-xs-7">{{ 'OMNIDEX.MARKETS.VOLUME' | translate}}</div>
+              <div class="col-xs-5 col-sm-2">
+                {{market.volume}}
+              </div>
+              <div class="visible-xs col-xs-7">{{ 'OMNIDEX.MARKETS.SUPPLY' | translate}}</div>
+              <div class="col-xs-5 col-sm-2">
+                {{market.supply}}
+              </div>
+              <div class="visible-xs col-xs-7">{{ 'OMNIDEX.MARKETS.CAP' | translate}}</div>
+              <div class="col-xs-5 col-sm-2">
+                {{market.cap}}
+              </div>
+              <div class="visible-xs col-xs-7">{{ 'OMNIDEX.MARKETS.CHANGE' | translate}}</div>
+              <div class="col-xs-5 col-sm-2">
+                {{market.change}}
+              </div>
+            </div>
+    		  </div>
+        </div>
+      </tab>
+    </tabset>
+</div>

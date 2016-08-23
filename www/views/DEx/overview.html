@@ -1,69 +1,27 @@
-<div ng-controller="DExOverviewController">
-    <div class="row">
-        <div class="col-xs-3 col-sm-3 col-md-4 col-lg-4 text-left om-title">
-            {{ 'OMNIDEX.MARKETS.TITLE' | translate }}
-        </div>
-        <div class="col-xs-6 col-sm-6 col-md-5 col-lg-5">
-          <span>{{ 'OMNIDEX.MARKETS.DENOMINATOR' | translate }}</span>
-          <div class="form-group btn-group">
-            <button type="button" class="hidden-xs btn btn-main dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-              {{ designatingCurrency.propertyname }} <span class="glyphicon glyphicon-chevron-down"></span>
-            </button>
-            <ul class="dropdown-menu dropdown-menu-main dropdown-menu-right" role="menu">
-              <li><a href="#" ng-click="showMarkets(currency)" ng-repeat="currency in designatingcurrencies">{{ currency.propertyname }} (#{{currency.propertyid}})</a></li>
-            </ul>
-          </div>
-          
-          <a class="btn btn-main" href="/dex/sale"> {{ 'OMNIDEX.MARKETS.NEW' | translate }} </a>
-        </div>
-        <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3 text-right" ng-include="'/views/assets/partials/form_ecosystem.html'"></div>
+<div ng-controller="DExOrderbookController">
+    <div class="row om-row">
+      <div class="col-xs-3 col-sm-3 col-md-4 col-lg-4 text-left om-title">
+        {{ 'OMNIDEX.ORDERBOOK.TITLE' | translate:{currency: orderbook.tradingPair.selling.name} }}
     </div>
-    <div class="row">
-    	<div class="col-xs-12 om-table" ng-init="loadDesignatingCurrencies()">
-    		<div class="row table-header hidden-xs">
-          <div class="col-sm-1">{{ 'OMNIDEX.MARKETS.SYMBOL' | translate}}</div>
-          <div class="col-sm-2">{{ 'OMNIDEX.MARKETS.NAME' | translate}}</div>
-          <div class="col-sm-1">
-            {{ 'OMNIDEX.MARKETS.PRICE' | translate}}
-          </div>
-          <div class="col-sm-2">{{ 'OMNIDEX.MARKETS.VOLUME' | translate}}</div>
-          <div class="col-sm-2">{{ 'OMNIDEX.MARKETS.SUPPLY' | translate}}</div>
-          <div class="col-sm-2">{{ 'OMNIDEX.MARKETS.CAP' | translate}}</div>
-          <div class="col-sm-2">{{ 'OMNIDEX.MARKETS.CHANGE' | translate}}</div>
-        </div>
-        <div class="row table-row text-center" ng-show="!loading && noMarkets">
-          <h3>{{ 'OMNIDEX.MARKETS.NOMARKETS' | translate }}</h3>
-        </div>
-        <div ng-repeat="market in markets" class="row table-row check-element animate-hide">
-          <div class="visible-xs col-xs-7">{{ 'OMNIDEX.MARKETS.SYMBOL' | translate}}</div>
-          <div class="col-xs-5 col-sm-1">
-            {{market.symbol}}
-          </div>
-          <div class="visible-xs col-xs-7">{{ 'OMNIDEX.MARKETS.NAME' | translate}}</div>
-          <div class="col-xs-5 col-sm-2">
-            <a href="/dex/orderbook/{{$parent.designatingCurrency.propertyid}}/{{market.propertyid}}">{{market.propertyname}} (#{{market.propertyid}})</a>
-          </div>
-          <div class="visible-xs col-xs-7">{{ 'OMNIDEX.MARKETS.PRICE' | translate}}</div>
-          <div class="col-xs-5 col-sm-1">
-            {{market.price}}
-          </div>
-          <div class="visible-xs col-xs-7">{{ 'OMNIDEX.MARKETS.VOLUME' | translate}}</div>
-          <div class="col-xs-5 col-sm-2">
-            {{market.volume}}
-          </div>
-          <div class="visible-xs col-xs-7">{{ 'OMNIDEX.MARKETS.SUPPLY' | translate}}</div>
-          <div class="col-xs-5 col-sm-2">
-            {{market.supply}}
-          </div>
-          <div class="visible-xs col-xs-7">{{ 'OMNIDEX.MARKETS.CAP' | translate}}</div>
-          <div class="col-xs-5 col-sm-2">
-            {{market.cap}}
-          </div>
-          <div class="visible-xs col-xs-7">{{ 'OMNIDEX.MARKETS.CHANGE' | translate}}</div>
-          <div class="col-xs-5 col-sm-2">
-            {{market.change}}
-          </div>
-        </div>
-		  </div>
+  </div>
+  <div class="row">
+    <div class="col-xs-8">
+      <nvd3 data="orderbook.chartData" 
+                options="orderbook.chartConfig" 
+                class="panel-body">
+            </nvd3>
     </div>
+    <div class="col-xs-4" ng-include="'/views/DEx/markets.html'">
+
+    </div>
+  </div>
+  <div class="row om-row" ng-include="'/views/DEx/orderbook_orders.html'">
+    
+  </div>
+  <div class="row" ng-include="'/views/DEx/orderbook_form.html'">
+    
+  </div>
+  <div class="row" ng-include="'/views/DEx/orderbook_book.html'">
+    
+  </div>
 </div>

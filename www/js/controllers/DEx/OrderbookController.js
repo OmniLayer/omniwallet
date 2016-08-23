@@ -1,18 +1,21 @@
 angular.module("omniControllers")
-	.controller("DExOrderbookController", ["$scope","Account","Orderbook","PropertyManager","ModalManager","$route", "Transaction", "MIN_MINER_FEE",
-		function DExOrderbookController($scope,Account,Orderbook,PropertyManager,ModalManager,$route, Transaction, MIN_MINER_FEE){
+	.controller("DExOrderbookController", ["$scope","Account","Orderbook","PropertyManager","ModalManager", "Transaction", "MIN_MINER_FEE",
+		function DExOrderbookController($scope,Account,Orderbook,PropertyManager,ModalManager, Transaction, MIN_MINER_FEE){
 			$scope.isLoggedIn = Account.isLoggedIn;
 			$scope.orderbook = {};
 			$scope.noOrders = true;
-			PropertyManager.getProperty($route.current.params.propertyIdDesired).then(function(result){
-				$scope.propertyDesired = result.data;
-				PropertyManager.getProperty($route.current.params.propertyIdSelling).then(function(result){
-					$scope.propertySelling = result.data;
-					$scope.orderbook = new Orderbook({desired:$scope.propertyDesired,selling:$scope.propertySelling});
-				});
-			});
 
-			 $scope.confirmCancel = function(offer){
+			$scope.loadOrderbook = function(propertyIdDesired, propertyIdSelling){
+				PropertyManager.getProperty(propertyIdDesired).then(function(result){
+					$scope.propertyDesired = result.data;
+					PropertyManager.getProperty(propertyIdSelling).then(function(result){
+						$scope.propertySelling = result.data;
+						$scope.orderbook = new Orderbook({desired:$scope.propertyDesired,selling:$scope.propertySelling});
+					});
+				});
+			}
+
+			$scope.confirmCancel = function(offer){
 			 	var fee = Account.settings.minerFee || MIN_MINER_FEE;
 				var dexOffer = new Transaction(26,offer.ownerAddress,fee,{
 						transaction_version:0,
@@ -36,5 +39,5 @@ angular.module("omniControllers")
 					},
 					transaction:dexOffer
 				});
-			 }
+			}
 	}]);
