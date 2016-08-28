@@ -1,17 +1,19 @@
 <div ng-controller="DExOverviewController">
-    <div class="row">
-        <div class="col-xs-3 col-sm-3 col-md-4 col-lg-4 text-left om-title">
-            {{ 'OMNIDEX.MARKETS.TITLE' | translate }}
-        </div>
-        <div class="col-xs-9 col-sm-9 col-md-8 col-lg-8 text-right" ng-include="'/views/assets/partials/form_ecosystem.html'"></div>
-        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">          
-          <a class="btn btn-main" href="/dex/sale"> {{ 'OMNIDEX.MARKETS.NEW' | translate }} </a>
-        </div>
+    <div class="row om-row">
+      <div class="col-xs-3 col-sm-3 col-md-4 col-lg-4 text-left om-title">
+          {{ 'OMNIDEX.MARKETS.TITLE' | translate }}
+      </div>
+      <div class="col-xs-9 col-sm-9 col-md-8 col-lg-8 text-right" ng-include="'/views/assets/partials/form_ecosystem.html'"></div>
+    </div>
+    <div class="row om-row">
+      <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 text-right">          
+        <a class="btn btn-main" href="/dex/sale"> {{ 'OMNIDEX.MARKETS.NEW' | translate }} </a>
+      </div>
     </div>
     <tabset ng-init="loadDesignatingCurrencies()">
       <tab heading="{{ currency.propertyname }}" select="showMarkets(currency)" ng-repeat="currency in designatingcurrencies">
         <div class="row">
-        	<div class="col-xs-12 om-table market-table">
+        	<div class="col-xs-12 om-table markets-table">
         		<div class="row table-header hidden-xs">
               <div class="col-sm-1">{{ 'OMNIDEX.MARKETS.SYMBOL' | translate}}</div>
               <div class="col-sm-2">{{ 'OMNIDEX.MARKETS.NAME' | translate}}</div>
