@@ -28,6 +28,10 @@ angular.module("omniControllers")
 					function success(response) {
 						$scope.markets = response.data.markets;
 						$scope.noMarkets = $scope.markets.length == 0;
+						var topmarket = $scope.markets[0]
+						if(topmarket){
+							$scope.$parent.loadOrderbook(currency.propertyid,topmarket.propertyid)
+						}
 					}, 
 					function(error){
 						console.log(error)
