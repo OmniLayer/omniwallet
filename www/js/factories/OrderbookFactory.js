@@ -31,64 +31,7 @@ angular.module("omniFactories")
 					self.selling = tradingPair.selling;
 					self.desired = tradingPair.desired;
 					self.marketData = [];
-					self.chartData = [];
-					// TODO:  list only addresses with balance > 0
-					self.addresses = Wallet.addresses.filter(function(address){
-						return ((address.privkey && address.privkey.length == 58) || address.pubkey)
-					});
-					self.buyAddresses = self.addresses.filter(function(address){
-						return address.getBalance(self.desired.propertyid) > 0;
-					});
-					self.buyOrder.address = self.buyAddresses.length > 0 ? self.buyAddresses[0] : undefined;
-					self.sellAddresses = self.addresses.filter(function(address){
-						return address.getBalance(self.selling.propertyid) > 0;
-					});
-					self.sellOrder.address = self.sellAddresses.length > 0 ? self.sellAddresses[0] : undefined;
-
-					self.askBook = [];
-					self.bidBook = [];
-					self.activeOffers = [];
-
-					// I get the orders for property selling asks
-					$http.get("/v1/omnidex/"+tradingPair.desired.propertyid+"/"+tradingPair.selling.propertyid)
-						.then(function(response){
-							if(response.status != 200 || response.data.status !=200)
-								return // handle errors
-
-							self.parseOrderbook(response.data.orderbook, self.askBook,tradingPair.desired,tradingPair.selling);
-
-							self.askBook.sort(function(a, b) {
-					          var priceA = a.price;
-					          var priceB = b.price;
-					          return priceA.gt(priceB) ? 1 : priceA.lt(priceB) ? -1 : 0;
-					        });
-						})
-					$http.get("/v1/omnidex/"+tradingPair.selling.propertyid+"/"+tradingPair.desired.propertyid)
-						.then(function(response){
-							if(response.status != 200 || response.data.status != 200)
-								return // handle errors
-							
-							self.parseOrderbook(response.data.orderbook, self.bidBook,tradingPair.selling,tradingPair.desired);
-
-							self.bidBook.sort(function(a, b) {
-					          var priceA = a.price;
-					          var priceB = b.price;
-					          return priceA.lt(priceB) ? 1 : priceA.gt(priceB) ? -1 : 0;
-					        });
-						})
-
-					$http.get("/v1/omnidex/ohlcv/"+tradingPair.selling.propertyid+"/"+tradingPair.desired.propertyid)
-						.then(function(response){
-							if(response.status != 200 || response.data.status !=200)
-								return // handle errors
-
-							self.marketData=response.data.orderbook;
-							// self.chartData = [
-							// 			{
-				   //                  values: self.marketData
-				   //              }
-							// ]
-							self.chartData = [{values: [
+					self.chartData = [{values: [
         {"date": 15854, "open": 165.42, "high": 165.8, "low": 164.34, "close": 165.22, "volume": 160363400, "adjusted": 164.35},
         {"date": 15855, "open": 165.35, "high": 166.59, "low": 165.22, "close": 165.83, "volume": 107793800, "adjusted": 164.96},
         {"date": 15856, "open": 165.37, "high": 166.31, "low": 163.13, "close": 163.45, "volume": 176850100, "adjusted": 162.59},
@@ -160,7 +103,63 @@ angular.module("omniFactories")
         {"date": 15952, "open": 164.43, "high": 166.03, "low": 164.13, "close": 165.75, "volume": 97304000, "adjusted": 165.75},
         {"date": 15953, "open": 165.85, "high": 166.4, "low": 165.73, "close": 165.96, "volume": 62930500, "adjusted": 165.96}
     ]}
-							]
+							];
+					// TODO:  list only addresses with balance > 0
+					self.addresses = Wallet.addresses.filter(function(address){
+						return ((address.privkey && address.privkey.length == 58) || address.pubkey)
+					});
+					self.buyAddresses = self.addresses.filter(function(address){
+						return address.getBalance(self.desired.propertyid) > 0;
+					});
+					self.buyOrder.address = self.buyAddresses.length > 0 ? self.buyAddresses[0] : undefined;
+					self.sellAddresses = self.addresses.filter(function(address){
+						return address.getBalance(self.selling.propertyid) > 0;
+					});
+					self.sellOrder.address = self.sellAddresses.length > 0 ? self.sellAddresses[0] : undefined;
+
+					self.askBook = [];
+					self.bidBook = [];
+					self.activeOffers = [];
+
+					// I get the orders for property selling asks
+					$http.get("/v1/omnidex/"+tradingPair.desired.propertyid+"/"+tradingPair.selling.propertyid)
+						.then(function(response){
+							if(response.status != 200 || response.data.status !=200)
+								return // handle errors
+
+							self.parseOrderbook(response.data.orderbook, self.askBook,tradingPair.desired,tradingPair.selling);
+
+							self.askBook.sort(function(a, b) {
+					          var priceA = a.price;
+					          var priceB = b.price;
+					          return priceA.gt(priceB) ? 1 : priceA.lt(priceB) ? -1 : 0;
+					        });
+						})
+					$http.get("/v1/omnidex/"+tradingPair.selling.propertyid+"/"+tradingPair.desired.propertyid)
+						.then(function(response){
+							if(response.status != 200 || response.data.status != 200)
+								return // handle errors
+							
+							self.parseOrderbook(response.data.orderbook, self.bidBook,tradingPair.selling,tradingPair.desired);
+
+							self.bidBook.sort(function(a, b) {
+					          var priceA = a.price;
+					          var priceB = b.price;
+					          return priceA.lt(priceB) ? 1 : priceA.gt(priceB) ? -1 : 0;
+					        });
+						})
+
+					$http.get("/v1/omnidex/ohlcv/"+tradingPair.selling.propertyid+"/"+tradingPair.desired.propertyid)
+						.then(function(response){
+							if(response.status != 200 || response.data.status !=200)
+								return // handle errors
+
+							self.marketData=response.data.orderbook;
+							// self.chartData = [
+							// 			{
+				   //                  values: self.marketData
+				   //              }
+							// ]
 							
 						})
 
