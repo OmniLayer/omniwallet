@@ -107,6 +107,10 @@ def insertomni(rawtx):
                 "values(%s,%s,%s,%s,%s,%s,%s)", (address,propertyid,protocol,txdbserialnum,addresstxindex,addressrole,recvamount))
       #update pending balance
       #dbExecute("update addressbalances set balancepending=balancepending+%s::numeric where address=%s and propertyid=%s and protocol=%s", (recvamount,address,propertyid,protocol))
+
+    #store decoded omni data until tx confirms
+    dbExecute("insert into txjson (txdbserialnum, protocol, txdata) values (%s,%s,%s)", (txdbserialnum, protocol, json.dumps(rawtx['MP'])) )
+
     dbCommit()
   except Exception,e:
     print "Error: ", e, "\n Could not add OMNI PendingTx: ", rawtx
