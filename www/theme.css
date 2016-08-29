@@ -192,6 +192,10 @@ h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6{
   text-align: center !important;
 }
 
+.markets-table .table-row div {
+  overflow: hidden !important;
+}
+
 .om-table .table-header{
   background-color: #f5f5f5;
   border-radius: 4px 4px 0px 0px;

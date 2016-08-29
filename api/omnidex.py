@@ -21,23 +21,25 @@ def getDesignatingCurrencies():
     except ValueError:
         abort(make_response('Field \'ecosystem\' invalid value, request failed', 400))
 
-    designating_currencies = dbSelect("select distinct ao.propertyiddesired as propertyid, sp.propertyname from activeoffers ao inner join SmartProperties sp on ao.propertyiddesired = sp.propertyid and sp.ecosystem = %s where ao.propertyidselling not in (1, 2, 31)  order by ao.propertyiddesired ",[ecosystem])
+    designating_currencies = dbSelect("select distinct ao.propertyidselling as propertyid, sp.propertyname from activeoffers ao inner join SmartProperties sp on ao.propertyidselling = sp.propertyid and sp.ecosystem = %s where (ao.propertyiddesired not in (1, 2, 31)) or (ao.propertyiddesired = 1 and ao.propertyidselling = 31)  order by ao.propertyidselling ",[ecosystem])
     return jsonify({"status" : 200, "currencies": [{"propertyid":currency[0], "propertyname" : currency[1] } for currency in designating_currencies]})
 
 
 @app.route('/<int:denominator>')
 def get_markets_by_denominator(denominator):
-    markets = dbSelect("select distinct CASE WHEN ao.propertyiddesired = %s THEN ao.propertyidselling WHEN ao.propertyidselling = %s THEN ao.propertyiddesired END as marketid, CASE WHEN ao.propertyiddesired = %s THEN selling.propertyname WHEN ao.propertyidselling = %s THEN desired.propertyname END as marketname, sum(ao.amountavailable) from activeoffers ao inner join SmartProperties selling on ao.propertyidselling = selling.propertyid and selling.protocol = 'Omni' inner join SmartProperties desired on ao.propertyiddesired = desired.propertyid and desired.protocol = 'Omni' where ao.propertyiddesired = %s or ao.propertyidselling = %s and ao.OfferState = 'active' group by marketid, marketname order by marketname;",[denominator,denominator,denominator,denominator,denominator,denominator])
+    markets = dbSelect("SELECT distinct ao.propertyiddesired as marketid, desired.propertyname as marketname, max(ao.unitprice), sum(ao.amountdesired) as supply, max(ho.unitprice) from activeoffers ao inner join transactions createtx on ao.createtxdbserialnum = createtx.txdbserialnum left outer join activeoffers ho on ao.createtxdbserialnum = ho.createtxdbserialnum and createtx.txrecvtime < (CURRENT_TIMESTAMP - INTERVAL '1 day') selling on ao.propertyidselling = selling.propertyid and selling.protocol = 'Omni' inner join SmartProperties desired on ao.propertyiddesired = desired.propertyid and desired.protocol = 'Omni' where ao.propertyidselling = %s and ao.OfferState = 'active' and ho group by marketid, marketname order by supply;",[denominator])
     return jsonify({"status" : 200, "markets": [
     	{
     		"propertyid":currency[0], 
     		"propertyname" : currency[1],
-    		"supply" : str(currency[2])
+            "price" : currency[2],
+            "supply" : currency[3],
+            "change" : currency[4] * 100 / currency[2] - 100
 		} for currency in markets]})
 
 @app.route('/ohlcv/<int:propertyid_desired>/<int:propertyid_selling>')
 def get_OHLCV(propertyid_desired, propertyid_selling):
-    orderbook = dbSelect("SELECT timeframe.date,FIRST(offers.unitprice) ,MAX(offers.unitprice), MIN(offers.unitprice), LAST(offers.unitprice), SUM(offers.totalselling) FROM generate_series('2016-01-01 00:00'::timestamp,current_date, '1 day') timeframe(date) INNER JOIN (SELECT ao.totalselling, ao.unitprice, createtx.TXRecvTime as createdate, COALESCE(lasttx.TXRecvTime,createtx.TXRecvTime) as solddate from ActiveOffers ao inner join Transactions createtx on ao.CreateTXDBSerialNum = createtx.TxDBSerialNum left outer join Transactions lasttx on ao.LastTXDBSerialNum = lasttx.TxDBSerialNum where (ao.OfferState = 'sold' or ao.OfferState = 'active')  and ao.unitprice > 0 and ao.PropertyIdSelling = %s and ao.PropertyIdDesired = %s ORDER BY createtx.TXRecvTime) offers on DATE(offers.createdate) <= timeframe.date and DATE(offers.solddate) >= timeframe.date group by timeframe.date",[propertyid_selling, propertyid_desired])
+    orderbook = dbSelect("SELECT timeframe.date,FIRST(offers.unitprice) ,MAX(offers.unitprice), MIN(offers.unitprice), LAST(offers.unitprice), SUM(offers.totalselling) FROM generate_series('2016-01-01 00:00'::timestamp,current_date, '1 day') timeframe(date) INNER JOIN (SELECT ao.totalselling, ao.unitprice, createtx.TXRecvTime as createdate, COALESCE(lasttx.TXRecvTime,createtx.TXRecvTime) as solddate from ActiveOffers ao inner join Transactions createtx on ao.CreateTXDBSerialNum = createtx.TxDBSerialNum left outer join Transactions lasttx on ao.LastTXDBSerialNum = lasttx.TxDBSerialNum where (ao.OfferState = 'sold' or ao.OfferState = 'active')  and ao.unitprice > 0 and ao.PropertyIdSelling = %s and ao.PropertyIdDesired = %s ORDER BY createtx.TXRecvTime DESC) offers on DATE(offers.createdate) <= timeframe.date and DATE(offers.solddate) >= timeframe.date group by timeframe.date",[propertyid_selling, propertyid_desired])
     return jsonify({"status" : 200, "orderbook": [
         {
             "date":int((time.mktime(order[0].timetuple()) + order[0].microsecond/1000000.0)/86400), 
