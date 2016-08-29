@@ -31,6 +31,46 @@ angular.module("omniFactories")
 					self.selling = tradingPair.selling;
 					self.desired = tradingPair.desired;
 					self.marketData = [];
+					self.chartConfig = {
+			            chart: {
+			                type: 'candlestickBarChart',
+			                height: 450,
+			                margin : {
+			                    top: 20,
+			                    right: 20,
+			                    bottom: 66,
+			                    left: 60
+			                },
+			                x: function(d){ return d['date']; },
+			                y: function(d){ return d['close']; },
+			                duration: 100,
+			                
+			                xAxis: {
+			                    axisLabel: 'Dates',
+			                    tickFormat: function(d) {
+			                        return d3.time.format('%x')(new Date(new Date() - (20000 * 86400000) + (d * 86400000)));
+			                    },
+			                    showMaxMin: false
+			                },
+
+			                yAxis: {
+			                    axisLabel: 'Stock Price',
+			                    tickFormat: function(d){
+			                        return '$' + d3.format(',.1f')(d);
+			                    },
+			                    showMaxMin: false
+			                },
+			                zoom: {
+			                    enabled: true,
+			                    scaleExtent: [1, 10],
+			                    useFixedDomain: false,
+			                    useNiceScale: false,
+			                    horizontalOff: false,
+			                    verticalOff: true,
+			                    unzoomEventType: 'dblclick.zoom'
+			                }
+			            }
+			        };
 					self.chartData = [{values: [
         {"date": 15854, "open": 165.42, "high": 165.8, "low": 164.34, "close": 165.22, "volume": 160363400, "adjusted": 164.35},
         {"date": 15855, "open": 165.35, "high": 166.59, "low": 165.22, "close": 165.83, "volume": 107793800, "adjusted": 164.96},
@@ -189,46 +229,7 @@ angular.module("omniFactories")
 						}
 					});				}
 
-				self.chartConfig = {
-		            chart: {
-		                type: 'candlestickBarChart',
-		                height: 450,
-		                margin : {
-		                    top: 20,
-		                    right: 20,
-		                    bottom: 66,
-		                    left: 60
-		                },
-		                x: function(d){ return d['date']; },
-		                y: function(d){ return d['close']; },
-		                duration: 100,
-		                
-		                xAxis: {
-		                    axisLabel: 'Dates',
-		                    tickFormat: function(d) {
-		                        return d3.time.format('%x')(new Date(new Date() - (20000 * 86400000) + (d * 86400000)));
-		                    },
-		                    showMaxMin: false
-		                },
-
-		                yAxis: {
-		                    axisLabel: 'Stock Price',
-		                    tickFormat: function(d){
-		                        return '$' + d3.format(',.1f')(d);
-		                    },
-		                    showMaxMin: false
-		                },
-		                zoom: {
-		                    enabled: true,
-		                    scaleExtent: [1, 10],
-		                    useFixedDomain: false,
-		                    useNiceScale: false,
-		                    horizontalOff: false,
-		                    verticalOff: true,
-		                    unzoomEventType: 'dblclick.zoom'
-		                }
-		            }
-		        };
+				
 
 				self.askCumulative = function(order){
 					let index = self.askBook.indexOf(order);
