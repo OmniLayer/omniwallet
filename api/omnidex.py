@@ -34,22 +34,6 @@ def get_markets_by_denominator(denominator):
     		"supply" : str(currency[2])
 		} for currency in markets]})
 
-@app.route('/history/<int:propertyid_desired>/<int:propertyid_selling>')
-def get_market_history(propertyid_desired, propertyid_selling):
-    orderbook = dbSelect("SELECT ao.propertyiddesired, ao.propertyidselling, ao.AmountAvailable, ao.AmountDesired, ao.TotalSelling, ao.AmountAccepted, txj.txdata->'unitprice', ao.Seller, tx.TxRecvTime from activeoffers ao, transactions tx, txjson txj where ao.CreateTxDBSerialNum = txj.TxDBSerialNum and ao.CreateTxDBSerialNum = tx.TxDBSerialNum and ao.propertyiddesired = %s and ao.propertyidselling = %s;",[propertyid_desired,propertyid_selling])
-    return jsonify({"status" : 200, "orderbook": [
-        {
-            "propertyid_desired":order[0], 
-            "propertyid_selling":order[1],
-            "available_amount" : str(order[2]),
-            "desired_amount" : str(order[3]),
-            "total_amount" : str(order[4]),
-            "accepted_amount": str(order[5]),
-            "unit_price" : str(order[6]),
-            "seller" : str(order[7]),
-            "time" : order[8]
-        } for order in orderbook]})
-
 @app.route('/ohlvc/<int:propertyid_desired>/<int:propertyid_selling>')
 def get_OHLCV(propertyid_desired, propertyid_selling):
     orderbook = dbSelect("SELECT timeframe.date,0 ,MAX(offers.unitprice), MIN(offers.unitprice), 0, SUM(offers.totalselling) FROM generate_series('2016-01-01 00:00'::timestamp,current_date, '1 day') timeframe(date) INNER JOIN (SELECT ao.unitprice, createtx.TXRecvTime as createdate, COALESCE(lasttx.TXRecvTime,createtx.TXRecvTime) as solddate from ActiveOffers ao inner join Transactions createtx on ao.CreateTXDBSerialNum = createtx.TxDBSerialNum left outer join Transactions lasttx on ao.LastTXDBSerialNum = lasttx.TxDBSerialNum where ao.OfferState = 'sold' and ao.PropertyIdSelling = %s and ao.PropertyIdDesired = %s ORDER BY createtx.TXRecvTime) offers on DATE(offers.createdate) <= timeframe.date and DATE(offers.solddate) >= timeframe.date group by timeframe.date",[propertyid_selling, propertyid_desired])
