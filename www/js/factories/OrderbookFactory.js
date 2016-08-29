@@ -132,7 +132,10 @@ angular.module("omniFactories")
 				    "duration": 100,
 				    "xAxis": {
 				      "axisLabel": "Dates",
-				      "showMaxMin": false
+				      "showMaxMin": false,
+				      tickFormat: function(d) {
+                        return d3.time.format('%x')(new Date(d));
+                    	}
 				    },
 				    "yAxis": {
 				      "axisLabel": "Price",
