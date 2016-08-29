@@ -120,13 +120,15 @@ angular.module("omniFactories")
 				self.chartConfig = {
 				  "chart": {
 				    "type": "candlestickBarChart",
-				    "height": 450,
+				    "height": 250,
 				    "margin": {
 				      "top": 20,
 				      "right": 20,
 				      "bottom": 40,
 				      "left": 60
-				    },
+				    },					    
+	                x: function(d){ return d['date']; },
+	                y: function(d){ return d['close']; },
 				    "duration": 100,
 				    "xAxis": {
 				      "axisLabel": "Dates",
@@ -134,7 +136,8 @@ angular.module("omniFactories")
 				    },
 				    "yAxis": {
 				      "axisLabel": "Price",
-				      "showMaxMin": false
+				      "showMaxMin": false,
+				      "tickFormat":function(d,i){ return '$' + d3.format(',.1f')(d); }
 				    },
 				    "zoom": {
 				      "enabled": true,

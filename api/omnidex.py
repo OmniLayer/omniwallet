@@ -40,11 +40,11 @@ def get_OHLCV(propertyid_desired, propertyid_selling):
     return jsonify({"status" : 200, "orderbook": [
         {
             "time":order[0], 
-            "open":order[1],
-            "high" : str(order[2]),
-            "low" : str(order[3]),
-            "close" : str(order[4]),
-            "volume": str(order[5])
+            "open":order[1] if order[1] is not None else 0,
+            "high" : str(order[2]) if order[2] is not None else 0,
+            "low" : str(order[3]) if order[3] is not None else 0,
+            "close" : str(order[4]) if order[4] is not None else 0 or 0,
+            "volume": str(order[5]) if order[5] is not None else 0
         } for order in orderbook]})
 
 
