@@ -14,7 +14,7 @@ def insertpending(txhex):
     #handle btc pending amounts
     insertbtc(rawtx)
 
-  if 'Amount' in rawtx['MP'] and rawtx['MP']['Amount']>0:
+  if 'amount' in rawtx['MP'] and decimal.Decimal(rawtx['MP']['amount'])>0:
     #only run if we have a non zero positive amount to process, otherwise exit
     insertomni(rawtx)
 
@@ -73,7 +73,10 @@ def insertomni(rawtx):
     addresstxindex=0
     txdbserialnum = dbSelect("select least(-1,min(txdbserialnum)) from transactions;")[0][0]
     txdbserialnum -= 1
-    amount = rawtx['MP']['amount']
+    if rawtx['MP']['divisible']:
+      amount = int(decimal.Decimal(str(rawtx['MP']['amount']))*decimal.Decimal(1e8))
+    else:
+      amount = int(rawtx['MP']['amount'])
 
     if txtype == 55:
       #handle grants to ourself or others
@@ -107,6 +110,10 @@ def insertomni(rawtx):
                 "values(%s,%s,%s,%s,%s,%s,%s)", (address,propertyid,protocol,txdbserialnum,addresstxindex,addressrole,recvamount))
       #update pending balance
       #dbExecute("update addressbalances set balancepending=balancepending+%s::numeric where address=%s and propertyid=%s and protocol=%s", (recvamount,address,propertyid,protocol))
+
+    #store decoded omni data until tx confirms
+    dbExecute("insert into txjson (txdbserialnum, protocol, txdata) values (%s,%s,%s)", (txdbserialnum, protocol, json.dumps(rawtx['MP'])) )
+
     dbCommit()
   except Exception,e:
     print "Error: ", e, "\n Could not add OMNI PendingTx: ", rawtx

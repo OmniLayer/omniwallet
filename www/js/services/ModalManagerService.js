@@ -193,7 +193,7 @@ angular.module("omniServices")
                                 if (successData.pushed.match(/submitted|success/gi) != null) {
                                   $modalScope.waiting = false;
                                   $modalScope.transactionSuccess = true;
-                                  $modalScope.url = 'http://blockchain.info/address/' + from + '?sort=0';
+                                  $modalScope.url = 'https://www.blocktrail.com/BTC/address/' + from + '/transactions';
                                 } else if (successData.status.match(/NOTOK/gi)) {
                                   $modalScope.waiting = false;
                                   $modalScope.transactionError = true;

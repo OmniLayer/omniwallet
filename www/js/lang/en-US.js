@@ -162,7 +162,7 @@ angular.module("omniConfig")
 			"STRENGTH":"Strength",
 			"REPEAT":"Repeat Password",
 			"EMAIL":"Email",
-			"EMAILHOLDER":"Enter an email address (optional)"
+			"EMAILHOLDER":"Enter an email address"
 		},
 		"LOGIN":{
 			"ID":"Wallet ID",
