@@ -14,7 +14,7 @@ def insertpending(txhex):
     #handle btc pending amounts
     insertbtc(rawtx)
 
-  if 'amount' in rawtx['MP'] and rawtx['MP']['amount']>0:
+  if 'amount' in rawtx['MP'] and decimal.Decimal(rawtx['MP']['amount'])>0:
     #only run if we have a non zero positive amount to process, otherwise exit
     insertomni(rawtx)
 
@@ -73,7 +73,10 @@ def insertomni(rawtx):
     addresstxindex=0
     txdbserialnum = dbSelect("select least(-1,min(txdbserialnum)) from transactions;")[0][0]
     txdbserialnum -= 1
-    amount = rawtx['MP']['amount']
+    if rawtx['MP']['divisible']:
+      amount = int(decimal.Decimal(str(rawtx['MP']['amount']))*decimal.Decimal(1e8))
+    else:
+      amount = int(rawtx['MP']['amount'])
 
     if txtype == 55:
       #handle grants to ourself or others
