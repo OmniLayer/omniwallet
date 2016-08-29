@@ -16,11 +16,11 @@
         	<div class="col-xs-12 om-table markets-table">
         		<div class="row table-header hidden-xs">
               <div class="col-sm-2">{{ 'OMNIDEX.MARKETS.SYMBOL' | translate}}</div>
-              <div class="col-sm-1">{{ 'OMNIDEX.MARKETS.NAME' | translate}}</div>
+              <div class="col-sm-2">{{ 'OMNIDEX.MARKETS.NAME' | translate}}</div>
               <div class="col-sm-3">
                 {{ 'OMNIDEX.MARKETS.PRICE' | translate}}
               </div>
-              <div class="col-sm-4">{{ 'OMNIDEX.MARKETS.SUPPLY' | translate}}</div>
+              <div class="col-sm-3">{{ 'OMNIDEX.MARKETS.SUPPLY' | translate}}</div>
               <div class="col-sm-2">{{ 'OMNIDEX.MARKETS.CHANGE' | translate}}</div>
             </div>
             <div class="row table-row text-center" ng-show="!loading && noMarkets">
@@ -32,7 +32,7 @@
                 #{{market.propertyid}}
               </div>
               <div class="visible-xs col-xs-7">{{ 'OMNIDEX.MARKETS.NAME' | translate}}</div>
-              <div class="col-xs-5 col-sm-1">
+              <div class="col-xs-5 col-sm-2">
                 <a ng-click="$parent.$parent.loadOrderbook($parent.designatingCurrency.propertyid,market.propertyid)">{{market.symbol}}</a>
               </div>
               <div class="visible-xs col-xs-7">{{ 'OMNIDEX.MARKETS.PRICE' | translate}}</div>
@@ -40,7 +40,7 @@
                 {{market.price}}
               </div>
               <div class="visible-xs col-xs-7">{{ 'OMNIDEX.MARKETS.SUPPLY' | translate}}</div>
-              <div class="col-xs-5 col-sm-4">
+              <div class="col-xs-5 col-sm-3">
                 {{market.supply}}
               </div>
               <div class="visible-xs col-xs-7">{{ 'OMNIDEX.MARKETS.CHANGE' | translate}}</div>
