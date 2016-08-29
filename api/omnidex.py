@@ -37,16 +37,16 @@ def get_markets_by_denominator(denominator):
 
 @app.route('/ohlcv/<int:propertyid_desired>/<int:propertyid_selling>')
 def get_OHLCV(propertyid_desired, propertyid_selling):
-    orderbook = dbSelect("SELECT timeframe.date,0 ,MAX(offers.unitprice), MIN(offers.unitprice), 0, SUM(offers.totalselling) FROM generate_series('2016-01-01 00:00'::timestamp,current_date, '1 day') timeframe(date) LEFT OUTER JOIN (SELECT ao.totalselling, ao.unitprice, createtx.TXRecvTime as createdate, COALESCE(lasttx.TXRecvTime,createtx.TXRecvTime) as solddate from ActiveOffers ao inner join Transactions createtx on ao.CreateTXDBSerialNum = createtx.TxDBSerialNum left outer join Transactions lasttx on ao.LastTXDBSerialNum = lasttx.TxDBSerialNum where ao.OfferState = 'sold' and ao.PropertyIdSelling = %s and ao.PropertyIdDesired = %s ORDER BY createtx.TXRecvTime) offers on DATE(offers.createdate) <= timeframe.date and DATE(offers.solddate) >= timeframe.date group by timeframe.date",[propertyid_selling, propertyid_desired])
+    orderbook = dbSelect("SELECT timeframe.date,FIRST(offers.unitprice) ,MAX(offers.unitprice), MIN(offers.unitprice), LAST(offers.unitprice), SUM(offers.totalselling) FROM generate_series('2016-01-01 00:00'::timestamp,current_date, '1 day') timeframe(date) INNER JOIN (SELECT ao.totalselling, ao.unitprice, createtx.TXRecvTime as createdate, COALESCE(lasttx.TXRecvTime,createtx.TXRecvTime) as solddate from ActiveOffers ao inner join Transactions createtx on ao.CreateTXDBSerialNum = createtx.TxDBSerialNum left outer join Transactions lasttx on ao.LastTXDBSerialNum = lasttx.TxDBSerialNum where (ao.OfferState = 'sold' or ao.OfferState = 'active')  and ao.unitprice > 0 and ao.PropertyIdSelling = %s and ao.PropertyIdDesired = %s ORDER BY createtx.TXRecvTime) offers on DATE(offers.createdate) <= timeframe.date and DATE(offers.solddate) >= timeframe.date group by timeframe.date",[propertyid_selling, propertyid_desired])
     return jsonify({"status" : 200, "orderbook": [
         {
             "date":int((time.mktime(order[0].timetuple()) + order[0].microsecond/1000000.0)/86400), 
-            "open":order[1] if order[1] is not None else 160 - (0.01 * orderbook.index(order)),
-            "high" : str(order[2]) if order[2] is not None else 160 + (0.01 * orderbook.index(order)),
-            "low" : str(order[3]) if order[3] is not None else 160 - (0.01 * orderbook.index(order)),
-            "close" : str(order[4]) if order[4] is not None else 160 + (0.01 * orderbook.index(order)),
-            "volume": str(order[5]) if order[5] is not None else 34.5 + (11.2 * orderbook.index(order)),
-            "adjustment":160
+            "open":order[1], #if order[1] is not None else 160 - (0.01 * orderbook.index(order)),
+            "high" : order[2], #if order[2] is not None else 160 + (0.01 * orderbook.index(order)),
+            "low" : order[3], #if order[3] is not None else 160 - (0.01 * orderbook.index(order)),
+            "close" : order[4], #if order[4] is not None else 160 + (0.01 * orderbook.index(order)),
+            "volume": order[5], #if order[5] is not None else 34.5 + (11.2 * orderbook.index(order)),
+            "adjustment":(order[2] + order[3]) /2
         } for order in orderbook]})
 
 
