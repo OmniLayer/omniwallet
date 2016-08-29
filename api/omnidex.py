@@ -34,7 +34,7 @@ def get_markets_by_denominator(denominator):
     		"propertyname" : currency[1],
             "price" : currency[2],
             "supply" : currency[3],
-            "change" : currency[4] * 100 / currency[2] - 100
+            "change" : currency[4] #currency[4] * 100 / currency[2] - 100
 		} for currency in markets]})
 
 @app.route('/ohlcv/<int:propertyid_desired>/<int:propertyid_selling>')
