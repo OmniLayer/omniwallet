@@ -26,6 +26,10 @@ angular.module("omniControllers")
 				$scope.designatingCurrency = currency;
 				$http.get('/v1/omnidex/'+ currency.propertyid).then(
 					function success(response) {
+						var markets = response.data.markets;
+						markets.forEach(function(market){
+							market.symbol = market.propertyid == 31 ? "USDT" : market.propertyid == 39 ? "AMP" : market.name.substr(0,4).toUpperCase();
+						});
 						$scope.markets = response.data.markets;
 						$scope.noMarkets = $scope.markets.length == 0;
 						var topmarket = $scope.markets[0]

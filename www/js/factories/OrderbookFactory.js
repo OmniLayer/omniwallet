@@ -77,30 +77,15 @@ angular.module("omniFactories")
 					        });
 						})
 
-					$http.get("/v1/omnidex/history/"+tradingPair.selling.propertyid+"/"+tradingPair.desired.propertyid)
+					$http.get("/v1/omnidex/ohlcv/"+tradingPair.selling.propertyid+"/"+tradingPair.desired.propertyid)
 						.then(function(response){
 							if(response.status != 200 || response.data.status !=200)
 								return // handle errors
 
-							response.data.orderbook.forEach(function(offerData){
-								var order = null;
-								var offer = new DExOffer(offerData,tradingPair.desired,tradingPair.selling,"market");
-								
-								self.marketData.push(offer);
-
-							});
-							self.marketData=self.marketData.sort(function(a, b) {
-							          var dateA = a.time;
-							          var dateB = b.time;
-							          return dateA < dateB ? -1 : dateA > dateB ? 1 : 0;
-							        });
+							self.marketData=response.data.orderbook;
 							self.chartData = [
 										{
-				                    values: self.marketData,      //values - represents the array of {x,y} data points
-				                    key: 'Offers', //key  - the name of the series.
-				                    color: '#ff7f0e',  //color - optional: choose your own line color.
-				                    strokeWidth: 2,
-				                    classed: 'dashed'
+				                    values: self.marketData
 				                }
 							]
 							
@@ -133,36 +118,38 @@ angular.module("omniFactories")
 					});				}
 
 				self.chartConfig = {
-					"chart": {
-					    "type": "lineChart",
-					    "height": 450,
-					    "margin": {
-					      "top": 20,
-					      "right": 20,
-					      "bottom": 40,
-					      "left": 55
-					    },
-					    x: function(offer){return offer.time;},
-			            y: function(offer){return offer.price.valueOf();},
-					    "useInteractiveGuideline": true,
-					    "dispatch": {},
-					    "xAxis": {
-					      "axisLabel": "Date",
-					      tickFormat : function(d) { return d3.time.format(' %b %e %H:%M')(new Date(d)); }
-					    },
-					    "yAxis": {
-					      "axisLabel": "Price (omni)",
-					      tickFormat: function(d){
-		                        return d3.format('.04f')(d);
-		                    },
-					      "axisLabelDistance": -10
-					    }
-					  },
-					  "title": {
-					    "enable": true,
-					    "text": "Market Data"
-					  }
-			      };
+				  "chart": {
+				    "type": "candlestickBarChart",
+				    "height": 450,
+				    "margin": {
+				      "top": 20,
+				      "right": 20,
+				      "bottom": 40,
+				      "left": 60
+				    },
+				    "duration": 100,
+				    "xAxis": {
+				      "axisLabel": "Dates",
+				      "showMaxMin": false
+				    },
+				    "yAxis": {
+				      "axisLabel": "Price",
+				      "showMaxMin": false
+				    },
+				    "zoom": {
+				      "enabled": true,
+				      "scaleExtent": [
+				        1,
+				        10
+				      ],
+				      "useFixedDomain": false,
+				      "useNiceScale": false,
+				      "horizontalOff": false,
+				      "verticalOff": true,
+				      "unzoomEventType": "dblclick.zoom"
+				    }
+				  }
+				};
 
 				self.askCumulative = function(order){
 					let index = self.askBook.indexOf(order);

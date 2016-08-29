@@ -6,13 +6,20 @@
   </div>
   <div class="row">
     <div class="col-xs-8">
-      <nvd3 data="orderbook.chartData" 
+      <div class="panel panel-default">
+        <div class="panel-body">
+          <nvd3 data="orderbook.chartData" 
                 options="orderbook.chartConfig" 
                 class="panel-body">
-            </nvd3>
+          </nvd3>
+        </div>
+      </div>
     </div>
-    <div class="col-xs-4" ng-include="'/views/DEx/markets.html'">
-
+    <div class="col-xs-4">
+      <div class="panel panel-default">
+        <div class="panel-body" ng-include="'/views/DEx/markets.html'">
+        </div>
+      </div>
     </div>
   </div>
   <div class="row om-row" ng-include="'/views/DEx/orderbook_orders.html'">

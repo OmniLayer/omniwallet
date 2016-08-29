@@ -35,7 +35,7 @@
               </div>
               <div class="visible-xs col-xs-7">{{ 'OMNIDEX.MARKETS.NAME' | translate}}</div>
               <div class="col-xs-5 col-sm-2">
-                <a ng-click="$parent.$parent.loadOrderbook($parent.designatingCurrency.propertyid,market.propertyid)">{{market.propertyname.substr(0,4).toUpperCase()}}</a>
+                <a ng-click="$parent.$parent.loadOrderbook($parent.designatingCurrency.propertyid,market.propertyid)">{{market.symbol}}</a>
               </div>
               <div class="visible-xs col-xs-7">{{ 'OMNIDEX.MARKETS.PRICE' | translate}}</div>
               <div class="col-xs-5 col-sm-1">
