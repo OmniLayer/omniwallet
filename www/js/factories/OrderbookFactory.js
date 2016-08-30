@@ -90,34 +90,48 @@ angular.module("omniFactories")
 					self.activeOffers = [];
 
 					// I get the orders for property selling asks
-					
-					$http.get("/v1/omnidex/"+tradingPair.desired.propertyid+"/"+tradingPair.selling.propertyid)
+					setTimeout(function(){
+						$http.get("/v1/omnidex/"+tradingPair.desired.propertyid+"/"+tradingPair.selling.propertyid)
 						.then(function(response){
 							if(response.status != 200 || response.data.status !=200)
 								return // handle errors
 
-							self.parseOrderbook(response.data.orderbook, self.askBook,tradingPair.desired,tradingPair.selling);
+							$scope.$apply(function(){
+								var orderbook = [];
+								self.parseOrderbook(response.data.orderbook, orderbook,tradingPair.desired,tradingPair.selling);
+								self.askBook = orderbook;
+								self.askBook.sort(function(a, b) {
+						          var priceA = a.price;
+						          var priceB = b.price;
+						          return priceA.gt(priceB) ? 1 : priceA.lt(priceB) ? -1 : 0;
+						        });
+							})
 
-							self.askBook.sort(function(a, b) {
-					          var priceA = a.price;
-					          var priceB = b.price;
-					          return priceA.gt(priceB) ? 1 : priceA.lt(priceB) ? -1 : 0;
-					        });
+							setTimeout(this,3000)
 						})
+					},3000);
 					
-					$http.get("/v1/omnidex/"+tradingPair.selling.propertyid+"/"+tradingPair.desired.propertyid)
+					setTimeout(function(){
+						$http.get("/v1/omnidex/"+tradingPair.selling.propertyid+"/"+tradingPair.desired.propertyid)
 						.then(function(response){
 							if(response.status != 200 || response.data.status != 200)
 								return // handle errors
 							
-							self.parseOrderbook(response.data.orderbook, self.bidBook,tradingPair.selling,tradingPair.desired);
+							$scope.$apply(function(){
+								var orderbook = [];
+								self.parseOrderbook(response.data.orderbook, orderbook,tradingPair.selling,tradingPair.desired);
+								self.bidBook = orderbook;
+								self.bidBook.sort(function(a, b) {
+						          var priceA = a.price;
+						          var priceB = b.price;
+						          return priceA.lt(priceB) ? 1 : priceA.gt(priceB) ? -1 : 0;
+						        });
+							});
 
-							self.bidBook.sort(function(a, b) {
-					          var priceA = a.price;
-					          var priceB = b.price;
-					          return priceA.lt(priceB) ? 1 : priceA.gt(priceB) ? -1 : 0;
-					        });
+							setTimeout(this, 3000)
 						})
+					},3000);
+
 
 					$http.get("/v1/omnidex/ohlcv/"+tradingPair.selling.propertyid+"/"+tradingPair.desired.propertyid)
 						.then(function(response){
