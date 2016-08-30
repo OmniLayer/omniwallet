@@ -78,7 +78,7 @@ def insertomni(rawtx):
         amount = int(decimal.Decimal(str(rawtx['MP']['amount']))*decimal.Decimal(1e8))
       else:
         amount = int(rawtx['MP']['amount'])
-    else
+    else:
       amount = rawtx['MP']['amountforsale']
 
     if txtype == 55:
