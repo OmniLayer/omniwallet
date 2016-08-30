@@ -73,10 +73,13 @@ def insertomni(rawtx):
     addresstxindex=0
     txdbserialnum = dbSelect("select least(-1,min(txdbserialnum)) from transactions;")[0][0]
     txdbserialnum -= 1
-    if rawtx['MP']['divisible']:
-      amount = int(decimal.Decimal(str(rawtx['MP']['amount']))*decimal.Decimal(1e8))
-    else:
-      amount = int(rawtx['MP']['amount'])
+    if 'amount' in rawtx['MP']:
+      if rawtx['MP']['divisible']:
+        amount = int(decimal.Decimal(str(rawtx['MP']['amount']))*decimal.Decimal(1e8))
+      else:
+        amount = int(rawtx['MP']['amount'])
+    else
+      amount = rawtx['MP']['amountforsale']
 
     if txtype == 55:
       #handle grants to ourself or others
