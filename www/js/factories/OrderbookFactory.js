@@ -162,7 +162,9 @@ angular.module("omniFactories")
 						if(owner){
 							offer.ownerAddress = owner;
 							offer.side = selling == self.tradingPair.selling ? "bid":"ask";
-							self.activeOffers.push(offer);
+							if(!self.activeOffers.find(function(element){return element.time == offer.time;})){
+								self.activeOffers.push(offer);
+							}
 						}
 						if(order == null){
 							order = new DExOrder(offer);
