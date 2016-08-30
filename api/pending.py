@@ -65,7 +65,7 @@ def insertomni(rawtx):
   try:
     sender = rawtx['Sender']
     receiver = rawtx['Reference']
-    propertyid = rawtx['MP']['propertyid'] if 'propertyid' in rawtx['MP'] else rawtx['MP']['propertyidselling']
+    propertyid = rawtx['MP']['propertyid'] if 'propertyid' in rawtx['MP'] else rawtx['MP']['propertyidforsale']
     txtype = rawtx['MP']['type_int']
     txversion = rawtx['MP']['version']
     txhash = rawtx['BTC']['txid']
