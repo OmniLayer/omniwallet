@@ -8,7 +8,7 @@
 			<th>Cumulative</th>
 		</thead>
 		<tbody>
-			<tr ng-repeat="order in orderbook.bidBook">
+			<tr ng-repeat="order in orderbook.bidBook" ng-class="{pending:order.hasPending}">
 				<td>{{order.offers.length}}</td>
 				<td>{{order.price.toFixed(8)}}</td>
 				<td>{{order.totaldesired.toFixed(8)}}</td>
@@ -27,7 +27,7 @@
 			<th>Cumulative</th>
 		</thead>
 		<tbody>
-			<tr ng-repeat="order in orderbook.askBook">
+			<tr ng-repeat="order in orderbook.askBook" ng-class="{pending:order.hasPending}">
 				<td>{{order.offers.length}}</td>
 				<td>{{order.price.toFixed(8)}}</td>
 				<td>{{order.remainingforsale.toFixed(8)}}</td>

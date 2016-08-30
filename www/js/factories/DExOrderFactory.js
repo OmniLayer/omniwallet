@@ -11,6 +11,7 @@ angular.module("omniFactories")
 				self.totaldesired = offer.desired_amount;
 
 				self.remainingforsale = offer.available_amount;
+				self.hasPending = offer.status == 'pending';
 				//self.desiredreceived = offer.accepted_amount; /* Accepted amount is not in db */
 			};
 
@@ -25,6 +26,12 @@ angular.module("omniFactories")
 				self.totalforsale = self.totalforsale.plus(offer.selling_amount);
 
 				self.remainingforsale = self.remainingforsale.plus(offer.available_amount);
+				self.hasPending = false;
+				self.offers.forEach(function(myoffer){
+					if(myoffer.status == 'pending'){
+						self.hasPending = true;
+					}
+				})
 				//self.desiredreceived = self.desiredreceived.plus(offer.accepted_amount);
 			};
 
