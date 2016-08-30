@@ -68,11 +68,11 @@ angular.module("omniFactories")
 					var currencyItem = self.balance.filter(function(asset){
 						return asset.id == assetId;
 					})[0];
-
-					if(currencyItem.divisible)
-						var value=new Big(currencyItem.value).times(WHOLE_UNIT).valueOf();
+					var value=new Big(currencyItem.value);
+					if (currencyItem && currencyItem.divisible)
+						value=new Big(currencyItem.value).times(WHOLE_UNIT).valueOf();
 					
-					return value || currencyItem.value;
+					return value;
 				}
 
 				self.getPendingNeg = function(assetId){
@@ -80,21 +80,22 @@ angular.module("omniFactories")
 						return asset.id == assetId;
 					})[0];
 
-					if(currencyItem.divisible)
+					var value=new Big(currencyItem.pendingneg);
+					if (currencyItem && currencyItem.divisible)
 						var value=new Big(currencyItem.pendingneg).times(WHOLE_UNIT).valueOf();
 					
-					return value || currencyItem.pendingneg;
+					return value;
 				}
 
 				self.getPendingPos = function(assetId){
 					var currencyItem = self.balance.filter(function(asset){
 						return asset.id == assetId;
 					})[0];
-					
-					if(currencyItem && currencyItem.divisible)
+					var value=new Big(currencyItem.pendingpos);
+					if (currencyItem && currencyItem.divisible)
 						var value=new Big(currencyItem.pendingpos).times(WHOLE_UNIT).valueOf();
 					
-					return value || currencyItem.pendingpos;
+					return value;
 				}
 
 				self.getBalance = function(assetId){
