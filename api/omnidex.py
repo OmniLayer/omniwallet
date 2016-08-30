@@ -54,7 +54,7 @@ def get_OHLCV(propertyid_desired, propertyid_selling):
 
 @app.route('/<int:propertyid_desired>/<int:propertyid_selling>')
 def get_orders_by_market(propertyid_desired, propertyid_selling):
-    orderbook = dbSelect("select ao.propertyiddesired, ao.propertyidselling, ao.AmountAvailable, ao.AmountDesired, ao.TotalSelling, ao.AmountAccepted, txj.txdata->'unitprice', ao.Seller, tx.TxRecvTime from activeoffers ao, transactions tx, txjson txj where ao.CreateTxDBSerialNum = txj.TxDBSerialNum and ao.CreateTxDBSerialNum = tx.TxDBSerialNum and ao.propertyiddesired = %s and ao.propertyidselling = %s and ao.OfferState = 'active';",[propertyid_desired,propertyid_selling])
+    orderbook = dbSelect("select ao.propertyiddesired, ao.propertyidselling, ao.AmountAvailable, ao.AmountDesired, ao.TotalSelling, ao.AmountAccepted, txj.txdata->'unitprice', ao.Seller, tx.TxRecvTime, 'active' from activeoffers ao, transactions tx, txjson txj where ao.CreateTxDBSerialNum = txj.TxDBSerialNum and ao.CreateTxDBSerialNum = tx.TxDBSerialNum and ao.propertyiddesired = %s and ao.propertyidselling = %s and ao.OfferState = 'active' union all select txj.txdata->'propertyiddesired',txj.txdata->'propertyidforsale',txj.txdata->'amountforsale',txj.txdata->'amountdesired',,txj.txdata->'amountforsale',0,,txj.txdata->'unitprice', ,txj.txdata->'sendingaddress', tx.TxRecvTime, 'pending' from transactions tx inner join txjson txj on tx.txdbserialnum = txj.txdbserialnum where tx.txdbserialnum < 0 and cast(txj.txdata->>'propertyidforsale' as numeric(19)) = %s and cast(txj.txdata->>'propertyiddesired' as numeric(19)) = %s",[propertyid_desired,propertyid_selling,propertyidselling,propertyiddesired])
     return jsonify({"status" : 200, "orderbook": [
         {
             "propertyid_desired":order[0], 
@@ -65,5 +65,6 @@ def get_orders_by_market(propertyid_desired, propertyid_selling):
             "accepted_amount": str(order[5]),
             "unit_price" : str(order[6]),
             "seller" : str(order[7]),
-            "time" : order[8]
+            "time" : order[8],
+            "status" : order[9]
         } for order in orderbook]})
