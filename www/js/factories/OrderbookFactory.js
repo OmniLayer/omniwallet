@@ -90,7 +90,7 @@ angular.module("omniFactories")
 					self.activeOffers = [];
 
 					// I get the orders for property selling asks
-					setTimeout(function(){
+					var updateAsks = function(){
 						$http.get("/v1/omnidex/"+tradingPair.desired.propertyid+"/"+tradingPair.selling.propertyid)
 						.then(function(response){
 							if(response.status != 200 || response.data.status !=200)
@@ -105,11 +105,12 @@ angular.module("omniFactories")
 					          return priceA.gt(priceB) ? 1 : priceA.lt(priceB) ? -1 : 0;
 					        });
 
-							setTimeout(this,3000)
+							setTimeout(updateAsks,3000)
 						})
-					},3000);
+					}
+					updateAsks();
 					
-					setTimeout(function(){
+					var updateBids = function(){
 						$http.get("/v1/omnidex/"+tradingPair.selling.propertyid+"/"+tradingPair.desired.propertyid)
 						.then(function(response){
 							if(response.status != 200 || response.data.status != 200)
@@ -124,9 +125,10 @@ angular.module("omniFactories")
 					          return priceA.lt(priceB) ? 1 : priceA.gt(priceB) ? -1 : 0;
 					        });
 
-							setTimeout(this, 3000)
+							setTimeout(updateBids, 3000)
 						})
-					},3000);
+					}
+					updateBids();
 
 
 					$http.get("/v1/omnidex/ohlcv/"+tradingPair.selling.propertyid+"/"+tradingPair.desired.propertyid)
