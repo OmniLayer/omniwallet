@@ -79,7 +79,7 @@ def insertomni(rawtx):
       else:
         amount = int(rawtx['MP']['amount'])
     else:
-      amount = rawtx['MP']['amountforsale']
+      amount = int(rawtx['MP']['amountforsale'])
 
     if txtype == 55:
       #handle grants to ourself or others
