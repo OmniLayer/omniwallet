@@ -1,6 +1,6 @@
 angular.module("omniFactories")
-	.factory("Orderbook",["$http","$rootScope","DExOrder","DExOffer","Transaction","Account","Wallet","ModalManager","MIN_MINER_FEE", "WHOLE_UNIT", "SATOSHI_UNIT", 
-		function OrderbookFactory($http, $rootScope, DExOrder,DExOffer,Transaction,Account,Wallet,ModalManager,MIN_MINER_FEE,WHOLE_UNIT,SATOSHI_UNIT){
+	.factory("Orderbook",["$http","DExOrder","DExOffer","Transaction","Account","Wallet","ModalManager","MIN_MINER_FEE", "WHOLE_UNIT", "SATOSHI_UNIT", 
+		function OrderbookFactory($http, DExOrder,DExOffer,Transaction,Account,Wallet,ModalManager,MIN_MINER_FEE,WHOLE_UNIT,SATOSHI_UNIT){
 			var Orderbook = function(tradingPair){
 				var self = this;
 
@@ -96,16 +96,14 @@ angular.module("omniFactories")
 							if(response.status != 200 || response.data.status !=200)
 								return // handle errors
 
-							$rootScope.$apply(function(){
-								var orderbook = [];
-								self.parseOrderbook(response.data.orderbook, orderbook,tradingPair.desired,tradingPair.selling);
-								self.askBook = orderbook;
-								self.askBook.sort(function(a, b) {
-						          var priceA = a.price;
-						          var priceB = b.price;
-						          return priceA.gt(priceB) ? 1 : priceA.lt(priceB) ? -1 : 0;
-						        });
-							})
+							var orderbook = [];
+							self.parseOrderbook(response.data.orderbook, orderbook,tradingPair.desired,tradingPair.selling);
+							self.askBook = orderbook;
+							self.askBook.sort(function(a, b) {
+					          var priceA = a.price;
+					          var priceB = b.price;
+					          return priceA.gt(priceB) ? 1 : priceA.lt(priceB) ? -1 : 0;
+					        });
 
 							setTimeout(this,3000)
 						})
@@ -117,16 +115,14 @@ angular.module("omniFactories")
 							if(response.status != 200 || response.data.status != 200)
 								return // handle errors
 							
-							$rootScope.$apply(function(){
-								var orderbook = [];
-								self.parseOrderbook(response.data.orderbook, orderbook,tradingPair.selling,tradingPair.desired);
-								self.bidBook = orderbook;
-								self.bidBook.sort(function(a, b) {
-						          var priceA = a.price;
-						          var priceB = b.price;
-						          return priceA.lt(priceB) ? 1 : priceA.gt(priceB) ? -1 : 0;
-						        });
-							});
+							var orderbook = [];
+							self.parseOrderbook(response.data.orderbook, orderbook,tradingPair.selling,tradingPair.desired);
+							self.bidBook = orderbook;
+							self.bidBook.sort(function(a, b) {
+					          var priceA = a.price;
+					          var priceB = b.price;
+					          return priceA.lt(priceB) ? 1 : priceA.gt(priceB) ? -1 : 0;
+					        });
 
 							setTimeout(this, 3000)
 						})
