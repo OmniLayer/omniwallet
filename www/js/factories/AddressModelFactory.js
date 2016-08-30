@@ -68,42 +68,55 @@ angular.module("omniFactories")
 					var currencyItem = self.balance.filter(function(asset){
 						return asset.id == assetId;
 					})[0];
-					var value=new Big(currencyItem.value);
-					if (currencyItem && currencyItem.divisible)
-						value=new Big(currencyItem.value).times(WHOLE_UNIT).valueOf();
-					
-					return value;
+
+					if(currencyItem){
+						if(currencyItem.divisible)
+							var value=new Big(currencyItem.value).times(WHOLE_UNIT).valueOf();
+						
+						return value || currencyItem.value;
+					} else {
+						return 0
+					}
 				}
 
 				self.getPendingNeg = function(assetId){
 					var currencyItem = self.balance.filter(function(asset){
 						return asset.id == assetId;
 					})[0];
-
-					var value=new Big(currencyItem.pendingneg);
-					if (currencyItem && currencyItem.divisible)
-						var value=new Big(currencyItem.pendingneg).times(WHOLE_UNIT).valueOf();
-					
-					return value;
+					if(currencyItem){
+						if(currencyItem.divisible)
+							var value=new Big(currencyItem.pendingneg).times(WHOLE_UNIT).valueOf();
+						
+						return value || currencyItem.pendingneg;
+					} else {
+						return 0
+					}
 				}
 
 				self.getPendingPos = function(assetId){
 					var currencyItem = self.balance.filter(function(asset){
 						return asset.id == assetId;
 					})[0];
-					var value=new Big(currencyItem.pendingpos);
-					if (currencyItem && currencyItem.divisible)
-						var value=new Big(currencyItem.pendingpos).times(WHOLE_UNIT).valueOf();
 					
-					return value;
+					if(currencyItem){
+						if(currencyItem && currencyItem.divisible)
+							var value=new Big(currencyItem.pendingpos).times(WHOLE_UNIT).valueOf();
+						
+						return value || currencyItem.pendingpos;
+					} else {
+						return 0
+					}
 				}
 
 				self.getBalance = function(assetId){
 					var currencyItem = self.balance.filter(function(asset){
 						return asset.id == assetId;
 					});
-
-					return currencyItem.length > 0 ? currencyItem[0].value : 0;
+					if(currencyItem){
+						return currencyItem.length > 0 ? currencyItem[0].value : 0;
+					} else {
+						return 0
+					}
 				}
 
 				self.initialize();
