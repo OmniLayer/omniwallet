@@ -182,6 +182,14 @@ angular.module("omniFactories")
 								order = new DExOrder(offer);
 								side.push(order);
 							}
+						} else {
+							var cancelled = self.activeOffers.find(function(element){
+								return element.status == 'active' && element.desired_amount == iscanceled.desired_amount && element.selling_amount == iscanceled.total_amount;
+							});
+
+							if(cancelled){
+								self.activeOffers.splice(self.activeOffers.indexOf(cancelled),1);
+							}
 						}
 					});
 				}
