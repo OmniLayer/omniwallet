@@ -7,7 +7,7 @@
   <div class="row">
     <div class="col-xs-8">
       <div class="panel panel-default">
-        <div class="panel-body">
+        <div class="panel-body" ng-if="orderbook && orderbook.chartData">
           <nvd3 data="orderbook.chartData" 
                 options="orderbook.chartConfig" 
                 class="with-3d-shadow with-transitions">
