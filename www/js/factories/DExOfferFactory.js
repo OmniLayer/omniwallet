@@ -20,7 +20,7 @@ angular.module("omniFactories")
 					self.price = new Big(data.unit_price);
 				}
 				self.time = Date.parse(data.time);
-
+				self.status = data.status;
 
 			};
 
