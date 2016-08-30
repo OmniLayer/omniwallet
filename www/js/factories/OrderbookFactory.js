@@ -97,7 +97,7 @@ angular.module("omniFactories")
 								return // handle errors
 
 							var orderbook = [];
-							self.parseOrderbook(response.data.orderbook, orderbook,tradingPair.desired,tradingPair.selling);
+							self.parseOrderbook(response.data.orderbook, orderbook,tradingPair.desired,tradingPair.selling,response.data.cancels);
 							self.askBook = orderbook;
 							self.askBook.sort(function(a, b) {
 					          var priceA = a.price;
@@ -117,7 +117,7 @@ angular.module("omniFactories")
 								return // handle errors
 							
 							var orderbook = [];
-							self.parseOrderbook(response.data.orderbook, orderbook,tradingPair.selling,tradingPair.desired);
+							self.parseOrderbook(response.data.orderbook, orderbook,tradingPair.selling,tradingPair.desired,response.data.cancels);
 							self.bidBook = orderbook;
 							self.bidBook.sort(function(a, b) {
 					          var priceA = a.price;
@@ -146,31 +146,38 @@ angular.module("omniFactories")
 
 				};
 
-				self.parseOrderbook =function(orderbook,side,selling,desired){
+				self.parseOrderbook =function(orderbook,side,selling,desired,cancels){
 					orderbook.forEach(function(offerData){
-						var order = null;
-						var offer = new DExOffer(offerData,selling,desired,selling == self.tradingPair.selling ? "bid":"ask");
-						side.forEach(function(orderData){
-							if(orderData.price.eq(offer.price)){
-								order = orderData;
-								order.addOffer(offer)
+						// check if there's a pending cancel for this offer
+						var iscanceled = cancels.find(function(cancelOffer){
+							return cancelOffer.desired_amount == offerData.desired_amount && cancelOffer.total_amount == offerData.total_amount;
+						})
+						if(!iscanceled){
+							var order = null;
+							var offer = new DExOffer(offerData,selling,desired,selling == self.tradingPair.selling ? "bid":"ask");
+							side.forEach(function(orderData){
+								if(orderData.price.eq(offer.price)){
+									order = orderData;
+									order.addOffer(offer)
+								}
+							})
+							let owner = Wallet.tradableAddresses().find(function(elem){
+								return elem.hash == offerData.seller
+							})
+							if(owner){
+								offer.ownerAddress = owner;
+								offer.side = selling == self.tradingPair.selling ? "bid":"ask";
+								if(!self.activeOffers.find(function(element){return element.time == offer.time;})){
+									self.activeOffers.push(offer);
+								}
 							}
-						})
-						let owner = Wallet.tradableAddresses().find(function(elem){
-							return elem.hash == offerData.seller
-						})
-						if(owner){
-							offer.ownerAddress = owner;
-							offer.side = selling == self.tradingPair.selling ? "bid":"ask";
-							if(!self.activeOffers.find(function(element){return element.time == offer.time;})){
-								self.activeOffers.push(offer);
+							if(order == null){
+								order = new DExOrder(offer);
+								side.push(order);
 							}
 						}
-						if(order == null){
-							order = new DExOrder(offer);
-							side.push(order);
-						}
-					});				}
+					});
+				}
 
 				
 
