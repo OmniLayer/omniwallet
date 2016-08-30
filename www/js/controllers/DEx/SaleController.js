@@ -62,4 +62,5 @@ angular.module("omniControllers")
 			};
 
 			$scope.setAddress($scope.wallet.omniTradableAddresses()[0])
+			$scope.showtesteco = $scope.account.getSetting('showtesteco');
 		}])
