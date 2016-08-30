@@ -76,17 +76,17 @@ angular.module("omniServices")
 	        	var address = new Address(raw.address,raw.privkey,raw.pubkey);
 
                 BalanceSocket.on("address:"+address.hash, function(data){
-                    var update = false;                    
-                    var asset = null;
-                    data.balance.forEach(function(balanceItem) {
+                    var update = false;
+                    data.balance.forEach(function(balanceItem) {                    
+                    	var asset = null;
                         var tradable = ((address.privkey && address.privkey.length == 58) || address.pubkey) && balanceItem.value > 0;
                         for (var j = 0; j < self.assets.length; j++) {
                           var currencyItem = self.assets[j];
                           if (currencyItem.symbol == balanceItem.symbol) {
                             asset = currencyItem;
                             if (asset.addresses().indexOf(address) == -1){
-                             tradable ? asset.tradableAddresses.push(address) : asset.watchAddresses.push(address) ;
-                             asset.tradable = asset.tradable || tradable;
+                              tradable ? asset.tradableAddresses.push(address) : asset.watchAddresses.push(address) ;
+                              asset.tradable = asset.tradable || tradable;
                             }
                             break;
                           }
@@ -100,11 +100,10 @@ angular.module("omniServices")
                             self.assets.push(asset);
                             update=true;
                         }
+                        if(address.assets.indexOf(asset) == -1){
+	                        address.assets.push(asset);
+	                    }
                     });
-
-                    if(address.assets.indexOf(asset) == -1){
-                        address.assets.push(asset);
-                    }
 
 					if(update){
 						appraiser.updateValues();
