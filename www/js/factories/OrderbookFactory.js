@@ -170,6 +170,13 @@ angular.module("omniFactories")
 								if(!self.activeOffers.find(function(element){return element.time == offer.time;})){
 									self.activeOffers.push(offer);
 								}
+								var confirmed = self.activeOffers.find(function(element){
+									return element.status == 'pending' && element.desired_amount == offer.desired_amount && element.selling_amount == offer.selling_amount;
+								});
+
+								if(confirmed){
+									self.activeOffers.splice(self.activeOffers.indexOf(confirmed),1);
+								}
 							}
 							if(order == null){
 								order = new DExOrder(offer);
