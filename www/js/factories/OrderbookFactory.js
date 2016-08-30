@@ -131,7 +131,7 @@ angular.module("omniFactories")
 					updateBids();
 
 
-					$http.get("/v1/omnidex/ohlcv/"+tradingPair.selling.propertyid+"/"+tradingPair.desired.propertyid)
+					$http.get("/v1/omnidex/ohlcv/"+tradingPair.desired.propertyid+"/"+tradingPair.selling.propertyid)
 						.then(function(response){
 							if(response.status != 200 || response.data.status !=200)
 								return // handle errors
