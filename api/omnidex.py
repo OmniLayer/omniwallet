@@ -21,13 +21,13 @@ def getDesignatingCurrencies():
     except ValueError:
         abort(make_response('Field \'ecosystem\' invalid value, request failed', 400))
 
-    designating_currencies = dbSelect("select distinct ao.propertyidselling as propertyid, sp.propertyname from activeoffers ao inner join SmartProperties sp on ao.propertyidselling = sp.propertyid and sp.ecosystem = %s where (ao.propertyiddesired not in (1, 2, 31)) or (ao.propertyiddesired = 1 and ao.propertyidselling = 31)  order by ao.propertyidselling ",[ecosystem])
+    designating_currencies = dbSelect("select distinct ao.propertyiddesired as propertyid, sp.propertyname from activeoffers ao inner join SmartProperties sp on ao.propertyiddesired = sp.propertyid and sp.ecosystem = %s where (ao.propertyidselling not in (1, 2, 31)) or (ao.propertyidselling = 1 and ao.propertyiddesired = 31)  order by ao.propertyiddesired ",[ecosystem])
     return jsonify({"status" : 200, "currencies": [{"propertyid":currency[0], "propertyname" : currency[1] } for currency in designating_currencies]})
 
 
 @app.route('/<int:denominator>')
 def get_markets_by_denominator(denominator):
-    markets = dbSelect("SELECT distinct ao.propertyiddesired as marketid, desired.propertyname as marketname, max(ao.unitprice), sum(ao.amountdesired) as supply, max(ho.unitprice) from activeoffers ao inner join transactions createtx on ao.createtxdbserialnum = createtx.txdbserialnum left outer join activeoffers ho on ao.createtxdbserialnum = ho.createtxdbserialnum and createtx.txrecvtime < (CURRENT_TIMESTAMP - INTERVAL '1 day') inner join SmartProperties desired on ao.propertyiddesired = desired.propertyid and desired.protocol = 'Omni' where ao.propertyidselling = %s and (ao.OfferState = 'active' or ho.OfferState = 'sold') group by marketid, marketname order by supply;",[denominator])
+    markets = dbSelect("SELECT distinct ao.propertyidselling as marketid, selling.propertyname as marketname, max(ao.unitprice), sum(ao.amountselling) as supply, max(ho.unitprice) from activeoffers ao inner join transactions createtx on ao.createtxdbserialnum = createtx.txdbserialnum left outer join activeoffers ho on ao.createtxdbserialnum = ho.createtxdbserialnum and createtx.txrecvtime < (CURRENT_TIMESTAMP - INTERVAL '1 day') inner join SmartProperties selling on ao.propertyidselling = selling.propertyid and selling.protocol = 'Omni' where ao.propertyiddesired = %s and (ao.OfferState = 'active' or ho.OfferState = 'sold') group by marketid, marketname order by supply;",[denominator])
     return jsonify({"status" : 200, "markets": [
     	{
     		"propertyid":currency[0], 
