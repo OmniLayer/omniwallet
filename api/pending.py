@@ -14,7 +14,7 @@ def insertpending(txhex):
     #handle btc pending amounts
     insertbtc(rawtx)
 
-  if ('amount' in rawtx['MP'] and decimal.Decimal(rawtx['MP']['amount'])>0) or 'unitprice' in rawtx['MP']:
+  if 'MP' in rawtx: #('amount' in rawtx['MP'] and decimal.Decimal(rawtx['MP']['amount'])>0) or 'unitprice' in rawtx['MP']:
     #only run if we have a non zero positive amount to process, otherwise exit
     insertomni(rawtx)
 
