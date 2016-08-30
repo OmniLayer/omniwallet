@@ -105,7 +105,7 @@ angular.module("omniFactories")
 					          return priceA.gt(priceB) ? 1 : priceA.lt(priceB) ? -1 : 0;
 					        });
 
-							setTimeout(updateAsks,3000)
+							self.updateAsksTimeout = setTimeout(updateAsks,3000);
 						})
 					}
 					updateAsks();
@@ -125,7 +125,7 @@ angular.module("omniFactories")
 					          return priceA.lt(priceB) ? 1 : priceA.gt(priceB) ? -1 : 0;
 					        });
 
-							setTimeout(updateBids, 3000)
+							self.updateBidsTimeout = setTimeout(updateBids, 3000);
 						})
 					}
 					updateBids();

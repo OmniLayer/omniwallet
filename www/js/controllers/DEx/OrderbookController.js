@@ -6,6 +6,12 @@ angular.module("omniControllers")
 			$scope.noOrders = true;
 
 			$scope.loadOrderbook = function(propertyIdDesired, propertyIdSelling){
+				if($scope.orderbook.updateBidsTimeout){
+					clearTimeout($scope.orderbook.updateBidsTimeout);
+				}
+				if($scope.orderbook.updateAsksTimeout){
+					clearTimeout($scope.orderbook.updateAsksTimeout);
+				}
 				PropertyManager.getProperty(propertyIdDesired).then(function(result){
 					$scope.propertyDesired = result.data;
 					PropertyManager.getProperty(propertyIdSelling).then(function(result){
