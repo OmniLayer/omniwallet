@@ -184,7 +184,7 @@ angular.module("omniFactories")
 							}
 						} else {
 							var cancelled = self.activeOffers.find(function(element){
-								return element.status == 'active' && element.desired_amount == iscanceled.desired_amount && element.selling_amount == iscanceled.total_amount;
+								return element.status == 'active' && element.rawdata.desired_amount == iscanceled.desired_amount && element.rawdata.selling_amount == iscanceled.total_amount;
 							});
 
 							if(cancelled){
