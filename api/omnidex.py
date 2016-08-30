@@ -27,7 +27,7 @@ def getDesignatingCurrencies():
 
 @app.route('/<int:denominator>')
 def get_markets_by_denominator(denominator):
-    markets = dbSelect("SELECT distinct ao.propertyidselling as marketid, selling.propertyname as marketname, max(ao.unitprice), sum(ao.amountforsale) as supply, max(ho.unitprice) from activeoffers ao inner join transactions createtx on ao.createtxdbserialnum = createtx.txdbserialnum left outer join activeoffers ho on ao.createtxdbserialnum = ho.createtxdbserialnum and createtx.txrecvtime < (CURRENT_TIMESTAMP - INTERVAL '1 day') inner join SmartProperties selling on ao.propertyidselling = selling.propertyid and selling.protocol = 'Omni' where ao.propertyiddesired = %s and (ao.OfferState = 'active' or ho.OfferState = 'sold') group by marketid, marketname order by supply;",[denominator])
+    markets = dbSelect("SELECT distinct ao.propertyidselling as marketid, selling.propertyname as marketname, max(ao.unitprice), sum(ao.totalselling) as supply, max(ho.unitprice) from activeoffers ao inner join transactions createtx on ao.createtxdbserialnum = createtx.txdbserialnum left outer join activeoffers ho on ao.createtxdbserialnum = ho.createtxdbserialnum and createtx.txrecvtime < (CURRENT_TIMESTAMP - INTERVAL '1 day') inner join SmartProperties selling on ao.propertyidselling = selling.propertyid and selling.protocol = 'Omni' where ao.propertyiddesired = %s and (ao.OfferState = 'active' or ho.OfferState = 'sold') group by marketid, marketname order by supply;",[denominator])
     return jsonify({"status" : 200, "markets": [
     	{
     		"propertyid":currency[0], 
