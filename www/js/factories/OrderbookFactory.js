@@ -1,6 +1,6 @@
 angular.module("omniFactories")
 	.factory("Orderbook",["$http","DExOrder","DExOffer","Transaction","Account","Wallet","ModalManager","MIN_MINER_FEE", "WHOLE_UNIT", "SATOSHI_UNIT", 
-		function OrderbookFactory($http,DExOrder,DExOffer,Transaction,Account,Wallet,ModalManager,MIN_MINER_FEE,WHOLE_UNIT,SATOSHI_UNIT){
+		function OrderbookFactory($http, $rootScope, DExOrder,DExOffer,Transaction,Account,Wallet,ModalManager,MIN_MINER_FEE,WHOLE_UNIT,SATOSHI_UNIT){
 			var Orderbook = function(tradingPair){
 				var self = this;
 
@@ -96,7 +96,7 @@ angular.module("omniFactories")
 							if(response.status != 200 || response.data.status !=200)
 								return // handle errors
 
-							$scope.$apply(function(){
+							$rootScope.$apply(function(){
 								var orderbook = [];
 								self.parseOrderbook(response.data.orderbook, orderbook,tradingPair.desired,tradingPair.selling);
 								self.askBook = orderbook;
@@ -117,7 +117,7 @@ angular.module("omniFactories")
 							if(response.status != 200 || response.data.status != 200)
 								return // handle errors
 							
-							$scope.$apply(function(){
+							$rootScope.$apply(function(){
 								var orderbook = [];
 								self.parseOrderbook(response.data.orderbook, orderbook,tradingPair.selling,tradingPair.desired);
 								self.bidBook = orderbook;
