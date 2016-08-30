@@ -171,7 +171,7 @@ angular.module("omniFactories")
 									self.activeOffers.push(offer);
 								}
 								var confirmed = self.activeOffers.find(function(element){
-									return element.status == 'pending' && element.desired_amount == offer.desired_amount && element.selling_amount == offer.selling_amount;
+									return offer.status == 'active' && element.status == 'pending' && element.desired_amount == offer.desired_amount && element.selling_amount == offer.selling_amount;
 								});
 
 								if(confirmed){
