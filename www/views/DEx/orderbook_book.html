@@ -9,7 +9,9 @@
 		</thead>
 		<tbody>
 			<tr ng-show="orderbook.bidBook.length == 0" >
-		      <h3 class="col-xs-12">{{ 'OMNIDEX.ORDERBOOK.EMPTY' | translate }}</h3>
+				<td colspan="4">
+			      	<h3>{{ 'OMNIDEX.ORDERBOOK.EMPTY' | translate }}</h3>
+			      </td>
 		    </tr>
 			<tr ng-repeat="order in orderbook.bidBook" ng-class="{pending:order.hasPending}">
 				<td>{{order.offers.length}}</td>
@@ -31,7 +33,9 @@
 		</thead>
 		<tbody>
 			<tr ng-show="orderbook.askBook.length == 0" >
+				<td colspan="4">
 		      <h3 class="col-xs-12">{{ 'OMNIDEX.ORDERBOOK.EMPTY' | translate }}</h3>
+		      </td>
 		    </tr>
 			<tr ng-repeat="order in orderbook.askBook" ng-class="{pending:order.hasPending}">
 				<td>{{order.offers.length}}</td>
