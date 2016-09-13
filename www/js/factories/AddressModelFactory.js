@@ -113,7 +113,7 @@ angular.module("omniFactories")
 						return asset.id == assetId;
 					});
 					if(currencyItem){
-						return currencyItem.length > 0 ? currencyItem[0].divisible ? new Big(currencyItem[0].value).times(WHOLE_UNIT) : new Big(currencyItem[0].value) : 0;
+						return currencyItem.length > 0 ? currencyItem[0].divisible ? new Big(currencyItem[0].value).times(WHOLE_UNIT) : new Big(currencyItem[0].value) : new Big(0);
 					} else {
 						return 0
 					}
