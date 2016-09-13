@@ -13,7 +13,7 @@
           <div class="col-sm-2">{{ 'TABLES.OFFERS.CANCEL' | translate }}</div>
     </div>
     <div class="row table-row" ng-show="orderbook.activeOffers.length == 0" >
-      <h3 class="col-xs-12">{{ 'OMNIDEX.ORDERBOOK.NOACTIVEOFFERS' | translate }}</h3>
+      <h3 class="col-xs-12 text-center">{{ 'OMNIDEX.ORDERBOOK.NOACTIVEOFFERS' | translate }}</h3>
     </div>
     <div class="row table-row" ng-repeat="offer in orderbook.activeOffers" ng-class="{pending:offer.status == 'pending'}">
 
