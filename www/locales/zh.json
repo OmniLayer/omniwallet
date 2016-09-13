@@ -137,7 +137,8 @@
 		"SETTINGS":"账户设置",
 		"TRADE":"交易",
 		"TRANSACTIONS":"交易",
-		"WALLET":"我的钱包"
+		"WALLET":"我的钱包",
+		"OMNIDEX":"OmniDex"
 	},
 	"MODALS":{
 		"CREATE":{
@@ -540,7 +541,8 @@
 			"AMOUNT":"Amount",
 			"TOTAL":"Total Cost",
 			"CANCEL":"Cancel",
-			"BUY":"Buy"
+			"BUY":"Buy",
+			"SIDE": "Side"
 		}
 	},
 	"EXCHANGE":{
@@ -630,6 +632,41 @@
 			"CANCELTITLE":"Confirm Sale Cancellation",
 			"CANCELCONFIRM":"Cancel Sale",
 			"CANCELMESSAGE":"You're about to cancel this sale. If this is correct, please press Cancel Sale below. "
+		}
+	},
+	"OMNIDEX" : {
+		"MARKETS" : {
+			"TITLE" : "Markets",
+			"NEW" : "Start New Market",
+			"SYMBOL" : "ID",
+			"NAME" : "Symbol",
+			"PRICE" : "Price",
+			"VOLUME" : "24h Volume",
+			"SUPPLY" : "Total Supply",
+			"CAP" : "Market Cap",
+			"CHANGE" : "24h Change",
+			"NOMARKETS" : "There are currently no open markets",
+			"DENOMINATOR" : "Choose Denominating Currency"
+		},
+		"ORDERBOOK" : {
+			"TITLE" : "{{ currency }} Exchange",
+			"BUY" : "Buy",
+			"SELL": "Sell",
+			"BALANCE" : "Your balance",
+			"TOTALPRICE" : "Total",
+			"UNITPRICE" :"Price",
+			"AMOUNT" : "Amount",
+			"NOCOINS" : "You don't have any {{propertyName}} available",
+			"ACTIVEOFFERS" : "Your Offers",
+			"NOACTIVEOFFERS" : "You don't have any active offers",
+			"EMPTY" : "No offers"
+		},
+		"SALE" : {
+			"TITLE" : "Open New Market",
+			"CHOOSECOINSELLING" : "Choose coin to sell",
+			"SELLINGAMOUNT" : "Amount to sell",
+			"CHOOSECOINDESIRED" : "Choose coin desired",
+			"DESIREDAMOUNT" : "Amount desired"
 		}
 	}
 }

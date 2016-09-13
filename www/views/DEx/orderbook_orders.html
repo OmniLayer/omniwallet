@@ -1,0 +1,36 @@
+<div class="col-md-12">
+  <h4>
+    <strong>{{ 'EXCHANGE.TRADE.ACTIVE' | translate}}</strong>
+  </h4>
+</div>
+<div class="col-md-12">
+  <div class="om-table">
+    <div class="row table-header hidden-xs">
+          <div class="col-sm-3">{{ 'TABLES.OFFERS.PRICE' | translate }}</div>
+          <div class="col-sm-2">{{ 'TABLES.OFFERS.AMOUNT' | translate }}</div>
+          <div class="col-sm-2">{{ 'TABLES.OFFERS.TOTAL' | translate }}</div>
+          <div class="col-sm-3">{{ 'TABLES.OFFERS.SIDE' | translate }}</div>
+          <div class="col-sm-2">{{ 'TABLES.OFFERS.CANCEL' | translate }}</div>
+    </div>
+    <div class="row table-row" ng-show="orderbook.activeOffers.length == 0" >
+      <h3 class="col-xs-12 text-center">{{ 'OMNIDEX.ORDERBOOK.NOACTIVEOFFERS' | translate }}</h3>
+    </div>
+    <div class="row table-row" ng-repeat="offer in orderbook.activeOffers" ng-class="{pending:offer.status == 'pending'}">
+
+      <div class="visible-xs col-xs-5">{{ 'TABLES.OFFERS.PRICE' | translate }}</div>
+      <div class="col-xs-7 col-sm-3" class="number" title="{{offer.price}}" ng-bind-html="offer.price | bigjs: '0,0.00000000'"></div> 
+
+      <div class="visible-xs col-xs-5">{{ 'TABLES.OFFERS.AMOUNT' | translate }}</div>
+      <div class="col-xs-7 col-sm-2" class="number" title="{{offer.available_amount}}" ng-bind-html="offer.available_amount | bigjs: '0,0.00000000'"></div> 
+
+      <div class="visible-xs col-xs-5">{{ 'TABLES.OFFERS.TOTAL' | translate }}</div>
+      <div class="col-xs-7 col-sm-2" class="number" title="{{offer.desired_amount}}" ng-bind-html="offer.desired_amount | bigjs: '0,0.00000000'"></div> 
+
+      <div class="visible-xs col-xs-5">{{ 'TABLES.OFFERS.SIDE' | translate }}</div>
+      <div class="col-xs-7 col-sm-3" class="number" title="{{offer.side}}">{{offer.side}}</div> 
+
+      <div class="visible-xs col-xs-5">{{ 'TABLES.OFFERS.CANCEL' | translate }}</div>
+      <div class="col-xs-7 col-sm-2"><button class="btn btn-secondary btn-sm" ng-show="offer.status == 'active'" ng-click="confirmCancel(offer)" type="button">{{ 'EXCHANGE.MYOFFERS.CANCEL' | translate }}</button></div>
+    </div>
+  </div>
+</div>

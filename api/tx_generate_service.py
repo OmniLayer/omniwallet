@@ -24,11 +24,16 @@ magicbyte=0
 testnet=False
 exodus_address=mainnet_exodus_address
 
+@app.route('/fee')
+def estimatefee():
+    fee = estimateFee(OmniTransaction.confirmtarget)['result']
+    return jsonify({"status" : 200, "fee" : fee})
+
 @app.route('/<int:tx_type>', methods=['POST'])
 def generate_tx(tx_type):
 
     #update this to support more transactions
-    supported_transactions = [50,51,54,55,56,0,20,22]
+    supported_transactions = [50,51,54,55,56,0,20,22,25,26,27,28]
 
     if tx_type not in supported_transactions:
         return jsonify({ 'status': 400, 'data': 'Unsupported transaction type '+str(tx_type) })
@@ -53,12 +58,20 @@ def generate_tx(tx_type):
         expected_fields+=['tx_hash', 'amount']
     elif tx_type in [55,56]:
         expected_fields+=['currency_identifier', 'number_properties']
+    elif tx_type == 25:
+        expected_fields+=['propertyidforsale', 'amountforsale', 'propertiddesired', 'amountdesired']
+    elif tx_type == 26:
+        expected_fields+=['propertyidforsale', 'amountforsale', 'propertiddesired', 'amountdesired']
+    elif tx_type == 27:
+        expected_fields+=['propertyidforsale', 'propertiddesired']
+    elif tx_type == 28:
+        expected_fields+=['ecosystem']
+
     for field in expected_fields:
         if field not in request.form:
             return jsonify({ 'status': 403, 'data': 'No field in request form '+field })
         elif request.form[field] == '' and field not in null_fields:
             return jsonify({ 'status': 403, 'data': 'Empty field in request form '+field })
-
     
     tx = OmniTransaction(tx_type, request.form)
 

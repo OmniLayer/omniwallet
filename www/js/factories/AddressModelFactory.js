@@ -12,7 +12,7 @@ angular.module("omniFactories")
 					self.privkey = privkey;
 					self.pubkey = pubkey;
 					self.balance = [];
-					//self.transactions = [];
+					self.assets = [];
 					self.qr = "https://chart.googleapis.com/chart?chs=150x150&cht=qr&chl="+hash+"&choe=UTF-8";
 					
 					//AddressManager.getTransactions(hash).then(function(result){
@@ -69,21 +69,28 @@ angular.module("omniFactories")
 						return asset.id == assetId;
 					})[0];
 
-					if(currencyItem.divisible)
-						var value=new Big(currencyItem.value).times(WHOLE_UNIT).valueOf();
-					
-					return value || currencyItem.value;
+					if(currencyItem){
+						if(currencyItem.divisible)
+							var value=new Big(currencyItem.value).times(WHOLE_UNIT).valueOf();
+						
+						return value || currencyItem.value;
+					} else {
+						return 0
+					}
 				}
 
 				self.getPendingNeg = function(assetId){
 					var currencyItem = self.balance.filter(function(asset){
 						return asset.id == assetId;
 					})[0];
-
-					if(currencyItem.divisible)
-						var value=new Big(currencyItem.pendingneg).times(WHOLE_UNIT).valueOf();
-					
-					return value || currencyItem.pendingneg;
+					if(currencyItem){
+						if(currencyItem.divisible)
+							var value=new Big(currencyItem.pendingneg).times(WHOLE_UNIT).valueOf();
+						
+						return value || currencyItem.pendingneg;
+					} else {
+						return 0
+					}
 				}
 
 				self.getPendingPos = function(assetId){
@@ -91,18 +98,25 @@ angular.module("omniFactories")
 						return asset.id == assetId;
 					})[0];
 					
-					if(currencyItem && currencyItem.divisible)
-						var value=new Big(currencyItem.pendingpos).times(WHOLE_UNIT).valueOf();
-					
-					return value || currencyItem.pendingpos;
+					if(currencyItem){
+						if(currencyItem && currencyItem.divisible)
+							var value=new Big(currencyItem.pendingpos).times(WHOLE_UNIT).valueOf();
+						
+						return value || currencyItem.pendingpos;
+					} else {
+						return 0
+					}
 				}
 
 				self.getBalance = function(assetId){
 					var currencyItem = self.balance.filter(function(asset){
 						return asset.id == assetId;
-					})[0];
-
-					return currencyItem.value;
+					});
+					if(currencyItem){
+						return currencyItem.length > 0 ? currencyItem[0].divisible ? new Big(currencyItem[0].value).times(WHOLE_UNIT) : new Big(currencyItem[0].value) : new Big(0);
+					} else {
+						return 0
+					}
 				}
 
 				self.initialize();

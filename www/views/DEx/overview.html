@@ -1,0 +1,34 @@
+<div ng-controller="DExOrderbookController">
+    <div class="row om-row">
+      <div class="col-xs-3 col-sm-3 col-md-4 col-lg-4 text-left om-title">
+        {{ 'OMNIDEX.ORDERBOOK.TITLE' | translate:{currency: orderbook.tradingPair.selling.name} }}
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-xs-8">
+      <div class="panel panel-default">
+        <div class="panel-body" ng-if="orderbook && orderbook.chartData">
+          <nvd3 data="orderbook.chartData" 
+                options="orderbook.chartConfig" 
+                class="with-3d-shadow with-transitions">
+          </nvd3>
+        </div>
+      </div>
+    </div>
+    <div class="col-xs-4">
+      <div class="panel panel-default">
+        <div class="panel-body" ng-include="'/views/DEx/markets.html'">
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row om-row" ng-include="'/views/DEx/orderbook_orders.html'">
+    
+  </div>
+  <div class="row" ng-include="'/views/DEx/orderbook_form.html'">
+    
+  </div>
+  <div class="row" ng-include="'/views/DEx/orderbook_book.html'">
+    
+  </div>
+</div>
