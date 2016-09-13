@@ -8,6 +8,9 @@
 			<th>Cumulative</th>
 		</thead>
 		<tbody>
+			<tr ng-show="orderbook.bidBook.length == 0" >
+		      <h3 class="col-xs-12">{{ 'OMNIDEX.ORDERBOOK.EMPTY' | translate }}</h3>
+		    </tr>
 			<tr ng-repeat="order in orderbook.bidBook" ng-class="{pending:order.hasPending}">
 				<td>{{order.offers.length}}</td>
 				<td>{{order.price.toFixed(8)}}</td>
@@ -27,6 +30,9 @@
 			<th>Cumulative</th>
 		</thead>
 		<tbody>
+			<tr ng-show="orderbook.askBook.length == 0" >
+		      <h3 class="col-xs-12">{{ 'OMNIDEX.ORDERBOOK.EMPTY' | translate }}</h3>
+		    </tr>
 			<tr ng-repeat="order in orderbook.askBook" ng-class="{pending:order.hasPending}">
 				<td>{{order.offers.length}}</td>
 				<td>{{order.price.toFixed(8)}}</td>

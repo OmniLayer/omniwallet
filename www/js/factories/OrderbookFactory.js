@@ -77,11 +77,11 @@ angular.module("omniFactories")
 						return ((address.privkey && address.privkey.length == 58) || address.pubkey)
 					});
 					self.buyAddresses = self.addresses.filter(function(address){
-						return address.getBalance(self.desired.propertyid) > 0;
+						return address.getBalance(self.desired.propertyid).gt(0);
 					});
 					self.buyOrder.address = self.buyAddresses.length > 0 ? self.buyAddresses[0] : undefined;
 					self.sellAddresses = self.addresses.filter(function(address){
-						return address.getBalance(self.selling.propertyid) > 0;
+						return address.getBalance(self.selling.propertyid).gt(0);
 					});
 					self.sellOrder.address = self.sellAddresses.length > 0 ? self.sellAddresses[0] : undefined;
 
@@ -263,7 +263,7 @@ angular.module("omniFactories")
 				};
 
 				self.getBalance = function(address, assetId){
-					return address && address.getBalance(assetId) ? new Big(address.getBalance(assetId)).times(WHOLE_UNIT).valueOf() : 0;
+					return address && address.getBalance(assetId).valueOf();
 				}
 
 				self.initialize();

@@ -46,4 +46,25 @@ angular.module("omniControllers")
 					transaction:dexOffer
 				});
 			}
+			$scope.confirmCancelAll = function(address){
+			 	var fee = Account.settings.minerFee || MIN_MINER_FEE;
+				var dexOffer = new Transaction(27,address,fee,{
+						transaction_version:0,
+						propertyidforsale:$scope.orderbook.tradingPair.selling.propertyid,
+						propertiddesired:$scope.orderbook.tradingPair.desired.propertyid
+					});
+				ModalManager.openConfirmationModal({
+					dataTemplate: '/views/modals/partials/dex_cancel.html',
+					scope: {
+						title:"Cancel DEx Offers By Pair",
+						address:address,
+						saleCurrency:$scope.orderbook.tradingPair.selling.propertyid,
+						desiredCurrency:$scope.orderbook.tradingPair.desired.propertyid,
+						totalCost:dexOffer.totalCost,
+						confirmText: "Cancel All",
+						successMessage: "The offers where cancelled successfully"
+					},
+					transaction:dexOffer
+				});
+			}
 	}]);

@@ -658,7 +658,9 @@ angular.module("omniConfig")
 			"UNITPRICE" :"Price",
 			"AMOUNT" : "Amount",
 			"NOCOINS" : "You don't have any {{propertyName}} available",
-			"ACTIVEOFFERS" : "Your Offers"
+			"ACTIVEOFFERS" : "Your Offers",
+			"NOACTIVEOFFERS" : "You don't have any active offers",
+			"EMPTY" : "No offers"
 		},
 		"SALE" : {
 			"TITLE" : "Open New Market",
