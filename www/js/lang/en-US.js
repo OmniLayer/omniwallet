@@ -56,26 +56,26 @@ angular.module("omniConfig")
             "TITLE":"Contact Us"
 		},
 		"OMNI":{
-                        "TITLE":"About Omni",
-                        "FOUNDATION":{
-                                "TITLE":"Omni Foundation",
-                                "FIRST":"In September 2013, the Mastercoin Foundation was formed to temporarily manage the funds in the Exodus Address and the distribution of the development MSC. The board of the Mastercoin Foundation has declared its intention to minimize its temporary central role by transitioning the decision making to Mastercoin owners through proof of stake voting.",
-                                "SECOND": "In January 2016 the Mastercoin Foundation was rebranded to the Omni Foundation and the primary tokens of the project, MSC, where renamed to OMNI. The Foundation advocates for the use of the Omni Protocol and tries to build a community of people who develop it. All budget items, board minutes, Dev OMNI vesting schedule, and bounties are public record and available to anyone on the ",
-                                "LINK": "Foundation's Website"
-                        },
-                        "PROTOCOL":{
-                                "TITLE":"Omni Protocol",
-                                "PARAGRAPH":"The Omni Protocol is a communications protocol that uses the Bitcoin block chain to enable features such as smart contracts, user currencies and decentralized peer-to-peer exchanges. A common analogy that is used to describe the relation of the Omni Protocol to Bitcoin is that of HTTP to TCP/IP: HTTP, like the Omni Protocol, is the application layer to the more fundamental transport and internet layer of TCP/IP, like Bitcoin. For more in-depth information and details see the ",
-                                "LINK":"Spec",
-                                "ONGITHUB":"on github."
+            "TITLE":"About Omni",
+            "FOUNDATION":{
+                "TITLE":"Omni Foundation",
+                "FIRST":"In September 2013, the Mastercoin Foundation was formed to temporarily manage the funds in the Exodus Address and the distribution of the development MSC. The board of the Mastercoin Foundation has declared its intention to minimize its temporary central role by transitioning the decision making to Mastercoin owners through proof of stake voting.",
+                "SECOND": "In January 2016 the Mastercoin Foundation was rebranded to the Omni Foundation and the primary tokens of the project, MSC, where renamed to OMNI. The Foundation advocates for the use of the Omni Protocol and tries to build a community of people who develop it. All budget items, board minutes, Dev OMNI vesting schedule, and bounties are public record and available to anyone on the ",
+                "LINK": "Foundation's Website"
+            },
+            "PROTOCOL":{
+                "TITLE":"Omni Protocol",
+                "PARAGRAPH":"The Omni Protocol is a communications protocol that uses the Bitcoin block chain to enable features such as smart contracts, user currencies and decentralized peer-to-peer exchanges. A common analogy that is used to describe the relation of the Omni Protocol to Bitcoin is that of HTTP to TCP/IP: HTTP, like the Omni Protocol, is the application layer to the more fundamental transport and internet layer of TCP/IP, like Bitcoin. For more in-depth information and details see the ",
+                "LINK":"Spec",
+                "ONGITHUB":"on github."
 
-                        },
-                        "TOKEN":{
-                                "TITLE":"Omnis",
-                                "FIRST" : "Omnis (symbol OMNI) are digital tokens that are necessary for the use of some features of the Omni Protocol. The total number of Omnis in existence is 619,478.6 and no more MSC will ever be created. Additionally, Omnis can not be mined into existence. The 619,478.6 OMNI were generated as a result of a public fundraiser in the style of Kickstarter.com.",
-                        },
-                        "INFO":"Information from the ",
-                        "EDUCATION":"Master Protocol Education"
+            },
+            "TOKEN":{
+                "TITLE":"Omnis",
+                "FIRST" : "Omnis (symbol OMNI) are digital tokens that are necessary for the use of some features of the Omni Protocol. The total number of Omnis in existence is 619,478.6 and no more MSC will ever be created. Additionally, Omnis can not be mined into existence. The 619,478.6 OMNI were generated as a result of a public fundraiser in the style of Kickstarter.com.",
+            },
+            "INFO":"Information from the ",
+            "EDUCATION":"Master Protocol Education"
 		},
 		"OMNIWALLET":{
 			"TITLE" : "About Omniwallet",
@@ -138,7 +138,8 @@ angular.module("omniConfig")
 		"SETTINGS":"Account Settings",
 		"TRADE":"Trade",
 		"TRANSACTIONS":"Transactions",
-		"WALLET":"My Wallet"
+		"WALLET":"My Wallet",
+		"OMNIDEX":"OmniDex"
 	},
 	"MODALS":{
 		"CREATE":{
@@ -541,7 +542,8 @@ angular.module("omniConfig")
 			"AMOUNT":"Amount",
 			"TOTAL":"Total Cost",
 			"CANCEL":"Cancel",
-			"BUY":"Buy"
+			"BUY":"Buy",
+			"SIDE": "Side"
 		}
 	},
 	"EXCHANGE":{
@@ -631,6 +633,41 @@ angular.module("omniConfig")
 			"CANCELTITLE":"Confirm Sale Cancellation",
 			"CANCELCONFIRM":"Cancel Sale",
 			"CANCELMESSAGE":"You're about to cancel this sale. If this is correct, please press Cancel Sale below. "
+		}
+	},
+	"OMNIDEX" : {
+		"MARKETS" : {
+			"TITLE" : "Markets",
+			"NEW" : "Start New Market",
+			"SYMBOL" : "ID",
+			"NAME" : "Symbol",
+			"PRICE" : "Price",
+			"VOLUME" : "24h Volume",
+			"SUPPLY" : "Total Supply",
+			"CAP" : "Market Cap",
+			"CHANGE" : "24h Change",
+			"NOMARKETS" : "There are currently no open markets",
+			"DENOMINATOR" : "Choose Denominating Currency"
+		},
+		"ORDERBOOK" : {
+			"TITLE" : "{{ currency }} Exchange",
+			"BUY" : "Buy",
+			"SELL": "Sell",
+			"BALANCE" : "Your balance",
+			"TOTALPRICE" : "Total",
+			"UNITPRICE" :"Price",
+			"AMOUNT" : "Amount",
+			"NOCOINS" : "You don't have any {{propertyName}} available",
+			"ACTIVEOFFERS" : "Your Offers",
+			"NOACTIVEOFFERS" : "You don't have any active offers",
+			"EMPTY" : "No offers"
+		},
+		"SALE" : {
+			"TITLE" : "Open New Market",
+			"CHOOSECOINSELLING" : "Choose coin to sell",
+			"SELLINGAMOUNT" : "Amount to sell",
+			"CHOOSECOINDESIRED" : "Choose coin desired",
+			"DESIREDAMOUNT" : "Amount desired"
 		}
 	}
 })

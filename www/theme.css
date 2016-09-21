@@ -187,6 +187,19 @@ h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6{
   margin-bottom:15px;
 }
 
+.markets-table .table-header{
+  font-size: 12px !important;
+  text-align: center !important;
+}
+
+.markets-table .table-row div {
+  overflow: hidden !important;
+}
+
+.pending{
+  background-color: pink;
+}
+
 .om-table .table-header{
   background-color: #f5f5f5;
   border-radius: 4px 4px 0px 0px;
@@ -560,6 +573,9 @@ fieldset[disabled] .btn-clear.active {
 
 .send-asset-dropdown .dropdown-menu {
     width: 60%;
+    z-index: 10000;
+    height: 200px;
+    overflow-y: scroll;
 }
 
 .send-asset-dropdown .caret {
@@ -1601,4 +1617,73 @@ i.icon-l{
 .media-panel > .media-body {
   vertical-align: middle;
   height: 186px;
+}
+
+
+
+/* DEx Styles */
+
+.orderbook-header-buy {
+  color: #ffffff;
+    background-color: #7ed933;
+    border-color: #7ed933;
+    margin-left: 0px;
+    margin-right: 0px;
+    border-radius: 5px 5px 0px 0px;
+    font-size: 26px;
+}
+
+.orderbook-header-sell {
+  color: #ffffff;
+  background-color: #ffb839;
+  border-color: #ffb839;
+    margin-left: 0px;
+    margin-right: 0px;
+    border-radius: 5px 5px 0px 0px;
+    font-size: 26px;
+}
+
+.no-coins {
+  min-height: 49px
+}
+
+.orderbook-orders-table {
+  width: 100%;
+}
+.orderbook-orders-table.asks caption {
+    background-color: #ffb839;
+    padding: 5px;
+    color: #fff;
+    border-radius: 5px 5px 0px 0px;
+    font-weight: bolder;
+    }
+
+    .orderbook-orders-table.bids  caption {
+    background-color: #7ed933;
+    padding: 5px;
+    color: #fff;
+    border-radius: 5px 5px 0px 0px;
+    font-weight: bolder;
+}
+
+.orderbook-orders-table td:first-child {
+    border-left: 0;
+}
+
+.orderbook-orders-table tr > td:last-child {{
+    border-right: 1px solid; }
+    border-left: 1;
+    border-right: 0;
+}
+
+.orderbook-orders-table tr > td {
+    padding: 5px;
+    border-left: 1px solid;
+    border-right: 1px solid;
+    text-align: center;
+}
+
+.orderbook-orders-table tr > th {
+    padding: 5px;
+    text-align: center;
 }
