@@ -123,7 +123,7 @@ def gettransaction(hash_id):
       "tx_time": (str(txJson['blocktime']) + '000') if 'blocktime' in txJson else '',
     }
 
-    if txType != -22 and  txType != 21: #Dex purchases don't have these fields 
+    if txType not in [-22,21,25,26,27,28]: #Dex purchases don't have these fields 
       ret['currencyId'] = txJson['propertyid']
       ret['currency_str'] = 'Omni' if txJson['propertyid'] == 1 else 'Test Omni' if txJson['propertyid'] == 2 else "Smart Property"
       ret['invalid'] = not txValid
