@@ -80,7 +80,7 @@ def gettransaction(hash_id):
     except ValueError:
         abort(make_response('This endpoint only consumes valid input', 400))
 
-    ROWS=dbSelect("select * from transactions t, txjson txj where t.txdbserialnum = txj.txdbserialnum and t.txhash=%s", [transaction_])
+    ROWS=dbSelect("select * from transactions t, txjson txj where t.txdbserialnum = txj.txdbserialnum and t.protocol != 'Bitcoin' and t.txhash=%s", [transaction_])
 
     if len(ROWS) < 1:
       return json.dumps([])
