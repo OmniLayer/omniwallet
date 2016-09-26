@@ -26,7 +26,7 @@ angular.module("omniControllers")
 				var dexOffer = new Transaction(26,offer.ownerAddress,fee,{
 						transaction_version:0,
 						propertyidforsale:offer.propertyselling.propertyid,
-						amountforsale: offer.available_amount.valueOf(),
+						amountforsale: offer.selling_amount.valueOf(),
 						propertiddesired:offer.propertydesired.propertyid,
 						amountdesired: offer.desired_amount.valueOf()
 					});
@@ -36,7 +36,7 @@ angular.module("omniControllers")
 						title:"Cancel DEx Offer",
 						address:offer.ownerAddress,
 						saleCurrency:offer.propertyselling.propertyid,
-						saleAmount:offer.available_amount.valueOf(),
+						saleAmount:offer.selling_amount.valueOf(),
 						desiredCurrency:offer.propertydesired.propertyid,
 						desiredAmount:offer.desired_amount.valueOf(),
 						totalCost:dexOffer.totalCost,
