@@ -120,7 +120,7 @@ def gettransaction(hash_id):
       "to_address": str("(null)"), 
       "confirms": txJson['confirmations'],
       "tx_hash": txData[0], 
-      "tx_time": str(txJson['blocktime']) + '000',
+      "tx_time": (str(txJson['blocktime']) + '000') if 'blocktime' in txJson else '',
     }
 
     if txType != -22 and  txType != 21: #Dex purchases don't have these fields 
