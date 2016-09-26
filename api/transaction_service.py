@@ -126,7 +126,7 @@ def gettransaction(hash_id):
     if txType != -22 and  txType != 21: #Dex purchases don't have these fields 
       ret['currencyId'] = txJson['propertyid']
       ret['currency_str'] = 'Omni' if txJson['propertyid'] == 1 else 'Test Omni' if txJson['propertyid'] == 2 else "Smart Property"
-      ret['invalid'] = False if txJson['valid'] == True else True
+      ret['invalid'] = not txValid
       ret['amount'] = str(txJson['amount'])
       ret['formatted_amount'] = txJson['amount']
       ret['divisible'] = txJson['divisible']
