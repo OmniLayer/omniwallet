@@ -28,7 +28,7 @@ angular.module("omniControllers")
 						propertyidforsale:offer.propertyselling.propertyid,
 						amountforsale: offer.selling_amount.valueOf(),
 						propertiddesired:offer.propertydesired.propertyid,
-						amountdesired: offer.desired_amount.valueOf()
+						amountdesired: offer.total_desired_amount.valueOf()
 					});
 				ModalManager.openConfirmationModal({
 					dataTemplate: '/views/modals/partials/dex_offer.html',
@@ -38,7 +38,7 @@ angular.module("omniControllers")
 						saleCurrency:offer.propertyselling.propertyid,
 						saleAmount:offer.selling_amount.valueOf(),
 						desiredCurrency:offer.propertydesired.propertyid,
-						desiredAmount:offer.desired_amount.valueOf(),
+						desiredAmount:offer.total_desired_amount.valueOf(),
 						totalCost:dexOffer.totalCost,
 						confirmText: "Cancel Offer",
 						successMessage: "Your order was cancelled successfully"
