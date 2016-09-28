@@ -80,7 +80,7 @@ def gettransaction(hash_id):
     except ValueError:
         abort(make_response('This endpoint only consumes valid input', 400))
 
-    ROWS=dbSelect("select * from transactions t, txjson txj where t.txdbserialnum = txj.txdbserialnum and t.txhash=%s", [transaction_])
+    ROWS=dbSelect("select * from transactions t, txjson txj where t.txdbserialnum = txj.txdbserialnum and t.protocol != 'Bitcoin' and t.txhash=%s", [transaction_])
 
     if len(ROWS) < 1:
       return json.dumps([])
@@ -120,13 +120,13 @@ def gettransaction(hash_id):
       "to_address": str("(null)"), 
       "confirms": txJson['confirmations'],
       "tx_hash": txData[0], 
-      "tx_time": str(txJson['blocktime']) + '000',
+      "tx_time": (str(txJson['blocktime']) + '000') if 'blocktime' in txJson else '',
     }
 
-    if txType != -22 and  txType != 21: #Dex purchases don't have these fields 
+    if txType not in [-22,21,25,26,27,28]: #Dex purchases don't have these fields 
       ret['currencyId'] = txJson['propertyid']
       ret['currency_str'] = 'Omni' if txJson['propertyid'] == 1 else 'Test Omni' if txJson['propertyid'] == 2 else "Smart Property"
-      ret['invalid'] = False if txJson['valid'] == True else True
+      ret['invalid'] = not txValid
       ret['amount'] = str(txJson['amount'])
       ret['formatted_amount'] = txJson['amount']
       ret['divisible'] = txJson['divisible']
