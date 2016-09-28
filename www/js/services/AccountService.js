@@ -101,7 +101,7 @@ angular.module("omniServices")
             return create.promise;
         }
 
-        self.verify = function(uuid,passphrase){
+        self.verify = function(uuid,passphrase,mfatoken="null"){
           return $http.get('/v1/user/wallet/challenge?uuid=' + uuid)
                     .then(function(result) {
                         var data = result.data;
@@ -111,7 +111,7 @@ angular.module("omniServices")
                         CryptUtilAsync.generateNonceForDifficulty(data.pow_challenge, function(result) {
                             self.nonce = result;
                             CryptUtilAsync.generateSymmetricKey(passphrase, data.salt, function(result) {
-                                self.walletKey = result;
+                                self.walletKeyTemp = result;
                                 CryptUtilAsync.generateAsymmetricPair(function(result) {
                                     self.asymKey = result;
                                     self.encodedPub = window.btoa(self.asymKey.pubPem);
@@ -125,27 +125,30 @@ angular.module("omniServices")
                     .then(function(result) {
                         return $http({
                             url: '/v1/user/wallet/login',
-                            method: 'GET',
-                            params: {
+                            method: 'POST',
+                            data: {
                                 nonce: self.nonce,
                                 public_key: self.encodedPub,
-                                uuid: self.uuid
+                                uuid: self.uuid,
+                                mfatoken: mfatoken
                             }
                         });
                     });
         }
 
-        self.login = function(uuid, passphrase) {
+        self.login = function(uuid, passphrase, mfatoken="null") {
             var login = $q.defer()
             if (!self.loginInProgress) {
             	self.loginInProgress = true;
                 self.uuid = uuid;
-                self.verify(uuid,passphrase)
+                self.verify(uuid,passphrase,mfatoken)
                     .then(function(result) {
                         var data = result.data;
                         try {
-                            var wallet = CryptUtil.decryptObject(data, self.walletKey);
+                            var wallet = CryptUtil.decryptObject(data.wallet, self.walletKeyTemp);
                             self.wallet = wallet;
+                            self.walletKey = self.walletKeyTemp;
+                            self.mfa = data.mfa;
                             self.settings.firstLogin=false;
                             // update wallet service
                             Wallet.initialize(wallet);
@@ -177,8 +180,10 @@ angular.module("omniServices")
         self.logout = function(){
             self.uuid = null;
             self.walletKey = null;
+            self.walletKeyTemp = null;
             self.asymKey = null;
             self.wallet = null;
+            self.mfa = null;
             self.addresses = null;
             self.assets = null;
             self.loggedIn = false;
@@ -208,6 +213,38 @@ angular.module("omniServices")
                   console.log("Success saving");
                 }, function(result) {
                   console.log("Failure saving");
+                  location = location.origin + '/loginfs/' + self.uuid;
+                  self.logout();
+                });
+            }
+        }
+
+        self.updateMFA = function(secret,token,action) {
+            if(self.loggedIn){
+                return $http.get('/v1/user/wallet/challenge?uuid=' + self.uuid)
+                .then(function(result) {
+
+                  var data = result.data;
+                  var challenge = data.challenge;
+                  var signature = CryptUtil.createSignedObject(challenge, self.asymKey.privKey);
+    
+                  return $http({
+                    url: '/v1/user/wallet/update',
+                    method: 'POST',
+                    data: {
+                      uuid: self.uuid,
+                      mfasecret: secret,
+                      mfatoken: token,
+                      mfaaction: action,
+                      signature: signature
+                    }
+                  });
+                }).then(function(result) {
+                  //console.log(result);
+                  return result;
+                }, function(result) {
+                  console.log("Failure updating");
+                  //console.log(result);
                   location = location.origin + '/loginfs/' + self.uuid;
                   self.logout();
                 });

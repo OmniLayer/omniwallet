@@ -1,7 +1,8 @@
 function LoginControllerUUID($injector, $scope, $http, $location, $modalInstance, $q, Account, uuid, $idle) {
   $scope.login = {
     uuid: uuid
-  }
+  };
+  $scope.displayMFA = true;
 
   Login($injector, $scope, $http, $location, $modalInstance, $q, Account, $idle);
 }
@@ -9,8 +10,11 @@ function LoginControllerUUID($injector, $scope, $http, $location, $modalInstance
 function LoginController($injector, $scope, $http, $location, $modalInstance, $q, Account, $idle) {
   if ( $scope != undefined && $scope.login != undefined && $scope.login.action != undefined && $scope.login.action == 'verify' ) {
     console.log("sync 1");
+    $scope.displayMFA = Account.mfa;
   } else {
+    //console.log("sync 2");
     $scope.login = {}
+    $scope.displayMFA = true;
   }
 
   Login($injector, $scope, $http, $location, $modalInstance, $q, Account, $idle);
@@ -39,16 +43,18 @@ function Login($injector, $scope, $http, $location, $modalInstance, $q, Account,
 
     if($scope.login.action == 'verify'){
       console.log("verifying");	
-      Account.verify(login.uuid,login.password).then(function(){
+      Account.login(login.uuid,login.password,login.mfatoken).then(function(){
+        console.log("verified");
         $modalInstance.close(Account.wallet) //pass wallet as verification
         $idle.watch();
       },function(error){
+        console.log("not verified");
         $scope.loginInProgress=false;
         angular.extend($scope,error);
       });
     } else {
 
-      Account.login(login.uuid,login.password).then(function(wallet){
+      Account.login(login.uuid,login.password,login.mfatoken).then(function(wallet){
           $modalInstance.close()
           $location.path('/wallet');
           $idle.watch();

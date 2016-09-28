@@ -3,6 +3,7 @@ import smtplib
 import os
 import base64
 import werkzeug.security as ws
+import pyotp,time
 from Crypto.Signature import PKCS1_v1_5
 from Crypto.Hash import SHA
 from Crypto.PublicKey import RSA
@@ -148,10 +149,18 @@ def create():
 
 @app.route('/update', methods=['POST'])
 def update():
+  #print "got form",request.form
+
   validate_uuid = UUID(request.form['uuid'])
   uuid = str(validate_uuid)
   session = ws.hashlib.sha256(config.SESSION_SECRET + uuid).hexdigest()
+
   email = request.form['email'] if 'email' in request.form else None
+  wallet = request.form['wallet'] if 'wallet' in request.form else None
+
+  secret=request.form['mfasecret'] if 'mfasecret' in request.form else None
+  token=request.form['mfatoken'] if 'mfatoken' in request.form else None
+  action=request.form['mfaaction'] if 'mfaaction' in request.form else None
 
   if config.LOCALDEVBYPASSDB:
     session_challenge = session + "_challenge"
@@ -167,7 +176,6 @@ def update():
 
     challenge = session_store.get(session_challenge)
     signature = request.form['signature']
-    wallet = request.form['wallet']
     pubkey = session_store.get(session_pubkey)
 
     key = RSA.importKey(pubkey)
@@ -178,7 +186,6 @@ def update():
       print 'Challenge signature not verified'
       abort(403)
 
-    write_wallet(uuid, wallet)
     session_store.delete(session_challenge)
   else:
     ROWS=dbSelect("select challenge,pubkey from sessions where sessionid=%s",[session])
@@ -193,7 +200,6 @@ def update():
 
     challenge = ROWS[0][0]
     signature = request.form['signature']
-    wallet = request.form['wallet']
     pubkey = ROWS[0][1]
 
     key = RSA.importKey(pubkey)
@@ -204,20 +210,35 @@ def update():
       print 'Challenge signature not verified'
       abort(403)
 
-    write_wallet(uuid, wallet, email)
     dbExecute("update sessions set challenge=NULL, timestamp=DEFAULT where sessionid=%s",[session])
     dbCommit()
 
-  return ""
+  ret=False
+  if wallet != None:
+    if email != None:
+      ret=write_wallet(uuid, wallet, email)
+    else:
+      ret=write_wallet(uuid, wallet)
+  elif None not in [token,action]:
+    ret=update_mfa(uuid,token,action,secret)
 
 
-@app.route('/login')
+  response = {
+      'updated': ret
+  }
+  print response
+
+  return jsonify(response)
+  #return ""
+
+
+@app.route('/login', methods=['POST'])
 def login():
-  validate_uuid = UUID(request.args.get('uuid'))
+  validate_uuid = UUID(request.form['uuid'])
   uuid = str(validate_uuid)
-  public_key = base64.b64decode(request.args.get('public_key').encode('UTF-8'))
-  nonce = request.args.get('nonce')
-
+  mfatoken = request.form['mfatoken'] 
+  public_key = base64.b64decode(request.form['public_key'].encode('UTF-8'))
+  nonce = request.form['nonce']
   session = ws.hashlib.sha256(config.SESSION_SECRET + uuid).hexdigest()
 
   if config.LOCALDEVBYPASSDB:
@@ -233,6 +254,11 @@ def login():
 
     if not exists(uuid):
       print 'Wallet not found'
+      abort(403)
+
+    mfa_verified, mfa = verify_mfa(uuid,mfatoken)
+    if not mfa_verified:
+      print 'MFA token incorrect'
       abort(403)
 
     wallet_data = read_wallet(uuid)
@@ -255,32 +281,118 @@ def login():
       print 'Wallet not found'
       abort(403)
 
+    mfa_verified,mfa = verify_mfa(uuid,mfatoken)
+    if not mfa_verified:
+      print 'MFA token incorrect'
+      abort(403)
+
     wallet_data = read_wallet(uuid)
     dbExecute("update sessions set pchallenge=NULL, timestamp=DEFAULT, pubkey=%s where sessionid=%s",(public_key, session))
     dbCommit()
     update_login(uuid)
   #end else: 
-  return wallet_data
+  response = {
+      'wallet': wallet_data,
+      'mfa': mfa
+  }
 
+  return jsonify(response)
+  #return wallet_data
 
+@app.route('/newmfa')
+def generate_mfa():
+  try:
+    validate_uuid = UUID(request.args.get('uuid'))
+    uuid = str(validate_uuid)
+    secret=pyotp.random_base32()
+    totp=pyotp.TOTP(secret)
+    uri="Omniwallet:"+str(time.strftime("%d-%m-%Y:"))+str(uuid)
+    prov=totp.provisioning_uri(uri)
+    response = {
+      'error': False,
+      'secret': secret,
+      'prov': prov
+    }
+  except ValueError:
+    response = {
+      'error': True,
+      'msg': 'Invalid UUID'
+    }
+
+  return jsonify(response)
 
 
 # Utility Functions
+def verify_mfa(uuid,token,secret='None'):
+  #print "checking uuid/token",uuid,token
+  #check totp token for login
+
+  if secret in ['None',None]:
+    if config.LOCALDEVBYPASSDB:
+      filename = data_dir_root + '/wallets/' + uuid + '.mfa'
+      if os.path.exists(filename):
+        with open(filename, 'r') as f:
+          secret=f.read()
+    else:
+      ROWS=dbSelect("select secret from mfa where walletid=%s",[uuid])
+      if len(ROWS)>0:
+        secret= ROWS[0][0]
+
+  if secret in ['None',None]:
+    if token == 'null':
+      return True,False
+    else:
+      return False,False
+  else:
+    totp = pyotp.TOTP(secret)
+    test=totp.verify(token,None,1)
+    return test,True
+
+def update_mfa(uuid,token,action,secret='None'):
+  verified,setup=verify_mfa(uuid,token,secret)
+  ret=False
+  if verified:
+    if action == 'add' and secret not in ['None',None]:
+       if config.LOCALDEVBYPASSDB:
+         filename = data_dir_root + '/wallets/' + uuid + '.mfa'
+         if os.path.exists(filename):
+           return ret
+         else:
+           with open(filename, 'w') as f:
+             f.write(secret)
+       else:
+         ROWS=dbExecute("update mfa set code=%s where walletid=%s",[secret,uuid])
+       ret=True
+    elif action == 'del' and setup:
+       if config.LOCALDEVBYPASSDB:
+         filename = data_dir_root + '/wallets/' + uuid + '.mfa'
+         if os.path.exists(filename):
+           os.remove(filename)
+       else:
+         ROWS=dbExecute("delete from mfa where walletid=%s",[uuid])
+       ret=True
+  return ret
+
 def failed_challenge(pow_challenge, nonce, difficulty):
   pow_challenge_response = ws.hashlib.sha256(pow_challenge + nonce).hexdigest()
   return pow_challenge_response[-len(difficulty):] != difficulty
 
 def write_wallet(uuid, wallet, email=None):
-  if config.LOCALDEVBYPASSDB:
-    filename = data_dir_root + '/wallets/' + uuid + '.json'
-    with open(filename, 'w') as f:
-      f.write(wallet)
-  else:
-    dbExecute("with upsert as (update wallets set walletblob=%s, email=%s where walletid=%s returning *) "
-              "insert into wallets (walletblob,walletid,email) select %s,%s,%s where not exists (select * from upsert)", 
-              (wallet,email,uuid,wallet,uuid,email))
-    dbCommit()
-    
+  try:
+    if config.LOCALDEVBYPASSDB:
+      filename = data_dir_root + '/wallets/' + uuid + '.json'
+      with open(filename, 'w') as f:
+        f.write(wallet)
+    else:
+      dbExecute("with upsert as (update wallets set walletblob=%s, email=%s where walletid=%s returning *) "
+                "insert into wallets (walletblob,walletid,email) select %s,%s,%s where not exists (select * from upsert)", 
+                (wallet,email,uuid,wallet,uuid,email))
+      dbCommit()
+
+    return True
+  except:
+    return False
+
 def read_wallet(uuid):
   if config.LOCALDEVBYPASSDB:
     filename = data_dir_root + '/wallets/' + uuid + '.json'
