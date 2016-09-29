@@ -30,7 +30,48 @@ angular.module("omniConfig")
 		"ACTIVECROWDSALES":"Active Crowdsales",
 		"HISTORY":"History",
 		"FEES":"Miner Fees (BTC)",
-		"PASSWORD":"Password"
+		"PASSWORD":"Password",
+		"DEFAULT":"Default",
+		"SUCCESS":"Success",
+		"ERROR":"Error",
+		"MFA":"MFA Code"
+	},
+	"SETTINGS":{
+		"TITLE":"Account Settings",
+		"ID":"Wallet ID:",
+		"PASSWORD":"Wallet Password:",
+		"PASSWORDCHANGE":"Click Here To Change Your Wallet Password",
+		"MFATOOLTIP":"Add/Remove an MFA compatible device (Google Authenticator, Authy, ...) to protect your account logins",
+		"MFA":"MFA:",
+		"MFAE":"Click Here to Disable your Multifactor Authentication (MFA) Device",
+		"MFAD":"Click Here to Setup/Enable a MultiFactor Authentication (MFA) Device",
+		"EMAILTOOLTIP":"(Optional) Your email can be used to recover your Wallet ID if you lose/misplace it and eventually for notifications concerning wallet activity.",
+		"EMAIL":"Wallet Email:",
+		"EMAILALERT":"Please enter a valid email",
+		"CURRENCYTOOLTIP":"Choose the preffered currency you wish all balance information in your wallet to be diplayed in.",
+		"CURRENCY":"Wallet Currency:",
+		"TESTECOTOOLTIP":"There are two types of ecosystems in the Masterprotocol, Production and Test. Enabling this option will display both in your wallet. Note: Disabling this option will not prevent you from receiving test ecosystem tokens. It will only filter it from your wallet display.",
+		"TESTECO":"Display Test Ecosystem:",
+		"FILTERDEXTOOLTIP":"Some DEx offers can no longer be completed because the cost to purchase the remaining tokens is less than the minimium amount allowed by the Bitcoin network. This option filters them out of the display list.",
+		"FILTERDEX":"Filter DEx dust level offers:",
+		"SAVE":"Save Preferences",
+		"SAVEDTRUE":"Your Wallet has been updated.",
+		"SAVEDFALSE1":"We seem to have encountered a problem updating your Wallet.",
+		"SAVEDFALSE2":"Please logout, close your browse, wait a minute then log back in and try again."
+	},
+	"MFA":{
+		"TITLE":"MFA Setup",
+		"ERROR":"Sorry, something is incorrect. Please double check what you entered and try again.",
+		"SUBMIT":"One moment while we verify and process your request, this should take less than a minute.",
+		"GENERROR1":"There was a problem generating a new secret. Please wait a moment and try again.",
+		"GENERROR2":"If this error continues to happen please notify the Omni team.",
+		"IMPORT":"To setup your account to require an MFA device scan the QR code below or manually enter the secret listed below into your MFA Device/Software (Google Authenticator, Authy, etc..)",
+		"SEC1":"Your Token Secret is",
+		"SEC2":"Store this safely and securely because",
+		"SEC3":"Anyone with this secret will be able to duplicate your mfa authorization codes.",
+		"SEC4":"Enter the current code being displayed on your MFA device to validate and complete the setup.",
+		"DIS1":"You currently have an MFA Device setup on your account.",
+		"DIS2":"Type 'DISABLE' and then enter your current mfa code to deactivate."
 	},
 	"HOMEPAGE":{
 		"ADDRESSEXAMPLE":"(e.g. 1EXoDusjGwvnjZUyKkxZ4UHEf77z6A5S4P)",
@@ -42,40 +83,40 @@ angular.module("omniConfig")
 	"ABOUT":{
 		"CONTACT":{
 			"WE":"We are a group of developers constantly working to improve Omniwallet.",  
-            "QUESTIONS":"If you have any questions, issues or just want to provide some general feedback feel free to reach out to us at:",
-            "GITHUBTITLE":"Github",
-            "GITHUBDESC":"Search/see our 'Open Issues' and what we are 'Actively Working' on now. Don't see your specific topic? We encourage you to open a new issue to let us know. (Please include as many details as possible including ",
-            "GITHUBLINK":"the output of the developer console",
-            "TALKTITLE":"Knowledge Base/Support Center",
-            "TALKDESC":"This is a support knowledge base where you can review common topics, post questions asking for help or help answer other users questions",
-            "EMAILTITLE":"Email",
-            "EMAILDESC":"You can also reach us directly at",
-            "EMAILLINK":"the output of the developer console",
-            "CHATTITLE":"Live Chat",
-            "CHATDESC":"Chat with the developers, share your ideas or ask questions. Availability varies, but we should generally be around Mon-Fri 9-5 CDT",
-            "TITLE":"Contact Us"
+			"QUESTIONS":"If you have any questions, issues or just want to provide some general feedback feel free to reach out to us at:",
+			"GITHUBTITLE":"Github",
+			"GITHUBDESC":"Search/see our 'Open Issues' and what we are 'Actively Working' on now. Don't see your specific topic? We encourage you to open a new issue to let us know. (Please include as many details as possible including ",
+			"GITHUBLINK":"the output of the developer console",
+			"TALKTITLE":"Knowledge Base/Support Center",
+			"TALKDESC":"This is a support knowledge base where you can review common topics, post questions asking for help or help answer other users questions",
+			"EMAILTITLE":"Email",
+			"EMAILDESC":"You can also reach us directly at",
+			"EMAILLINK":"the output of the developer console",
+			"CHATTITLE":"Live Chat",
+			"CHATDESC":"Chat with the developers, share your ideas or ask questions. Availability varies, but we should generally be around Mon-Fri 9-5 CDT",
+			"TITLE":"Contact Us"
 		},
 		"OMNI":{
-                        "TITLE":"About Omni",
-                        "FOUNDATION":{
-                                "TITLE":"Omni Foundation",
-                                "FIRST":"In September 2013, the Mastercoin Foundation was formed to temporarily manage the funds in the Exodus Address and the distribution of the development MSC. The board of the Mastercoin Foundation has declared its intention to minimize its temporary central role by transitioning the decision making to Mastercoin owners through proof of stake voting.",
-                                "SECOND": "In January 2016 the Mastercoin Foundation was rebranded to the Omni Foundation and the primary tokens of the project, MSC, where renamed to OMNI. The Foundation advocates for the use of the Omni Protocol and tries to build a community of people who develop it. All budget items, board minutes, Dev OMNI vesting schedule, and bounties are public record and available to anyone on the ",
-                                "LINK": "Foundation's Website"
-                        },
-                        "PROTOCOL":{
-                                "TITLE":"Omni Protocol",
-                                "PARAGRAPH":"The Omni Protocol is a communications protocol that uses the Bitcoin block chain to enable features such as smart contracts, user currencies and decentralized peer-to-peer exchanges. A common analogy that is used to describe the relation of the Omni Protocol to Bitcoin is that of HTTP to TCP/IP: HTTP, like the Omni Protocol, is the application layer to the more fundamental transport and internet layer of TCP/IP, like Bitcoin. For more in-depth information and details see the ",
-                                "LINK":"Spec",
-                                "ONGITHUB":"on github."
+			"TITLE":"About Omni",
+			"FOUNDATION":{
+				"TITLE":"Omni Foundation",
+				"FIRST":"In September 2013, the Mastercoin Foundation was formed to temporarily manage the funds in the Exodus Address and the distribution of the development MSC. The board of the Mastercoin Foundation has declared its intention to minimize its temporary central role by transitioning the decision making to Mastercoin owners through proof of stake voting.",
+				"SECOND": "In January 2016 the Mastercoin Foundation was rebranded to the Omni Foundation and the primary tokens of the project, MSC, where renamed to OMNI. The Foundation advocates for the use of the Omni Protocol and tries to build a community of people who develop it. All budget items, board minutes, Dev OMNI vesting schedule, and bounties are public record and available to anyone on the ",
+				"LINK": "Foundation's Website"
+			},
+			"PROTOCOL":{
+				"TITLE":"Omni Protocol",
+				"PARAGRAPH":"The Omni Protocol is a communications protocol that uses the Bitcoin block chain to enable features such as smart contracts, user currencies and decentralized peer-to-peer exchanges. A common analogy that is used to describe the relation of the Omni Protocol to Bitcoin is that of HTTP to TCP/IP: HTTP, like the Omni Protocol, is the application layer to the more fundamental transport and internet layer of TCP/IP, like Bitcoin. For more in-depth information and details see the ",
+				"LINK":"Spec",
+				"ONGITHUB":"on github."
 
-                        },
-                        "TOKEN":{
-                                "TITLE":"Omnis",
-                                "FIRST" : "Omnis (symbol OMNI) are digital tokens that are necessary for the use of some features of the Omni Protocol. The total number of Omnis in existence is 619,478.6 and no more MSC will ever be created. Additionally, Omnis can not be mined into existence. The 619,478.6 OMNI were generated as a result of a public fundraiser in the style of Kickstarter.com.",
-                        },
-                        "INFO":"Information from the ",
-                        "EDUCATION":"Master Protocol Education"
+			},
+			"TOKEN":{
+				"TITLE":"Omnis",
+				"FIRST" : "Omnis (symbol OMNI) are digital tokens that are necessary for the use of some features of the Omni Protocol. The total number of Omnis in existence is 619,478.6 and no more OMNI will ever be created. Additionally, Omnis can not be mined into existence. The 619,478.6 OMNI were generated as a result of a public fundraiser in the style of Kickstarter.com."
+			},
+			"INFO":"Information from the ",
+			"EDUCATION":"Omni Protocol Education"
 		},
 		"OMNIWALLET":{
 			"TITLE" : "About Omniwallet",
@@ -165,7 +206,9 @@ angular.module("omniConfig")
 		},
 		"LOGIN":{
 			"ID":"Wallet ID",
-			"INVALID":"Please enter a valid wallet id and password"
+			"INVALID":"Please enter a valid wallet id and password",
+			"MFACODE":"I'm using Multi Factor Authentication",
+			"MFATOOLTIP":"Don't have an MFA device setup yet? Login and add one to your account under 'Account Settings'"
 		}, 
 		"CONFIRM":{
 			"OFFLINE":"Your transaction was generated successfully, now save the text above and sign it on your Armory offline computer. Come back with the signed text to broadcast it.",
@@ -354,8 +397,8 @@ angular.module("omniConfig")
 			"MODAL_FROM":"From",
 			"MODAL_TO":"To",
 			"CONFIRM":"Confirm Send",
-                        "AVAIL":"From address available",
-                        "LOWFEE":"Your 'From Address' does not have enough BTC to complete this transaction. Please select a different address or send enough BTC to cover the Total transaction cost."
+			"AVAIL":"From address available",
+			"LOWFEE":"Your 'From Address' does not have enough BTC to complete this transaction. Please select a different address or send enough BTC to cover the Total transaction cost."
 		},
 		"ASSETS":{
 			"ASSETS":"Assets",
