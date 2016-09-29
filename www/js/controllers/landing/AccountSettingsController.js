@@ -6,6 +6,7 @@ angular.module("omniControllers")
       $scope.wallet = mywallet;
       $scope.uuid = mywallet['uuid'];
       $scope.error = false;
+      $scope.mfa = Account.mfa;
 
       $scope.email = Account.getSetting('email');
 
@@ -47,6 +48,7 @@ angular.module("omniControllers")
       $scope.changePassword = function() {
           $scope.login = {
             uuid: Account.uuid,
+            displayMFA: Account.mfa,
             action: 'verify',
             title: 'Verify Current Password',
             button: 'Validate',
@@ -76,6 +78,61 @@ angular.module("omniControllers")
               });
           });
       };
-    }
 
+      $scope.setupMFA = function() {
+          $scope.login = {
+            uuid: Account.uuid,
+            displayMFA: Account.mfa,
+            action: 'verify',
+            title: 'Verify Current Password',
+            button: 'Validate',
+            bodyTemplate: "/views/modals/partials/login.html",
+            footerTemplate: "/views/modals/partials/login_footer.html",
+            disable: true //disable UUID field in template
+          };
+          var modalInstance = $modal.open({
+            templateUrl: '/views/modals/base.html',
+            controller: LoginController,
+            scope: $scope,
+            backdrop:'static'
+          });
+
+          //for accounts without mfa setup we preload the new mfa secret before trying to render it
+          if (!Account.mfa) {
+            $http.get('/v1/user/wallet/newmfa?uuid=' + Account.uuid)
+            .success(function(data, status) {
+              if (data.error) {
+                $scope.getsecretError = true;
+                $scope.secret="";
+                $scope.prov="";
+              } else {
+                $scope.getsecretError = false;
+                $scope.secret=data.secret;
+                $scope.prov=data.prov;
+              }
+            }).error(function() {
+              $scope.getsecretError = true;
+              $scope.secret="";
+              $scope.prov="";
+            });
+          } else {
+            $scope.prov="<encrypted>";
+          }
+
+          modalInstance.result.then(function() {
+              var MfaModal = $modal.open({
+                templateUrl: '/views/modals/setup_mfa.html',
+                controller: MFASetupController,
+                scope: $scope
+              });
+              MfaModal.result.then(function() {
+                $scope.saved = true;
+                $scope.error = false;
+              }, function() {
+                $scope.saved = false;
+              });
+          });
+      };
+
+    }
 ])
