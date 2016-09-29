@@ -27,7 +27,7 @@
     "angular-translate": "~2.4.2",
     "angular-nvd3": "~0.0.9",
     "angular-translate-loader-static-files": "~2.5.2",
-    "angular-qr": "latest"
+    "angular-qr": "0.2.0"
   },
   "resolutions": {
     "d3": "~3.4",
