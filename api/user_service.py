@@ -326,20 +326,14 @@ def generate_mfa():
 def verify_mfa(uuid,token,secret='None'):
   #check totp token for login
   if secret in ['None',None]:
-    if config.LOCALDEVBYPASSDB:
-      filename = data_dir_root + '/wallets/' + uuid + '.mfa'
-      if os.path.exists(filename):
-        with open(filename, 'r') as f:
-          secret=f.read()
-    else:
-      value=get_setting(uuid,'mfasecret')
-      if value not in ['None',None]:
-        encsec=decrypt_value(value)
-        if encsec[0]:
-          secret=encsec[1]
-        else:
-          print "Error decrypting secret from db for ",uuid," got error: ",encsec[1]
-          return False,True
+    value=get_setting(uuid,'mfasecret')
+    if value not in ['None',None]:
+      encsec=decrypt_value(value)
+      if encsec[0]:
+        secret=encsec[1]
+      else:
+        print "Error decrypting secret from db for ",uuid," got error: ",encsec[1]
+        return False,True
 
   if secret in ['None',None]:
     if token == 'null':
@@ -364,23 +358,10 @@ def update_mfa(uuid,token,action,secret='None'):
          print "error trying to encrypt secret, error:",encsec[1]
          return ret
       
-       if config.LOCALDEVBYPASSDB:
-         filename = data_dir_root + '/wallets/' + uuid + '.mfa'
-         if os.path.exists(filename):
-           return ret
-         else:
-           with open(filename, 'w') as f:
-             f.write(secret)
-       else:
-         set_setting(uuid,'mfasecret',secret)
+       set_setting(uuid,'mfasecret',secret)
        ret=True
     elif action == 'del' and setup:
-       if config.LOCALDEVBYPASSDB:
-         filename = data_dir_root + '/wallets/' + uuid + '.mfa'
-         if os.path.exists(filename):
-           os.remove(filename)
-       else:
-         set_setting(uuid,'mfasecret',None)
+       set_setting(uuid,'mfasecret',None)
        ret=True
   return ret
 
@@ -393,11 +374,15 @@ def encrypt_value(value):
     obj = AES.new(config.AESKEY, AES.MODE_CBC, config.AESIV)
     justify=int(((len(value)/16) + 1) * 16)
     message=value.rjust(justify)
-    return True,obj.encrypt(message)
+    return True,obj.encrypt(message).decode('latin-1')
   except Exception as e:
     return False, e
 
-def decrypt_value(value):
+def decrypt_value(input):
+  try:
+    value=input.encode('latin-1')
+  except UnicodeDecodeError:
+    value=input
   try:
     obj = AES.new(config.AESKEY, AES.MODE_CBC, config.AESIV)
     return True, obj.decrypt(value).strip()
@@ -406,28 +391,60 @@ def decrypt_value(value):
 
 def get_setting(uuid,key):
   ret=None
-  ROWS=dbSelect("select settings->>%s from wallets where walletid=%s",[key,uuid])
-  if len(ROWS)>0:
-    ret = ROWS[0][0]
+  try:
+    settings=read_settings(uuid)
+    ret=settings[key]
+  except Exception as e:
+    print "Could not get setting \"",key,"\" for uuid ",uuid," error: ",e
   return ret
 
 def set_setting(uuid,key,value):
   ret=False
-  ROWS=dbSelect("select settings from wallets where walletid=%s",[uuid])
-  if len(ROWS)>0:
-    try:
-      settings = ROWS[0][0]
-      if settings == None:
-        settings={}
-      else:
-        settings=json.loads(settings)
+  try:
+    settings=read_settings(uuid)
+    if value==None:
+      del settings[key]
+    else:
       settings[key]=value
-      dbExecute("update wallets set settings=%s where walletid=%s",[json.dumps(settings),uuid])
-      dbCommit()
-      ret=True
-    except Exception as e:
-      print "Error setting setting",key,"to value",value,"for uuid",uuid
+    ret=write_settings(uuid,settings)
+  except Exception as e:
+    print "Error setting ",key," to value ",value," for uuid ",uuid," error: ",e
   return ret
+
+def read_settings(uuid):
+  settings={}
+  if config.LOCALDEVBYPASSDB:
+    filename = data_dir_root + '/wallets/' + uuid + '.settings'
+    if os.path.exists(filename):
+      with open(filename, 'r') as f:
+        settings=f.read()   
+  else:
+    ROWS=dbSelect("select settings from wallets where walletid=%s",[uuid])
+    if len(ROWS)>0:
+      settings = ROWS[0][0]
+  try:
+    settings=json.loads(settings)
+  except TypeError:
+    if settings==None:
+      settings={}
+  return settings
+
+def write_settings(uuid,towrite):
+  if towrite==None:
+    settings=towrite
+  else:
+    settings=json.dumps(towrite)
+  try:
+    if config.LOCALDEVBYPASSDB:
+      filename = data_dir_root + '/wallets/' + uuid + '.settings'
+      with open(filename, 'w') as f:
+        f.write(settings)
+    else:
+      dbExecute("update wallets set settings=%s where walletid=%s",[settings,uuid])
+      dbCommit()
+    return True
+  except:
+    return False
 
 def write_wallet(uuid, wallet, email=None):
   try:
@@ -440,7 +457,6 @@ def write_wallet(uuid, wallet, email=None):
                 "insert into wallets (walletblob,walletid,email) select %s,%s,%s where not exists (select * from upsert)", 
                 (wallet,email,uuid,wallet,uuid,email))
       dbCommit()
-
     return True
   except:
     return False
