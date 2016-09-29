@@ -7,6 +7,7 @@ import pyotp,time
 from Crypto.Signature import PKCS1_v1_5
 from Crypto.Hash import SHA
 from Crypto.PublicKey import RSA
+from Crypto.Cipher import AES
 from flask import Flask, request, jsonify, abort, json
 from simplekv.fs import FilesystemStore
 from uuid import UUID
@@ -318,15 +319,12 @@ def generate_mfa():
       'error': True,
       'msg': 'Invalid UUID'
     }
-
   return jsonify(response)
 
 
 # Utility Functions
 def verify_mfa(uuid,token,secret='None'):
-  #print "checking uuid/token",uuid,token
   #check totp token for login
-
   if secret in ['None',None]:
     if config.LOCALDEVBYPASSDB:
       filename = data_dir_root + '/wallets/' + uuid + '.mfa'
@@ -334,9 +332,14 @@ def verify_mfa(uuid,token,secret='None'):
         with open(filename, 'r') as f:
           secret=f.read()
     else:
-      ROWS=dbSelect("select secret from mfa where walletid=%s",[uuid])
-      if len(ROWS)>0:
-        secret= ROWS[0][0]
+      value=get_setting(uuid,'mfasecret')
+      if value not in ['None',None]:
+        encsec=decrypt_value(value)
+        if encsec[0]:
+          secret=encsec[1]
+        else:
+          print "Error decrypting secret from db for ",uuid," got error: ",encsec[1]
+          return False,True
 
   if secret in ['None',None]:
     if token == 'null':
@@ -353,6 +356,14 @@ def update_mfa(uuid,token,action,secret='None'):
   ret=False
   if verified:
     if action == 'add' and secret not in ['None',None]:
+       #encrypt the secret before storing it
+       encsec=encrypt_value(secret)
+       if encsec[0]:
+         secret=encsec[1]
+       else:
+         print "error trying to encrypt secret, error:",encsec[1]
+         return ret
+      
        if config.LOCALDEVBYPASSDB:
          filename = data_dir_root + '/wallets/' + uuid + '.mfa'
          if os.path.exists(filename):
@@ -361,7 +372,7 @@ def update_mfa(uuid,token,action,secret='None'):
            with open(filename, 'w') as f:
              f.write(secret)
        else:
-         ROWS=dbExecute("update mfa set code=%s where walletid=%s",[secret,uuid])
+         set_setting(uuid,'mfasecret',secret)
        ret=True
     elif action == 'del' and setup:
        if config.LOCALDEVBYPASSDB:
@@ -369,13 +380,54 @@ def update_mfa(uuid,token,action,secret='None'):
          if os.path.exists(filename):
            os.remove(filename)
        else:
-         ROWS=dbExecute("delete from mfa where walletid=%s",[uuid])
+         set_setting(uuid,'mfasecret',None)
        ret=True
   return ret
 
 def failed_challenge(pow_challenge, nonce, difficulty):
   pow_challenge_response = ws.hashlib.sha256(pow_challenge + nonce).hexdigest()
   return pow_challenge_response[-len(difficulty):] != difficulty
+
+def encrypt_value(value):
+  try:
+    obj = AES.new(config.AESKEY, AES.MODE_CBC, config.AESIV)
+    justify=int(((len(value)/16) + 1) * 16)
+    message=value.rjust(justify)
+    return True,obj.encrypt(message)
+  except Exception as e:
+    return False, e
+
+def decrypt_value(value):
+  try:
+    obj = AES.new(config.AESKEY, AES.MODE_CBC, config.AESIV)
+    return True, obj.decrypt(value).strip()
+  except Exception as e:
+    return False, e
+
+def get_setting(uuid,key):
+  ret=None
+  ROWS=dbSelect("select settings->>%s from wallets where walletid=%s",[key,uuid])
+  if len(ROWS)>0:
+    ret = ROWS[0][0]
+  return ret
+
+def set_setting(uuid,key,value):
+  ret=False
+  ROWS=dbSelect("select settings from wallets where walletid=%s",[uuid])
+  if len(ROWS)>0:
+    try:
+      settings = ROWS[0][0]
+      if settings == None:
+        settings={}
+      else:
+        settings=json.loads(settings)
+      settings[key]=value
+      dbExecute("update wallets set settings=%s where walletid=%s",[json.dumps(settings),uuid])
+      dbCommit()
+      ret=True
+    except Exception as e:
+      print "Error setting setting",key,"to value",value,"for uuid",uuid
+  return ret
 
 def write_wallet(uuid, wallet, email=None):
   try:
