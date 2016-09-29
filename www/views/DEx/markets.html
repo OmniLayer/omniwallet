@@ -1,0 +1,55 @@
+<div ng-controller="DExOverviewController">
+    <div class="row om-row">
+      <div class="col-xs-3 col-sm-3 col-md-4 col-lg-4 text-left om-title">
+          {{ 'OMNIDEX.MARKETS.TITLE' | translate }}
+      </div>
+      <div class="col-xs-9 col-sm-9 col-md-8 col-lg-8 text-right" ng-include="'/views/assets/partials/form_ecosystem.html'"></div>
+    </div>
+    <div class="row om-row">
+      <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 text-right">          
+        <a class="btn btn-main" href="/dex/sale"> {{ 'OMNIDEX.MARKETS.NEW' | translate }} </a>
+      </div>
+    </div>
+    <tabset ng-init="loadDesignatingCurrencies()">
+      <tab heading="{{ currency.propertyname }}" select="showMarkets(currency)" ng-repeat="currency in designatingcurrencies">
+        <div class="row">
+        	<div class="col-xs-12 om-table markets-table">
+        		<div class="row table-header hidden-xs">
+              <div class="col-sm-2">{{ 'OMNIDEX.MARKETS.SYMBOL' | translate}}</div>
+              <div class="col-sm-2">{{ 'OMNIDEX.MARKETS.NAME' | translate}}</div>
+              <div class="col-sm-3">
+                {{ 'OMNIDEX.MARKETS.PRICE' | translate}}
+              </div>
+              <div class="col-sm-3">{{ 'OMNIDEX.MARKETS.SUPPLY' | translate}}</div>
+              <div class="col-sm-2">{{ 'OMNIDEX.MARKETS.CHANGE' | translate}}</div>
+            </div>
+            <div class="row table-row text-center" ng-show="!loading && noMarkets">
+              <h3>{{ 'OMNIDEX.MARKETS.NOMARKETS' | translate }}</h3>
+            </div>
+            <div ng-repeat="market in markets" class="row table-row check-element animate-hide">
+              <div class="visible-xs col-xs-7">{{ 'OMNIDEX.MARKETS.SYMBOL' | translate}}</div>
+              <div class="col-xs-5 col-sm-2">
+                #{{market.propertyid}}
+              </div>
+              <div class="visible-xs col-xs-7">{{ 'OMNIDEX.MARKETS.NAME' | translate}}</div>
+              <div class="col-xs-5 col-sm-2">
+                <a ng-click="$parent.$parent.loadOrderbook($parent.designatingCurrency.propertyid,market.propertyid)">{{market.symbol}}</a>
+              </div>
+              <div class="visible-xs col-xs-7">{{ 'OMNIDEX.MARKETS.PRICE' | translate}}</div>
+              <div class="col-xs-5 col-sm-3">
+                {{market.price}}
+              </div>
+              <div class="visible-xs col-xs-7">{{ 'OMNIDEX.MARKETS.SUPPLY' | translate}}</div>
+              <div class="col-xs-5 col-sm-3">
+                {{market.supply}}
+              </div>
+              <div class="visible-xs col-xs-7">{{ 'OMNIDEX.MARKETS.CHANGE' | translate}}</div>
+              <div class="col-xs-5 col-sm-2">
+                {{market.change}}
+              </div>
+            </div>
+    		  </div>
+        </div>
+      </tab>
+    </tabset>
+</div>

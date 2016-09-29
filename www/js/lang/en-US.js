@@ -109,7 +109,6 @@ angular.module("omniConfig")
 				"PARAGRAPH":"The Omni Protocol is a communications protocol that uses the Bitcoin block chain to enable features such as smart contracts, user currencies and decentralized peer-to-peer exchanges. A common analogy that is used to describe the relation of the Omni Protocol to Bitcoin is that of HTTP to TCP/IP: HTTP, like the Omni Protocol, is the application layer to the more fundamental transport and internet layer of TCP/IP, like Bitcoin. For more in-depth information and details see the ",
 				"LINK":"Spec",
 				"ONGITHUB":"on github."
-
 			},
 			"TOKEN":{
 				"TITLE":"Omnis",
@@ -179,7 +178,8 @@ angular.module("omniConfig")
 		"SETTINGS":"Account Settings",
 		"TRADE":"Trade",
 		"TRANSACTIONS":"Transactions",
-		"WALLET":"My Wallet"
+		"WALLET":"My Wallet",
+		"OMNIDEX":"OmniDex"
 	},
 	"MODALS":{
 		"CREATE":{
@@ -586,7 +586,8 @@ angular.module("omniConfig")
 			"AMOUNT":"Amount",
 			"TOTAL":"Total Cost",
 			"CANCEL":"Cancel",
-			"BUY":"Buy"
+			"BUY":"Buy",
+			"SIDE": "Side"
 		}
 	},
 	"EXCHANGE":{
@@ -676,6 +677,41 @@ angular.module("omniConfig")
 			"CANCELTITLE":"Confirm Sale Cancellation",
 			"CANCELCONFIRM":"Cancel Sale",
 			"CANCELMESSAGE":"You're about to cancel this sale. If this is correct, please press Cancel Sale below. "
+		}
+	},
+	"OMNIDEX" : {
+		"MARKETS" : {
+			"TITLE" : "Markets",
+			"NEW" : "Start New Market",
+			"SYMBOL" : "ID",
+			"NAME" : "Symbol",
+			"PRICE" : "Price",
+			"VOLUME" : "24h Volume",
+			"SUPPLY" : "Total Supply",
+			"CAP" : "Market Cap",
+			"CHANGE" : "24h Change",
+			"NOMARKETS" : "There are currently no open markets",
+			"DENOMINATOR" : "Choose Denominating Currency"
+		},
+		"ORDERBOOK" : {
+			"TITLE" : "{{ currency }} Exchange",
+			"BUY" : "Buy",
+			"SELL": "Sell",
+			"BALANCE" : "Your balance",
+			"TOTALPRICE" : "Total",
+			"UNITPRICE" :"Price",
+			"AMOUNT" : "Amount",
+			"NOCOINS" : "You don't have any {{propertyName}} available",
+			"ACTIVEOFFERS" : "Your Offers",
+			"NOACTIVEOFFERS" : "You don't have any active offers",
+			"EMPTY" : "No offers"
+		},
+		"SALE" : {
+			"TITLE" : "Open New Market",
+			"CHOOSECOINSELLING" : "Choose coin to sell",
+			"SELLINGAMOUNT" : "Amount to sell",
+			"CHOOSECOINDESIRED" : "Choose coin desired",
+			"DESIREDAMOUNT" : "Amount desired"
 		}
 	}
 })

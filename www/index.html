@@ -20,7 +20,7 @@
 
     <link rel="stylesheet" href="/bower_components/bootstrap/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="/bower_components/bootstrap/dist/css/bootstrap-theme.min.css">
-    <link rel="stylesheet" href="/bower_components/nvd3/nv.d3.css">
+    <link rel="stylesheet" href="/bower_components/nvd3/build/nv.d3.css">
     <link rel="stylesheet" href="/theme.css">
 
     <link href='https://fonts.googleapis.com/css?family=Gudea:400,400italic,700' rel='stylesheet' type='text/css'>
@@ -45,7 +45,7 @@
     <script src="/bower_components/forge/js/forge.min.js"></script>
     <script src="/bower_components/bitcoinjs-lib/build/bitcoinjs-lib.js"></script>
     <script src="/bower_components/d3/d3.min.js"></script>
-    <script src="/bower_components/nvd3/nv.d3.js"></script>
+    <script src="/bower_components/nvd3/build/nv.d3.js"></script>
     <script src="/bower_components/angular-nvd3/dist/angular-nvd3.js"></script>
     <script src="/bower_components/sjcl/sjcl.js"></script>
     <script src="/bower_components/FileSaver/FileSaver.js"></script>
@@ -65,6 +65,9 @@
     <script src="/js/factories/AddressModelFactory.js"></script>
     <script src="/js/factories/AssetModelFactory.js"></script>
     <script src="/js/factories/TransactionModelFactory.js"></script>
+    <script src="/js/factories/OrderbookFactory.js"></script>
+    <script src="/js/factories/DExOfferFactory.js"></script>
+    <script src="/js/factories/DExOrderFactory.js"></script>
     <script src="/js/services/WalletService.js"></script>
     <script src="/js/services/AccountService.js"></script>
     <script src="/js/services/AppraiserService.js"></script>
@@ -76,14 +79,14 @@
     <script src="/js/services/PropertyManagerService.js"></script>
     <script src="/js/services/BrowserService.js"></script>
     <script src="/js/controllers/landing/HomeController.js"></script>
+    <script src="/js/controllers/landing/NavigationController.js"></script>
+    <script src="/js/controllers/landing/SiteController.js"></script>
+    <script src="/js/controllers/landing/AccountSettingsController.js"></script>
     <script src="/js/controllers/wallet/OverviewController.js"></script>
     <script src="/js/controllers/wallet/AddressesController.js"></script>
     <script src="/js/controllers/wallet/HistoryController.js"></script>
     <script src="/js/controllers/wallet/SendController.js"></script>
     <script src="/js/controllers/wallet/AssetsController.js"></script>
-    <script src="/js/controllers/landing/NavigationController.js"></script>
-    <script src="/js/controllers/landing/SiteController.js"></script>
-    <script src="/js/controllers/landing/AccountSettingsController.js"></script>
     <script src="/js/controllers/modals/ConfirmSendFooterController.js"></script>
     <script src="/js/controllers/assets/CrowdsaleParticipationController.js"></script>
     <script src="/js/controllers/assets/CrowdsaleController.js"></script>
@@ -98,6 +101,9 @@
     <script src="/js/controllers/exchange/PendingController.js"></script>
     <script src="/js/controllers/exchange/TradeController.js"></script>
     <script src="/js/controllers/exchange/OverviewController.js"></script>
+    <script src="/js/controllers/DEx/SaleController.js"></script>
+    <script src="/js/controllers/DEx/OverviewController.js"></script>
+    <script src="/js/controllers/DEx/OrderbookController.js"></script>
     <script src="/js/directive.js"></script>
     <script src="/js/service.js"></script>
     <script src="/js/controller.js"></script>
