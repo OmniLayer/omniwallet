@@ -416,7 +416,9 @@ angular.module("omniConfig")
 			"AMOUNT":"Amount",
 			"TXTIME":"Transaction time",
 			"TXDETAILS":"Transaction details",
-			"MOREDETAILS":"See transaction details"
+			"MOREDETAILS":"See transaction details",
+			"BTCNOTE1":"Note: At this time the history page only includes Omni Protocol transactions.",
+			"BTCNOTE2":"To see Bitcoin Transaction history we recommend a Bitcoin Explorer like: "
 		}
 	},
 	"ASSET":{

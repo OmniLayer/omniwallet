@@ -415,7 +415,9 @@
 			"AMOUNT":"数量",
 			"TXTIME":"交易时间",
 			"TXDETAILS":"交易明细",
-			"MOREDETAILS":"查看交易明细"
+			"MOREDETAILS":"查看交易明细",
+			"BTCNOTE1":"Note: At this time the history page only includes Omni Protocol transactions.",
+			"BTCNOTE2":"To see Bitcoin Transaction history we recommend a Bitcoin Explorer like: "
 		}
 	},
 	"ASSET":{
