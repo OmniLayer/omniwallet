@@ -138,7 +138,7 @@ def filterOffers(addresses):
     qs = genQs('or', 'ao', 'seller', addresses)
 
     ROWS=dbSelect("select * from activeoffers ao, transactions t, txjson txj where " + qs + \
-                  " and offerstate='active' and ao.createtxdbserialnum=t.txdbserialnum "
+                  " and offerstate='active' and ao.propertyiddesired='0' and ao.createtxdbserialnum=t.txdbserialnum "
                   "and ao.createtxdbserialnum=txj.txdbserialnum")
 
     #print query

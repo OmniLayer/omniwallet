@@ -33,7 +33,7 @@ angular.module("omniServices")
                                 waiting: false,
                                 transactionError: true,
                                 error: successData.error || successData.data, /* Backwards compatibility for mastercoin-tools send API */
-                                errorMessage: "Error preparing transaction"
+                                errorMessage: successData.error || "Error preparing transaction"
                             });
                         } else {
                             var tx = self.prepareTransaction(successData.unsignedhex || successData.transaction, successData.sourceScript)

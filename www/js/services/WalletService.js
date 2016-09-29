@@ -9,7 +9,7 @@ angular.module("omniServices")
 				if(!BalanceSocket.connected)
 					BalanceSocket.connect();
 				appraiser = $injector.get('appraiser');
-
+				self.settings = wallet.settings;
 	            self.addresses = [];
 	            self.assets = [];
 	            self.loader = {
@@ -76,17 +76,17 @@ angular.module("omniServices")
 	        	var address = new Address(raw.address,raw.privkey,raw.pubkey);
 
                 BalanceSocket.on("address:"+address.hash, function(data){
-                    var update = false;                    
-                    data.balance.forEach(function(balanceItem) {
+                    var update = false;
+                    data.balance.forEach(function(balanceItem) {                    
+                    	var asset = null;
                         var tradable = ((address.privkey && address.privkey.length == 58) || address.pubkey) && balanceItem.value > 0;
-                        var asset = null;
                         for (var j = 0; j < self.assets.length; j++) {
                           var currencyItem = self.assets[j];
                           if (currencyItem.symbol == balanceItem.symbol) {
                             asset = currencyItem;
                             if (asset.addresses().indexOf(address) == -1){
-                             tradable ? asset.tradableAddresses.push(address) : asset.watchAddresses.push(address) ;
-                             asset.tradable = asset.tradable || tradable;
+                              tradable ? asset.tradableAddresses.push(address) : asset.watchAddresses.push(address) ;
+                              asset.tradable = asset.tradable || tradable;
                             }
                             break;
                           }
@@ -100,6 +100,9 @@ angular.module("omniServices")
                             self.assets.push(asset);
                             update=true;
                         }
+                        if(address.assets.indexOf(asset) == -1){
+	                        address.assets.push(asset);
+	                    }
                     });
 
 					if(update){
@@ -159,7 +162,7 @@ angular.module("omniServices")
 
 	        self.tradableAddresses = function(){
 	        	return self.assets.map(function(asset){
-	        		return asset.tradableAddresses;
+	        		return ((asset.id < 2147483648 && asset.id != 2) || self.settings["showtesteco"] === 'true') ? asset.tradableAddresses : [];
 	        	}).reduce(function(previous,current){
 	        		var next = previous;
 	        		current.forEach(function(address){
@@ -168,6 +171,23 @@ angular.module("omniServices")
 	        		})
 	        		return next;
 	        	})
+	        }
+
+	        self.omniTradableAddresses = function(){
+	        	return self.assets.map(function(asset){
+	        		return (((asset.id < 2147483648 && asset.id != 2) || self.settings["showtesteco"] === 'true')  && asset.id != 0) ? asset.tradableAddresses : [];
+	        	}).reduce(function(previous,current){
+	        		var next = previous;
+	        		current.forEach(function(address){
+	        			if(previous.indexOf(address)==-1)
+	        				next.push(address)
+	        		})
+	        		return next;
+	        	})
+	        }
+
+	        self.setSettings = function(settings){
+	        	self.settings = settings;
 	        }
 			// self.initialize = function(){				  
 			//     self.selectedCoin = self.currencyList[0];

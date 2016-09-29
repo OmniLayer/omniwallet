@@ -228,3 +228,14 @@
                 uwsgi_modifier1 30;
                 uwsgi_pass 127.0.0.1:$PORT;
         }
+
+        location = /v1/omnidex { rewrite ^ /v1/omnidex; }
+        location /v1/omnidex { try_files $uri @flask_omnidex; }
+        location @flask_omnidex {
+                include uwsgi_params;
+                uwsgi_param SCRIPT_NAME /v1/omnidex;
+                uwsgi_param UWSGI_MODULE omnidex;
+                uwsgi_param UWSGI_CALLABLE app;
+                uwsgi_modifier1 30;
+                uwsgi_pass 127.0.0.1:$PORT;
+        }
