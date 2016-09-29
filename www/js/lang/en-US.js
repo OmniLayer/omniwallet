@@ -257,7 +257,7 @@ angular.module("omniConfig")
 				"ENTER":"Enter",
 				"KEY":"Private Key",
 				"ENABLE":"Enable Sending",
-				"KEYHOLDER":"enter your private key, formats: hex, b64, WIP, compressed WIP"
+				"KEYHOLDER":"enter your private key, formats: hex, b64, WIF, compressed WIF"
 			},
 			"WALLET":{
 				"TITLE":"Import a Wallet Backup",

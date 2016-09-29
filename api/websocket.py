@@ -31,7 +31,7 @@ def balance_thread():
     count = 0
     TIMEOUT='timeout -s 9 8 '
     while True:
-        time.sleep(60)
+        time.sleep(5)
         count += 1
         printmsg("Tracking "+str(len(addresses))+"/"+str(maxaddresses)+"(max) addresses, for "+str(clients)+"/"+str(maxclients)+"(max) clients, ran "+str(count)+" times")
         balances=get_bulkbalancedata(addresses)
