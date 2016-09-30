@@ -128,6 +128,7 @@ angular.module("omniControllers")
               MfaModal.result.then(function() {
                 $scope.saved = true;
                 $scope.error = false;
+                $scope.mfa=Account.mfa;
               }, function() {
                 $scope.saved = false;
               });
