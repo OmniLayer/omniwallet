@@ -62,17 +62,17 @@ angular.module("omniConfig")
 	"MFA":{
 		"TITLE1":"MFA Setup",
 		"TITLE2":"Disable MFA",
-		"ERROR":"Sorry, something is incorrect. Please double check what you entered and try again.",
+		"ERROR":"Sorry, the code you entered is incorrect. Please double check and try again.",
 		"SUBMIT":"One moment while we verify and process your request, this should take less than a minute.",
 		"GENERROR1":"There was a problem generating a new secret. Please wait a moment and try again.",
 		"GENERROR2":"If this error continues to happen please notify the Omni team.",
 		"IMPORT":"To setup your account to require an MFA device scan the QR code below or manually enter the secret listed below into your MFA Device/Software (Google Authenticator, Authy, etc..)",
 		"SEC1":"Your Token Secret is",
 		"SEC2":"Store this safely and securely because",
-		"SEC3":"Anyone with this secret will be able to duplicate your mfa authorization codes.",
+		"SEC3":"Anyone with this secret will be able to duplicate your MFA authorization codes.",
 		"SEC4":"Enter the current code being displayed on your MFA device to validate and complete the setup.",
 		"DIS1":"You currently have an MFA Device setup on your account.",
-		"DIS2":"Type 'DISABLE' and then enter your current mfa code to deactivate."
+		"DIS2":"Type DISABLE and then enter your current MFA code to deactivate."
 	},
 	"HOMEPAGE":{
 		"ADDRESSEXAMPLE":"(e.g. 1EXoDusjGwvnjZUyKkxZ4UHEf77z6A5S4P)",
