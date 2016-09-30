@@ -4,6 +4,8 @@ function LoginControllerUUID($injector, $scope, $http, $location, $modalInstance
     password: ''
   };
   $scope.displayMFA = true;
+  $scope.toggleMFA = true;
+  $scope.login.mfachecked = false;
 
   Login($injector, $scope, $http, $location, $modalInstance, $q, Account, $idle);
 }
