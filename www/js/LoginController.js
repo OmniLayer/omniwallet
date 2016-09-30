@@ -11,6 +11,7 @@ function LoginController($injector, $scope, $http, $location, $modalInstance, $q
   if ( $scope != undefined && $scope.login != undefined && $scope.login.action != undefined && $scope.login.action == 'verify' ) {
     console.log("sync 1");
     $scope.displayMFA = Account.mfa;
+    $scope.mfachecked = Account.mfa;
   } else {
     //console.log("sync 2");
     $scope.login = {}

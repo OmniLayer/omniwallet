@@ -60,7 +60,8 @@ angular.module("omniConfig")
 		"SAVEDFALSE2":"Please logout, close your browse, wait a minute then log back in and try again."
 	},
 	"MFA":{
-		"TITLE":"MFA Setup",
+		"TITLE1":"MFA Setup",
+		"TITLE2":"Disable MFA",
 		"ERROR":"Sorry, something is incorrect. Please double check what you entered and try again.",
 		"SUBMIT":"One moment while we verify and process your request, this should take less than a minute.",
 		"GENERROR1":"There was a problem generating a new secret. Please wait a moment and try again.",
@@ -206,7 +207,8 @@ angular.module("omniConfig")
 		},
 		"LOGIN":{
 			"ID":"Wallet ID",
-			"INVALID":"Please enter a valid wallet id and password",
+			"INVALID1":"Sorry, we could not validate your credentials.",
+			"INVALID2":"Please check your login details and try again.",
 			"MFACODE":"I'm using Multi Factor Authentication",
 			"MFATOOLTIP":"Don't have an MFA device setup yet? Login and add one to your account under 'Account Settings'"
 		}, 
