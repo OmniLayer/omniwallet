@@ -5,6 +5,6 @@
   </div>
 </div>
 <img ng-show="loginInProgress" src="/assets/img/spinner.gif" alt="loading">
-<div ng-show="missingUUID" style="color:red">{{ 'MODALS.LOGIN.INVALID' | translate}}</div>
-<div ng-show="badPassword" style="color:red">{{ 'MODALS.LOGIN.INVALID' | translate}}</div>
+<div ng-show="missingUUID" style="color:red">{{ 'MODALS.LOGIN.INVALID1' | translate}} <br /> {{ 'MODALS.LOGIN.INVALID2' | translate}}</div>
+<div ng-show="badPassword" style="color:red">{{ 'MODALS.LOGIN.INVALID1' | translate}} <br /> {{ 'MODALS.LOGIN.INVALID2' | translate}}</div>
 <div ng-show="serverError" style="color:red">{{ 'COMMON.SERVERERROR' | translate}}</div>

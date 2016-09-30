@@ -18,9 +18,9 @@
         tooltip-append-to-body="true" tooltip-placement="top">
         {{ 'MODALS.LOGIN.MFACODE' | translate}}:
       </a>
-      <input type="checkbox" ng-model="mfachecked">
+      <input type="checkbox" ng-model="mfachecked" ng-change="login.mfatoken= mfachecked ? '' : 'null'">
     </label><br/>
-    <input type="text" class="form-control" placeholder="{{ 'COMMON.MFA' | translate}}" ng-disabled="loginInProgress || !mfachecked" ng-model="login.mfatoken" id="inputMFA" ng-keypress="keyPress($event)">
+    <input type="text" class="form-control" ng-show="mfachecked" placeholder="{{ 'COMMON.MFA' | translate}}" ng-disabled="loginInProgress || !mfachecked" ng-model="login.mfatoken" id="inputMFA" ng-keypress="keyPress($event)">
   </div>
 </div>
 
