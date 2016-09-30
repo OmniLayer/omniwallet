@@ -12,10 +12,12 @@ function LoginController($injector, $scope, $http, $location, $modalInstance, $q
     console.log("sync 1");
     $scope.displayMFA = Account.mfa;
     $scope.mfachecked = Account.mfa;
+    $scope.toggleMFA = false;
   } else {
     //console.log("sync 2");
     $scope.login = {}
     $scope.displayMFA = true;
+    $scope.toggleMFA = true;
   }
 
   Login($injector, $scope, $http, $location, $modalInstance, $q, Account, $idle);
