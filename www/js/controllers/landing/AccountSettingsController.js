@@ -7,6 +7,7 @@ angular.module("omniControllers")
       $scope.uuid = mywallet['uuid'];
       $scope.error = false;
       $scope.mfaemail = false;
+      $scope.unsaved = false;
       $scope.mfa = Account.mfa;
 
       $scope.email = Account.getSetting('email');
@@ -18,9 +19,8 @@ angular.module("omniControllers")
         } else {
           allowmfa=true;
         }
-        console.log("checking, MFA allowed is ",allowmfa);
         $scope.allowmfa=allowmfa;
-      }
+      };
 
       self.checkMFA();
 
@@ -37,14 +37,20 @@ angular.module("omniControllers")
 
       $scope.label=function (name, abv) {
          return name+" ("+abv+")";
-      }
+      };
+
+      $scope.resetMSGS = function() {
+        $scope.error=false;
+        $scope.saved=false;
+        $scope.unsaved = true;
+      };
 
       $scope.save = function() {
           self.checkMFA();
           if ($scope.myForm.$error.email) {
             $scope.saved = false;
             $scope.error = true;
-          } else if (!self.allowmfa) {
+          } else if (Account.mfa && !self.allowmfa) {
             $scope.saved = false;
             $scope.mfaemail = true;
           } else {
@@ -58,6 +64,7 @@ angular.module("omniControllers")
             $scope.saved = true;
             $scope.error = false;
             $scope.mfaemail = false;
+            $scope.unsaved = false;
             Account.setCurrencySymbol($scope.selectedCurrency);
             var appraiser= $injector.get("appraiser");
             appraiser.updateValues();
