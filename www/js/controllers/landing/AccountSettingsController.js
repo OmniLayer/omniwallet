@@ -6,9 +6,23 @@ angular.module("omniControllers")
       $scope.wallet = mywallet;
       $scope.uuid = mywallet['uuid'];
       $scope.error = false;
+      $scope.mfaemail = false;
       $scope.mfa = Account.mfa;
 
       $scope.email = Account.getSetting('email');
+
+      checkMFA = function(){
+        $scope.emailonfile = Account.getSetting('email');
+        if ($scope.email.length==0) {
+          allowmfa=false;
+        } else {
+          allowmfa=true;
+        }
+        console.log("checking, MFA allowed is ",allowmfa);
+        $scope.allowmfa=allowmfa;
+      }
+
+      self.checkMFA();
 
       $http.get('/v1/values/currencylist').success(function(data) {
         $scope.currencylist = data;    
@@ -26,9 +40,13 @@ angular.module("omniControllers")
       }
 
       $scope.save = function() {
+          self.checkMFA();
           if ($scope.myForm.$error.email) {
             $scope.saved = false;
-            $scope.error = true;   
+            $scope.error = true;
+          } else if (!self.allowmfa) {
+            $scope.saved = false;
+            $scope.mfaemail = true;
           } else {
             mywallet['email'] = $scope.email;
             mywallet['settings'] = { 'usercurrency':$scope.selectedCurrency,
@@ -39,9 +57,11 @@ angular.module("omniControllers")
             Account.saveSession();
             $scope.saved = true;
             $scope.error = false;
+            $scope.mfaemail = false;
             Account.setCurrencySymbol($scope.selectedCurrency);
             var appraiser= $injector.get("appraiser");
             appraiser.updateValues();
+            self.checkMFA();
           }
         };
 
@@ -71,6 +91,7 @@ angular.module("omniControllers")
               newPasswordModal.result.then(function() {
                 $scope.saved = true;
                 $scope.error = false;
+                $scope.mfaemail = false;
               }, function() {
                 $scope.saved = false;
                 //Closing modal shouldn't generate an error
@@ -128,7 +149,9 @@ angular.module("omniControllers")
               MfaModal.result.then(function() {
                 $scope.saved = true;
                 $scope.error = false;
+                $scope.mfaemail = false;
                 $scope.mfa=Account.mfa;
+                self.checkMFA();
               }, function() {
                 $scope.saved = false;
               });
