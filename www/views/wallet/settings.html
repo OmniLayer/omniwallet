@@ -34,6 +34,7 @@
         <input class="form-control" type="email" ng-model="email">
         <div collapse="!myForm.$error.email"><p class="alert-danger" align="center">{{'SETTINGS.EMAILTOOLTIP' | translate}}</p></div>
       </div>
+      <button type="button" class="btn btn-secondary" ng-hide="email==emailonfile" ng-model="resetEmail" ng-click="email=emailonfile" >{{'COMMON.RESET' | translate}}</button>
     </div> 
 
     <div class="form-group">
