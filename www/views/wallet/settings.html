@@ -32,7 +32,7 @@
       </label>
       <div class="col-xs-4">
         <input class="form-control" type="email" ng-model="email" ng-change="resetMSGS()">
-        <div collapse="!myForm.$error.email"><p class="alert-danger" align="center">{{'SETTINGS.EMAILTOOLTIP' | translate}}</p></div>
+        <div collapse="!myForm.$error.email"><p class="alert-danger" align="center">{{'SETTINGS.EMAILALERT' | translate}}</p></div>
       </div>
       <button type="button" class="btn btn-secondary" ng-hide="email==emailonfile" ng-model="resetEmail" ng-click="email=emailonfile" >{{'COMMON.RESET' | translate}}</button>
     </div> 
