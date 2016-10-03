@@ -20,7 +20,8 @@
           tooltip="{{'SETTINGS.MFATOOLTIP' | translate}}"
           tooltip-append-to-body="true" tooltip-placement="top">{{'SETTINGS.MFA' | translate}}</a>
       </label>
-      <div class="col-xs-6"><a href="" ng-click="setupMFA()"><p class="form-control-static">{{mfa ? 'SETTINGS.MFAE' : 'SETTINGS.MFAD' | translate}}</p></a></div>
+      <div class="col-xs-6" ng-hide="allowmfa"><p class="form-control-static">{{'SETTINGS.MFAEMAILREQ' | translate}}</p></a></div>
+      <div class="col-xs-6" ng-show="allowmfa"><a href="" ng-click="setupMFA()"><p class="form-control-static">{{mfa ? 'SETTINGS.MFAE' : 'SETTINGS.MFAD' | translate}}</p></a></div>
     </div>
 
     <div class="form-group">
@@ -87,7 +88,7 @@
       </div>
     </div>
 
-    <button type="button" class="btn btn-main" ng-model="singleModel" ng-click="save()" ng-disabled="myForm.$error.email">{{'SETTINGS.SAVE' | translate}}</button>
+    <button type="button" class="btn btn-main" ng-model="singleModel" ng-click="save()" ng-disabled="(myForm.$error.email) || (mfa && email.length==0)">{{'SETTINGS.SAVE' | translate}}</button>
   </form>
   <br> 
   <div collapse="!saved">
@@ -101,6 +102,13 @@
      <button type="button" class="close" aria-hidden="true" ng-click="error=!error">&times;</button>
      <strong>{{'COMMON.ERROR' | translate}}:</strong> {{'SETTINGS.SAVEDFALSE1' | translate}} <br />
              {{'SETTINGS.SAVEDFALSE2' | translate}}<br />
+    </div> 
+  </div>
+
+  <div collapse="!mfaemail && !(mfa && email.length==0)">
+    <div class="col-xs-8 alert alert-danger alert-dismissable">
+     <button type="button" class="close" aria-hidden="true" ng-click="email=emailonfile">&times;</button>
+     <strong>{{'SETTINGS.MFAEMAIL' | translate}}</strong>
     </div> 
   </div>
 
