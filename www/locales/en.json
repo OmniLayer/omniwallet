@@ -44,7 +44,7 @@
 		"MFA":"MFA:",
 		"MFAE":"Click Here to Disable your Multifactor Authentication (MFA) Device",
 		"MFAD":"Click Here to Setup/Enable a MultiFactor Authentication (MFA) Device",
-		"EMAILTOOLTIP":"(Optional) Your email can be used to recover your Wallet ID if you lose/misplace it and eventually for notifications concerning wallet activity.",
+		"EMAILTOOLTIP":"Your email can be used to recover your Wallet ID if you lose/misplace it and eventually for notifications concerning wallet activity.",
 		"EMAIL":"Wallet Email:",
 		"EMAILALERT":"Please enter a valid email",
 		"CURRENCYTOOLTIP":"Choose the preffered currency you wish all balance information in your wallet to be diplayed in.",
@@ -56,7 +56,9 @@
 		"SAVE":"Save Preferences",
 		"SAVEDTRUE":"Your Wallet has been updated.",
 		"SAVEDFALSE1":"We seem to have encountered a problem updating your Wallet.",
-		"SAVEDFALSE2":"Please logout, close your browse, wait a minute then log back in and try again."
+		"SAVEDFALSE2":"Please logout, close your browse, wait a minute then log back in and try again.",
+		"MFAEMAIL":"You Currently have an Active MFA Device. For security purposes you can not remove your email at this time.",
+		"MFAEMAILREQ":"For security and recovery purposes you can not setup an MFA device until you add a valid email to your account."
 	},
 	"MFA":{
 		"TITLE1":"MFA Setup",
