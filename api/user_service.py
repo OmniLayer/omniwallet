@@ -4,6 +4,7 @@ import os
 import base64
 import werkzeug.security as ws
 import pyotp,time
+import datetime
 from Crypto.Signature import PKCS1_v1_5
 from Crypto.Hash import SHA
 from Crypto.PublicKey import RSA
@@ -393,19 +394,20 @@ def get_setting(uuid,key):
   ret=None
   try:
     settings=read_settings(uuid)
-    ret=settings[key]
+    ret=settings[key]['value']
   except Exception as e:
     print "Could not get setting \"",key,"\" for uuid ",uuid," error: ",e
   return ret
 
 def set_setting(uuid,key,value):
   ret=False
+  time=str(datetime.datetime.now())
   try:
     settings=read_settings(uuid)
-    if value==None:
-      del settings[key]
+    if key in settings and 'created_at' in settings[key]:
+      settings[key]={'value':value,'updated_at':time,'created_at':settings[key]['created_at']}
     else:
-      settings[key]=value
+      settings[key]={'value':value,'updated_at':time,'created_at':time}
     ret=write_settings(uuid,settings)
   except Exception as e:
     print "Error setting ",key," to value ",value," for uuid ",uuid," error: ",e
