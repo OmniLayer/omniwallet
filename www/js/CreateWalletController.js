@@ -21,13 +21,17 @@ function MFASetupController($scope, $location, $modalInstance, $http, Account) {
   $scope.dismiss = $modalInstance.dismiss;
 
   $scope.mfa = Account.mfa;
-  if (!Account.mfa) {
+  if (Account.mfa) {
+    $scope.asq="valid";
+    $scope.asa="valid";
+  } else {
     $scope.mfadisable="no";
   }
 
-  $scope.setupMFA = function(mfadisable,mfatoken) {
+  $scope.setupMFA = function(mfadisable,mfatoken,asq,asa) {
     $scope.validating=true;
     $scope.serverError = false;
+    console.log(asq,asa);
 
     token=mfatoken;
     secret=$scope.secret;
@@ -49,7 +53,7 @@ function MFASetupController($scope, $location, $modalInstance, $http, Account) {
     $http.get('/v1/user/wallet/challenge?uuid=' + Account.uuid)
     .success(function(data, status) {
       //Account.walletKey = CryptUtil.generateSymmetricKey(change.password, data.salt);
-      Account.updateMFA(secret,token,action)
+      Account.updateMFA(secret,token,action,asq,asa)
         .then(function(result) {
           if (result.data.updated) {
             console.log("Update Successful");
