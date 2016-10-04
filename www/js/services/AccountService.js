@@ -13,7 +13,6 @@ angular.module("omniServices")
           return uuid;
         };
 
-
         self.verifyUUID = function(uuid) {
           //Check UUID for proper format
           verify = uuid.match(/^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89a-f][0-9a-f]{3}-[0-9a-f]{12}$/i) || []
@@ -219,7 +218,7 @@ angular.module("omniServices")
             }
         }
 
-        self.updateMFA = function(secret,token,action) {
+        self.updateMFA = function(secret,token,action,asq,asa) {
             if(self.loggedIn){
                 return $http.get('/v1/user/wallet/challenge?uuid=' + self.uuid)
                 .then(function(result) {
@@ -236,7 +235,9 @@ angular.module("omniServices")
                       mfasecret: secret,
                       mfatoken: token,
                       mfaaction: action,
-                      signature: signature
+                      signature: signature,
+                      question: asq,
+                      answer: asa
                     }
                   });
                 }).then(function(result) {
