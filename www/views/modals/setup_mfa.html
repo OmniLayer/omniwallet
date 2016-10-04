@@ -22,7 +22,7 @@
   </div>
 </div>
 
-<form name="mfaForm" role="form" novalidate class="form-horizontal" ng-submit="setupMFA(mfadisable,mfatoken)">
+<form name="mfaForm" role="form" novalidate class="form-horizontal" ng-submit="setupMFA(mfadisable,mfatoken,asq,asa)">
   <div class="modal-body">
 
     <div class="row" ng-show={{mfa}}>
@@ -30,6 +30,32 @@
         <label class="control-label" for="inputDISABLE">{{'MFA.DIS1' | translate}}<br />{{'MFA.DIS2' | translate}}</label>
         <div class="controls">
           <input name="mfadisable" type="text" ng-model="mfadisable" class="form-control" id="inputDISABLE" required>
+        </div>
+      </div>
+    </div>
+
+    <div class="row" ng-show={{!mfa}}>
+      <div class="form-group col-md-10 col-md-push-1">
+        <label class="control-label" for="inputQUESTION">
+          <a href=""
+          tooltip="{{'MFA.ASQTOOLTIP' | translate}}"
+          tooltip-append-to-body="true" tooltip-placement="top">{{'MFA.ASQ' | translate}}</a>
+        </label>
+        <div class="controls">
+          <input name="asq" type="text" ng-model="asq" class="form-control" id="inputASQ" required>
+        </div>
+      </div>
+    </div>
+
+    <div class="row" ng-show={{!mfa}}>
+      <div class="form-group col-md-10 col-md-push-1">
+        <label class="control-label" for="inputASA">
+          <a href=""
+          tooltip="{{'MFA.ASATOOLTIP' | translate}}"
+          tooltip-append-to-body="true" tooltip-placement="top">{{'MFA.ASA' | translate}}</a>
+        </label>
+        <div class="controls">
+          <input name="asa" type="text" ng-model="asa" class="form-control" id="inputASA" required>
         </div>
       </div>
     </div>

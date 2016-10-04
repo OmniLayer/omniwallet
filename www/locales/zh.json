@@ -74,7 +74,11 @@
 		"SEC3":"Anyone with this secret will be able to duplicate your MFA authorization codes.",
 		"SEC4":"Enter the current code being displayed on your MFA device to validate and complete the setup.",
 		"DIS1":"You currently have an MFA Device setup on your account.",
-		"DIS2":"Type DISABLE and then enter your current MFA code to deactivate."
+		"DIS2":"Type DISABLE and then enter your current MFA code to deactivate.",
+		"ASQ":"Personal Security Question",
+		"ASQTOOLTIP":"In the event you loose your MFA device Omniwallet's support team can use this Security Question/Answer to help verify you are the wallet owner and assist in removing the MFA requirements",
+		"ASA":"Personal Security Question Answer",
+		"ASATOOLTIP":"Enter an answer for your security question."
 	},
 	"HOMEPAGE":{
 		"ADDRESSEXAMPLE":"(例如 1EXoDusjGwvnjZUyKkxZ4UHEf77z6A5S4P)",
