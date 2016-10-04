@@ -31,7 +31,6 @@ function MFASetupController($scope, $location, $modalInstance, $http, Account) {
   $scope.setupMFA = function(mfadisable,mfatoken,asq,asa) {
     $scope.validating=true;
     $scope.serverError = false;
-    console.log(asq,asa);
 
     token=mfatoken;
     secret=$scope.secret;
