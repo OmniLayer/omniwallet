@@ -42,7 +42,7 @@ angular.module("omniConfig")
 		"ID":"Wallet ID:",
 		"PASSWORD":"Wallet Password:",
 		"PASSWORDCHANGE":"Click Here To Change Your Wallet Password",
-		"MFATOOLTIP":"Add/Remove an MFA compatible device (Google Authenticator, Authy, ...) to protect your account logins",
+		"MFATOOLTIP":"Add/Remove a compatible MFA device (Google Authenticator, Authy, ...) to protect your account logins",
 		"MFA":"MFA:",
 		"MFAE":"Click Here to Disable your Multifactor Authentication (MFA) Device",
 		"MFAD":"Click Here to Setup/Enable a MultiFactor Authentication (MFA) Device",
