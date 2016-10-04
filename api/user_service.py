@@ -164,6 +164,9 @@ def update():
   token=request.form['mfatoken'] if 'mfatoken' in request.form else None
   action=request.form['mfaaction'] if 'mfaaction' in request.form else None
 
+  question=request.form['question'] if 'question' in request.form else None
+  answer=request.form['answer'] if 'answer' in request.form else None
+
   if config.LOCALDEVBYPASSDB:
     session_challenge = session + "_challenge"
     session_pubkey = session + "_public_key"
@@ -223,7 +226,9 @@ def update():
       ret=write_wallet(uuid, wallet)
   elif None not in [token,action]:
     ret=update_mfa(uuid,token,action,secret)
-
+    if ret and action == 'add':
+      data={'question':question,'answer':answer}
+      set_setting(uuid,'challange',data)
 
   response = {
       'updated': ret
