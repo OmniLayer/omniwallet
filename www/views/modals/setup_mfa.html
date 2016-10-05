@@ -75,7 +75,7 @@
       <div class="controls">
         <img ng-show="validating" src="/assets/img/spinner.gif" alt="loading">
         <button type="button" class="btn btn-warning" ng-disabled="validating" ng-click="dismiss('close')">Cancel</button>
-        <input type="submit" class="btn" ng-disabled="validating || mfaForm.$invalid || (mfa && mfadisable!='DISABLE')">
+        <button type="submit" class="btn" ng-disabled="validating || mfaForm.$invalid || (mfa && mfadisable!='DISABLE')">Submit</button>
       </div>
     </div>
     <div style="color:red" ng-show="serverError">{{'MFA.ERROR' | translate}}</div>
