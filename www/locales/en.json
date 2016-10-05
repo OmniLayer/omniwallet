@@ -59,7 +59,8 @@
 		"SAVEDFALSE1":"We seem to have encountered a problem updating your Wallet.",
 		"SAVEDFALSE2":"Please logout, close your browse, wait a minute then log back in and try again.",
 		"MFAEMAIL":"You Currently have an Active MFA Device. For security purposes you can not remove your email at this time.",
-		"MFAEMAILREQ":"For security and recovery purposes you can not setup an MFA device until you add a valid email to your account."
+		"MFAEMAILREQ":"For security and recovery purposes you can not setup an MFA device until you add a valid email to your account.",
+		"SHOWHIDEASQ":"Show/Hide Security Question"
 	},
 	"MFA":{
 		"TITLE1":"MFA Setup",
@@ -77,6 +78,7 @@
 		"DIS2":"Type DISABLE and then enter your current MFA code to deactivate.",
 		"ASQ":"Personal Security Question",
 		"ASQTOOLTIP":"In the event you loose your MFA device Omniwallet's support team can use this Security Question/Answer to help verify you are the wallet owner and assist in removing the MFA requirements",
+		"ASQPLACEHOLDER":"Setup your Personal Security Question in the MFA Setup",
 		"ASA":"Personal Security Question Answer",
 		"ASATOOLTIP":"Enter an answer for your security question."
 	},

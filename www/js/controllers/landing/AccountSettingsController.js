@@ -9,12 +9,21 @@ angular.module("omniControllers")
       $scope.mfaemail = false;
       $scope.unsaved = false;
       $scope.mfa = Account.mfa;
-      if (typeof Account.asq == "undefined" || Account.asq == null) {
-        $scope.asq = "Setup your Personal Security Question in the MFA Setup";
+
+      if ((typeof Account.asq=="undefined") || (Account.asq==null)) {
+        $scope.asqtype='text';
       } else {
-        $scope.asq = Account.asq;
+         $scope.asqtype='password';
       }
 
+      $scope.asq = Account.asq;
+
+      $scope.hideShowQuestion = function(){
+        if ($scope.asqtype == 'password')
+          $scope.asqtype = 'text';
+        else
+          $scope.asqtype = 'password';
+      };
 
       $scope.email = Account.getSetting('email');
 
@@ -169,7 +178,6 @@ angular.module("omniControllers")
                 self.checkMFA();
               }, function() {
                 $scope.saved = false;
-                $scope.asq = "Setup your Personal Security Question in the MFA Setup";
               });
           });
       };
