@@ -148,6 +148,7 @@ angular.module("omniServices")
                             self.wallet = wallet;
                             self.walletKey = self.walletKeyTemp;
                             self.mfa = data.mfa;
+                            self.asq = data.asq;
                             self.settings.firstLogin=false;
                             // update wallet service
                             Wallet.initialize(wallet);
@@ -242,6 +243,7 @@ angular.module("omniServices")
                   });
                 }).then(function(result) {
                   //console.log(result);
+                  self.asq=asq;
                   return result;
                 }, function(result) {
                   console.log("Failure updating");
