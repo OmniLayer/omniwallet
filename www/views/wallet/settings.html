@@ -31,7 +31,7 @@
           tooltip-append-to-body="true" tooltip-placement="top"> <strong>{{'MFA.ASQ' | translate}}</strong></a>
       </label>
       <div class="col-xs-5">
-        <input class="form-control" type="{{asqtype}}" ng-model="asq" ng-disabled="true" placeholder="{{'MFA.ASQPLACEHOLDER' | translate}}">
+        <input class="form-control" type="{{asqtype}}" ng-model="asq" ng-readonly="true" placeholder="{{'MFA.ASQPLACEHOLDER' | translate}}">
       </div>
       <button type="button" class="btn btn-secondary" ng-model="showASQ" ng-click="hideShowQuestion()" >{{'SETTINGS.SHOWHIDEASQ' | translate}}</button>
     </div> 
