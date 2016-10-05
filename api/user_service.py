@@ -164,8 +164,8 @@ def update():
   token=request.form['mfatoken'] if 'mfatoken' in request.form else None
   action=request.form['mfaaction'] if 'mfaaction' in request.form else None
 
-  question=request.form['question'] if 'question' in request.form else None
-  answer=request.form['answer'] if 'answer' in request.form else None
+  question=str(request.form['question'])[:64] if 'question' in request.form else None
+  answer=str(request.form['answer'])[:32] if 'answer' in request.form else None
 
   if config.LOCALDEVBYPASSDB:
     session_challenge = session + "_challenge"
@@ -228,7 +228,12 @@ def update():
     ret=update_mfa(uuid,token,action,secret)
     if ret and action == 'add':
       data={'question':question,'answer':answer}
-      set_setting(uuid,'challange',data)
+      encdata=encrypt_value(json.dumps(data))
+      if encdata[0]:
+        if not (set_setting(uuid,'asq',encdata[1])):
+          print "Error setting ASQ:",uuid,encdata
+      else:
+        print "Error setting ASQ:",uuid,data,encdata
 
   response = {
       'updated': ret
@@ -297,10 +302,22 @@ def login():
     dbExecute("update sessions set pchallenge=NULL, timestamp=DEFAULT, pubkey=%s where sessionid=%s",(public_key, session))
     dbCommit()
     update_login(uuid)
-  #end else: 
+  #end else:
+
+  question=None
+  value=get_setting(uuid,'asq')
+  if value not in ['None',None]:
+    asq=decrypt_value(value)
+    if asq[0]:
+      try:
+        question=json.loads(asq[1])['question']
+      except Exception as e:
+        print "couldn't load user setting 'ASQ', error:",e
+
   response = {
       'wallet': wallet_data,
-      'mfa': mfa
+      'mfa': mfa,
+      'asq':question
   }
 
   return jsonify(response)

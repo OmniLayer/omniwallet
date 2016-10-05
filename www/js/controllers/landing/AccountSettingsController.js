@@ -10,6 +10,21 @@ angular.module("omniControllers")
       $scope.unsaved = false;
       $scope.mfa = Account.mfa;
 
+      if ((typeof Account.asq=="undefined") || (Account.asq==null)) {
+        $scope.asqtype='text';
+      } else {
+         $scope.asqtype='password';
+      }
+
+      $scope.asq = Account.asq;
+
+      $scope.hideShowQuestion = function(){
+        if ($scope.asqtype == 'password')
+          $scope.asqtype = 'text';
+        else
+          $scope.asqtype = 'password';
+      };
+
       $scope.email = Account.getSetting('email');
 
       checkMFA = function(){
@@ -137,6 +152,7 @@ angular.module("omniControllers")
                 $scope.getsecretError = false;
                 $scope.secret=data.secret;
                 $scope.prov=data.prov;
+                $scope.asq="";
               }
             }).error(function() {
               $scope.getsecretError = true;
@@ -158,6 +174,7 @@ angular.module("omniControllers")
                 $scope.error = false;
                 $scope.mfaemail = false;
                 $scope.mfa=Account.mfa;
+                $scope.asq=Account.asq;
                 self.checkMFA();
               }, function() {
                 $scope.saved = false;

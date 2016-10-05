@@ -22,7 +22,7 @@ function MFASetupController($scope, $location, $modalInstance, $http, Account) {
 
   $scope.mfa = Account.mfa;
   if (Account.mfa) {
-    $scope.asq="valid";
+    $scope.asq=Account.asq;
     $scope.asa="valid";
   } else {
     $scope.mfadisable="no";
@@ -56,7 +56,7 @@ function MFASetupController($scope, $location, $modalInstance, $http, Account) {
         .then(function(result) {
           if (result.data.updated) {
             console.log("Update Successful");
-            $scope.mfa=Account.mfa=!Account.mfa;            
+            $scope.mfa=Account.mfa=!Account.mfa;
             $modalInstance.close()
           } else {
             console.log("Update Failed");
