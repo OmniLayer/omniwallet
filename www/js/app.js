@@ -44,6 +44,7 @@ var app = angular.module('omniwallet', [
   'reCAPTCHA',
   'pascalprecht.translate',
   'nvd3',
+  'ja.qr',
   'omniConfig',
   'omniFilters',
   'omniDirectives',

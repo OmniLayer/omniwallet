@@ -29,7 +29,58 @@
 		"ACTIVECROWDSALES":"Active Crowdsales",
 		"HISTORY":"History",
 		"FEES":"Miner Fees (BTC)",
-		"PASSWORD":"Password"
+		"PASSWORD":"Password",
+		"DEFAULT":"Default",
+		"SUCCESS":"Success",
+		"ERROR":"Error",
+		"MFA":"MFA Code",
+		"RESET":"Reset"
+	},
+	"SETTINGS":{
+		"TITLE":"Account Settings",
+		"ID":"Wallet ID:",
+		"PASSWORD":"Wallet Password:",
+		"PASSWORDCHANGE":"Click Here To Change Your Wallet Password",
+		"MFATOOLTIP":"Add/Remove a compatible MFA device (Google Authenticator, Authy, ...) to protect your account logins",
+		"MFA":"MFA:",
+		"MFAE":"Click Here to Disable your Multifactor Authentication (MFA) Device",
+		"MFAD":"Click Here to Setup/Enable a MultiFactor Authentication (MFA) Device",
+		"EMAILTOOLTIP":"Your email can be used to recover your Wallet ID if you lose/misplace it and eventually for notifications concerning wallet activity.",
+		"EMAIL":"Wallet Email:",
+		"EMAILALERT":"Please enter a valid email",
+		"CURRENCYTOOLTIP":"Choose the preffered currency you wish all balance information in your wallet to be diplayed in.",
+		"CURRENCY":"Wallet Currency:",
+		"TESTECOTOOLTIP":"There are two types of ecosystems in the Masterprotocol, Production and Test. Enabling this option will display both in your wallet. Note: Disabling this option will not prevent you from receiving test ecosystem tokens. It will only filter it from your wallet display.",
+		"TESTECO":"Display Test Ecosystem:",
+		"FILTERDEXTOOLTIP":"Some DEx offers can no longer be completed because the cost to purchase the remaining tokens is less than the minimium amount allowed by the Bitcoin network. This option filters them out of the display list.",
+		"FILTERDEX":"Filter DEx dust level offers:",
+		"SAVE":"Save Preferences",
+		"SAVEDTRUE":"Your Wallet has been updated.",
+		"SAVEDFALSE1":"We seem to have encountered a problem updating your Wallet.",
+		"SAVEDFALSE2":"Please logout, close your browse, wait a minute then log back in and try again.",
+		"MFAEMAIL":"You Currently have an Active MFA Device. For security purposes you can not remove your email at this time.",
+		"MFAEMAILREQ":"For security and recovery purposes you can not setup an MFA device until you add a valid email to your account.",
+		"SHOWHIDEASQ":"Show/Hide Security Question"
+	},
+	"MFA":{
+		"TITLE1":"MFA Setup",
+		"TITLE2":"Disable MFA",
+		"ERROR":"Sorry, the code you entered is incorrect. Please double check and try again.",
+		"SUBMIT":"One moment while we verify and process your request, this should take less than a minute.",
+		"GENERROR1":"There was a problem generating a new secret. Please wait a moment and try again.",
+		"GENERROR2":"If this error continues to happen please notify the Omni team.",
+		"IMPORT":"To setup your account to require an MFA device scan the QR code below or manually enter the secret listed below into your MFA Device/Software (Google Authenticator, Authy, etc..)",
+		"SEC1":"Your Token Secret is",
+		"SEC2":"Store this safely and securely because",
+		"SEC3":"Anyone with this secret will be able to duplicate your MFA authorization codes.",
+		"SEC4":"Enter the current code being displayed on your MFA device to validate and complete the setup.",
+		"DIS1":"You currently have an MFA Device setup on your account.",
+		"DIS2":"Type DISABLE and then enter your current MFA code to deactivate.",
+		"ASQ":"Personal Security Question:",
+		"ASQTOOLTIP":"In the event you lose your MFA device Omniwallet's support team can use this Security Question/Answer to help verify you are the wallet owner and assist in removing the MFA requirements",
+		"ASQPLACEHOLDER":"Setup your Personal Security Question in the MFA Setup",
+		"ASA":"Personal Security Question Answer:",
+		"ASATOOLTIP":"Enter an answer for your security question."
 	},
 	"HOMEPAGE":{
 		"ADDRESSEXAMPLE":"(e.g. 1EXoDusjGwvnjZUyKkxZ4UHEf77z6A5S4P)",
@@ -46,7 +97,7 @@
 			"GITHUBDESC":"Search/see our 'Open Issues' and what we are 'Actively Working' on now. Don't see your specific topic? We encourage you to open a new issue to let us know. (Please include as many details as possible including ",
 			"GITHUBLINK":"the output of the developer console",
 			"TALKTITLE":"Knowledge Base/Support Center",
-			"TALKDESC":"This is a support knowledge base where you can review common topics, post questions asking for help or help answer other users questions",
+			"TALKDESC":"This is a support knowledge base where you can review common topics, questions and answers.",
 			"EMAILTITLE":"Email",
 			"EMAILDESC":"You can also reach us directly at",
 			"EMAILLINK":"the output of the developer console",
@@ -164,7 +215,10 @@
 		},
 		"LOGIN":{
 			"ID":"Wallet ID",
-			"INVALID":"Please enter a valid wallet id and password"
+			"INVALID1":"Sorry, we could not validate your credentials. Please check them and try again",
+			"INVALID2":"If you continue to have difficulties, check out our ",
+			"MFACODE":"I'm using Multi Factor Authentication",
+			"MFATOOLTIP":"Don't have an MFA device setup yet? Login and add one to your account under 'Account Settings'"
 		}, 
 		"CONFIRM":{
 			"OFFLINE":"Your transaction was generated successfully, now save the text above and sign it on your Armory offline computer. Come back with the signed text to broadcast it.",
@@ -353,8 +407,8 @@
 			"MODAL_FROM":"From",
 			"MODAL_TO":"To",
 			"CONFIRM":"Confirm Send",
-                        "AVAIL":"From address available",
-                        "LOWFEE":"Your 'From Address' does not have enough BTC to complete this transaction. Please select a different address or send enough BTC to cover the Total transaction cost."
+			"AVAIL":"From address available",
+			"LOWFEE":"Your 'From Address' does not have enough BTC to complete this transaction. Please select a different address or send enough BTC to cover the Total transaction cost."
 		},
 		"ASSETS":{
 			"ASSETS":"Assets",
@@ -372,7 +426,9 @@
 			"AMOUNT":"Amount",
 			"TXTIME":"Transaction time",
 			"TXDETAILS":"Transaction details",
-			"MOREDETAILS":"See transaction details"
+			"MOREDETAILS":"See transaction details",
+			"BTCNOTE1":"Note: At this time the history page only includes Omni Protocol transactions.",
+			"BTCNOTE2":"To see Bitcoin Transaction history we recommend a Bitcoin Explorer like: "
 		}
 	},
 	"ASSET":{
