@@ -1,7 +1,11 @@
 function LoginControllerUUID($injector, $scope, $http, $location, $modalInstance, $q, Account, uuid, $idle) {
   $scope.login = {
-    uuid: uuid
-  }
+    uuid: uuid,
+    password: ''
+  };
+  $scope.displayMFA = true;
+  $scope.toggleMFA = true;
+  $scope.login.mfachecked = false;
 
   Login($injector, $scope, $http, $location, $modalInstance, $q, Account, $idle);
 }
@@ -9,8 +13,18 @@ function LoginControllerUUID($injector, $scope, $http, $location, $modalInstance
 function LoginController($injector, $scope, $http, $location, $modalInstance, $q, Account, $idle) {
   if ( $scope != undefined && $scope.login != undefined && $scope.login.action != undefined && $scope.login.action == 'verify' ) {
     console.log("sync 1");
+    $scope.displayMFA = Account.mfa;
+    $scope.login.mfachecked = Account.mfa;
+    $scope.toggleMFA = false;
   } else {
-    $scope.login = {}
+    //console.log("sync 2");
+    $scope.login = {
+      uuid: '',
+      password: ''
+    }
+    $scope.displayMFA = true;
+    $scope.toggleMFA = true;
+    $scope.login.mfachecked = false;
   }
 
   Login($injector, $scope, $http, $location, $modalInstance, $q, Account, $idle);
@@ -25,6 +39,24 @@ function Login($injector, $scope, $http, $location, $modalInstance, $q, Account,
   $scope.login.button == undefined ? $scope.button = 'Open Wallet' : $scope.button = $scope.login.button;
   $scope.login.bodyTemplate != undefined ? $scope.bodyTemplate = $scope.login.bodyTemplate : null;
   $scope.login.footerTemplate != undefined ? $scope.footerTemplate = $scope.login.footerTemplate : null;
+  $scope.loginInvalid = true;
+
+  $scope.checkLogin=function() {
+    valid=true;
+    if ( !Account.verifyUUID($scope.login.uuid) || $scope.login.password.length < 1 ) {
+      valid=false;
+    }
+    if ($scope.login.mfachecked && $scope.login.mfatoken.length<6) {
+      valid=false;
+    }
+    $scope.loginInvalid = !valid;
+  }
+
+  $scope.toggleMFAcheckbox=function() {
+    if ($scope.toggleMFA) {
+      $scope.login.mfachecked=!$scope.login.mfachecked;
+    }
+  }
   
   $scope.open = function(login) {
     if ( Account.verifyUUID(login.uuid) == false ) {
@@ -39,16 +71,18 @@ function Login($injector, $scope, $http, $location, $modalInstance, $q, Account,
 
     if($scope.login.action == 'verify'){
       console.log("verifying");	
-      Account.verify(login.uuid,login.password).then(function(){
+      Account.login(login.uuid,login.password,login.mfatoken).then(function(){
+        console.log("verified");
         $modalInstance.close(Account.wallet) //pass wallet as verification
         $idle.watch();
       },function(error){
+        console.log("not verified");
         $scope.loginInProgress=false;
         angular.extend($scope,error);
       });
     } else {
 
-      Account.login(login.uuid,login.password).then(function(wallet){
+      Account.login(login.uuid,login.password,login.mfatoken).then(function(wallet){
           $modalInstance.close()
           $location.path('/wallet');
           $idle.watch();

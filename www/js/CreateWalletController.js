@@ -1,5 +1,3 @@
-
-
 function WalletPasswordController($scope, $location, $modalInstance, $http, Account) {
   $scope.dismiss = $modalInstance.dismiss;
 
@@ -15,6 +13,61 @@ function WalletPasswordController($scope, $location, $modalInstance, $http, Acco
     }).error(function() {
       $scope.validating=false;
       $scope.serverError = true;    
+    });
+  }
+}
+
+function MFASetupController($scope, $location, $modalInstance, $http, Account) {
+  $scope.dismiss = $modalInstance.dismiss;
+
+  $scope.mfa = Account.mfa;
+  if (Account.mfa) {
+    $scope.asq=Account.asq;
+    $scope.asa="valid";
+  } else {
+    $scope.mfadisable="no";
+  }
+
+  $scope.setupMFA = function(mfadisable,mfatoken,asq,asa) {
+    $scope.validating=true;
+    $scope.serverError = false;
+
+    token=mfatoken;
+    secret=$scope.secret;
+
+    if (Account.mfa) {
+      //mfa already setup, check if we're disabling
+      if (mfadisable=='DISABLE') {
+        action='del';
+      } else {
+        //throw error
+        $scope.validating=false;
+        $scope.serverError = true;
+        return;
+      }
+    } else {
+      action='add';
+    }
+
+    $http.get('/v1/user/wallet/challenge?uuid=' + Account.uuid)
+    .success(function(data, status) {
+      //Account.walletKey = CryptUtil.generateSymmetricKey(change.password, data.salt);
+      Account.updateMFA(secret,token,action,asq,asa)
+        .then(function(result) {
+          if (result.data.updated) {
+            console.log("Update Successful");
+            $scope.mfa=Account.mfa=!Account.mfa;
+            $modalInstance.close()
+          } else {
+            console.log("Update Failed");
+            $scope.validating=false;
+            $scope.serverError = true;
+          }
+          //console.log(result);
+        });
+    }).error(function() {
+      $scope.validating=false;
+      $scope.serverError = true;
     });
   }
 }

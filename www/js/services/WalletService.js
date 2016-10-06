@@ -139,6 +139,15 @@ angular.module("omniServices")
 	            })
 	        }
 
+		self.getTotalValue = function(address) {
+			var value=0;
+			address.balance.forEach( function(asset, index, array){
+				var price=self.getAsset(asset.id).price;
+				value+=address.getDisplayBalance(asset.id) * price;
+			});
+			return value;
+		}
+
 	        self.getAsset = function(assetId){
 	        	return self.assets.filter(function(asset){
 	        		return asset.id == assetId;
