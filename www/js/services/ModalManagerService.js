@@ -21,50 +21,6 @@ angular.module("omniServices")
             return enc;
           };
 
-          self.verifyByEmail = function(email) {
-              var modalScope = $rootScope.$new()
-              modalScope.title = 'Login';
-              modalScope.button = 'Open Wallet';
-
-            self.modalInstance = $modal.open({
-              templateUrl: '/views/modals/partials/verify_by_email.html',
-              controller: function VerifyByEmailController($scope, $location, $modalInstance, $idle, Account, AddressManager) {
-                $scope.dismiss = $modalInstance.dismiss;
-                $scope.validatetoken=false;
-
-                function randomString(length) {
-                  var chars = '23456789abcdefghjkmnpqrstuvwxyzABCDEFGHJKMNPQRSTUVWXYZ';
-                  var result = '';
-                  for (var i = length; i > 0; --i) result += chars[Math.floor(Math.random() * chars.length)];
-                    return result;
-                };
-
-                verificationToken=randomString(6);
-                console.log(verificationToken);
-
-                $scope.sendVerificationEmail = function(email) {
-                  $scope.validatetoken=true;
-                  console.log("sendingEmail to",email);
-                };
-
-                $scope.verifyEmailCode = function() {
-                  if ($scope.emailcode==self.verificationToken) {
-                    $modalInstance.dismiss('close');
-                    return true;
-                  } else {
-                    $scope.tokenError=true;
-                  }
-                };
-
-                $scope.close = function() {
-                  $modalInstance.dismiss('close');
-                };
-              },
-              scope: modalScope,
-              backdrop:'static'
-            });
-          };
-
           self.openCreateModal = function() {
               var modalScope = $rootScope.$new()
               modalScope.title ='Create New Wallet';
