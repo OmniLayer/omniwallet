@@ -80,7 +80,7 @@ angular.module("omniServices")
           self.openConfirmationModal = function(modalConfig) {
               self.modalInstance = $modal.open({
                   templateUrl: "/views/modals/base.html",
-                  controller: function ConfirmationModalController($scope, $rootScope, $modalInstance, $location, modalConfig, modalManager) {                        
+                  controller: function ConfirmationModalController($scope, $rootScope, $modalInstance, $location, modalConfig, modalManager) {
                       angular.extend($scope, modalConfig.scope);
 
                       $scope.bodyTemplate = modalConfig.bodyTemplate || "/views/modals/confirmation.html";
@@ -236,14 +236,21 @@ angular.module("omniServices")
                   $scope.account = Account;
                   $scope.summary = [];
                   $scope.exportFinished = false;
+                  $scope.displayMFA = Account.mfa;
+                  $scope.exportData.mfatoken="";
                   $scope.exportWallet = function(exportData){
                     $scope.progressMessage = "";
                     $scope.progressColor = "";
                     $scope.exportInProgress=true;
-                    Account.verify(Account.uuid, exportData.passphrase).then(function(result){
+                    console.log(exportData);
+                    if (exportData.mfatoken.length==0) {
+                      exportData.mfatoken="null";
+                    }
+                    Account.verify(Account.uuid, exportData.passphrase, exportData.mfatoken).then(function(result){
                       var data = result.data;
+                      console.log(data,Account.walletKeyTemp);
                       try{
-                        var wallet = CryptUtil.decryptObject(data, Account.walletKey);
+                        var wallet = CryptUtil.decryptObject(data.wallet, Account.walletKeyTemp);
 
                         $scope.exported = 0;
                         var walletAddresses = wallet.addresses;
@@ -304,9 +311,14 @@ angular.module("omniServices")
                         next();
                       } catch (e) {
                         $scope.exportInProgress=false;
-                        $scope.progressMessage = "Error decrypting wallet. Wrong passphrase";
+                        $scope.progressMessage = "Error decrypting wallet. Check your details and try again.";
                         $scope.progressColor = "red";
                       }
+                    }, function(result) {
+                       console.log("failed",result);
+                       $scope.exportInProgress=false;
+                       $scope.progressMessage = "Error decrypting wallet. Check your details and try again.";
+                       $scope.progressColor = "red";
                     })
                   };
                   
