@@ -3,10 +3,72 @@ import os, sys, re
 from flask import Flask, request, jsonify, abort, json, make_response
 from msc_apps import *
 from decimal import Decimal
-
+from blockchain_utils import *
 
 app = Flask(__name__)
 app.debug = True
+
+@app.route('/estimatefee/<addr>', methods=['GET'])
+def estimatefees(addr):
+    try:
+      address = str(re.sub(r'\W+', '', addr ) ) #check alphanumeric
+    except ValueError:
+      abort(make_response('This endpoint only consumes valid input', 400))
+
+    #get dynamic fee rates from db
+    try:
+      fees=json.loads(getfees())
+    except:
+      fees={"unit": "Satoshi/kB", "faster": 75000, "fast": 45000, "normal": 35000}
+
+    #initial miner fee estimate
+    mfee=25000
+
+    #class B tx: output base cost
+    cbb=4410
+
+    #Class C tx: output base cost
+    ccb=2730
+
+    ins=1
+    outs=2
+
+    amount=ccb+mfee
+    unspent=bc_getutxo(addr,amount)
+    if 'utxos' in unspent:
+      ins=len(unspent['utxos'])
+      if unspent['avail'] == amount:
+        outs=1
+      
+    #ins + outs + header + opreturn
+    size=ins*180 + outs*34 + 10 + 80
+
+    faster = int((size * fees['faster'])/1000)
+    fast = int((size * fees['fast'])/1000)
+    normal = int((size * fees['normal'])/1000)
+
+    ret={"address":addr, "class_c":{"faster": faster, "fast": fast, "normal": normal, "estimates":{"size":size, "ins":ins, "outs":outs} }}
+    return json.dumps(ret)
+
+@app.route('/fees')
+def getfees():
+    fee={}
+    ROWS=dbSelect("select value from settings where key='feeEstimates'")
+    print ROWS
+    if len(ROWS) > 0:
+      fee=json.loads(ROWS[0][0])
+
+    fee['unit']='Satoshi/kB'
+    return json.dumps(fee)
+
+@app.route('/estimatetxcost', methods=['POST'])
+def estimatetxcost():
+    try:
+        address = str(re.sub(r'\W+', '', request.form['address'] ) ) #check alphanumeric
+        type = int(re.sub(r'\d', '', request.form['txtype'] ) )
+    except ValueError:
+        abort(make_response('This endpoint only consumes valid input', 400))
+
 
 @app.route('/address', methods=['POST'])
 def getaddress():
