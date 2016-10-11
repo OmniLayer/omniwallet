@@ -24,11 +24,6 @@ magicbyte=0
 testnet=False
 exodus_address=mainnet_exodus_address
 
-@app.route('/fee')
-def estimatefee():
-    fee = estimateFee(OmniTransaction.confirmtarget)['result']
-    return jsonify({"status" : 200, "fee" : fee})
-
 @app.route('/<int:tx_type>', methods=['POST'])
 def generate_tx(tx_type):
 
