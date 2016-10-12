@@ -19,6 +19,7 @@
 		"LOADING":"Loading",
 		"BACK":"Go back",
 		"NAME":"Name",
+		"DONE":"Done",
 		"SELECT":"Select",
 		"SERVERERROR":"Server Error, try again later",
 		"YES":"Yes",

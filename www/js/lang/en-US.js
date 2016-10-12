@@ -27,6 +27,7 @@ angular.module("omniConfig")
 		"CANCEL":"Cancel",
 		"CLOSE":"Close",
 		"NEXT":"Next",
+		"DONE":"Done",
 		"ACTIVECROWDSALES":"Active Crowdsales",
 		"HISTORY":"History",
 		"FEES":"Miner Fees (BTC)",
