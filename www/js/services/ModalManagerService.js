@@ -242,13 +242,11 @@ angular.module("omniServices")
                     $scope.progressMessage = "";
                     $scope.progressColor = "";
                     $scope.exportInProgress=true;
-                    console.log(exportData);
                     if (exportData.mfatoken.length==0) {
                       exportData.mfatoken="null";
                     }
                     Account.verify(Account.uuid, exportData.passphrase, exportData.mfatoken).then(function(result){
                       var data = result.data;
-                      console.log(data,Account.walletKeyTemp);
                       try{
                         var wallet = CryptUtil.decryptObject(data.wallet, Account.walletKeyTemp);
 
@@ -725,7 +723,21 @@ angular.module("omniServices")
                 templateUrl: '/views/modals/base.html',
                 controller: function($scope, $modalInstance, OMNI_PROTOCOL_COST){
                   $scope.PROTOCOL_COST = parseFloat(OMNI_PROTOCOL_COST.valueOf());
-                  $scope.minersFee = parseFloat($scope.parentScope.minersFee.valueOf())
+                  $scope.minersFee = parseFloat($scope.parentScope.minersFee.valueOf());
+                  $scope.fee = {
+                    type: $scope.parentScope.feeType
+                  };
+                  $scope.predefined = !($scope.fee.type =='custom');
+                  if (typeof $scope.parentScope.selectedAsset == 'undefined') {
+                    $scope.isBTC = false;
+                  } else {
+                    $scope.isBTC = ($scope.parentScope.selectedAsset.symbol == 'BTC');
+                  }
+                  $scope.normalFee= new Big($scope.parentScope.feeData.class_c.normal);
+                  $scope.fastFee= new Big($scope.parentScope.feeData.class_c.fast);
+                  $scope.fasterFee= new Big($scope.parentScope.feeData.class_c.faster);
+                  $scope.protocolFee = new Big(OMNI_PROTOCOL_COST);
+
                   $scope.close = function() {
                     $modalInstance.dismiss('close');
                   };
@@ -734,8 +746,16 @@ angular.module("omniServices")
                     $scope.next();
                   };
                   $scope.setMinersFee = function(value){
+                    $scope.parentScope.feeType = $scope.fee.type;
+
+                    if ($scope.fee.type=='custom') {
+                      $scope.predefined=false;
+                    } else {
+                      $scope.predefined=true;
+                    }
+                    $scope.minersFee=parseFloat(new Big(value).valueOf());
                     $scope.parentScope.minersFee = new Big(value);
-                  }
+                  };
                 },
                 scope: modalScope
               });

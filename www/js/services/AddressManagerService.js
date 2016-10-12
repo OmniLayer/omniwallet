@@ -34,6 +34,13 @@ angular.module("omniServices")
 	      return {hash:address,privkey:encryptedPrivateKey}
 	    };
 
+            self.estimateFee = function(address) {
+                var url = '/v1/transaction/estimatefee/'+address;
+                        return $http.get(url).then(function(response) {
+                                return response;
+                        });
+            }
+
 	    self.getTransactions = function(address) {
 	    	var url = '/v1/transaction/address';
 			var data = {

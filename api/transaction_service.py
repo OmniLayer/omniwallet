@@ -34,18 +34,21 @@ def estimatefees(addr):
     outs=2
 
     amount=ccb+mfee
-    unspent=bc_getutxo(addr,amount)
-    if 'utxos' in unspent:
-      ins=len(unspent['utxos'])
-      if unspent['avail'] == amount:
-        outs=1
+
+    balance=bc_getbalance(address)
+    if 'bal' in balance and balance['bal']>0:
+      unspent=bc_getutxo(addr,amount)
+      if 'utxos' in unspent:
+        ins=len(unspent['utxos'])
+        if unspent['avail'] == amount:
+          outs=1
       
     #ins + outs + header + opreturn
     size=ins*180 + outs*34 + 10 + 80
 
-    faster = int((size * fees['faster'])/1000)
-    fast = int((size * fees['fast'])/1000)
-    normal = int((size * fees['normal'])/1000)
+    faster = '%.8f' % ( Decimal(int((size * fees['faster'])/1000)) / Decimal(1e8) )
+    fast = '%.8f' % ( Decimal(int((size * fees['fast'])/1000)) / Decimal(1e8) )
+    normal = '%.8f' % ( Decimal(int((size * fees['normal'])/1000)) / Decimal(1e8) )
 
     ret={"address":addr, "class_c":{"faster": faster, "fast": fast, "normal": normal, "estimates":{"size":size, "ins":ins, "outs":outs} }}
     return json.dumps(ret)

@@ -16,7 +16,8 @@ angular.module("omniFactories")
 							desired: 0,
 							selling: 0
 						},
-						price: 0
+						price: 0,
+						feeType: 'normal'
 					};
 					self.sellOrder = {
 						desired : tradingPair.desired,
@@ -25,7 +26,8 @@ angular.module("omniFactories")
 							desired: 0,
 							selling: 0
 						},
-						price: 0
+						price: 0,
+						feeType: 'normal'
 					};
 
 					self.selling = tradingPair.selling;
@@ -215,10 +217,22 @@ angular.module("omniFactories")
 
 				self.setBuyAddress = function(address){
 					self.buyOrder.address = address;
+					address.estimateFee().then(function(result){
+						self.buyOrder.feeData=result;
+						if(self.buyOrder.feeType != 'custom'){
+							self.buyOrder.fee = new Big(result.class_c[self.buyOrder.feeType]);
+						}
+					});
 				};
 
 				self.setSellAddress = function(address){
 					self.sellOrder.address = address;
+					address.estimateFee().then(function(result){
+						self.sellOrder.feeData=result;
+						if(self.sellOrder.feeType != 'custom'){
+							self.sellOrder.fee = new Big(result.class_c[self.sellOrder.feeType]);
+						}
+					});
 				};
 
 				self.updateAmount = function(offer, side) {
@@ -236,7 +250,8 @@ angular.module("omniFactories")
 
 				self.submitOffer = function(offer){
 					// TODO: Validations
-					var fee = Account.settings.minerFee || MIN_MINER_FEE;
+					var fee = offer.fee;
+                                        //Account.settings.minerFee || MIN_MINER_FEE;
 					var dexOffer = new Transaction(25,offer.address,fee,{
 							transaction_version:0,
 							propertyidforsale:offer.selling.propertyid,

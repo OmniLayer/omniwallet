@@ -52,7 +52,7 @@ angular.module("omniFactories")
 				self.transactions = function(showtesteco){
 					address=self.hash;
 					//console.log("Starting "+address);
-					return AddressManager.getTransactions(address).then(function(result){
+					AddressManager.getTransactions(address).then(function(result){
 						var data = result.data;
 						//console.log("found data for "+data.address+" its length is "+data.transactions.length);
 						txs=data.transactions;
@@ -61,6 +61,13 @@ angular.module("omniFactories")
 								return tx;
 							}
 						});
+					});
+				}
+
+				self.estimateFee = function(){
+					address=self.hash;
+					return AddressManager.estimateFee(address).then(function(result){
+						return result.data;
 					});
 				}
 

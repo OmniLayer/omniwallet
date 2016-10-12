@@ -1,9 +1,10 @@
 angular.module("omniControllers")
-	.controller("DExOrderbookController", ["$scope","Account","Orderbook","PropertyManager","ModalManager", "Transaction", "MIN_MINER_FEE",
-		function DExOrderbookController($scope,Account,Orderbook,PropertyManager,ModalManager, Transaction, MIN_MINER_FEE){
+	.controller("DExOrderbookController", ["$scope","Account","Orderbook","PropertyManager","ModalManager", "Transaction", "MIN_MINER_FEE", "OMNI_PROTOCOL_COST",
+		function DExOrderbookController($scope,Account,Orderbook,PropertyManager,ModalManager, Transaction, MIN_MINER_FEE, PROTOCOL_FEE){
 			$scope.isLoggedIn = Account.isLoggedIn;
 			$scope.orderbook = {};
 			$scope.noOrders = true;
+			$scope.protocolFee = PROTOCOL_FEE;
 
 			$scope.loadOrderbook = function(propertyIdDesired, propertyIdSelling){
 				if($scope.orderbook.updateBidsTimeout){
@@ -17,8 +18,31 @@ angular.module("omniControllers")
 					PropertyManager.getProperty(propertyIdSelling).then(function(result){
 						$scope.propertySelling = result.data;
 						$scope.orderbook = new Orderbook({desired:$scope.propertyDesired,selling:$scope.propertySelling});
+						$scope.orderbook.setBuyAddress($scope.orderbook.buyAddresses[0]);
+						$scope.orderbook.setSellAddress($scope.orderbook.sellAddresses[0]);
 					});
 				});
+			}
+
+			$scope.editTransactionCost = function(side){
+				if (side == 'buy') {
+					$scope.minersFee=$scope.orderbook.buyOrder.fee;
+					$scope.feeType=$scope.orderbook.buyOrder.feeType;
+					$scope.feeData=$scope.orderbook.buyOrder.feeData;
+				} else {
+					$scope.minersFee=$scope.orderbook.sellOrder.fee;
+					$scope.feeType=$scope.orderbook.sellOrder.feeType;
+					$scope.feeData=$scope.orderbook.sellOrder.feeData;
+                                }
+				$scope.modalManager.openTransactionCostModal($scope, function(){
+					if (side == 'buy') {
+						$scope.orderbook.buyOrder.fee=$scope.minersFee;
+						$scope.orderbook.buyOrder.feeType=$scope.feeType;
+					} else {
+						$scope.orderbook.sellOrder.fee=$scope.minersFee;
+						$scope.orderbook.sellOrder.feeType=$scope.feeType;
+	                                }
+                                });
 			}
 
 			$scope.confirmCancel = function(offer){
