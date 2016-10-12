@@ -35,11 +35,11 @@ angular.module("omniServices")
 	    };
 
             self.estimateFee = function(address) {
-                var url = '/v1/transaction/estimatefee/'+address;
-                        return $http.get(url).then(function(response) {
-                                return response;
-                        });
-            }
+              var url = '/v1/transaction/estimatefee/'+address;
+              return $http.get(url).then(function(response) {
+                  return response;
+              });
+            };
 
 	    self.getTransactions = function(address) {
 	    	var url = '/v1/transaction/address';
@@ -51,5 +51,5 @@ angular.module("omniServices")
 			return $http.post(url, data).then(function(response) {
 				return response;
 			});
-	    }
+	    };
 	}]);
