@@ -101,7 +101,7 @@ class OmniTransaction:
             rawtx = createrawtx_input(input['txid'],input['vout'],rawtx)['result']
 
         # Add the change
-        rawtx = createrawtx_change(rawtx, validnextinputs, self.rawdata['transaction_from'], float(fee_total))['result']
+        rawtx = createrawtx_change(rawtx, validnextinputs, self.rawdata['transaction_from'], float(self.fee))['result']
 
         return { 'status':200, 'unsignedhex': rawtx , 'sourceScript': prevout_script }
 
