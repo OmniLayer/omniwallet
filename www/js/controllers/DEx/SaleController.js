@@ -1,12 +1,24 @@
 angular.module("omniControllers")
-	.controller("DExSaleController", ["$scope",  "PropertyManager","Account","Transaction","MIN_MINER_FEE","ModalManager",
-		function DExSaleController($scope,PropertyManager,Account,Transaction,MIN_MINER_FEE,ModalManager ){
-			
+	.controller("DExSaleController", ["$scope", "PropertyManager", "Account", "Transaction", "MIN_MINER_FEE", "OMNI_PROTOCOL_COST", "ModalManager",
+		function DExSaleController($scope,PropertyManager,Account,Transaction,MIN_MINER_FEE,PROTOCOL_FEE,ModalManager ){
+
+			$scope.editTransactionCost = function(){
+				$scope.modalManager.openTransactionCostModal($scope, function(){return;});
+			}
+
+			$scope.feeType = 'normal';
+			$scope.protocolFee = PROTOCOL_FEE;
 			$scope.setAddress = function(address){
 				$scope.selectedAddress = address;
 				$scope.setAsset($scope.wallet.getAsset($scope.selectedAddress.assets[0].id));
-			}
-			
+				$scope.selectedAddress.estimateFee().then(function(result){
+					$scope.feeData=result;
+					if($scope.feeType != 'custom'){
+						$scope.minersFee = new Big(result.class_c[$scope.feeType]);
+					}
+				});
+			};
+
 			$scope.setAsset = function(asset){
 				$scope.sellingAsset = asset;
 				let nextEco = (asset.id < 2147483648 && asset.id != 2) ? 1 : 2;
@@ -33,7 +45,7 @@ angular.module("omniControllers")
 
 			$scope.validateDexSaleForm = function(){
 				// TODO: Validations
-				var fee = Account.settings.minerFee || MIN_MINER_FEE;
+				var fee = Account.settings.minerFee || $scope.minersFee;
 				var dexOffer = new Transaction(25,$scope.selectedAddress,fee,{
 						transaction_version:0,
 						propertyidforsale:$scope.sellingAsset.id,

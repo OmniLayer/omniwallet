@@ -64,6 +64,13 @@ angular.module("omniFactories")
 					});
 				}
 
+				self.estimateFee = function(){
+					address=self.hash;
+					return AddressManager.estimateFee(address).then(function(result){
+						return result.data;
+					});
+				}
+
 				self.getDisplayBalance = function(assetId){
 					var currencyItem = self.balance.filter(function(asset){
 						return asset.id == assetId;

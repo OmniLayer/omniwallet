@@ -87,6 +87,10 @@
             </div>    
           </div>
         </div>
+        <p>
+          {{ 'WALLET.SEND.COST' | translate}}: {{minersFee.plus(protocolFee).valueOf()}} BTC <button type="button" class="btn btn-xs" ng-click="editTransactionCost()"><span class="glyphicon glyphicon-pencil small"></span></button>
+        </p>
+
         <button type="submit" class="btn btn-main pull-right">{{ 'COMMON.NEXT' | translate}}</button>
       </form>
       <div class="row">

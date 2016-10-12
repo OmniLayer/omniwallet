@@ -32,7 +32,8 @@ class OmniTransaction:
         except NameError, e:
           print e
           self.pubkey = form['pubkey']
-        self.fee = estimateFee(self.confirm_target)['result']
+        #self.fee = estimateFee(self.confirm_target)['result']
+        self.fee = form['fee']
         self.rawdata = form.copy()
         self.tx_type = tx_type
 
