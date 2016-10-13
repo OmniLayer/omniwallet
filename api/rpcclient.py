@@ -95,11 +95,13 @@ def decoderawtransaction(rawtx):
 def omni_decodetransaction(rawtx):
     return host.call("omni_decodetransaction", rawtx)
 
-
 def estimateFee(blocks=4):
     return host.call("estimatefee", blocks)
 
-## Mastercoin Specific RPC calls
+def gettxout(txid,vout,unconfirmed=True):
+    return host.call("gettxout",txid,vout,unconfirmed)
+
+## Omni Specific RPC calls
 def getbalance_MP(addr, propertyid):
     return host.call("getbalance_MP", addr, propertyid)
 
