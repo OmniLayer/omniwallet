@@ -237,15 +237,15 @@ angular.module("omniFactories")
 
 				self.updateAmount = function(offer, side) {
 					if(side == "bid")
-						offer.amounts.selling= (offer.amounts.desired * offer.price) ||0;
+						offer.amounts.selling= parseFloat((offer.amounts.desired * offer.price).toPrecision(8)) ||0;
 					else
-						offer.amounts.desired= (offer.amounts.selling * offer.price) ||0;
+						offer.amounts.desired= parseFloat((offer.amounts.selling * offer.price).toPrecision(8)) ||0;
 				}
 				self.updateTotal = function(offer, side) {
 					if(side == "bid")
-						offer.amounts.desired= (offer.amounts.selling / offer.price) ||0;
+						offer.amounts.desired= parseFloat((offer.amounts.selling / offer.price).toPrecision(8)) ||0;
 					else
-						offer.amounts.selling= (offer.amounts.desired / offer.price) ||0;
+						offer.amounts.selling= parseFloat((offer.amounts.desired / offer.price).toPrecision(8)) ||0;
 				}
 
 				self.submitOffer = function(offer){
