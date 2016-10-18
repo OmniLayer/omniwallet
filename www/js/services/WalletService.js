@@ -10,26 +10,27 @@ angular.module("omniServices")
 					BalanceSocket.connect();
 				appraiser = $injector.get('appraiser');
 				self.settings = wallet.settings;
-	            self.addresses = [];
-	            self.assets = [];
-	            self.loader = {
-	            	totalAddresses: wallet.addresses.length || 1,
-	            	totalAssets:1,
-	            	addresses:0,
-	            	assets:0,
-	            	loadedAddresses:false,
-	            	loadedAssets:false
-	            }
-	            wallet.addresses.forEach(function(raw){
-	                self._addAddress(raw);
-	            });
+				self.addresses = [];
+				self.assets = [];
+				self.loader = {
+				totalAddresses: wallet.addresses.length || 1,
+				totalAssets:1,
+				addresses:0,
+				assets:0,
+				loadedAddresses:false,
+				loadedAssets:false
+			}
 
-	            appraiser.start();
+			wallet.addresses.forEach(function(raw){
+				self._addAddress(raw);
+			});
 
-				$rootScope.$on("address:loaded", function(address){
-					self.loader.addresses +=1;
-						check_load()
-				});
+			appraiser.start();
+
+			$rootScope.$on("address:loaded", function(address){
+				self.loader.addresses +=1;
+				check_load()
+			});
 
 				$rootScope.$on("asset:loaded", function(asset){
 					self.loader.assets +=1;

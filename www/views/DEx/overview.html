@@ -1,11 +1,11 @@
-<div ng-controller="DExOrderbookController">
+<div ng-controller="DExOrderbookController" init="showCharts=false;">
     <div class="row om-row">
       <div class="col-xs-3 col-sm-3 col-md-4 col-lg-4 text-left om-title">
         {{ 'OMNIDEX.ORDERBOOK.TITLE' | translate:{currency: orderbook.tradingPair.selling.name} }}
     </div>
   </div>
   <div class="row">
-    <div class="col-xs-8">
+    <div class="col-xs-10" ng-show="showCharts">
       <div class="panel panel-default">
         <div class="panel-body" ng-if="orderbook && orderbook.chartData">
           <nvd3 data="orderbook.chartData" 
@@ -15,9 +15,16 @@
         </div>
       </div>
     </div>
-    <div class="col-xs-4">
+    <div class="col-xs-10" ng-hide="showCharts">
       <div class="panel panel-default">
         <div class="panel-body" ng-include="'/views/DEx/markets.html'">
+        </div>
+      </div>
+    </div>
+    <div class="col-xs-2">
+      <div class="panel panel-default">
+        <div class="panel-body">
+          <button type="button" class="btn btn-info" ng-click="showCharts=!showCharts;">Show {{showCharts ? "Markets" : "Charts"}}</button>
         </div>
       </div>
     </div>

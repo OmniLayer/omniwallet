@@ -10,30 +10,32 @@
         <a class="btn btn-main" href="/dex/sale"> {{ 'OMNIDEX.MARKETS.NEW' | translate }} </a>
       </div>
     </div>
-    <tabset ng-init="loadDesignatingCurrencies()">
-      <tab heading="{{ currency.propertyname }}" select="showMarkets(currency)" ng-repeat="currency in designatingcurrencies">
+    <div ng-init="loadDesignatingCurrencies()">
+      <div class="form-group col-sm-12">
+        <label for="base">Base</label>
+        <combobox name="base" model-value="designatingCurrency.displayname" option-list="designatingcurrencies" value-selected="showMarkets(base)"></combobox>
+      </div>
+
         <div class="row">
-        	<div class="col-xs-12 om-table markets-table">
-        		<div class="row table-header hidden-xs">
+          <div class="col-xs-12 om-table markets-table">
+            <div class="row table-header hidden-xs">
               <div class="col-sm-2">{{ 'OMNIDEX.MARKETS.SYMBOL' | translate}}</div>
               <div class="col-sm-2">{{ 'OMNIDEX.MARKETS.NAME' | translate}}</div>
-              <div class="col-sm-3">
-                {{ 'OMNIDEX.MARKETS.PRICE' | translate}}
-              </div>
+              <div class="col-sm-3">{{ 'OMNIDEX.MARKETS.PRICE' | translate}}</div>
               <div class="col-sm-3">{{ 'OMNIDEX.MARKETS.SUPPLY' | translate}}</div>
               <div class="col-sm-2">{{ 'OMNIDEX.MARKETS.CHANGE' | translate}}</div>
             </div>
             <div class="row table-row text-center" ng-show="!loading && noMarkets">
               <h3>{{ 'OMNIDEX.MARKETS.NOMARKETS' | translate }}</h3>
             </div>
-            <div ng-repeat="market in markets" class="row table-row check-element animate-hide">
+            <div ng-repeat="market in markets" class="row table-row check-element animate-hide text-center">
               <div class="visible-xs col-xs-7">{{ 'OMNIDEX.MARKETS.SYMBOL' | translate}}</div>
               <div class="col-xs-5 col-sm-2">
                 #{{market.propertyid}}
               </div>
               <div class="visible-xs col-xs-7">{{ 'OMNIDEX.MARKETS.NAME' | translate}}</div>
               <div class="col-xs-5 col-sm-2">
-                <a ng-click="$parent.$parent.loadOrderbook($parent.designatingCurrency.propertyid,market.propertyid)">{{market.symbol}}</a>
+                <a data-toggle="tooltip" title={{market.propertyname}} ng-click="$parent.$parent.loadOrderbook($parent.designatingCurrency.propertyid,market.propertyid)">{{market.propertyname}}</a>
               </div>
               <div class="visible-xs col-xs-7">{{ 'OMNIDEX.MARKETS.PRICE' | translate}}</div>
               <div class="col-xs-5 col-sm-3">
@@ -48,8 +50,7 @@
                 {{market.change}}
               </div>
             </div>
-    		  </div>
+          </div>
         </div>
-      </tab>
-    </tabset>
+    </div>
 </div>

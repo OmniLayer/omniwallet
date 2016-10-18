@@ -8,6 +8,7 @@ from flask import Flask, render_template, session, request
 from flask.ext.socketio import SocketIO, emit, join_room, leave_room
 from msc_apps import *
 from balancehelper import *
+from omnidex import getOrderbook
 import config
 
 app = Flask(__name__)
@@ -20,14 +21,26 @@ clients = 0
 maxclients = 0
 maxaddresses = 0
 addresses = {}
+book = {}
+lasttrade = 0
 
 def printmsg(msg):
     print msg
     sys.stdout.flush()
 
+def update_book():
+    global book, lasttrade
+    ret=getOrderbook(lasttrade)
+    printmsg("Checking for new orderbook updates, last: "+str(lasttrade))
+    if ret['updated']:
+      book=ret['book']
+      printmsg("Orderbook updated. Lasttrade: "+str(lasttrade)+" Newtrade: "+str(ret['lasttrade'])+" Book length is: "+str(len(book)))
+      lasttrade=ret['lasttrade']
+
+
 def balance_thread():
     """Send balance data for the connected clients."""
-    global addresses, maxaddresses, clients, maxclients
+    global addresses, maxaddresses, clients, maxclients, book
     count = 0
     TIMEOUT='timeout -s 9 8 '
     while True:
@@ -35,6 +48,9 @@ def balance_thread():
         count += 1
         printmsg("Tracking "+str(len(addresses))+"/"+str(maxaddresses)+"(max) addresses, for "+str(clients)+"/"+str(maxclients)+"(max) clients, ran "+str(count)+" times")
         balances=get_bulkbalancedata(addresses)
+        #push updated orderbook
+        update_book()
+        socketio.emit('orderbook',book,namespace='/balance')
         for address in addresses:
           #balance_data=get_balancedata(address)
           balance_data=balances[address]
