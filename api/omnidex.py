@@ -24,7 +24,11 @@ def getOrderbook(lasttrade=0):
         for pair in AO:
           pd=int(pair[0])
           ps=int(pair[1])
-          book[pd]={ps: get_orders_by_market(pd,ps)}
+          data= get_orders_by_market(pd,ps)
+          try:
+            book[pd][ps]=data
+          except KeyError:
+            book[pd]={ps: data}
         updated=True
 
     ret={"updated":updated ,"book":book, "lasttrade":trade}

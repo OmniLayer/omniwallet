@@ -1,6 +1,6 @@
 angular.module("omniFactories")
-	.factory("Orderbook",["$http","DExOrder","DExOffer","Transaction","Account","Wallet","ModalManager","MIN_MINER_FEE", "WHOLE_UNIT", "SATOSHI_UNIT", 
-		function OrderbookFactory($http, DExOrder,DExOffer,Transaction,Account,Wallet,ModalManager,MIN_MINER_FEE,WHOLE_UNIT,SATOSHI_UNIT){
+	.factory("Orderbook",["$http","DExOrder","DExOffer","BalanceSocket","Transaction","Account","Wallet","ModalManager","MIN_MINER_FEE", "WHOLE_UNIT", "SATOSHI_UNIT",
+		function OrderbookFactory($http, DExOrder,DExOffer,BalanceSocket,Transaction,Account,Wallet,ModalManager,MIN_MINER_FEE,WHOLE_UNIT,SATOSHI_UNIT){
 			var Orderbook = function(tradingPair){
 				var self = this;
 
@@ -91,8 +91,32 @@ angular.module("omniFactories")
 					self.bidBook = [];
 					self.activeOffers = [];
 
+					BalanceSocket.on("orderbook", function(data){
+						bigbook=data;
+						updateAsks(bigbook);
+						updateBids(bigbook);
+					});
+
+					//process websocket orderbook
+					var updateAsks = function(bigbook){
+						if (typeof bigbook=="undefined" || typeof bigbook[tradingPair.desired.propertyid]=="undefined" || typeof bigbook[tradingPair.desired.propertyid][tradingPair.selling.propertyid]=="undefined") {
+							return // handle errors
+						}
+						data=bigbook[tradingPair.desired.propertyid][tradingPair.selling.propertyid];
+						if (data.status != 200)
+							return // handle errors
+						var orderbook = [];
+						self.parseOrderbook(data.orderbook, orderbook,tradingPair.desired,tradingPair.selling,data.cancels);
+						self.askBook = orderbook;
+						self.askBook.sort(function(a, b) {
+							var priceA = a.price;
+							var priceB = b.price;
+							return priceA.gt(priceB) ? 1 : priceA.lt(priceB) ? -1 : 0;
+						});
+					}
+
 					// I get the orders for property selling asks
-					var updateAsks = function(){
+					var updateAsksInitial = function(){
 						$http.get("/v1/omnidex/"+tradingPair.desired.propertyid+"/"+tradingPair.selling.propertyid)
 						.then(function(response){
 							if(response.status != 200 || response.data.status !=200)
@@ -107,12 +131,30 @@ angular.module("omniFactories")
 					          return priceA.gt(priceB) ? 1 : priceA.lt(priceB) ? -1 : 0;
 					        });
 
-							self.updateAsksTimeout = setTimeout(updateAsks,3000);
+							//self.updateAsksTimeout = setTimeout(updateAsks,3000);
 						})
 					}
-					updateAsks();
-					
-					var updateBids = function(){
+					updateAsksInitial();
+
+                                        //process websocket orderbook
+                                        var updateBids = function(bigbook){
+						if (typeof bigbook=="undefined" || typeof bigbook[tradingPair.selling.propertyid]=="undefined" || typeof bigbook[tradingPair.selling.propertyid][tradingPair.desired.propertyid]=="undefined"){
+							return // handle errors
+						}
+                                                data=bigbook[tradingPair.selling.propertyid][tradingPair.desired.propertyid];
+                                                if (data.status != 200)
+                                                        return // handle errors
+                                                var orderbook = [];
+                                                self.parseOrderbook(data.orderbook, orderbook,tradingPair.selling,tradingPair.desired,data.cancels);
+                                                self.bidBook = orderbook;
+                                                self.bidBook.sort(function(a, b) {
+                                                        var priceA = a.price;
+                                                        var priceB = b.price;
+                                                        return priceA.lt(priceB) ? 1 : priceA.gt(priceB) ? -1 : 0;
+                                                });
+                                        }
+
+					var updateBidsInitial = function(){
 						$http.get("/v1/omnidex/"+tradingPair.selling.propertyid+"/"+tradingPair.desired.propertyid)
 						.then(function(response){
 							if(response.status != 200 || response.data.status != 200)
@@ -127,10 +169,10 @@ angular.module("omniFactories")
 					          return priceA.lt(priceB) ? 1 : priceA.gt(priceB) ? -1 : 0;
 					        });
 
-							self.updateBidsTimeout = setTimeout(updateBids, 3000);
+							//self.updateBidsTimeout = setTimeout(updateBids, 3000);
 						})
 					}
-					updateBids();
+					updateBidsInitial();
 
 
 					$http.get("/v1/omnidex/ohlcv/"+tradingPair.desired.propertyid+"/"+tradingPair.selling.propertyid)
@@ -195,8 +237,6 @@ angular.module("omniFactories")
 						}
 					});
 				}
-
-				
 
 				self.askCumulative = function(order){
 					let index = self.askBook.indexOf(order);

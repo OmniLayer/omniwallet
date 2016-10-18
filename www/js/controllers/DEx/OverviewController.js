@@ -1,6 +1,6 @@
 angular.module("omniControllers")
-	.controller("DExOverviewController", ["$scope","Account","$http",
-		function DExOverviewController($scope,Account,$http){
+	.controller("DExOverviewController", ["$scope","Account","$http","WHOLE_UNIT",
+		function DExOverviewController($scope,Account,$http,WHOLE_UNIT){
 			$scope.isLoggedIn = Account.isLoggedIn;
 			$scope.markets = [];
 			$scope.noMarkets = true;
@@ -28,7 +28,13 @@ angular.module("omniControllers")
 					function success(response) {
 						var markets = response.data.markets;
 						markets.forEach(function(market){
-							market.symbol = market.propertyid == 31 ? "USDT" : market.propertyid == 39 ? "AMP" : market.propertyname.substr(0,4).toUpperCase();
+							if ([2,66,130].includes(market.propertytype)) {
+								market.supply=market.supply*WHOLE_UNIT;
+							}
+							market.symbol =
+								market.propertyid == 31 ? "USDT" :
+								market.propertyid == 39 ? "AMP" :
+								market.propertyname.substr(0,4).toUpperCase();
 						});
 						$scope.markets = response.data.markets;
 						$scope.noMarkets = $scope.markets.length == 0;

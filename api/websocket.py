@@ -50,7 +50,7 @@ def balance_thread():
         balances=get_bulkbalancedata(addresses)
         #push updated orderbook
         update_book()
-        socketio.emit('orderbook',book,namespace='balance')
+        socketio.emit('orderbook',book,namespace='/balance')
         for address in addresses:
           #balance_data=get_balancedata(address)
           balance_data=balances[address]
