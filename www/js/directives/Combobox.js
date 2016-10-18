@@ -17,12 +17,15 @@ angular.module("omniDirectives")
 	      $scope.filter=function(){
 	        var results = $scope.optionList.filter(function(option){
 	          var matcher = new RegExp("^"+$scope.modelValue);
-	          return matcher.test(option);
+		  if ( typeof option == "string") {
+		    return matcher.test(option);
+		  } else {
+		    return matcher.test(option.displayname);
+		  };
 	        }) ;
-	 
-	        $scope.filteredList = results.length > 0 ? results: ["No results"];
-	        
-	        $scope.valueSelected({category:$scope.modelValue});
+	        $scope.filteredList =  results.length > 0 ? results: ["No results"];
+
+	        //$scope.valueSelected({category:$scope.modelValue});
 	      };
 	      
 	      $scope.$watch(function(){ return $scope.optionList; },function(options){
@@ -49,9 +52,14 @@ angular.module("omniDirectives")
 	      };
 
 	      scope.optionSelected = function(option){
+                console.log(option);
 	        scope.modelValue = option;
 	        $('.dropdown',element).removeClass('open');
-	        scope.valueSelected({category:option});
+                if ( typeof option == "string" ) {
+	          scope.valueSelected({category:option});
+                } else {
+	          scope.valueSelected({base:option});
+		};
 	        scope.selectedOption=false;
 	      };
 	      
