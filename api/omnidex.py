@@ -62,8 +62,8 @@ def getDesignatingCurrencies():
 
 @app.route('/<int:denominator>')
 def get_markets_by_denominator(denominator):
-    markets = dbSelect("SELECT distinct ao.propertyidselling as marketid, selling.propertyname as marketname, max(ao.unitprice), "
-                       "sum(ao.amountavailable) as supply, coalesce(max(ho.unitprice),0), selling.propertytype as propertytype from activeoffers ao inner join transactions createtx on "
+    markets = dbSelect("SELECT distinct ao.propertyidselling as marketid, selling.propertyname as marketname, min(ao.unitprice), "
+                       "sum(ao.amountavailable) as supply, coalesce(min(ho.unitprice),0), selling.propertytype as propertytype from activeoffers ao inner join transactions createtx on "
                        "ao.createtxdbserialnum = createtx.txdbserialnum left outer join activeoffers ho on ao.createtxdbserialnum = ho.createtxdbserialnum "
                        "and createtx.txrecvtime < (CURRENT_TIMESTAMP - INTERVAL '1 day') inner join SmartProperties selling on "
                        "ao.propertyidselling = selling.propertyid and selling.protocol = 'Omni' where ao.propertyiddesired = %s "
