@@ -25,6 +25,15 @@ angular.module("omniServices")
 				self._addAddress(raw);
 			});
 
+			//Make sure we stay connected
+			var ensureWebsocketIsConnected = function() {
+				if(!BalanceSocket.connected) {
+					BalanceSocket.connect();
+				}
+				self.ensureWebsocketIsConnectedTimeout = setTimeout(ensureWebsocketIsConnected,15000);
+			}
+			ensureWebsocketIsConnected();
+
 			appraiser.start();
 
 			$rootScope.$on("address:loaded", function(address){
@@ -76,9 +85,11 @@ angular.module("omniServices")
 	        self._addAddress = function(raw){
 	        	var address = new Address(raw.address,raw.privkey,raw.pubkey);
 
-                BalanceSocket.on("address:"+address.hash, function(data){
+                BalanceSocket.on("address:book", function(data){
+		  if (typeof data[address.hash]!="undefined") {
+                    serverBalance=data[address.hash].balance
                     var update = false;
-                    data.balance.forEach(function(balanceItem) {                    
+                    serverBalance.forEach(function(balanceItem) {
                     	var asset = null;
                         var tradable = ((address.privkey && address.privkey.length == 58) || address.pubkey) && balanceItem.value > 0;
                         for (var j = 0; j < self.assets.length; j++) {
@@ -105,11 +116,10 @@ angular.module("omniServices")
 	                        address.assets.push(asset);
 	                    }
                     });
-
-					if(update){
-						appraiser.updateValues();
-					}
-						
+		    if(update){
+			appraiser.updateValues();
+		    }
+		  }
                 });
 
                 self.addresses.push(address)

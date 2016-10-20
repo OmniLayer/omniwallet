@@ -56,7 +56,7 @@ angular.module("omniFactories")
 			                },
 
 			                yAxis: {
-			                    axisLabel: 'Stock Price',
+			                    axisLabel: 'Price',
 			                    tickFormat: function(d){
 			                        return '$' + d3.format(',.1f')(d);
 			                    },
@@ -115,7 +115,7 @@ angular.module("omniFactories")
 						});
 					}
 
-					// I get the orders for property selling asks
+					// Initial load of orders for property selling asks
 					var updateAsksInitial = function(){
 						$http.get("/v1/omnidex/"+tradingPair.desired.propertyid+"/"+tradingPair.selling.propertyid)
 						.then(function(response){
