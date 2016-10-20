@@ -20,33 +20,44 @@ angular.module("omniFactories")
 					//	self.transactions = data.transactions;
 					//})
 
-					BalanceSocket.on("address:"+hash, function(data){
-						if(self.balance != data.balance){
-							var previousBalance = self.balance;
-							data.balance.forEach(function(balance,index){
-								var found = previousBalance.filter(function(prevBalance){
-									return prevBalance.symbol == balance.symbol
-								})[0];
-
-								var delta = found ? balance.value-found.value : balance.value;
-								var dneg = found ? balance.pendingneg - found.pendingneg : balance.pendingneg;
-								var dpos = found ? balance.pendingpos - found.pendingpos : balance.pendingpos;
-
-								if (delta != 0 || dpos !=0 || dneg != 0)
-									$rootScope.$broadcast('balance:'+balance.symbol, delta, dneg, dpos);
-							});
-
-							self.balance = data.balance;
-							$rootScope.$broadcast('balance:changed');
-
-							if(!self.loaded){
-								self.loaded=true;
-								$rootScope.$broadcast("address:loaded", {hash:hash});
-							}
+					BalanceSocket.on("address:book", function(data){
+						if (typeof data[hash]!="undefined") {
+							processBalanceData(data[hash].balance);
+						} else {
+							BalanceSocket.emit("address:add", {data:hash});
 						}
+					});
+					BalanceSocket.on("address:"+hash, function(data){
+						processBalanceData(data.balance);
 					});
 
 					BalanceSocket.emit("address:add", {data:hash});
+				}
+
+				var processBalanceData = function(serverBalance) {
+					if(self.balance != serverBalance){
+						var previousBalance = self.balance;
+						serverBalance.forEach(function(balance,index){
+							var found = previousBalance.filter(function(prevBalance){
+								return prevBalance.symbol == balance.symbol
+							})[0];
+
+							var delta = found ? balance.value-found.value : balance.value;
+							var dneg = found ? balance.pendingneg - found.pendingneg : balance.pendingneg;
+							var dpos = found ? balance.pendingpos - found.pendingpos : balance.pendingpos;
+
+							if (delta != 0 || dpos !=0 || dneg != 0)
+								$rootScope.$broadcast('balance:'+balance.symbol, delta, dneg, dpos);
+						});
+
+						self.balance = serverBalance;
+						$rootScope.$broadcast('balance:changed');
+	
+						if(!self.loaded){
+							self.loaded=true;
+							$rootScope.$broadcast("address:loaded", {hash:hash});
+						}
+					}
 				}
 
 				self.transactions = function(showtesteco){
