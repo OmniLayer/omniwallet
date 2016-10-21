@@ -8,7 +8,7 @@ bitcoin-python==0.3
 psycopg2==2.5.4
 recaptcha-client==1.0.6
 Flask==0.10.1
-Flask-SocketIO
+Flask-SocketIO==2.7.1
 Jinja2==2.7.2
 MarkupSafe==0.18
 Werkzeug==0.9.4
