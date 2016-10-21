@@ -138,7 +138,7 @@ def get_orders_by_market(propertyid_desired, propertyid_selling):
             "accepted_amount": str(order[5]),
             "unit_price" : str(order[6]),
             "seller" : str(order[7]),
-            "time" : order[8],
+            "time" : str(order[8]),
             "status" : order[9]
         } for order in orderbook], "cancels":[
         {
@@ -148,5 +148,5 @@ def get_orders_by_market(propertyid_desired, propertyid_selling):
             "total_amount" : str(cancel[3]),
             "unit_price" : str(cancel[4]),
             "seller" : str(cancel[5]),
-            "time" : cancel[6]
+            "time" : str(cancel[6])
         } for cancel in cancels]}
