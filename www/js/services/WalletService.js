@@ -85,42 +85,49 @@ angular.module("omniServices")
 	        self._addAddress = function(raw){
 	        	var address = new Address(raw.address,raw.privkey,raw.pubkey);
 
-                BalanceSocket.on("address:book", function(data){
-		  if (typeof data[address.hash]!="undefined") {
-                    serverBalance=data[address.hash].balance
-                    var update = false;
-                    serverBalance.forEach(function(balanceItem) {
-                    	var asset = null;
-                        var tradable = ((address.privkey && address.privkey.length == 58) || address.pubkey) && balanceItem.value > 0;
-                        for (var j = 0; j < self.assets.length; j++) {
-                          var currencyItem = self.assets[j];
-                          if (currencyItem.symbol == balanceItem.symbol) {
-                            asset = currencyItem;
-                            if (asset.addresses().indexOf(address) == -1){
-                              tradable ? asset.tradableAddresses.push(address) : asset.watchAddresses.push(address) ;
-                              asset.tradable = asset.tradable || tradable;
-                            }
-                            break;
-                          }
-                        }
-                        if (asset === null) {
-                        	if(balanceItem.symbol!="BTC")
-                            	self.loader.totalAssets += 1;
-                            
-                            asset = new Asset(balanceItem.symbol,balanceItem.value, tradable, address)
+		BalanceSocket.on("address:book", function(data){
+			if (typeof data[address.hash]!="undefined") {
+				processBalanceSocket(data[address.hash].balance);
+			}
+		});
 
-                            self.assets.push(asset);
-                            update=true;
-                        }
-                        if(address.assets.indexOf(asset) == -1){
-	                        address.assets.push(asset);
-	                    }
-                    });
-		    if(update){
-			appraiser.updateValues();
-		    }
-		  }
-                });
+		BalanceSocket.on("address:"+address.hash, function(data){
+			processBalanceSocket(data.balance);
+		});
+
+		var processBalanceSocket = function(serverBalance) {
+			var update = false;
+			serverBalance.forEach(function(balanceItem) {
+				var asset = null;
+				var tradable = ((address.privkey && address.privkey.length == 58) || address.pubkey) && balanceItem.value > 0;
+				for (var j = 0; j < self.assets.length; j++) {
+					var currencyItem = self.assets[j];
+					if (currencyItem.symbol == balanceItem.symbol) {
+						asset = currencyItem;
+						if (asset.addresses().indexOf(address) == -1){
+							tradable ? asset.tradableAddresses.push(address) : asset.watchAddresses.push(address) ;
+							asset.tradable = asset.tradable || tradable;
+						}
+						break;
+					}
+				}
+				if (asset === null) {
+					if(balanceItem.symbol!="BTC"){
+						self.loader.totalAssets += 1;
+					}
+					asset = new Asset(balanceItem.symbol,balanceItem.value, tradable, address)
+
+					self.assets.push(asset);
+					update=true;
+				}
+				if(address.assets.indexOf(asset) == -1){
+					address.assets.push(asset);
+				}
+			});
+			if(update){
+				appraiser.updateValues();
+			}
+		};
 
                 self.addresses.push(address)
 	        }
