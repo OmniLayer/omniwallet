@@ -92,7 +92,6 @@ angular.module("omniFactories")
 					self.activeOffers = [];
 
 					BalanceSocket.on("orderbook", function(data){
-						console.log("OrderbookFactory.js - orderbook");
 						bigbook=data;
 						updateAsks(bigbook);
 						updateBids(bigbook);
