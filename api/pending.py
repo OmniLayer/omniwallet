@@ -63,6 +63,10 @@ def insertbtc(rawtx):
 
 def insertomni(rawtx):
   try:
+    saddressrole="sender"
+    raddressrole="recipient"
+    sbacd=None
+    rbacd=None
     sender = rawtx['Sender']
     receiver = rawtx['Reference']
     propertyid = rawtx['MP']['propertyid']
@@ -86,6 +90,16 @@ def insertomni(rawtx):
       else:
         sendamount=0
         recvamount=amount
+    elif txtype == 22:
+      #sender = buyer
+      saddressrole="buyer"
+      sbacd=None
+      #receiver = seller
+      raddressrole="seller"
+      rbacd=amount
+      #unused in this tx
+      sendamount=None
+      recvamount=None
     else:
       #all other txs deduct from our balance and, where applicable, apply to the reciever
       sendamount=-amount
@@ -95,19 +109,17 @@ def insertomni(rawtx):
               (txhash,protocol,txdbserialnum,txtype,txversion))
     
     address=sender
-    addressrole="sender"
     #insert the addressesintxs entry for the sender
-    dbExecute("insert into addressesintxs (address,propertyid,protocol,txdbserialnum,addresstxindex,addressrole,balanceavailablecreditdebit) "
-              "values(%s,%s,%s,%s,%s,%s,%s)", (address,propertyid,protocol,txdbserialnum,addresstxindex,addressrole,sendamount))
+    dbExecute("insert into addressesintxs (address,propertyid,protocol,txdbserialnum,addresstxindex,addressrole,balanceavailablecreditdebit,balanceacceptedcreditdebit) "
+              "values(%s,%s,%s,%s,%s,%s,%s,%s)", (address,propertyid,protocol,txdbserialnum,addresstxindex,saddressrole,sendamount,sbacd))
 
     #update pending balance
     #dbExecute("update addressbalances set balancepending=balancepending+%s::numeric where address=%s and propertyid=%s and protocol=%s", (sendamount,address,propertyid,protocol))
 
     if receiver != "":
       address=receiver
-      addressrole="recipient"
-      dbExecute("insert into addressesintxs (address,propertyid,protocol,txdbserialnum,addresstxindex,addressrole,balanceavailablecreditdebit) "
-                "values(%s,%s,%s,%s,%s,%s,%s)", (address,propertyid,protocol,txdbserialnum,addresstxindex,addressrole,recvamount))
+      dbExecute("insert into addressesintxs (address,propertyid,protocol,txdbserialnum,addresstxindex,addressrole,balanceavailablecreditdebit,balanceacceptedcreditdebit) "
+                "values(%s,%s,%s,%s,%s,%s,%s,%s)", (address,propertyid,protocol,txdbserialnum,addresstxindex,addressrole,recvamount,rbacd))
       #update pending balance
       #dbExecute("update addressbalances set balancepending=balancepending+%s::numeric where address=%s and propertyid=%s and protocol=%s", (recvamount,address,propertyid,protocol))
 
