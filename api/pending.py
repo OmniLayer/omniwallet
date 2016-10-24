@@ -119,7 +119,7 @@ def insertomni(rawtx):
     if receiver != "":
       address=receiver
       dbExecute("insert into addressesintxs (address,propertyid,protocol,txdbserialnum,addresstxindex,addressrole,balanceavailablecreditdebit,balanceacceptedcreditdebit) "
-                "values(%s,%s,%s,%s,%s,%s,%s,%s)", (address,propertyid,protocol,txdbserialnum,addresstxindex,addressrole,recvamount,rbacd))
+                "values(%s,%s,%s,%s,%s,%s,%s,%s)", (address,propertyid,protocol,txdbserialnum,addresstxindex,raddressrole,recvamount,rbacd))
       #update pending balance
       #dbExecute("update addressbalances set balancepending=balancepending+%s::numeric where address=%s and propertyid=%s and protocol=%s", (recvamount,address,propertyid,protocol))
 
