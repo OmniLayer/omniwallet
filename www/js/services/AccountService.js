@@ -25,14 +25,14 @@ angular.module("omniServices")
           }
         };
 
-        self.create = function(form){
+        self.create = function (form) {
             var create = $q.defer();
-            if(!self.validating){
+            if (!self.validating) {
                 self.uuid = generateUUID();
                 if (form.email == undefined) {
-                  uemail = ""
+                  uemail = "";
                 } else {
-                  uemail = form.email
+                  uemail = form.email;
                 }
                 var wallet = {
                   uuid: self.uuid,
@@ -61,8 +61,8 @@ angular.module("omniServices")
                       angular.extend(createData, {
                         recaptcha_challenge_field:form.captcha.challenge,
                         recaptcha_response_field:form.captcha.response
-                      })
-                    };
+                      });
+                    }
 
                     return $http({
                       url: '/v1/user/wallet/create',
@@ -71,16 +71,16 @@ angular.module("omniServices")
                     });
                   })
                   .then(function(result) {
-                    if(result.data.error =="InvalidCaptcha"){
+                    if(result.data.error == "InvalidCaptcha"){
                       
                       self.validating=false;
                       Recaptcha.reload();
                       create.reject({
                         invalidCaptcha : true,
                         validating : false
-                      })
-                    }else {
-                      self.validating=false;
+                      });
+                    } else {
+                      self.validating = false;
                       self.settings.firstLogin = true;
                       self.wallet = wallet;
                       Wallet.initialize(wallet);
@@ -98,9 +98,12 @@ angular.module("omniServices")
             }
             
             return create.promise;
-        }
+        };
 
-        self.verify = function(uuid,passphrase,mfatoken="null"){
+        self.verify = function(uuid, passphrase, mfatoken) {
+          if (typeof mfatoken=="undefined") {
+            mfatoken="null";
+          }
           return $http.get('/v1/user/wallet/challenge?uuid=' + uuid)
                     .then(function(result) {
                         var data = result.data;
@@ -133,10 +136,13 @@ angular.module("omniServices")
                             }
                         });
                     });
-        }
+        };
 
-        self.login = function(uuid, passphrase, mfatoken="null") {
-            var login = $q.defer()
+        self.login = function(uuid, passphrase, mfatoken) {
+            if (typeof mfatoken=="undefined") {
+              mfatoken="null";
+            }
+            var login = $q.defer();
             if (!self.loginInProgress) {
             	self.loginInProgress = true;
                 self.uuid = uuid;
@@ -175,7 +181,7 @@ angular.module("omniServices")
             }
 
             return login.promise;
-        }
+        };
 
         self.logout = function(){
             self.uuid = null;
@@ -188,7 +194,7 @@ angular.module("omniServices")
             self.assets = null;
             self.loggedIn = false;
             Wallet.destroy();
-        }
+        };
 
         self.saveSession = function() {
             if(self.loggedIn){
@@ -217,7 +223,7 @@ angular.module("omniServices")
                   self.logout();
                 });
             }
-        }
+        };
 
         self.updateMFA = function(secret,token,action,asq,asa) {
             if(self.loggedIn){
@@ -252,7 +258,7 @@ angular.module("omniServices")
                   self.logout();
                 });
             }
-        }
+        };
 
         self.addAddress = function(address, privKey, pubKey) {
             for (var i in self.wallet.addresses) {
@@ -277,7 +283,7 @@ angular.module("omniServices")
               "address": address,
               "privkey": privKey,
               "pubkey": pubKey 
-            }
+            };
 
             self.wallet.addresses.push(rawaddress);
             
@@ -299,7 +305,7 @@ angular.module("omniServices")
 
         self.setCurrencySymbol = function(currency){
 
-          csym = '$'
+          csym = '$';
 
           switch (currency) {
 
@@ -412,9 +418,9 @@ angular.module("omniServices")
 
             case "email":
               if (self.wallet.email == undefined) {
-                retval = ""
+                retval = "";
               } else {
-                retval = self.wallet.email
+                retval = self.wallet.email;
               }
               break;
 
@@ -425,30 +431,30 @@ angular.module("omniServices")
               //  retval = settings['donate']
               //}
               //disable all donate options for now
-              retval = 'false'
+              retval = 'false';
               break;
 
             case "usercurrency":
               if (settings['usercurrency'] == undefined) {
-                retval = "USD"
+                retval = "USD";
               } else {
-                retval = settings['usercurrency']
+                retval = settings['usercurrency'];
               }
               break;
 
             case "filterdexdust":
               if (settings['filterdexdust'] == undefined) {
-                retval = 'true'
+                retval = 'true';
               } else {
-                retval = settings['filterdexdust']
+                retval = settings['filterdexdust'];
               }
               break;
 
             case "showtesteco":
               if (settings['showtesteco'] == undefined) {
-                retval = 'false'
+                retval = 'false';
               } else {
-                retval = settings['showtesteco']
+                retval = settings['showtesteco'];
               }
               break;
 
