@@ -144,10 +144,14 @@ def get_bulkbalancedata(addresses):
       balance_data = { 'balance': [] }
       #out, err = run_command(TIMEOUT+ 'sx balance -j ' + addr )
       #out, err = run_command(TIMEOUT+"curl -s http://btc.blockr.io/api/v1/address/balance/"+addr)
-      if address in btclist:
-        out = btclist[address]
-        err = None
-      else:
+      try:
+        if address in btclist:
+          out = btclist[address]
+          err = None
+        else:
+          out = ''
+          err = "Missing"
+      except TypeError:
         out = ''
         err = "Missing"
 
