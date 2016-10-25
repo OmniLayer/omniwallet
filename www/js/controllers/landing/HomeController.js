@@ -58,7 +58,7 @@ angular.module("omniControllers")
           }
           requests.push(
           $http.get('/v1/values/' + symbol + '.json').then(function(response) {
-            var currency = response.data[0];
+            var currency = response.data;
             if (currency.symbol == 'BTC') {
               // Store these things internally as the value of a satoshi.
               $scope.conversions.BTC = currency.price / 100000000;

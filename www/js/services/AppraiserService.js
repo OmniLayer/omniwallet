@@ -1,5 +1,5 @@
-angular.module('omniServices').service('appraiser', ['$rootScope', '$http', '$q', 'Wallet','Account',
- function($rootScope, $http, $q, Wallet, Account) {
+angular.module('omniServices').service('appraiser', ['$rootScope', '$http', '$q', 'Wallet','Account', 'BalanceSocket',
+ function($rootScope, $http, $q, Wallet, Account, BalanceSocket) {
     var self = this;
     self.conversions = {};
 
@@ -9,7 +9,43 @@ angular.module('omniServices').service('appraiser', ['$rootScope', '$http', '$q'
       });
     }
 
-  
+    BalanceSocket.on("valuebook", function(data){
+      if (typeof data!="undefined") {
+        processValueBook(data);
+      }
+    });
+
+    var processValueBook = function (valuebook) {
+      var coins = Wallet.assets;
+      var changed = [];
+      coins.forEach(function(coin) {
+        if (coin.symbol === 'BTC') {
+          symbol="BTC"+cursym;
+        } else {
+          symbol=coin.symbol;
+        }
+        currency=valuebook[symbol];
+        if (typeof currency != "undefined") {
+          if (currency.symbol == 'BTC') {
+            // Store these things internally as the value of a satoshi.
+            self.conversions.BTC = currency.price / 100000000;
+          } else {
+            self.conversions[currency.symbol] = currency.price;
+          }
+          value = self.getValue(coin.balance,coin.symbol,coin.divisible)
+          price = self.getValue(coin.divisible ? Big(100000000) : Big(1),coin.symbol,coin.divisible)
+          if (coin.value != value || coin.price != price) {
+            coin.value=value;
+            coin.price=price;
+            changed.push(currency.symbol);
+          }
+        }
+      });
+      if (changed.length>0) {
+        $rootScope.$broadcast('APPRAISER_VALUE_CHANGED',changed)
+      }
+    };
+
     self.updateValues = function(callback) {
       var requests = [];
       var coins = Wallet.assets;
@@ -22,20 +58,20 @@ angular.module('omniServices').service('appraiser', ['$rootScope', '$http', '$q'
           symbol=coin.symbol;
         }
         requests.push(
-        $http.get('/v1/values/' + symbol + '.json').then(function(response) {
-          var currency = response.data[0];
-          if (currency.symbol == 'BTC') {
-            // Store these things internally as the value of a satoshi.
-            self.conversions.BTC = currency.price / 100000000;
-          } else {
-            self.conversions[currency.symbol] = currency.price;
-          }
-          coin.value = self.getValue(coin.balance,coin.symbol,coin.divisible)
-          coin.price = self.getValue(coin.divisible ? Big(100000000) : Big(1),coin.symbol,coin.divisible)
-          changed.push(currency.symbol)
-        }, function(error) {
-          console.log(error);
-        })
+          $http.get('/v1/values/' + symbol + '.json').then(function(response) {
+            var currency = response.data;
+            if (currency.symbol == 'BTC') {
+              // Store these things internally as the value of a satoshi.
+              self.conversions.BTC = currency.price / 100000000;
+            } else {
+              self.conversions[currency.symbol] = currency.price;
+            }
+            coin.value = self.getValue(coin.balance,coin.symbol,coin.divisible)
+            coin.price = self.getValue(coin.divisible ? Big(100000000) : Big(1),coin.symbol,coin.divisible)
+            changed.push(currency.symbol)
+          }, function(error) {
+            console.log(error);
+          })
         );
       });
       $q.all(requests).then(function(responses) {
@@ -46,6 +82,7 @@ angular.module('omniServices').service('appraiser', ['$rootScope', '$http', '$q'
           callback();
       });
     };
+
     self.updateValue = function(callback, symbol) {      
       if (symbol === 'BTC') {
         usercur=symbol+cursym;
@@ -54,7 +91,7 @@ angular.module('omniServices').service('appraiser', ['$rootScope', '$http', '$q'
       }
       if (symbol === 'BTC' || self.conversions.BTC) {
         $http.get('/v1/values/' + usercur + '.json').then(function(response) {
-          var currency = response.data[0];
+          var currency = response.data;
           if (currency.symbol == 'BTC') {
             // Store these things internally as the value of a satoshi.
             self.conversions.BTC = currency.price / 100000000;
@@ -94,7 +131,7 @@ angular.module('omniServices').service('appraiser', ['$rootScope', '$http', '$q'
     };
 
     self.start = function(){
-      UpdateLoop();
+    //  UpdateLoop();
     }
 
     cursym = "USD";

@@ -695,8 +695,8 @@ angular.module("omniConfig")
 		"MARKETS" : {
 			"TITLE" : "Markets",
 			"NEW" : "Start New Market",
-			"SYMBOL" : "ID",
-			"NAME" : "Symbol",
+			"SYMBOL" : "PropertyID",
+			"NAME" : "Property Name",
 			"PRICE" : "Price",
 			"VOLUME" : "24h Volume",
 			"SUPPLY" : "Total Supply",
