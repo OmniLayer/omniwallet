@@ -62,12 +62,20 @@ def getDesignatingCurrencies():
 
 @app.route('/<int:denominator>')
 def get_markets_by_denominator(denominator):
-    markets = dbSelect("SELECT distinct ao.propertyidselling as marketid, selling.propertyname as marketname, min(ao.unitprice), "
-                       "sum(ao.amountavailable) as supply, coalesce(min(ho.unitprice),0), selling.propertytype as propertytype from activeoffers ao inner join transactions createtx on "
-                       "ao.createtxdbserialnum = createtx.txdbserialnum left outer join activeoffers ho on ao.createtxdbserialnum = ho.createtxdbserialnum "
-                       "and createtx.txrecvtime < (CURRENT_TIMESTAMP - INTERVAL '1 day') inner join SmartProperties selling on "
-                       "ao.propertyidselling = selling.propertyid and selling.protocol = 'Omni' where ao.propertyiddesired = %s "
-                       "and (ao.OfferState = 'active' or ho.OfferState = 'sold') group by marketid, marketname, propertytype order by supply;",[denominator])
+    markets = dbSelect("WITH active AS "
+                         "(SELECT DISTINCT ao.propertyidselling as marketid, ao.propertyiddesired as base, "
+                         "min(ao.unitprice) as unitprice, sum(ao.amountavailable) as supply from activeoffers ao "
+                         "where ao.offerstate='active' group by marketid, base), "
+                       "sold AS "
+                         "(SELECT DISTINCT ON ( ao.propertyidselling, ao.propertyiddesired) ao.propertyidselling as marketid, "
+                         "ao.propertyiddesired as base, ao.unitprice as price, max(ao.createtxdbserialnum) from activeoffers ao, "
+                         "transactions tx where ao.createtxdbserialnum=tx.txdbserialnum and ao.offerstate='sold' and "
+                         "tx.txrecvtime < (CURRENT_TIMESTAMP - INTERVAL '1 day') group by marketid, base, price) "
+                       "SELECT active.marketid as marketid, sp.propertyname as marketname, active.unitprice as price, active.supply as supply, "
+                       "coalesce(sold.price,0) as lastprice, sp.propertytype as propertytype from active "
+                         "LEFT OUTER JOIN sold ON active.marketid=sold.marketid and active.base=sold.base "
+                         "INNER JOIN smartproperties sp ON active.marketid=sp.propertyid and sp.protocol='Omni' "
+                       "where active.base=%s;",[denominator])
     return jsonify({"status" : 200, "markets": [
 	{
 	 "propertyid":currency[0], 
