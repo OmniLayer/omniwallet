@@ -35,13 +35,15 @@ def balance_thread():
         count += 1
         printmsg("Tracking "+str(len(addresses))+"/"+str(maxaddresses)+"(max) addresses, for "+str(clients)+"/"+str(maxclients)+"(max) clients, ran "+str(count)+" times")
         balances=get_bulkbalancedata(addresses)
-        for address in addresses:
-          #balance_data=get_balancedata(address)
-          balance_data=balances[address]
-          socketio.emit('address:'+address,
-                      balance_data,
-                      namespace='/balance')
-
+        try:
+          for address in addresses:
+            #balance_data=get_balancedata(address)
+            balance_data=balances[address]
+            socketio.emit('address:'+address,
+                        balance_data,
+                        namespace='/balance')
+        except RuntimeError:
+          printmsg("addresses changed size, skipping update")
 
 @socketio.on('connect', namespace='/balance')
 def balance_connect():
