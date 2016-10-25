@@ -56,7 +56,6 @@ def balance_thread():
                       balances,
                       namespace='/balance')
 
-
 @socketio.on('connect', namespace='/balance')
 def balance_connect():
     printmsg('Client connected')
