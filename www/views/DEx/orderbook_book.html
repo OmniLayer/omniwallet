@@ -5,7 +5,7 @@
 			<th>Order Count</th>
 			<th>Price</th>
 			<th>Amount</th>
-			<th>Cumulative</th>
+			<th>Total</th>
 		</thead>
 		<tbody>
 			<tr ng-show="orderbook.bidBook.length == 0" >
@@ -17,7 +17,7 @@
 				<td>{{order.offers.length}}</td>
 				<td>{{order.price.toFixed(8)}}</td>
 				<td>{{order.totaldesired.toFixed(8)}}</td>
-				<td>{{orderbook.bidCumulative(order)}}</td>
+				<td>{{orderbook.bidCumulative(order).toFixed(8)}}</td>
 			</tr>
 		</tbody>
 	</table>
@@ -29,7 +29,7 @@
 			<th>Order Count</th>
 			<th>Price</th>
 			<th>Amount</th>
-			<th>Cumulative</th>
+			<th>Total</th>
 		</thead>
 		<tbody>
 			<tr ng-show="orderbook.askBook.length == 0" >
@@ -41,7 +41,7 @@
 				<td>{{order.offers.length}}</td>
 				<td>{{order.price.toFixed(8)}}</td>
 				<td>{{order.remainingforsale.toFixed(8)}}</td>
-				<td>{{orderbook.askCumulative(order)}}</td>
+				<td>{{orderbook.askCumulative(order).toFixed(8)}}</td>
 			</tr>
 		</tbody>
 	</table>

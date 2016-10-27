@@ -21,7 +21,7 @@ angular.module("omniControllers")
 
 			$scope.setAsset = function(asset){
 				$scope.sellingAsset = asset;
-				let nextEco = (asset.id < 2147483648 && asset.id != 2) ? 1 : 2;
+				nextEco = (asset.id < 2147483648 && asset.id != 2) ? 1 : 2;
 				if($scope.ecosystem != nextEco){
 					$scope.ecosystem = nextEco;
 					$scope.loadCurrencies();	
@@ -53,7 +53,7 @@ angular.module("omniControllers")
 						propertiddesired:$scope.desiredAsset.propertyid,
 						amountdesired: new Big($scope.desiredAmount).valueOf()
 					});
-				let redirectUrl = "/dex/overview";
+				redirectUrl = "/dex/overview";
 				ModalManager.openConfirmationModal({
 					dataTemplate: '/views/modals/partials/dex_offer.html',
 					scope: {

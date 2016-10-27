@@ -38,7 +38,7 @@
                   <span class="caret pull-right"></span>
                 </button>
                 <ul class="dropdown-menu" role="menu" aria-labelledby="chooseCoin">
-                  <li role="presentation" ng-repeat="asset in selectedAddress.assets" ng-if="asset.tradable && ((asset.id < 2147483648 && asset.id != 2) || showtesteco === 'true')">
+                  <li role="presentation" ng-repeat="asset in selectedAddress.assets" ng-if="asset.id != 0 && asset.tradable && ((asset.id < 2147483648 && asset.id != 2) || showtesteco === 'true')">
                     <a role="menuitem" tabindex="-1" href="#" ng-click="setAsset(asset)">{{asset.name | truncate:14}} <small class="text-muted">({{asset.id}})</small></a>
                   </li>
                 </ul>

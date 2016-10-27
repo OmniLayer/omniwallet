@@ -183,11 +183,10 @@ angular.module("omniFactories")
 							self.marketData=response.data.orderbook;
 							self.chartData = [
 										{
-				                    values: self.marketData
-				                }
-							]
+											values: self.marketData
+										}
+									]
 						})
-
 				};
 
 				self.parseOrderbook =function(orderbook,side,selling,desired,cancels){
@@ -205,7 +204,7 @@ angular.module("omniFactories")
 									order.addOffer(offer)
 								}
 							})
-							let owner = Wallet.tradableAddresses().find(function(elem){
+							owner = Wallet.tradableAddresses().find(function(elem){
 								return elem.hash == offerData.seller
 							})
 							if(owner){
@@ -239,18 +238,18 @@ angular.module("omniFactories")
 				}
 
 				self.askCumulative = function(order){
-					let index = self.askBook.indexOf(order);
-					let cumulative = new Big(0);
-					for (let i = 0; i <= index; i++){
-						cumulative = cumulative.plus(self.askBook[i].totaldesired)
+					index = self.askBook.indexOf(order);
+					cumulative = new Big(0);
+					for (i = 0; i <= index; i++){
+						cumulative = cumulative.plus(self.askBook[i].remainingforsale)
 					}
 					return cumulative;
 				}
 				self.bidCumulative = function(order){
-					let index = self.bidBook.indexOf(order);
-					let cumulative = new Big(0);
-					for (let i = 0; i <= index; i++){
-						cumulative = cumulative.plus(self.bidBook[i].remainingforsale)
+					index = self.bidBook.indexOf(order);
+					cumulative = new Big(0);
+					for (i = 0; i <= index; i++){
+						cumulative = cumulative.plus(self.bidBook[i].totaldesired)
 					}
 					return cumulative;
 				}
