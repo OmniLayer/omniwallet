@@ -186,7 +186,6 @@ angular.module("omniFactories")
 											values: self.marketData
 										}
 									]
-							console.log(self.chartData);
 						})
 				};
 
