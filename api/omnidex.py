@@ -19,16 +19,22 @@ def getOrderbook(lasttrade=0):
       trade=int(trades[0][0])
 
     if (trade > lasttrade):
-      AO=dbSelect("select distinct propertyiddesired, propertyidselling from activeoffers where offerstate='active' order by propertyiddesired")
+      AO=dbSelect("select distinct propertyiddesired, propertyidselling from activeoffers "
+                  "where offerstate='active' order by propertyiddesired")
       if len(AO) > 0:
         for pair in AO:
           pd=int(pair[0])
           ps=int(pair[1])
-          data= get_orders_by_market(pd,ps)
+          data = get_orders_by_market(pd,ps)
+          data2 = get_orders_by_market(ps,pd)
           try:
             book[pd][ps]=data
           except KeyError:
             book[pd]={ps: data}
+          try:
+            book[ps][pd]=data2
+          except KeyError:
+            book[ps]={pd: data2}
         updated=True
 
     ret={"updated":updated ,"book":book, "lasttrade":trade}
@@ -49,11 +55,16 @@ def getDesignatingCurrencies():
     except ValueError:
         abort(make_response('Field \'ecosystem\' invalid value, request failed', 400))
 
-    designating_currencies = dbSelect("select distinct ao.propertyiddesired as propertyid, sp.propertyname from activeoffers ao "
-                                      "inner join SmartProperties sp on ao.propertyiddesired = sp.propertyid and sp.ecosystem = %s "
+    #designating_currencies = dbSelect("select distinct ao.propertyiddesired as propertyid, sp.propertyname from activeoffers ao "
+    #                                  "inner join SmartProperties sp on ao.propertyiddesired = sp.propertyid and sp.ecosystem = %s "
                                       #"where (ao.propertyidselling not in (1, 2, 31)) or (ao.propertyidselling = 1 and ao.propertyiddesired = 31) "
-                                      "where ao.offerstate='active' "
-                                      "order by ao.propertyiddesired ",[ecosystem])
+    #                                  "where ao.offerstate='active' "
+    #                                  "order by ao.propertyiddesired ",[ecosystem])
+    designating_currencies = dbSelect("select distinct propertyiddesired,desiredname from markets where supply > 0 and "
+                                      "CASE WHEN %s='Production' THEN "
+                                      "propertyiddesired > 0 and propertyiddesired < 2147483648 and propertyiddesired !=2 "
+                                      "ELSE propertyiddesired > 2147483650 or propertyiddesired=2 END "
+                                      "order by propertyiddesired",[ecosystem])
     return jsonify({"status" : 200, "currencies": [
 	{
 	 "propertyid":currency[0], "propertyname" : currency[1], "displayname" : str(currency[1])+" #"+str(currency[0])
@@ -62,20 +73,10 @@ def getDesignatingCurrencies():
 
 @app.route('/<int:denominator>')
 def get_markets_by_denominator(denominator):
-    markets = dbSelect("WITH active AS "
-                         "(SELECT DISTINCT ao.propertyidselling as marketid, ao.propertyiddesired as base, "
-                         "min(ao.unitprice) as unitprice, sum(ao.amountavailable) as supply from activeoffers ao "
-                         "where ao.offerstate='active' group by marketid, base), "
-                       "sold AS "
-                         "(SELECT DISTINCT ON ( ao.propertyidselling, ao.propertyiddesired) ao.propertyidselling as marketid, "
-                         "ao.propertyiddesired as base, ao.unitprice as price, max(ao.createtxdbserialnum) from activeoffers ao, "
-                         "transactions tx where ao.createtxdbserialnum=tx.txdbserialnum and ao.offerstate='sold' and "
-                         "tx.txrecvtime < (CURRENT_TIMESTAMP - INTERVAL '1 day') group by marketid, base, price) "
-                       "SELECT active.marketid as marketid, sp.propertyname as marketname, active.unitprice as price, active.supply as supply, "
-                       "coalesce(sold.price,0) as lastprice, sp.propertytype as propertytype from active "
-                         "LEFT OUTER JOIN sold ON active.marketid=sold.marketid and active.base=sold.base "
-                         "INNER JOIN smartproperties sp ON active.marketid=sp.propertyid and sp.protocol='Omni' "
-                       "where active.base=%s;",[denominator])
+    markets = dbSelect("select propertyidselling as marketid, sellingname as marketname, unitprice, supply, lastprice, marketpropertytype "
+                         "from markets where propertyiddesired=%s and ( supply>0 or propertyidselling in "
+                           "(select propertyiddesired as marketid from markets where propertyidselling=%s and supply>0) "
+                         ") order by propertyidselling",(denominator,denominator))
     return jsonify({"status" : 200, "markets": [
 	{
 	 "propertyid":currency[0], 

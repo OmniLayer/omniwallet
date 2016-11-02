@@ -22,8 +22,8 @@
               <div class="col-sm-2">{{ 'OMNIDEX.MARKETS.SYMBOL' | translate}}</div>
               <div class="col-sm-2">{{ 'OMNIDEX.MARKETS.NAME' | translate}}</div>
               <div class="col-sm-3">{{ 'OMNIDEX.MARKETS.PRICE' | translate}}</div>
-              <div class="col-sm-3">{{ 'OMNIDEX.MARKETS.SUPPLY' | translate}}</div>
               <div class="col-sm-2">{{ 'OMNIDEX.MARKETS.CHANGE' | translate}}</div>
+              <div class="col-sm-3">{{ 'OMNIDEX.MARKETS.SUPPLY' | translate}}</div>
             </div>
             <div class="row table-row text-center" ng-show="!loading && noMarkets">
               <h3>{{ 'OMNIDEX.MARKETS.NOMARKETS' | translate }}</h3>
@@ -41,13 +41,13 @@
               <div class="col-xs-5 col-sm-3">
                 {{market.price}}
               </div>
-              <div class="visible-xs col-xs-7">{{ 'OMNIDEX.MARKETS.SUPPLY' | translate}}</div>
-              <div class="col-xs-5 col-sm-3">
-                {{market.supply}}
-              </div>
               <div class="visible-xs col-xs-7">{{ 'OMNIDEX.MARKETS.CHANGE' | translate}}</div>
               <div class="col-xs-5 col-sm-2">
                 {{market.change}}
+              </div>
+              <div class="visible-xs col-xs-7">{{ 'OMNIDEX.MARKETS.SUPPLY' | translate}}</div>
+              <div class="col-xs-5 col-sm-3">
+                {{market.supply}}
               </div>
             </div>
           </div>

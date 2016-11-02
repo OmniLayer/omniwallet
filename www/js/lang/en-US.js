@@ -697,11 +697,11 @@ angular.module("omniConfig")
 			"NEW" : "Start New Market",
 			"SYMBOL" : "PropertyID",
 			"NAME" : "Property Name",
-			"PRICE" : "Price",
+			"PRICE" : "Current Price",
 			"VOLUME" : "24h Volume",
 			"SUPPLY" : "Total Supply",
 			"CAP" : "Market Cap",
-			"CHANGE" : "24h Change",
+			"CHANGE" : "Change Since Last Trade",
 			"NOMARKETS" : "There are currently no open markets",
 			"DENOMINATOR" : "Choose Denominating Currency"
 		},
