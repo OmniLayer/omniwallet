@@ -601,7 +601,9 @@ def welcome_email(user_email, wallet, uuid):
     part2 = MIMEText(html, 'html')
     msg.attach(part1)
     msg.attach(part2)
-
+    if config.WELCOMECID is not None:
+      msg.add_header('X-Mailgun-Campaign-Id',config.WELCOMECID)
+    
     #wfile = MIMEBase('application', 'octet-stream')
     #wfile.set_payload(wallet)
     #Encoders.encode_base64(wfile)
