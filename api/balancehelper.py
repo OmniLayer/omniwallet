@@ -103,7 +103,8 @@ def get_bulkbalancedata(addresses):
     counter=0
     total=0
     btclist={}
-    for a in addresses:
+    try:
+     for a in addresses:
       if list == "":
         list = a
       else:
@@ -118,7 +119,9 @@ def get_bulkbalancedata(addresses):
           for addr in baldata['bal']:
             btclist[addr]=baldata['bal'][addr]
         except TypeError:
-          print "No Data:",btclist
+          print "No Data:",baldata
+    except RuntimeError:
+      print "Balance helper addresses changed size"
 
     #btclist = baldata['bal']
 
