@@ -114,8 +114,11 @@ def get_bulkbalancedata(addresses):
         baldata=bc_getbulkbalance(list)
         counter=0
         list=""
-        for addr in baldata['bal']:
-          btclist[addr]=baldata['bal'][addr]
+        try:
+          for addr in baldata['bal']:
+            btclist[addr]=baldata['bal'][addr]
+        except TypeError:
+          print "No Data:",btclist
 
     #btclist = baldata['bal']
 
