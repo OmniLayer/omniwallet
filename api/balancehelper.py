@@ -100,14 +100,25 @@ def get_balancedata(address):
 
 def get_bulkbalancedata(addresses):
     list=""
+    counter=0
+    total=0
+    btclist={}
     for a in addresses:
       if list == "":
         list = a
       else:
         list += ","+a
+      counter+=1
+      total+=1
+      if counter>=19 or total==len(addresses):
+        baldata=bc_getbulkbalance(list)
+        counter=0
+        list=""
+        print baldata
+        for addr in baldata['bal']:
+          btclist[addr]=baldata['bal'][addr]
 
-    baldata=bc_getbulkbalance(list)
-    btclist = baldata['bal']
+    #btclist = baldata['bal']
 
     retval = {}
 
