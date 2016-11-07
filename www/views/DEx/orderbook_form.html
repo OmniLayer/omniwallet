@@ -60,14 +60,14 @@
                                 {{ 'OMNIDEX.ORDERBOOK.BALANCE' | translate}}: {{orderbook.getBalance(orderbook.buyOrder.address, orderbook.tradingPair.desired.propertyid)}} {{orderbook.tradingPair.desired.name}}
                             </div>
                             <div class="col-xs-4 text-right">
-                                <button type="submit" class="btn btn-main" ng-disabled="orderbook.buyAddresses.length == 0 || orderbook.buyOrder.fee.plus(protocolFee).valueOf() > orderbook.buyOrder.address.getDisplayBalance(0)" >
+                                <button type="submit" class="btn btn-main" ng-disabled="orderbook.buyAddresses.length == 0 || orderbook.buyOrder.fee.valueOf() > orderbook.buyOrder.address.getDisplayBalance(0)" >
                                     {{ 'OMNIDEX.ORDERBOOK.BUY' | translate}} {{orderbook.tradingPair.selling.name}}
                                 </button>
                             </div>
                         </div>
                         <div class="row">
                           <div class="col-xs-8">
-                            {{ 'WALLET.SEND.COST' | translate}}: {{orderbook.buyOrder.fee.plus(protocolFee).valueOf()}} BTC <button type="button" class="btn btn-xs" ng-click="editTransactionCost('buy')"><span class="glyphicon glyphicon-pencil small"></span></button>
+                            {{ 'WALLET.SEND.COST' | translate}}: {{orderbook.buyOrder.fee.valueOf()}} BTC <button type="button" class="btn btn-xs" ng-click="editTransactionCost('buy')"><span class="glyphicon glyphicon-pencil small"></span></button>
                           </div>
                         </div>
                         <div class="row">
@@ -143,14 +143,14 @@
                                 {{ 'OMNIDEX.ORDERBOOK.BALANCE' | translate}}: {{orderbook.getBalance(orderbook.sellOrder.address, orderbook.tradingPair.selling.propertyid)}} {{orderbook.tradingPair.selling.name}} 
                             </div>
                             <div class="col-xs-4 text-right">
-                                <button type="submit" class="btn btn-secondary" ng-disabled="orderbook.sellAddresses.length == 0 || orderbook.sellOrder.fee.plus(protocolFee).valueOf() > orderbook.sellOrder.address.getDisplayBalance(0)" >
+                                <button type="submit" class="btn btn-secondary" ng-disabled="orderbook.sellAddresses.length == 0 || orderbook.sellOrder.fee.valueOf() > orderbook.sellOrder.address.getDisplayBalance(0)" >
                                     {{ 'OMNIDEX.ORDERBOOK.SELL' | translate}} {{orderbook.tradingPair.selling.name}}
                                 </button>
                             </div>
                         </div>
                         <div class="row">
                           <div class="col-xs-8">
-                            {{ 'WALLET.SEND.COST' | translate}}: {{orderbook.sellOrder.fee.plus(protocolFee).valueOf()}} BTC <button type="button" class="btn btn-xs" ng-click="editTransactionCost('sell')"><span class="glyphicon glyphicon-pencil small"></span></button>
+                            {{ 'WALLET.SEND.COST' | translate}}: {{orderbook.sellOrder.fee.valueOf()}} BTC <button type="button" class="btn btn-xs" ng-click="editTransactionCost('sell')"><span class="glyphicon glyphicon-pencil small"></span></button>
                           </div>
                         </div>
                         <div class="row">

@@ -5,6 +5,7 @@ angular.module("omniControllers")
 			$scope.orderbook = {};
 			$scope.noOrders = true;
 			$scope.protocolFee = PROTOCOL_FEE;
+			$scope.omniAnnounce = true;
 
 			$scope.loadOrderbook = function(propertyIdDesired, propertyIdSelling){
 				if($scope.orderbook.updateBidsTimeout){

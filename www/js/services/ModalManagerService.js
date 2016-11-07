@@ -733,6 +733,9 @@ angular.module("omniServices")
                   } else {
                     $scope.isBTC = ($scope.parentScope.selectedAsset.symbol == 'BTC');
                   }
+                  if (typeof $scope.parentScope.omniAnnounce != 'undefined' && $scope.parentScope.omniAnnounce) {
+                    $scope.isBTC = true;
+                  }
                   $scope.normalFee= new Big($scope.parentScope.feeData.class_c.normal);
                   $scope.fastFee= new Big($scope.parentScope.feeData.class_c.fast);
                   $scope.fasterFee= new Big($scope.parentScope.feeData.class_c.faster);

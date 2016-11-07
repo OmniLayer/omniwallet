@@ -6,6 +6,7 @@ angular.module("omniControllers")
 				$scope.modalManager.openTransactionCostModal($scope, function(){return;});
 			}
 
+			$scope.omniAnnounce = true;
 			$scope.feeType = 'normal';
 			$scope.protocolFee = PROTOCOL_FEE;
 			$scope.setAddress = function(address){
