@@ -694,7 +694,7 @@ angular.module("omniConfig")
 	"OMNIDEX" : {
 		"MARKETS" : {
 			"TITLE" : "Markets",
-			"NEW" : "Start New Market",
+			"NEW" : "Start Market",
 			"SYMBOL" : "PropertyID",
 			"NAME" : "Property Name",
 			"PRICE" : "Current Price",
