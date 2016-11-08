@@ -2,9 +2,16 @@ from flask import Flask, request, jsonify, abort, json, make_response
 import re
 import time
 from sqltools import * 
+from math import ceil
 app = Flask(__name__)
 app.debug = True
 
+
+def fixDecimal(value):
+    try:
+      return str(ceil(float(value)*(1e8))/1e8)
+    except Exception as e:
+      print "couldn't convert ",value,"got error: ",e
 
 #@app.route('/book')
 def getOrderbook(lasttrade=0):
@@ -116,7 +123,7 @@ def get_orders_by_market_json(propertyid_desired, propertyid_selling):
 
 def get_orders_by_market(propertyid_desired, propertyid_selling):
     orderbook = dbSelect("SELECT ao.propertyiddesired, ao.propertyidselling, ao.AmountAvailable, ao.AmountDesired, ao.TotalSelling, ao.AmountAccepted, "
-                         "cast(txj.txdata->>'unitprice' as numeric), ao.Seller, tx.TxRecvTime, 'active' from activeoffers ao, transactions tx, txjson txj "
+                         "cast(txj.txdata->>'unitprice' as numeric), ao.Seller, tx.TxRecvTime, 'active', tx.txhash from activeoffers ao, transactions tx, txjson txj "
                          "where ao.CreateTxDBSerialNum = txj.TxDBSerialNum and ao.CreateTxDBSerialNum = tx.TxDBSerialNum and ao.propertyiddesired = %s and "
                          "ao.propertyidselling = %s and ao.OfferState = 'active' union all select cast(txj.txdata->>'propertyiddesired' as bigint), "
                          "cast(txj.txdata->>'propertyidforsale' as bigint),CASE WHEN txj.txdata->>'propertyidforsaleisdivisible' = 'true' THEN "
@@ -132,7 +139,7 @@ def get_orders_by_market(propertyid_desired, propertyid_selling):
                        "txj.txdata->>'propertyiddesiredisdivisible' = 'true' THEN round(cast(txj.txdata->>'amountdesired' as numeric) * 100000000) "
                        "ELSE cast(txj.txdata->>'amountdesired' as numeric) END,CASE WHEN txj.txdata->>'propertyidforsaleisdivisible' = 'true' THEN "
                        "round(cast(txj.txdata->>'amountforsale' as numeric) * 100000000) ELSE cast(txj.txdata->>'amountforsale' as numeric) END, "
-                       "cast(txj.txdata->>'unitprice' as numeric),txj.txdata->>'sendingaddress', tx.TxRecvTime, 'pending' from transactions tx "
+                       "cast(txj.txdata->>'unitprice' as numeric),txj.txdata->>'sendingaddress', tx.TxRecvTime, 'pending', tx.txhash from transactions tx "
                        "inner join txjson txj on tx.txdbserialnum = txj.txdbserialnum where tx.txdbserialnum < 0 and tx.txtype = 26 and "
                        "cast(txj.txdata->>'propertyidforsale' as numeric) = %s and cast(txj.txdata->>'propertyiddesired' as numeric) = %s",
                        [propertyid_selling,propertyid_desired])
@@ -145,10 +152,11 @@ def get_orders_by_market(propertyid_desired, propertyid_selling):
             "desired_amount" : str(order[3]),
             "total_amount" : str(order[4]),
             "accepted_amount": str(order[5]),
-            "unit_price" : str(order[6]),
+            "unit_price" : fixDecimal(order[6]),
             "seller" : str(order[7]),
             "time" : str(order[8]),
-            "status" : order[9]
+            "status" : order[9],
+            "txhash" : str(order[10])
         } for order in orderbook], "cancels":[
         {
             "propertyid_desired":cancel[0], 
@@ -158,4 +166,5 @@ def get_orders_by_market(propertyid_desired, propertyid_selling):
             "unit_price" : str(cancel[4]),
             "seller" : str(cancel[5]),
             "time" : str(cancel[6])
+            "txhash" : str(order[7])
         } for cancel in cancels]}
