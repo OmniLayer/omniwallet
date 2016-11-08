@@ -16,11 +16,11 @@ angular.module("omniFactories")
 				local_price = new Big(data.unit_price);
 				if(side == "ask"){
 					self.total_desired_amount = new Big(self.selling_amount.times(local_price).toFixed(8));
-					self.price = new Big(self.desired_amount.div(self.available_amount).toFixed(8));
+					self.price = new Big(Math.ceil(self.desired_amount.div(self.available_amount).div(WHOLE_UNIT).toString()).times(WHOLE_UNIT);
 					//self.price = self.local_price;
 				} else if (side == "bid"){
 					self.desired_amount = new Big(self.available_amount.times(local_price).toFixed(8));
-					self.price = new Big(self.available_amount.div(self.total_desired_amount).toFixed(8));
+					self.price = new Big(Math.ceil(self.available_amount.div(self.total_desired_amount).div(WHOLE_UNIT).toString()).times(WHOLE_UNIT);
 					//self.price = self.available_amount.div(self.desired_amount);
 				} else if(side = "market"){
 					self.price = new Big(data.unit_price);
