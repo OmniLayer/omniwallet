@@ -165,6 +165,6 @@ def get_orders_by_market(propertyid_desired, propertyid_selling):
             "total_amount" : str(cancel[3]),
             "unit_price" : str(cancel[4]),
             "seller" : str(cancel[5]),
-            "time" : str(cancel[6])
+            "time" : str(cancel[6]),
             "txhash" : str(order[7])
         } for cancel in cancels]}
