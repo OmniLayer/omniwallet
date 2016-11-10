@@ -280,15 +280,15 @@ angular.module("omniFactories")
 
 				self.updateAmount = function(offer, side) {
 					if(side == "bid")
-						offer.amounts.selling= parseFloat((offer.amounts.desired * offer.price).toPrecision(8)) ||0;
+						offer.amounts.selling= parseFloat(new Big(Math.ceil((offer.amounts.desired * offer.price)/(WHOLE_UNIT))*(WHOLE_UNIT)).toFixed(8)) ||0;
 					else
-						offer.amounts.desired= parseFloat((offer.amounts.selling * offer.price).toPrecision(8)) ||0;
+						offer.amounts.desired= parseFloat(new Big(Math.floor((offer.amounts.selling * offer.price)/(WHOLE_UNIT))*(WHOLE_UNIT)).toFixed(8)) ||0;
 				}
 				self.updateTotal = function(offer, side) {
 					if(side == "bid")
-						offer.amounts.desired= parseFloat((offer.amounts.selling / offer.price).toPrecision(8)) ||0;
+						offer.amounts.desired= parseFloat(new Big(Math.ceil((offer.amounts.selling / offer.price)/(WHOLE_UNIT))*(WHOLE_UNIT)).toFixed(8)) ||0;
 					else
-						offer.amounts.selling= parseFloat((offer.amounts.desired / offer.price).toPrecision(8)) ||0;
+						offer.amounts.selling= parseFloat(new Big(Math.floor((offer.amounts.desired / offer.price)/(WHOLE_UNIT))*(WHOLE_UNIT)).toFixed(8)) ||0;
 				}
 
 				self.submitOffer = function(offer){
