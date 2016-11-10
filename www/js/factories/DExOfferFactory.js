@@ -9,13 +9,17 @@ angular.module("omniFactories")
 				self.rawdata = data;
 				self.propertyselling = propertyselling;
 				self.propertydesired = propertydesired;
-				self.available_amount = propertyselling.divisible ? new Big(data.available_amount).times(WHOLE_UNIT) : new Big(data.available_amount);
+				local_price = new Big(data.unit_price);
+				//original amount selling
 				self.selling_amount = propertyselling.divisible ? new Big(data.total_amount).times(WHOLE_UNIT) : new Big(data.total_amount);
+				//amount remaining selling
+				self.available_amount = propertyselling.divisible ? new Big(data.available_amount).times(WHOLE_UNIT) : new Big(data.available_amount);
+				//original amount desired
 				self.total_desired_amount = propertydesired.divisible ? new Big(data.desired_amount).times(WHOLE_UNIT) : new Big(data.desired_amount);
 				self.desired_amount = self.total_desired_amount;
-				local_price = new Big(data.unit_price);
+
 				if(side == "ask"){
-					self.total_desired_amount = new Big(self.selling_amount.times(local_price).toFixed(8));
+					self.total_desired_amount = new Big(self.available_amount.times(local_price).toFixed(8));
 					self.price = new Big(Math.ceil(self.desired_amount.div(self.available_amount).div(WHOLE_UNIT).toString())).times(WHOLE_UNIT);
 					//self.price = self.local_price;
 				} else if (side == "bid"){
