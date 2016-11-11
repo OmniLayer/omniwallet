@@ -1,6 +1,6 @@
 <div class="col-md-12">
   <h4>
-    <strong>{{ 'EXCHANGE.TRADE.ACTIVE' | translate}} for (#{{orderbook.tradingPair.selling.propertyid}}){{orderbook.tradingPair.selling.name}} / (#{{orderbook.tradingPair.desired.propertyid}}){{orderbook.tradingPair.desired.name}}</strong>
+    <strong>{{ 'EXCHANGE.TRADE.ACTIVE' | translate}} for {{orderbook.tradingPair.selling.name}}#{{orderbook.tradingPair.selling.propertyid}} / {{orderbook.tradingPair.desired.name}}#{{orderbook.tradingPair.desired.propertyid}}</strong>
   </h4>
 </div>
 <div class="col-md-12">
@@ -14,7 +14,7 @@
           <div class="col-sm-2">{{ 'TABLES.OFFERS.CANCEL' | translate }}</div>
     </div>
     <div class="row table-row" ng-show="orderbook.activeOffers.length == 0" >
-      <h3 class="col-xs-12 text-center">{{ 'OMNIDEX.ORDERBOOK.NOACTIVEOFFERS' | translate }} for (#{{orderbook.tradingPair.selling.propertyid}}){{orderbook.tradingPair.selling.name}} / (#{{orderbook.tradingPair.desired.propertyid}}){{orderbook.tradingPair.desired.name}}</h3>
+      <h3 class="col-xs-12 text-center">{{ 'OMNIDEX.ORDERBOOK.NOACTIVEOFFERS' | translate }} for {{orderbook.tradingPair.selling.name}}#{{orderbook.tradingPair.selling.propertyid}} / {{orderbook.tradingPair.desired.name}}#{{orderbook.tradingPair.desired.propertyid}}</h3>
     </div>
     <div class="row table-row" ng-repeat="offer in orderbook.activeOffers" ng-class="{pending:offer.status == 'pending'}">
 
