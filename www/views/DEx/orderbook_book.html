@@ -3,9 +3,9 @@
 		<caption>Bids</caption>
 		<thead>
 			<th>Order Count</th>
-			<th>Price</th>
 			<th>Amount</th>
 			<th>Total</th>
+			<th>Price</th>
 		</thead>
 		<tbody>
 			<tr ng-show="orderbook.bidBook.length == 0" >
@@ -14,10 +14,10 @@
 			      </td>
 		    </tr>
 			<tr ng-repeat="order in orderbook.bidBook" ng-class="{pending:order.hasPending}">
-				<td>{{order.offers.length}}</td>
-				<td>{{order.price.toFixed(8)}}</td>
+				<td><a href="" ng-click="modalManager.showOrderInfo(order)">{{order.offers.length}}</a></td>
 				<td>{{order.totaldesired.toFixed(8)}}</td>
 				<td>{{orderbook.bidCumulative(order).toFixed(8)}}</td>
+				<td>{{order.price.toFixed(8)}}</td>
 			</tr>
 		</tbody>
 	</table>
@@ -26,10 +26,10 @@
 	<table class="orderbook-orders-table asks">
 		<caption>Asks</caption>
 		<thead>
-			<th>Order Count</th>
 			<th>Price</th>
-			<th>Amount</th>
 			<th>Total</th>
+			<th>Amount</th>
+			<th>Order Count</th>
 		</thead>
 		<tbody>
 			<tr ng-show="orderbook.askBook.length == 0" >
@@ -38,10 +38,10 @@
 		      </td>
 		    </tr>
 			<tr ng-repeat="order in orderbook.askBook" ng-class="{pending:order.hasPending}">
-				<td>{{order.offers.length}}</td>
 				<td>{{order.price.toFixed(8)}}</td>
-				<td>{{order.remainingforsale.toFixed(8)}}</td>
 				<td>{{orderbook.askCumulative(order).toFixed(8)}}</td>
+				<td>{{order.remainingforsale.toFixed(8)}}</td>
+				<td><a href="" ng-click="modalManager.showOrderInfo(order)">{{order.offers.length}}</a></td>
 			</tr>
 		</tbody>
 	</table>

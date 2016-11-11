@@ -535,6 +535,26 @@ angular.module("omniServices")
               }
             }, function() {});
           };
+
+          self.showOrderInfo = function(orders) {
+            var modalScope = $rootScope.$new();
+            modalScope.title = 'Order Details';
+            modalScope.button = 'Dismiss';
+            modalScope.bodyTemplate = "/views/modals/partials/order_info.html";
+            modalScope.footerTemplate = "/views/modals/partials/footer.html";
+
+            self.modalInstance = $modal.open({
+              templateUrl: '/views/modals/base.html',
+              controller: function($scope, $modalInstance){
+                $scope.orders=orders;
+                $scope.close = function() {
+                    $modalInstance.dismiss('close');
+                  };
+              },
+              scope: modalScope,
+              backdrop:'static'
+            });
+          };
           
           var AddArmoryAddressModal = function($scope, $modalInstance) {
             $scope.title = "MODALS.IMPORT.OFFLINE.TITLE";
