@@ -22,7 +22,27 @@ angular.module("omniControllers")
 				);
 			}
 
+			$scope.invert = function(currentSelling,currentDesired){
+				var run=true;
+				angular.forEach($scope.designatingcurrencies, function (value,key){
+					if (run) {
+						if (value.propertyid == currentSelling) {
+							//Found what we want, break loop
+							run=false;
+							newSelling=value;
+							$scope.showMarkets({'newCurrency':newSelling, 'newTopMarket':currentDesired});
+						}
+					}
+				});
+			}
+
 			$scope.showMarkets = function(currency){
+				var ltm=true;
+				if (typeof(currency['newCurrency'])!='undefined') {
+					tmid=currency['newTopMarket'];
+					currency=currency['newCurrency'];
+					ltm=false;
+				}
 				$scope.designatingCurrency = currency;
 				$http.get('/v1/omnidex/'+ currency.propertyid).then(
 					function success(response) {
@@ -39,8 +59,11 @@ angular.module("omniControllers")
 						$scope.markets = response.data.markets;
 						$scope.noMarkets = $scope.markets.length == 0;
 						var topmarket = $scope.markets[0]
-						if(topmarket){
+						if(topmarket && ltm){
 							$scope.$parent.loadOrderbook(currency.propertyid,topmarket.propertyid)
+						}
+						if(!ltm){
+							$scope.$parent.loadOrderbook(currency.propertyid,tmid)
 						}
 					}, 
 					function(error){

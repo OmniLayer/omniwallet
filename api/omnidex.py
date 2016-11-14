@@ -96,6 +96,7 @@ def get_markets_by_denominator(denominator):
 	 "propertyname" : currency[1],
 	 "price" : float(currency[2]),
 	 "supply" : currency[3],
+	 "lastprice" : float(currency[4]),
 	 "change" : float(currency[2]-currency[4]),
          "propertytype" : currency[5]
 	} for currency in markets]})
