@@ -20,7 +20,7 @@ angular.module("omniFactories")
 				//amount desired to fill
 				self.desired_amount = new Big(Math.ceil(self.available_amount.times(local_price).div(WHOLE_UNIT).toString())).times(WHOLE_UNIT);
 				//protect against price drift when no matches have been made yet
-				if (self.desired_amount > self.total_desired_amount) {
+				if (self.desired_amount.gt(self.total_desired_amount)) {
 					self.desired_amount = self.total_desired_amount;
 				}
 
