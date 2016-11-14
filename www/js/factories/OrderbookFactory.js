@@ -210,11 +210,11 @@ angular.module("omniFactories")
 							if(owner){
 								offer.ownerAddress = owner;
 								offer.side = selling == self.tradingPair.selling ? "bid":"ask";
-								if(!self.activeOffers.find(function(element){return element.time == offer.time;})){
+								if(!self.activeOffers.find(function(element){return element.txhash == offer.txhash;})){
 									self.activeOffers.push(offer);
 								}
 								var confirmed = self.activeOffers.find(function(element){
-									return offer.status == 'active' && element.status == 'pending' && element.desired_amount == offer.desired_amount && element.selling_amount == offer.selling_amount;
+									return offer.status == 'active' && element.status == 'pending' && element.txhash == offer.txhash;
 								});
 
 								if(confirmed){

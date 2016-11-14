@@ -4,6 +4,9 @@
           {{ 'OMNIDEX.MARKETS.TITLE' | translate }}
       </div>
       <div class="col-xs-9 col-sm-9 col-md-8 col-lg-8 text-right" ng-include="'/views/assets/partials/form_ecosystem.html'"></div>
+      <div class="col-xs-9 col-sm-9 col-md-8 col-lg-8 text-right">
+        <button type="button" class="btn btn-info" ng-click="invert(orderbook.tradingPair.selling.propertyid,orderbook.tradingPair.desired.propertyid);">Invert Markets</button>
+      </div>
     </div>
     <div ng-init="loadDesignatingCurrencies()">
       <div class="form-group col-sm-12">
@@ -17,7 +20,7 @@
               <div class="col-sm-2">{{ 'OMNIDEX.MARKETS.SYMBOL' | translate}}</div>
               <div class="col-sm-2">{{ 'OMNIDEX.MARKETS.NAME' | translate}}</div>
               <div class="col-sm-3">{{ 'OMNIDEX.MARKETS.PRICE' | translate}}</div>
-              <div class="col-sm-2">{{ 'OMNIDEX.MARKETS.CHANGE' | translate}}</div>
+              <div class="col-sm-2">{{ 'OMNIDEX.MARKETS.LASTPRICE' | translate}}</div>
               <div class="col-sm-3">{{ 'OMNIDEX.MARKETS.SUPPLY' | translate}}</div>
             </div>
             <div class="row table-row text-center" ng-show="!loading && noMarkets">
@@ -36,9 +39,9 @@
               <div class="col-xs-5 col-sm-3">
                 {{market.price}}
               </div>
-              <div class="visible-xs col-xs-7">{{ 'OMNIDEX.MARKETS.CHANGE' | translate}}</div>
+              <div class="visible-xs col-xs-7">{{ 'OMNIDEX.MARKETS.LASTPRICE' | translate}}</div>
               <div class="col-xs-5 col-sm-2">
-                {{market.change}}
+                {{market.lastprice}}
               </div>
               <div class="visible-xs col-xs-7">{{ 'OMNIDEX.MARKETS.SUPPLY' | translate}}</div>
               <div class="col-xs-5 col-sm-3">

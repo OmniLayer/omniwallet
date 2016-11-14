@@ -67,11 +67,17 @@ def getDesignatingCurrencies():
                                       #"where (ao.propertyidselling not in (1, 2, 31)) or (ao.propertyidselling = 1 and ao.propertyiddesired = 31) "
     #                                  "where ao.offerstate='active' "
     #                                  "order by ao.propertyiddesired ",[ecosystem])
-    designating_currencies = dbSelect("select distinct propertyiddesired,desiredname from markets where supply > 0 and "
+    designating_currencies = dbSelect("select distinct propertyiddesired,desiredname from markets where "
                                       "CASE WHEN %s='Production' THEN "
                                       "propertyiddesired > 0 and propertyiddesired < 2147483648 and propertyiddesired !=2 "
                                       "ELSE propertyiddesired > 2147483650 or propertyiddesired=2 END "
-                                      "order by propertyiddesired",[ecosystem])
+                                      "and (supply > 0 or propertyiddesired in "
+                                        "(select propertyidselling as marketid from markets where "
+                                        "CASE WHEN %s='Production' THEN "
+                                        "propertyidselling > 0 and propertyidselling < 2147483648 and propertyidselling !=2 "
+                                        "ELSE propertyidselling > 2147483650 or propertyidselling=2 END "
+                                        " and supply >0)) "
+                                      "order by propertyiddesired",(ecosystem,ecosystem))
     return jsonify({"status" : 200, "currencies": [
 	{
 	 "propertyid":currency[0], "propertyname" : currency[1], "displayname" : str(currency[1])+" #"+str(currency[0])
@@ -90,6 +96,7 @@ def get_markets_by_denominator(denominator):
 	 "propertyname" : currency[1],
 	 "price" : float(currency[2]),
 	 "supply" : currency[3],
+	 "lastprice" : float(currency[4]),
 	 "change" : float(currency[2]-currency[4]),
          "propertytype" : currency[5]
 	} for currency in markets]})
