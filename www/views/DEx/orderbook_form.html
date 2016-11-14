@@ -57,11 +57,14 @@
                             </div>
                           </div>
                           <div class="row">
-                            <div class="col-xs-8">
+                            <div class="col-xs-8 text-danger" ng-show="orderbook.buyOrder.invalid">
+                                <strong>{{ 'OMNIDEX.ORDERBOOK.BALANCE' | translate}}: {{orderbook.getBalance(orderbook.buyOrder.address, orderbook.tradingPair.desired.propertyid)}} {{orderbook.tradingPair.desired.name}}</strong>
+                            </div>
+                            <div class="col-xs-8" ng-hide="orderbook.buyOrder.invalid">
                                 {{ 'OMNIDEX.ORDERBOOK.BALANCE' | translate}}: {{orderbook.getBalance(orderbook.buyOrder.address, orderbook.tradingPair.desired.propertyid)}} {{orderbook.tradingPair.desired.name}}
                             </div>
                             <div class="col-xs-4 text-center">
-                                <button type="submit" class="btn btn-main" ng-disabled="orderbook.buyAddresses.length == 0 || orderbook.buyOrder.fee.valueOf() > orderbook.buyOrder.address.getDisplayBalance(0)" >
+                                <button type="submit" class="btn btn-main" ng-disabled="orderbook.buyAddresses.length == 0 || orderbook.buyOrder.fee.valueOf() > orderbook.buyOrder.address.getDisplayBalance(0) || orderbook.buyOrder.invalid" >
                                     <!-- {{ 'OMNIDEX.ORDERBOOK.BUY' | translate}} {{orderbook.tradingPair.selling.name | truncate:12}} -->
                                     {{ 'COMMON.NEXT' | translate}}
                                 </button>
@@ -73,7 +76,10 @@
                             </div>
                           </div>
                           <div class="row">
-                            <div class="col-xs-8">
+                            <div class="col-xs-8 text-danger" ng-show="orderbook.buyOrder.fee.valueOf() > orderbook.buyOrder.address.getDisplayBalance(0)">
+                              <strong>{{ 'WALLET.SEND.AVAIL' | translate}}: {{orderbook.buyOrder.address.getDisplayBalance(0)}} BTC </strong>
+                            </div>
+                            <div class="col-xs-8" ng-hide="orderbook.buyOrder.fee.valueOf() > orderbook.buyOrder.address.getDisplayBalance(0)">
                               {{ 'WALLET.SEND.AVAIL' | translate}}: {{orderbook.buyOrder.address.getDisplayBalance(0)}} BTC
                             </div>
                           </div>
@@ -143,11 +149,14 @@
                             </div>
                           </div>
                           <div class="row">
-                            <div class="col-xs-8">
+                            <div class="col-xs-8 text-danger" ng-show="orderbook.sellOrder.invalid">
+                                <strong>{{ 'OMNIDEX.ORDERBOOK.BALANCE' | translate}}: {{orderbook.getBalance(orderbook.sellOrder.address, orderbook.tradingPair.selling.propertyid)}} {{orderbook.tradingPair.selling.name}}</strong>
+                            </div>
+                            <div class="col-xs-8" ng-hide="orderbook.sellOrder.invalid">
                                 {{ 'OMNIDEX.ORDERBOOK.BALANCE' | translate}}: {{orderbook.getBalance(orderbook.sellOrder.address, orderbook.tradingPair.selling.propertyid)}} {{orderbook.tradingPair.selling.name}} 
                             </div>
                             <div class="col-xs-4 text-center">
-                                <button type="submit" class="btn btn-secondary" ng-disabled="orderbook.sellAddresses.length == 0 || orderbook.sellOrder.fee.valueOf() > orderbook.sellOrder.address.getDisplayBalance(0)" >
+                                <button type="submit" class="btn btn-secondary" ng-disabled="orderbook.sellAddresses.length == 0 || orderbook.sellOrder.fee.valueOf() > orderbook.sellOrder.address.getDisplayBalance(0) || orderbook.sellOrder.invalid" >
                                     <!-- {{ 'OMNIDEX.ORDERBOOK.SELL' | translate}} {{orderbook.tradingPair.selling.name | truncate:12}} -->
                                     {{ 'COMMON.NEXT' | translate}}
                                 </button>
@@ -159,7 +168,10 @@
                             </div>
                           </div>
                           <div class="row">
-                            <div class="col-xs-8">
+                            <div class="col-xs-8 text-danger" ng-show="orderbook.sellOrder.fee.valueOf() > orderbook.sellOrder.address.getDisplayBalance(0)">
+                              <strong>{{ 'WALLET.SEND.AVAIL' | translate}}: {{orderbook.sellOrder.address.getDisplayBalance(0)}} BTC</strong>
+                            </div>
+                            <div class="col-xs-8" ng-hide="orderbook.sellOrder.fee.valueOf() > orderbook.sellOrder.address.getDisplayBalance(0)">
                               {{ 'WALLET.SEND.AVAIL' | translate}}: {{orderbook.sellOrder.address.getDisplayBalance(0)}} BTC
                             </div>
                           </div>

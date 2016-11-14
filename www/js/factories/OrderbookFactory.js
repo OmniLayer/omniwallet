@@ -17,7 +17,8 @@ angular.module("omniFactories")
 							selling: 0
 						},
 						price: 0,
-						feeType: 'normal'
+						feeType: 'normal',
+						invalid: true
 					};
 					self.sellOrder = {
 						desired : tradingPair.desired,
@@ -27,7 +28,8 @@ angular.module("omniFactories")
 							selling: 0
 						},
 						price: 0,
-						feeType: 'normal'
+						feeType: 'normal',
+						invalid: true
 					};
 
 					self.selling = tradingPair.selling;
@@ -264,6 +266,7 @@ angular.module("omniFactories")
 						}
 					  });
 					};
+					self.updateOrderValidity(self.buyOrder,"bid");
 				};
 
 				self.setSellAddress = function(address){
@@ -276,19 +279,37 @@ angular.module("omniFactories")
 						}
 					  });
 					};
+					self.updateOrderValidity(self.sellOrder,"ask");
 				};
 
+				self.updateOrderValidity = function(offer,side) {
+					if(side == "bid") {
+						balance=parseFloat(self.getBalance(offer.address, self.tradingPair.desired.propertyid));
+					} else {
+						balance=parseFloat(self.getBalance(offer.address, self.tradingPair.selling.propertyid));
+					}
+					if (balance < offer.amounts.selling) {
+						offer.invalid=true;
+					} else {
+						offer.invalid=false;
+					}
+				}
+
 				self.updateAmount = function(offer, side) {
-					if(side == "bid")
+					if(side == "bid") {
 						offer.amounts.selling= parseFloat(new Big(Math.ceil((offer.amounts.desired * offer.price)/(WHOLE_UNIT))*(WHOLE_UNIT)).toFixed(8)) ||0;
-					else
+					} else {
 						offer.amounts.desired= parseFloat(new Big(Math.floor((offer.amounts.selling * offer.price)/(WHOLE_UNIT))*(WHOLE_UNIT)).toFixed(8)) ||0;
+					}
+					self.updateOrderValidity(offer,side);
 				}
 				self.updateTotal = function(offer, side) {
-					if(side == "bid")
+					if(side == "bid") {
 						offer.amounts.desired= parseFloat(new Big(Math.ceil((offer.amounts.selling / offer.price)/(WHOLE_UNIT))*(WHOLE_UNIT)).toFixed(8)) ||0;
-					else
+					} else {
 						offer.amounts.selling= parseFloat(new Big(Math.floor((offer.amounts.desired / offer.price)/(WHOLE_UNIT))*(WHOLE_UNIT)).toFixed(8)) ||0;
+					}
+					self.updateOrderValidity(offer,side);
 				}
 
 				self.submitOffer = function(offer){
