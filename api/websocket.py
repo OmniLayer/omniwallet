@@ -1,7 +1,7 @@
 from gevent import monkey
 monkey.patch_all()
 
-import time
+import time, datetime
 import json, re
 from threading import Thread
 from flask import Flask, render_template, session, request
@@ -31,7 +31,7 @@ valuebook = {}
 
 
 def printmsg(msg):
-    print msg
+    print str(datetime.datetime.now())+str(" ")+str(msg)
     sys.stdout.flush()
 
 def update_balances():
