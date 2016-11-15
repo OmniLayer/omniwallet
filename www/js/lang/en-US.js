@@ -36,7 +36,8 @@ angular.module("omniConfig")
 		"SUCCESS":"Success",
 		"ERROR":"Error",
 		"MFA":"MFA Code",
-		"RESET":"Reset"
+		"RESET":"Reset",
+		"MY":"My"
 	},
 	"SETTINGS":{
 		"TITLE":"Account Settings",
@@ -594,7 +595,7 @@ angular.module("omniConfig")
 		},
 		"OFFERS":{
 			"HASH":"Transaction hash",
-			"PRICE":"Price per Coin",
+			"PRICE":"Price per Token",
 			"AMOUNT":"Amount",
 			"TOTAL":"Total Cost",
 			"CANCEL":"Cancel",

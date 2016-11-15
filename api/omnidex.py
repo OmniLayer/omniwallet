@@ -86,19 +86,23 @@ def getDesignatingCurrencies():
 
 @app.route('/<int:denominator>')
 def get_markets_by_denominator(denominator):
-    markets = dbSelect("select propertyidselling as marketid, sellingname as marketname, unitprice, supply, lastprice, marketpropertytype "
-                         "from markets where propertyiddesired=%s and ( supply>0 or propertyidselling in "
-                           "(select propertyiddesired as marketid from markets where propertyidselling=%s and supply>0) "
-                         ") order by propertyidselling",(denominator,denominator))
+    markets = dbSelect("select ma.propertyidselling as marketid, ma.sellingname as marketname, "
+                        "CASE WHEN mb.unitprice=0 THEN 0 ELSE cast(1/mb.unitprice as numeric(27,8)) END as bidprice, "
+                       "ma.unitprice as askprice, ma.supply, ma.lastprice, ma.marketpropertytype "
+                       "from markets ma left outer join markets mb on ma.propertyidselling=mb.propertyiddesired "
+                       "and ma.propertyiddesired=mb.propertyidselling where ma.propertyiddesired=%s and "
+                       "( ma.supply>0 or ma.propertyidselling in "
+                        "(select propertyiddesired as marketid from markets where propertyidselling=%s and supply>0) "
+                       " ) order by ma.propertyidselling",(denominator,denominator))
     return jsonify({"status" : 200, "markets": [
 	{
 	 "propertyid":currency[0], 
 	 "propertyname" : currency[1],
-	 "price" : float(currency[2]),
-	 "supply" : currency[3],
-	 "lastprice" : float(currency[4]),
-	 "change" : float(currency[2]-currency[4]),
-         "propertytype" : currency[5]
+	 "bidprice" : float(currency[2]),
+	 "askprice" : float(currency[3]),
+	 "supply" : currency[4],
+	 "lastprice" : float(currency[5]),
+         "propertytype" : currency[6]
 	} for currency in markets]})
 
 @app.route('/ohlcv/<int:propertyid_desired>/<int:propertyid_selling>')
