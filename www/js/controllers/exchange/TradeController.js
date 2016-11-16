@@ -70,7 +70,7 @@ angular.module("omniControllers")
 		  } 
 
 		  $scope.hasCoins = $scope.wallet.getAsset(1) != undefined;
-		  $scope.hasBitcoins = $scope.wallet.getAsset(0) != undefined;
+		  $scope.hasBitcoins = $scope.wallet.getAsset(0).tradable;
 		  $scope.selectedAsset = $scope.wallet.getAsset(1);
 
 		  //Get the active currency pair
