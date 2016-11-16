@@ -649,7 +649,7 @@ angular.module("omniConfig")
 		},
 		"BUY":{
 			"TITLE":"Accept Offer",
-			"NOFUNDS":"No Funds on Addresses with private keys to complete the purchase!",
+			"NOFUNDS":"No Funds on Addresses with private keys to complete the request!",
 			"SENDSOME":"Send some funding to an address on the",
 			"ORADD":"page or add an address with funds.",
 			"ADDRESS":"Buying Address",

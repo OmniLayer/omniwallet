@@ -7,7 +7,14 @@
       <div class="text-left om-title">{{ 'OMNIDEX.SALE.TITLE' | translate}}</div>
     </div>
   </div> 
-  <div class="row">
+  <div class="row" ng-hide="selectedAddress!=undefined">
+    <div class="col-sm-12">
+      {{ 'EXCHANGE.BUY.NOFUNDS' | translate}}
+      <br />
+      {{ 'EXCHANGE.BUY.SENDSOME' | translate}} <a class="" href="/wallet/addresses"> {{ 'NAVIGATION.ADDRESSES' | translate }} </a> {{ 'EXCHANGE.BUY.ORADD' | translate}}
+    </div>
+  </div>
+  <div class="row" ng-show="selectedAddress!=undefined">
     <div class="col-xs-12">
       <form name="dexSaleForm" ng-submit="validateDexSaleForm()">
         <div class="panel panel-form">
