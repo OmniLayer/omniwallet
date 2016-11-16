@@ -83,9 +83,9 @@ def insertomni(rawtx):
       else:
         amount = int(rawtx['MP']['amount'])
     else:
-      if rawtx['MP']['propertyidforsaleisdivisible']
+      if rawtx['MP']['propertyidforsaleisdivisible']:
         amount = int(decimal.Decimal(str(rawtx['MP']['amountforsale']))*decimal.Decimal(1e8))
-      else
+      else:
         amount = int(rawtx['MP']['amountforsale'])
 
     if txtype == 55:

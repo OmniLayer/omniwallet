@@ -90,33 +90,47 @@ angular.module("omniServices")
                       $scope.signOffline = modalConfig.transaction.offline;
 
                       $scope.transaction = modalConfig.transaction;
-                      
+                      $scope.complete = false;
+
                       $scope.confirm = function() {
                           $scope.clicked = true;
                           $scope.waiting = true;
 
                           TransactionManager.processTransaction($scope.transaction).then(function(result){
                             if(result.transactionSuccess){
-                              $location.path($scope.successRedirect)
-                              $rootScope.notify({
-                                message: "Operation success",
-                                url : result.url
-                              })
-                              $modalInstance.dismiss('close');
+                              //$location.path($scope.successRedirect)
+                              //$rootScope.notify({
+                              //  message: "Operation success",
+                              //  url : result.url
+                              //})
+                              //$modalInstance.dismiss('close');
+                              $scope.complete = true;
+                              $scope.success = true;
+                              $scope.saved = true;
+                              $scope.message = "Operation success";
+                              $scope.url = result.url;
                             } else if(result.readyToSign){
                               $scope.readyToSign = result.readyToSign;
                               $scope.unsignedTransaction = result.unsignedTransaction;
                             } else {
-                              $rootScope.notifyError({
-                                message: result.error || "Unknown Error"
-                              })
-                              $modalInstance.dismiss('close');
-                            }
+                              //$rootScope.notifyError({
+                              //  message: result.error || "Unknown Error"
+                              //})
+                              //$modalInstance.dismiss('close');
+                              $scope.complete = true;
+                              $scope.transactionError = true;
+                              $scope.error = result.error || "Unknown Error" ;
+                              $scope.saved = true;
+                          }
                           }, function(errorData){
-                          	$modalInstance.dismiss('close');
-                                $rootScope.notifyError({
-                                message: errorData.errorMessage || "Unknown Error"
-                              })
+                          	//$modalInstance.dismiss('close');
+                                //$rootScope.notifyError({
+                                //message: errorData.errorMessage || "Unknown Error"
+                                //})
+                                $scope.complete = true;
+                                $scope.transactionError = true;
+                                $scope.error = errorData.errorMessage || "Unknown Error" ;
+                                $scope.saved = true;
                           });
                       };
 

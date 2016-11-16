@@ -1,4 +1,4 @@
-<div class="control-group" ng-hide="readyToSign">
+<div class="control-group" ng-hide="readyToSign || complete">
     <div class="controls">
         <button ng-disabled="clicked" class="btn btn-main" ng-click="confirm()">
             {{confirmText | translate}}
@@ -7,17 +7,19 @@
     </div>  
 </div>
 <div class="row">
-    <div ng-show="readyToSign">
-        <h4 class="pull-left" style="color:green;">{{ 'MODALS.CONFIRM.OFFLINE' | translate }}  
-          </h4>
+    <div ng-show="readyToSign || complete">
+        <h4 class="pull-left" style="color:green;" ng-if="signOffline">{{ 'MODALS.CONFIRM.OFFLINE' | translate }}</h4>
+        <div class="alert alert-success text-center animate-show" ng-show="success"><strong > {{message}},
+          {{ 'MODALS.CONFIRM.CHECK' | translate }} <a target="_blank" href="{{url}}">{{ 'MODALS.CONFIRM.HERE' | translate }}.</a></strong>
+        </div>
         <button ng-click="openBroadcastTransactionForm(fromAddress)" class="btn btn-secondary" ng-if="signOffline">{{ 'MODALS.CONFIRM.BROADCAST' | translate }} </button>
         <button ng-click="saveUnsigned(unsignedTransaction)" class="btn btn-main" ng-hide="saved">Save</button>
         <a href="/wallet/overview">
-            <button ng-click="close()" class="btn" ng-class="{'btn-tertiary':unsaved,'btn-main':saved}">{{ 'COMMON.CLOSE' | translate }} </button>
+            <button ng-click="close()" class="btn" ng-class="{'btn-tertiary':unsaved,'btn-info':saved}">{{ 'NAVIGATION.WALLET' | translate }} </button>
         </a>
+        <button ng-click="close()" class="btn" ng-class="{'btn-tertiary':unsaved,'btn-main':saved}">{{ 'COMMON.CLOSE' | translate }} </button>
     </div>
     <div ng-show="transactionError">
-        <h4 class="col-xs-12" style="color:red;"> {{errorMessage}}: 
-         {{error}} </h4>
+        <h4 class="col-xs-12" style="color:red;"> {{errorMessage}}: {{error}} </h4>
     </div>
 </div>
