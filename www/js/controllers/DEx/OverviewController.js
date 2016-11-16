@@ -56,7 +56,7 @@ angular.module("omniControllers")
 								market.propertyid == 39 ? "AMP" :
 								market.propertyname.substr(0,4).toUpperCase();
 							market.price =
-								new Big(market.bidprice) == 0 ? market.askprice : market.bidprice ;
+								new Big(market.askprice) == 0 ? market.bidprice : market.askprice ;
 						});
 						$scope.markets = response.data.markets;
 						$scope.noMarkets = $scope.markets.length == 0;
