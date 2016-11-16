@@ -11,13 +11,15 @@ angular.module("omniControllers")
 			$scope.protocolFee = PROTOCOL_FEE;
 			$scope.setAddress = function(address){
 				$scope.selectedAddress = address;
-				$scope.setAsset($scope.wallet.getAsset($scope.selectedAddress.assets[0].id));
-				$scope.selectedAddress.estimateFee().then(function(result){
+				if (address!=undefined) {
+				  $scope.setAsset($scope.wallet.getAsset($scope.selectedAddress.assets[0].id));
+				  $scope.selectedAddress.estimateFee().then(function(result){
 					$scope.feeData=result;
 					if($scope.feeType != 'custom'){
 						$scope.minersFee = new Big(result.class_c[$scope.feeType]);
 					}
-				});
+				  });
+				}
 			};
 
 			$scope.setAsset = function(asset){

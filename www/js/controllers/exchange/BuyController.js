@@ -8,12 +8,14 @@ angular.module("omniControllers")
       $scope.feeType = 'normal';
       $scope.setAddress = function(address){
             $scope.selectedAddress = address;
-            $scope.selectedAddress.estimateFee().then(function(result){
+            if (address!=undefined) {
+              $scope.selectedAddress.estimateFee().then(function(result){
                 $scope.feeData=result;
                 if($scope.feeType != 'custom'){
                     $scope.minersFee = new Big(result.class_c[$scope.feeType]);
                 }
-            });
+              });
+            }
       }
       $scope.setAddress($scope.selectedAddress);
       var transaction = $scope.global['buyOffer'];
