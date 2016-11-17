@@ -186,9 +186,10 @@ angular.module("omniConfig")
 		"FAQ":"FAQ",
 		"LOGIN":"Login",
 		"LOGOUT":"Logout",
-		"OFFERS":"My Offers",
+		"OFFERS":"Offers",
 		"SETTINGS":"Account Settings",
 		"TRADE":"Trade",
+		"DEX1":"BTC/OMNI",
 		"TRANSACTIONS":"Transactions",
 		"WALLET":"My Wallet",
 		"OMNIDEX":"OmniDex"

@@ -288,7 +288,7 @@ angular.module("omniFactories")
 					} else {
 						balance=parseFloat(self.getBalance(offer.address, self.tradingPair.selling.propertyid));
 					}
-					if (balance < offer.amounts.selling) {
+					if (balance < offer.amounts.selling | offer.amounts.selling == 0 | offer.amounts.selling == null) {
 						offer.invalid=true;
 					} else {
 						offer.invalid=false;
@@ -297,17 +297,29 @@ angular.module("omniFactories")
 
 				self.updateAmount = function(offer, side) {
 					if(side == "bid") {
-						offer.amounts.selling= parseFloat(new Big(Math.ceil((offer.amounts.desired * offer.price)/(WHOLE_UNIT))*(WHOLE_UNIT)).toFixed(8)) ||0;
+						if (!offer.desired.divisible) {
+							offer.amounts.desired=parseFloat(offer.amounts.desired.toFixed(0));
+						}
+						offer.amounts.selling = parseFloat(new Big(Math.ceil((offer.amounts.desired * offer.price)/(WHOLE_UNIT))*(WHOLE_UNIT)).toFixed(8)) ||0;
 					} else {
-						offer.amounts.desired= parseFloat(new Big(Math.floor((offer.amounts.selling * offer.price)/(WHOLE_UNIT))*(WHOLE_UNIT)).toFixed(8)) ||0;
+						if (!offer.selling.divisible) {
+							offer.amounts.selling=parseFloat(offer.amounts.selling.toFixed(0));
+						}
+						offer.amounts.desired = parseFloat(new Big(Math.floor((offer.amounts.selling * offer.price)/(WHOLE_UNIT))*(WHOLE_UNIT)).toFixed(8)) ||0;
 					}
 					self.updateOrderValidity(offer,side);
 				}
 				self.updateTotal = function(offer, side) {
 					if(side == "bid") {
-						offer.amounts.desired= parseFloat(new Big(Math.ceil((offer.amounts.selling / offer.price)/(WHOLE_UNIT))*(WHOLE_UNIT)).toFixed(8)) ||0;
+						if (!offer.selling.divisible) {
+							offer.amounts.selling=parseFloat(offer.amounts.selling.toFixed(0));
+						}
+						offer.amounts.desired = parseFloat(new Big(Math.ceil((offer.amounts.selling / offer.price)/(WHOLE_UNIT))*(WHOLE_UNIT)).toFixed(8)) ||0;
 					} else {
-						offer.amounts.selling= parseFloat(new Big(Math.floor((offer.amounts.desired / offer.price)/(WHOLE_UNIT))*(WHOLE_UNIT)).toFixed(8)) ||0;
+						if (!offer.desired.divisible) {
+							offer.amounts.desired=parseFloat(offer.amounts.desired.toFixed(0));
+						}
+						offer.amounts.selling = parseFloat(new Big(Math.floor((offer.amounts.desired / offer.price)/(WHOLE_UNIT))*(WHOLE_UNIT)).toFixed(8)) ||0;
 					}
 					self.updateOrderValidity(offer,side);
 				}

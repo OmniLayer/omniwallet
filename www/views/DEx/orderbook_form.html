@@ -42,7 +42,8 @@
                             <div class="col-xs-12">
                                 <label for="buy_amount_desired">{{ 'OMNIDEX.ORDERBOOK.AMOUNT' | translate}} to {{ 'OMNIDEX.ORDERBOOK.BUY' | translate}}:</label>
                                 <div class="input-group">
-                                    <input type="number" class="form-control" id="buy_amount_desired" placeholder="Enter amount to buy" ng-model="orderbook.buyOrder.amounts.desired" ng-change="orderbook.updateAmount(orderbook.buyOrder,'bid')" step="0.00000001" min="0.00000001">
+                                    <input type="number" ng-if="!orderbook.tradingPair.selling.divisible" class="form-control" id="buy_amount_desired" placeholder="Enter amount to buy" ng-model="orderbook.buyOrder.amounts.desired" ng-change="orderbook.updateAmount(orderbook.buyOrder,'bid')" step="1" min="1">
+                                    <input type="number" ng-if="orderbook.tradingPair.selling.divisible" class="form-control" id="buy_amount_desired" placeholder="Enter amount to buy" ng-model="orderbook.buyOrder.amounts.desired" ng-change="orderbook.updateAmount(orderbook.buyOrder,'bid')" step="0.00000001" min="0.00000001">
                                     <span class="input-group-addon">{{orderbook.tradingPair.selling.name}}</span>
                                 </div>
                             </div>
@@ -51,7 +52,8 @@
                             <div class="col-xs-12">
                                 <label for="buy_amount_offered">{{ 'OMNIDEX.ORDERBOOK.TOTALCOST' | translate}}:</label>
                                 <div class="input-group">
-                                    <input type="number" class="form-control" id="buy_amount_offered" placeholder="My Total Cost" ng-model="orderbook.buyOrder.amounts.selling" ng-change="orderbook.updateTotal(orderbook.buyOrder,'bid')" step="0.00000001" min="0.00000001">
+                                    <input type="number" ng-if="!orderbook.tradingPair.desired.divisible" class="form-control" id="buy_amount_offered" placeholder="My Total Cost" ng-model="orderbook.buyOrder.amounts.selling" ng-change="orderbook.updateTotal(orderbook.buyOrder,'bid')" step="1" min="1">
+                                    <input type="number" ng-if="orderbook.tradingPair.desired.divisible" class="form-control" id="buy_amount_offered" placeholder="My Total Cost" ng-model="orderbook.buyOrder.amounts.selling" ng-change="orderbook.updateTotal(orderbook.buyOrder,'bid')" step="0.00000001" min="0.00000001">
                                     <span class="input-group-addon">{{orderbook.tradingPair.desired.name}}</span>
                                 </div>
                             </div>
@@ -134,7 +136,8 @@
                             <div class="col-xs-12">
                                 <label for="sell_amount_desired">{{ 'OMNIDEX.ORDERBOOK.AMOUNT' | translate}} to {{ 'OMNIDEX.ORDERBOOK.SELL' | translate}}:</label>
                                 <div class="input-group">
-                                    <input type="number" class="form-control" id="sell_amount_desired" placeholder="Enter amount to sell" ng-model="orderbook.sellOrder.amounts.selling" ng-change="orderbook.updateAmount(orderbook.sellOrder,'ask')" step="0.00000001" min="0.00000001">
+                                    <input type="number" ng-if="!orderbook.tradingPair.selling.divisible" class="form-control" id="sell_amount_desired" placeholder="Enter amount to sell" ng-model="orderbook.sellOrder.amounts.selling" ng-change="orderbook.updateAmount(orderbook.sellOrder,'ask')" step="1" min="1">
+                                    <input type="number" ng-if="orderbook.tradingPair.selling.divisible" class="form-control" id="sell_amount_desired" placeholder="Enter amount to sell" ng-model="orderbook.sellOrder.amounts.selling" ng-change="orderbook.updateAmount(orderbook.sellOrder,'ask')" step="0.00000001" min="0.00000001">
                                     <span class="input-group-addon">{{orderbook.tradingPair.selling.name}}</span>
                                 </div>
                             </div>
@@ -143,7 +146,8 @@
                             <div class="col-xs-12">
                                 <label for="sell_amount_offered">{{ 'OMNIDEX.ORDERBOOK.TOTALDESIRED' | translate}}:</label>
                                 <div class="input-group">
-                                    <input type="number" class="form-control" id="sell_amount_desired" placeholder="Total Desired" ng-model="orderbook.sellOrder.amounts.desired" ng-change="orderbook.updateTotal(orderbook.sellOrder,'ask')" step="0.00000001" min="0.00000001">
+                                    <input type="number" ng-if="!orderbook.sellOrder.desired.divisible" class="form-control" id="sell_amount_desired" placeholder="Total Desired" ng-model="orderbook.sellOrder.amounts.desired" ng-change="orderbook.updateTotal(orderbook.sellOrder,'ask')" step="1" min="1">
+                                    <input type="number" ng-if="orderbook.sellOrder.desired.divisible" class="form-control" id="sell_amount_desired" placeholder="Total Desired" ng-model="orderbook.sellOrder.amounts.desired" ng-change="orderbook.updateTotal(orderbook.sellOrder,'ask')" step="0.00000001" min="0.00000001">
                                     <span class="input-group-addon">{{orderbook.sellOrder.desired.name}}</span>
                                 </div>
                             </div>
