@@ -288,7 +288,7 @@ angular.module("omniFactories")
 					} else {
 						balance=parseFloat(self.getBalance(offer.address, self.tradingPair.selling.propertyid));
 					}
-					if (balance < offer.amounts.selling | offer.amounts.selling == 0) {
+					if (balance < offer.amounts.selling | offer.amounts.selling == 0 | offer.amounts.selling == null) {
 						offer.invalid=true;
 					} else {
 						offer.invalid=false;
