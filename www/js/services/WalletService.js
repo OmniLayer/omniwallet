@@ -72,18 +72,20 @@ angular.module("omniServices")
 					if(self.loader.loadedAddresses && self.loader.loadedAssets)
 						self.loaded = true;
 				}
-	        };
+		};
 
+                self.getSetting = function(setting){
+                        return Account.getSetting(setting);
+                }
 
-	        self.destroy = function(){
-	        	self.addresses = [];
-	            self.assets = [];
-	        	BalanceSocket.disconnect();
-	        	
-	        }
+		self.destroy = function(){
+			self.addresses = [];
+		    self.assets = [];
+			BalanceSocket.disconnect();
+		}
 
-	        self._addAddress = function(raw){
-	        	var address = new Address(raw.address,raw.privkey,raw.pubkey);
+		self._addAddress = function(raw){
+			var address = new Address(raw.address,raw.privkey,raw.pubkey);
 
 		BalanceSocket.on("address:book", function(data){
 			if (typeof data[address.hash]!="undefined") {
@@ -129,36 +131,35 @@ angular.module("omniServices")
 			}
 		};
 
-                self.addresses.push(address)
-	        }
+		self.addresses.push(address)
+		}
 
-	        self._updateAddress = function(address,privKey,pubKey){
-	        	for (var i in self.addresses) {
-		            if (self.addresses[i].hash == address) {
-		                if(privKey){
-		                	self.addresses[i].privkey = privKey;
-		                	self.addresses[i].pubkey = undefined;
-		                }
-		                  
-		                if(pubKey)
-		                  self.addresses[i].pubkey = pubKey;
-		            }
-	            }
-	        }
+		self._updateAddress = function(address,privKey,pubKey){
+			for (var i in self.addresses) {
+			    if (self.addresses[i].hash == address) {
+				if(privKey){
+					self.addresses[i].privkey = privKey;
+					self.addresses[i].pubkey = undefined;
+				}
+				if(pubKey)
+				  self.addresses[i].pubkey = pubKey;
+			    }
+		    }
+		}
 
-	        self._removeAddress = function(addressHash){
-	        	for (var i = 0; i < self.addresses.length; i++)
-	              if (self.addresses[i].hash == addressHash) 
-	                var address = self.addresses.splice(i, 1)[0];
+		self._removeAddress = function(addressHash){
+			for (var i = 0; i < self.addresses.length; i++)
+				if (self.addresses[i].hash == addressHash)
+					var address = self.addresses.splice(i, 1)[0];
 
-	            address.balance.forEach(function(balance){
-	            	var asset = self.getAsset(balance.id);
-	            	if (asset.tradableAddresses.indexOf(address) > -1)
-	            		asset.tradableAddresses.splice(asset.tradableAddresses.indexOf(address), 1)
-	            	else
-	            		asset.watchAddresses.splice(asset.watchAddresses.indexOf(address), 1)
-	            })
-	        }
+			address.balance.forEach(function(balance){
+				var asset = self.getAsset(balance.id);
+					if (asset.tradableAddresses.indexOf(address) > -1)
+						asset.tradableAddresses.splice(asset.tradableAddresses.indexOf(address), 1)
+					else
+						asset.watchAddresses.splice(asset.watchAddresses.indexOf(address), 1)
+			})
+		}
 
 		self.getTotalValue = function(address) {
 			var value=0;
@@ -169,99 +170,48 @@ angular.module("omniServices")
 			return value;
 		}
 
-	        self.getAsset = function(assetId){
-	        	return self.assets.filter(function(asset){
-	        		return asset.id == assetId;
-	        	})[0];
-	        }
-
-	        self.getAddress = function(addressHash){
-	        	return self.addresses.filter(function(address){
-	        		return address.hash == addressHash;
-	        	})[0];	
-	        }
-
-	        self.transactions = function(showtesteco){
-			return self.addresses.map(function(address){
-        			return address.transactions(showtesteco);
-			});
-	        }
-
-	        self.tradableAddresses = function(){
-	        	return self.assets.map(function(asset){
-	        		return ((asset.id < 2147483648 && asset.id != 2) || self.settings["showtesteco"] === 'true') ? asset.tradableAddresses : [];
-	        	}).reduce(function(previous,current){
-	        		var next = previous;
-	        		current.forEach(function(address){
-	        			if(previous.indexOf(address)==-1)
-	        				next.push(address)
-	        		})
-	        		return next;
-	        	})
-	        }
-
-	        self.omniTradableAddresses = function(){
-	        	return self.assets.map(function(asset){
-	        		return (((asset.id < 2147483648 && asset.id != 2) || self.settings["showtesteco"] === 'true')  && asset.id != 0) ? asset.tradableAddresses : [];
-	        	}).reduce(function(previous,current){
-	        		var next = previous;
-	        		current.forEach(function(address){
-	        			if(previous.indexOf(address)==-1)
-	        				next.push(address)
-	        		})
-	        		return next;
-	        	})
-	        }
-
-	        self.setSettings = function(settings){
-	        	self.settings = settings;
-	        }
-			// self.initialize = function(){				  
-			//     self.selectedCoin = self.currencyList[0];
-			//     self.currencyList.forEach(function(e, i) {
-			//       if (e.symbol == "MSC")
-			//         self.selectedCoin = e;
-			//     });
-					  
-			// 	self.addressListByCoin = self.selectedCoin ? userService.getTradableAddresses(self.selectedCoin.tradableAddresses,true) : [];
-			// 	self.addressList = userService.getTradableAddresses(null,true);
-			// 	self.selectedAddress = self.addressListByCoin[0] || null;
-
-
-			// 	// [ Retrieve Balances ]
-				
-			// 	self.calculateTotal(self.minerFees);
-			// 	self.setBitcoinValue(self.getBitcoinValue());  				
-			// }
-
-			// self.getBitcoinValue = function(){
-			//     return appraiser.getValue(100000000,"BTC");
-			// }
-			// self.setBitcoinValue = function(value){
-			//     self.bitcoinValue = value;
-			// } 
-
-			// self.calculateTotal=function(minerFees) {
-			//     self.mProtocolCost = MSC_PROTOCOL_COST
-			//     if (self.selectedCoin && self.selectedCoin.symbol == 'BTC')
-			//     	self.mProtocolCost = 0.0;
-			//     self.totalCost = (+new Big(minerFees).plus(self.mProtocolCost).valueOf()).toFixed(8);
-			// }
-
-			// self.initialize();
-			
-			// $rootScope.$watch(function(){return self.selectedCoin;}, function() {
-			//     self.addressListByCoin = self.selectedCoin ? userService.getTradableAddresses(self.selectedCoin.tradableAddresses) : [];
-			//     self.selectedAddress = self.addressListByCoin[0] || null;
-			//     self.setBalance();
-			//     self.minerFees = +MIN_MINER_FEE.valueOf(); // reset miner fees
-			//     self.calculateTotal(self.minerFees);
-			// });
-
-			// $rootScope.$watch(function(){return self.selectedAddress;}, function() {
-			// 	self.setBalance();
-			//     var pubkey = userService.getAddress(self.selectedAddress).pubkey;
-			//     self.offline = pubkey != undefined && pubkey != "";
-			// });
+		self.getAsset = function(assetId){
+			return self.assets.filter(function(asset){
+				return asset.id == assetId;
+			})[0];
 		}
-	]);
+
+		self.getAddress = function(addressHash){
+			return self.addresses.filter(function(address){
+				return address.hash == addressHash;
+			})[0];
+		}
+
+		self.transactions = function(showtesteco){
+			return self.addresses.map(function(address){
+				return address.transactions(showtesteco);
+			});
+		}
+
+		self.tradableAddresses = function(){
+			return self.assets.map(function(asset){
+				return ((asset.id < 2147483648 && asset.id != 2) || self.getSetting["showtesteco"] === 'true') ? asset.tradableAddresses : [];
+			}).reduce(function(previous,current){
+				var next = previous;
+				current.forEach(function(address){
+					if(previous.indexOf(address)==-1)
+						next.push(address)
+				})
+				return next;
+			})
+		}
+
+		self.omniTradableAddresses = function(){
+			return self.assets.map(function(asset){
+				return (((asset.id < 2147483648 && asset.id != 2) || self.getSetting["showtesteco"] === 'true')  && asset.id != 0) ? asset.tradableAddresses : [];
+			}).reduce(function(previous,current){
+				var next = previous;
+				current.forEach(function(address){
+					if(previous.indexOf(address)==-1)
+						next.push(address)
+				})
+				return next;
+			})
+		}
+	}
+]);
