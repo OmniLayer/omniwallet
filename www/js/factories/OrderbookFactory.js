@@ -238,6 +238,9 @@ angular.module("omniFactories")
 						}
 					});
 				}
+				self.formatOffer = function(offer) {
+					return new DExOrder(offer);
+				}
 
 				self.askCumulative = function(order){
 					index = self.askBook.indexOf(order);
