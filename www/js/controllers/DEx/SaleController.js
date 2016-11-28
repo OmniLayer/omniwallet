@@ -9,6 +9,7 @@ angular.module("omniControllers")
 			$scope.omniAnnounce = true;
 			$scope.feeType = 'normal';
 			$scope.protocolFee = PROTOCOL_FEE;
+			$scope.filteredCur = {'index':-1, 'cur':{'propertyid':-1}};
 			$scope.setAddress = function(address){
 				$scope.selectedAddress = address;
 				if (address!=undefined) {
@@ -28,11 +29,31 @@ angular.module("omniControllers")
 				if($scope.ecosystem != nextEco){
 					$scope.ecosystem = nextEco;
 					$scope.loadCurrencies();	
+				} else {
+					if ($scope.filteredCur['index'] > -1) {
+						$scope.availableTokens.splice($scope.filteredCur['index'],0,$scope.filteredCur['cur']);
+					}
+					self.filterCurrencies();
 				}
 			}
 
 			$scope.setDesiredAsset = function(asset){
 				$scope.desiredAsset = asset;
+			}
+
+			self.filterCurrencies = function(){
+				index=-1;
+				$scope.availableTokens.forEach(function(token) {
+					if (token.propertyid==$scope.sellingAsset.propertyid) {
+						index=$scope.availableTokens.indexOf(token);
+					}
+				});
+				if (index > -1) {
+					$scope.filteredCur={'index':index, 'cur':$scope.availableTokens.splice(index,1)[0]};
+				}
+				if ($scope.desiredAsset.propertyid==$scope.filteredCur['cur'].propertyid){
+					$scope.desiredAsset = $scope.availableTokens[0];
+				}
 			}
 
 			$scope.loadCurrencies = function(){
@@ -42,17 +63,8 @@ angular.module("omniControllers")
 						var currencyB = b.name.toUpperCase();
 						return (currencyA < currencyB) ? -1 : (currencyA > currencyB) ? 1 : 0;
 					});
-					index=-1;
-					$scope.availableTokens.forEach(function(token) {
-						if (token.propertyid==$scope.sellingAsset.propertyid) {
-							index=$scope.availableTokens.indexOf(token);
-						}
-					});
-					if (index > -1) {
-						$scope.availableTokens.splice(index,1);
-					}
-
 					$scope.desiredAsset = $scope.availableTokens[0];
+					self.filterCurrencies();
 				});
 			}
 
