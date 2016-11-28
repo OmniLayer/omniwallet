@@ -29,7 +29,9 @@ angular.module("omniControllers")
       
       $scope.showtesteco = $scope.account.getSetting('showtesteco');
 
-      $scope.chartData = function(){
+      $scope.chartData = getChartData();
+
+      function getChartData(){
         ret=[]
         angular.forEach(Wallet.assets, function(asset,key){
           if (parseFloat(asset.value) > 0) {
@@ -54,6 +56,7 @@ angular.module("omniControllers")
           $scope.total += parseFloat(asset.value);
         });
 
+        $scope.chartData = getChartData();
       }
 
       $scope.disclaimerSeen = $scope.account.settings.disclaimerSeen;
