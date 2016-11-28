@@ -37,13 +37,17 @@ angular.module("omniControllers")
 
 			$scope.loadCurrencies = function(){
 				PropertyManager.listByEcosystem($scope.ecosystem).then(function(result){
-			      $scope.availableTokens = result.data.properties.sort(function(a, b) {
-			          var currencyA = a.name.toUpperCase();
-			          var currencyB = b.name.toUpperCase();
-			          return (currencyA < currencyB) ? -1 : (currencyA > currencyB) ? 1 : 0;
-			      });
-			      $scope.desiredAsset = $scope.availableTokens[0];
-			  	});
+					$scope.availableTokens = result.data.properties.sort(function(a, b) {
+						var currencyA = a.name.toUpperCase();
+						var currencyB = b.name.toUpperCase();
+						return (currencyA < currencyB) ? -1 : (currencyA > currencyB) ? 1 : 0;
+					});
+					index=$scope.availableTokens.indexOf($scope.desiredAsset);
+					if (index > -1) {
+						$scope.availableTokens.splice(index,1);
+					}
+					$scope.desiredAsset = $scope.availableTokens[0];
+				});
 			}
 
 			$scope.validateDexSaleForm = function(){
