@@ -42,10 +42,16 @@ angular.module("omniControllers")
 						var currencyB = b.name.toUpperCase();
 						return (currencyA < currencyB) ? -1 : (currencyA > currencyB) ? 1 : 0;
 					});
-					index=$scope.availableTokens.indexOf($scope.desiredAsset);
+					index=-1;
+					$scope.availableTokens.forEach(function(token) {
+						if (token.propertyid==$scope.sellingAsset.propertyid) {
+							index=$scope.availableTokens.indexOf(token);
+						}
+					});
 					if (index > -1) {
 						$scope.availableTokens.splice(index,1);
 					}
+
 					$scope.desiredAsset = $scope.availableTokens[0];
 				});
 			}
