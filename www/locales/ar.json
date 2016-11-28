@@ -722,8 +722,8 @@
 			"ACTIVEOFFERS" : "Your Offers",
 			"NOACTIVEOFFERS" : "You don't have any active offers",
 			"EMPTY" : "No offers",
-			"AMOUNTTOOLTIP" : "The Sum of the Amount Available for all orders at this price point",
-			"TOTALTOOLTIP" : "The Aggregate Sum of the Total Amount Available in all orders at this price or better",
+			"AMOUNTTOOLTIP" : "The Sum of the Amount {{ type }} for all orders at this price point",
+			"TOTALTOOLTIP" : "The Aggregate Sum of the Total Amount {{ type }} in all orders at this price or better",
 			"ID" : "Offer ID"
 		},
 		"SALE" : {
