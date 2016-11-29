@@ -303,12 +303,12 @@ angular.module("omniFactories")
 						if (!offer.desired.divisible) {
 							offer.amounts.desired=parseFloat(offer.amounts.desired.toFixed(0));
 						}
-						offer.amounts.selling = parseFloat(new Big(Math.ceil((offer.amounts.desired * offer.price)/(WHOLE_UNIT))*(WHOLE_UNIT)).toFixed(8)) ||0;
+						offer.amounts.selling = floatMath(offer.amounts.desired,offer.price,1,1) ||0;
 					} else {
 						if (!offer.selling.divisible) {
 							offer.amounts.selling=parseFloat(offer.amounts.selling.toFixed(0));
 						}
-						offer.amounts.desired = parseFloat(new Big(Math.floor((offer.amounts.selling * offer.price)/(WHOLE_UNIT))*(WHOLE_UNIT)).toFixed(8)) ||0;
+						offer.amounts.desired = floatMath(offer.amounts.selling,offer.price,1,0) ||0;
 					}
 					self.updateOrderValidity(offer,side);
 				}
@@ -317,15 +317,45 @@ angular.module("omniFactories")
 						if (!offer.selling.divisible) {
 							offer.amounts.selling=parseFloat(offer.amounts.selling.toFixed(0));
 						}
-						offer.amounts.desired = parseFloat(new Big(Math.ceil((offer.amounts.selling / offer.price)/(WHOLE_UNIT))*(WHOLE_UNIT)).toFixed(8)) ||0;
+						offer.amounts.desired = floatMath(offer.amounts.selling,offer.price,0,1) ||0;
 					} else {
 						if (!offer.desired.divisible) {
 							offer.amounts.desired=parseFloat(offer.amounts.desired.toFixed(0));
 						}
-						offer.amounts.selling = parseFloat(new Big(Math.floor((offer.amounts.desired / offer.price)/(WHOLE_UNIT))*(WHOLE_UNIT)).toFixed(8)) ||0;
+						offer.amounts.selling = floatMath(offer.amounts.desired,offer.price,0,0) ||0;
 					}
 					self.updateOrderValidity(offer,side);
 				}
+
+				var floatMath = function(a, b, op, md) {
+					ret=0;
+
+					//convert to whole numbers first
+					wa=parseInt(a*SATOSHI_UNIT);
+					wb=parseInt(b*SATOSHI_UNIT);
+
+					//op=0 divide,  op=1 multiply
+					//do initial math operation
+					if (op==0){
+						dc=wa/wb;	
+					} else if (op==1){
+						//(this is now 2x SATOSHI_UNIT large) so convert back to decimal
+						dc=wa*wb*WHOLE_UNIT*WHOLE_UNIT;
+					}
+					//handle rounding and math.ceiling/floor funcitons
+					//md=0 math.floor,   md=1 math.ceil
+					if (md==0){
+						ret=parseFloat(new Big(Math.floor(dc/WHOLE_UNIT)*(WHOLE_UNIT)).toFixed(8)) ||0;
+					} else if (md==1) {
+						ret=parseFloat(new Big(Math.ceil(dc/WHOLE_UNIT)*(WHOLE_UNIT)).toFixed(8)) ||0;
+					} else {
+						ret=parseFloat(new Big(dc).toFixed(8)) ||0;
+					}
+					
+					return ret;
+				}
+
+
 
 				self.submitOffer = function(offer){
 					// TODO: Validations

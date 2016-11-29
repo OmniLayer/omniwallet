@@ -25,9 +25,11 @@ angular.module("omniFactories")
 				}
 
 				if(side == "ask"){
-					self.price = new Big(Math.ceil(self.desired_amount.div(self.available_amount).div(WHOLE_UNIT).toString())).times(WHOLE_UNIT);
+					//self.price = new Big(Math.ceil(self.desired_amount.div(self.available_amount).div(WHOLE_UNIT).toString())).times(WHOLE_UNIT);
+					self.price = new Big(Math.round(self.desired_amount.div(self.available_amount).div(WHOLE_UNIT).toString())).times(WHOLE_UNIT);
 				} else if (side == "bid"){
-					self.price = new Big(Math.floor(self.available_amount.div(self.desired_amount).div(WHOLE_UNIT).toString())).times(WHOLE_UNIT);
+					//self.price = new Big(Math.floor(self.available_amount.div(self.desired_amount).div(WHOLE_UNIT).toString())).times(WHOLE_UNIT);
+					self.price = new Big(Math.round(self.available_amount.div(self.desired_amount).div(WHOLE_UNIT).toString())).times(WHOLE_UNIT);
 				} else if(side = "market"){
 					self.price = new Big(data.unit_price);
 				}
