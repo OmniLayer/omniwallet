@@ -27,6 +27,7 @@ maxaddresses = 0
 addresses = {}
 orderbook = {}
 lasttrade = 0
+lastpending = 0
 valuebook = {}
 
 
@@ -39,13 +40,14 @@ def update_balances():
     balances=get_bulkbalancedata(addresses)
 
 def update_orderbook():
-    global orderbook, lasttrade
-    ret=getOrderbook(lasttrade)
+    global orderbook, lasttrade, lastpending
+    ret=getOrderbook(lasttrade, lastpending)
     printmsg("Checking for new orderbook updates, last: "+str(lasttrade))
     if ret['updated']:
       orderbook=ret['book']
       printmsg("Orderbook updated. Lasttrade: "+str(lasttrade)+" Newtrade: "+str(ret['lasttrade'])+" Book length is: "+str(len(orderbook)))
       lasttrade=ret['lasttrade']
+      lastpending=ret['lastpending']
 
 def update_valuebook():
     global valuebook
