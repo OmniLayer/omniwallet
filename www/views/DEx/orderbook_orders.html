@@ -10,10 +10,26 @@
   <div class="om-table">
     <div class="row table-header hidden-xs">
           <div class="col-sm-1">{{ 'OMNIDEX.ORDERBOOK.ID' | translate }}</div>
-          <div class="col-sm-1">{{ 'WALLET.HISTORY.TYPE' | translate }}</div>
-          <div class="col-sm-3">{{ 'TABLES.OFFERS.AMOUNT' | translate }}</div>
-          <div class="col-sm-3">{{ 'OMNIDEX.ORDERBOOK.UNITPRICE' | translate }}</div>
-          <div class="col-sm-3">{{ 'TABLES.OFFERS.TOTAL' | translate }}</div>
+          <div class="col-sm-1"><a href=""
+                                tooltip="{{ 'OMNIDEX.ORDERS.TYPETT' | translate }}"
+                                tooltip-append-to-body="true"
+                                tooltip-placement="top" >{{ 'WALLET.HISTORY.TYPE' | translate }}</a>
+          </div>
+          <div class="col-sm-3"><a href=""
+                                tooltip="{{ 'OMNIDEX.ORDERS.AMOUNTTT' | translate }}"
+                                tooltip-append-to-body="true"
+                                tooltip-placement="top" >{{ 'EXCHANGE.TRADE.AMOUNT' | translate }}</a>
+          </div>
+          <div class="col-sm-3"><a href=""
+                                tooltip="{{ 'OMNIDEX.ORDERS.PRICETT' | translate }}"
+                                tooltip-append-to-body="true"
+                                tooltip-placement="top" >{{ 'OMNIDEX.ORDERBOOK.UNITPRICE' | translate }}</a>
+          </div>
+          <div class="col-sm-3"><a href=""
+                                tooltip="{{ 'OMNIDEX.ORDERS.TOTALTT' | translate }}"
+                                tooltip-append-to-body="true"
+                                tooltip-placement="top" >{{ 'TABLES.OFFERS.TOTAL' | translate }}</a>
+          </div>
           <div class="col-sm-1"></div>
     </div>
     <div class="row table-row" ng-repeat="offer in orderbook.activeOffers" ng-class="{pending:offer.status == 'pending'}">
