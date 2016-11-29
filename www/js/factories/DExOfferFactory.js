@@ -18,7 +18,9 @@ angular.module("omniFactories")
 				//original amount desired
 				self.total_desired_amount = propertydesired.divisible ? new Big(data.desired_amount).times(WHOLE_UNIT) : new Big(data.desired_amount);
 				//amount desired to fill
-				self.desired_amount = new Big(Math.ceil(self.available_amount.times(local_price).div(WHOLE_UNIT).toString())).times(WHOLE_UNIT);
+				desired_amount = new Big(Math.ceil(self.available_amount.times(local_price).div(WHOLE_UNIT).toString())).times(WHOLE_UNIT);
+				self.desired_amount = propertydesired.divisible ? desired_amount : new Big(parseInt(desired_amount));
+
 				//protect against price drift when no matches have been made yet
 				if (self.desired_amount.gt(self.total_desired_amount)) {
 					self.desired_amount = self.total_desired_amount;
