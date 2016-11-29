@@ -732,6 +732,12 @@ angular.module("omniConfig")
 			"SELLINGAMOUNT" : "Amount to sell",
 			"CHOOSECOINDESIRED" : "Choose coin desired",
 			"DESIREDAMOUNT" : "Amount desired"
+		},
+		"ORDERS" : {
+			"TYPETT" : "Indicates which side of the Orderbook the Order applies to. Note: When switching the Market Currency, order information is automatically flipped and displayed on the inverted pair.",
+			"AMOUNTT" : "The Amount remaining in your order to be Bought (Buy Orders) or Sold (Sell Orders).",
+			"PRICETT" : "The effective price your order is listed at. Because the price is calculated based off the amount remaining to sell and amount remaining to fill its possible for the price to change as your order is matched/filled against other orders.",
+			"TOTALTT" : "The Total Amount left in your order to be Bought (Sell Orders) or Sold (Buy Orders)."
 		}
 	}
 })
