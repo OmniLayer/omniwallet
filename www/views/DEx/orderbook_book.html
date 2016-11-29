@@ -21,7 +21,7 @@
 			      	<h3 class="text-center">{{ 'OMNIDEX.ORDERBOOK.EMPTY' | translate }}</h3>
 			      </td>
 		    </tr>
-			<tr ng-repeat="order in orderbook.bidBook" ng-class="{pending:order.hasPending}">
+			<tr ng-repeat="order in orderbook.bidBook" ng-class="{pending:order.hasPending}" title="{{order.hasPending ? 'Unconfirmed/Pending' : ''}}">
 				<td><a href="" ng-click="modalManager.showOrderInfo(order)">{{order.offers.length}}</a></td>
 				<td>{{order.totaldesired.toFixed(8)}}</td>
 				<td>{{orderbook.bidCumulative(order).toFixed(8)}}</td>
