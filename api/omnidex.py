@@ -14,7 +14,7 @@ def fixDecimal(value):
       print "couldn't convert ",value,"got error: ",e
 
 #@app.route('/book')
-def getOrderbook(lasttrade=0):
+def getOrderbook(lasttrade=0, lastpending=0):
     #use for websocket to load/broadcast updated book
     book={}
     trade=0
@@ -25,7 +25,11 @@ def getOrderbook(lasttrade=0):
     if len(trades) > 0 and len(trades[0]) > 0:
       trade=int(trades[0][0])
 
-    if (trade > lasttrade):
+    pending=dbSelect("select coalesce(min(txdbserialnum),0) from transactions where txtype >24 and txtype<29 and txstate='pending'")
+    if len(pending) > 0 and len(pending[0]) > 0:
+      pending=int(pending[0][0])
+
+    if (trade > lasttrade or pending < lastpending):
       AO=dbSelect("select distinct propertyiddesired, propertyidselling from activeoffers "
                   "where offerstate='active' order by propertyiddesired")
       if len(AO) > 0:
@@ -44,7 +48,7 @@ def getOrderbook(lasttrade=0):
             book[ps]={pd: data2}
         updated=True
 
-    ret={"updated":updated ,"book":book, "lasttrade":trade}
+    ret={"updated":updated ,"book":book, "lasttrade":trade, "lastpending":pending}
     return ret
    
 
