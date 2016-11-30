@@ -13,7 +13,11 @@
 				tooltip-append-to-body="true"
 				tooltip-placement="top" >Total</a>
 			</th>
-			<th>Price</th>
+			<th><a href=""
+				tooltip="{{ 'OMNIDEX.ORDERS.PRICETT' | translate }}"
+				tooltip-append-to-body="true"
+				tooltip-placement="top" >Price</a>
+			</th>
 		</thead>
 		<tbody>
 			<tr ng-show="orderbook.bidBook.length == 0" >
@@ -34,7 +38,11 @@
 	<table class="orderbook-orders-table asks">
 		<caption>Asks ({{'OMNIDEX.ORDERBOOK.SELL' | translate}} {{'NAVIGATION.OFFERS' | translate}})</caption>
 		<thead>
-			<th>Price</th>
+			<th><a href=""
+				tooltip="{{ 'OMNIDEX.ORDERS.PRICETT' | translate }}"
+				tooltip-append-to-body="true"
+				tooltip-placement="top" >Price</a>
+			</th>
 			<th><a href=""
 				tooltip="{{ 'OMNIDEX.ORDERBOOK.TOTALTOOLTIP' | translate:{type: 'Available'} }}"
 				tooltip-append-to-body="true"

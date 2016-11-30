@@ -58,7 +58,7 @@ angular.module("omniControllers")
 				ModalManager.openConfirmationModal({
 					dataTemplate: '/views/modals/partials/dex_offer.html',
 					scope: {
-						title:"Cancel DEx Offer",
+						title:"Cancel OmniDex Offer",
 						address:offer.ownerAddress,
 						saleCurrency:offer.propertyselling.propertyid,
 						saleName:offer.propertyselling.name,
@@ -83,7 +83,7 @@ angular.module("omniControllers")
 				ModalManager.openConfirmationModal({
 					dataTemplate: '/views/modals/partials/dex_cancel.html',
 					scope: {
-						title:"Cancel DEx Offers By Pair",
+						title:"Cancel OmniDex Offers By Pair",
 						address:address,
 						saleCurrency:$scope.orderbook.tradingPair.selling.propertyid,
 						desiredCurrency:$scope.orderbook.tradingPair.desired.propertyid,
