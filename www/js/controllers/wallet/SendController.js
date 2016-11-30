@@ -1,6 +1,6 @@
 angular.module("omniControllers")
-  .controller("WalletSendController",["$scope", "MIN_MINER_FEE", "OMNI_PROTOCOL_COST", "SATOSHI_UNIT", "Transaction", "$filter",
-      function WalletSendController($scope, MIN_MINER_FEE, PROTOCOL_FEE, SATOSHI_UNIT, Transaction, $filter){
+  .controller("WalletSendController",["$scope", "MIN_MINER_FEE", "MINER_SPEED", "OMNI_PROTOCOL_COST", "SATOSHI_UNIT", "Transaction", "$filter",
+      function WalletSendController($scope, MIN_MINER_FEE, MINER_SPEED, PROTOCOL_FEE, SATOSHI_UNIT, Transaction, $filter){
 
         function checkSend() {
         	if($scope.selectedAddress != undefined){
@@ -35,7 +35,7 @@ angular.module("omniControllers")
 
 	$scope.minersFee = MIN_MINER_FEE;
 	$scope.protocolFee = PROTOCOL_FEE;
-        $scope.feeType = 'normal';
+        $scope.feeType = MINER_SPEED;
 
 	$scope.selectedAsset = $scope.wallet.getAsset(1) || $scope.wallet.getAsset(0);
 	$scope.selectedAddress = $scope.selectedAsset.tradableAddresses[0];

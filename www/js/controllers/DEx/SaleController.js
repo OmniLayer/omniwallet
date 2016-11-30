@@ -1,13 +1,13 @@
 angular.module("omniControllers")
-	.controller("DExSaleController", ["$scope", "PropertyManager", "Account", "Transaction", "MIN_MINER_FEE", "OMNI_PROTOCOL_COST", "ModalManager",
-		function DExSaleController($scope,PropertyManager,Account,Transaction,MIN_MINER_FEE,PROTOCOL_FEE,ModalManager ){
+	.controller("DExSaleController", ["$scope", "PropertyManager", "Account", "Transaction", "MIN_MINER_FEE", "MINER_SPEED", "OMNI_PROTOCOL_COST", "ModalManager",
+		function DExSaleController($scope,PropertyManager,Account,Transaction,MIN_MINER_FEE,MINER_SPEED,PROTOCOL_FEE,ModalManager ){
 
 			$scope.editTransactionCost = function(){
 				$scope.modalManager.openTransactionCostModal($scope, function(){return;});
 			}
 
 			$scope.omniAnnounce = true;
-			$scope.feeType = 'normal';
+			$scope.feeType = MINER_SPEED;
 			$scope.protocolFee = PROTOCOL_FEE;
 			$scope.filteredCur = {'index':-1, 'cur':{'propertyid':-1}};
 			$scope.setAddress = function(address){
