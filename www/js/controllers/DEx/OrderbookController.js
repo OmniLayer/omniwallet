@@ -70,6 +70,7 @@ angular.module("omniControllers")
 						desiredAmount:offer.total_desired_amount.valueOf(),
 						totalCost:dexOffer.totalCost,
 						confirmText: "Cancel Offer",
+						invert: false,
 						successMessage: "Your order was cancelled successfully"
 					},
 					transaction:dexOffer

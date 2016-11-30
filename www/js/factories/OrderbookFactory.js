@@ -378,7 +378,7 @@ angular.module("omniFactories")
 					ModalManager.openConfirmationModal({
 						dataTemplate: '/views/modals/partials/dex_offer.html',
 						scope: {
-							title:"Confirm DEx Transaction",
+							title:"Confirm OmniDex Transaction",
 							address:offer.address,
 							saleCurrency:offer.selling.propertyid,
 							saleName:offer.selling.name,
@@ -389,6 +389,7 @@ angular.module("omniFactories")
 							totalCost:dexOffer.totalCost,
 							action:"Add",
 							confirmText: "Create Transaction",
+							invert: true,
 							successMessage: "Your order was placed successfully"
 						},
 						transaction:dexOffer

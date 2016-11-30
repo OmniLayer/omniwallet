@@ -93,6 +93,7 @@ angular.module("omniControllers")
 						totalCost:dexOffer.totalCost,
 						confirmText: "Create Transaction",
 						successMessage: "Your order was placed successfully",
+						invert: true,
 						successRedirect:redirectUrl
 					},
 					transaction:dexOffer
