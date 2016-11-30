@@ -303,6 +303,12 @@ angular.module("omniFactories")
 					} else {
 						offer.invalid=false;
 					}
+					if ( !offer.selling.divisible && offer.amounts.selling < 1) {
+						offer.invalid=true;
+					}
+					if ( !offer.desired.divisible && offer.amounts.desired < 1) {
+						offer.invalid=true;
+					}
 				}
 
 				self.updateAmount = function(offer, side) {
