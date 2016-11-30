@@ -1,6 +1,6 @@
 <div class="col-xs-6">
 	<table class="orderbook-orders-table bids">
-		<caption>Bids ({{'OMNIDEX.ORDERBOOK.BUY' | translate}} {{'NAVIGATION.OFFERS' | translate}})</caption>
+		<caption>Bids ({{'OMNIDEX.ORDERBOOK.BUY' | translate}} {{orderbook.tradingPair.selling.name}} #{{orderbook.tradingPair.selling.propertyid}} for {{orderbook.tradingPair.desired.name}} #{{orderbook.tradingPair.desired.propertyid}})</caption>
 		<thead>
 			<th>Order Count</th>
 			<th><a href=""
@@ -36,7 +36,7 @@
 </div>
 <div class="col-xs-6">
 	<table class="orderbook-orders-table asks">
-		<caption>Asks ({{'OMNIDEX.ORDERBOOK.SELL' | translate}} {{'NAVIGATION.OFFERS' | translate}})</caption>
+		<caption>Asks ({{'OMNIDEX.ORDERBOOK.SELL' | translate}} {{orderbook.tradingPair.selling.name}} #{{orderbook.tradingPair.selling.propertyid}} for {{orderbook.tradingPair.desired.name}} #{{orderbook.tradingPair.desired.propertyid}})</caption>
 		<thead>
 			<th><a href=""
 				tooltip="{{ 'OMNIDEX.ORDERS.PRICETT' | translate }}"
