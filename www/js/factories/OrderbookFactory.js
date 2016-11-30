@@ -1,6 +1,6 @@
 angular.module("omniFactories")
-	.factory("Orderbook",["$http","DExOrder","DExOffer","BalanceSocket","Transaction","Account","Wallet","ModalManager","MIN_MINER_FEE", "WHOLE_UNIT", "SATOSHI_UNIT",
-		function OrderbookFactory($http, DExOrder,DExOffer,BalanceSocket,Transaction,Account,Wallet,ModalManager,MIN_MINER_FEE,WHOLE_UNIT,SATOSHI_UNIT){
+	.factory("Orderbook",["$http","DExOrder","DExOffer","BalanceSocket","Transaction","Account","Wallet","ModalManager","MIN_MINER_FEE", "MINER_SPEED", "WHOLE_UNIT", "SATOSHI_UNIT",
+		function OrderbookFactory($http, DExOrder,DExOffer,BalanceSocket,Transaction,Account,Wallet,ModalManager,MIN_MINER_FEE,MINER_SPEED,WHOLE_UNIT,SATOSHI_UNIT){
 			var Orderbook = function(tradingPair){
 				var self = this;
 
@@ -17,7 +17,7 @@ angular.module("omniFactories")
 							selling: 0
 						},
 						price: 0,
-						feeType: 'normal',
+						feeType: MINER_SPEED,
 						invalid: true
 					};
 					self.sellOrder = {
@@ -28,7 +28,7 @@ angular.module("omniFactories")
 							selling: 0
 						},
 						price: 0,
-						feeType: 'normal',
+						feeType: MINER_SPEED,
 						invalid: true
 					};
 

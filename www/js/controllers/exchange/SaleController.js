@@ -1,6 +1,6 @@
 angular.module("omniControllers")
-  .controller("ExchangeSaleController",["$scope", "Transaction", "ADDRESS_EXPLORER_URL", "SATOSHI_UNIT",
-    function ExchangeSaleController($scope, Transaction, ADDRESS_EXPLORER_URL, SATOSHI_UNIT) {
+  .controller("ExchangeSaleController",["$scope", "Transaction", "ADDRESS_EXPLORER_URL", "SATOSHI_UNIT","MINER_SPEED",
+    function ExchangeSaleController($scope, Transaction, ADDRESS_EXPLORER_URL, SATOSHI_UNIT,MINER_SPEED) {
                   $scope.editTransactionCost = function(){
                   $scope.modalManager.openTransactionCostModal($scope, function(){return;});
             }
@@ -39,7 +39,7 @@ angular.module("omniControllers")
       }
 
       $scope.selectedAddress= $scope.hasCoins ? $scope.selectedAsset.tradableAddresses[0] : undefined;
-      $scope.feeType = 'normal';
+      $scope.feeType = MINER_SPEED;
       $scope.setAddress = function(address){
             $scope.selectedAddress = address;
             $scope.selectedAddress.estimateFee().then(function(result){

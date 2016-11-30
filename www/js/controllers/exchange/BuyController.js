@@ -1,11 +1,11 @@
 angular.module("omniControllers")
-  .controller("ExchangeBuyController",["$scope", "$http", "Transaction", "ADDRESS_EXPLORER_URL", "SATOSHI_UNIT",
-    function ExchangeBuyController($scope, $http, Transaction, ADDRESS_EXPLORER_URL, SATOSHI_UNIT) {
+  .controller("ExchangeBuyController",["$scope", "$http", "Transaction", "ADDRESS_EXPLORER_URL", "SATOSHI_UNIT","MINER_SPEED"
+    function ExchangeBuyController($scope, $http, Transaction, ADDRESS_EXPLORER_URL, SATOSHI_UNIT,MINER_SPEED) {
       $scope.editTransactionCost = function(){
         $scope.modalManager.openTransactionCostModal($scope, function(){return;});
       }
       $scope.selectedAddress= $scope.hasBitcoins ? $scope.wallet.getAsset(0).tradableAddresses[0] : undefined;
-      $scope.feeType = 'normal';
+      $scope.feeType = MINER_SPEED;
       $scope.setAddress = function(address){
             $scope.selectedAddress = address;
             if (address!=undefined) {

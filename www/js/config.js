@@ -7,5 +7,6 @@ angular.module("omniConfig", [])
   .constant("reCaptchaKey", "----KEY----")
   .value("SATOSHI_UNIT", new Big(100000000)) //Backend data needs satoshi, use this conversion ratio
   .value("MIN_MINER_FEE", new Big(0.00010000))
+  .value("MINER_SPEED", 'fast')  //Synamic Fee Calculation, valid options are 'normal','fast','faster'
   .value("OMNI_PROTOCOL_COST", new Big(0.00025))
   .value("WHOLE_UNIT",new Big(0.00000001));
