@@ -82,7 +82,7 @@ angular.module("omniControllers")
 				ModalManager.openConfirmationModal({
 					dataTemplate: '/views/modals/partials/dex_offer.html',
 					scope: {
-						title:"Confirm DEx Transaction",
+						title:"Confirm OmniDex Transaction",
 						address:$scope.selectedAddress,
 						saleCurrency:$scope.sellingAsset.id,
 						saleName:$scope.sellingAsset.name,
