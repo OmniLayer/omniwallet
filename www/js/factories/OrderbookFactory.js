@@ -75,7 +75,7 @@ angular.module("omniFactories")
 			                }
 			            }
 			        };
-				if (Account.isLoggedIn) {
+				if (Account.loggedIn) {
 					// TODO:  list only addresses with balance > 0
 					self.addresses = Wallet.addresses.filter(function(address){
 						return ((address.privkey && address.privkey.length == 58) || address.pubkey)
@@ -209,7 +209,7 @@ angular.module("omniFactories")
 									order.addOffer(offer)
 								}
 							})
-							if (Account.isLoggedIn) {
+							if (Account.loggedIn) {
 								owner = Wallet.tradableAddresses().find(function(elem){
 									return elem.hash == offerData.seller
 								})
