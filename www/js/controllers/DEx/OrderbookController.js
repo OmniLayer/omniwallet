@@ -19,8 +19,10 @@ angular.module("omniControllers")
 					PropertyManager.getProperty(propertyIdSelling).then(function(result){
 						$scope.propertySelling = result.data;
 						$scope.orderbook = new Orderbook({desired:$scope.propertyDesired,selling:$scope.propertySelling});
-						$scope.orderbook.setBuyAddress($scope.orderbook.buyAddresses[0]);
-						$scope.orderbook.setSellAddress($scope.orderbook.sellAddresses[0]);
+						if (Account.loggedIn) {
+							$scope.orderbook.setBuyAddress($scope.orderbook.buyAddresses[0]);
+							$scope.orderbook.setSellAddress($scope.orderbook.sellAddresses[0]);
+						}
 					});
 				});
 			}
