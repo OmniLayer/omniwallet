@@ -30,7 +30,8 @@
             <a class="btn btn-main" href="/dex/sale"> {{ 'OMNIDEX.MARKETS.NEW' | translate }} </a>
           </div>
           <div class="om-row">
-            <button type="button" class="btn btn-info disabled" title="Coming Soon!" ng-click="showCharts=!showCharts;">Show {{showCharts ? "Markets" : "Chart"}}</button>
+            <button type="button" ng-show="false" class="btn btn-info disabled" title="Coming Soon!" ng-click="showCharts=!showCharts;">Show {{showCharts ? "Markets" : "Chart"}}</button>
+            <button type="button" ng-show="true" class="btn btn-info disabled" title="Coming Soon!" ng-click="">Show {{showCharts ? "Markets" : "Chart"}}</button>
           </div>
         </div>
       </div>
