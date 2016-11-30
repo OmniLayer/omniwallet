@@ -75,7 +75,7 @@ angular.module("omniFactories")
 			                }
 			            }
 			        };
-					
+				if (Account.isLoggedIn) {
 					// TODO:  list only addresses with balance > 0
 					self.addresses = Wallet.addresses.filter(function(address){
 						return ((address.privkey && address.privkey.length == 58) || address.pubkey)
@@ -88,10 +88,13 @@ angular.module("omniFactories")
 						return address.getBalance(self.selling.propertyid).gt(0);
 					});
 					self.sellOrder.address = self.sellAddresses.length > 0 ? self.sellAddresses[0] : undefined;
-
+				}
 					self.askBook = [];
 					self.bidBook = [];
 					self.activeOffers = [];
+
+					if(!BalanceSocket.connected)
+                                                BalanceSocket.connect();
 
 					BalanceSocket.on("orderbook", function(data){
 						bigbook=data;
@@ -206,9 +209,13 @@ angular.module("omniFactories")
 									order.addOffer(offer)
 								}
 							})
-							owner = Wallet.tradableAddresses().find(function(elem){
-								return elem.hash == offerData.seller
-							})
+							if (Account.isLoggedIn) {
+								owner = Wallet.tradableAddresses().find(function(elem){
+									return elem.hash == offerData.seller
+								})
+							} else {
+								owner=false;
+							}
 							if(owner){
 								offer.ownerAddress = owner;
 								offer.side = selling == self.tradingPair.selling ? "bid":"ask";
