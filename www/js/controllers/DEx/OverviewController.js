@@ -1,7 +1,7 @@
 angular.module("omniControllers")
 	.controller("DExOverviewController", ["$scope","Account","$http","WHOLE_UNIT",
 		function DExOverviewController($scope,Account,$http,WHOLE_UNIT){
-			$scope.isLoggedIn = Account.isLoggedIn;
+			$scope.isLoggedIn = Account.loggedIn;
 			$scope.markets = [];
 			$scope.noMarkets = true;
 			$scope.ecosystem = 1;
