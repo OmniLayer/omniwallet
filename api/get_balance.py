@@ -69,28 +69,16 @@ def get_balance_response(request_dict):
   except KeyError:
       return (None, 'no address in dictionary')
       
-  if len(addrs_list)!=1:
-      return response(none, 'no single address')
-  addr=addrs_list[0]
+  if len(addrs_list)<1:
+      return response(none, 'must provide at least one address')
+  clean_list=[]
+  #addr=addrs_list[0]
+  for addr in addrs_list:
+    clean_list.append(re.sub(r'\W+', '', addr) #check alphanumeric
 
-  addr = re.sub(r'\W+', '', addr) #check alphanumeric
-
+  #addr = re.sub(r'\W+', '', addr) #check alphanumeric
   #Use new balance function call
-  return (json.dumps( get_balancedata(addr) ), None)
-
-  #address_data, err = get_msc_balances( addr )
-  #if err != None:
-  #  address_data = {}
-  #  address_data[ 'address' ] = addr
-  #  address_data[ 'balance' ] = []
-
-  #bitcoin_balances, err = get_btc_balances( addr )
-
-  #if err == None:
-  #  for i in xrange(0,len( bitcoin_balances )):
-  #    address_data[ 'balance' ].append( bitcoin_balances[i] )
-
-  #return (json.dumps( address_data ), None)
+  return (json.dumps( get_bulkbalancedata(clean_list) ), None)
 
 def get_balance_handler(environ, start_response):
   return general_handler(environ, start_response, get_balance_response)
