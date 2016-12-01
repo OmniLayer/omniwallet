@@ -61,7 +61,7 @@
 		      <h3 class="text-center">{{ 'OMNIDEX.ORDERBOOK.EMPTY' | translate }}</h3>
 		      </td>
 		    </tr>
-			<tr ng-repeat="order in orderbook.askBook" ng-class="{pending:order.hasPending}">
+			<tr ng-repeat="order in orderbook.askBook" ng-class="{pending:order.hasPending}" title="{{order.hasPending ? 'Unconfirmed/Pending' : ''}}">
 				<td>{{order.price.toFixed(8)}}</td>
 				<td>{{orderbook.askCumulative(order).toFixed(8)}}</td>
 				<td>{{order.remainingforsale.toFixed(8)}}</td>
