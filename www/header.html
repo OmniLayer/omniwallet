@@ -88,7 +88,7 @@
       <ul class="nav navbar-nav">
         <li ng-class="{active:subsection=='omnidex'}"><a ng-click="subsection='omnidex'" href="/dex/overview">{{'NAVIGATION.OMNIDEX' | translate}}</a></li>
         <li ng-class="{active:subsection=='trade'}"><a ng-click="subsection='trade'" href="/exchange/trade">{{'NAVIGATION.DEX1' | translate}}</a></li>
-        <li ng-if="account.loggedIn" ng-class="{active:subsection=='myoffers'}"><a ng-click="subsection='myoffers'" href="/exchange/myoffers">{{'COMMON.MY' | translate}} {{'NAVIGATION.DEX1' | translate}} {{'NAVIGATION.OFFERS' | translate}}</a></li>
+        <li ng-show="account.loggedIn" ng-class="{active:subsection=='myoffers'}"><a ng-click="subsection='myoffers'" href="/exchange/myoffers">{{'COMMON.MY' | translate}} {{'NAVIGATION.DEX1' | translate}} {{'NAVIGATION.OFFERS' | translate}}</a></li>
       </ul>
     </div>
     <div id="explorer-navbar" ng-if="section=='explorer'">
