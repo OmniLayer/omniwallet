@@ -14,7 +14,7 @@ def insertpending(txhex):
     #handle btc pending amounts
     insertbtc(rawtx)
 
-  if 'amount' in rawtx['MP'] and decimal.Decimal(rawtx['MP']['amount'])>0:
+  if 'MP' in rawtx: #('amount' in rawtx['MP'] and decimal.Decimal(rawtx['MP']['amount'])>0) or 'unitprice' in rawtx['MP']:
     #only run if we have a non zero positive amount to process, otherwise exit
     insertomni(rawtx)
 
@@ -69,7 +69,7 @@ def insertomni(rawtx):
     rbacd=None
     sender = rawtx['Sender']
     receiver = rawtx['Reference']
-    propertyid = rawtx['MP']['propertyid']
+    propertyid = rawtx['MP']['propertyid'] if 'propertyid' in rawtx['MP'] else rawtx['MP']['propertyidforsale']
     txtype = rawtx['MP']['type_int']
     txversion = rawtx['MP']['version']
     txhash = rawtx['BTC']['txid']
@@ -77,10 +77,16 @@ def insertomni(rawtx):
     addresstxindex=0
     txdbserialnum = dbSelect("select least(-1,min(txdbserialnum)) from transactions;")[0][0]
     txdbserialnum -= 1
-    if rawtx['MP']['divisible']:
-      amount = int(decimal.Decimal(str(rawtx['MP']['amount']))*decimal.Decimal(1e8))
+    if 'amount' in rawtx['MP']:
+      if rawtx['MP']['divisible']:
+        amount = int(decimal.Decimal(str(rawtx['MP']['amount']))*decimal.Decimal(1e8))
+      else:
+        amount = int(rawtx['MP']['amount'])
     else:
-      amount = int(rawtx['MP']['amount'])
+      if rawtx['MP']['propertyidforsaleisdivisible']:
+        amount = int(decimal.Decimal(str(rawtx['MP']['amountforsale']))*decimal.Decimal(1e8))
+      else:
+        amount = int(rawtx['MP']['amountforsale'])
 
     if txtype == 55:
       #handle grants to ourself or others

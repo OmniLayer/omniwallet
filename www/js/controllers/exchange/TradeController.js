@@ -11,7 +11,11 @@ angular.module("omniControllers")
 		  $scope.onBuyView = false;
 		  $scope.history = '/views/wallet/history.html';
 
-		  $scope.inactive = $scope.account.getSetting("filterdexdust");
+		  if ($scope.account.loggedIn) {
+			$scope.inactive = $scope.account.getSetting("filterdexdust");
+		  } else {
+			$scope.inactive = true;
+		  }
 
 		  $scope.setView = function(view, data) {
 		    if (view != 'tradeInfo'){
@@ -58,20 +62,33 @@ angular.module("omniControllers")
 		  PropertyManager.getProperty(1).then(function(result){
 		  	var omni = result.data;
 		  	omni.symbol  = "OMNI";
-		  	$scope.currPairs.splice(0,0,{0:$scope.wallet.getAsset(0),1:omni,active:true});
+			if ($scope.account.loggedIn) {
+			  	$scope.currPairs.splice(0,0,{0:$scope.wallet.getAsset(0),1:omni,active:true});
+			} else {
+				$scope.currPairs.splice(0,0,{0:{name:"Bitcoin",symbol:"BTC"},1:omni,active:true});
+			}
 		  	$scope.setActiveCurrencyPair();
 		  })
-		  if ( $scope.account.getSetting("showtesteco") === 'true'){
+		  if ( !$scope.account.loggedIn || $scope.account.getSetting("showtesteco") === 'true'){
 		    PropertyManager.getProperty(2).then(function(result){
 		    	var tomni = result.data;
 		  		tomni.symbol  = "T-OMNI";
-			  	$scope.currPairs.splice(1,0,{0:$scope.wallet.getAsset(0),1:tomni});
+				if ($scope.account.loggedIn) {
+				  	$scope.currPairs.splice(1,0,{0:$scope.wallet.getAsset(0),1:tomni});
+				} else {
+					$scope.currPairs.splice(0,0,{0:{name:"Bitcoin",symbol:"BTC"},1:tomni,active:true});
+				}
 			})
 		  } 
 
-		  $scope.hasCoins = $scope.wallet.getAsset(1) != undefined;
-		  $scope.hasBitcoins = $scope.wallet.getAsset(0) != undefined;
-		  $scope.selectedAsset = $scope.wallet.getAsset(1);
+		  if ($scope.account.loggedIn) {
+			$scope.hasCoins = $scope.wallet.getAsset(1) != undefined;
+			$scope.hasBitcoins = $scope.wallet.getAsset(0).tradable;
+			$scope.selectedAsset = $scope.wallet.getAsset(1);
+		  } else {
+			$scope.hasCoins = false;
+			$scope.hasBitcoins = false;
+		  }
 
 		  //Get the active currency pair
 		  $scope.activeCurrencyPair = []
@@ -82,9 +99,12 @@ angular.module("omniControllers")
 		      $scope.activeCurrencyPair = $scope.currPairs[0]
 		    else
 		      $scope.activeCurrencyPair = currencyPair
-
-		  	$scope.hasCoins = $scope.wallet.getAsset($scope.activeCurrencyPair[1].propertyid) != undefined;
+		      if ($scope.account.loggedIn) {
+			$scope.hasCoins = $scope.wallet.getAsset($scope.activeCurrencyPair[1].propertyid) != undefined;
 		  	$scope.selectedAsset = $scope.wallet.getAsset($scope.activeCurrencyPair[1].propertyid);
+		      } else {
+			$scope.hasCoins = false;
+		      }
 
 		    var random = Math.random();
 		    $scope.saleView = '/views/exchange/partials/sale.html?r='+random;

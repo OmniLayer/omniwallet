@@ -1,0 +1,63 @@
+<div class="col-md-12">
+  <h4 ng-hide="orderbook.activeOffers.length == 0">
+    <strong>{{ 'COMMON.MY' | translate}} {{ 'EXCHANGE.TRADE.ACTIVE' | translate}} for {{orderbook.tradingPair.selling.name}} #{{orderbook.tradingPair.selling.propertyid}} / {{orderbook.tradingPair.desired.name}} #{{orderbook.tradingPair.desired.propertyid}}</strong>
+  </h4>
+  <h4 ng-show="orderbook.activeOffers.length == 0">
+    <strong>{{ 'OMNIDEX.ORDERBOOK.NOACTIVEOFFERS' | translate }} for {{orderbook.tradingPair.selling.name}} #{{orderbook.tradingPair.selling.propertyid}} / {{orderbook.tradingPair.desired.name}} #{{orderbook.tradingPair.desired.propertyid}}</strong>
+  </hv>
+</div>
+<div class="col-md-12" ng-hide="orderbook.activeOffers.length == 0">
+  <div class="om-table">
+    <div class="row table-header hidden-xs">
+          <div class="col-sm-1">{{ 'OMNIDEX.ORDERBOOK.ID' | translate }}</div>
+          <div class="col-sm-1"><a href=""
+                                tooltip="{{ 'OMNIDEX.ORDERS.TYPETT' | translate }}"
+                                tooltip-append-to-body="true"
+                                tooltip-placement="top" >{{ 'WALLET.HISTORY.TYPE' | translate }}</a>
+          </div>
+          <div class="col-sm-3"><a href=""
+                                tooltip="{{ 'OMNIDEX.ORDERS.AMOUNTT' | translate }}"
+                                tooltip-append-to-body="true"
+                                tooltip-placement="top" >{{ 'EXCHANGE.TRADE.AMOUNT' | translate }}</a>
+          </div>
+          <div class="col-sm-3"><a href=""
+                                tooltip="{{ 'OMNIDEX.ORDERS.PRICETT' | translate }}"
+                                tooltip-append-to-body="true"
+                                tooltip-placement="top" >{{ 'OMNIDEX.ORDERBOOK.UNITPRICE' | translate }}</a>
+          </div>
+          <div class="col-sm-3"><a href=""
+                                tooltip="{{ 'OMNIDEX.ORDERS.TOTALTT' | translate }}"
+                                tooltip-append-to-body="true"
+                                tooltip-placement="top" >{{ 'TABLES.OFFERS.TOTAL' | translate }}</a>
+          </div>
+          <div class="col-sm-1"></div>
+    </div>
+    <div class="row table-row" ng-repeat="offer in orderbook.activeOffers" ng-class="{pending:offer.status == 'pending'}">
+
+      
+      <div class="visible-xs col-xs-5">{{ 'OMNIDEX.ORDERBOOK.ID' | translate }}</div>
+      <div class="col-xs-7 col-sm-1" class="text" title="{{offer.txhash}}"><a href="" ng-click="modalManager.showOrderInfo(orderbook.formatOffer(offer))">{{offer.txhash | truncate:11}}</a></div>
+
+      <div class="visible-xs col-xs-5">{{ 'WALLET.HISTORY.TYPE' | translate }}</div>
+      <div class="col-xs-7 col-sm-1" class="number" ng-show="offer.side == 'bid'" title="{{ 'OMNIDEX.ORDERBOOK.BUY' | translate}}">{{ 'OMNIDEX.ORDERBOOK.BUY' | translate}}</div>
+      <div class="col-xs-7 col-sm-1" class="number" ng-hide="offer.side == 'bid'" title="{{ 'OMNIDEX.ORDERBOOK.SELL' | translate}}">{{ 'OMNIDEX.ORDERBOOK.SELL' | translate}}</div>
+
+      <div class="visible-xs col-xs-5">{{ 'TABLES.OFFERS.AMOUNT' | translate }}</div>
+      <div class="col-xs-7 col-sm-3" ng-show="offer.side == 'bid'" title="{{offer.desired_amount}} {{orderbook.tradingPair.selling.name}}"><span class="number" ng-bind-html="offer.desired_amount | bigjs: '0,0.00000000'"></span> {{orderbook.tradingPair.selling.name | truncate:12}}</div>
+      <div class="col-xs-7 col-sm-3" ng-hide="offer.side == 'bid'" title="{{offer.available_amount}} {{orderbook.tradingPair.selling.name}}"><span class="number" ng-bind-html="offer.available_amount | bigjs: '0,0.00000000'"></span> {{orderbook.tradingPair.selling.name | truncate:12}}</div>
+
+      <div class="visible-xs col-xs-5">{{ 'OMNIDEX.ORDERBOOK.UNITPRICE' | translate }}</div>
+      <div class="col-xs-7 col-sm-3" title="{{offer.price}} {{orderbook.tradingPair.desired.name}}"><span class="number" ng-bind-html="offer.price | bigjs: '0,0.00000000'"></span> {{orderbook.tradingPair.desired.name | truncate:12}}</div>
+
+      <div class="visible-xs col-xs-5">{{ 'TABLES.OFFERS.TOTAL' | translate }}</div>
+      <div class="col-xs-7 col-sm-3" ng-show="offer.side == 'bid'" title="{{offer.available_amount}} {{orderbook.tradingPair.desired.name}}"><span class="number" ng-bind-html="offer.available_amount | bigjs: '0,0.00000000'"></span> {{orderbook.tradingPair.desired.name | truncate:12}}</div>
+      <div class="col-xs-7 col-sm-3" ng-hide="offer.side == 'bid'" title="{{offer.desired_amount}} {{orderbook.tradingPair.desired.name}}"><span class="number" ng-bind-html="offer.desired_amount | bigjs: '0,0.00000000'"></span> {{orderbook.tradingPair.desired.name | truncate:12}}</div>
+
+      <div class="visible-xs col-xs-5"></div>
+      <div class="col-xs-7 col-sm-1">
+        <button ng-show="offer.status == 'active'" class="btn btn-secondary btn-sm" ng-click="confirmCancel(offer)" type="button">{{ 'COMMON.CANCEL' | translate }}</button>
+        <span ng-hide="offer.status == 'active'">{{offer.status}}</span>
+      </div>
+    </div>
+  </div>
+</div>

@@ -29,9 +29,17 @@ angular.module("omniControllers")
       
       $scope.showtesteco = $scope.account.getSetting('showtesteco');
 
-      $scope.chartData = Wallet.assets.filter(function(asset){
-        return ((asset.id < 2147483648 && asset.id != 2) || $scope.showtesteco === 'true') && asset.balance.gt(0)
-      })
+      $scope.chartData = getChartData();
+
+      function getChartData(){
+        ret=[]
+        angular.forEach(Wallet.assets, function(asset,key){
+          if (parseFloat(asset.value) > 0) {
+            ret.push({'name':asset.name, 'value':asset.value});
+          }
+        })
+        return ret;
+      }
 
       $scope.openBackupModal=function(){
         ModalManager.openBackupWalletModal();
@@ -45,9 +53,10 @@ angular.module("omniControllers")
         $scope.total = 0;
 
         Wallet.assets.forEach(function(asset) {
-          $scope.total += parseInt(asset.value);
+          $scope.total += parseFloat(asset.value);
         });
 
+        $scope.chartData = getChartData();
       }
 
       $scope.disclaimerSeen = $scope.account.settings.disclaimerSeen;

@@ -1,7 +1,7 @@
 import simplejson
 import requests
 import decimal
-
+from rpcclient import gettxout
 
 def bc_getutxo(address, ramount):
   try:
@@ -14,7 +14,9 @@ def bc_getutxo(address, ramount):
       retval = []
       avail = 0
       for tx in unspents:
-        if tx['confirmations'] > 0:
+        txUsed=gettxout(tx['tx_hash'],tx['tx_output_n'])
+        isUsed = ('result' in txUsed and txUsed['result']==None)
+        if tx['confirmations'] > 0 and not isUsed:
           avail += tx['value']
           retval.append([ tx['tx_hash'], tx['tx_output_n'], tx['value'] ])
           if avail >= ramount:
@@ -39,7 +41,9 @@ def bc_getutxo_blockr(address, ramount):
       retval = []
       avail = 0
       for tx in unspents:
-        if tx['confirmations'] > 0:
+        txUsed=gettxout(tx['tx'],tx['n'])
+        isUsed = ('result' in txUsed and txUsed['result']==None)
+        if tx['confirmations'] > 0 and not isUsed:
           tx['amount'] =  int(decimal.Decimal(tx['amount'])*decimal.Decimal(1e8))
           avail += tx['amount']
           retval.append([ tx['tx'], tx['n'], tx['amount'] ])

@@ -1,0 +1,72 @@
+<div class="col-xs-6">
+	<table class="orderbook-orders-table bids">
+		<caption>Bids ({{'OMNIDEX.ORDERBOOK.BUY' | translate}} {{orderbook.tradingPair.selling.name}} #{{orderbook.tradingPair.selling.propertyid}} for {{orderbook.tradingPair.desired.name}} #{{orderbook.tradingPair.desired.propertyid}})</caption>
+		<thead>
+			<th>Order Count</th>
+			<th><a href=""
+				tooltip="{{ 'OMNIDEX.ORDERBOOK.AMOUNTTOOLTIP' | translate:{type: 'Desired'} }}"
+				tooltip-append-to-body="true"
+				tooltip-placement="top" >Amount</a>
+			</th>
+			<th><a href=""
+				tooltip="{{ 'OMNIDEX.ORDERBOOK.TOTALTOOLTIP' | translate:{type: 'Desired'} }}"
+				tooltip-append-to-body="true"
+				tooltip-placement="top" >Total</a>
+			</th>
+			<th><a href=""
+				tooltip="{{ 'OMNIDEX.ORDERS.PRICETT' | translate }}"
+				tooltip-append-to-body="true"
+				tooltip-placement="top" >Price</a>
+			</th>
+		</thead>
+		<tbody>
+			<tr ng-show="orderbook.bidBook.length == 0" >
+				<td colspan="4">
+			      	<h3 class="text-center">{{ 'OMNIDEX.ORDERBOOK.EMPTY' | translate }}</h3>
+			      </td>
+		    </tr>
+			<tr ng-repeat="order in orderbook.bidBook" ng-class="{pending:order.hasPending}" title="{{order.hasPending ? 'Unconfirmed/Pending' : ''}}">
+				<td><a href="" ng-click="modalManager.showOrderInfo(order)">{{order.offers.length}}</a></td>
+				<td>{{order.totaldesired.toFixed(8)}}</td>
+				<td>{{orderbook.bidCumulative(order).toFixed(8)}}</td>
+				<td>{{order.price.toFixed(8)}}</td>
+			</tr>
+		</tbody>
+	</table>
+</div>
+<div class="col-xs-6">
+	<table class="orderbook-orders-table asks">
+		<caption>Asks ({{'OMNIDEX.ORDERBOOK.SELL' | translate}} {{orderbook.tradingPair.selling.name}} #{{orderbook.tradingPair.selling.propertyid}} for {{orderbook.tradingPair.desired.name}} #{{orderbook.tradingPair.desired.propertyid}})</caption>
+		<thead>
+			<th><a href=""
+				tooltip="{{ 'OMNIDEX.ORDERS.PRICETT' | translate }}"
+				tooltip-append-to-body="true"
+				tooltip-placement="top" >Price</a>
+			</th>
+			<th><a href=""
+				tooltip="{{ 'OMNIDEX.ORDERBOOK.TOTALTOOLTIP' | translate:{type: 'Available'} }}"
+				tooltip-append-to-body="true"
+				tooltip-placement="top" >Total</a>
+			</th>
+			<th><a href=""
+				tooltip="{{ 'OMNIDEX.ORDERBOOK.AMOUNTTOOLTIP' | translate:{type: 'Available'} }}"
+				tooltip-append-to-body="true"
+				tooltip-placement="top" >Amount</a>
+			</th>
+			<th>Order Count</th>
+		</thead>
+		<tbody>
+			<tr ng-show="orderbook.askBook.length == 0" >
+				<td colspan="4">
+		      <h3 class="text-center">{{ 'OMNIDEX.ORDERBOOK.EMPTY' | translate }}</h3>
+		      </td>
+		    </tr>
+			<tr ng-repeat="order in orderbook.askBook" ng-class="{pending:order.hasPending}" title="{{order.hasPending ? 'Unconfirmed/Pending' : ''}}">
+				<td>{{order.price.toFixed(8)}}</td>
+				<td>{{orderbook.askCumulative(order).toFixed(8)}}</td>
+				<td>{{order.remainingforsale.toFixed(8)}}</td>
+				<td><a href="" ng-click="modalManager.showOrderInfo(order)">{{order.offers.length}}</a></td>
+			</tr>
+		</tbody>
+	</table>
+</div>

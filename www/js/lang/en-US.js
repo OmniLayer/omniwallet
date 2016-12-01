@@ -27,6 +27,7 @@ angular.module("omniConfig")
 		"CANCEL":"Cancel",
 		"CLOSE":"Close",
 		"NEXT":"Next",
+		"DONE":"Done",
 		"ACTIVECROWDSALES":"Active Crowdsales",
 		"HISTORY":"History",
 		"FEES":"Miner Fees (BTC)",
@@ -35,7 +36,8 @@ angular.module("omniConfig")
 		"SUCCESS":"Success",
 		"ERROR":"Error",
 		"MFA":"MFA Code",
-		"RESET":"Reset"
+		"RESET":"Reset",
+		"MY":"My"
 	},
 	"SETTINGS":{
 		"TITLE":"Account Settings",
@@ -119,7 +121,6 @@ angular.module("omniConfig")
 				"PARAGRAPH":"The Omni Protocol is a communications protocol that uses the Bitcoin block chain to enable features such as smart contracts, user currencies and decentralized peer-to-peer exchanges. A common analogy that is used to describe the relation of the Omni Protocol to Bitcoin is that of HTTP to TCP/IP: HTTP, like the Omni Protocol, is the application layer to the more fundamental transport and internet layer of TCP/IP, like Bitcoin. For more in-depth information and details see the ",
 				"LINK":"Spec",
 				"ONGITHUB":"on github."
-
 			},
 			"TOKEN":{
 				"TITLE":"Omnis",
@@ -185,11 +186,13 @@ angular.module("omniConfig")
 		"FAQ":"FAQ",
 		"LOGIN":"Login",
 		"LOGOUT":"Logout",
-		"OFFERS":"My Offers",
+		"OFFERS":"Offers",
 		"SETTINGS":"Account Settings",
 		"TRADE":"Trade",
+		"DEX1":"BTC/OMNI",
 		"TRANSACTIONS":"Transactions",
-		"WALLET":"My Wallet"
+		"WALLET":"My Wallet",
+		"OMNIDEX":"OmniDex"
 	},
 	"MODALS":{
 		"CREATE":{
@@ -593,11 +596,13 @@ angular.module("omniConfig")
 		},
 		"OFFERS":{
 			"HASH":"Transaction hash",
-			"PRICE":"Price per Coin",
+			"PRICE":"Price per Token",
 			"AMOUNT":"Amount",
-			"TOTAL":"Total Cost",
+			"TOTAL":"Total",
 			"CANCEL":"Cancel",
-			"BUY":"Buy"
+			"BUY":"Buy",
+			"SIDE": "Side",
+			"STATUS": "Status"
 		}
 	},
 	"EXCHANGE":{
@@ -645,7 +650,7 @@ angular.module("omniConfig")
 		},
 		"BUY":{
 			"TITLE":"Accept Offer",
-			"NOFUNDS":"No Funds on Addresses with private keys to complete the purchase!",
+			"NOFUNDS":"No Funds on Addresses with private keys to complete the request!",
 			"SENDSOME":"Send some funding to an address on the",
 			"ORADD":"page or add an address with funds.",
 			"ADDRESS":"Buying Address",
@@ -687,6 +692,52 @@ angular.module("omniConfig")
 			"CANCELTITLE":"Confirm Sale Cancellation",
 			"CANCELCONFIRM":"Cancel Sale",
 			"CANCELMESSAGE":"You're about to cancel this sale. If this is correct, please press Cancel Sale below. "
+		}
+	},
+	"OMNIDEX" : {
+		"MARKETS" : {
+			"TITLE" : "Markets",
+			"NEW" : "Start Market",
+			"SYMBOL" : "PropertyID",
+			"NAME" : "Property Name",
+			"PRICE" : "Current Price",
+			"VOLUME" : "24h Volume",
+			"SUPPLY" : "Total Supply",
+			"CAP" : "Market Cap",
+			"CHANGE" : "Change Since Last Trade",
+			"LASTPRICE" : "Last Trade Price",
+			"NOMARKETS" : "There are currently no open markets",
+			"DENOMINATOR" : "Choose Denominating Currency"
+		},
+		"ORDERBOOK" : {
+			"TITLE" : "{{ currency }} Exchange",
+			"BUY" : "Buy",
+			"SELL": "Sell",
+			"BALANCE" : "Your balance",
+			"TOTALCOST" : "My Total Cost",
+			"TOTALDESIRED" : "Total Desired",
+			"UNITPRICE" :"Price Per",
+			"AMOUNT" : "Amount",
+			"NOCOINS" : "You don't have any {{propertyName}} available",
+			"ACTIVEOFFERS" : "Your Offers",
+			"NOACTIVEOFFERS" : "You don't have any active offers",
+			"EMPTY" : "No offers",
+			"AMOUNTTOOLTIP" : "The Sum of the Amount {{ type }} for all orders at this price point",
+			"TOTALTOOLTIP" : "The Aggregate Sum of the Total Amount {{ type }} in all orders at this price or better",
+			"ID" : "Offer ID"
+		},
+		"SALE" : {
+			"TITLE" : "Open New Market",
+			"CHOOSECOINSELLING" : "Choose coin to sell",
+			"SELLINGAMOUNT" : "Amount to sell",
+			"CHOOSECOINDESIRED" : "Choose coin desired",
+			"DESIREDAMOUNT" : "Amount desired"
+		},
+		"ORDERS" : {
+			"TYPETT" : "Indicates which side of the Orderbook the Order applies to. Note: When switching the Market Currency, order information is automatically flipped and displayed on the inverted pair.",
+			"AMOUNTT" : "The Amount remaining in your order to be Bought (Buy Orders) or Sold (Sell Orders).",
+			"PRICETT" : "The effective unit price (EUP) is usually the original unit price. The EUP can go up (for asks) and down (for bids) in certain edge cases due to rounding of fractions to transferable units.",
+			"TOTALTT" : "The Total Amount left in your order to be Bought (Sell Orders) or Sold (Buy Orders)."
 		}
 	}
 })

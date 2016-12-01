@@ -32,7 +32,8 @@ class OmniTransaction:
         except NameError, e:
           print e
           self.pubkey = form['pubkey']
-        self.fee = estimateFee(self.confirm_target)['result']
+        #self.fee = estimateFee(self.confirm_target)['result']
+        self.fee = form['fee']
         self.rawdata = form.copy()
         self.tx_type = tx_type
 
@@ -70,7 +71,7 @@ class OmniTransaction:
             return { "status": "NOT OK", "error": "Couldn't get list of unspent tx's. Response Code: " + str(dirty_txes['code'])  }
 
         if (dirty_txes['error'][:3]=='Low'):
-            return { "status": "NOT OK", "error": "Not enough funds, try again. Needed: " + str(fee_total) + " but Have: " + str(dirty_txes['avail'])  }
+            return { "status": "NOT OK", "error": "Not enough funds, try again. Needed: " + str(fee_total) + " but Have: " + str(dirty_txes['avail'] / Decimal(1e8))  }
 
         total_amount = dirty_txes['avail']
         unspent_tx = dirty_txes['utxos']
@@ -100,7 +101,7 @@ class OmniTransaction:
             rawtx = createrawtx_input(input['txid'],input['vout'],rawtx)['result']
 
         # Add the change
-        rawtx = createrawtx_change(rawtx, validnextinputs, self.rawdata['transaction_from'], float(fee_total))['result']
+        rawtx = createrawtx_change(rawtx, validnextinputs, self.rawdata['transaction_from'], float(self.fee))['result']
 
         return { 'status':200, 'unsignedhex': rawtx , 'sourceScript': prevout_script }
 
@@ -143,3 +144,11 @@ class OmniTransaction:
             return getgrantPayload(self.rawdata['currency_identifier'], self.rawdata['amount'], self.rawdata['memo'])['result']
         if self.tx_type == 56:
             return getrevokePayload(self.rawdata['currency_identifier'], self.rawdata['amount'], self.rawdata['memo'])['result']
+        if self.tx_type == 25:
+            return gettradePayload(self.rawdata['propertyidforsale'], self.rawdata['amountforsale'], self.rawdata['propertiddesired'], self.rawdata['amountdesired'])['result']
+        if self.tx_type == 26:
+            return getcanceltradesbypricePayload(self.rawdata['propertyidforsale'], self.rawdata['amountforsale'], self.rawdata['propertiddesired'], self.rawdata['amountdesired'])['result']
+        if self.tx_type == 27:
+            return getcanceltradesbypairPayload(self.rawdata['propertyidforsale'], self.rawdata['propertiddesired'])['result']
+        if self.tx_type == 28:
+            return getcancelalltradesPayload(self.rawdata['ecosystem'])['result']
