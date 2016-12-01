@@ -6,6 +6,8 @@
     </button>
   </div>
   <ul class="dropdown-menu" role="menu">
-    <li role="presentation" ng-repeat="option in filteredList"><a role="menuitem" tabindex="-1" href="#" ng-click="optionSelected(option)">{{option}}</a></li>
+    <li role="presentation" ng-repeat="option in filteredList"><a role="menuitem" tabindex="-1" href="#" ng-click="optionSelected(option)">
+      {{option.displayname ? option.displayname : option}}</a>
+    </li>
   </ul>
 </div>

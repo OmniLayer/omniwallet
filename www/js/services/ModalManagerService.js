@@ -90,33 +90,47 @@ angular.module("omniServices")
                       $scope.signOffline = modalConfig.transaction.offline;
 
                       $scope.transaction = modalConfig.transaction;
-                      
+                      $scope.complete = false;
+
                       $scope.confirm = function() {
                           $scope.clicked = true;
                           $scope.waiting = true;
 
                           TransactionManager.processTransaction($scope.transaction).then(function(result){
                             if(result.transactionSuccess){
-                              $location.path($scope.successRedirect)
-                              $rootScope.notify({
-                                message: "Operation success",
-                                url : result.url
-                              })
-                              $modalInstance.dismiss('close');
+                              //$location.path($scope.successRedirect)
+                              //$rootScope.notify({
+                              //  message: "Operation success",
+                              //  url : result.url
+                              //})
+                              //$modalInstance.dismiss('close');
+                              $scope.complete = true;
+                              $scope.success = true;
+                              $scope.saved = true;
+                              $scope.message = "Operation success";
+                              $scope.url = result.url;
                             } else if(result.readyToSign){
                               $scope.readyToSign = result.readyToSign;
                               $scope.unsignedTransaction = result.unsignedTransaction;
                             } else {
-                              $rootScope.notifyError({
-                                message: result.error || "Unknown Error"
-                              })
-                              $modalInstance.dismiss('close');
-                            }
+                              //$rootScope.notifyError({
+                              //  message: result.error || "Unknown Error"
+                              //})
+                              //$modalInstance.dismiss('close');
+                              $scope.complete = true;
+                              $scope.transactionError = true;
+                              $scope.error = result.error || "Unknown Error" ;
+                              $scope.saved = true;
+                          }
                           }, function(errorData){
-                          	$modalInstance.dismiss('close');
-                                $rootScope.notifyError({
-                                message: errorData.errorMessage || "Unknown Error"
-                              })
+                          	//$modalInstance.dismiss('close');
+                                //$rootScope.notifyError({
+                                //message: errorData.errorMessage || "Unknown Error"
+                                //})
+                                $scope.complete = true;
+                                $scope.transactionError = true;
+                                $scope.error = errorData.errorMessage || "Unknown Error" ;
+                                $scope.saved = true;
                           });
                       };
 
@@ -242,13 +256,11 @@ angular.module("omniServices")
                     $scope.progressMessage = "";
                     $scope.progressColor = "";
                     $scope.exportInProgress=true;
-                    console.log(exportData);
                     if (exportData.mfatoken.length==0) {
                       exportData.mfatoken="null";
                     }
                     Account.verify(Account.uuid, exportData.passphrase, exportData.mfatoken).then(function(result){
                       var data = result.data;
-                      console.log(data,Account.walletKeyTemp);
                       try{
                         var wallet = CryptUtil.decryptObject(data.wallet, Account.walletKeyTemp);
 
@@ -537,6 +549,26 @@ angular.module("omniServices")
               }
             }, function() {});
           };
+
+          self.showOrderInfo = function(orders) {
+            var modalScope = $rootScope.$new();
+            modalScope.title = 'Order Details';
+            modalScope.button = 'Dismiss';
+            modalScope.bodyTemplate = "/views/modals/partials/order_info.html";
+            modalScope.footerTemplate = "/views/modals/partials/footer.html";
+
+            self.modalInstance = $modal.open({
+              templateUrl: '/views/modals/base.html',
+              controller: function($scope, $modalInstance){
+                $scope.orders=orders;
+                $scope.close = function() {
+                    $modalInstance.dismiss('close');
+                  };
+              },
+              scope: modalScope,
+              backdrop:'static'
+            });
+          };
           
           var AddArmoryAddressModal = function($scope, $modalInstance) {
             $scope.title = "MODALS.IMPORT.OFFLINE.TITLE";
@@ -717,7 +749,7 @@ angular.module("omniServices")
             modalScope.title = "WALLET.SEND.MODAL_TRANSACTION_COST";
             modalScope.next = next;
             modalScope.parentScope = $parentScope;
-            modalScope.button ='COMMON.NEXT';
+            modalScope.button ='COMMON.DONE';
             modalScope.bodyTemplate = "/views/modals/partials/transaction_cost.html";
             modalScope.footerTemplate = "/views/modals/partials/transaction_cost_footer.html";
 
@@ -725,7 +757,24 @@ angular.module("omniServices")
                 templateUrl: '/views/modals/base.html',
                 controller: function($scope, $modalInstance, OMNI_PROTOCOL_COST){
                   $scope.PROTOCOL_COST = parseFloat(OMNI_PROTOCOL_COST.valueOf());
-                  $scope.minersFee = parseFloat($scope.parentScope.minersFee.valueOf())
+                  $scope.minersFee = parseFloat($scope.parentScope.minersFee.valueOf());
+                  $scope.fee = {
+                    type: $scope.parentScope.feeType
+                  };
+                  $scope.predefined = !($scope.fee.type =='custom');
+                  if (typeof $scope.parentScope.selectedAsset == 'undefined') {
+                    $scope.isBTC = false;
+                  } else {
+                    $scope.isBTC = ($scope.parentScope.selectedAsset.symbol == 'BTC');
+                  }
+                  if (typeof $scope.parentScope.omniAnnounce != 'undefined' && $scope.parentScope.omniAnnounce) {
+                    $scope.isBTC = true;
+                  }
+                  $scope.normalFee= new Big($scope.parentScope.feeData.class_c.normal);
+                  $scope.fastFee= new Big($scope.parentScope.feeData.class_c.fast);
+                  $scope.fasterFee= new Big($scope.parentScope.feeData.class_c.faster);
+                  $scope.protocolFee = new Big(OMNI_PROTOCOL_COST);
+
                   $scope.close = function() {
                     $modalInstance.dismiss('close');
                   };
@@ -734,8 +783,16 @@ angular.module("omniServices")
                     $scope.next();
                   };
                   $scope.setMinersFee = function(value){
+                    $scope.parentScope.feeType = $scope.fee.type;
+
+                    if ($scope.fee.type=='custom') {
+                      $scope.predefined=false;
+                    } else {
+                      $scope.predefined=true;
+                    }
+                    $scope.minersFee=parseFloat(new Big(value).valueOf());
                     $scope.parentScope.minersFee = new Big(value);
-                  }
+                  };
                 },
                 scope: modalScope
               });

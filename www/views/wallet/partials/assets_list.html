@@ -8,9 +8,9 @@
 					<span ng-if="asset.divisible != undefined && !asset.divisible" class="currency" title="{{asset.displayBalance}}" ng-bind-html="asset.displayBalance | bigjs: '0,0'"></span>
 					<span ng-if="asset.divisible != undefined && asset.divisible" class="currency" title="{{asset.displayBalance}}" ng-bind-html="asset.displayBalance | bigjs: '0,0.00000000'"></span>
 					<span ng-if="asset.divisible == undefined" class="currency" title="{{asset.displayBalance}}"><span ng-bind-html="asset.displayBalance | bigjs: '0,0.00000000'"></span></span>
-					<span ng-show="asset.displayPendingNeg<0" tooltip="This balance reflects Omni's pending transaction(s) with a total outgoing amount of {{asset.displayPendingNeg*-1}} {{asset.name ? asset.name : asset.symbol | truncate:14}}">
+					<span ng-show="asset.displayPendingNeg<0" tooltip="This balance reflects the total outbound amount of {{asset.displayPendingNeg*-1}} {{asset.name ? asset.name : asset.symbol | truncate:14}} in your pending transaction(s)">
 					  <a href="/about/faq" target="_new"><span class="glyphicon glyphicon-export"></span></a></span>
-					<span ng-show="asset.displayPendingPos>0" tooltip="Oh Boy, Someone sent you something. When it confirms this balance will be updated">
+					<span ng-show="asset.displayPendingPos>0" tooltip="To be added to your balance when confirmed">
 					  <br><a href="/about/faq" target="_new"><span class="glyphicon glyphicon-import"></span></a> (+<span ng-bind-html="asset.displayPendingPos | bigjs: '0,0.00000000'"></span> Unconfirmed)</span>
 				</div>
 				<div class="col-xs-6 col-sm-3 text-right" title="{{asset.value}}" ng-bind-html="asset.value | numeraljs: '$0,0.00':true"></div>
@@ -48,21 +48,21 @@
 				            	<img ng-src="{{address.qr}}" ng-show="showqr"><a href ng-click="showqr = !showqr">{{address.hash}}</a>
 				            </td>
 				            <td ng-if="asset.divisible != undefined && !asset.divisible" class="currency number text-right" title="{{address.getDisplayBalance(asset.id)}}"> <span ng-bind-html="address.getDisplayBalance(asset.id) | bigjs: '0,0'"></span>
-				            	<span ng-show="address.getPendingNeg(asset.id)<0" tooltip="This balance reflects Omni's pending transaction(s) with a total outgoing amount of {{address.getPendingNeg(asset.id)*-1}} {{currency.name ? currency.name : currency.symbol | truncate:14}}">
+						<span ng-show="address.getPendingNeg(asset.id)<0" tooltip="This balance reflects the total outbound amount of {{address.getPendingNeg(asset.id)*-1}} {{currency.name ? currency.name : currency.symbol | truncate:14}} in your pending transaction(s)">
 			                    <a href="/about/faq" target="_new"><span class="glyphicon glyphicon-export"></span></a></span>
-			                 <span ng-show="address.getPendingPos(asset.id)>0" tooltip="Oh Boy, Someone sent you something from Omni. When it confirms this balance will be updated">
+			                 <span ng-show="address.getPendingPos(asset.id)>0" tooltip="To be added to your balance when confirmed">
 			                    <br><a href="/about/faq" target="_new"><span class="glyphicon glyphicon-import"></span></a> (+<span ng-bind-html="address.getPendingPos(asset.id) | bigjs: '0,0.00000000'"></span> Unconfirmed)</span>
 				            </td>
 				            <td ng-if="asset.divisible != undefined && asset.divisible" class="currency number text-right" title="{{address.getDisplayBalance(asset.id)}}"> <span ng-bind-html="address.getDisplayBalance(asset.id) | bigjs: '0,0.00000000'"></span>
-				            	<span ng-show="address.getPendingNeg(asset.id)<0" tooltip="This balance reflects Omni's pending transaction(s) with a total outgoing amount of {{address.getPendingNeg(asset.id)*-1}} {{currency.name ? currency.name : currency.symbol | truncate:14}}">
+						<span ng-show="address.getPendingNeg(asset.id)<0" tooltip="This balance reflects the total outbound amount of {{address.getPendingNeg(asset.id)*-1}} {{currency.name ? currency.name : currency.symbol | truncate:14}} in your pending transaction(s)">
 			                    <a href="/about/faq" target="_new"><span class="glyphicon glyphicon-export"></span></a></span>
-			                 <span ng-show="address.getPendingPos(asset.id)>0" tooltip="Oh Boy, Someone sent you something from Omni. When it confirms this balance will be updated">
+			                 <span ng-show="address.getPendingPos(asset.id)>0" tooltip="To be added to your balance when confirmed">
 			                    <br><a href="/about/faq" target="_new"><span class="glyphicon glyphicon-import"></span></a> (+<span ng-bind-html="address.getPendingPos(asset.id) | bigjs: '0,0.00000000'"></span> Unconfirmed)</span>
 				            </td>
 				            <td ng-if="asset.divisible == undefined" class="currency number text-right" title="{{address.getDisplayBalance(asset.id)}}"><span ng-bind-html="address.getDisplayBalance(asset.id) | bigjs: '0,0.00000000'"></span> {{currency.symbol}}
-				            	<span ng-show="address.getPendingNeg(asset.id)<0" tooltip="This balance reflects Omni's pending transaction(s) with a total outgoing amount of {{address.getPendingNeg(asset.id)*-1}} {{currency.name ? currency.name : currency.symbol | truncate:14}}">
+						<span ng-show="address.getPendingNeg(asset.id)<0" tooltip="This balance reflects the total outbound amount of {{address.getPendingNeg(asset.id)*-1}} {{currency.name ? currency.name : currency.symbol | truncate:14}} in your pending transaction(s)">
 			                    <a href="/about/faq" target="_new"><span class="glyphicon glyphicon-export"></span></a></span>
-			                 <span ng-show="address.getPendingPos(asset.id)>0" tooltip="Oh Boy, Someone sent you something from Omni. When it confirms this balance will be updated">
+			                 <span ng-show="address.getPendingPos(asset.id)>0" tooltip="To be added to your balance when confirmed">
 			                    <br><a href="/about/faq" target="_new"><span class="glyphicon glyphicon-import"></span></a> (+<span ng-bind-html="address.getPendingPos(asset.id) | bigjs: '0,0.00000000'"></span> Unconfirmed)</span>
 				            </td>
 				            <td class="currency number text-right" title="{{address.getDisplayBalance(asset.id) * asset.price}}" ng-bind-html="address.getDisplayBalance(asset.id) * asset.price | numeraljs: '$0,0.00':true"></td>
