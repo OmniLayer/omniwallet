@@ -87,14 +87,18 @@ angular.module("omniFactories")
 						return asset.id == assetId;
 					})[0];
 
+					var value=0;
 					if(currencyItem){
-						if(currencyItem.divisible)
-							var value=new Big(currencyItem.value).times(WHOLE_UNIT).valueOf();
-						
-						return value || currencyItem.value;
-					} else {
-						return 0
+						if(currencyItem.divisible) {
+							value=new Big(currencyItem.value).times(WHOLE_UNIT).valueOf();
+						} else {
+							value=currencyItem.value;
+						}
 					}
+					if (value < 0) {
+						value=0;
+					}
+					return value;
 				}
 
 				self.getPendingNeg = function(assetId){
