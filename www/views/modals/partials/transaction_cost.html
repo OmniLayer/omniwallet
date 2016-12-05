@@ -9,13 +9,22 @@
 </div>
 <div class="modal-row">
  <label>
-   <input type="radio" ng-model="fee.type" value="normal" ng-change="setMinersFee(normalFee)"> Normal
+   <input type="radio" ng-model="fee.type" value="normal" ng-change="setMinersFee(normalFee)">
+     <a href=""
+      tooltip="Estimated Confirmation in 5-7+ blocks"
+      tooltip-append-to-body="true" tooltip-placement="top"> Normal</a>
  </label>
  <label>
-   <input type="radio" ng-model="fee.type" value="fast"   ng-change="setMinersFee(fastFee)"> Fast
+   <input type="radio" ng-model="fee.type" value="fast"   ng-change="setMinersFee(fastFee)">
+     <a href=""
+      tooltip="Estimated Confirmation in 3-5 blocks"
+      tooltip-append-to-body="true" tooltip-placement="top"> Fast</a>
  </label>
  <label>
-   <input type="radio" ng-model="fee.type" value="faster" ng-change="setMinersFee(fasterFee)"> Faster
+   <input type="radio" ng-model="fee.type" value="faster" ng-change="setMinersFee(fasterFee)">
+     <a href=""
+      tooltip="Estimated Confirmation in 1-3 blocks"
+      tooltip-append-to-body="true" tooltip-placement="top"> Faster</a>
  </label>
  <label>
    <input type="radio" ng-model="fee.type" value="custom" ng-change="setMinersFee(minersFee)"> Custom
