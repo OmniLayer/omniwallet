@@ -153,7 +153,7 @@ angular.module("omniConfig")
 			},
 			"STATUS" :{
 				"TITLE" : "Current Status",
-				"SPEED" : "Omniwallet is in full-speed development. Our vision and goal are well defined, and we are working hard to develop the functionality and continually improve the features",
+				"SPEED" : "Omniwallet is in development. Our vision and goal are well defined, and we are working hard to develop the functionality and continually improve the features.",
 				"INVOLVEMENT" : "We would like to get your involvement in the development effort! So go ahead and:",
 				"SUGGESTIONS" : "Play around with it and give us suggestions",
 				"BUGS" : "Report bugs on github",
