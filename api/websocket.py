@@ -36,10 +36,12 @@ def printmsg(msg):
     sys.stdout.flush()
 
 def update_balances():
+    printmsg("updating balances")
     global addresses, balances
     balances=get_bulkbalancedata(addresses)
 
 def update_orderbook():
+    printmsg("updating orderbook")
     global orderbook, lasttrade, lastpending
     ret=getOrderbook(lasttrade, lastpending)
     printmsg("Checking for new orderbook updates, last: "+str(lasttrade))
@@ -50,6 +52,7 @@ def update_orderbook():
       lastpending=ret['lastpending']
 
 def update_valuebook():
+    printmsg("updating valuebook")
     global valuebook
     vbook=getValueBook()
     if len(vbook)>0:
@@ -78,11 +81,13 @@ def update_valuebook():
 def watchdog_thread():
     global emitter
     while True:
-      time.sleep(5)
+      time.sleep(10)
+      printmsg("watchdog running")
       update_orderbook()
       update_balances()
       update_valuebook()
       if emitter is None or not emitter.isAlive():
+          printmsg("emitter not running")
           emitter = Thread(target=emitter_thread)
           emitter.start()
 
@@ -91,7 +96,7 @@ def emitter_thread():
     global addresses, maxaddresses, clients, maxclients, book, balances, valuebook
     count = 0
     while True:
-        time.sleep(5)
+        time.sleep(15)
         count += 1
         printmsg("Tracking "+str(len(addresses))+"/"+str(maxaddresses)+"(max) addresses, for "+str(clients)+"/"+str(maxclients)+"(max) clients, ran "+str(count)+" times")
         #push orderbook
