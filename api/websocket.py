@@ -151,13 +151,12 @@ def add_address(message):
   global addresses, maxaddresses
   
   address = message['data']
-  if str(address) in addresses: 
-    addresses[str(address)] += 1
-  else:
-    addresses[str(address)] = 1
-
   if str(address) not in session['addresses']:
     session['addresses'].append(str(address))
+    if str(address) in addresses: 
+      addresses[str(address)] += 1
+    else:
+      addresses[str(address)] = 1
 
   if len(addresses) > maxaddresses:
     maxaddresses=len(addresses)
