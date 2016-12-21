@@ -1,6 +1,37 @@
 angular.module("omniControllers")
-	.controller("ExchangePendingController",["$scope", "$http", "hashExplorer", "ADDRESS_EXPLORER_URL", "Transaction", "SATOSHI_UNIT", "$filter",
-		function ExchangePendingController($scope, $http, hashExplorer, ADDRESS_EXPLORER_URL, Transaction, SATOSHI_UNIT, $filter) {
+	.controller("ExchangePendingController",["$scope", "$http", "hashExplorer", "ADDRESS_EXPLORER_URL", "Transaction", "SATOSHI_UNIT", "MIN_MINER_FEE", "OMNI_PROTOCOL_COST", "MINER_SPEED", "$filter",
+		function ExchangePendingController($scope, $http, hashExplorer, ADDRESS_EXPLORER_URL, Transaction, SATOSHI_UNIT, MIN_MINER_FEE, OMNI_PROTOCOL_COST, MINER_SPEED, $filter) {
+		  function checkSend(sendAmount) {
+			if($scope.selectedAddress != undefined){
+				avail = parseFloat($scope.selectedAddress.getDisplayBalance(0));
+				console.log(avail);
+				$scope.selectedAddress.estimateFee(sendAmount).then(function(result){
+					$scope.feeData=result;
+					if($scope.feeType != 'custom'){
+						$scope.minersFee = new Big(result.class_c[$scope.feeType]);
+					}
+				});
+                  
+				if ( avail >= parseFloat(sendAmount) + parseFloat($scope.minersFee) + parseFloat($scope.protocolFee) ) {
+					$scope.cansend = true;
+				} else {
+					$scope.cansend = false;
+				}
+				console.log($scope.cansend);
+			} else {
+				$scope.cansend = false;
+			}
+		  }
+
+		  $scope.protocolFee = OMNI_PROTOCOL_COST;
+		  $scope.feeType = MINER_SPEED;
+
+		  $scope.editTransactionCost = function(){
+			$scope.omniAnnounce = false;
+			$scope.modalManager.openTransactionCostModal($scope, $scope.sendTransaction);
+			checkSend($scope.sendAmount);
+		  }
+
 		  $scope.setHashExplorer = hashExplorer.setHash.bind(hashExplorer)
 		  //$scope.selectedAddress = $scope.wallet.addresses[ $scope.wallet.addresses.length-1 ].address;
 		  $scope.currencyUnit = 'stom'
@@ -128,16 +159,19 @@ angular.module("omniControllers")
 		      $scope.orderBookStorage = JSON.stringify($scope.orderbook);
 		    });
 		  };
+
 		  $scope.purchaseCoin = function(tx) {
+		    $scope.minersFee = MIN_MINER_FEE;
 		    $scope.pendingThinking = false;
 		    $scope.buyTransaction = tx;
 		    $scope.sendTo = tx.to_address;
 		    $scope.sendAmount = tx.bitcoin_required;
 		    $scope.selectedAddress = $scope.wallet.getAddress(tx.from_address);
 		    $scope.selectedAsset = $scope.wallet.getAsset(0);
+		    checkSend(tx.bitcoin_required);
 		    $http.get('/v1/transaction/tx/' + tx.sell_offer_txid + '.json').success(function(data) {
 		      var sell_tx = data[0];
-		      $scope.minersFee= new Big(sell_tx.formatted_fee_required);
+		      //$scope.minersFee= new Big(sell_tx.formatted_fee_required);
 		      $http.post('/v1/blocks/getlast',{origin:"blockchain"}).success(function(block){
 		        $scope.remainingBlocks = sell_tx.formatted_block_time_limit - (block.height - tx.block);
 		      });
@@ -193,7 +227,7 @@ angular.module("omniControllers")
 				symbol:$scope.selectedAsset.symbol,
 				sendValue:$scope.sendAmount * btcPrice,
 				toAddress:$scope.sendTo,
-				fees:acceptSend.totalCost,
+				fees:new Big(acceptSend.totalCost).plus(new Big(OMNI_PROTOCOL_COST)).valueOf(),
 				confirmText:"WALLET.SEND.FUNDS",
             	successRedirect:"/wallet" 
 			};
