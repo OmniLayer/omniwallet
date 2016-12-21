@@ -23,7 +23,7 @@ angular.module("omniControllers")
 			}
 		  }
 
-		  $scope.protocolFee = OMNI_PROTOCOL_COST;
+		  $scope.protocolFee = new Big(OMNI_PROTOCOL_COST);
 		  $scope.feeType = MINER_SPEED;
 
 		  $scope.editTransactionCost = function(){
