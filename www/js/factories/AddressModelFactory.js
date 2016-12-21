@@ -75,9 +75,9 @@ angular.module("omniFactories")
 					});
 				}
 
-				self.estimateFee = function(){
+				self.estimateFee = function(btcAmount=null){
 					address=self.hash;
-					return AddressManager.estimateFee(address).then(function(result){
+					return AddressManager.estimateFee(address,btcAmount).then(function(result){
 						return result.data;
 					});
 				}

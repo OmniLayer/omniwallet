@@ -76,6 +76,11 @@ angular.module("omniControllers")
 			});
 		    
 			var btcPrice = $scope.selectedAsset.price;
+                        if ($scope.selectedAsset.symbol == 'BTC') {
+				var displayFee = fee;
+			} else {
+				var displayFee = new Big(fee).plus(new Big(PROTOCOL_FEE)).valueOf();
+			}
 			
 			var modalScope = {
 				title:"WALLET.SEND.CONFIRM",
@@ -84,7 +89,7 @@ angular.module("omniControllers")
 				symbol:$scope.selectedAsset.symbol,
 				sendValue:$scope.sendAmount * btcPrice,
 				toAddress:$scope.sendTo,
-				fees:simpleSend.totalCost,
+				fees:displayFee,
 				confirmText:"WALLET.SEND.FUNDS",
 				successRedirect:"/wallet"
 			};
