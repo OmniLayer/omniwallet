@@ -8,12 +8,17 @@ from blockchain_utils import *
 app = Flask(__name__)
 app.debug = True
 
-@app.route('/estimatefee/<addr>', methods=['GET'])
+@app.route('/estimatefee/<addr>', methods=['GET','POST'])
 def estimatefees(addr):
     try:
       address = str(re.sub(r'\W+', '', addr ) ) #check alphanumeric
     except ValueError:
       abort(make_response('This endpoint only consumes valid input', 400))
+
+    try:
+      amountBTC=int( Decimal(request.form['amountBTC']) * Decimal(1e8))
+    except:
+      amountBTC=0
 
     #get dynamic fee rates from db
     try:
@@ -33,7 +38,7 @@ def estimatefees(addr):
     ins=1
     outs=2
 
-    amount=ccb+mfee
+    amount=ccb+mfee+amountBTC
 
     balance=bc_getbalance(address)
     if 'bal' in balance and balance['bal']>0:
