@@ -1,6 +1,7 @@
 import simplejson
 import requests
 import decimal
+import json
 from rpcclient import gettxout
 
 def bc_getutxo(address, ramount):
@@ -91,17 +92,71 @@ def bc_getbalance_blockr(address):
 
 def bc_getbulkbalance(addresses):
   try:
+    #get bulk data from blockonomics
+    list=""
+    for a in addresses:
+      if list == "":
+        list = a
+      else:
+        list += " "+a
+
+    baldata=bc_getbulkbalance_blockonomics(list)
+    if not baldata['error']:
+      return baldata['bal']
+    else:
+      #if blockonomics lookup fails get from blockr
+      list=""
+      counter=0
+      total=0
+      btclist={}
+      for a in addresses:
+        if list == "":
+          list = a
+        else:
+          list += ","+a
+        counter+=1
+        total+=1
+        if counter>=19 or total==len(addresses):
+          baldata=bc_getbulkbalance_blockr(list)
+          counter=0
+          list=""
+          try:
+            for addr in baldata['bal']:
+              btclist[addr]=baldata['bal'][addr]
+          except TypeError:
+            print "No Data:",baldata
+      return btclist
+  except Exception as e:
+    print "Error getting bulk data"+str(e)
+
+
+      
+def bc_getbulkbalance_blockonomics(addresses):
+  try:
+    r = requests.post('https://www.blockonomics.co/api/balance',json.dumps({"addr":addresses}))
+    if r.status_code == 200:
+      balances = r.json()['response']
+      retval = {}
+      for entry in balances:
+        retval[entry['addr']] = int(entry['confirmed'])+int(entry['unconfirmed'])
+      return {"bal": retval, "error": None}
+    else:
+      return {"bal": None , "error": True}
+  except:
+    return {"bal": None , "error": True}
+
+def bc_getbulkbalance_blockr(addresses):
+  try:
     r= requests.get('http://btc.blockr.io/api/v1/address/balance/'+addresses)
     if r.status_code == 200:
       balances = r.json()['data']
       retval = {}
       for entry in balances:
         retval[entry['address']] = int(entry['balance']*1e8)
-
       return {"bal": retval, "error": None}
     else:
-      return {"bal": None , "error": "Couldn't get balance"}
+      return {"bal": None , "error": True}
   except:
-    return {"bal": None , "error": "Couldn't get balance"}
+    return {"bal": None , "error": True}
 
 
