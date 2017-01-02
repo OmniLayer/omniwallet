@@ -30,7 +30,7 @@ def bc_getutxo(address, ramount):
     return bc_getutxo_blockcypher(address, ramount)
 
 
-def bc_getutxo_blockcypher(address, ramount)
+def bc_getutxo_blockcypher(address, ramount):
   try:
     r = requests.get('https://api.blockcypher.com/v1/btc/main/addrs/'+address+'?unspentOnly=true')
 
