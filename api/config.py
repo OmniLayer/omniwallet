@@ -24,3 +24,5 @@ AESIV='use a 16 char password'
 #Donation Address Pubkey  (We need the pubkey so that if an address hasn't sent a tx before we don't need the private key to get the pubkey)
 D_PUBKEY = '04ec31f456cc70a60793ff2033d9d2094541a5de8cac67ab1e5b1441187c6bed1601dc64c447244618268af0bd449d90d2ce71816efc69dc7921a226ed60fe926b'
 
+#Blocktrail API Key (used for lookups of utxo's)
+BTAPIKEY = None

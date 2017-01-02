@@ -6,11 +6,37 @@ from rpcclient import gettxout
 
 def bc_getutxo(address, ramount):
   try:
+    r = requests.get('https://api.blocktrail.com/v1/btc/address/'+address+'/unspent-outputs?api_key='+str(BTAPIKEY))
+
+    if r.status_code == 200:
+      unspents = r.json()['data']
+      print "got unspent list (btrail)", unspents
+
+      retval = []
+      avail = 0
+      for tx in unspents:
+        txUsed=gettxout(tx['hash'],tx['index'])
+        isUsed = ('result' in txUsed and txUsed['result']==None)
+        if tx['confirmations'] > 0 and not isUsed and tx['multisig']==None:
+          avail += tx['value']
+          retval.append([ tx['hash'], tx['index'], tx['value'] ])
+          if avail >= ramount:
+            return {"avail": avail, "utxos": retval, "error": "none"}
+      return {"avail": avail, "error": "Low balance error"}
+    else:
+      #return {"error": "Connection error", "code": r.status_code}
+      return bc_getutxo_blockcypher(address, ramount)
+  except:
+    return bc_getutxo_blockcypher(address, ramount)
+
+
+def bc_getutxo_blockcypher(address, ramount)
+  try:
     r = requests.get('https://api.blockcypher.com/v1/btc/main/addrs/'+address+'?unspentOnly=true')
 
     if r.status_code == 200:
       unspents = r.json()['txrefs']
-      print "got unspent list", unspents
+      print "got unspent list (bcypher)", unspents
 
       retval = []
       avail = 0
@@ -38,7 +64,7 @@ def bc_getutxo_blockr(address, ramount):
 
       unspents = r.json()['data']['unspent']
 
-      print "blockcypher failed, blockr unspents", unspents
+      print "got unspent list (blockr)", unspents
       retval = []
       avail = 0
       for tx in unspents:
