@@ -101,6 +101,11 @@ def bc_getbulkbalance(addresses):
         list += " "+a
 
     baldata=bc_getbulkbalance_blockonomics(list)
+  except Exception as e:
+    print "Error getting bulk data from blockonomics"+str(e)+str(" ")+str(baldata)
+    baldata={"bal": None , "error": True}
+
+  try:
     if not baldata['error']:
       return baldata['bal']
     else:
@@ -127,7 +132,7 @@ def bc_getbulkbalance(addresses):
             print "No Data:",baldata
       return btclist
   except Exception as e:
-    print "Error getting bulk data "+str(e)
+    print "Error getting bulk data from blockr "+str(e)
 
 
       
