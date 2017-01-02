@@ -127,7 +127,7 @@ def bc_getbulkbalance(addresses):
             print "No Data:",baldata
       return btclist
   except Exception as e:
-    print "Error getting bulk data"+str(e)
+    print "Error getting bulk data "+str(e)
 
 
       
