@@ -88,8 +88,8 @@ def insertomni(rawtx):
       else:
         amount = int(rawtx['MP']['amountforsale'])
 
-    if txtype == 55:
-      #handle grants to ourself or others
+    if txtype in [26,55]:
+      #handle grants to ourself/others and cancel by price on OmniDex
       if receiver == "":
         sendamount=amount
         recvamount=0
