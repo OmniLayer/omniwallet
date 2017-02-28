@@ -5,16 +5,13 @@ import json
 from config import BTAPIKEY
 from rpcclient import gettxout
 
-def bc_getutxo(address, ramount):
+def bc_getutxo(address, ramount, page=1, retval=[], avail=0):
   try:
-    r = requests.get('https://api.blocktrail.com/v1/btc/address/'+address+'/unspent-outputs?api_key='+str(BTAPIKEY))
-
+    r = requests.get('https://api.blocktrail.com/v1/btc/address/'+address+'/unspent-outputs?api_key='+str(BTAPIKEY)+'&limit=200&page='+str(page))
     if r.status_code == 200:
-      unspents = r.json()['data']
-      print "got unspent list (btrail)", unspents
-
-      retval = []
-      avail = 0
+      response = r.json()
+      unspents = response['data']
+      print "got unspent list (btrail)", response
       for tx in unspents:
         txUsed=gettxout(tx['hash'],tx['index'])
         isUsed = ('result' in txUsed and txUsed['result']==None)
@@ -23,6 +20,8 @@ def bc_getutxo(address, ramount):
           retval.append([ tx['hash'], tx['index'], tx['value'] ])
           if avail >= ramount:
             return {"avail": avail, "utxos": retval, "error": "none"}
+      if int(response['total'])-(int(response['per_page'])*page ) > 0:
+        return bc_getutxo(address, ramount, page+1, retval, avail)
       return {"avail": avail, "error": "Low balance error"}
     else:
       #return {"error": "Connection error", "code": r.status_code}
