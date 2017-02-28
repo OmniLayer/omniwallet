@@ -7,11 +7,18 @@ angular.module("omniControllers")
 	          avail = parseFloat($scope.selectedAddress.getDisplayBalance(0));
 	          console.log(avail);
 
-                  $scope.selectedAddress.estimateFee().then(function(result){
+                  if ( $scope.selectedAsset.symbol == 'BTC' ) {
+                    BTCAmount=$scope.sendAmount;
+                  } else {
+                    BTCAmount=0;
+                  }
+
+                  $scope.selectedAddress.estimateFee(BTCAmount).then(function(result){
                     $scope.feeData=result;
                     if($scope.feeType != 'custom'){
                       $scope.minersFee = new Big(result.class_c[$scope.feeType]);
                     }
+                    $scope.updatingFee=false;
                   });
 
 	          if ( $scope.selectedAsset.symbol == 'BTC' ) {
@@ -33,6 +40,7 @@ angular.module("omniControllers")
 	        }
         }
 
+
 	$scope.minersFee = MIN_MINER_FEE;
 	$scope.protocolFee = PROTOCOL_FEE;
         $scope.feeType = MINER_SPEED;
@@ -46,19 +54,32 @@ angular.module("omniControllers")
       	$scope.showtesteco = $scope.account.getSetting('showtesteco');
       	$scope.userCurrency = $scope.account.getSetting("usercurrency");
 
+        $scope.updateFee = function(){
+                $scope.updatingFee=true;
+                $scope.amountModified=false;
+                checkSend();
+
+        }
+
       	$scope.setAsset = function(asset){
       		$scope.selectedAsset = asset;
       		$scope.selectedAddress = $scope.selectedAsset.tradableAddresses[0];
+                $scope.updatingFee = false;
+                $scope.amountModified=false;
+                $scope.sendAmount=null;
                 checkSend();
       	}
       	
       	$scope.setAddress = function(address){
       		$scope.selectedAddress = address;
+                $scope.updatingFee = false;
+                $scope.amountModified=false;
+                $scope.sendAmount=null;
                 checkSend();
       	}
 
       	$scope.editTransactionCost = function(){
-      		$scope.modalManager.openTransactionCostModal($scope, $scope.sendTransaction);
+      		$scope.modalManager.openTransactionCostModal($scope, function(){return;});
                 checkSend();
       	}
 
