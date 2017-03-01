@@ -5,7 +5,9 @@ import json
 from config import BTAPIKEY
 from rpcclient import gettxout
 
-def bc_getutxo(address, ramount, page=1, retval=[], avail=0):
+def bc_getutxo(address, ramount, page=1, retval=None, avail=0):
+  if retval==None:
+    retval=[]
   try:
     r = requests.get('https://api.blocktrail.com/v1/btc/address/'+address+'/unspent-outputs?api_key='+str(BTAPIKEY)+'&limit=200&page='+str(page))
     if r.status_code == 200:
