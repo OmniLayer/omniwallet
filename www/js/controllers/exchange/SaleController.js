@@ -46,6 +46,7 @@ angular.module("omniControllers")
                 $scope.feeData=result;
                 if($scope.feeType != 'custom'){
                     $scope.minersFee = new Big(result.class_c[$scope.feeType]);
+                    $scope.topupAmount = new Big(result.topup_c[$scope.feeType]);
                 }
             });
       }
