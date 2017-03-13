@@ -1,5 +1,6 @@
 import urlparse
 import os, sys, re
+import math
 from flask import Flask, request, jsonify, abort, json, make_response
 from msc_apps import *
 from decimal import Decimal
@@ -50,12 +51,20 @@ def estimatefees(addr):
       
     #ins + outs + header + opreturn
     size=ins*180 + outs*34 + 10 + 80
+    tsize=math.ceil((size+180)*1.05)
 
     faster = '%.8f' % ( Decimal(int((size * fees['faster'])/1000)) / Decimal(1e8) )
     fast = '%.8f' % ( Decimal(int((size * fees['fast'])/1000)) / Decimal(1e8) )
     normal = '%.8f' % ( Decimal(int((size * fees['normal'])/1000)) / Decimal(1e8) )
 
-    ret={"address":addr, "class_c":{"faster": faster, "fast": fast, "normal": normal, "estimates":{"size":size, "ins":ins, "outs":outs} }}
+    tfaster = '%.8f' % ( Decimal(int((tsize * fees['faster'])/1000)) / Decimal(1e8) )
+    tfast = '%.8f' % ( Decimal(int((tsize * fees['fast'])/1000)) / Decimal(1e8) )
+    tnormal = '%.8f' % ( Decimal(int((tsize * fees['normal'])/1000)) / Decimal(1e8) )
+
+    ret={"address":addr,
+         "class_c":{"faster": faster, "fast": fast, "normal": normal, "estimates":{"size":size, "ins":ins, "outs":outs} },
+         "topup_c":{"faster": tfaster, "fast": tfast, "normal": tnormal, "estimates":{"size":tsize, "ins":ins+1, "outs":outs} }
+        }
     return json.dumps(ret)
 
 @app.route('/fees')
