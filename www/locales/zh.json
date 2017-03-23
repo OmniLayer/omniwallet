@@ -412,7 +412,7 @@
 			"MODAL_TO":"至",
 			"CONFIRM":"确认发送",
 			"AVAIL":"从可用地址",
-			"LOWFEE":"您的“发件人地址”没有足够的BTC完成此交易。请至少发送 {{ topupAmount }} BTC覆盖估计总交易成本。"
+			"LOWFEE":"您的“发件人地址”没有足够的BTC完成此交易。请至少发送 {{ topupAmount }} BTC覆盖估计总交易成本。",
 			"UPDATE_FEE":"Re-estimate Transaction Cost"
 		},
 		"ASSETS":{
