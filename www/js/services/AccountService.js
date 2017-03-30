@@ -216,7 +216,14 @@ angular.module("omniServices")
                     }
                   });
                 }).then(function(result) {
-                  console.log("Success saving");
+		  var data = result.data;
+		  if(data.updated) {
+			console.log("Success saving");
+		  } else {
+			console.log("Failure saving");
+			location = location.origin + '/loginfs/' + self.uuid;
+			self.logout();
+		  }
                 }, function(result) {
                   console.log("Failure saving");
                   location = location.origin + '/loginfs/' + self.uuid;
