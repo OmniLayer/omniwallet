@@ -25,26 +25,36 @@ def sql_connect():
       return response
     try:     
         con = psycopg2.connect(database=DBNAME, user=DBUSER, password=DBPASS, host=DBHOST, port=DBPORT)
-        cur = con.cursor(cursor_factory=psycopg2.extras.DictCursor)
-    	return cur
+        return con
     except psycopg2.DatabaseError, e:
         print 'Error %s' % e    
         sys.exit(1)
 
 def dbInit():
     #Prime the DB Connection, it can be restarted in the select/execute statement if it gets closed prematurely. 
+    global con
     global dbc
+
+    try:
+      if con.closed:
+        con=sql_connect()
+    except NameError:
+      con=sql_connect()
+
     try:
       if dbc.closed:
-        dbc=sql_connect()
+        dbc=con.cursor(cursor_factory=psycopg2.extras.DictCursor)
     except NameError:
-      dbc=sql_connect()
+      dbc=con.cursor(cursor_factory=psycopg2.extras.DictCursor)
 
 def dbSelect(statement, values=None):
     dbInit()
     try:
         dbc.execute(statement, values)
         ROWS = dbc.fetchall()
+        dbc.close()
+        con.commit()
+        con.close()
         return ROWS
     except psycopg2.DatabaseError, e:
         print 'Error', e, 'Rollback returned: ', dbRollback()
@@ -61,6 +71,7 @@ def dbExecute(statement, values=None):
 def dbCommit():
     try:
         con.commit()
+        con.close()
     except psycopg2.DatabaseError, e:
         print 'Error', e, 'Rollback returned: ', dbRollback()
         sys.exit(1)
@@ -68,6 +79,7 @@ def dbCommit():
 def dbRollback():
     if con:
        con.rollback()
+       con.close()
        return 1
     else:
        return 0
