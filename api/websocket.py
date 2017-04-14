@@ -36,11 +36,15 @@ def printmsg(msg):
     sys.stdout.flush()
 
 def update_balances():
+  try:
     printmsg("updating balances")
     global addresses, balances
     balances=get_bulkbalancedata(addresses)
+  except Exception as e:
+    printmsg("error updating balances: "+str(e))
 
 def update_orderbook():
+  try:
     printmsg("updating orderbook")
     global orderbook, lasttrade, lastpending
     ret=getOrderbook(lasttrade, lastpending)
@@ -50,8 +54,11 @@ def update_orderbook():
       printmsg("Orderbook updated. Lasttrade: "+str(lasttrade)+" Newtrade: "+str(ret['lasttrade'])+" Book length is: "+str(len(orderbook)))
       lasttrade=ret['lasttrade']
       lastpending=ret['lastpending']
+  except Exception as e:
+    printmsg("error updating orderbook: "+str(e))
 
 def update_valuebook():
+  try:
     printmsg("updating valuebook")
     global valuebook
     vbook=getValueBook()
@@ -77,25 +84,31 @@ def update_valuebook():
         else:
           symbol=name+str(pid2)
         valuebook[symbol]={"price":rate,"symbol":symbol,"timestamp":time, "source":source}
+  except Exception as e:
+    printmsg("error updating valuebook"+str(e))
 
 def watchdog_thread():
     global emitter
     while True:
-      time.sleep(10)
-      printmsg("watchdog running")
-      update_orderbook()
-      update_balances()
-      update_valuebook()
-      if emitter is None or not emitter.isAlive():
+      try:
+        time.sleep(10)
+        printmsg("watchdog running")
+        update_orderbook()
+        update_balances()
+        update_valuebook()
+        if emitter is None or not emitter.isAlive():
           printmsg("emitter not running")
           emitter = Thread(target=emitter_thread)
           emitter.start()
+      except Exception as e:
+        printmsg("error in watchdog: "+str(e))
 
 def emitter_thread():
     #Send data for the connected clients
     global addresses, maxaddresses, clients, maxclients, book, balances, valuebook
     count = 0
     while True:
+      try:
         time.sleep(15)
         count += 1
         printmsg("Tracking "+str(len(addresses))+"/"+str(maxaddresses)+"(max) addresses, for "+str(clients)+"/"+str(maxclients)+"(max) clients, ran "+str(count)+" times")
@@ -105,6 +118,8 @@ def emitter_thread():
         socketio.emit('valuebook',valuebook,namespace='/balance')
         #push addressbook
         socketio.emit('address:book',balances,namespace='/balance')
+      except Exception as e:
+        printmsg("emitter error: "+str(e))
 
 @socketio.on('connect', namespace='/balance')
 def balance_connect():
