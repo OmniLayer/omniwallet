@@ -97,6 +97,20 @@ def bc_getpubkey(address):
     return "error"
 
 def bc_getbalance(address):
+  return bc_getbalance_bitgo(address)
+
+def bc_getbalance_bitgo(address):
+  try:
+    r= requests.get('https://www.bitgo.com/api/v1/address/'+address)
+    if r.status_code == 200:
+      balance = int(r.json()['balance'])
+      return {"bal":balance , "error": None}
+    else:
+      return bc_getbalance_blockcypher(address)
+  except:
+    return bc_getbalance_blockcypher(address)
+
+def bc_getbalance_blockcypher(address):
   try:
     r= requests.get('https://api.blockcypher.com/v1/btc/main/addrs/'+address+'/balance')
     if r.status_code == 200:
