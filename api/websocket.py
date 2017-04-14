@@ -45,6 +45,12 @@ def update_balances():
       time.sleep(10)
       printmsg("updating balances")
       balances=get_bulkbalancedata(addresses)
+      for addr in list(addresses):
+        if addresses[addr] < 1 and addresses[addr] >= -30:
+          addresses[addr] -= 1
+          #cache old addresses for 5~10 minutes after user discconects
+        elif addresses[addr] < -30:
+          addresses.pop(addr)
   except Exception as e:
     printmsg("error updating balances: "+str(e))
 
@@ -102,6 +108,10 @@ def watchdog_thread():
       try:
         time.sleep(10)
         printmsg("watchdog running")
+        if emitter is None or not emitter.isAlive():
+          printmsg("emitter not running")
+          emitter = Thread(target=emitter_thread)
+          emitter.start()
         if bthread is None or not bthread.isAlive():
           printmsg("balance thread not running")
           bthread = Thread(target=update_balances)
@@ -114,10 +124,6 @@ def watchdog_thread():
           printmsg("orderbook not running")
           othread = Thread(target=update_orderbook)
           othread.start()
-        if emitter is None or not emitter.isAlive():
-          printmsg("emitter not running")
-          emitter = Thread(target=emitter_thread)
-          emitter.start()
       except Exception as e:
         printmsg("error in watchdog: "+str(e))
 
@@ -130,12 +136,12 @@ def emitter_thread():
         time.sleep(15)
         count += 1
         printmsg("Tracking "+str(len(addresses))+"/"+str(maxaddresses)+"(max) addresses, for "+str(clients)+"/"+str(maxclients)+"(max) clients, ran "+str(count)+" times")
-        #push orderbook
-        socketio.emit('orderbook',orderbook,namespace='/balance')
-        #push valuebook
-        socketio.emit('valuebook',valuebook,namespace='/balance')
         #push addressbook
         socketio.emit('address:book',balances,namespace='/balance')
+        #push valuebook
+        socketio.emit('valuebook',valuebook,namespace='/balance')
+        #push orderbook
+        socketio.emit('orderbook',orderbook,namespace='/balance')
       except Exception as e:
         printmsg("emitter error: "+str(e))
 
@@ -159,7 +165,8 @@ def endSession(session):
     global addresses
     for address in session['addresses']:
       if addresses[address] == 1:
-        addresses.pop(address)
+        #addresses.pop(address)
+         addresses[address] = -1
       else:
         addresses[address] -= 1
   except KeyError:
@@ -191,7 +198,7 @@ def add_address(message):
   address = message['data']
   if str(address) not in session['addresses']:
     session['addresses'].append(str(address))
-    if str(address) in addresses: 
+    if str(address) in addresses and addresses[str(address)] > 0: 
       addresses[str(address)] += 1
     else:
       addresses[str(address)] = 1
