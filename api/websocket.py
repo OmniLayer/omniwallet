@@ -19,6 +19,9 @@ socketio = SocketIO(app)
 #threads
 watchdog = None
 emitter = None
+bthread = None
+vthread = None
+othread = None
 #stat trackers
 clients = 0
 maxclients = 0
@@ -36,66 +39,94 @@ def printmsg(msg):
     sys.stdout.flush()
 
 def update_balances():
-    printmsg("updating balances")
-    global addresses, balances
-    balances=get_bulkbalancedata(addresses)
-
-def update_orderbook():
-    printmsg("updating orderbook")
-    global orderbook, lasttrade, lastpending
-    ret=getOrderbook(lasttrade, lastpending)
-    printmsg("Checking for new orderbook updates, last: "+str(lasttrade))
-    if ret['updated']:
-      orderbook=ret['book']
-      printmsg("Orderbook updated. Lasttrade: "+str(lasttrade)+" Newtrade: "+str(ret['lasttrade'])+" Book length is: "+str(len(orderbook)))
-      lasttrade=ret['lasttrade']
-      lastpending=ret['lastpending']
-
-def update_valuebook():
-    printmsg("updating valuebook")
-    global valuebook
-    vbook=getValueBook()
-    if len(vbook)>0:
-      for v in vbook:
-        name=v[0]
-        p1=v[1]
-        pid1=int(v[2])
-        p2=v[3]
-        pid2=int(v[4])
-        rate=v[5]
-        time=str(v[6])
-        source=v[7]
-        if p1=='Bitcoin' and p2=='Omni':
-          if pid2==1:
-            symbol="OMNI"
-          else:
-            symbol="SP"+str(pid2)
-        elif p1=='Fiat' and p2=='Bitcoin':
-          symbol="BTC"
-          if pid1>0 or pid2>0:
-            symbol=symbol+str(name)
-        else:
-          symbol=name+str(pid2)
-        valuebook[symbol]={"price":rate,"symbol":symbol,"timestamp":time, "source":source}
-
-def watchdog_thread():
-    global emitter
+  global addresses, balances
+  try:
     while True:
       time.sleep(10)
-      printmsg("watchdog running")
-      update_orderbook()
-      update_balances()
-      update_valuebook()
-      if emitter is None or not emitter.isAlive():
+      printmsg("updating balances")
+      balances=get_bulkbalancedata(addresses)
+  except Exception as e:
+    printmsg("error updating balances: "+str(e))
+
+def update_orderbook():
+  global orderbook, lasttrade, lastpending
+  try:
+    while True:
+      time.sleep(10)
+      printmsg("updating orderbook")
+      ret=getOrderbook(lasttrade, lastpending)
+      printmsg("Checking for new orderbook updates, last: "+str(lasttrade))
+      if ret['updated']:
+        orderbook=ret['book']
+        printmsg("Orderbook updated. Lasttrade: "+str(lasttrade)+" Newtrade: "+str(ret['lasttrade'])+" Book length is: "+str(len(orderbook)))
+        lasttrade=ret['lasttrade']
+        lastpending=ret['lastpending']
+  except Exception as e:
+    printmsg("error updating orderbook: "+str(e))
+
+def update_valuebook():
+  global valuebook
+  try:
+    while True:
+      time.sleep(10)
+      printmsg("updating valuebook")
+      vbook=getValueBook()
+      if len(vbook)>0:
+        for v in vbook:
+          name=v[0]
+          p1=v[1]
+          pid1=int(v[2])
+          p2=v[3]
+          pid2=int(v[4])
+          rate=v[5]
+          tstamp=str(v[6])
+          source=v[7]
+          if p1=='Bitcoin' and p2=='Omni':
+            if pid2==1:
+              symbol="OMNI"
+            else:
+              symbol="SP"+str(pid2)
+          elif p1=='Fiat' and p2=='Bitcoin':
+            symbol="BTC"
+            if pid1>0 or pid2>0:
+              symbol=symbol+str(name)
+          else:
+            symbol=name+str(pid2)
+          valuebook[symbol]={"price":rate,"symbol":symbol,"timestamp":tstamp, "source":source}
+  except Exception as e:
+    printmsg("error updating valuebook: "+str(e))
+
+def watchdog_thread():
+    global emitter, bthread, vthread, othread
+    while True:
+      try:
+        time.sleep(10)
+        printmsg("watchdog running")
+        if bthread is None or not bthread.isAlive():
+          printmsg("balance thread not running")
+          bthread = Thread(target=update_balances)
+          bthread.start()
+        if vthread is None or not vthread.isAlive():
+          printmsg("value thread not running")
+          vthread = Thread(target=update_valuebook)
+          vthread.start()
+        if othread is None or not othread.isAlive():
+          printmsg("orderbook not running")
+          othread = Thread(target=update_orderbook)
+          othread.start()
+        if emitter is None or not emitter.isAlive():
           printmsg("emitter not running")
           emitter = Thread(target=emitter_thread)
           emitter.start()
+      except Exception as e:
+        printmsg("error in watchdog: "+str(e))
 
 def emitter_thread():
     #Send data for the connected clients
     global addresses, maxaddresses, clients, maxclients, book, balances, valuebook
     count = 0
     while True:
+      try:
         time.sleep(15)
         count += 1
         printmsg("Tracking "+str(len(addresses))+"/"+str(maxaddresses)+"(max) addresses, for "+str(clients)+"/"+str(maxclients)+"(max) clients, ran "+str(count)+" times")
@@ -105,6 +136,8 @@ def emitter_thread():
         socketio.emit('valuebook',valuebook,namespace='/balance')
         #push addressbook
         socketio.emit('address:book',balances,namespace='/balance')
+      except Exception as e:
+        printmsg("emitter error: "+str(e))
 
 @socketio.on('connect', namespace='/balance')
 def balance_connect():

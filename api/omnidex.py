@@ -36,6 +36,9 @@ def getOrderbook(lasttrade=0, lastpending=0):
         for pair in AO:
           pd=int(pair[0])
           ps=int(pair[1])
+          if 0 in [pd,ps]:
+            #skip dex 1.0 sales
+            continue
           data = get_orders_by_market(pd,ps)
           data2 = get_orders_by_market(ps,pd)
           try:
