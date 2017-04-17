@@ -26,3 +26,7 @@ D_PUBKEY = '04ec31f456cc70a60793ff2033d9d2094541a5de8cac67ab1e5b1441187c6bed1601
 
 #Blocktrail API Key (used for lookups of utxo's)
 BTAPIKEY = None
+
+#Redis Connection Info
+REDIS_HOST='localhost'
+REDIS_PORT=6379
