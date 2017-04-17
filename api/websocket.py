@@ -11,11 +11,14 @@ from balancehelper import *
 from omnidex import getOrderbook
 from values_service import getValueBook
 import config
+import redis
 
 app = Flask(__name__)
 app.debug = True
 app.config['SECRET_KEY'] = config.WEBSOCKET_SECRET
 socketio = SocketIO(app)
+r = redis.StrictRedis(host=config.REDIS_HOST, port=config.REDIS_PORT, db=0)
+
 #threads
 watchdog = None
 emitter = None
@@ -60,13 +63,21 @@ def update_orderbook():
     while True:
       time.sleep(10)
       printmsg("updating orderbook")
-      ret=getOrderbook(lasttrade, lastpending)
-      printmsg("Checking for new orderbook updates, last: "+str(lasttrade))
-      if ret['updated']:
-        orderbook=ret['book']
-        printmsg("Orderbook updated. Lasttrade: "+str(lasttrade)+" Newtrade: "+str(ret['lasttrade'])+" Book length is: "+str(len(orderbook)))
-        lasttrade=ret['lasttrade']
-        lastpending=ret['lastpending']
+      book=r.get("omniwallet:omnidex:book")
+      if book != None:
+        lasttrade = r.get("omniwallet:omnidex:lasttrade")
+        lastpending = r.get("omniwallet:omnidex:lastpending")
+        printmsg("Loading orderbook from redis.")
+        orderbook=json.loads(book)
+        printmsg("Orderbook Lasttrade: "+str(lasttrade)+" Book length is: "+str(len(orderbook)))
+      else:
+        ret=getOrderbook(lasttrade, lastpending)
+        printmsg("Checking for new orderbook updates, last: "+str(lasttrade))
+        if ret['updated']:
+          orderbook=ret['book']
+          printmsg("Orderbook updated. Lasttrade: "+str(lasttrade)+" Newtrade: "+str(ret['lasttrade'])+" Book length is: "+str(len(orderbook)))
+          lasttrade=ret['lasttrade']
+          lastpending=ret['lastpending']
   except Exception as e:
     printmsg("error updating orderbook: "+str(e))
 

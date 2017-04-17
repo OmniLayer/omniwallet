@@ -9,7 +9,7 @@ SMTPSTARTTLS = False  # Use starttls before SMTP login
 WELCOMECID = None #mailgun campaign id for welcome email stats
 
 #For wallets and session store you can switch between disk and the database
-LOCALDEVBYPASSDB = 0    #Set to 1 to use local storage/file system, Set to 0 to use database
+LOCALDEVBYPASSDB = 1    #Set to 1 to use local storage/file system, Set to 0 to use database
 
 #Used to generate challange/response hash
 SERVER_SECRET = 'SoSecret!'
@@ -26,3 +26,7 @@ D_PUBKEY = '04ec31f456cc70a60793ff2033d9d2094541a5de8cac67ab1e5b1441187c6bed1601
 
 #Blocktrail API Key (used for lookups of utxo's)
 BTAPIKEY = None
+
+#Redis Connection Info
+REDIS_HOST='localhost'
+REDIS_PORT=6379
