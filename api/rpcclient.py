@@ -138,6 +138,15 @@ def getdivisible_MP(propertyid):
 def getgrants_MP(propertyid):
     return host.call("getgrants_MP", propertyid)
 
+def gettradessince_MP():
+    return host.call("gettradessince_MP")
+
+def gettrade(txhash):
+    return host.call("omni_gettrade", txhash)
+
+def getsto_MP(txid):
+    return host.call("getsto_MP", txid , "*")
+
 def getsimplesendPayload(propertyid, amount):
     return host.call("omni_createpayload_simplesend", int(propertyid), amount)
 def getsendallPayload(ecosystem):
