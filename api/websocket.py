@@ -47,13 +47,21 @@ def update_balances():
     while True:
       time.sleep(10)
       printmsg("updating balances")
-      balances=get_bulkbalancedata(addresses)
+      balances=r.get("omniwallet:balances:balbook")
+      if balances != None:
+        printmsg("Balances loaded from redis")
+        balances=json.loads(balances)
+      else:
+        printmsg("Could not load balances from redis, falling back")
+        balances=get_bulkbalancedata(addresses)
+ 
       for addr in list(addresses):
         if addresses[addr] < 1 and addresses[addr] >= -30:
           addresses[addr] -= 1
           #cache old addresses for 5~10 minutes after user discconects
         elif addresses[addr] < -30:
           addresses.pop(addr)
+      r.set("omniwallet:balances:addresses",json.dumps(addresses))
   except Exception as e:
     printmsg("error updating balances: "+str(e))
 
@@ -213,15 +221,16 @@ def add_address(message):
       addresses[str(address)] += 1
     else:
       addresses[str(address)] = 1
+      r.set("omniwallet:balances:addresses",json.dumps(addresses))
+      #speed up initial data load
+      balance_data=get_balancedata(address)
+      emit('address:'+address,
+        balance_data,
+        namespace='/balance')
 
   if len(addresses) > maxaddresses:
     maxaddresses=len(addresses)
 
-  #speed up initial data load
-  balance_data=get_balancedata(address)
-  emit('address:'+address,
-        balance_data,
-        namespace='/balance')
 
 @socketio.on("address:refresh", namespace='/balance')
 def refresh_address(message):
