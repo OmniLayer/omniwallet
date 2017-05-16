@@ -74,7 +74,7 @@ def get_balance_response(request_dict):
   clean_list=[]
   #addr=addrs_list[0]
   for addr in addrs_list:
-    clean_list.append(re.sub(r'\W+', '', addr) #check alphanumeric
+    clean_list.append(re.sub(r'\W+', '', addr)) #check alphanumeric
 
   #addr = re.sub(r'\W+', '', addr) #check alphanumeric
   #Use new balance function call
