@@ -15,6 +15,9 @@ def get_balance_v2_response(request_dict):
       
   if len(addrs_list)<1:
       return response(none, 'must provide at least one address')
+  elif len(addrs_list)>20:
+      return response(none, 'max address supported 20')
+
   clean_list=[]
   for addr in addrs_list:
     clean_list.append(re.sub(r'\W+', '', addr)) #check alphanumeric
