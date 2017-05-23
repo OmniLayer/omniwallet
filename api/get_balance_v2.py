@@ -4,7 +4,7 @@ import json
 from debug import *
 from balancehelper import *
 
-def get_balance_response(request_dict):
+def get_balance_v2_response(request_dict):
   import re
   print "get_balance_response(request_dict)",request_dict
 
@@ -21,6 +21,6 @@ def get_balance_response(request_dict):
 
   return (json.dumps( get_bulkbalancedata(clean_list) ), None)
 
-def get_balance_handler(environ, start_response):
-  return general_handler(environ, start_response, get_balance_response)
+def get_balance_v2_handler(environ, start_response):
+  return general_handler(environ, start_response, get_balance_v2_response)
 
