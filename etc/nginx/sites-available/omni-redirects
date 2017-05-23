@@ -65,6 +65,12 @@
         uwsgi_param UWSGI_CALLABLE   "${app}_handler";
 
         set $PORT 1088;
+        location /v2/address/addr/ {
+                add_header Access-Control-Allow-Origin *;
+                set   $app   get_balance_v2;
+                uwsgi_pass   127.0.0.1:$PORT;
+        }
+
         location /v1/address/addr/ {
                 add_header Access-Control-Allow-Origin *;
                 set   $app   get_balance;
