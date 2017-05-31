@@ -181,7 +181,6 @@ angular.module("omniControllers")
 
 		  $scope.isCancel=true;
 		  $scope.confirmCancel = function(tx) {
-		    var go = false;
 		    sendingAddress = $scope.wallet.getAddress(tx.from_address);
 		    sendingAddress.estimateFee().then(function(result){
                                         $scope.feeData=result;
