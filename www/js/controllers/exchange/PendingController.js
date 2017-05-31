@@ -38,7 +38,7 @@ angular.module("omniControllers")
 		  $scope.currencyUnit = 'stom'
 		  $scope.pendingThinking = true
 		  $scope.hasAddressesWithPrivkey = $scope.wallet.addresses.filter(function(address){
-		    return address.privkey && address.privkey.length == 58
+		    return (address.privkey && address.privkey.length == 58) || (address.pubkey && address.pubkey.length > 65);
 		  }).map(function(e){
 		          return e.hash;
 		        });
@@ -181,30 +181,46 @@ angular.module("omniControllers")
 
 		  $scope.isCancel=true;
 		  $scope.confirmCancel = function(tx) {
-		  	var fee = new Big(0.0001);
-	        var exchangeCancel = new Transaction(20,$scope.wallet.getAddress(tx.from_address),fee,{
-	            transaction_version:1,
-	            amount_for_sale: 0,
-	            amount_desired: 0,
-	            min_buyer_fee: 0,
-	            blocks: 10,
-	            currency_identifier: tx.currencyId,
-	            action:3,
-	            donate: $scope.account.getSetting("donate")
-	          });
+		    var go = false;
+		    sendingAddress = $scope.wallet.getAddress(tx.from_address);
+		    sendingAddress.estimateFee().then(function(result){
+                                        $scope.feeData=result;
+                                        if($scope.feeType != 'custom'){
+                                                $scope.minersFee = new Big(result.class_c[$scope.feeType]);
+                                                $scope.topupAmount = new Big(result.topup_c[$scope.feeType]);
+                                        }
+					$scope.omniAnnounce = true;
+					$scope.buttonOverride = 'COMMON.NEXT';
+					$scope.modalManager.openTransactionCostModal($scope, function(){$scope.sendCancel(tx);} );
+                                  });
+		  };
 
+		  $scope.sendCancel = function(tx) {
+			//var fee = new Big(0.0001);
+			var fee = $scope.minersFee;
+			var exchangeCancel = new Transaction(20,$scope.wallet.getAddress(tx.from_address),fee,{
+			  transaction_version:1,
+			  amount_for_sale: 0,
+			  amount_desired: 0,
+			  min_buyer_fee: 0,
+			  blocks: 10,
+			  currency_identifier: tx.currencyId,
+			  action:3,
+			  donate: $scope.account.getSetting("donate")
+			});
 
-	        $scope.modalManager.openConfirmationModal({
-	          dataTemplate: '/views/modals/partials/cancel.html',
-	          scope:{
-	            title:"EXCHANGE.MYOFFERS.CANCELTITLE",
-	            confirmText:"EXCHANGE.MYOFFERS.CANCELCONFIRM",
-	            explorerUrl:ADDRESS_EXPLORER_URL,
-	            successRedirect:"/exchange/myoffers"
-	          },
-	          transaction:exchangeCancel
-	        })
-		  }
+			$scope.modalManager.openConfirmationModal({
+			  dataTemplate: '/views/modals/partials/cancel.html',
+			  scope:{
+			    title:"EXCHANGE.MYOFFERS.CANCELTITLE",
+			    confirmText:"EXCHANGE.MYOFFERS.CANCELCONFIRM",
+		            explorerUrl:ADDRESS_EXPLORER_URL,
+		            successRedirect:"/exchange/myoffers",
+			    minersFee: fee
+		          },
+		          transaction:exchangeCancel
+			})
+		  };
 
 		  $scope.sendTransaction = function(){
 			// TODO: Validations
