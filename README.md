@@ -474,11 +474,8 @@ HTTP GET ``/v1/system/revision.json``
 Returns:
 ```
 {
-	"commit_hexsha": "c030d61e6e7d91c2149a7af8af6bca70e7c0638f", 
-	"commit_time": "20140131", 
 	"last_block": 284634, 
 	"last_parsed": "07 Feb 2014 15:48:39 GMT", 
-	"url": "https://github.com/grazcoin/mastercoin-tools/commit/c030d61e6e7d91c2149a7af8af6bca70e7c0638f"
 }
 ```
 
