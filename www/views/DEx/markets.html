@@ -6,6 +6,14 @@
       </div>
       <div class="col-xs-9 col-sm-9 col-md-8 col-lg-8 text-right" ng-include="'/views/assets/partials/form_ecosystem.html'"></div>
     </div>
+
+    <div class=" alert alert-warning alert-dismissable">
+       <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+       <strong>Please Read:</strong>
+       <a href="https://github.com/OmniLayer/omniwallet/wiki/Understanding-Property-Names-and-IDs-on-the-OmniDex" target="_blank">
+       Understanding Property Names and IDs on the OmniDex.</a>
+    </div>
+
     <div ng-init="loadDesignatingCurrencies()">
       <div class="form-group col-sm-12">
         <label for="base">Market Currency</label>
@@ -36,7 +44,7 @@
               </div>
               <div class="visible-xs col-xs-7">{{ 'OMNIDEX.MARKETS.SYMBOL' | translate}}</div>
               <div class="col-xs-5 col-sm-2">
-                #{{market.propertyid}}
+                <a href="https://www.omniwallet.org/assets/details/{{market.propertyid}}" target="_blank">#{{market.propertyid}}</a>
               </div>
               <div class="visible-xs col-xs-7">{{ 'OMNIDEX.MARKETS.NAME' | translate}}</div>
               <div class="col-xs-5 col-sm-3 text-left">
