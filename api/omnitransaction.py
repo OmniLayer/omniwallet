@@ -40,19 +40,20 @@ class OmniTransaction:
     def get_unsigned(self):
         # get payload
         payload = self.__generate_payload()
-        # Add exodous output
+        #initialize values
         rawtx = None
+        fee_total = Decimal(self.fee)
+
         if 'transaction_to' in self.rawdata:
             # Add reference for reciever to figure out potential tx cost
             rawtx = createrawtx_reference(self.rawdata['transaction_to'], rawtx)['result']
 
-        # Decode transaction to get total needed amount
-        decodedtx = decoderawtransaction(rawtx)['result']
+            # Decode transaction to get total needed amount
+            decodedtx = decoderawtransaction(rawtx)['result']
 
-        # Sum up the outputs
-        fee_total = Decimal(self.fee)
-        for output in decodedtx['vout']:
-            fee_total += Decimal(output['value'])
+            # Sum up the outputs
+            for output in decodedtx['vout']:
+                fee_total += Decimal(output['value'])
 
         # Determine size of payload for multisig if necessary
         if len(payload) > 152:  #80bytes - 4 bytes for omni marker
@@ -61,7 +62,6 @@ class OmniTransaction:
             decodedtx = decoderawtransaction(rawtx)['result']
 
             # Sum up the outputs
-            fee_total = Decimal(self.fee)
             for output in decodedtx['vout']:
               fee_total += Decimal(output['value'])
 
