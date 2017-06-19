@@ -39,7 +39,7 @@ class RPCHost():
         hadConnectionFailures = False
         while True:
             try:
-                response = self._session.get(self._url, headers=self._headers, data=payload, verify=False)
+                response = self._session.post(self._url, headers=self._headers, data=payload, verify=False)
             except requests.exceptions.ConnectionError:
                 tries -= 1
                 if tries == 0:

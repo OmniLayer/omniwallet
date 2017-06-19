@@ -40,26 +40,32 @@ class OmniTransaction:
     def get_unsigned(self):
         # get payload
         payload = self.__generate_payload()
-        # Add exodous output
+        #initialize values
         rawtx = None
+        fee_total = Decimal(self.fee)
+
         if 'transaction_to' in self.rawdata:
-            # Add reference for reciever
+            # Add reference for reciever to figure out potential tx cost
             rawtx = createrawtx_reference(self.rawdata['transaction_to'], rawtx)['result']
 
-        # Add the payload    
-        if len(payload) <= 152:  #80bytes - 4 bytes for omni marker
-            rawtx = createrawtx_opreturn(payload, rawtx)['result']
-        else:
+            # Decode transaction to get total needed amount
+            decodedtx = decoderawtransaction(rawtx)['result']
+
+            # Sum up the outputs
+            for output in decodedtx['vout']:
+                fee_total += Decimal(output['value'])
+
+        # Determine size of payload for multisig if necessary
+        if len(payload) > 152:  #80bytes - 4 bytes for omni marker
+            rawtx = None
             rawtx = createrawtx_multisig(payload, self.rawdata['transaction_from'], self.pubkey, rawtx)['result']
+            decodedtx = decoderawtransaction(rawtx)['result']
 
-        # Decode transaction to get total needed amount
-        decodedtx = decoderawtransaction(rawtx)['result']
+            # Sum up the outputs
+            for output in decodedtx['vout']:
+              fee_total += Decimal(output['value'])
 
-        # Sumup the outputs
-        fee_total = Decimal(self.fee)
-        for output in decodedtx['vout']:
-            fee_total += Decimal(output['value'])
-
+        #get total fee in satoshis
         fee_total_satoshi = int( round( fee_total * Decimal(1e8) ) )
 
         # Get utxo to generate inputs
@@ -85,6 +91,8 @@ class OmniTransaction:
         hash160=bc_address_to_hash_160(self.rawdata['transaction_from']).encode('hex_codec')
         prevout_script='OP_DUP OP_HASH160 ' + hash160 + ' OP_EQUALVERIFY OP_CHECKSIG'
 
+        #reset tx to create it proper from scratch
+        rawtx=None
         validnextinputs = []   #get valid redeemable inputs
         for unspent in unspent_tx:
             #retrieve raw transaction to spend it
@@ -99,6 +107,17 @@ class OmniTransaction:
         # Add the inputs
         for input in validnextinputs:
             rawtx = createrawtx_input(input['txid'],input['vout'],rawtx)['result']
+
+
+        if 'transaction_to' in self.rawdata:
+            # Add reference for reciever
+            rawtx = createrawtx_reference(self.rawdata['transaction_to'], rawtx)['result']
+
+        # Add the payload    
+        if len(payload) <= 152:  #80bytes - 4 bytes for omni marker
+            rawtx = createrawtx_opreturn(payload, rawtx)['result']
+        else:
+            rawtx = createrawtx_multisig(payload, self.rawdata['transaction_from'], self.pubkey, rawtx)['result']
 
         # Add the change
         rawtx = createrawtx_change(rawtx, validnextinputs, self.rawdata['transaction_from'], float(self.fee))['result']
