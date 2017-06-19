@@ -91,6 +91,7 @@ class OmniTransaction:
         hash160=bc_address_to_hash_160(self.rawdata['transaction_from']).encode('hex_codec')
         prevout_script='OP_DUP OP_HASH160 ' + hash160 + ' OP_EQUALVERIFY OP_CHECKSIG'
 
+        #reset tx to create it proper from scratch
         rawtx=None
         validnextinputs = []   #get valid redeemable inputs
         for unspent in unspent_tx:
