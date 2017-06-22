@@ -3,9 +3,11 @@
    		"ACTIONS":"操作",
 		"ADDRESS":"地址",
 		"AVAILABLE":"有效的",
+		"SENDABLE":"sendable",
 		"BALANCE":"余额",
 		"BITCOIN":"比特币",
    		"BROADCAST":"发布交易",
+		"SIGNMSG":"Sign Message",
    		"OVERVIEW":"总览",
    		"REMOVEADDRESS":"从钱包移除",
 		"ADDRESSES":"地址",
@@ -240,11 +242,19 @@
 		},
 		"BROADCAST":{
 			"TITLE":"Broadcast Signed Transaction",
-			"INSTRUCTIONS":"Please copy the signed transaction on the textbox below to broadcastit",
+			"INSTRUCTIONS":"Please copy the signed transaction into the textbox below to broadcast it",
 			"ADDRESS":"Broadcasting Address",
 			"SIGNED":"Signed Armory Transaction",
 			"SUCCESS":"Transaction broadcasted successfully",
 			"FAIL":"Transaction failed to broadcast"
+		},
+		"SIGNMSG":{
+			"TITLE":"Sign Message",
+			"INSTRUCTIONS":"Enter your message below and click sign, to sign it with the signing address",
+			"ADDRESS":"Signing Address",
+			"SIGNED":"Signed Message",
+			"SUCCESS":"Message signed successfully",
+			"FAIL":"Could not sign message"
 		},
 		"IMPORT":{
 			"VALID":"Must be a valid Bitcoin address",
