@@ -9,7 +9,7 @@ SMTPSTARTTLS = False  # Use starttls before SMTP login
 WELCOMECID = None #mailgun campaign id for welcome email stats
 
 #For wallets and session store you can switch between disk and the database
-LOCALDEVBYPASSDB = 1    #Set to 1 to use local storage/file system, Set to 0 to use database
+LOCALDEVBYPASSDB = 0    #Set to 1 to use local storage/file system, Set to 0 to use database
 
 #Used to generate challange/response hash
 SERVER_SECRET = 'SoSecret!'
