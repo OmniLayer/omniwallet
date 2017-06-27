@@ -17,7 +17,7 @@ app = Flask(__name__)
 app.debug = True
 app.config['SECRET_KEY'] = config.WEBSOCKET_SECRET
 socketio = SocketIO(app)
-r = redis.StrictRedis(host=config.REDIS_HOST, port=config.REDIS_PORT, db=config.REDIS_PORT)
+r = redis.StrictRedis(host=config.REDIS_HOST, port=config.REDIS_PORT, db=config.REDIS_DB)
 
 #threads
 watchdog = None
