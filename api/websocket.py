@@ -17,7 +17,7 @@ app = Flask(__name__)
 app.debug = True
 app.config['SECRET_KEY'] = config.WEBSOCKET_SECRET
 socketio = SocketIO(app)
-r = redis.StrictRedis(host=config.REDIS_HOST, port=config.REDIS_PORT, db=0)
+r = redis.StrictRedis(host=config.REDIS_HOST, port=config.REDIS_PORT, db=config.REDIS_PORT)
 
 #threads
 watchdog = None
@@ -47,7 +47,7 @@ def update_balances():
     while True:
       time.sleep(10)
       printmsg("updating balances")
-      balances=r.get("omniwallet:balances:balbook")
+      balances=r.get("omniwallet:balances:balbook"+str(config.REDIS_ADDRSPACE))
       if balances != None:
         printmsg("Balances loaded from redis")
         balances=json.loads(balances)
@@ -61,7 +61,7 @@ def update_balances():
           #cache old addresses for 5~10 minutes after user discconects
         elif addresses[addr] < -30:
           addresses.pop(addr)
-      r.set("omniwallet:balances:addresses",json.dumps(addresses))
+      r.set("omniwallet:balances:addresses"+str(config.REDIS_ADDRSPACE),json.dumps(addresses))
   except Exception as e:
     printmsg("error updating balances: "+str(e))
 
@@ -221,7 +221,7 @@ def add_address(message):
       addresses[str(address)] += 1
     else:
       addresses[str(address)] = 1
-      r.set("omniwallet:balances:addresses",json.dumps(addresses))
+      r.set("omniwallet:balances:addresses"+str(config.REDIS_ADDRSPACE),json.dumps(addresses))
       #speed up initial data load
       balance_data=get_balancedata(address)
       emit('address:'+address,
