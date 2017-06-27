@@ -2,7 +2,8 @@ import urlparse
 import os, sys, re, random,pybitcointools, bitcoinrpc, math, hashlib
 from decimal import Decimal
 from flask import Flask, request, jsonify, abort, json, make_response
-from msc_apps import *
+#from msc_apps import *
+from rpcclient import *
 tools_dir = os.environ.get('TOOLSDIR')
 lib_path = os.path.abspath(tools_dir)
 sys.path.append(lib_path)
@@ -13,7 +14,7 @@ from armoryengine.ALL import *
 
 app = Flask(__name__)
 app.debug = True
-conn = getRPCconn()
+#conn = getRPCconn()
 
 @app.route('/getunsigned', methods=['POST'])
 def generate_unsigned():
@@ -27,7 +28,7 @@ def generate_unsigned():
     except KeyError, e:
         tnet_ = 0
     #Translate raw txn
-    decoded_tx = conn.decoderawtransaction(unsigned_hex)
+    decoded_tx = decoderawtransaction(unsigned_hex)['result']
     #spending_txid= decoded_tx['vin'][0]['txid']
     #spending_tx_raw = conn.getrawtransaction(spending_txid, False)
     #spending_tx_decoded = conn.decoderawtransaction(spending_tx_raw)
@@ -44,8 +45,8 @@ def generate_unsigned():
     i_k = []
     for intx in decoded_tx['vin']:
       spending_txid= intx['txid']
-      spending_tx_raw = conn.getrawtransaction(spending_txid, False)
-      spending_tx_decoded = conn.decoderawtransaction(spending_tx_raw)
+      spending_tx_raw = getrawtransaction(spending_txid)['result']['hex']
+      spending_tx_decoded = decoderawtransaction(spending_tx_raw)['result']
       i_vout = -1
       for each in spending_tx_decoded['vout']:
         info=each['scriptPubKey']['asm'].split(' ')
@@ -73,7 +74,7 @@ def generate_unsigned():
                        'magicbytes': tnet,
                        'p2shscript': '',
                        'txoutscript': o['scriptPubKey']['hex'],
-                       'txoutvalue': int( o['value'] * Decimal(1e8) ),
+                       'txoutvalue': int( Decimal(o['value']) * Decimal(1e8) ),
                        'version': 1,
                        'wltlocator': ''}) 
 

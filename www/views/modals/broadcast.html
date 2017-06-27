@@ -13,15 +13,15 @@
         <textarea rows="16" class="form-control input-sm" ng-model="transaction.signedHex" id="signedtx"></textarea>
       </div>
     </div>
-</div>
-<div class="modal-footer">
+  </div>
+  <div class="modal-footer">
     <div class="row" ng-hide="transactionSuccess">
       <button ng-disabled="clicked" class="btn btn-main" ng-click="ok(transaction.signedHex)">{{ 'MODALS.CONFIRM.BROADCAST' | translate}}</button>
       <button ng-disabled="wating" class="btn btn-tertiary" ng-click="cancel()">{{ 'COMMON.CANCEL' | translate}}</button>
       <img class="" src="/assets/img/spinner.gif" ng-show="waiting">
     </div>
       <br>
-    <div class="row">
+    <div>
       <div ng-show="transactionSuccess">
         <h4 class="pull-left" style="color:green"> {{ 'MODALS.BROADCAST.SUCCESS' | translate}} <a target="_blank" href="{{url}}">{{ 'MODALS.CONFIRM.HERE' | translate }}.</a></h4>
         <a href="/wallet/overview">

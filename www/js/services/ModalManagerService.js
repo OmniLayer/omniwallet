@@ -239,6 +239,44 @@ angular.module("omniServices")
               });
           };
 
+
+          self.openSignMessage = function(address) {
+              self.modalInstance = $modal.open({
+                  templateUrl: "/views/modals/sign.html",
+                  controller: function SignmsgModalController($scope, $modalInstance, address) {
+                      $scope.signAddress = address.hash;
+
+                      $scope.ok = function(msg) {
+                          signature = address.signMsg(msg);
+                          if (typeof signature == 'undefined') {
+                             $scope.messageError = true;
+                             $scope.messageSuccess = false;
+                           } else {
+                             $scope.messageSuccess = true;
+                             $scope.messageError = false;
+                             $scope.signature = signature;
+                           }
+                      };
+
+                      $scope.cancel = function() {
+                          $modalInstance.dismiss('cancel');
+                          self.modalInstance = null;
+                      };
+
+                      $scope.close = function() {
+                          $modalInstance.dismiss('close');
+                          self.modalInstance = null;
+                      };
+                  },
+                  resolve: {
+                    address: function() {
+                          return address;
+                      }
+                  }
+              });
+          };
+
+
           self.openBackupWalletModal = function() {
               var exportScope = $rootScope.$new();
               exportScope.exportInProgress=false;

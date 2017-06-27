@@ -4,9 +4,11 @@ angular.module("omniConfig")
    		"ACTIONS":"Actions",
 		"ADDRESS":"Address",
 		"AVAILABLE":"available",
+		"SENDABLE":"sendable",
 		"BALANCE":"Balance",
 		"BITCOIN":"Bitcoin",
    		"BROADCAST":"Broadcast Transaction",
+		"SIGNMSG":"Sign Message",
    		"OVERVIEW":"Overview",
    		"REMOVEADDRESS":"Remove from Wallet",
 		"ADDRESSES":"Addresses",
@@ -240,11 +242,19 @@ angular.module("omniConfig")
 		},
 		"BROADCAST":{
 			"TITLE":"Broadcast Signed Transaction",
-			"INSTRUCTIONS":"Please copy the signed transaction on the textbox below to broadcastit",
+			"INSTRUCTIONS":"Please copy the signed transaction into the textbox below to broadcast it",
 			"ADDRESS":"Broadcasting Address",
 			"SIGNED":"Signed Armory Transaction",
 			"SUCCESS":"Transaction broadcasted successfully",
 			"FAIL":"Transaction failed to broadcast"
+		},
+		"SIGNMSG":{
+			"TITLE":"Sign Message",
+			"INSTRUCTIONS":"Enter your message below and click sign, to sign it with the signing address",
+			"ADDRESS":"Signing Address",
+			"SIGNED":"Signed Message",
+			"SUCCESS":"Message signed successfully",
+			"FAIL":"Could not sign message"
 		},
 		"IMPORT":{
 			"VALID":"Must be a valid Bitcoin address",
