@@ -49,6 +49,7 @@ def get_balancedata(address):
           if err != None or out == '':
             #btc_balance[ 'value' ] = str(long(-555))
             btc_balance[ 'value' ] = str(long(0))
+            btc_balance[ 'error' ] = True
           else:
             try:
               if balrow[4] < 0:
@@ -62,6 +63,7 @@ def get_balancedata(address):
             except ValueError:
               #btc_balance[ 'value' ] = str(long(-555))
               btc_balance[ 'value' ] = str(long(0))
+              btc_balance[ 'error' ] = True
         else:
           #get regular balance from db
           if balrow[4] < 0:
@@ -80,10 +82,11 @@ def get_balancedata(address):
         addbtc=False
 
     if addbtc:
-      btc_balance = { 'symbol': 'BTC', 'divisible': True, 'id' : 0 }
+      btc_balance = { 'symbol': 'BTC', 'divisible': True, 'id' : 0, 'error' : False }
       if err != None or out == '':
         #btc_balance[ 'value' ] = str(long(-555))
         btc_balance[ 'value' ] = str(long(0))
+        btc_balance[ 'error' ] = True
       else:
         try:
           #btc_balance[ 'value' ] = str(long( json.loads( out )[0][ 'paid' ]))
@@ -92,6 +95,7 @@ def get_balancedata(address):
         except ValueError:
           #btc_balance[ 'value' ] = str(long(-555))
           btc_balance[ 'value' ] = str(long(0))
+          btc_balance[ 'error' ] = True
       btc_balance['pendingpos'] = str(long(0))
       btc_balance['pendingneg'] = str(long(0))
       balance_data['balance'].append(btc_balance)
@@ -160,6 +164,7 @@ def get_bulkbalancedata(addresses):
           if err != None or out == '':
             #btc_balance[ 'value' ] = str(long(-555))
             btc_balance[ 'value' ] = str(long(0))
+            btc_balance[ 'error' ] = True
           else:
             try:
               if balrow[4] < 0:
@@ -171,6 +176,7 @@ def get_bulkbalancedata(addresses):
             except ValueError:
               #btc_balance[ 'value' ] = str(long(-555))
               btc_balance[ 'value' ] = str(long(0))
+              btc_balance[ 'error' ] = True
         else:
           #get regular balance from db
           if balrow[4] < 0:
@@ -189,10 +195,11 @@ def get_bulkbalancedata(addresses):
           addbtc=False
 
       if addbtc:
-        btc_balance = { 'symbol': 'BTC', 'divisible': True, 'id' : 0 }
+        btc_balance = { 'symbol': 'BTC', 'divisible': True, 'id' : 0 ,'error' : False}
         if err != None or out == '':
           #btc_balance[ 'value' ] = str(long(-555))
           btc_balance[ 'value' ] = str(long(0))
+          btc_balance[ 'error' ] = True
         else:
           try:
             #btc_balance[ 'value' ] = str(long( json.loads( out )[0][ 'paid' ]))
@@ -200,6 +207,7 @@ def get_bulkbalancedata(addresses):
           except ValueError:
             #btc_balance[ 'value' ] = str(long(-555))
             btc_balance[ 'value' ] = str(long(0))
+            btc_balance[ 'error' ] = True
         btc_balance['pendingpos'] = str(long(0))
         btc_balance['pendingneg'] = str(long(0))
         balance_data['balance'].append(btc_balance)
