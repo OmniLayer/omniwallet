@@ -44,7 +44,10 @@ def pushtx_response(response_dict):
     response=pushtxnode(signed_tx)
 
     if "NOTOK" not in response:
-      insertpending(signed_tx)
+      try:
+        insertpending(signed_tx)
+      except Exception as e:
+        print "error inserting pending tx"+str(e)
     
     print signed_tx,'\n', response
     return (response, None)
@@ -100,6 +103,7 @@ def pushtx(signed_tx):
     
     # broadcast
     ret=broadcast_tx(f.name)
+    #ret=None
     if ret != None:
         return ret
     else:
