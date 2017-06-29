@@ -28,5 +28,9 @@ D_PUBKEY = '04ec31f456cc70a60793ff2033d9d2094541a5de8cac67ab1e5b1441187c6bed1601
 BTAPIKEY = None
 
 #Redis Connection Info
-REDIS_HOST='localhost'
+REDIS_HOST='127.0.0.1'
 REDIS_PORT=6379
+REDIS_DB=0
+#Use if you want custom address namespace (multiple servers on same box)
+#Must prefix custom name with :  example ":stage"
+REDIS_ADDRSPACE=""
