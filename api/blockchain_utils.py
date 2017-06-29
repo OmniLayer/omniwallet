@@ -4,6 +4,7 @@ import decimal
 import json
 from config import BTAPIKEY
 from rpcclient import gettxout
+from cacher import *
 
 def bc_getutxo(address, ramount, page=1, retval=None, avail=0):
   if retval==None:
@@ -97,7 +98,17 @@ def bc_getpubkey(address):
     return "error"
 
 def bc_getbalance(address):
-  return bc_getbalance_bitgo(address)
+  try:
+    balance=rGet("omniwallet:balances:"+str(address))
+    balance=json.loads(balance)
+    if balance['error']:
+      raise LookupError("Not cached")
+  except Exception as e:
+    balance = bc_getbalance_bitgo(address)
+    #cache btc balance for 2.5 minutes
+    rSet("omniwallet:balances:"+str(address),json.dumps(balance))
+    rExpire("omniwallet:balances:"+str(address),150)
+  return balance
 
 def bc_getbalance_bitgo(address):
   try:
@@ -136,19 +147,32 @@ def bc_getbulkbalance(addresses):
   try:
     #get bulk data from blockonomics
     list=""
+    cbdata={}
     for a in addresses:
-      if list == "":
-        list = a
-      else:
-        list += " "+a
-
-    baldata=bc_getbulkbalance_blockonomics(list)
+      try:
+        cb=rGet("omniwallet:balances:"+str(a))
+        cb=json.loads(cb)
+        if cb['error']:
+          raise LookupError("Not cached")
+        else:
+          cbdata[a]=cb['bal']
+      except Exception as e:
+        if list == "":
+          list = a
+        else:
+          list += " "+a
+    if (len(list) > 0):
+      data=bc_getbulkbalance_blockonomics(list)
+      baldata={'bal':dict(data['bal'],**cbdata),'error':data['error'], 'fresh':list}
+    else:
+      baldata={'bal':cbdata,'error':None, 'fresh':list}
   except Exception as e:
     print "Error getting bulk data from blockonomics"+str(e)+str(" ")+str(baldata)
     baldata={"bal": None , "error": True}
 
   try:
     if not baldata['error']:
+      rSetNotUpdateBTC(baldata)
       return baldata['bal']
     else:
       #if blockonomics lookup fails get from blockr
