@@ -149,6 +149,11 @@ angular.module("omniFactories")
                                     return signature;
                                 }
 
+                                self.genPubkey = function() {
+                                    var pubkey = Bitcoin.ECKey.decodeEncryptedFormat(self.privkey, self.hash).getPubKeyHex();
+                                    return pubkey;
+                                }
+
 				self.initialize();
 			}
 
