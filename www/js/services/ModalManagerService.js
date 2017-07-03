@@ -240,6 +240,37 @@ angular.module("omniServices")
           };
 
 
+          self.getPubkey = function(address) {
+              self.modalInstance = $modal.open({
+                  templateUrl: "/views/modals/pubkey.html",
+                  controller: function ShowpubkeyModalController($scope, $modalInstance, address) {
+                      $scope.address = address.hash;
+                      $scope.pubkey = address.genPubkey();
+
+                      $scope.ok = function(msg) {
+                          $modalInstance.dismiss('close');
+                          self.modalInstance = null;
+                      };
+
+                      $scope.cancel = function() {
+                          $modalInstance.dismiss('cancel');
+                          self.modalInstance = null;
+                      };
+
+                      $scope.close = function() {
+                          $modalInstance.dismiss('close');
+                          self.modalInstance = null;
+                      };
+                  },
+                  resolve: {
+                    address: function() {
+                          return address;
+                      }
+                  }
+              });
+          };
+
+
           self.openSignMessage = function(address) {
               self.modalInstance = $modal.open({
                   templateUrl: "/views/modals/sign.html",

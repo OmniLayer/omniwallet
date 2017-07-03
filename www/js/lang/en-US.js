@@ -39,7 +39,8 @@ angular.module("omniConfig")
 		"ERROR":"Error",
 		"MFA":"MFA Code",
 		"RESET":"Reset",
-		"MY":"My"
+		"MY":"My",
+		"PUBKEY":"Pubkey"
 	},
 	"SETTINGS":{
 		"TITLE":"Account Settings",
