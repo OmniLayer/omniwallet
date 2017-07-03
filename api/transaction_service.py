@@ -34,7 +34,7 @@ def estimatefees(addr):
     cbb=4410
 
     #Class C tx: output base cost
-    ccb=2730
+    ccb=5460
 
     ins=1
     outs=2
