@@ -1,6 +1,7 @@
 from decode import *
 from sqltools import *
 import decimal
+from cacher import *
 
 def insertpending(txhex):
 
@@ -40,6 +41,7 @@ def insertbtc(rawtx):
       dbExecute("insert into addressesintxs (address,propertyid,protocol,txdbserialnum,addresstxindex,addressrole,balanceavailablecreditdebit) "
                 "values(%s,%s,%s,%s,%s,%s,%s)", (address,propertyid,protocol,txdbserialnum,addresstxindex,addressrole,inputamount))
       addresstxindex+=1
+      rDelete("omniwallet:balances:"+str(address))
 
 
     addresstxindex = 0
@@ -51,6 +53,7 @@ def insertbtc(rawtx):
            address=addr
            dbExecute("insert into addressesintxs (address,propertyid,protocol,txdbserialnum,addresstxindex,addressrole,balanceavailablecreditdebit) "
                      "values(%s,%s,%s,%s,%s,%s,%s)", (address,propertyid,protocol,txdbserialnum,addresstxindex,addressrole,outputamount))
+           rDelete("omniwallet:balances:"+str(address))
         addresstxindex+=1
 
     #store signed tx until it confirms
