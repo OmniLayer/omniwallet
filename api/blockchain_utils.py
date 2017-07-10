@@ -18,7 +18,7 @@ def bc_getutxo(address, ramount, page=1, retval=None, avail=0):
       for tx in unspents:
         txUsed=gettxout(tx['hash'],tx['index'])
         isUsed = ('result' in txUsed and txUsed['result']==None)
-        if tx['confirmations'] > 0 and not isUsed and tx['multisig']==None:
+        if not isUsed and txUsed['result']['confirmations'] > 0 and tx['multisig']==None:
           avail += tx['value']
           retval.append([ tx['hash'], tx['index'], tx['value'] ])
           if avail >= ramount:
