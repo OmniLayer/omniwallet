@@ -164,8 +164,8 @@ def update():
   token=request.form['mfatoken'] if 'mfatoken' in request.form else None
   action=request.form['mfaaction'] if 'mfaaction' in request.form else None
 
-  question=str(request.form['question'])[:64] if 'question' in request.form else None
-  answer=str(request.form['answer'])[:32] if 'answer' in request.form else None
+  question=unicode(str(request.form['question'])[:64],errors='replace') if 'question' in request.form else None
+  answer=unicode(str(request.form['answer'])[:32],errors='replace') if 'answer' in request.form else None
 
   if config.LOCALDEVBYPASSDB:
     session_challenge = session + "_challenge"
