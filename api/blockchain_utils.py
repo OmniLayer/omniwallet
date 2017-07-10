@@ -99,15 +99,15 @@ def bc_getpubkey(address):
 
 def bc_getbalance(address):
   try:
-    balance=rGet("omniwallet:balances:"+str(address))
+    balance=rGet("omniwallet:balances:address:"+str(address))
     balance=json.loads(balance)
     if balance['error']:
       raise LookupError("Not cached")
   except Exception as e:
     balance = bc_getbalance_bitgo(address)
     #cache btc balance for 2.5 minutes
-    rSet("omniwallet:balances:"+str(address),json.dumps(balance))
-    rExpire("omniwallet:balances:"+str(address),150)
+    rSet("omniwallet:balances:address:"+str(address),json.dumps(balance))
+    rExpire("omniwallet:balances:address:"+str(address),150)
   return balance
 
 def bc_getbalance_bitgo(address):
@@ -150,7 +150,7 @@ def bc_getbulkbalance(addresses):
     cbdata={}
     for a in addresses:
       try:
-        cb=rGet("omniwallet:balances:"+str(a))
+        cb=rGet("omniwallet:balances:address:"+str(a))
         cb=json.loads(cb)
         if cb['error']:
           raise LookupError("Not cached")
