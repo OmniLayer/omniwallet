@@ -18,7 +18,7 @@ def bc_getutxo(address, ramount, page=1, retval=None, avail=0):
       for tx in unspents:
         txUsed=gettxout(tx['hash'],tx['index'])
         isUsed = ('result' in txUsed and txUsed['result']==None)
-        if not isUsed and txUsed['result']['confirmations'] > 0 and tx['multisig']==None:
+        if tx['confirmations'] > 0 and not isUsed and tx['multisig']==None:
           avail += tx['value']
           retval.append([ tx['hash'], tx['index'], tx['value'] ])
           if avail >= ramount:
@@ -144,67 +144,80 @@ def bc_getbalance_blockr(address):
       return {"bal": 0 , "error": "Couldn't get balance"}
 
 def bc_getbulkbalance(addresses):
-  try:
-    #get bulk data from blockonomics
-    list=""
-    cbdata={}
-    for a in addresses:
+  split=[]
+  recurse=[]
+  counter=0
+  retval={}
+  cbdata={}
+  for a in addresses:
+    try:
+      cb=rGet("omniwallet:balances:address:"+str(a))
+      cb=json.loads(cb)
+      if cb['error']:
+        raise LookupError("Not cached")
+      else:
+        cbdata[a]=cb['bal']
+    except Exception as e:
+      if counter < 20:
+        split.append(a)
+      else:
+        recurse.append(a)
+      counter+=1
+
+  if len(split)==0:
+    if len(cbdata) > 0:
+      retval={'bal':cbdata, 'fresh':None}
+    else:
+      retval={'bal':{}, 'fresh':None}
+  else:
+    try:
+      data=bc_getbulkbalance_blockonomics(split)
+      if data['error']:
+        raise Exception("issue getting blockonomics baldata",data)
+      else:
+        retval={'bal':dict(data['bal'],**cbdata), 'fresh':split}
+    except Exception as e:
+      print e
       try:
-        cb=rGet("omniwallet:balances:address:"+str(a))
-        cb=json.loads(cb)
-        if cb['error']:
-          raise LookupError("Not cached")
+        data=bc_getbulkbalance_blockchain(split)
+        if data['error']:
+          raise Exception("issue getting blockchain baldata",data)
         else:
-          cbdata[a]=cb['bal']
+          retval={'bal':dict(data['bal'],**cbdata), 'fresh':split}
       except Exception as e:
-        if list == "":
-          list = a
-        else:
-          list += " "+a
-    if (len(list) > 0):
-      data=bc_getbulkbalance_blockonomics(list)
-      baldata={'bal':dict(data['bal'],**cbdata),'error':data['error'], 'fresh':list}
-    else:
-      baldata={'bal':cbdata,'error':None, 'fresh':list}
-  except Exception as e:
-    print "Error getting bulk data from blockonomics"+str(e)+str(" ")+str(baldata)
-    baldata={"bal": None , "error": True}
+        print e
+        try:
+          data=bc_getbulkbalance_blockr(split)
+          if data['error']:
+            raise Exception("issue getting blockr baldata",data)
+          else:
+            retval={'bal':dict(data['bal'],**cbdata), 'fresh':split}
+        except Exception as e:
+          print e
+          if len(cbdata) > 0:
+            retval={'bal':cbdata, 'fresh':None}
+          else:
+            retval={'bal':{}, 'fresh':None}
 
-  try:
-    if not baldata['error']:
-      rSetNotUpdateBTC(baldata)
-      return baldata['bal']
-    else:
-      #if blockonomics lookup fails get from blockr
-      list=""
-      counter=0
-      total=0
-      btclist={}
-      for a in addresses:
-        if list == "":
-          list = a
-        else:
-          list += ","+a
-        counter+=1
-        total+=1
-        if counter>=19 or total==len(addresses):
-          baldata=bc_getbulkbalance_blockr(list)
-          counter=0
-          list=""
-          try:
-            for addr in baldata['bal']:
-              btclist[addr]=baldata['bal'][addr]
-          except TypeError:
-            print "No Data:",baldata
-      return btclist
-  except Exception as e:
-    print "Error getting bulk data from blockr "+str(e)
 
+  rSetNotUpdateBTC(retval)
+  if len(recurse)>0:
+    rdata=bc_getbulkbalance(recurse)
+  else:
+    rdata={}
+  return dict(retval['bal'],**rdata)
 
       
 def bc_getbulkbalance_blockonomics(addresses):
+  formatted=""
+  for address in addresses:
+    if formatted=="":
+      formatted=address
+    else:
+      formatted=formatted+" "+address
+
   try:
-    r = requests.post('https://www.blockonomics.co/api/balance',json.dumps({"addr":addresses}))
+    r = requests.post('https://www.blockonomics.co/api/balance',json.dumps({"addr":formatted}))
     if r.status_code == 200:
       balances = r.json()['response']
       retval = {}
@@ -217,8 +230,15 @@ def bc_getbulkbalance_blockonomics(addresses):
     return {"bal": None , "error": True}
 
 def bc_getbulkbalance_blockr(addresses):
+  formatted=""
+  for address in addresses:
+    if formatted=="":
+      formatted=address
+    else:
+      formatted=formatted+","+address
+
   try:
-    r= requests.get('http://btc.blockr.io/api/v1/address/balance/'+addresses)
+    r= requests.get('http://btc.blockr.io/api/v1/address/balance/'+formatted)
     if r.status_code == 200:
       balances = r.json()['data']
       retval = {}
@@ -230,4 +250,22 @@ def bc_getbulkbalance_blockr(addresses):
   except:
     return {"bal": None , "error": True}
 
-
+def bc_getbulkbalance_blockchain(addresses):
+  formatted=""
+  for address in addresses:
+    if formatted=="":
+      formatted=address
+    else:
+      formatted=formatted+"|"+address
+  try:
+    r= requests.get('https://blockchain.info/balance?active='+formatted)
+    if r.status_code == 200:
+      balances = r.json()
+      retval = {}
+      for entry in balances:
+        retval[entry] = int(balances[entry]['final_balance'])
+      return {"bal": retval, "error": None}
+    else:
+      return {"bal": None , "error": True}
+  except:
+    return {"bal": None , "error": True}

@@ -16,12 +16,16 @@ def rExpire(key,sec):
 def rDelete(key):
   return r.delete(key)
 
+def rKeys(key):
+  return r.keys(key)
+
 def rSetNotUpdateBTC(baldata):
-  for addr in baldata['fresh'].split():
-    rSet("omniwallet:balances:address:"+str(addr),json.dumps( {"bal":baldata['bal'][addr],"error":None}))
-    rExpire("omniwallet:balances:address:"+str(addr),150)
+  fresh=baldata['fresh']
+  if fresh!=None and len(fresh)>0:
+    for addr in fresh:
+      rSet("omniwallet:balances:address:"+str(addr),json.dumps( {"bal":baldata['bal'][addr],"error":None}))
+      rExpire("omniwallet:balances:address:"+str(addr),150)
 
 def rExpireAllBalBTC():
-  for addr in rKeys("omniwallet:balances:address:*")
+  for addr in rKeys("omniwallet:balances:address:*"):
     rDelete(addr)
-
