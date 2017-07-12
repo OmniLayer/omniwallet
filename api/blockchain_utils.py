@@ -6,6 +6,11 @@ from config import BTAPIKEY
 from rpcclient import gettxout
 from cacher import *
 
+try:
+  expTime=config.BTCBAL_CACHE
+except:
+  expTime=600
+
 def bc_getutxo(address, ramount, page=1, retval=None, avail=0):
   if retval==None:
     retval=[]
@@ -107,7 +112,7 @@ def bc_getbalance(address):
     balance = bc_getbalance_bitgo(address)
     #cache btc balance for 2.5 minutes
     rSet("omniwallet:balances:address:"+str(address),json.dumps(balance))
-    rExpire("omniwallet:balances:address:"+str(address),150)
+    rExpire("omniwallet:balances:address:"+str(address),expTime)
   return balance
 
 def bc_getbalance_bitgo(address):
