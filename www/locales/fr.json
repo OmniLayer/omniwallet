@@ -37,7 +37,8 @@
     "ERROR": "Erreur",
     "MFA": "Code MFA",
     "RESET": "Remise à zéro",
-    "MY": "Moi"
+    "MY": "Moi",
+    "PUBKEY":"Clé publique"
   },
   "SETTINGS": {
     "TITLE": "Paramètres du compte",
