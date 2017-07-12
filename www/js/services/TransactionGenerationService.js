@@ -1,5 +1,5 @@
 angular.module('omniServices')
-  .service('TransactionGenerator',['$http',"SATOSHI_UNIT",function TransactionGeneratorService($http, SATOSHI_UNIT){
+  .service('TransactionGenerator',['$http',"TESTNET","SATOSHI_UNIT",function TransactionGeneratorService($http, TESTNET, SATOSHI_UNIT){
     var self = this;
       self.pushSignedTransaction = function(signedTransaction) {
         var url = '/v1/transaction/pushtx/';
@@ -18,7 +18,8 @@ angular.module('omniServices')
             'amount':new Big(data.amount_to_transfer).times(SATOSHI_UNIT).valueOf(),
             'currency':'BTC',
             'fee':data.fee,
-            'marker': (data.marker || false)
+            'marker': (data.marker || false),
+            'testnet': (TESTNET || false);
           };
           var url = '/v1/transaction/send/';
         // } else if (type == 20) { // sell tx
