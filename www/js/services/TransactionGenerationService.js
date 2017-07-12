@@ -19,7 +19,7 @@ angular.module('omniServices')
             'currency':'BTC',
             'fee':data.fee,
             'marker': (data.marker || false),
-            'testnet': (TESTNET || false);
+            'testnet': (TESTNET || false)
           };
           var url = '/v1/transaction/send/';
         // } else if (type == 20) { // sell tx
