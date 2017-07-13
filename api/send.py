@@ -8,11 +8,6 @@ from blockchain_utils import *
 from msc_apps import *
 import random
 
-#dust_limit=2730
-testnet = False
-magicbyte = 0
-
-
 def send_form_response(response_dict):
     expected_fields=['from_address', 'to_address', 'amount', 'currency', 'fee']
     # if marker is True, send dust to marker (for payments of sells)
@@ -27,6 +22,9 @@ def send_form_response(response_dict):
     if 'testnet' in response_dict and ( response_dict['testnet'] in ['true', 'True'] ):
         testnet =True
         magicbyte = 111
+    else:
+        testnet = False
+        magicbyte = 0
 
     if response_dict.has_key( 'pubKey' ) and is_pubkey_valid( response_dict['pubKey'][0]):
         pubkey = response_dict['pubKey'][0]
