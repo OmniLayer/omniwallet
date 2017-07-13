@@ -1,6 +1,6 @@
 angular.module("omniControllers")
-  .controller("WalletOverviewController", ["$scope","$location","Wallet","ModalManager","$filter",
-    function WalletOverviewController($scope,$location,Wallet,ModalManager,$filter){
+  .controller("WalletOverviewController", ["$scope","$location","Wallet","ModalManager","$filter", "$http",
+    function WalletOverviewController($scope,$location,Wallet,ModalManager,$filter, $http){
       $scope.uuid = $scope.account.uuid;
       $scope.loginLink = $location.protocol() + "://" + $location.host() + "/login/" + $scope.uuid;
       //console.log(Wallet.addresses);
@@ -49,10 +49,31 @@ angular.module("omniControllers")
         ModalManager.openImportWalletModal();
       }
 
-      function refresh(){
+      function refresh() {
         $scope.total = 0;
+        
+        const objectAssets = Wallet.assets.filter(asset => asset.url.indexOf("vatomic") !== -1);
+        
+        Promise.all(objectAssets.map((objectAsset, i) => {
+          return $http({ method: "GET", url: objectAsset.url })
+            .then(res => res.data)
+            .then(objectDef => ({ objectDef, name: objectAsset.name, quantity: Number.parseInt(objectAsset.totaltokens), url: objectAsset.url, propertyid: objectAsset.propertyid }));
+        }))
+        .then(resolvedObjects => {
+          return resolvedObjects
+            .map(object => {
+              return new Array(/*Number.parseInt(object.quantity)*/ 1).fill(0).map(() => Object.assign({}, object));
+            })
+            .reduce((prev, curr) => prev.concat(curr), []);
+        })
+        .then(inventory => {
+          if ($scope.inventory === undefined || $scope.inventory.length !== inventory.length) {
+            $scope.inventory = inventory;
+            $scope.$apply();
+          }
+        });
 
-        Wallet.assets.forEach(function(asset) {
+        Wallet.assets.forEach(function (asset) {
           $scope.total += parseFloat(asset.value);
         });
 
@@ -72,4 +93,31 @@ angular.module("omniControllers")
       })
 
       refresh();
+      
+      $scope.startVatomIconTouch = function (object, event) {
+        $scope.originalMoveLocation = { x: event.clientX, y: event.clientY };
+        $scope.shouldOpenVatom = true;
+      };
+      
+      $scope.endVatomIconTouch = function (object, event) {
+        if ($scope.shouldOpenVatom) {
+          $scope.isModalOpen = true;
+          $scope.selectedObject = object;
+        }
+      };
+      
+      $scope.panVatomIconTouch = function (object, event) {
+        const MAX_CLICK_DIST = 5;
+        
+        if ((Math.abs($scope.originalMoveLocation.x - event.clientX) > MAX_CLICK_DIST || Math.abs($scope.originalMoveLocation.y - event.clientY) > MAX_CLICK_DIST) && $scope.shouldOpenVatom) {
+          $scope.shouldOpenVatom = false;
+        }
+      };
+      
+      $scope.closeVatomCard = function () {
+        $scope.isModalOpen = false;
+        $scope.selectedObject = undefined;
+      };
+      
+      $scope.isModalOpen = false;
     }]);

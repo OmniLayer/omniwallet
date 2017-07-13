@@ -1,3 +1,24 @@
+<div ng-if="inventory.length > 0">
+	<h2 style="margin-top: 10px; margin-bottom: -5px;">Objects</h2>
+	
+	<div class="objects-grid">
+		<div ng-repeat="object in inventory" class="object-icon" ng-mousedown="startVatomIconTouch(object, $event)" ng-mouseup="endVatomIconTouch(object, $event)" ng-mousemove="panVatomIconTouch(object,
+		$event)">
+			<div vatom-icon vatom-def="{{object.objectDef}}"></div>
+		</div>
+	</div>
+
+	<div class="object-modal" ng-style="{'display': isModalOpen ? 'auto' : 'none'}" ng-click="closeVatomCard()">
+		<img class="object-modal-close-button" src="/assets/img/icons/close.svg" ng-click="closeVatomCard()" />
+	</div>
+
+	<div class="object-card" ng-style="{'transform': isModalOpen ? 'translateY(0px)' : 'translateY(930px)'}">
+		<div vatom-card vatom-def={{selectedObject.objectDef}}></div>
+	</div>
+</div>
+
+<h2 style="margin-top: 30px; margin-bottom: -5px;">All Assets</h2>
+
 <div class="container-fluid" ng-repeat="asset in wallet.assets">
 	<div ng-if="(asset.balance>0 || asset.symbol == 'BTC') && ((asset.id < 2147483648 && asset.id != 2) || showtesteco === 'true')" class="asset-table">
 		<div class="row">
@@ -85,3 +106,16 @@
 		</div>
 	</div>
 </div>
+
+
+ <!-- <script>
+	Vatomic.RequestHelper.getVatom("0a06c5b6-d6ce-4036-bb28-47ddf4468f51", data => {
+		const vatom = new Vatomic.Vatom(data);
+		const el = new Vatomic.VatomView(vatom, { view_mode: "icon" });
+		console.log("showing vatom");
+		document.getElementById("vatom").innerHTML = "";
+		document.getElementById("vatom").appendChild(el.element);
+	}, (errorCode, errorText) => {
+		console.error("could not get vatom", errorCode, errorText);
+	});
+</script>  -->

@@ -1,5 +1,6 @@
 import requests, getpass
 import time, json
+import config
 
 class RPCHost():
     def __init__(self):
@@ -7,7 +8,7 @@ class RPCHost():
         self._session = requests.Session()
         try:
             with open('/home/'+USER+'/.bitcoin/bitcoin.conf') as fp:
-                RPCPORT="8332"
+                RPCPORT= "8332"
                 RPCHOST="localhost"
                 RPCSSL=False
                 for line in fp:

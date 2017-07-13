@@ -1,11 +1,11 @@
 RECAPTCHA_PRIVATE = None #replace private key text here
 DOMAIN = None     #Replace with domain to override email domain lookup, otherwise system hostname is used
-EMAILFROM = None  #Is set to None, use noreply@domain
-SMTPUSER = None   #If your smtp server requires authentication define it here
-SMTPPASS = None   #If your smtp server requires authentication define it here
-SMTPDOMAIN = 'localhost'  #smtp server to use for sending, default    'localhost'
+EMAILFROM = "omniwallet@vatomic.io"  #Is set to None, use noreply@domain
+SMTPUSER = "postmaster@sandboxd311510a82c5491ca65ef71fb65ed076.mailgun.org"   #If your smtp server requires authentication define it here
+SMTPPASS = "8473aba8f839e68810f890613be7213e"   #If your smtp server requires authentication define it here
+SMTPDOMAIN = 'smtp.mailgun.org'  #smtp server to use for sending, default    'localhost'
 SMTPPORT = 25     #smtp port,  default 25
-SMTPSTARTTLS = False  # Use starttls before SMTP login
+SMTPSTARTTLS = True  # Use starttls before SMTP login
 WELCOMECID = None #mailgun campaign id for welcome email stats
 
 #For wallets and session store you can switch between disk and the database
@@ -18,8 +18,8 @@ WEBSOCKET_SECRET = 'SocketSecret!'
 
 #used for encrypting/decrypting secure values. 
 #NOTE: If these values change, anything previously encrypted with them will need to be updated / encrypted with the new values
-AESKEY='use a 16 char password'
-AESIV='use a 16 char password'
+AESKEY='aaaaaaaabbbbbbbb'
+AESIV='aaaaaaaabbbbbbbb'
 
 #Donation Address Pubkey  (We need the pubkey so that if an address hasn't sent a tx before we don't need the private key to get the pubkey)
 D_PUBKEY = '04ec31f456cc70a60793ff2033d9d2094541a5de8cac67ab1e5b1441187c6bed1601dc64c447244618268af0bd449d90d2ce71816efc69dc7921a226ed60fe926b'
@@ -28,15 +28,10 @@ D_PUBKEY = '04ec31f456cc70a60793ff2033d9d2094541a5de8cac67ab1e5b1441187c6bed1601
 BTAPIKEY = None
 
 #Redis Connection Info
-REDIS_HOST='127.0.0.1'
+REDIS_HOST='172.31.11.207'
 REDIS_PORT=6379
+
 REDIS_DB=0
-#Use if you want custom address namespace (multiple servers on same box)
-#Must prefix custom name with :  example ":stage"
 REDIS_ADDRSPACE=""
 
-#How long, in seconds, to cache BTC balance info for new addresses, Default 10min (600)
-BTCBAL_CACHE=600
-
-
-TESTNET = False
+TESTNET = True
