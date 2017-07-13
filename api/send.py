@@ -19,7 +19,7 @@ def send_form_response(response_dict):
             info('Multiple values for field '+field)
             return (None, 'Multiple values for field '+field)
           
-    if 'testnet' in response_dict and ( response_dict['testnet'] in ['true', 'True'] ):
+    if 'testnet' in response_dict and ( response_dict['testnet'][0] in ['true', 'True'] ):
         testnet =True
         magicbyte = 111
     else:
