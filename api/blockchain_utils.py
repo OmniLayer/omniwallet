@@ -5,21 +5,6 @@ import json
 from config import BTAPIKEY
 from rpcclient import gettxout
 from cacher import *
-import config
-
-BLOCKCHAININFO_API_URL = "https://blockchain.info/"
-BLOCKR_API_URL = "http://btc.blockr.io/api/v1"
-BLOCKTRAIL_API_URL = "https://api.blocktrail.com/v1/btc/"
-BLOCKCYPHER_API_URL = "https://api.blockcypher.com/v1/btc/main/"
-BITGO_API_URL = "https://www.bitgo.com/api/v1/"
-BLOCKONOMICS_API_URL = "https://www.blockonomics.co/api"
-
-# note: "blockchain.info" does not support testnet
-# note: "blockonomics" does not appear to support testnet
-TESTNET_BLOCKR_API_URL = "http://tbtc.blockr.io/api/v1"
-TESTNET_BLOCKTRAIL_API_URL = "https://api.blocktrail.com/v1/tbtc/"
-TESTNET_BLOCKCYPHER_API_URL = "https://api.blockcypher.com/v1/btc/test3/"
-TESTNET_BITGO_API_URL = "https://test.bitgo.com/api/v1/"
 
 try:
   expTime=config.BTCBAL_CACHE
@@ -30,8 +15,7 @@ def bc_getutxo(address, ramount, page=1, retval=None, avail=0):
   if retval==None:
     retval=[]
   try:
-    apiUrl = BLOCKTRAIL_API_URL if not config.TESTNET else TESTNET_BLOCKTRAIL_API_URL
-    r = requests.get(apiUrlr + '/address/'+address+'/unspent-outputs?api_key='+str(BTAPIKEY)+'&limit=200&page='+str(page))
+    r = requests.get('https://api.blocktrail.com/v1/btc/address/'+address+'/unspent-outputs?api_key='+str(BTAPIKEY)+'&limit=200&page='+str(page))
     if r.status_code == 200:
       response = r.json()
       unspents = response['data']
@@ -56,8 +40,7 @@ def bc_getutxo(address, ramount, page=1, retval=None, avail=0):
 
 def bc_getutxo_blockcypher(address, ramount):
   try:
-    apiUrl = BLOCKCYPHER_API_URL if not config.TESTNET else TESTNET_BLOCKCYPHER_API_URL
-    r = requests.get(apiUrl + '/addrs/'+address+'?unspentOnly=true')
+    r = requests.get('https://api.blockcypher.com/v1/btc/main/addrs/'+address+'?unspentOnly=true')
 
     if r.status_code == 200:
       unspents = r.json()['txrefs']
@@ -82,8 +65,7 @@ def bc_getutxo_blockcypher(address, ramount):
 
 def bc_getutxo_blockr(address, ramount):
   try:
-    apiUrl = BLOCKR_API_URL if not config.TESTNET else TESTNET_BLOCKR_API_URL
-    r = requests.get(apiUrl + '/address/unspent/'+address+'?unconfirmed=1')
+    r = requests.get('http://btc.blockr.io/api/v1/address/unspent/'+address+'?unconfirmed=1')
 
     if r.status_code == 200:
       #Process and format response from blockr.io
@@ -110,12 +92,8 @@ def bc_getutxo_blockr(address, ramount):
 
 
 def bc_getpubkey(address):
-  # note: only supports mainnet
   try:
-    if config.TESTNET:
-      return "error: tried using blockchain.info api with testnet enabled"
-    
-    r = requests.get(BLOCKCHAININFO_API_URL + '/q/pubkeyaddr/'+address)
+    r = requests.get('https://blockchain.info/q/pubkeyaddr/'+address)
 
     if r.status_code == 200:
       return str(r.text)
@@ -139,8 +117,7 @@ def bc_getbalance(address):
 
 def bc_getbalance_bitgo(address):
   try:
-    apiUrl = BITGO_API_URL if not config.TESTNET else TESTNET_BITGO_API_URL
-    r= requests.get(apiUrl + '/address/'+address)
+    r= requests.get('https://www.bitgo.com/api/v1/address/'+address)
     if r.status_code == 200:
       balance = int(r.json()['balance'])
       return {"bal":balance , "error": None}
@@ -151,8 +128,7 @@ def bc_getbalance_bitgo(address):
 
 def bc_getbalance_blockcypher(address):
   try:
-    apiUrl = BLOCKCYPHER_API_URL if not config.TESTNET else TESTNET_BLOCKCYPHER_API_URL
-    r= requests.get(apiUrl + '/addrs/'+address+'/balance')
+    r= requests.get('https://api.blockcypher.com/v1/btc/main/addrs/'+address+'/balance')
     if r.status_code == 200:
       balance = int(r.json()['balance'])
       return {"bal":balance , "error": None}
@@ -163,8 +139,7 @@ def bc_getbalance_blockcypher(address):
 
 def bc_getbalance_blockr(address):
   try:
-    apiUrl = BLOCKR_API_URL if not config.TESTNET else TESTNET_BLOCKR_API_URL
-    r= requests.get(apiUrl + '/address/balance/'+address)
+    r= requests.get('http://btc.blockr.io/api/v1/address/balance/'+address)
     if r.status_code == 200:
       balance = int(r.json()['data']['balance']*1e8)
       return {"bal":balance , "error": None}
@@ -247,10 +222,7 @@ def bc_getbulkbalance_blockonomics(addresses):
       formatted=formatted+" "+address
 
   try:
-    if config.TESTNET:
-      return "error: tried using blockonomics api with testnet enabled"
-    
-    r = requests.post(apiUrl + '/balance',json.dumps({"addr":formatted}))
+    r = requests.post('https://www.blockonomics.co/api/balance',json.dumps({"addr":formatted}))
     if r.status_code == 200:
       balances = r.json()['response']
       retval = {}
@@ -271,8 +243,7 @@ def bc_getbulkbalance_blockr(addresses):
       formatted=formatted+","+address
 
   try:
-    apiUrl = BLOCKR_API_URL if not config.TESTNET else TESTNET_BLOCKR_API_URL
-    r= requests.get(apiUrl + '/address/balance/'+formatted)
+    r= requests.get('http://btc.blockr.io/api/v1/address/balance/'+formatted)
     if r.status_code == 200:
       balances = r.json()['data']
       retval = {}
@@ -292,10 +263,7 @@ def bc_getbulkbalance_blockchain(addresses):
     else:
       formatted=formatted+"|"+address
   try:
-    if config.TESTNET:
-      return "error: tried using blockchain.info api with testnet enabled"
-    
-    r= requests.get(BLOCKCHAININFO_API_URL + '/balance?active='+formatted)
+    r= requests.get('https://blockchain.info/balance?active='+formatted)
     if r.status_code == 200:
       balances = r.json()
       retval = {}

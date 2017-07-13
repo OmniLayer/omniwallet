@@ -82,20 +82,13 @@ function Login($injector, $scope, $http, $location, $modalInstance, $q, Account,
       });
     } else {
 
-      Account.login(login.uuid, login.password, login.mfatoken).then(function (wallet) {
-        // Set app ID
-        Vatomic.init({
-          appID: "87b4a201-054c-484c-b206-02742ba9ae87",
-          serverAddress: "https://api.vatomic.net",
-          websocketAddress: "wss://websocket.api.vatomic.net"
-        });
-
-        $modalInstance.close()
-        $location.path('/wallet');
-        $idle.watch();
-      }, function (error) {
-        $scope.loginInProgress = false;
-        angular.extend($scope, error);
+      Account.login(login.uuid,login.password,login.mfatoken).then(function(wallet){
+          $modalInstance.close()
+          $location.path('/wallet');
+          $idle.watch();
+      },function(error){
+	$scope.loginInProgress=false;
+        angular.extend($scope,error);
       })
     }   
   };

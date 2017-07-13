@@ -7,7 +7,6 @@ from msc_utils_parsing import *
 from blockchain_utils import *
 from msc_apps import *
 import random
-import traceback
 
 def send_form_response(response_dict):
     expected_fields=['from_address', 'to_address', 'amount', 'currency', 'fee']
@@ -19,8 +18,8 @@ def send_form_response(response_dict):
         if len(response_dict[field]) != 1:
             info('Multiple values for field '+field)
             return (None, 'Multiple values for field '+field)
-       
-    if 'testnet' in response_dict and ( response_dict['testnet'][0] in ['true', 'True'] ):
+          
+    if 'testnet' in response_dict and ( response_dict['testnet'] in ['true', 'True'] ):
         testnet =True
         magicbyte = 111
     else:
@@ -33,6 +32,8 @@ def send_form_response(response_dict):
     else:
         response_status='invalid pubkey'
         pubkey=None
+    
+    print response_dict
   
     from_addr=response_dict['from_address'][0]
     if not is_valid_bitcoin_address_or_pubkey(from_addr):
@@ -102,7 +103,6 @@ def send_form_response(response_dict):
       return (response, None)
     except Exception as e:
       print "error creating unsigned tx", e
-      traceback.print_exc()
       return (None, str(e))
 
 
@@ -251,10 +251,10 @@ def prepare_send_tx_for_signing(from_address, to_address, marker_address, curren
         # under dust limit leave all remaining as fees
         pass
 
-    #tx=mktx(inputs_outputs)
-    tx=pybitcointools.mktx(ins,outs)
-    info('inputs_outputs are '+str(ins)+' '+str(outs))
-    #info('inputs_outputs are '+inputs_outputs)
+    tx=mktx(inputs_outputs)
+    #tx.pybitcointools.mktx(ins,outs)
+    #info('inputs_outputs are '+str(ins)+' '+str(outs))
+    info('inputs_outputs are '+inputs_outputs)
     info('parsed tx is '+str(get_json_tx(tx)))
 
     hash160=bc_address_to_hash_160(from_address).encode('hex_codec')
