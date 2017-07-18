@@ -17,6 +17,7 @@ body {
   margin-bottom: 30px;
 }
 
+/* Animation */
 .animate-show {
   line-height: 20px;
   opacity: 1;
@@ -137,6 +138,7 @@ h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6{
   width:489px;
 }
 
+/* Media Queries */
 @media (max-width: 767px) {
   .chart {
    width: 380px;
@@ -373,7 +375,7 @@ a {
 a:hover{
   color: #db7010;
 }
-
+/* Button Styles */
 .btn-main {
   color: #ffffff;
   background-color: #7ed933;
@@ -627,6 +629,7 @@ border-left-color: #111111;
   z-index: 1010;
 }
 
+/* NAVBAR  */
 .navbar-main-tier1 .navbar-brand {
   color: #a2b6d3;
 }
