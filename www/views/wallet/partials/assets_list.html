@@ -1,3 +1,37 @@
+<div class="panel panel-default" ng-if="inventory.length > 0" style="margin-bottom: 35px;">
+	<div class="panel-heading">
+		{{ 'WALLET.OVERVIEW.OBJECTS' | translate }}
+	</div>
+	<div class="panel-body">
+		<div class="objects-grid">
+			<div ng-repeat="object in inventory" class="object-icon" ng-mousedown="startVatomIconTouch(object, $event)" ng-mouseup="endVatomIconTouch(object, $event)"
+				ng-mousemove="panVatomIconTouch(object,
+	$event)">
+				<div vatom-icon vatom-def="{{object.objectDef}}"></div>
+			</div>
+		</div>
+
+		<div class="object-modal" ng-style="{'display': isModalOpen ? 'auto' : 'none'}" ng-click="closeVatom()">
+			<img class="object-modal-close-button" src="/assets/img/icons/close.svg" ng-click="closeVatom()" />
+		</div>
+
+		<div class="object-fullscreen" ng-style="{'display': isModalOpen ? 'auto' : 'none'}">
+			<div vatom-fullscreen vatom-def={{selectedObject.objectDef}}></div>
+		</div>
+
+		<div class="object-card" ng-style="{'display': isModalOpen && isCardAvailable ? 'auto' : 'none', 'left': '10px', 'bottom': isModalOpen ? (isCardOpen ? '10px' : '-calc(100% - 75px)') : 'translateY(930px)'}">
+			<div vatom-card vatom-def={{selectedObject.objectDef}}></div>
+		</div>
+
+		<div class="object-card-open-button-container" ng-style="{'display': isModalOpen && isCardAvailable ? 'auto' : 'none'}">
+			<img class="object-card-open-button" src="/assets/img/icons/up.svg" ng-click="toggleVatomCard()" ng-style="{'transform': isCardOpen ? 'rotate(180deg)' : 'rotate(0deg)'}"
+			/>
+		</div>
+	</div>
+</div>
+
+<h2 style="margin-top: 10px; margin-bottom: -5px;">{{ 'WALLET.OVERVIEW.ASSETS' | translate }}</h2>
+
 <div class="container-fluid" ng-repeat="asset in wallet.assets">
 	<div ng-if="(asset.balance>0 || asset.symbol == 'BTC') && ((asset.id < 2147483648 && asset.id != 2) || showtesteco === 'true')" class="asset-table">
 		<div class="row">

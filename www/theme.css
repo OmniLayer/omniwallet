@@ -1687,3 +1687,111 @@ i.icon-l{
     padding: 5px;
     text-align: center;
 }
+
+.objects-grid {
+  min-height: 100px;
+  padding: 5px;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
+.object-icon {
+  width: 110px;
+  height: 110px;
+  margin: 11px;
+}
+
+.object-modal {
+  padding: 20px;
+  background-color: rgba(255, 255, 255, 0.5);
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 1058; 
+}
+
+.object-modal-close-button {
+  cursor: pointer;
+  z-index: 1059;
+  width: 60px;
+  height: 60px;
+  right: 20px;
+  position: absolute;
+  transition: all .2s ease-in-out;
+}
+
+.object-modal-close-button:hover {
+  transform: scale(1.1);
+}
+
+.object-card {
+  width: 545px;
+  height: 872px;
+  border-radius: 10px;
+  border: 1px solid rgb(76, 76, 76);
+  position: fixed;
+  bottom: -800px;
+  background-color: white;
+  z-index: 1060;
+  left: 0;
+  right: 0;
+  margin-left: auto;
+  margin-right: auto;
+  overflow: hidden;
+  transition: bottom 300ms ease;
+  box-shadow: rgb(95, 95, 95) 0px 1px 20px 2px;
+  z-index: 1061;
+}
+
+.object-fullscreen {
+  width: 70%;
+  height: 79%;
+  border-radius: 10px;
+  position: fixed;
+  bottom: 100px;
+  z-index: 1060;
+  left: 0;
+  right: 0;
+  margin-left: auto;
+  margin-right: auto;
+  overflow: hidden;
+  transition: transform 200ms ease;
+  border: 1px solid #989898;
+	background: rgba(255, 255, 255, 0.7);
+}
+
+.object-card-open-button {
+  cursor: pointer;
+  z-index: 1059;
+  width: 50px;
+  height: 50px;
+  position: absolute;
+  margin-left: auto;
+  margin-right: auto;
+  left: 0;
+  right: 0;
+  transition: all .2s ease-in-out;
+  z-index: 1062;
+}
+
+.object-card-open-button:hover {
+  transform: scale(1.1);
+}
+
+.object-card-open-button-container {
+  position: absolute;
+  width: 100%;
+  position: fixed;
+  left: 0;
+  right: 0;
+  z-index: 1062;
+  bottom: 63px;
+  transition: transform 500ms ease; 
+}
+
+.loading-panel {
+  padding-top: 60px; 
+}

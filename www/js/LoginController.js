@@ -82,13 +82,13 @@ function Login($injector, $scope, $http, $location, $modalInstance, $q, Account,
       });
     } else {
 
-      Account.login(login.uuid,login.password,login.mfatoken).then(function(wallet){
-          $modalInstance.close()
-          $location.path('/wallet');
-          $idle.watch();
-      },function(error){
-	$scope.loginInProgress=false;
-        angular.extend($scope,error);
+      Account.login(login.uuid, login.password, login.mfatoken).then(function (wallet) {
+        $modalInstance.close()
+        $location.path('/wallet');
+        $idle.watch();
+      }, function (error) {
+        $scope.loginInProgress = false;
+        angular.extend($scope, error);
       })
     }   
   };
