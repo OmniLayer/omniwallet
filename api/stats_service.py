@@ -27,7 +27,7 @@ def status():
 
   #print rev, st, coms
   merged_response = {key: value for (key, value) in (rev.items() + st.items() + coms.items())}
-  json_response = json.dumps( merged_response )
+  json_response = jsonify( merged_response )
   return json_response
 
 
@@ -37,10 +37,10 @@ def revision():
 
   response = {
           'last_block': ROWS[0][0],
-          'last_parsed': ROWS[0][1] 
+          'last_parsed': ROWS[0][1]
       }
 
-  json_response = json.dumps( response)
+  json_response = jsonify( response)
   return json_response
 
 
@@ -52,7 +52,7 @@ def stats():
           'amount_of_wallets': ROWS[0][0]
       }
 
-  json_response = json.dumps( response)
+  json_response = jsonify(response)
   return json_response
 
 
@@ -70,5 +70,5 @@ def commits():
       'msg': str(y[3].strip())
     })
 
-  json_response = json.dumps({'commits': response})
+  json_response = jsonify({'commits': response})
   return json_response
