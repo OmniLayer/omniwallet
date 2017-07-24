@@ -1,7 +1,7 @@
 import urlparse
 import os, sys, re
 import math
-from flask import Flask, request, jsonify, abort, json, make_response
+from flask import Flask, request, Response, jsonify, abort, json, make_response
 from msc_apps import *
 from decimal import Decimal
 from blockchain_utils import *
@@ -148,7 +148,7 @@ def getcurrencyrecent():
         response.append(res)
 
 
-    return jsonify(response)
+    return Response(json.dumps(response), mimetype="application/json")
     #Input will be CURRENCY_PAGE ex. MSC_0001, SP50_4999, etc. up to 4 digits of pagination
 
 

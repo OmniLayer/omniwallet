@@ -1,4 +1,4 @@
-from flask import Flask, abort, json
+from flask import Flask, abort, json, jsonify, Response
 from sqltools import *
 import re
 
@@ -112,7 +112,7 @@ def currencylist():
   for x in ROWS:
    retval.append({'value':x[0],'label':x[1]})
 
-  return jsonify(retval)
+  return Response(json.dumps(retval), mimetype="application/json")
 
 #TODO COnversion
 @app.route('/history/<currency>')
@@ -195,5 +195,4 @@ def history(currency=None):
                }
       response.append(item)
 
-  json_response = jsonify(response)
-  return json_response
+  return Response(json.dumps(response), mimetype="application/json")

@@ -98,4 +98,4 @@ def getproperty(prop_id):
     #"update_fs": false
 
 
-    return jsonify([ ret ]) #only send back mapped schema
+    return jsonify([ret]) #only send back mapped schema
