@@ -474,11 +474,8 @@ HTTP GET ``/v1/system/revision.json``
 Returns:
 ```
 {
-	"commit_hexsha": "c030d61e6e7d91c2149a7af8af6bca70e7c0638f", 
-	"commit_time": "20140131", 
 	"last_block": 284634, 
 	"last_parsed": "07 Feb 2014 15:48:39 GMT", 
-	"url": "https://github.com/grazcoin/mastercoin-tools/commit/c030d61e6e7d91c2149a7af8af6bca70e7c0638f"
 }
 ```
 
@@ -734,6 +731,38 @@ var dataToSend = { signedTransaction: rawTx };
 $.post('/wallet/pushtx/', dataToSend, function (data) {}).fail( function() {} );
 ```
 No return value in ``data``.
+
+### Create a new property:
+```
+/v1/transaction/getunsigned/<type of property to create>
+```
+Property Types:
+
+50 = unmanaged (fixed nunmber of tokens, never changes)
+
+54 = managed (you can issue/revoke tokens with a separate tx later)
+
+Your post data will need to include the following fields
+```
+'transaction_version' : (int) 0
+'transaction_from' : (string) the sending address
+'pubkey' : (string) pubkey of the sending address
+'fee'  : (int) miner fee's to create the tx with (in satoshis)
+'ecosystem'   :  (int) 1 for production 2 for test
+'property_type' : (int) 1 for indivisible (whole unit tokens), 2 for divisible (tokens can be divides to decimal amounts like BTC)
+'previous_property_id': (int) 0
+'property_category' : (string) Choose a category (less than 10 chars)
+'property_subcategory': (string) Choose a subcategory (less than 15 chars)
+'property_name' : (string) Choose a name (less than 14 chars)
+'property_url' : (string) A url website for your property (:21 chars or less)
+'property_data' : (string) any additional details/description for your property (less than 250 chars)
+```
+Additionally only for property type 50 include the following field
+```
+'number_properties' : (int) Valid values: 1 to 9,223,372,036,854,775,807 which represents
+0.00000001 to 92,233,720,368.54775807 divisible coins or tokens
+1 to 9,223,372,036,854,775,807 indivisible coins or tokens
+```
 
 ### Make a trade offer:
 

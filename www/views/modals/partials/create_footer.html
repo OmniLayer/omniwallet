@@ -1,0 +1,11 @@
+<div class="control-group">
+  <div class="controls">
+    <img ng-show="validating" src="/assets/img/spinner.gif" alt="loading">
+    <button type="button" class="btn btn-tertiary" ng-disabled="loginInProgress" ng-click="dismiss('close')">{{ 'COMMON.CANCEL' | translate }}</button>
+    <input type="submit" ng-click="!createForm.$invalid && createWallet(createForm.create)" class="btn btn-main" ng-disabled="validating || createForm.$invalid || (createForm.create.password != createForm.create.repeatPassword) || ((createForm.create.password | passwordPercent).replace('%', '') < 70) || (createForm.create.email == null)" value="Create Wallet">
+  </div>
+</div>
+<div style="color:red" ng-show="walletExists">{{ 'MODALS.CREATE.MESSAGES.UUID' | translate }}</div>
+<div style="color:red" ng-show="serverError">{{ 'COMMON.SERVERERROR' | translate }}</div>
+<div style="color:red" ng-show="invalidCaptcha">{{ 'MODALS.CREATE.MESSAGES.CAPTCHA' | translate }}</div>
+<div style="color:green" ng-show="validating">{{ 'MODALS.CREATE.MESSAGES.VALIDATING' | translate }}</div>

@@ -11,9 +11,23 @@ angular.module("omniConfig")
     if(TESTNET)
       return "http://tbtc.blockr.io/tx/info/";
     else
-      return "https://blockchain.info/tx/";
+      return "https://www.blocktrail.com/BTC/tx/";
+  }])
+  .factory("ADDRESS_EXPLORER_URL",["TESTNET", function AddressExplorerUrlFactory(TESTNET){
+    if(TESTNET)
+      return "http://tbtc.blockr.io/address/info/";
+    else
+      return "https://omniexplorer.info/lookupadd.aspx?address=";
+  }])
+  .factory("EXODUS_ADDRESS",["TESTNET", function AddressExplorerUrlFactory(TESTNET){
+    if(TESTNET)
+      return "moneyqMan7uh8FqdCA2BV5yZ8qVrc9ikLP";
+    else
+      return "1EXoDusjGwvnjZUyKkxZ4UHEf77z6A5S4P";
   }]);
 
+angular.module("omniFilters", ["omniConfig"]);
+angular.module("omniDirectives", ["omniConfig"]);
 angular.module("omniFactories", ["omniConfig"]);
 angular.module("omniServices", ["omniConfig", "omniFactories"]);
 angular.module("omniControllers", ["omniConfig", "omniFactories", "omniServices"]);
@@ -22,12 +36,18 @@ var app = angular.module('omniwallet', [
   'ngRoute',
   'ui.bootstrap',
   'ui.bootstrap.modal',
-  'ngNumeraljs',
   'vr.filters.passwordStrength',
+  'timer',
+  'infinite-scroll',
+  'ngNumeraljs',
   'ngIdle',
   'reCAPTCHA',
   'pascalprecht.translate',
+  'nvd3',
+  'ja.qr',
   'omniConfig',
+  'omniFilters',
+  'omniDirectives',
   'omniFactories',
   'omniServices',
   'omniControllers'
@@ -48,6 +68,31 @@ var app = angular.module('omniwallet', [
     TESTNET=false;
   }
 
+  $routeProvider.when('/dex/:page?', {
+      templateUrl: function(route) {
+        //new views added here
+        var availableViews = ['overview','sale'];
+
+        var view;
+        var viewFound = availableViews.indexOf(route.page);
+        if (viewFound != -1)
+          view = '/views/DEx/' + route.page + '.html';
+        else
+          view = '/views/DEx/overview.html';
+
+        ga('send', 'event', 'button', 'click', route.page);
+        return view;
+      }
+    }).otherwise({
+      redirectTo:'/dex/overview'
+    });
+
+    $routeProvider.when('/dex/orderbook/:propertyIdDesired/:propertyIdSelling', {
+      templateUrl:  '/views/DEx/orderbook.html'
+    }).otherwise({
+      redirectTo:'/dex/overview'
+    });
+
   $routeProvider.when('/assets/:page?', {
       templateUrl: function(route) {
         //new views added here
@@ -56,27 +101,39 @@ var app = angular.module('omniwallet', [
         var view;
         var viewFound = availableViews.indexOf(route.page);
         if (viewFound != -1)
-          view = '/partials/wallet_assets_' + route.page + '.html';
+          view = '/views/assets/' + route.page + '.html';
         else
-          view = '/partials/explorer_assets.html';
+          view = '/views/wallet/assets.html';
 
         ga('send', 'event', 'button', 'click', route.page);
         return view;
       }
     }).otherwise({
+      redirectTo:'/wallet/assets'
+    });
+  
+  $routeProvider.when('/assets/details/:propertyId', {
+      templateUrl:  '/views/assets/details.html'
+    }).otherwise({
       redirectTo:'/explorer/assets'
     });
 
+  $routeProvider.when('/crowdsale/participation/:propertyId', {
+      templateUrl:  '/views/assets/participation.html'
+    }).otherwise({
+      redirectTo:'/explorer/crowdsales'
+    });
+    
   $routeProvider.when('/wallet/:page?', {
       templateUrl: function(route) {
         //new views added here
-        var availableViews = ['overview', 'addresses', 'trade', 'history', 'send', 'myoffers', 'settings'];
+        var availableViews = ['overview', 'assets', 'addresses', 'history', 'send', 'settings'];
 
         var viewFound = availableViews.indexOf(route.page);
         if (viewFound == -1)
           route.page = 'overview';
 
-        var view = '/partials/wallet_' + route.page + '.html';
+        var view = '/views/wallet/' + route.page + '.html';
         //DEBUG console.log(view, route.page, view == '/wallet_addresses.html')
 
         ga('send', 'event', 'button', 'click', route.page);
@@ -86,15 +143,34 @@ var app = angular.module('omniwallet', [
     redirectTo: '/wallet'
   });
 
+  $routeProvider.when('/exchange/:page?', {
+      templateUrl: function(route) {
+        //new views added here
+        var availableViews = ['trade', 'myoffers'];
+
+        var viewFound = availableViews.indexOf(route.page);
+        if (viewFound == -1)
+          route.page = 'trade';
+
+        var view = '/views/exchange/' + route.page + '.html';
+        //DEBUG console.log(view, route.page, view == '/wallet_addresses.html')
+
+        ga('send', 'event', 'button', 'click', route.page);
+        return view
+      }
+    }).otherwise({
+    redirectTo: '/exchange'
+  });
+
   $routeProvider.when('/explorer/:page?', {
       templateUrl: function(route) {
-        var availableViews = ['overview', 'assets', 'bookmarks', 'following', 'inspector'];
+        var availableViews = ['overview', 'assets', 'crowdsales', 'inspector'];
 
         var viewFound = availableViews.indexOf(route.page);
         if (viewFound == -1)
           route.page = 'overview';
 
-        var view = '/partials/explorer_' + route.page + '.html';
+        var view = '/views/explorer/' + route.page + '.html';
         //DEBUG console.log(view, route.page, view == '/wallet_addresses.html')
 
         ga('send', 'event', 'button', 'click', route.page);
@@ -106,29 +182,26 @@ var app = angular.module('omniwallet', [
 
   $routeProvider.when('/about/:page?', {
       templateUrl: function(route) {
-        var availableViews = ['omniwallet', 'mastercoin', 'contact', 'faq' ];
+        var availableViews = ['omniwallet', 'omni', 'contact', 'faq' ];
 
         var viewFound = availableViews.indexOf(route.page);
         if (viewFound == -1) //Default view
           route.page = 'omniwallet';
 
-        var view = '/partials/about_' + route.page + '.html';
+        var view = '/views/about/' + route.page + '.html';
         //DEBUG console.log(view, route.page, view == '/wallet_addresses.html')
 
         ga('send', 'event', 'button', 'click', route.page);
         return view
       }
     }).when('/', {
-      templateUrl: '/homepage.html',
-      controller: HomeCtrl
+      templateUrl: '/homepage.html'
     }).when('/login/:uuid', {
       template: '<div ng-controller="HiddenLoginController" ng-init="open()"></div>',
       controller: HiddenLoginController
     }).when('/loginfs/:uuid', {
       template: '<div ng-controller="FailedSaveLoginController" ng-init="open()"></div>',
       controller: FailedSaveLoginController
-    }).when('/import', {
-      templateUrl: '/partials/wallet_import.html',
     }).when('/status', {
       templateUrl: '/status.html',
       controller: StatsCtrl
@@ -139,7 +212,7 @@ var app = angular.module('omniwallet', [
   $locationProvider.html5Mode(true).hashPrefix('!');
 });
 
-app.config(function($idleProvider, $keepaliveProvider, reCAPTCHAProvider, idleDuration, idleWarningDuration, reCaptchaKey, $translateProvider, EnglishTranslation) {
+app.config(function($idleProvider, $keepaliveProvider, reCAPTCHAProvider, idleDuration, idleWarningDuration, reCaptchaKey, $translateProvider, DefaultTranslation) {
   $idleProvider.idleDuration(idleDuration);
   $idleProvider.warningDuration(idleWarningDuration);
   // $keepaliveProvider.interval(2);
@@ -151,13 +224,24 @@ app.config(function($idleProvider, $keepaliveProvider, reCAPTCHAProvider, idleDu
       theme: 'clean'
   });
 
-  $translateProvider.translations('en', EnglishTranslation);
-   
-  $translateProvider.preferredLanguage('en');
+  $translateProvider
+    .translations('en', DefaultTranslation)
+    .useStaticFilesLoader({
+      prefix: '/locales/',
+      suffix: '.json'
+    })
+    .registerAvailableLanguageKeys(['en', 'zh','ar'], {
+      'en_us': 'en',
+      'en_uk': 'en',
+      'zh_cn': 'zh'
+    })
+    .fallbackLanguage('en')
+    .determinePreferredLanguage();
+
 })
-.run(function(Account, $location, TESTNET) {
+.run(function(Account, $location, TESTNET, BalanceSocket) {
   //Whitelist pages
-  whitelisted = ['login', 'about', 'status', 'explorer'];
+  whitelisted = ['login', 'about', 'status', 'explorer', 'details', 'dex'];
 
   if (!Account.loggedIn) {
     for (var i = 0; i < whitelisted.length; i++) {
@@ -167,6 +251,7 @@ app.config(function($idleProvider, $keepaliveProvider, reCAPTCHAProvider, idleDu
     }
     $location.path('/');
   }
+  BalanceSocket.connect();
 });
 
 //app helpers

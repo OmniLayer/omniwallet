@@ -1,17 +1,15 @@
-
-  <div collapse="signOffline && readyToSign" ng-include="dataTemplate">
+<div collapse="signOffline && readyToSign" ng-include="dataTemplate">
+</div>
+<div ng-if="signOffline" collapse="!readyToSign">
+  <div class="modal-row">
+    <div class="description-title">{{ 'MODALS.CONFIRM.FROM' | translate }}:</div><div class="description-text">{{fromAddress}}</div>
   </div>
-  <div ng-if="signOffline" collapse="!readyToSign">
-    <div class="modal-row">
-      <div class="description-title">From:</div><span class="description-text">{{fromAddress}}</span>
-    </div>
-    <pre class="armory-unsigned">{{unsignedTransaction}}</pre>
-    <hr>
-  </div>
-  <div ng-if="signOffline">
-    <p class="text-warning">
-      You will need to sign this transaction offline and come back to broadcast it and finish the send.
-    </p>
-    <hr>
-  </div>
+  <pre class="armory-unsigned">{{unsignedTransaction}}</pre>
+  <hr>
+</div>
+<div ng-if="signOffline">
+  <p class="text-warning">
+    {{ 'MODALS.CONFIRM.SIGN' | translate }} 
+  </p>
+  <hr>
 </div>

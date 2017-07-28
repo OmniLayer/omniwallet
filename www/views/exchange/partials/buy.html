@@ -1,0 +1,117 @@
+<div ng-controller="ExchangeBuyController">
+  <div class="row om-row">
+    <div class="col-xs-12">
+      <h3 class="text-left om-title" >{{ 'EXCHANGE.BUY.TITLE' | translate}}</h3>
+      <div ng-show="showErrors" class="alert alert-danger">
+        {{error}}
+      </div>
+    </div>
+  </div>
+  <div class="row" ng-hide="hasBitcoins">
+    <div class="col-sm-12"> 
+      {{ 'EXCHANGE.BUY.NOFUNDS' | translate}}
+      <br />
+      {{ 'EXCHANGE.BUY.SENDSOME' | translate}} <a class="" href="/wallet/addresses"> {{ 'NAVIGATION.ADDRESSES' | translate }} </a> {{ 'EXCHANGE.BUY.ORADD' | translate}}
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-sm-12"> 
+      <form name="buyForm" ng-submit="confirm()" ng-show="hasBitcoins">
+        <div class="panel panel-form">
+          <div class="panel-body">
+            <div class="col-sm-6">
+              <label for="chooseAddress" >{{ 'EXCHANGE.BUY.ADDRESS' | translate}}:</label>
+              <div class="btn-group send-address-dropdown">
+                <button class="btn btn-clear dropdown-toggle" type="button" id="chooseAddress" data-toggle="dropdown" aria-expanded="true">
+                  {{selectedAddress.hash}} 
+                  <span class="caret pull-right"></span>
+                </button>
+                <ul class="dropdown-menu" role="menu" aria-labelledby="chooseAddress">
+                  <li role="presentation" ng-repeat="address in wallet.getAsset(0).tradableAddresses">
+                    <a role="menuitem" tabindex="-1" href="#" ng-click="setAddress(address)">{{address.hash}} </a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+            <div class="col-sm-6">
+              <div class="form-group">
+                <label>{{ 'EXCHANGE.BUY.SELLER' | translate }}: </label>
+                <span class="form-control" >
+                  {{global['buyOffer'].from_address}}
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-sm-6">
+            <div class="form-group" tooltip="{{ 'EXCHANGE.BUY.OFFERTOOLTIP' | translate }}">
+              <label>{{ 'EXCHANGE.BUY.OFFER' | translate }}:</label>
+              <a href="/explorer/inspector?view={{buySaleID}}" target="_blank">
+                <span class="form-control" ng-init="buySaleID=global['buyOffer'].tx_hash">{{buySaleID}}</span>
+              </a>
+            </div>
+          </div>
+          <div class="col-sm-6">
+            <div class="form-group">
+              <label>{{ 'EXCHANGE.SALE.PRICE' | translate }}: </label>
+              <span class="form-control">{{ global['buyOffer'].formatted_price_per_coin }} BTC </span>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-sm-6">
+            <div class="form-group">
+              <label> {{ 'EXCHANGE.BUY.FEE' | translate }}: </label>
+              <span class="form-control">
+                {{ global['buyOffer'].formatted_fee_required }} BTC
+              </span>
+            </div>
+          </div>
+          <div class="col-sm-6">
+            <div class="form-group">
+              <label > {{ 'EXCHANGE.BUY.TIMEFRAME' | translate }}: <a href=""
+                tooltip="{{ 'EXCHANGE.BUY.TIMEFRAMETOOLTIP' | translate }}"
+                tooltip-append-to-body="true"
+                tooltip-placement="top"> <strong>(?)</strong> </a> </label>
+              <span class="form-control">
+                 {{ global['buyOffer'].formatted_block_time_limit }} {{ 'EXCHANGE.BUY.TIMEFRAMEDESCRIPTIONLEAD' | translate }} {{ (global['buyOffer'].formatted_block_time_limit * 10)/60 | number:2}} {{ 'EXCHANGE.BUY.TIMEFRAMEDESCRIPTIONTRAIL' | translate }}
+              </span>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-sm-6">
+            <div class="form-group" ng-init="buyOffer=global['buyOffer']">
+              <label> {{ 'EXCHANGE.BUY.AMOUNT' | translate }} ({{ displayedAbbreviation }}): </label>
+              <input name="amount" type="number" ng-model="buyAmount" class="form-control"
+              placeholder="{{ 'EXCHANGE.BUY.AMOUNTPLACEHOLDER' | translate:'{available:buyOffer.formatted_amount_available}' }}" step="{{ sendPlaceholderStep }}" min="{{ sendPlaceholderMin }}" 
+              max="{{ global['buyOffer'].formatted_amount_available }}" required>
+              <p class="help-block">
+                {{ 'EXCHANGE.BUY.AMOUNTAVAILABLE' | translate }} ({{ global['buyOffer'].formatted_amount_available }} {{ displayedAbbreviation }})
+              </p>
+            </div>
+          </div>
+          <div class="col-sm-6">
+            <div class="form-group">
+              <label> {{ 'EXCHANGE.BUY.COST' | translate }} : <a href=""
+                tooltip="{{ 'EXCHANGE.BUY.COSTTOOLTIP' | translate }}"
+                tooltip-append-to-body="true"
+                tooltip-placement="top"> <strong>(?)</strong> </a> </label>
+              <span class="form-control">
+                {{ ( global['buyOffer'].formatted_price_per_coin * buyAmount ) | number:8 }} BTC
+              </span>
+              <p class="help-block">
+                {{ 'EXCHANGE.BUY.AMOUNTAVAILABLEBTC' | translate }}: {{selectedAddress.getDisplayBalance(0)}} BTC
+              </p>
+            </div>
+          </div>
+        </div>
+        <p>
+          {{ 'WALLET.SEND.COST' | translate}}: {{ minersFee.plus(protocolFee).valueOf()}} BTC <button type="button" class="btn btn-xs" ng-click="editTransactionCost()"><span class="glyphicon glyphicon-pencil small"></span></button>
+        </p>
+        <button type="submit" class="btn btn-main pull-right">{{ 'COMMON.NEXT' | translate}}</button>
+      </form>  
+    </div>
+  </div>
+</div>

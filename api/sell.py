@@ -54,10 +54,10 @@ def sell_form_response(response_dict):
     if blocks<1 or blocks>max_payment_timeframe:
         return (None, 'Invalid payment timeframe')
     currency=response_dict['currency'][0]
-    if currency=='MSC':
+    if currency=='OMNI':
         currency_id=1
     else:
-        if currency=='TMSC':
+        if currency=='T-OMNI':
             currency_id=2
         else:
             return (None, 'Invalid currency')

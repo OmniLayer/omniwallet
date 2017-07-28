@@ -1,0 +1,26 @@
+<div class="row">
+  <div class="form-group col-xs-12">
+    <label for="inputUUID">{{ 'MODALS.LOGIN.ID' | translate}}</label>
+    <input type="text" class="form-control" ng-change="checkLogin()" ng-disabled="loginInProgress || login.disable" ng-model="login.uuid" id="inputUUID" value="{{ uuid }}">
+  </div>
+</div>
+<div class="row">
+  <div class="form-group col-xs-12">
+    <label for="inputPassword">{{ 'COMMON.PASSWORD' | translate}}</label>
+    <input type="password" class="form-control" ng-change="checkLogin()" ng-disabled="loginInProgress" ng-model="login.password" id="inputPassword" ng-keypress="keyPress($event)">
+  </div>
+</div>
+<div class="row" ng-show={{displayMFA}}>
+  <div class="form-group col-xs-12">
+    <label>
+      <a href="" ng-click="toggleMFAcheckbox()"
+        tooltip="{{'MODALS.LOGIN.MFATOOLTIP' | translate}}"
+        tooltip-append-to-body="true" tooltip-placement="top">
+        {{ 'MODALS.LOGIN.MFACODE' | translate}}:
+      </a>
+      <input ng-show="toggleMFA" type="checkbox" id="mfacheckbox" ng-model="login.mfachecked" ng-change="login.mfatoken= login.mfachecked ? '' : 'null';checkLogin()">
+    </label><br/>
+    <input type="text" class="form-control" ng-show="login.mfachecked" ng-change="checkLogin()" placeholder="{{ 'COMMON.MFA' | translate}}" ng-disabled="loginInProgress || !login.mfachecked" ng-model="login.mfatoken" id="inputMFA" ng-keypress="keyPress($event)">
+  </div>
+</div>
+

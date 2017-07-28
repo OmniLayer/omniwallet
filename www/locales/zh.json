@@ -1,0 +1,755 @@
+﻿{
+   	"COMMON":{
+   		"ACTIONS":"操作",
+		"ADDRESS":"地址",
+		"AVAILABLE":"有效的",
+		"SENDABLE":"sendable",
+		"BALANCE":"余额",
+		"BITCOIN":"比特币",
+   		"BROADCAST":"发布交易",
+		"SIGNMSG":"Sign Message",
+   		"OVERVIEW":"总览",
+   		"REMOVEADDRESS":"从钱包移除",
+		"ADDRESSES":"地址",
+		"ASSETS":"资产",
+		"ASSET":"资产",
+		"OVERVIEW":"Overview",
+   		"SEND":"发送",
+   		"VALUE":"价值",
+		"CREATEWALLET":"创建钱包",
+		"LOGIN":"登陆",
+		"LOADING":"载入中",
+		"BACK":"后退",
+		"NAME":"姓名",
+		"SELECT":"选择",
+		"SERVERERROR":"Server Error, try again later",
+		"YES":"是",
+		"NO":"否",
+		"CANCEL":"退出",
+		"CLOSE":"Close",
+		"NEXT":"下一步",
+		"DONE":"Done",
+		"ACTIVECROWDSALES":"有效众筹",
+		"HISTORY":"历史记录",
+		"FEES":"Miner Fees (BTC)",
+		"PASSWORD":"Password",
+		"DEFAULT":"Default",
+		"SUCCESS":"Success",
+		"ERROR":"Error",
+		"MFA":"MFA Code",
+		"RESET":"Reset",
+		"MY":"My",
+		"PUBKEY":"Pubkey"
+	},
+	"SETTINGS":{
+		"TITLE":"Account Settings",
+		"ID":"Wallet ID:",
+		"PASSWORD":"Wallet Password:",
+		"PASSWORDCHANGE":"Click Here To Change Your Wallet Password",
+		"MFATOOLTIP":"Add/Remove a compatible MFA device (Google Authenticator, Authy, ...) to protect your account logins",
+		"MFA":"MFA:",
+		"MFAE":"Click Here to Disable your Multifactor Authentication (MFA) Device",
+		"MFAD":"Click Here to Setup/Enable a MultiFactor Authentication (MFA) Device",
+		"EMAILTOOLTIP":"Your email can be used to recover your Wallet ID if you lose/misplace it and eventually for notifications concerning wallet activity.",
+		"EMAIL":"Wallet Email:",
+		"EMAILALERT":"Please enter a valid email",
+		"CURRENCYTOOLTIP":"Choose the preffered currency you wish all balance information in your wallet to be diplayed in.",
+		"CURRENCY":"Wallet Currency:",
+		"TESTECOTOOLTIP":"There are two types of ecosystems in the Masterprotocol, Production and Test. Enabling this option will display both in your wallet. Note: Disabling this option will not prevent you from receiving test ecosystem tokens. It will only filter it from your wallet display.",
+		"TESTECO":"Display Test Ecosystem:",
+		"FILTERDEXTOOLTIP":"Some DEx offers can no longer be completed because the cost to purchase the remaining tokens is less than the minimium amount allowed by the Bitcoin network. This option filters them out of the display list.",
+		"FILTERDEX":"Filter DEx dust level offers:",
+		"SAVE":"Save Preferences",
+		"SAVEDTRUE":"Your Wallet has been updated.",
+		"SAVEDFALSE1":"We seem to have encountered a problem updating your Wallet.",
+		"SAVEDFALSE2":"Please logout, close your browse, wait a minute then log back in and try again.",
+		"MFAEMAIL":"You Currently have an Active MFA Device. For security purposes you can not remove your email at this time.",
+		"MFAEMAILREQ":"For security and recovery purposes you can not setup an MFA device until you add a valid email to your account.",
+		"SHOWHIDEASQ":"Show/Hide Security Question"
+	},
+	"MFA":{
+		"TITLE1":"MFA Setup",
+		"TITLE2":"Disable MFA",
+		"ERROR":"Sorry, the code you entered is incorrect. Please double check and try again.",
+		"SUBMIT":"One moment while we verify and process your request, this should take less than a minute.",
+		"GENERROR1":"There was a problem generating a new secret. Please wait a moment and try again.",
+		"GENERROR2":"If this error continues to happen please notify the Omni team.",
+		"IMPORT":"To setup your account to require an MFA device scan the QR code below or manually enter the secret listed below into your MFA Device/Software (Google Authenticator, Authy, etc..)",
+		"SEC1":"Your Token Secret is",
+		"SEC2":"Store this safely and securely because",
+		"SEC3":"Anyone with this secret will be able to duplicate your MFA authorization codes.",
+		"SEC4":"Enter the current code being displayed on your MFA device to validate and complete the setup.",
+		"DIS1":"You currently have an MFA Device setup on your account.",
+		"DIS2":"Type DISABLE and then enter your current MFA code to deactivate.",
+		"ASQ":"Personal Security Question:",
+		"ASQTOOLTIP":"In the event you lose your MFA device Omniwallet's support team can use this Security Question/Answer to help verify you are the wallet owner and assist in removing the MFA requirements",
+		"ASQPLACEHOLDER":"Setup your Personal Security Question in the MFA Setup",
+		"ASA":"Personal Security Question Answer:",
+		"ASATOOLTIP":"Enter an answer for your security question."
+	},
+	"HOMEPAGE":{
+		"ADDRESSEXAMPLE":"(例如 1EXoDusjGwvnjZUyKkxZ4UHEf77z6A5S4P)",
+   		"BALANCECHECK":"余额查询",
+   		"CHECKBALANCE":"查询余额",
+		"ENTERVALIDADDRESS":"输入有效的比特币地址",
+		"WELCOME":"欢迎使用Omniwallet"
+	},
+	"ABOUT":{
+		"CONTACT":{
+			"WE":"We are a group of developers constantly working to improve Omniwallet.",  
+			"QUESTIONS":"If you have any questions, issues or just want to provide some general feedback feel free to reach out to us at:",
+			"GITHUBTITLE":"Github",
+			"GITHUBDESC":"Search/see our 'Open Issues' and what we are 'Actively Working' on now. Don't see your specific topic? We encourage you to open a new issue to let us know. (Please include as many details as possible including ",
+			"GITHUBLINK":"the output of the developer console",
+			"TALKTITLE":"Knowledge Base/Support Center",
+			"TALKDESC":"This is a support knowledge base where you can review common topics, questions and answers.",
+			"EMAILTITLE":"Email",
+			"EMAILDESC":"You can also reach us directly at",
+			"EMAILLINK":"the output of the developer console",
+			"CHATTITLE":"Live Chat",
+			"CHATDESC":"Chat with the developers, share your ideas or ask questions. Availability varies, but we should generally be around Mon-Fri 9-5 CDT",
+			"TITLE":"Contact Us"
+		},
+		"OMNI":{
+			"TITLE":"About Omni",
+			"FOUNDATION":{
+				"TITLE":"Omni Foundation",
+				"FIRST":"In September 2013, the Mastercoin Foundation was formed to temporarily manage the funds in the Exodus Address and the distribution of the development MSC. The board of the Mastercoin Foundation has declared its intention to minimize its temporary central role by transitioning the decision making to Mastercoin owners through proof of stake voting.",
+				"SECOND": "In January 2016 the Mastercoin Foundation was rebranded to the Omni Foundation and the primary tokens of the project, MSC, where renamed to OMNI. The Foundation advocates for the use of the Omni Protocol and tries to build a community of people who develop it. All budget items, board minutes, Dev OMNI vesting schedule, and bounties are public record and available to anyone on the ",
+				"LINK": "Foundation's Website"
+			},
+			"PROTOCOL":{
+				"TITLE":"Omni Protocol",
+				"PARAGRAPH":"The Omni Protocol is a communications protocol that uses the Bitcoin block chain to enable features such as smart contracts, user currencies and decentralized peer-to-peer exchanges. A common analogy that is used to describe the relation of the Omni Protocol to Bitcoin is that of HTTP to TCP/IP: HTTP, like the Omni Protocol, is the application layer to the more fundamental transport and internet layer of TCP/IP, like Bitcoin. For more in-depth information and details see the ",
+				"LINK":"Spec",
+				"ONGITHUB":"on github."
+
+			},
+			"TOKEN":{
+				"TITLE":"Omnis",
+				"FIRST" : "Omnis (symbol OMNI) are digital tokens that are necessary for the use of some features of the Omni Protocol. The total number of Omnis in existence is 619,478.6 and no more MSC will ever be created. Additionally, Omnis can not be mined into existence. The 619,478.6 OMNI were generated as a result of a public fundraiser in the style of Kickstarter.com."
+			},
+			"INFO":"Information from the ",
+			"EDUCATION":"Master Protocol Education"
+		},
+		"OMNIWALLET":{
+			"TITLE" : "About Omniwallet",
+			"AIM" : "Omniwallet is a new type of web wallet which aims to combine security, usability and multi-currency support.",
+			"SECURITY" : {
+				"TITLE" : "Best in class security",
+				"KEYS" : "Private keys are never sent to the server except in an encrypted form",
+				"OPEN" : "Everything is open source from the ground up!",
+				"REPLICATE" : "You can deploy the Omniwallet on your own server and host your own instance, or use one of the service providers that will host it for you - your money, your choice"
+			},
+			"USABILITY" : {
+				"TITLE" : "Baked in usability",
+				"ONLINE" : "No software to download or install, no blockchain to synchronize and verify - it just works, lightning fast",
+				"PLANNED" : "Carefully planned layout, with common operations emphasized",
+				"INTUITIVE" : "Beautiful and intuitive User Interface",
+				"SPECIAL" : "Special care is taken to smooth out operational edge cases to prevent mistakes and ensure a painless experience for the user"
+			},
+			"MULTICURRENCY" : {
+				"TITLE" : "Multi-currency support",
+				"BUILT" : "Omniwallet comes with a pre-built support for Bitcoin, Omni and Test Omni",
+				"SUPPORT" : "Native support for Smart Property and User-Generated Currencies",
+				"ALT" : "Alt-coin support  - Omniwallet has plans to support coins that go outside of the usual Omni ecosystem, such as Litecoin, Peercoin and more"
+			},
+			"STATUS" :{
+				"TITLE" : "Current Status",
+				"SPEED" : "Omniwallet is in development. Our vision and goal are well defined, and we are working hard to develop the functionality and continually improve the features.",
+				"INVOLVEMENT" : "We would like to get your involvement in the development effort! So go ahead and:",
+				"SUGGESTIONS" : "Play around with it and give us suggestions",
+				"BUGS" : "Report bugs on github",
+				"CODE" : "Code up and send in pull requests that fix some of these issues",
+				"CONTRIBUTIONS" : "Contributions are eligible for the",
+				"BOUNTIES" : "bounties we have in place",
+				"SUBMIT" : "so please be sure to submit any contribution you make to the bounty thread.",
+				"BETA" : "Beta Code:",
+				"MEAN" : "What does this mean? We strive to make sure the features available are working as expected, however",
+				"CAUTION" : "you should still exercise caution",
+				"VALUE" : "when working with anything of substantial value."
+			}
+		},
+		"FAQ":{
+			"TITLE" : "Frequently Asked Questions"
+		}
+	},
+	"NAVIGATION":{
+		"ABOUT":"关于",
+		"ABOUTOMNIWALLET":"关于Omniwallet",
+		"ABOUTOMNI":"关于OMNI",
+		"ACCOUNT":"我的账户",
+		"ADDRESSES":"我的地址",
+		"ASSETS":"我的资产",
+		"CREATE":"创建钱包",
+		"CONTACT":"联系我们",
+		"EXCHANGE":"交易",
+		"EXPLORER":"浏览",
+		"EXPLOREASSETS":"资产",
+		"FAQ":"常见问题",
+		"LOGIN":"登陆",
+		"LOGOUT":"注销",
+		"OFFERS":"我的报价",
+		"SETTINGS":"账户设置",
+		"TRADE":"交易",
+		"DEX1":"BTC/OMNI",
+		"TRANSACTIONS":"交易",
+		"WALLET":"我的钱包",
+		"OMNIDEX":"OmniDex"
+	},
+	"MODALS":{
+		"CREATE":{
+			"MESSAGES" : {
+				"UUID":"This UUID is already in use",
+				"CAPTCHA":"Invalid Captcha try again.",
+				"VALIDATING":"We are validating your data and creating your account",
+				"PASSWORDLENGTH":"Password must be at least 8 characters long",
+				"PASSWORDSTRENGTH":"Password strength must be at least 70%",
+				"STRENGTHTIP":"(Try having at least 2: UpperCase/LowerCase/Numbers/Symbols)",
+				"PASSWORDMATCH":"Passwords do not match!",
+				"EMAIL":"We will send you a welcome email containing your unique login link.",
+				"EMAILVALID":"Please enter a valid email address"
+			},
+			"WARNING":{
+				"TITLE":"Don't Forget Your Password!",
+				"MESSAGE":"WARNING: Forgotten passwords are UNRECOVERABLE and can result in LOSS of ALL of your coins!"
+			},
+			"REQUIRED":"Required",
+			"STRENGTH":"Strength",
+			"REPEAT":"Repeat Password",
+			"EMAIL":"Email",
+			"EMAILHOLDER":"Enter an email address"
+		},
+		"LOGIN":{
+			"ID":"Wallet ID",
+			"INVALID1":"Sorry, we could not validate your credentials. Please check them and try again",
+			"INVALID2":"If you continue to have difficulties, check out our ",
+			"MFACODE":"I'm using Multi Factor Authentication",
+			"MFATOOLTIP":"Don't have an MFA device setup yet? Login and add one to your account under 'Account Settings'"
+		}, 
+		"CONFIRM":{
+			"OFFLINE":"Your transaction was generated successfully, now save the text above and sign it on your Armory offline computer. Come back with the signed text to broadcast it.",
+			"BROADCAST":"Broadcast",
+			"CHECK":"check your transaction",
+			"HERE":"here",
+			"FROM":"From",
+			"SIGN":"You will need to sign this transaction offline and come back to broadcast it and finish the operation."
+		},
+		"SEND":{
+			"ERROR":"Funds could not be sent",
+			"GOBACK":"Go back and change the amount",
+			"CHANGED":"The value of BTC has changed, Please check the details and choose what you want to do"
+
+		},
+		"BROADCAST":{
+			"TITLE":"Broadcast Signed Transaction",
+			"INSTRUCTIONS":"Please copy the signed transaction into the textbox below to broadcast it",
+			"ADDRESS":"Broadcasting Address",
+			"SIGNED":"Signed Armory Transaction",
+			"SUCCESS":"Transaction broadcasted successfully",
+			"FAIL":"Transaction failed to broadcast"
+		},
+		"SIGNMSG":{
+			"TITLE":"Sign Message",
+			"INSTRUCTIONS":"Enter your message below and click sign, to sign it with the signing address",
+			"ADDRESS":"Signing Address",
+			"SIGNED":"Signed Message",
+			"SUCCESS":"Message signed successfully",
+			"FAIL":"Could not sign message"
+		},
+		"IMPORT":{
+			"VALID":"Must be a valid Bitcoin address",
+			"EXISTS":"Bitcoin address is already listed",
+			"SUBMIT":"Add Address",
+			"OFFLINE":{
+				"TITLE":"Import Armory Offline Address",
+				"KEY":"Enter Public Key",
+				"OFFLINE":"Offline"
+			},
+			"WATCH":{
+				"TITLE":"Import a Watch Only BTC/OMNI Address",
+				"ADDRESS":"Enter Address",
+				"DESC":"Watch Only"
+			},
+			"ENCRYPTED":{
+				"TITLE":"Import an Encrypted BTC/OMNI Private Key",
+				"KEY":"Enter Encrypted Key (Send/Receive)",
+				"KEYHOLDER":"enter your encrypted private key",
+				"PASSHOLDER":"enter your passphrase"
+			},
+			"PRIVATE":{
+				"TITLE":"Import a BTC/OMNI Private Key",
+				"ENTER":"Enter",
+				"KEY":"Private Key",
+				"ENABLE":"Enable Sending",
+				"KEYHOLDER":"enter your private key, formats: hex, b64, WIF, compressed WIF"
+			},
+			"WALLET":{
+				"TITLE":"Import a Wallet Backup",
+				"UPLOAD":"Upload backup file",
+				"INVALID":"Must be a valid Omnicore backup file"
+			}
+		},
+		"EXPORT":{
+			"TITLE":"Export Wallet",
+			"NAME":"Backup Name",
+			"PASSPHRASE":"Enter Password"
+		},
+		"IDLE":{
+			"TITLE":"Do you want to continue your session?",
+			"BODY":"For security reasons your session will time out {{ idleEndTimeFormatted }} unless you continue.",
+			"FOOTER":"Continue Session"
+		},
+		"DELETE":{
+			"TITLE":"Remove from your wallet",
+			"SURE":"Are you sure?",
+			"DESCRIPTION":{
+				"LEAD":"Removing this address from your wallet won't destroy any funds kept in it, but if this is the only place you have your private key stored, you ",
+				"BOLD":"will permanently lose",
+				"TRAIL":"the ability to move or cash them in!"
+			
+			},
+			"BACKUP":{
+				"LEAD":"Be VERY sure your keys are ",
+				"LINK":"backed up",
+				"TRAIL":"and you mean to do this!"
+			
+			},
+			"WATCH":"Removing this WatchOnly address from your wallet only affects the displayed balances. All funds on this address will continue to remain on it and you can add it back at anytime if you wish to track them again.",
+			"CONFIRM":"Yes, Remove Address"
+		}
+	},
+	"TRANSACTION":{
+		"TYPE":{
+			"0":"发送",
+			"3":"Send To Owners",
+			"20":"卖单",
+			"21":"Dex第二阶段",
+			"22":"接受报价",
+			"-22":"买单",
+			"50":"创建固定资产",
+			"51":"发起众筹",
+			"-51":"参与众筹",
+			"52":"推销资产",
+			"53":"关闭众筹",
+			"54":"创建资产管理",
+			"55":"发放资产令牌",
+			"56":"撤销资产令牌",
+			"70":"更改资产发行人记录",
+			"-1":"Unknown Transaction"
+		},
+		"DETAILS":{
+			"0":{
+				"SENDER":"您已发送 {{amount | toWhole:divisible }} {{coin | truncate:15}}",
+				"RECIPIENT":"您已收到 {{amount | toWhole:divisible }} {{coin | truncate:15}}"
+			},
+			"3":{
+				"PAYER":"您已发送 {{amount | toWhole:divisible }} {{coin | truncate:15}}",
+				"PAYEE":"您收到付款 {{amount | toWhole:divisible }} {{coin | truncate:15}}",
+				"FEEPAYER":"You paid {{amount | toWhole:divisible }} {{coin | truncate:15}} in fees"
+			},
+			"20":{ 
+				"SELLER":"您挂单 {{amount | toWhole:divisible }} {{coin | truncate:15}} 出售"},
+			"22":{
+				"BUYER":"您收到 {{amount | toWhole:divisible }} {{coin | truncate:15}}",
+				"SELLER":"{{amount | toWhole:divisible }} {{coin | truncate:15}} 来自买家"
+			},
+			"-22":{
+				"BUYER":"您购买 {{amount | toWhole:divisible }} {{coin | truncate:15}}",
+				"SELLER":"您出售 {{amount | toWhole:divisible }} {{coin | truncate:15}}"
+			},
+			"50":{ 
+				"ISSUER":"您创造了 {{coin | truncate:15}} 并且其数量为 {{amount | toWhole:divisible }}"},
+			"51":{ 
+				"ISSUER":"您已发起 {{coin | truncate:15}} 众筹"},
+			"-51":{
+				"ISSUER":"您获得 {{amount | toWhole:divisible }} {{coin | truncate:15}}",
+				"PARTICIPANT":"您获得 {{amount | toWhole:divisible }} {{coin | truncate:15}}",
+				"SENDER":"您参与众筹了 {{amount | toWhole:divisible }} {{coin | truncate:15}}",
+				"RECIPIENT":"您收到 {{amount | toWhole:divisible }} {{coin | truncate:15}}"
+			},
+			"54":{ 
+				"ISSUER":"您创造了 {{coin | truncate:15}} 以便于资产管理" 
+			},
+			"55":{
+				"ISSUER":"您已发放 {{amount | toWhole:divisible }} {{coin | truncate:15}}",
+				"RECIPIENT":"您已被发放 {{amount | toWhole:divisible }} {{coin | truncate:15}}"
+			},
+			"56":{
+				"ISSUER":"您已撤销 {{coin | truncate:15}}"
+			},
+			"70":{
+				"ISSUER":"{{coin | truncate:15}} 所有权转移"
+			},
+			"-1":{
+				"SENDER":"OmiProtocol Transaction, Unknown Type"
+			}
+		}
+	},
+	"WALLET":{
+		"OVERVIEW":{
+			"BACKUP":"备份",
+			"ESTIMATED":"预计总额",
+			"IMPORT":"输入",
+			"TITLE":"总览",
+			"OPTIONS":"钱包选项",
+			"OPTIONSTOGGLE":"切换选项",
+			"PORTFOLIO":"根据价值组合",
+			"WALLETID":"钱包ID"
+		},
+		"ADDRESSES":{
+			"CREATE":"创建新钱包地址",
+			"IMPORT":"输入带私匙的地址",
+			"TITLE":"我的钱包地址",
+			"VIEW":"浏览",
+			"OPTIONS":"添加钱包地址",
+			"WATCH":"Add Watch Only Address",
+			"OFFLINE":"添加离线地址"
+		},
+		"SEND":{
+			"TITLE":"发送",
+			"CHOOSECOIN":"选择货币",
+			"FROM":"发送地址",
+			"AMOUNT":"数量",
+			"TO":"接收地址",
+			"COST":"全部交易费用",
+			"PROTOCOL_COST": "Omni Protocol Transaction Cost",
+			"MODAL_TRANSACTION_COST":"Transaction Cost",
+			"MODAL_MINER": "Miner Fee",
+			"FUNDS":"发送资产",
+			"TOKEN":"令牌",
+			"MODAL_AMOUNT":"数量",
+			"MODAL_FROM":"来自",
+			"MODAL_TO":"至",
+			"CONFIRM":"确认发送",
+			"AVAIL":"从可用地址",
+			"LOWFEE":"您的“发件人地址”没有足够的BTC完成此交易。请至少发送 {{ topupAmount }} BTC覆盖估计总交易成本。",
+			"UPDATE_FEE":"Re-estimate Transaction Cost"
+		},
+		"ASSETS":{
+			"ASSETS":"资产",
+			"CREATE":"创建",
+			"CROWDSALE":"众筹",
+			"MYASSETS":"我的资产",
+			"SMARTPROPERTY":"智能资产"
+		},
+		"HISTORY":{
+			"ALLADDRESSES":"-- 全部地址 --",
+			"FILTERLABEL":"钱包完整记录",
+			"TITLE":"历史记录",
+			"CURRENCY":"货币",
+			"TYPE":"类型",
+			"AMOUNT":"数量",
+			"TXTIME":"交易时间",
+			"TXDETAILS":"交易明细",
+			"MOREDETAILS":"查看交易明细",
+			"BTCNOTE1":"Note: At this time the history page only includes Omni Protocol transactions.",
+			"BTCNOTE2":"To see Bitcoin Transaction history we recommend a Bitcoin Explorer like: "
+		}
+	},
+	"ASSET":{
+		"ISSUANCE":{
+			"TITLE":"创建智能资产",
+			"SUBTITLE":"发行明细",
+			"AMOUNT":"令牌数量",
+			"AMOUNT_HINT":"输入期望的数量",
+			"TYPE":"发行类型",
+			"FIXED":"确定",
+			"MANAGED":"管理",
+			"CREATE":"创建资产",
+			"MODALTITLE":"确定创建资产"
+		},
+		"FORM":{
+			"ISSUER":"发行地址",
+			"DETAILS":{
+				"SUBTITLE":"智能资产描述",
+				"DIVISIBLE":"可分割",
+				"CATEGORY":"分类",
+				"SUBCATEGORY":"子分类",
+				"URL":"资产网址",
+				"URL_HINT":"输入相关网址以帮助用户了解更多关于智能资产的信息",
+				"DESCRIPTION":"智能资产描述",
+				"DESCRIPTION_HINT":"剩余字符",
+				"NAME_HINT":"ex. Bobcoin"
+			}
+		},
+		"CROWDSALE":{
+			"TITLE":"发起众筹",
+			"SUBTITLE":"众筹详情",
+			"DEADLINE":"截止日期",
+			"FORISSUER":"Percentage for issuer",
+			"FORISSUER_TOOLTIP":"Additional percentage created and credited to the issuing address based on the amount created and credited for each investment. Ex:With Percentage to issuer = 10, an investment that credits 100 tokens to an investment will also credit 10 tokens to the issuer.",
+			"UTC":"世界标准时间",
+			"EARLYBONUS":"Weekly early bird bonus percentage",
+			"EARLYBONUS_TOOLTIP":"Bonus percentage created and credited to each investor for each week (7 days) before the deadline (calculated to the second). Ex:With Weekly early bird bonus percentage = 10, a participant investing 14 days before the deadline will get approx 20% bonus. An investor investing with 10 days left will get approx 14% bonus.",
+			"EARLYESTIMATE":"Estimated initial early bird bonus",
+			"EARLYESTIMATE_TOOLTIP":"Estimate based on the crowdsale creation being confirmed in the blockchain within 30 minutes after it was calculated.",
+			"PER":"每个",
+			"INVESTED":"投资",
+			"ADDCURRENCY":"+ Add investment currency",
+			"TOKENRATE":"# of tokens",
+			"RATES":"Rates",
+			"RATE":"Rate",
+			"START":"发起众筹",
+			"MODALTITLE":"确认发起众筹",
+			"ACCEPTEDCURRENCY":"支持的货币",
+			"INITIALEB":"早期参与者的红利"
+		},
+		"MODAL_DESCRIPTION":"说明",
+		"HISTORY":{
+			"TRANSACTIONS":"交易",
+			"LOADING":"交易正在进行",
+			"FIXEDISSUANCE":{
+				"TRUE":"资产",
+				"FALSE":"众筹"
+			},
+			"TITLE":"Asset History",
+			"TRANSACTION":{
+				"CLOSED":"Crowdsale was closed from further investments",
+				"CREATE":"被创建",
+				"CONFIRMATIONS":"Confirmations", 
+				"GRANT":"Granted {{amount}} tokens to {{to}}"
+			}
+		},
+		"DETAILS":{
+			"URL":"获取更多信息请访问",
+			"SHARE":"分享该页面"
+		}
+	},
+	"TIMER":{
+		"YEAR":"年",
+		"MONTH":"月",
+		"DAY":"日",
+		"HOUR":"时",
+		"MINUTE":"分",
+		"SECOND":"秒"
+	},
+	"TIMEAGO":{
+		"NOW":"刚刚",
+		"MINUTE":"几分钟前",
+		"HOUR":"几小时前",
+		"DAY":"几天前",
+		"WEEK":"几周前",
+		"MONTH":"几个月前",
+		"YEAR":"几年前"
+	},
+	"CROWDSALE":{
+		"DETAILS":{
+			"YOUR":"您的",
+			"ACTIVE":{
+				"TRUE":"正在进行的众筹",
+				"FALSE":"已经结束的众筹"
+			},
+			"TIME":"最后期限",
+			"TOKENSBOUGHT":"已被购买的令牌",
+			"TOKENSISSUER":"已被创建的令牌",
+			"CURRENTBONUS":"目前早期参与众筹者的优惠",
+			"GETTOKENS":"获取令牌!",
+			"PARTICIPATE":"参与",
+			"NOTOKENS":"您不拥有此次众筹的令牌",
+			"LOGIN":"您需要登录或者创建钱包以便于参与众筹"
+		},
+		"PARTICIPATION":{
+			"TITLE":"参与 {{property.name | truncate:15}} 众筹",
+			"DESIREDCOIN":"发送令牌",
+			"MODAL_ESTIMATE":"预计令牌数量",
+			"ESTIMATE_LEAD":"您将会收到",
+			"ESTIMATE_TRAIL":"if you participate at this level."
+		},
+		"REMAINING":{
+			"DAYS":"日",
+			"HOURS":"时",
+			"MINUTES":"分"
+		},
+		"PARTICIPATE":{
+			"TITLE":"确定参与众筹",
+			"CONFIRM":"参与"
+		}
+	},
+	"ECOSYSTEM":{
+		"LABEL":"生态系统",
+		"PRODUCTION":"产品",
+		"TEST":"测试"
+	},
+	"EXPLORER":{
+		"OVERVIEW":{
+			"TITLE":"最新交易",
+			"SHORTQUERY":{
+				"LEAD":"您需要至少",
+				"TRAIL":"more character(s) to search."
+			},
+			"NORESULTS":"发现0个交易记录.",
+			"ALPHANUMERIC":"搜索时不能使用非数字或字母字符.",
+			"PLACEHOLDER":"搜索部分或者完整交易记录"
+		},
+		"INSPECTOR":{
+			"TITLE":"核对交易",
+			"FIELD":"字段名称",
+			"DETAILS":"详细信息"
+		}
+	},
+	"TABLES":{
+		"TRANSACTIONS":{
+			"TX":"交易",
+			"DETAILS":"详细信息",
+			"AMOUNT":"数量",
+			"BLOCK":"区块",
+			"BLOCKTIME":"区块时间 (世界标准时间)"
+		},
+		"ASSETS":{
+			"ID":"资产 ID",
+			"NAME":"资产名称",
+			"AMOUNT":"总数量",
+			"URL":"网址"
+		},
+		"CROWDSALE":{
+			"BOUGHT":"已被购买的令牌",
+			"CREATED":"已被创建的令牌"
+		},
+		"OFFERS":{
+			"HASH":"Transaction hash",
+			"PRICE":"Price per Token",
+			"AMOUNT":"Amount",
+			"TOTAL":"Total",
+			"CANCEL":"Cancel",
+			"BUY":"Buy",
+			"SIDE": "Side",
+			"STATUS": "Status"
+		}
+	},
+	"EXCHANGE":{
+		"TRADE":{
+			"TITLE":"Trade",
+			"SELL":"Sell",
+			"NOCOINS":{
+				"LEAD":"Sorry, you don't have any",
+				"TRAIL": "available to sell"
+			},
+			"NOORDERS":"No offers/bids found for this timeframe",
+			"ACTIVE": "Active Offers",
+			"TIMEFRAME" :"Time frame",
+			"TOTAL": "Total Transactions",
+			"TXHASH":"Transaction hash",
+			"PRICE":"Price",
+			"AMOUNT":"Amount Remaining",
+			"COST":"Cost",
+			"FEE":"Fee",
+			"PAYMENT":"Payment Window (Blocks)",
+			"ENDED":"User Ended",
+			"SOLD":"Sold out!",
+			"BUYERFEE":"Buyer Fee",
+			"ACCEPT": "Accept Offer",
+			"YOURS":"Your offer/purchase"
+		},
+		"SALE":{
+			"TITLE":"Sell Offer",
+			"CHOOSECOIN":"Selected coin",
+			"FROM":"From address",
+			"QUANTITY":"Sell Quantity",
+			"TOTAL":"Total Bitcoin desired ( # BTC for",
+			"TOTALTOOLTIP":"Enter the total # of bitcoins you would want to receive if you sold all",
+			"PRICE":"Price per coin",
+			"TIME":"Time given to buyer to pay",
+			"TIMETOOLTIP":"Time in blocks the buyer has to complete his purchase (1 block approx. 10 minutes)",
+			"BUYERFEE":"Buyer's fee",
+			"MODALTITLE": "Confirm Sale",
+			"CURRENCY": "Selling",
+			"MODAL_FROM":"From",
+			"MODAL_AMOUNT": "Amount",
+			"BLOCKS":"Payment Timeframe",
+			"BUYERSFEE":"Buyer's Fee",
+			"CONFIRM":"Confirm Sale"
+		},
+		"BUY":{
+			"TITLE":"Accept Offer",
+			"NOFUNDS":"No Funds on Addresses with private keys to complete the request!",
+			"SENDSOME":"Send some funding to an address on the",
+			"ORADD":"page or add an address with funds.",
+			"ADDRESS":"Buying Address",
+			"OFFERTOOLTIP":"Opens in new Window/Tab",
+			"OFFER":"Sale Offer (ID / hash)",
+			"SELLER":"Seller's address",
+			"FEE":"Sale fee",
+			"TIMEFRAME":"Payment Timeframe",
+			"TIMEFRAMETOOLTIP":"If your reservation offer is accepted and validated you will have to complete the payment within this time frame.",
+			"TIMEFRAMEDESCRIPTIONLEAD":" Blocks. (Approx ",
+			"TIMEFRAMEDESCRIPTIONTRAIL": "hours based on an average of 10min/block)",
+			"AMOUNT":"Amount to accept",
+			"AMOUNTPLACEHOLDER":"For example: {{ sendPlaceholderValue }} (Max {{ available }})",
+			"AMOUNTAVAILABLE":"Available to accept:",
+			"AMOUNTAVAILABLEBTC":"Current Address Balance",
+			"COST":"Approx Cost",
+			"COSTTOOLTIP":"If your reservation offer is accepted and validated, you will have to pay this amount to complete the transaction.",
+			"MODALTITLE":"Confirm Buy Offer",
+			"CONFIRM":"Accept Offer",
+			"CURRENCY":"Buying",
+			"BLOCKS":"Blocks"
+		},
+		"MYOFFERS":{
+			"TITLE":"My Offers",
+			"BUYTITLE":"Active Buy Offers",
+			"SELLTITLE":"Active Sell Offers",
+			"PURCHASE":"Purchase coin",
+			"EXPIRED":"Offer Expired",
+			"CANCEL":"Cancel Offer",
+			"PAYMENT":"Send payment",
+			"COINTYPE":"Send type of coin",
+			"COINMESSAGE":"To complete a pending offer, you must make purchases in Bitcoin.",
+			"FROM":"Send from address",
+			"TO":"Send funds to",
+			"AMOUNT":"Amount to send (in",
+			"REMAINING":"Blocks Remaining",
+			"REMAININGTOOLTIP":"Your payment must be received within this many blocks to complete successfully",
+			"BLOCKS":"blocks",
+			"CANCELTITLE":"Confirm Sale Cancellation",
+			"CANCELCONFIRM":"Cancel Sale",
+			"CANCELMESSAGE":"You're about to cancel this sale. If this is correct, please press Cancel Sale below. "
+		}
+	},
+	"OMNIDEX" : {
+		"MARKETS" : {
+			"TITLE" : "Markets",
+			"NEW" : "Start Market",
+			"SYMBOL" : "PropertyID",
+			"NAME" : "Property Name",
+			"PRICE" : "Current Price",
+			"VOLUME" : "24h Volume",
+			"SUPPLY" : "Total Supply",
+			"CAP" : "Market Cap",
+			"CHANGE" : "Change Since Last Trade",
+			"LASTPRICE" : "Last Trade Price",
+			"NOMARKETS" : "There are currently no open markets",
+			"DENOMINATOR" : "Choose Denominating Currency"
+		},
+		"ORDERBOOK" : {
+			"TITLE" : "{{ currency }} Exchange",
+			"BUY" : "Buy",
+			"SELL": "Sell",
+			"BALANCE" : "Your balance",
+			"TOTALCOST" : "My Total Cost",
+			"TOTALDESIRED" : "Total Desired",
+			"UNITPRICE" :"Price Per",
+			"AMOUNT" : "Amount",
+			"NOCOINS" : "You don't have any {{propertyName}} available",
+			"ACTIVEOFFERS" : "Your Offers",
+			"NOACTIVEOFFERS" : "You don't have any active offers",
+			"EMPTY" : "No offers",
+			"AMOUNTTOOLTIP" : "The Sum of the Amount {{ type }} for all orders at this price point",
+			"TOTALTOOLTIP" : "The Aggregate Sum of the Total Amount {{ type }} in all orders at this price or better",
+			"ID" : "Offer ID"
+		},
+		"SALE" : {
+			"TITLE" : "Open New Market",
+			"CHOOSECOINSELLING" : "Choose coin to sell",
+			"SELLINGAMOUNT" : "Amount to sell",
+			"CHOOSECOINDESIRED" : "Choose coin desired",
+			"DESIREDAMOUNT" : "Amount desired"
+		},
+		"ORDERS" : {
+			"TYPETT" : "Indicates which side of the Orderbook the Order applies to. Note: When switching the Market Currency, order information is automatically flipped and displayed on the inverted pair.",
+			"AMOUNTT" : "The Amount remaining in your order to be Bought (Buy Orders) or Sold (Sell Orders).",
+			"PRICETT" : "The effective unit price (EUP) is usually the original unit price. The EUP can go up (for asks) and down (for bids) in certain edge cases due to rounding of fractions to transferable units.",
+			"TOTALTT" : "The Total Amount left in your order to be Bought (Sell Orders) or Sold (Buy Orders)."
+		}
+	}
+}

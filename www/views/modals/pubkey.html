@@ -1,0 +1,21 @@
+<div class="modal-header">
+  <div class="text-left modal-title col-md-11">{{ 'COMMON.ADDRESS' | translate}}: <strong>{{address}}</strong></div>
+  <div class="text-right"><button ng-disabled="wating" class="btn modal-cancel-btn" ng-click="close()"></button></div>
+</div>
+<form novalidate class="form-horizontal">
+  <div class="modal-body">
+    <h5>{{ 'COMMON.PUBKEY' | translate}}:</h5>
+    <div class="control-group">
+      <div class="controls">
+        <textarea rows="8" class="form-control input-sm" ng-readonly=true >{{pubkey}}</textarea>
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <div>
+      <a href="/wallet/addresses">
+        <button class="btn btn-success" ng-click="close()">{{ 'COMMON.CLOSE' | translate}}</button>
+      </a>
+    </div>
+  </div>
+</form>

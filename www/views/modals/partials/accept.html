@@ -1,0 +1,31 @@
+<div class="modal-row">
+  <div class="description-title-xlarge">{{ 'EXCHANGE.BUY.CURRENCY' | translate}}:</div><div class="description-text">{{selectedCoin}}</div>
+</div>
+
+<div class="modal-row">
+  <div class="description-title-xlarge">{{ 'EXCHANGE.BUY.SELLER' | translate}}:</div><div class="description-text"><a href="#" tooltip="{{sellerAddress}}"> {{sellerAddress.substring(0,18)}}...</a></div>
+</div>
+
+<div class="modal-row">
+  <div class="description-title-xlarge">{{ 'EXCHANGE.BUY.OFFER' | translate}}:</div><div class="description-text"><a tooltip="{{offerHash}}" href="#">{{offerHash.substring(0,22)}}...</a> </div>
+</div>
+
+<div class="modal-row">
+  <div class="description-title-xlarge">{{ 'EXCHANGE.SALE.PRICE' | translate}}:</div><div class="description-text">{{salePricePerCoin}} BTC</div>
+</div>
+
+<div class="modal-row">
+  <div class="description-title-xlarge">{{ 'EXCHANGE.BUY.TIMEFRAME' | translate}}:</div><div class="description-text">{{saleBlocks}} {{ 'EXCHANGE.BUY.BLOCKS' | translate}}</div>
+</div>
+
+<div class="modal-row">
+  <div class="description-title-xlarge">{{ 'EXCHANGE.BUY.ADDRESS' | translate}}:</div><div class="description-text">{{selectedAddress.hash}}</div>
+</div>
+
+<div class="modal-row">
+  <div class="description-title-xlarge">{{ 'EXCHANGE.BUY.AMOUNT' | translate}}:</div><div class="description-text">{{buyAmount}}</div>
+</div>
+
+<div class="modal-row">
+  <div class="description-title-xlarge">{{ 'WALLET.SEND.COST' | translate}}:</div><div class="description-text">{{totalCost}}</div>
+</div>

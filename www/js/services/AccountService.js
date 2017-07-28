@@ -13,7 +13,6 @@ angular.module("omniServices")
           return uuid;
         };
 
-
         self.verifyUUID = function(uuid) {
           //Check UUID for proper format
           verify = uuid.match(/^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89a-f][0-9a-f]{3}-[0-9a-f]{12}$/i) || []
@@ -26,14 +25,14 @@ angular.module("omniServices")
           }
         };
 
-        self.create = function(form){
+        self.create = function (form) {
             var create = $q.defer();
-            if(!self.validating){
+            if (!self.validating) {
                 self.uuid = generateUUID();
                 if (form.email == undefined) {
-                  uemail = ""
+                  uemail = "";
                 } else {
-                  uemail = form.email
+                  uemail = form.email;
                 }
                 var wallet = {
                   uuid: self.uuid,
@@ -62,8 +61,8 @@ angular.module("omniServices")
                       angular.extend(createData, {
                         recaptcha_challenge_field:form.captcha.challenge,
                         recaptcha_response_field:form.captcha.response
-                      })
-                    };
+                      });
+                    }
 
                     return $http({
                       url: '/v1/user/wallet/create',
@@ -72,19 +71,20 @@ angular.module("omniServices")
                     });
                   })
                   .then(function(result) {
-                    if(result.data.error =="InvalidCaptcha"){
+                    if(result.data.error == "InvalidCaptcha"){
                       
                       self.validating=false;
                       Recaptcha.reload();
                       create.reject({
                         invalidCaptcha : true,
                         validating : false
-                      })
-                    }else {
-                      self.validating=false;
+                      });
+                    } else {
+                      self.validating = false;
                       self.settings.firstLogin = true;
                       self.wallet = wallet;
                       Wallet.initialize(wallet);
+
                       ga('send', 'event', 'button', 'click', 'Create Wallet');
                       self.loggedIn = true;
                       create.resolve(self);
@@ -98,9 +98,12 @@ angular.module("omniServices")
             }
             
             return create.promise;
-        }
+        };
 
-        self.verify = function(uuid,passphrase){
+        self.verify = function(uuid, passphrase, mfatoken) {
+          if (typeof mfatoken=="undefined") {
+            mfatoken="null";
+          }
           return $http.get('/v1/user/wallet/challenge?uuid=' + uuid)
                     .then(function(result) {
                         var data = result.data;
@@ -110,7 +113,7 @@ angular.module("omniServices")
                         CryptUtilAsync.generateNonceForDifficulty(data.pow_challenge, function(result) {
                             self.nonce = result;
                             CryptUtilAsync.generateSymmetricKey(passphrase, data.salt, function(result) {
-                                self.walletKey = result;
+                                self.walletKeyTemp = result;
                                 CryptUtilAsync.generateAsymmetricPair(function(result) {
                                     self.asymKey = result;
                                     self.encodedPub = window.btoa(self.asymKey.pubPem);
@@ -124,27 +127,34 @@ angular.module("omniServices")
                     .then(function(result) {
                         return $http({
                             url: '/v1/user/wallet/login',
-                            method: 'GET',
-                            params: {
+                            method: 'POST',
+                            data: {
                                 nonce: self.nonce,
                                 public_key: self.encodedPub,
-                                uuid: self.uuid
+                                uuid: self.uuid,
+                                mfatoken: mfatoken
                             }
                         });
                     });
-        }
+        };
 
-        self.login = function(uuid, passphrase) {
-            var login = $q.defer()
+        self.login = function(uuid, passphrase, mfatoken) {
+            if (typeof mfatoken=="undefined") {
+              mfatoken="null";
+            }
+            var login = $q.defer();
             if (!self.loginInProgress) {
             	self.loginInProgress = true;
                 self.uuid = uuid;
-                self.verify(uuid,passphrase)
+                self.verify(uuid,passphrase,mfatoken)
                     .then(function(result) {
                         var data = result.data;
                         try {
-                            var wallet = CryptUtil.decryptObject(data, self.walletKey);
+                            var wallet = CryptUtil.decryptObject(data.wallet, self.walletKeyTemp);
                             self.wallet = wallet;
+                            self.walletKey = self.walletKeyTemp;
+                            self.mfa = data.mfa;
+                            self.asq = data.asq;
                             self.settings.firstLogin=false;
                             // update wallet service
                             Wallet.initialize(wallet);
@@ -171,18 +181,20 @@ angular.module("omniServices")
             }
 
             return login.promise;
-        }
+        };
 
         self.logout = function(){
             self.uuid = null;
             self.walletKey = null;
+            self.walletKeyTemp = null;
             self.asymKey = null;
             self.wallet = null;
+            self.mfa = null;
             self.addresses = null;
             self.assets = null;
             self.loggedIn = false;
             Wallet.destroy();
-        }
+        };
 
         self.saveSession = function() {
             if(self.loggedIn){
@@ -204,14 +216,56 @@ angular.module("omniServices")
                     }
                   });
                 }).then(function(result) {
-                  console.log("Success saving");
+		  var data = result.data;
+		  if(data.updated) {
+			console.log("Success saving");
+		  } else {
+			console.log("Failure saving");
+			location = location.origin + '/loginfs/' + self.uuid;
+			self.logout();
+		  }
                 }, function(result) {
                   console.log("Failure saving");
                   location = location.origin + '/loginfs/' + self.uuid;
                   self.logout();
                 });
             }
-        }
+        };
+
+        self.updateMFA = function(secret,token,action,asq,asa) {
+            if(self.loggedIn){
+                return $http.get('/v1/user/wallet/challenge?uuid=' + self.uuid)
+                .then(function(result) {
+
+                  var data = result.data;
+                  var challenge = data.challenge;
+                  var signature = CryptUtil.createSignedObject(challenge, self.asymKey.privKey);
+    
+                  return $http({
+                    url: '/v1/user/wallet/update',
+                    method: 'POST',
+                    data: {
+                      uuid: self.uuid,
+                      mfasecret: secret,
+                      mfatoken: token,
+                      mfaaction: action,
+                      signature: signature,
+                      question: asq,
+                      answer: asa
+                    }
+                  });
+                }).then(function(result) {
+                  //console.log(result);
+                  self.asq=asq;
+                  return result;
+                }, function(result) {
+                  console.log("Failure updating");
+                  //console.log(result);
+                  location = location.origin + '/loginfs/' + self.uuid;
+                  self.logout();
+                });
+            }
+        };
 
         self.addAddress = function(address, privKey, pubKey) {
             for (var i in self.wallet.addresses) {
@@ -236,7 +290,7 @@ angular.module("omniServices")
               "address": address,
               "privkey": privKey,
               "pubkey": pubKey 
-            }
+            };
 
             self.wallet.addresses.push(rawaddress);
             
@@ -258,7 +312,7 @@ angular.module("omniServices")
 
         self.setCurrencySymbol = function(currency){
 
-          csym = '$'
+          csym = '$';
 
           switch (currency) {
 
@@ -371,9 +425,9 @@ angular.module("omniServices")
 
             case "email":
               if (self.wallet.email == undefined) {
-                retval = ""
+                retval = "";
               } else {
-                retval = self.wallet.email
+                retval = self.wallet.email;
               }
               break;
 
@@ -384,30 +438,30 @@ angular.module("omniServices")
               //  retval = settings['donate']
               //}
               //disable all donate options for now
-              retval = 'false'
+              retval = 'false';
               break;
 
             case "usercurrency":
               if (settings['usercurrency'] == undefined) {
-                retval = "USD"
+                retval = "USD";
               } else {
-                retval = settings['usercurrency']
+                retval = settings['usercurrency'];
               }
               break;
 
             case "filterdexdust":
               if (settings['filterdexdust'] == undefined) {
-                retval = 'true'
+                retval = 'true';
               } else {
-                retval = settings['filterdexdust']
+                retval = settings['filterdexdust'];
               }
               break;
 
             case "showtesteco":
               if (settings['showtesteco'] == undefined) {
-                retval = 'false'
+                retval = 'false';
               } else {
-                retval = settings['showtesteco']
+                retval = settings['showtesteco'];
               }
               break;
 

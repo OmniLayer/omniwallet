@@ -1,0 +1,130 @@
+<div ng-controller="ExchangePendingController" ng-init="getData(selectedTimeframe)">
+  <div class="row om-row">
+    <div class="text-left om-title">{{ 'EXCHANGE.MYOFFERS.TITLE' | translate}}</div>
+  </div>
+  <div ng-show="pendingThinking" class="row">
+    <div ng-show="orderbook.length == 0" class="col-xs-12 text-center">{{'COMMON.LOADING' | translate}}...<img src="/assets/img/spinner.gif"></div>
+    
+    <tabset ng-hide="orderbook.length == 0">
+      <tab heading="{{ 'EXCHANGE.MYOFFERS.BUYTITLE' | translate }}">
+        <h3 class="om-subtitle"> {{ 'EXCHANGE.MYOFFERS.BUYTITLE' | translate }} </h3>
+        <div class="om-table">
+          <div class="row table-header hidden-xs">
+                <div class="col-sm-3">{{ 'TABLES.OFFERS.HASH' | translate }}</div>
+                <div class="col-sm-3">{{ 'TABLES.OFFERS.PRICE' | translate }}</div>
+                <div class="col-sm-2">{{ 'TABLES.OFFERS.AMOUNT' | translate }}</div>
+                <div class="col-sm-2">{{ 'TABLES.OFFERS.TOTAL' | translate }}</div>
+                <div class="col-sm-2">{{ 'TABLES.OFFERS.BUY' | translate }}</div>
+          </div>
+          <div class="row table-row" ng-repeat="transaction in filtered_buys">
+            <div class="visible-xs col-xs-5">{{ 'TABLES.OFFERS.HASH' | translate }}</div>
+            <div class="col-xs-7 col-sm-3" ng-click="setHashExplorer(transaction)"> <a href="/explorer/inspector?view={{transaction.tx_hash}}">{{transaction.tx_hash_concat}}</a></div>
+
+            <div class="visible-xs col-xs-5">{{ 'TABLES.OFFERS.PRICE' | translate }}</div>
+            <div class="col-xs-7 col-sm-3" ng-if="transaction.formatted_price_per_coin" class="number" title="{{transaction.formatted_price_per_coin}}" ng-bind-html="transaction.formatted_price_per_coin | bigjs: '0,0.00000000'"></div> 
+
+            <div class="visible-xs col-xs-5">{{ 'TABLES.OFFERS.AMOUNT' | translate }}</div>
+            <div class="col-xs-7 col-sm-2" ng-if="transaction.formatted_amount" class="number" title="{{transaction.formatted_amount}}" ng-bind-html="transaction.formatted_amount | bigjs: '0,0.00000000'"></div> 
+
+            <div class="visible-xs col-xs-5">{{ 'TABLES.OFFERS.TOTAL' | translate }}</div>
+            <div class="col-xs-7 col-sm-2" ng-if="transaction.bitcoin_required" class="number" title="{{transaction.bitcoin_required}}" ng-bind-html="transaction.bitcoin_required | bigjs: '0,0.00000000'"></div>
+
+            <div class="visible-xs col-xs-5">{{ 'TABLES.OFFERS.BUY' | translate }}</div> 
+            <div class="col-xs-7 col-sm-2" ng-show="(transaction.tx_hash.length == 64 && transaction.payment_expired == false)">
+              <button class="btn btn-main btn-sm" ng-click="purchaseCoin(transaction)" type="submit">{{ 'EXCHANGE.MYOFFERS.PURCHASE' | translate }}</button>
+            </div>
+            <div class="col-xs-7 col-sm-2" ng-show="(transaction.payment_expired == true)"> {{ 'EXCHANGE.MYOFFERS.EXPIRED' | translate }}
+            </div>
+          </div>
+        </div>
+      </tab>
+      <tab heading="{{ 'EXCHANGE.MYOFFERS.SELLTITLE' | translate }}">
+        <h3 class="om-subtitle"> {{ 'EXCHANGE.MYOFFERS.SELLTITLE' | translate }} </h3>
+        <div class="om-table">
+          <div class="row table-header hidden-xs">
+                <div class="col-sm-3">{{ 'TABLES.OFFERS.HASH' | translate }}</div>
+                <div class="col-sm-3">{{ 'TABLES.OFFERS.PRICE' | translate }}</div>
+                <div class="col-sm-2">{{ 'TABLES.OFFERS.AMOUNT' | translate }}</div>
+                <div class="col-sm-2">{{ 'TABLES.OFFERS.TOTAL' | translate }}</div>
+                <div class="col-sm-2">{{ 'TABLES.OFFERS.CANCEL' | translate }}</div>
+          </div>
+          <div class="row table-row" ng-repeat="transaction in filtered_sells">
+            <div class="visible-xs col-xs-5">{{ 'TABLES.OFFERS.HASH' | translate }}</div>
+            <div class="col-xs-7 col-sm-3" ng-click="setHashExplorer(transaction)"> <a href="/explorer/inspector?view={{transaction.tx_hash}}">{{transaction.tx_hash_concat}}</a></div>
+
+            <div class="visible-xs col-xs-5">{{ 'TABLES.OFFERS.PRICE' | translate }}</div>
+            <div class="col-xs-7 col-sm-3" class="number" title="{{transaction.formatted_price_per_coin}}" ng-bind-html="transaction.formatted_price_per_coin | bigjs: '0,0.00000000'"></div> 
+
+            <div class="visible-xs col-xs-5">{{ 'TABLES.OFFERS.AMOUNT' | translate }}</div>
+            <div class="col-xs-7 col-sm-2" class="number" title="{{transaction.formatted_amount}}" ng-bind-html="transaction.formatted_amount | bigjs: '0,0.00000000'"></div> 
+
+            <div class="visible-xs col-xs-5">{{ 'TABLES.OFFERS.TOTAL' | translate }}</div>
+            <div class="col-xs-7 col-sm-2" class="number" title="{{transaction.bitcoin_required}}" ng-bind-html="transaction.bitcoin_required | bigjs: '0,0.00000000'"></div> 
+
+            <div class="visible-xs col-xs-5">{{ 'TABLES.OFFERS.CANCEL' | translate }}</div>
+            <div class="col-xs-7 col-sm-2"><button class="btn btn-secondary btn-sm" ng-click="confirmCancel(transaction)" type="submit">{{ 'EXCHANGE.MYOFFERS.CANCEL' | translate }}</button></div>
+          </div>
+        </div>
+      </tab>
+    </tabset>
+  </div>
+
+  <div class="row" ng-hide="pendingThinking">
+    <h4>
+      <a ng-click="pendingThinking = true"> <strong> < {{ 'COMMON.BACK' | translate}} </strong> </a>
+    </h4>
+    <div ng-init="marker=true">
+      <div class="row om-row">
+        <div class="col-xs-12">
+          <div class="text-left om-title">{{ 'EXCHANGE.MYOFFERS.PAYMENT' | translate }}</div>
+          <div ng-show="showErrors" class="alert alert-danger"> <strong> {{error}} </strong> </div> 
+        </div>
+      </div>
+      <form name="sendForm"  ng-submit="sendTransaction()">
+        <div class="panel panel-form">
+          <div class="panel-body">
+            <div class="col-sm-6">
+              <label >{{ 'EXCHANGE.MYOFFERS.COINTYPE' | translate }}:</label>
+              <div class="btn-group send-asset-dropdown">
+                <span class="form-control">
+                  {{selectedAsset.name | truncate:15}} <small class="text-muted" ng-show="selectedAsset.id > 2">({{selectedAsset.id}})</small>
+                </span>
+              </div> 
+              <h6 class="text-justify"> {{ 'EXCHANGE.MYOFFERS.COINMESSAGE' | translate }}</h6> 
+            </div>
+            <div class="col-sm-6">
+              <label class="text-justify" >{{ 'EXCHANGE.MYOFFERS.FROM' | translate}}</label>
+              <span class="form-control">{{selectedAddress.hash}} </span>
+            </div>
+          </div>
+        </div>  
+        <div class="panel panel-form">
+          <div class="panel-body">
+            <div class="col-sm-6">
+              <label> {{ 'EXCHANGE.MYOFFERS.TO' | translate }}:</label>
+              <span class="form-control">
+                {{ sendTo }}
+              </span>
+            </div>
+            <div class="col-sm-6">
+              <label> {{ 'EXCHANGE.MYOFFERS.AMOUNT' | translate }} {{selectedCoin.symbol}}): </label>
+                <span class="form-control">
+                  {{sendAmount}}
+                </span>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-sm-12">
+            <h4>{{ 'EXCHANGE.MYOFFERS.REMAINING' | translate }}</h4>
+            <span ng-class="{'text-primary' : remainingBlocks > 4, 'text-warning': remainingBlocks == 4, 'text-danger': remainingBlocks < 4}" tooltip="{{ 'EXCHANGE.MYOFFERS.REMAININGTOOLTIP' | translate }}">{{remainingBlocks}} {{ 'EXCHANGE.MYOFFERS.BLOCKS' | translate }}</span>
+          </div>
+        </div>
+        <p>
+          {{ 'WALLET.SEND.COST' | translate}}: {{ minersFee.plus(protocolFee).valueOf() }} BTC <button type="button" class="btn btn-xs" ng-click="editTransactionCost()"><span class="glyphicon glyphicon-pencil small"></span></button>
+        </p>
+        <button type="submit" class="btn btn-main pull-right" ng-disabled="!cansend">{{ 'COMMON.NEXT' | translate}}</button>
+      </form>
+    </div>
+  </div>
+</div>

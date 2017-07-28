@@ -1,0 +1,7 @@
+<div ng-controller="ExchangeTradeController" ng-init="setView('tradeInfo')">
+
+  <h4 ng-hide="onTradeView">
+    <a ng-click="setView('tradeInfo')"> <strong> < {{ 'COMMON.BACK' | translate}} </strong> </a>
+  </h4>
+  <div ng-include="tradeView"></div>
+</div>

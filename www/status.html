@@ -1,1 +1,17 @@
-<div ng-include src="'v1/system/status.html'"></div>
+<div>
+  <div class="block-tx2">
+    <span style=""><strong>Omniwallet Change Log</strong></span><br/>
+      <div ng-repeat="commit in status.commits">
+        <span style="width:100%;float:left;padding-left:1%;padding-top:0px;font-size:85%;">[{{commit.date}}] (<a href="http://github.com/OmniLayer/omniwallet/commit/{{commit.commitlong}}">{{commit.commitshort}}</a>) {{commit.msg}}</span><br/>
+      </div>
+    </div>
+  </div>
+  <div class="block-tx3">
+    <span style=""><strong>Instance Statistics</strong></span><br/>
+    <br/><span style="width:95%;float:left;padding-left:1%;padding-top:0px;font-size:85%;">This page last updated: {{status.last_parsed}}</span><br/>
+    <br/><span style="width:95%;float:left;padding-left:1%;padding-top:0px;font-size:85%;">Last Block Processed: {{status.last_block}}</span><br/>
+    <br/><span style="width:95%;float:left;padding-left:1%;padding-top:0px;font-size:85%;">Wallets Hosted: {{status.amount_of_wallets}}</span><br/>
+    <!--<br/><span style="width:95%;float:left;padding-left:1%;padding-top:0px;font-size:85%;">Addressses Managed: {{status.amount_of_addresses_managed}}</span><br/><br/> -->
+    <!--<br/><span style="width:95%;float:left;padding-left:1%;padding-top:0px;font-size:85%;">Transactions Broadcasted: {{status.amount_of_transactions}}</span><br/><br/> -->
+  </div>
+</div>

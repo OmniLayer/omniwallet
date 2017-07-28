@@ -1,0 +1,36 @@
+<div class="modal-row" ng-hide="isBTC">
+  <div class="description-title-wide">{{ 'WALLET.SEND.PROTOCOL_COST' | translate}}:</div><div class="description-text">{{PROTOCOL_COST}}</div>
+</div>
+<div class="modal-row">
+  <div class="description-title">{{ 'WALLET.SEND.MODAL_MINER' | translate}}:</div>
+  <div class="col-sm-4">
+    <input type="number" class="form-control" step="0.00000001" min="0.0001" ng-model="minersFee" ng-change="setMinersFee(minersFee)" ng-disabled="predefined">
+  </div>
+</div>
+<div class="modal-row">
+ <label>
+   <input type="radio" ng-model="fee.type" value="normal" ng-change="setMinersFee(normalFee)">
+     <a href=""
+      tooltip="Estimated Confirmation in 5-7+ blocks"
+      tooltip-append-to-body="true" tooltip-placement="top"> Normal</a>
+ </label>
+ <label>
+   <input type="radio" ng-model="fee.type" value="fast"   ng-change="setMinersFee(fastFee)">
+     <a href=""
+      tooltip="Estimated Confirmation in 3-5 blocks"
+      tooltip-append-to-body="true" tooltip-placement="top"> Fast</a>
+ </label>
+ <label>
+   <input type="radio" ng-model="fee.type" value="faster" ng-change="setMinersFee(fasterFee)">
+     <a href=""
+      tooltip="Estimated Confirmation in 1-3 blocks"
+      tooltip-append-to-body="true" tooltip-placement="top"> Faster</a>
+ </label>
+ <label>
+   <input type="radio" ng-model="fee.type" value="custom" ng-change="setMinersFee(minersFee)"> Custom
+ </label>
+</div>
+
+<div class="modal-row">
+  <div class="description-title-xlarge">{{ 'WALLET.SEND.COST' | translate}}:</div><div class="description-text">{{ isBTC ? minersFee.valueOf() : protocolFee.plus(minersFee).valueOf() }}</div>
+</div>

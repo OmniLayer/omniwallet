@@ -3,33 +3,30 @@ angular.module("omniFactories")
 		var TransactionModel = function(txType,fromAddress,minerFee,txData){
 			var self = this;
 
-			self.initialize = function(){
-				self.type = txType;
+			self.configure = function(type,address,fee,data){
+				self.type = type;
 
-				if(fromAddress.privkey){
-					self.privKey = new Bitcoin.ECKey.decodeEncryptedFormat(fromAddress.privkey, fromAddress.address); // Using address as temporary password
-                    self.pubKey = self.privKey.getPubKeyHex();
-
+				if(address.privkey){
+					self.privKey = new Bitcoin.ECKey.decodeEncryptedFormat(address.privkey, address.hash); // Using address as temporary password
+					self.pubKey = self.privKey.getPubKeyHex();
 					self.offline = false;
-				}else if(fromAddress.pubkey){
-					self.pubKey = fromAddress.pubkey.toUpperCase();
-
+				}else if(address.pubkey){
+					self.pubKey = address.pubkey.toUpperCase();
 					self.offline = true;
 				}else
 					throw "Transaction needs an Address with private or public key"; // Throw an error?
 
-				self.address = fromAddress;
-				self.data = txData;
+				self.address = address;
+				self.data = data;
 
-                self.data['pubkey'] = self.pubKey;
-                self.data['fee']= minerFee.times(SATOSHI_UNIT).valueOf();
-                self.data['transaction_from'] = self.address.address;
-                self.data['testnet'] = TESTNET || false;
-
-                self.totalCost = minerFee; // TODO: calculate protocol cost
+				self.data['pubkey'] = self.pubKey;
+				self.data['fee']= fee.valueOf();
+				self.data['transaction_from'] = self.address.hash;
+				self.data['testnet'] = TESTNET || false;
+				self.totalCost = fee; // TODO: calculate protocol cost
 			}
 
-			self.initialize()
+			self.configure(txType,fromAddress,minerFee,txData)
 		}
 
 		return TransactionModel;

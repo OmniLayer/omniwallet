@@ -20,66 +20,98 @@
 
     <link rel="stylesheet" href="/bower_components/bootstrap/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="/bower_components/bootstrap/dist/css/bootstrap-theme.min.css">
+    <link rel="stylesheet" href="/bower_components/nvd3/build/nv.d3.css">
     <link rel="stylesheet" href="/theme.css">
 
     <link href='https://fonts.googleapis.com/css?family=Gudea:400,400italic,700' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Roboto:300' rel='stylesheet' type='text/css'>
 
-    <!-- SocketIO 1.x.x not supported right now -->
-    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/socket.io/0.9.16/socket.io.min.js"></script>
+    <!-- SocketIO 1.7.3 -->
+    <script type="text/javascript" src="/js/socket.io.min.js"></script>
     
     <script src="/bower_components/underscore/underscore.js"></script>
     <script src="/bower_components/jquery/dist/jquery.min.js"></script>
     <script src="/bower_components/angular/angular.js"></script>
     <script src="/bower_components/angular-route/angular-route.js"></script>
     <script src="/bower_components/angular-translate/angular-translate.js"></script>
+    <script src="/bower_components/angular-translate-loader-static-files/angular-translate-loader-static-files.min.js"></script>
     <script src="/bower_components/numeraljs/numeral.js"></script>
     <script src="/bower_components/angular-numeraljs/src/angular-numeraljs.js"></script>
-    <script src="/bower_components/angular-idle/src/angular-idle.js"></script>
+    <script src="/bower_components/ng-idle/angular-idle.js"></script>
     <script src="/bower_components/angular-password-strength/build/angular-password-strength.js"></script>
     <script src="/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
-    <script src="/bower_components/angular-bootstrap/ui-bootstrap.min.js"></script>
     <script src="/bower_components/angular-bootstrap/ui-bootstrap-tpls.min.js"></script>
     <script src="/bower_components/jsrsasign/jsrsasign-latest-all-min.js"></script>
     <script src="/bower_components/forge/js/forge.min.js"></script>
     <script src="/bower_components/bitcoinjs-lib/build/bitcoinjs-lib.js"></script>
+    <script src="/bower_components/bitcore-lib/bitcore-lib.js"></script>
+    <script src="/bower_components/bitcore-message/bitcore-message.min.js"></script>
     <script src="/bower_components/d3/d3.min.js"></script>
+    <script src="/bower_components/nvd3/build/nv.d3.js"></script>
+    <script src="/bower_components/angular-nvd3/dist/angular-nvd3.js"></script>
     <script src="/bower_components/sjcl/sjcl.js"></script>
     <script src="/bower_components/FileSaver/FileSaver.js"></script>
     <script src="/bower_components/big.js/big.min.js"></script>
+    <script src="/bower_components/angular-timer/dist/angular-timer.min.js"></script>
+    <script src="/bower_components/ngInfiniteScroll/build/ng-infinite-scroll.js"></script>
     <script type="text/javascript" src="/bower_components/angular-re-captcha/angular-re-captcha.js"></script>
+    <script type="text/javascript" src="/bower_components/qrcode/lib/qrcode.min.js"></script>
+    <script type="text/javascript" src="/bower_components/angular-qr/angular-qr.min.js"></script>
     <script src="/js/config.js"></script>
     <script src="/js/app.js"></script>
+    <script src="/js/lang/en-US.js"></script>
+    <script src="/js/filters/ToWhole.js"></script>
+    <script src="/js/filters/TimeAgo.js"></script>
+    <script src="/js/filters/BigJS.js"></script>
+    <script src="/js/directives/Combobox.js"></script>
     <script src="/js/factories/AddressModelFactory.js"></script>
     <script src="/js/factories/AssetModelFactory.js"></script>
     <script src="/js/factories/TransactionModelFactory.js"></script>
+    <script src="/js/factories/OrderbookFactory.js"></script>
+    <script src="/js/factories/DExOfferFactory.js"></script>
+    <script src="/js/factories/DExOrderFactory.js"></script>
     <script src="/js/services/WalletService.js"></script>
     <script src="/js/services/AccountService.js"></script>
-    <script src="/js/lang/en-US.js"></script>
+    <script src="/js/services/AppraiserService.js"></script>
     <script src="/js/services/TransactionGenerationService.js"></script>
     <script src="/js/services/TransactionManagerService.js"></script>
     <script src="/js/services/ModalManagerService.js"></script>
     <script src="/js/services/BalanceSocket.js"></script>
     <script src="/js/services/AddressManagerService.js"></script>
     <script src="/js/services/PropertyManagerService.js"></script>
-    <script src="/js/controllers/Wallet/OverviewController.js"></script>
+    <script src="/js/services/BrowserService.js"></script>
+    <script src="/js/controllers/landing/HomeController.js"></script>
+    <script src="/js/controllers/landing/NavigationController.js"></script>
+    <script src="/js/controllers/landing/SiteController.js"></script>
+    <script src="/js/controllers/landing/AccountSettingsController.js"></script>
+    <script src="/js/controllers/wallet/OverviewController.js"></script>
+    <script src="/js/controllers/wallet/AddressesController.js"></script>
+    <script src="/js/controllers/wallet/HistoryController.js"></script>
+    <script src="/js/controllers/wallet/SendController.js"></script>
+    <script src="/js/controllers/wallet/AssetsController.js"></script>
+    <script src="/js/controllers/modals/ConfirmSendFooterController.js"></script>
+    <script src="/js/controllers/assets/CrowdsaleParticipationController.js"></script>
+    <script src="/js/controllers/assets/CrowdsaleController.js"></script>
+    <script src="/js/controllers/assets/IssuanceController.js"></script>
+    <script src="/js/controllers/assets/DetailsController.js"></script>
+    <script src="/js/controllers/explorer/AssetsController.js"></script>
+    <script src="/js/controllers/explorer/CrowdsaleController.js"></script>
+    <script src="/js/controllers/explorer/OverviewController.js"></script>
+    <script src="/js/controllers/explorer/InspectorController.js"></script>
+    <script src="/js/controllers/exchange/SaleController.js"></script>
+    <script src="/js/controllers/exchange/BuyController.js"></script>
+    <script src="/js/controllers/exchange/PendingController.js"></script>
+    <script src="/js/controllers/exchange/TradeController.js"></script>
+    <script src="/js/controllers/exchange/OverviewController.js"></script>
+    <script src="/js/controllers/DEx/SaleController.js"></script>
+    <script src="/js/controllers/DEx/OverviewController.js"></script>
+    <script src="/js/controllers/DEx/OrderbookController.js"></script>
     <script src="/js/directive.js"></script>
     <script src="/js/service.js"></script>
     <script src="/js/controller.js"></script>
     <script src="/js/filter.js"></script>
     <script src="/js/LoginController.js"></script>
-    <script src="/js/TransactionGenerationController.js"></script>
-    <script src="/js/ExplorerController.js"></script>
-    <script src="/js/WalletAddressesController.js"></script>
-    <script src="/js/WalletController.js"></script>
-    <script src="/js/WalletAssetsFormController.js"></script>
-    <script src="/js/WalletSendAssetsController.js"></script>
-    <script src="/js/WalletSellAssetsController.js"></script>
-    <script src="/js/WalletBuyAssetsController.js"></script>
     <script src="/js/CreateWalletController.js"></script>
-    <script src="/js/AssetTypesController.js"></script>
-    <script src="/js/PropertyIssuanceController.js"></script>
-    <script src="/js/CrowdsaleIssuanceController.js"></script>
-    <script src="/js/add_address.js"></script>
     <script src="/js/cryptUtil.js"></script>
     <script src="/js/cryptUtilAsync.js"></script>
     <script>
@@ -95,26 +127,27 @@
     </script>
 
   </head>
-  <body>
+  <body ng-controller="SiteController">
     <div id="wrap">
-       <div class="container" ng-controller="Ctrl">
-         <div class="header">
-           <div ng-include="templates['header']"></div> 
-         </div>
-         <div class="container middle row">
-           <div class="info info-custom info-dismissable" ng-hide="true">
-             <button type="button" class="close" data-dismiss="info" aria-hidden="true">&times;</button>
-             Omniwallet&#8482; is a cryptocurrency web wallet that combines security, usability and meta-currency support.
-           </div>
-         </div>
-           <div ng-view></div>
-         <br/><br />
-          <div class="row"></div>
-         <div class="footer">
-          <div ng-include="templates['footer']"></div> 
-         </div>
-       </div>
-      </div>
+        <div class="header">
+           <div ng-include="'/header.html'"></div> 
+        </div>
+        <div class="main">
+            <div class="container">
+                <div class="alert alert-success text-center animate-show" ng-show="showNotify"><strong > {{success.message}}, 
+        {{ 'MODALS.CONFIRM.CHECK' | translate }} <a target="_blank" href="{{success.url}}">{{ 'MODALS.CONFIRM.HERE' | translate }}.</a></strong><button type="button" class="close" aria-label="Close"><span aria-hidden="true" ng-click="showNotify=!showNotify">&times;</span></button></div>
+
+                <div class="alert alert-danger text-center animate-show" ng-show="showError"><strong> {{error.message}}</strong> <button type="button" class="close" aria-label="Close"><span aria-hidden="true" ng-click="showError=!showError">&times;</span></button></div>
+                <div class="panel panel-default panel-main">
+                    <div class="om-title text-center" ng-show="account.loggedIn && !wallet.loaded">{{ 'COMMON.LOADING' | translate}}...</div>
+                    <div class="panel-body" ng-view></div>
+                </div>
+            </div>
+        </div>
+        <div id="push"></div>
+    </div>
+    <div class="footer">
+        <div ng-include="'/footer.html'"></div> 
     </div>
   </body>
 </html>

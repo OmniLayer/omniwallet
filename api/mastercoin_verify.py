@@ -14,7 +14,7 @@ app.debug = True
 @app.route('/properties')
 def properties():
   #ROWS=dbSelect("select * from smartproperties")
-  ROWS=dbSelect("select propertyname, propertyid, protocol from smartproperties")
+  ROWS=dbSelect("select propertyname, propertyid, protocol, propertytype from smartproperties")
 
   def dehexify(hex_str):
       temp_str=[]
@@ -31,7 +31,8 @@ def properties():
           'currencyID': sprow[1],
           #'name': dehexify(sprow[-1]['name']) 
           'name': dehexify(sprow[0]),
-          'Protocol': sprow[2]
+          'Protocol': sprow[2],
+          'divisible': sprow[3] in [2,66,130]
       }
       response.append(res)
 

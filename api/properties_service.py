@@ -58,9 +58,22 @@ def subcategories():
 
     return jsonify(response)
 
-@app.route('/list', methods=['POST'])
+@app.route('/list')
 def list():
-    query = ""
+    
+    ROWS= dbSelect("select PropertyData from smartproperties where Protocol != 'Fiat' ORDER BY PropertyName,PropertyID")
+    
+    data=[prop[0] for prop in ROWS]
+        
+    response = {
+                'status' : 'OK',
+                'properties' : data
+                }
+
+    return jsonify(response)
+
+@app.route('/listbyecosystem', methods=['POST'])
+def listByEcosystem():
     try:
         value = int(re.sub(r'\D+', '', request.form['ecosystem']))
         valid_values = [1,2]
@@ -72,18 +85,32 @@ def list():
         abort(make_response('No field \'ecosystem\' in request, request failed', 400))
     except ValueError:
         abort(make_response('Field \'ecosystem\' invalid value, request failed', 400))
-    try:
-        issuer = re.sub(r'\D+', '', request.form['issuer_address']) #check alphanumeric
-        query += " AND issuer='" + str(issuer) + "'"
-    except KeyError:
-        issuer = ""
     
-    #ROWS= dbSelect("select * from smartproperties where PropertyID > 2 AND ecosystem=%s %s ORDER BY PropertyName,PropertyID", (ecosystem,query))
-    ROWS= dbSelect("select * from smartproperties where PropertyID > 2 AND ecosystem=%s ORDER BY PropertyName,PropertyID", [ecosystem])
-    data=[]
-    for property in ROWS:
-        data.append({"currencyId":property[1],"propertyName":property[6]}) #get the json representation
+    
+    ROWS= dbSelect("select PropertyData from smartproperties where Protocol != 'Fiat' AND ecosystem=%s ORDER BY PropertyName,PropertyID", [ecosystem])
+    
+    data=[prop[0] for prop in ROWS]
         
+    response = {
+                'status' : 'OK',
+                'properties' : data
+                }
+
+    return jsonify(response)
+
+@app.route('/listbyowner', methods=['POST'])
+def listbyowner():
+    # I can't believe flask can't parse properly arrays from the frontend, using values() as a hack.
+    try:
+        addresses = request.form.values()
+    except KeyError:
+        abort(make_response('No field \'issuer_addresses\' in request, request failed', 400))
+
+    
+    ROWS= dbSelect("select PropertyData from smartproperties where Protocol != 'Fiat' AND issuer= ANY(%s) ORDER BY PropertyName,PropertyID", (addresses,))
+
+    data = [data[0] for data in ROWS]
+
     response = {
                 'status' : 'OK',
                 'properties' : data

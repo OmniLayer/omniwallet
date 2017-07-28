@@ -1,0 +1,51 @@
+<div class="modal-header">
+  <div class="text-left modal-title col-md-11">{{ 'MODALS.EXPORT.TITLE' | translate}}</div><div class="text-right"><button ng-disabled="wating" class="btn modal-cancel-btn" ng-click="close()"></button></div>
+</div>
+<form name="exportForm" novalidate class="form-group" ng-submit="exportWallet(exportData)">
+  <div class="modal-body">
+    <div class="row" ng-hide="exportFinished">
+      <div class="form-group col-xs-10 col-xs-push-1">
+        <label for="inputName">{{ 'MODALS.LOGIN.ID' | translate}}:</label>
+        <span>{{account.uuid}}</span>
+      </div>
+    </div>
+    <div class="row" ng-hide="exportFinished">
+      <div class="form-group col-xs-10 col-xs-push-1">
+        <label for="inputName">{{ 'MODALS.EXPORT.NAME' | translate}}</label>
+        <input type="text" class="form-control" ng-model="exportData.backupName" id="inputName" required>
+      </div>
+    </div>
+    <div class="row" ng-hide="exportFinished">
+      <div class="form-group col-xs-10 col-xs-push-1">
+        <input type="password" class="form-control" ng-model="exportData.passphrase" id="inputPass" required placeholder="{{ 'MODALS.EXPORT.PASSPHRASE' | translate}}">
+      </div>
+    </div>
+    <div class="row" ng-show="displayMFA && !exportFinished">
+      <div class="form-group col-xs-10 col-xs-push-1">
+        <label>
+          <a href=""
+            tooltip="{{'MODALS.LOGIN.MFATOOLTIP' | translate}}"
+            tooltip-append-to-body="true" tooltip-placement="top">
+            {{ 'MODALS.LOGIN.MFACODE' | translate}}:
+          </a>
+        </label><br/>
+        <input type="text" class="form-control" placeholder="{{ 'COMMON.MFA' | translate}}" ng-disabled="exportInProgress" ng-model="exportData.mfatoken" id="inputMFA">
+      </div>
+    </div>
+    <div class="row" ng-show="exportFinished">
+      <ul>
+        <li ng-repeat="item in summary" style="color: {{item.color}};">{{item.message}}</li>
+      </ul>
+    </div>  
+  </div>
+  <div class="modal-footer" style="text-align:center">
+    <div class="col-xs-8 col-xs-push-2">
+      <input type="submit" class="btn btn-main" value="Validate" ng-disabled="exportInProgress || exportForm.$invalid || (displayMFA && exportData.mfatoken.length<1)"  ng-hide="exportFinished">
+      <button type="button" class="btn btn-tertiary" ng-disabled="exportInProgress" ng-click="cancel()" ng-hide="exportFinished">{{ 'COMMON.CANCEL' | translate}}</button>
+      <button type="button" class="btn btn-success" ng-click="close()" ng-show="exportFinished">{{ 'COMMON.CLOSE' | translate}}</button>
+      <progressbar ng-show="exportInProgress" style="margin-top:10px" animate="false" value="(exported * 100) / total" type="success" max="100"><b ng-show="exported > 0">{{exported}} / {{total}}</b></progressbar>
+      <h4  ng-hide="exportFinished" style="color: {{progressColor}};">{{progressMessage}}</h4>
+    </div>
+  </div>
+</form>
+

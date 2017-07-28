@@ -1,0 +1,56 @@
+<div class="row text-left om-title">{{'WALLET.HISTORY.TITLE' | translate}}</div>
+
+  <div class="row" ng-controller="WalletHistoryController">
+    
+      <h4 class="pull-right">{{'WALLET.HISTORY.FILTERLABEL' | translate}}
+        <div class="btn-group btn-tertiary">
+          <button class="btn btn-clear dropdown-toggle" type="button" id="chooseAddress" data-toggle="dropdown" aria-expanded="true">
+            <span ng-if="selectedAddress">{{selectedAddress.hash}}</span>
+            <span ng-hide="selectedAddress">{{'WALLET.HISTORY.ALLADDRESSES' | translate}}</span>
+            <span class="caret pull-right"></span>
+          </button>
+          <ul class="dropdown-menu" role="menu" aria-labelledby="chooseAddress">
+            <li role="presentation">
+              <a role="menuitem" tabindex="-1" href="#" ng-click="changeAddress()">{{'WALLET.HISTORY.ALLADDRESSES' | translate}}</a>
+            </li>
+            <li role="presentation" ng-repeat="address in wallet.addresses">
+              <a role="menuitem" tabindex="-1" href="#" ng-click="changeAddress(address)">{{address.hash}} </a>
+            </li>
+          </ul>
+        </div> 
+      </h4>
+
+    <h3 ng-show="isLoading" class="text-center">{{'COMMON.LOADING' | translate}}...<img src="/assets/img/spinner.gif"></h3>
+
+    <div>{{'WALLET.HISTORY.BTCNOTE1' | translate}} <br />
+         {{'WALLET.HISTORY.BTCNOTE2' | translate}} <a href="https://www.blocktrail.com/BTC" target="_new">Blocktrail.com</a>
+    </div>
+    <table class="table table-hover table-condensed">
+      <thead>
+          <tr>
+            <!-- <th>Transaction hash</th> -->
+            <th>{{'WALLET.HISTORY.TYPE' | translate}}</th>
+            <th>{{'WALLET.HISTORY.AMOUNT' | translate}}</th>
+            <th>{{'WALLET.HISTORY.CURRENCY' | translate}}</th>
+            <th>{{'WALLET.HISTORY.TXDETAILS' | translate}}</th>
+            <th>{{'WALLET.HISTORY.TXTIME' | translate}}</th>
+          </tr>
+      </thead>
+      <tbody> 
+      </tbody>
+
+      <tr ng-repeat="transaction in history track by $index">
+        <!-- <td ng-click="setHashExplorer(transaction)"> <a href="/explorer/inspector?view={{transaction.tx_hash}}">{{transaction.tx_hash_concat}}</a></td> -->
+        <td class="tx-{{transaction.role}}">{{ 'TRANSACTION.TYPE.' + transaction.type | translate}}</td>
+        <td ng-show="transaction.currency.divisible" ng-if="transaction.amount" class="number" title="{{transaction.amount | toWhole:true}}" ng-bind-html="transaction.amount | toWhole:true | bigjs: '0,0.00000000'"></td>
+        <td ng-hide="transaction.currency.divisible" ng-if="transaction.amount" class="number" title="{{transaction.amount}}" ng-bind-html="transaction.amount | bigjs: '0,0'"></td> 
+        <td ng-hide="transaction.amount">--</td>
+        <td>{{transaction.currency.name | truncate:14 }}</td>
+        <td ng-click="setHashExplorer(transaction.hash)">
+          {{'TRANSACTION.DETAILS.' + transaction.type + '.' + transaction.role.toUpperCase() | translate:'{coin:transaction.currency.name, amount:transaction.amount, divisible:transaction.currency.divisible}'}}
+          <a href="#" tooltip="{{ 'WALLET.HISTORY.MOREDETAILS' | translate}}"><i class="glyphicon glyphicon-zoom-in"></i></a>
+        </td>
+        <td>{{transaction.time | date:'dd MMM HH:mma Z'}}</td>
+      </tr>
+    </table>
+  </div>

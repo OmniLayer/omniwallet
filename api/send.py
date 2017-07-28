@@ -36,13 +36,13 @@ def send_form_response(response_dict):
     if float(amount)<0 or float( from_satoshi(amount))>max_currency_value:
         return (None, 'Invalid amount: ' + str( from_satoshi( amount )) + ', max: ' + str( max_currency_value ))
     btc_fee=response_dict['fee'][0]
-    if float(btc_fee)<0 or float( from_satoshi(btc_fee))>max_currency_value:
-        return (None, 'Invalid fee: ' + str( from_satoshi( amount )) + ', max: ' + str( max_currency_value ))
+    if float(btc_fee)<0 or float( btc_fee )>max_currency_value:
+        return (None, 'Invalid fee: ' + str( btc_fee ) + ', max: ' + str( max_currency_value ))
     currency=response_dict['currency'][0]
-    if currency=='MSC':
+    if currency=='OMNI':
         currency_id=1
     else:
-        if currency=='TMSC':
+        if currency=='T-OMNI':
             currency_id=2
         else:
             if currency=='BTC':
@@ -84,7 +84,7 @@ def send_form_response(response_dict):
 
     try:
       if pubkey != None:
-          tx_to_sign_dict=prepare_send_tx_for_signing( pubkey, to_addr, marker_addr, currency_id, amount, btc_fee)
+          tx_to_sign_dict=prepare_send_tx_for_signing( pubkey, to_addr, marker_addr, currency_id, amount, to_satoshi(btc_fee))
       else:
           # hack to show error on page
           tx_to_sign_dict['sourceScript']=response_status
@@ -99,8 +99,8 @@ def send_form_response(response_dict):
 
 # simple send and bitcoin send (with or without marker)
 def prepare_send_tx_for_signing(from_address, to_address, marker_address, currency_id, amount, btc_fee=500000):
-    print '*** send tx for signing, amount: ' + amount
-    print '    btc_fee: ' + btc_fee
+    print '*** send.py tx for signing: from_address, to_address, marker_address, currency_id, amount, btc_fee'
+    print from_address, to_address, marker_address, currency_id, amount, btc_fee
 
     # consider a more general func that covers also sell offer and sell accept
 
@@ -138,7 +138,7 @@ def prepare_send_tx_for_signing(from_address, to_address, marker_address, curren
         raise Exception({ "status": "NOT OK", "error": "Couldn't get list of unspent tx's. Response Code: " + dirty_txes['code'] })
 
     if (dirty_txes['error'][:3]=='Low'):
-        raise Exception({ "status": "NOT OK", "error": "Not enough funds, try again. Needed: " + str(fee_total_satoshi) + " but Have: " + dirty_txes['avail']  })
+        raise Exception({ "status": "NOT OK", "error": "Not enough funds, try again. Needed: " + str(fee_total_satoshi) + " but Have: " + str(dirty_txes['avail'])  })
 
     inputs_total_value = dirty_txes['avail']
     inputs = dirty_txes['utxos']
