@@ -1,7 +1,12 @@
 <div class="modal-header">
     <h3>{{'MODALS.DELETE.TITLE' | translate}}: <br /> {{address}}</h3>
 </div>
-<div class="modal-body">
+
+<div class="modal-body" ng-show={{lastaddress}}>
+    <p>{{'MODALS.DELETE.LAST' | translate}}</p>
+</div>
+
+<div class="modal-body" ng-hide={{lastaddress}}>
 	<h3 class="text-center">{{'MODALS.DELETE.SURE' | translate}}</h3>
         <span ng-show={{private}}>
 	<p>
@@ -16,7 +21,10 @@
         </p>
 	</span>
 </div>
-<div class="modal-footer">
+<div class="modal-footer" ng-hide={{lastaddress}}>
     <button class="btn btn-primary" ng-click="ok()">{{'MODALS.DELETE.CONFIRM' | translate}}</button>
     <button class="btn btn-warning" ng-click="cancel()">{{'COMMON.CANCEL' | translate}}</button>
+</div>
+<div class="modal-footer" ng-show={{lastaddress}}>
+    <button class="btn btn-warning" ng-click="close()">{{'COMMON.CLOSE' | translate}}</button>
 </div>

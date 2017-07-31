@@ -316,7 +316,8 @@
 			
 			},
 			"WATCH":"Removing this WatchOnly address from your wallet only affects the displayed balances. All funds on this address will continue to remain on it and you can add it back at anytime if you wish to track them again.",
-			"CONFIRM":"Yes, Remove Address"
+			"CONFIRM":"Yes, Remove Address",
+			"LAST":"这是您钱包中的最后一个地址，无法删除"
 		}
 	},
 	"TRANSACTION":{
