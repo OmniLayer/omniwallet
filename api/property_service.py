@@ -1,6 +1,6 @@
 import urlparse
 import os, sys, re
-from flask import Flask, request, jsonify, abort, json, make_response
+from flask import Flask, request, jsonify, abort, json, make_response, Response
 from msc_apps import *
 
 app = Flask(__name__)
@@ -98,4 +98,4 @@ def getproperty(prop_id):
     #"update_fs": false
 
 
-    return jsonify([ret]) #only send back mapped schema
+    return Response(json.dumps([ret]), mimetype="application/json") #only send back mapped schema
