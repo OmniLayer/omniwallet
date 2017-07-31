@@ -1,4 +1,4 @@
-from flask import Flask, abort, json
+from flask import Flask, abort, json, jsonify, Response
 from sqltools import *
 import re
 
@@ -69,7 +69,7 @@ def getCurrentPrice(currency=None):
     pid2=2
 
   else:
-    return json.dumps({ 'price': 0, 'symbol': input })
+    return jsonify({ 'price': 0, 'symbol': input })
 
 
   ROWS=dbSelect("select rate1for2 from exchangerates where protocol1=%s and propertyid1=%s and "
@@ -92,7 +92,7 @@ def getCurrentPrice(currency=None):
                    'currency': currency
                  }
 
-  json_response = json.dumps(response)
+  json_response = jsonify(response)
   return json_response
 
 
@@ -112,7 +112,7 @@ def currencylist():
   for x in ROWS:
    retval.append({'value':x[0],'label':x[1]})
 
-  return json.dumps(retval)    
+  return Response(json.dumps(retval), mimetype="application/json")
 
 #TODO COnversion
 @app.route('/history/<currency>')
@@ -164,7 +164,7 @@ def history(currency=None):
     pid2=getPropertyid('T-OMNI', protocol2)
 
   else:
-    return json.dumps([0])
+    return jsonify([0])
 
 
   ROWS=dbSelect("select rate1for2, extract(epoch from asof) from exchangerates where protocol1=%s and propertyid1=%s and "
@@ -195,6 +195,4 @@ def history(currency=None):
                }
       response.append(item)
 
-  json_response = json.dumps(response)
-  return json_response
-
+  return Response(json.dumps(response), mimetype="application/json")
