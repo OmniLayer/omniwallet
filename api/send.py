@@ -19,13 +19,22 @@ def send_form_response(response_dict):
             info('Multiple values for field '+field)
             return (None, 'Multiple values for field '+field)
           
+    if 'testnet' in response_dict and ( response_dict['testnet'][0] in ['true', 'True'] ):
+        testnet =True
+        magicbyte = 111
+    else:
+        testnet = False
+        magicbyte = 0
+
     if response_dict.has_key( 'pubKey' ) and is_pubkey_valid( response_dict['pubKey'][0]):
         pubkey = response_dict['pubKey'][0]
         response_status='OK'
     else:
         response_status='invalid pubkey'
         pubkey=None
-      
+    
+    print response_dict
+  
     from_addr=response_dict['from_address'][0]
     if not is_valid_bitcoin_address_or_pubkey(from_addr):
         return (None, 'From address is neither bitcoin address nor pubkey')
@@ -84,7 +93,7 @@ def send_form_response(response_dict):
 
     try:
       if pubkey != None:
-          tx_to_sign_dict=prepare_send_tx_for_signing( pubkey, to_addr, marker_addr, currency_id, amount, to_satoshi(btc_fee))
+          tx_to_sign_dict=prepare_send_tx_for_signing( pubkey, to_addr, marker_addr, currency_id, amount, to_satoshi(btc_fee), magicbyte)
       else:
           # hack to show error on page
           tx_to_sign_dict['sourceScript']=response_status
@@ -98,16 +107,16 @@ def send_form_response(response_dict):
 
 
 # simple send and bitcoin send (with or without marker)
-def prepare_send_tx_for_signing(from_address, to_address, marker_address, currency_id, amount, btc_fee=500000):
-    print '*** send.py tx for signing: from_address, to_address, marker_address, currency_id, amount, btc_fee'
-    print from_address, to_address, marker_address, currency_id, amount, btc_fee
+def prepare_send_tx_for_signing(from_address, to_address, marker_address, currency_id, amount, btc_fee=500000, magicbyte=0):
+    print '*** send.py tx for signing: from_address, to_address, marker_address, currency_id, amount, btc_fee, magicbyte'
+    print from_address, to_address, marker_address, currency_id, amount, btc_fee, magicbyte
 
     # consider a more general func that covers also sell offer and sell accept
 
     # check if address or pubkey was given as from address
     if from_address.startswith('0'): # a pubkey was given
         from_address_pub=from_address
-        from_address=get_addr_from_key(from_address)
+        from_address=pybitcointools.pubkey_to_address(from_address,magicbyte)
     else: # address was given
         from_address_pub=addrPub=bc_getpubkey(from_address)
         from_address_pub=from_address_pub.strip()
@@ -169,8 +178,12 @@ def prepare_send_tx_for_signing(from_address, to_address, marker_address, curren
     #---------------------------------------------- End Old utxo calls
 
     inputs_outputs='/dev/stdout'
+    ins=[]
+    outs=[]
     for i in inputs:
-        inputs_outputs+=' -i '+str(i[0])+':'+str(i[1])
+        inhash=str(i[0])+':'+str(i[1])
+        inputs_outputs+=' -i '+inhash
+        ins.append(inhash)
 
 
     # calculate change
@@ -187,7 +200,9 @@ def prepare_send_tx_for_signing(from_address, to_address, marker_address, curren
 
         if marker_address != None:
             inputs_outputs+=' -o '+marker_address+':'+str(dust_limit)
+            outs.append(marker_address+':'+str(dust_limit))
         inputs_outputs+=' -o '+to_address+':'+str(satoshi_amount)
+        outs.append(to_address+':'+str(satoshi_amount))
         
     else:
         # create multisig tx
@@ -231,12 +246,15 @@ def prepare_send_tx_for_signing(from_address, to_address, marker_address, curren
 
     if change_value >= dust_limit:
         inputs_outputs+=' -o '+changeAddress+':'+str(change_value)
+        outs.append(changeAddress+':'+str(change_value))
     else:
         # under dust limit leave all remaining as fees
         pass
 
-    tx=mktx(inputs_outputs)
-    info('inputs_outputs are '+inputs_outputs)
+    #tx=mktx(inputs_outputs)
+    tx.pybitcointools.mktx(ins,outs)
+    info('inputs_outputs are '+str(ins)+' '+str(outs))
+    #info('inputs_outputs are '+inputs_outputs)
     info('parsed tx is '+str(get_json_tx(tx)))
 
     hash160=bc_address_to_hash_160(from_address).encode('hex_codec')
