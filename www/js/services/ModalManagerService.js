@@ -591,6 +591,7 @@ angular.module("omniServices")
           var DeleteBtcAddressModal = function($scope, $modalInstance, address) {
             $scope.address = address.hash;
             $scope.private = address.privkey != undefined;
+            $scope.lastaddress = Wallet.addresses.length == 1;
 
             $scope.ok = function() {
               $modalInstance.close();

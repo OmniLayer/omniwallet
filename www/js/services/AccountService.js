@@ -301,6 +301,10 @@ angular.module("omniServices")
 
           
         self.removeAddress = function(addressHash) {
+            if (self.wallet.addresses.length == 1) {
+              return false;
+            }
+
             for (var i = 0; i < self.wallet.addresses.length; i++)
               if (self.wallet.addresses[i].address == addressHash) {
                 var remove = self.wallet.addresses.splice(i, 1)[0];
