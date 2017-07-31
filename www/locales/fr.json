@@ -311,7 +311,8 @@
         "TRAIL": "et que vous voulez faire cela !"
       },
       "WATCH": "Retirer cette adresse de lecture seule de votre portefeuille n'affecte que les soldes affichés. Tous les fonds sur cette adresse continueront à y rester et vous pouvez l'ajouter à tout moment si vous souhaitez les suivre à nouveau.",
-      "CONFIRM": "Oui, Supprimer l'Adresse"
+      "CONFIRM": "Oui, Supprimer l'Adresse",
+      "LAST":"Ceci est la dernière adresse de votre portefeuille et ne peut pas être supprimé."
     }
   },
   "TRANSACTION": {
