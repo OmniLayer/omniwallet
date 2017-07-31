@@ -19,15 +19,13 @@ angular.module("omniDirectives").directive('vatomCard', function ($compile) {
                 currentElement = el.element;
                 
                 window.addEventListener("resize", function (e) {
-                    var pageHeight = e.target.outerHeight;
-                                        
                     var height = 0;
                     var width = 0;
                     
-                    var scaleUsing = window.innerWidth / window.innerHeight;
+                    var scaleUsing = window.innerWidth / (window.innerHeight - 94);
                     
-                    if (scaleUsing > 0.57) {
-                        height = window.innerHeight;
+                    if (scaleUsing > 0.62) {
+                        height = window.innerHeight - 94;
                         width = height * (10 / 16);
                     }
                     else {
@@ -38,8 +36,8 @@ angular.module("omniDirectives").directive('vatomCard', function ($compile) {
                         var toPercent = ratio * 100;
                     }
                     
-                    currentElement.parentElement.style.height = height-20 + "px";
-                    currentElement.parentElement.style.width = width-20 + "px";
+                    currentElement.parentElement.style.height = (height - 20) + "px";
+                    currentElement.parentElement.style.width = (width - 20) + "px";
                 }, true);
             });
         }
