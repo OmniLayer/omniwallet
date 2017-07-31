@@ -251,10 +251,10 @@ def prepare_send_tx_for_signing(from_address, to_address, marker_address, curren
         # under dust limit leave all remaining as fees
         pass
 
-    tx=mktx(inputs_outputs)
-    #tx.pybitcointools.mktx(ins,outs)
-    #info('inputs_outputs are '+str(ins)+' '+str(outs))
-    info('inputs_outputs are '+inputs_outputs)
+    #tx=mktx(inputs_outputs)
+    tx.pybitcointools.mktx(ins,outs)
+    info('inputs_outputs are '+str(ins)+' '+str(outs))
+    #info('inputs_outputs are '+inputs_outputs)
     info('parsed tx is '+str(get_json_tx(tx)))
 
     hash160=bc_address_to_hash_160(from_address).encode('hex_codec')
