@@ -29,4 +29,4 @@ def search():
       res = json.loads(gettransaction(queryrow[0]))[0]
       response.append(res)
 
-  return json.dumps({ 'status': 200, 'data': response })
+  return jsonify({ 'status': 200, 'data': response })

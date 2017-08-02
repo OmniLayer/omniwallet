@@ -53,7 +53,7 @@ def update_balances():
       else:
         printmsg("Could not load balances from redis, falling back")
         balances=get_bulkbalancedata(addresses)
- 
+
       for addr in list(addresses):
         if addresses[addr] < 1 and addresses[addr] >= -30:
           addresses[addr] -= 1
@@ -212,11 +212,11 @@ def logout():
 @socketio.on("address:add", namespace='/balance')
 def add_address(message):
   global addresses, maxaddresses
-  
+
   address = message['data']
   if str(address) not in session['addresses']:
     session['addresses'].append(str(address))
-    if str(address) in addresses and addresses[str(address)] > 0: 
+    if str(address) in addresses and addresses[str(address)] > 0:
       addresses[str(address)] += 1
     else:
       addresses[str(address)] = 1
