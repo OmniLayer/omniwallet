@@ -5,7 +5,7 @@ angular.module("omniControllers")
             $scope.tokenMin = 0;
             $scope.tokenMax = "9223372036854775807";
             $scope.issuerData = {};
-            $scope.propertyDetails = { propertyType: 2, propertyCategory: 'Object' };
+            $scope.propertyDetails = { propertyType: 1, propertyCategory: 'Object' };
             $scope.ecosystem = 2;
 
             // $scope.setEcosystem = function (ecosystem) {
