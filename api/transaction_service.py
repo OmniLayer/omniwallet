@@ -23,9 +23,11 @@ def estimatefees(addr):
 
     #get dynamic fee rates from db
     try:
-      fees=json.loads(getfees())
-    except:
-      fees={"unit": "Satoshi/kB", "faster": 75000, "fast": 45000, "normal": 35000}
+      fees=getfeesRaw()
+    except Exception as e:
+      print "Fee lookup failed, falling back"
+      print e
+      fees={"unit": "Satoshi/kB", "faster": 275000, "fast": 245000, "normal": 215000}
 
     #initial miner fee estimate
     mfee=25000
@@ -69,6 +71,9 @@ def estimatefees(addr):
 
 @app.route('/fees')
 def getfees():
+    return jsonify(getfeesRaw())
+
+def getfeesRaw():
     fee={}
     ROWS=dbSelect("select value from settings where key='feeEstimates'")
     print ROWS
@@ -76,7 +81,7 @@ def getfees():
       fee=json.loads(ROWS[0][0])
 
     fee['unit']='Satoshi/kB'
-    return jsonify(fee)
+    return fee
 
 @app.route('/estimatetxcost', methods=['POST'])
 def estimatetxcost():
