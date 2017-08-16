@@ -7,19 +7,22 @@ app.debug = True
 
 @app.route('/status')
 def status():
-  rev=revision()
+  rev=revision().get_data()
+  print rev
   try:
     rev=json.loads(rev)
   except:
     rev={'revision':rev}
 
-  st=stats()
+  st=stats().get_data()
+  print st
   try:
     st=json.loads(st)
   except:
     st={'stats':st}
 
-  coms=commits()
+  coms=commits().get_data()
+  print coms
   try:
     coms=json.loads(coms)
   except:
@@ -27,8 +30,7 @@ def status():
 
   #print rev, st, coms
   merged_response = {key: value for (key, value) in (rev.items() + st.items() + coms.items())}
-  json_response = json.dumps( merged_response )
-  return json_response
+  return jsonify(merged_response)
 
 
 @app.route('/revision')
@@ -37,10 +39,10 @@ def revision():
 
   response = {
           'last_block': ROWS[0][0],
-          'last_parsed': ROWS[0][1] 
+          'last_parsed': ROWS[0][1]
       }
 
-  json_response = json.dumps( response)
+  json_response = jsonify(response)
   return json_response
 
 
@@ -52,7 +54,7 @@ def stats():
           'amount_of_wallets': ROWS[0][0]
       }
 
-  json_response = json.dumps( response)
+  json_response = jsonify(response)
   return json_response
 
 
@@ -70,5 +72,5 @@ def commits():
       'msg': str(y[3].strip())
     })
 
-  json_response = json.dumps({'commits': response})
+  json_response = jsonify({'commits': response})
   return json_response
