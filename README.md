@@ -46,7 +46,7 @@ NOTE: If you've recently upgrade from ubuntu 13 to 14 release do not install pyt
 ```
 cd
 sudo apt-get remove python-pip
-wget https://raw.github.com/pypa/pip/master/contrib/get-pip.py
+wget https://bootstrap.pypa.io/get-pip.py
 sudo python get-pip.py
 ```
 Clone Omni repository:
