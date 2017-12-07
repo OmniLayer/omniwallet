@@ -23,7 +23,8 @@ def bc_getutxo(address, ramount, page=1, retval=None, avail=0):
       for tx in unspents:
         txUsed=gettxout(tx['hash'],tx['index'])
         isUsed = ('result' in txUsed and txUsed['result']==None)
-        if not isUsed and txUsed['result']['confirmations'] > 0 and tx['multisig']==None:
+        coinbaseHold = (tx['is_coinbase'] and tx['confirmations'] < 100)
+        if not isUsed and not coinbaseHold and txUsed['result']['confirmations'] > 0 and tx['multisig']==None:
           avail += tx['value']
           retval.append([ tx['hash'], tx['index'], tx['value'] ])
           if avail >= ramount:
