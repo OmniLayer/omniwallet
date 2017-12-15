@@ -96,7 +96,7 @@ var app = angular.module('omniwallet', [
   $routeProvider.when('/assets/:page?', {
       templateUrl: function(route) {
         //new views added here
-        var availableViews = ['issue','crowdsale'];
+        var availableViews = ['issue','crowdsale','object'];
 
         var view;
         var viewFound = availableViews.indexOf(route.page);

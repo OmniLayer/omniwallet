@@ -1,0 +1,20 @@
+<div class="row">
+    <div class="col-sm-12">
+        <h3 class="om-subtitle">{{'ASSET.FORM_OBJECT.DETAILS.SUBTITLE' | translate}}</h3>
+        <hr>
+    </div>
+</div>
+<div class="row">
+    <div class="form-group col-sm-6">
+        <label for="name"> {{ 'COMMON.NAME' | translate }} <small class="text-muted">({{ 'ASSET.FORM_OBJECT.DETAILS.NAME_HINT' | translate }})</small></label>
+        <input name="name" type="text" ng-model="propertyDetails.propertyName" class="form-control" maxlength="255" ng-maxlength="255"
+            required>
+    </div>
+</div>
+<div class="row">
+    <div class="form-group col-sm-6">
+        <label for="url"> {{ 'ASSET.FORM_OBJECT.DETAILS.URL' | translate }} <small class="text-muted">({{ 'ASSET.FORM_OBJECT.DETAILS.URL_HINT' | translate }})</small></label>
+        <input name="url" type="url" ng-model="propertyDetails.propertyUrl" class="form-control" placeholder="ex: http://my.property.url/o/CoolGadget"
+            maxlength="255" ng-maxlength="255">
+    </div>
+</div>

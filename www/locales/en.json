@@ -396,7 +396,9 @@
 			"OPTIONS":"Wallet Options",
 			"OPTIONSTOGGLE":"Toggle Options",
 			"PORTFOLIO":"Portfolio Composition by value",
-			"WALLETID":"Wallet ID"
+			"WALLETID":"Wallet ID",
+			"OBJECTS": "Objects",
+			"ASSETS": "All Assets"
 		},
 		"ADDRESSES":{
 			"CREATE":"Create New Address",
@@ -432,7 +434,8 @@
 			"CREATE":"Create",
 			"CROWDSALE":"Crowdsale",
 			"MYASSETS":"My Assets",
-			"SMARTPROPERTY":"Smart Property"
+			"SMARTPROPERTY":"Smart Property",
+			"OBJECT": "Digital Object"
 		},
 		"HISTORY":{
 			"ALLADDRESSES":"-- All Addresses --",
@@ -474,6 +477,15 @@
 				"NAME_HINT":"ex. Bobcoin"
 			}
 		},
+		"FORM_OBJECT": {
+			"ISSUER": "Issuance Address",
+			"DETAILS": {
+				"SUBTITLE": "Digital Object details",
+				"URL": "External URL",
+				"URL_HINT": "Enter a url that resolves to a valid digital object JSON definition.",
+				"NAME_HINT": "ex. Cool Gadget"
+			}
+		},
 		"CROWDSALE":{
 			"TITLE":"Start a Crowdsale",
 			"SUBTITLE":"Crowdsale details",
@@ -495,6 +507,17 @@
 			"MODALTITLE":"Confirm Crowdsale Creation",
 			"ACCEPTEDCURRENCY":"Accepted currency",
 			"INITIALEB":"Initial early bird bonus"
+		},
+		"OBJECT": {
+			"TITLE": "Create Digital Object",
+			"SUBTITLE": "Object Details",
+			"AMOUNT": "Number of Tokens",
+			"AMOUNT_HINT": "Enter desired amount",
+			"TYPE": "Issuance type",
+			"FIXED": "Fixed",
+			"MANAGED": "Managed",
+			"CREATE": "Create Object",
+			"MODALTITLE": "Confirm Property Creation"
 		},
 		"MODAL_DESCRIPTION":"Description",
 		"HISTORY":{
