@@ -33,7 +33,8 @@ class OmniTransaction:
           print e
           self.pubkey = form['pubkey']
         #self.fee = estimateFee(self.confirm_target)['result']
-        self.fee = form['fee']
+        #make sure fee is correct length
+        self.fee = int(float(form['fee'])*float(1e8))/1e8
         self.rawdata = form.copy()
         self.tx_type = tx_type
 

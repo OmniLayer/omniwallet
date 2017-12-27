@@ -864,8 +864,8 @@ angular.module("omniServices")
                     } else {
                       $scope.predefined=true;
                     }
-                    $scope.minersFee=parseFloat(new Big(value).valueOf());
-                    $scope.parentScope.minersFee = new Big(value);
+                    $scope.minersFee=parseFloat(new Big(value).toFixed(8));
+                    $scope.parentScope.minersFee = new Big($scope.minersFee);
                   };
                 },
                 scope: modalScope
