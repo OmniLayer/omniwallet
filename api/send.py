@@ -144,7 +144,7 @@ def prepare_send_tx_for_signing(from_address, to_address, marker_address, curren
     dirty_txes = bc_getutxo( from_address, fee_total_satoshi )
 
     if (dirty_txes['error'][:3]=='Con'):
-        raise Exception({ "status": "NOT OK", "error": "Couldn't get list of unspent tx's. Response Code: " + dirty_txes['code'] })
+        raise Exception({ "status": "NOT OK", "error": "Could not get list of unspent txs. Response Code: " + str(dirty_txes['code']) })
 
     if (dirty_txes['error'][:3]=='Low'):
         raise Exception({ "status": "NOT OK", "error": "Not enough funds, try again. Needed: " + str(fee_total_satoshi) + " but Have: " + str(dirty_txes['avail'])  })
@@ -263,7 +263,6 @@ def prepare_send_tx_for_signing(from_address, to_address, marker_address, curren
     # tx, inputs
     return_dict={'transaction':tx, 'sourceScript':prevout_script}
     return return_dict
-
 
 def send_handler(environ, start_response):
     return general_handler(environ, start_response, send_form_response)

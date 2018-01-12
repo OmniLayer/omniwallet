@@ -22,14 +22,6 @@ angular.module('omniServices')
             'testnet': (TESTNET || false)
           };
           var url = '/v1/transaction/send/';
-        // } else if (type == 20) { // sell tx
-        //   var url = '/v1/exchange/sell/';
-        //   data["seller"] = data["transaction_from"]
-        //   data["pubKey"] = data["pubkey"]
-        // }else if (type==22){ // accept tx
-        //   var url = '/v1/exchange/accept/';
-        //   data["buyer"] = data["transaction_from"]
-        //   data["pubKey"] = data["pubkey"]
         }else{ // SP and simple send tx
           var url = '/v1/transaction/getunsigned/'+type;
         } 

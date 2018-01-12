@@ -39,8 +39,12 @@ class OmniTransaction:
         self.tx_type = tx_type
 
     def get_unsigned(self):
+      try:
         # get payload
         payload = self.__generate_payload()
+        if 'error' in payload:
+          raise Exception(payload['msg'])
+
         #initialize values
         rawtx = None
         fee_total = Decimal(self.fee)
@@ -124,8 +128,11 @@ class OmniTransaction:
         rawtx = createrawtx_change(rawtx, validnextinputs, self.rawdata['transaction_from'], float(self.fee))['result']
 
         return { 'status':200, 'unsignedhex': rawtx , 'sourceScript': prevout_script }
+      except Exception as e:
+        return { 'status':503, 'error': e.message }
 
     def __generate_payload(self):
+      try:
         if self.tx_type == 0:
             return getsimplesendPayload(self.rawdata['currency_identifier'], self.rawdata['amount_to_transfer'])['result']
         if self.tx_type == 20:
@@ -172,3 +179,18 @@ class OmniTransaction:
             return getcanceltradesbypairPayload(self.rawdata['propertyidforsale'], self.rawdata['propertiddesired'])['result']
         if self.tx_type == 28:
             return getcancelalltradesPayload(self.rawdata['ecosystem'])['result']
+      except Exception as e:
+        if 'call' in e.message:
+          msg=e.message.split("call: ")[1]
+          ret=re.findall('{.+',str(msg))
+          try:
+            msg=json.loads(ret[0])
+          except TypeError:
+            msg=ret[0]
+          except ValueError:
+            #reverse the single/double quotes and strip leading u in output to make it json compatible
+            msg=json.loads(ret[0].replace("'",'"').replace('u"','"'))
+
+          return { 'error': True, 'msg': msg['message'] }
+        else:
+          return { 'error': True, 'msg': e.message }
