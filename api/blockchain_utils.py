@@ -71,7 +71,7 @@ def bc_getutxo_blockcypher(address, ramount):
       except ValueError:
         #reverse the single/double quotes and strip leading u in output to make it json compatible
         msg=json.loads(ret[0].replace("'",'"').replace('u"','"'))
-      return {"error": "Connection error", "code": msg}
+      return {"error": "Connection error", "code": msg['message']}
     else: 
       return {"error": "Connection error", "code": e.message}
 
