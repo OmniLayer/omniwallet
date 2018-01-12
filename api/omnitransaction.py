@@ -181,6 +181,16 @@ class OmniTransaction:
             return getcancelalltradesPayload(self.rawdata['ecosystem'])['result']
       except Exception as e:
         if 'call' in e.message:
-          return { 'error': True, 'msg': e.message.split("call: ")[1] }
+          msg=e.message.split("call: ")[1]
+          ret=re.findall('{.+',str(msg))
+          try:
+            msg=json.loads(ret[0])
+          except TypeError:
+            msg=ret[0]
+          except ValueError:
+            #reverse the single/double quotes and strip leading u in output to make it json compatible
+            msg=json.loads(ret[0].replace("'",'"').replace('u"','"'))
+
+          return { 'error': True, 'msg': msg }
         else:
           return { 'error': True, 'msg': e.message }
