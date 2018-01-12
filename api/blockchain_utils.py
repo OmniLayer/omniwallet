@@ -59,37 +59,21 @@ def bc_getutxo_blockcypher(address, ramount):
             return {"avail": avail, "utxos": retval, "error": "none"}
       return {"avail": avail, "error": "Low balance error"}
     else:
-      #return {"error": "Connection error", "code": r.status_code}
-      return bc_getutxo_blockr(address, ramount)
-  except:
-    return bc_getutxo_blockr(address, ramount)
-
-def bc_getutxo_blockr(address, ramount):
-  try:
-    r = requests.get('http://btc.blockr.io/api/v1/address/unspent/'+address+'?unconfirmed=1')
-
-    if r.status_code == 200:
-      #Process and format response from blockr.io
-
-      unspents = r.json()['data']['unspent']
-
-      print "got unspent list (blockr)", unspents
-      retval = []
-      avail = 0
-      for tx in unspents:
-        txUsed=gettxout(tx['tx'],tx['n'])
-        isUsed = ('result' in txUsed and txUsed['result']==None)
-        if tx['confirmations'] > 0 and not isUsed:
-          tx['amount'] =  int(decimal.Decimal(tx['amount'])*decimal.Decimal(1e8))
-          avail += tx['amount']
-          retval.append([ tx['tx'], tx['n'], tx['amount'] ])
-          if avail >= ramount:
-            return {"avail": avail, "utxos": retval, "error": "none"}
-      return {"avail": avail, "error": "Low balance error"}
-    else:
       return {"error": "Connection error", "code": r.status_code}
-  except:
-    return {"error": "Connection error", "code": r.status_code}
+  except Exception as e:
+    if 'call' in e.message:
+      msg=e.message.split("call: ")[1]
+      ret=re.findall('{.+',str(msg))
+      try:
+        msg=json.loads(ret[0])
+      except TypeError:
+        msg=ret[0]
+      except ValueError:
+        #reverse the single/double quotes and strip leading u in output to make it json compatible
+        msg=json.loads(ret[0].replace("'",'"').replace('u"','"'))
+      return {"error": "Connection error", "code": msg}
+    else: 
+      return {"error": "Connection error", "code": e.message}
 
 
 def bc_getpubkey(address):

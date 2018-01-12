@@ -129,7 +129,7 @@ class OmniTransaction:
 
         return { 'status':200, 'unsignedhex': rawtx , 'sourceScript': prevout_script }
       except Exception as e:
-        return { 'status':503, 'error': e }
+        return { 'status':503, 'error': e.message }
 
     def __generate_payload(self):
       try:
@@ -191,6 +191,6 @@ class OmniTransaction:
             #reverse the single/double quotes and strip leading u in output to make it json compatible
             msg=json.loads(ret[0].replace("'",'"').replace('u"','"'))
 
-          return { 'error': True, 'msg': msg }
+          return { 'error': True, 'msg': msg['message'] }
         else:
           return { 'error': True, 'msg': e.message }
