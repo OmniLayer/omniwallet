@@ -108,7 +108,7 @@ angular.module("omniConfig")
 			"EMAILDESC":"You can also reach us directly at",
 			"EMAILLINK":"the output of the developer console",
 			"CHATTITLE":"Live Chat",
-			"CHATDESC":"Chat with the developers, share your ideas or ask questions. Availability varies, but we should generally be around Mon-Fri 9-5 CDT",
+			"CHATDESC":"Chat with the developers, share your ideas or ask questions. Availability varies, but we should generally be around Mon-Fri 10-4 EST",
 			"TITLE":"Contact Us"
 		},
 		"OMNI":{
