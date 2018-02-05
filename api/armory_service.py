@@ -45,14 +45,15 @@ def generate_unsigned():
     i_k = []
     for intx in decoded_tx['vin']:
       spending_txid= intx['txid']
+      i_vout = intx['vout']
       spending_tx_raw = getrawtransaction(spending_txid)['result']['hex']
-      spending_tx_decoded = decoderawtransaction(spending_tx_raw)['result']
-      i_vout = -1
-      for each in spending_tx_decoded['vout']:
-        info=each['scriptPubKey']['asm'].split(' ')
-        print "\nArmoryService: Searching for pubKey:", pubKeyHash, "| ASM Info:",info
-        if len(info) > 3 and info[0] != "OP_RETURN" and info[2] == pubKeyHash:
-          i_vout = each['n']
+      #spending_tx_decoded = decoderawtransaction(spending_tx_raw)['result']
+      #i_vout = -1
+      #for each in spending_tx_decoded['vout']:
+      #  info=each['scriptPubKey']['asm'].split(' ')
+      #  print "\nArmoryService: Searching for pubKey:", pubKeyHash, "| ASM Info:",info
+      #  if len(info) > 3 and info[0] != "OP_RETURN" and info[2] == pubKeyHash:
+      #    i_vout = each['n']
 
       i_k.append ({'contribid': '',
                       'contriblabel': '',
