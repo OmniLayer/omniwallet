@@ -26,6 +26,12 @@ def insertbtc(rawtx):
     txversion = rawtx['BTC']['version']
     txhash = rawtx['BTC']['txid']
     protocol = "Bitcoin"
+
+    #somehow tx is already in database, skip
+    existing=dbSelect("select * from transactions where txhash=%s and protocol='Bitcoin'",[txhash])
+    if len(existing) > 0:
+      return
+
     txdbserialnum = dbSelect("select least(-1,min(txdbserialnum)) from transactions;")[0][0]
     txdbserialnum -= 1
     addresstxindex = 0
@@ -75,6 +81,12 @@ def insertomni(rawtx):
     txhash = rawtx['BTC']['txid']
     protocol = "Omni"
     addresstxindex=0
+
+    #somehow tx is already in database, skip
+    existing=dbSelect("select * from transactions where txhash=%s and protocol='Omni'",[txhash])
+    if len(existing) > 0:
+      return
+
     txdbserialnum = dbSelect("select least(-1,min(txdbserialnum)) from transactions;")[0][0]
     txdbserialnum -= 1
     if 'amount' in rawtx['MP']:
