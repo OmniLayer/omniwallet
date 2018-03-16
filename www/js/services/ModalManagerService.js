@@ -30,9 +30,10 @@ angular.module("omniServices")
               
               self.modalInstance = $modal.open({
                 templateUrl: '/views/modals/base.html',
-                controller: function CreateWalletController($scope, $location, $modalInstance, $idle, Account, AddressManager) {
+                controller: function CreateWalletController($scope, $location, $modalInstance, $idle, reCaptchaKey, Account, AddressManager) {
                   $scope.dismiss = $modalInstance.dismiss;
-                  
+                  $scope.sitekey = reCaptchaKey;
+
                   $scope.createWallet = function(create) {
                     $scope.validating=true;
                     $scope.serverError = $scope.invalidCaptcha =false;

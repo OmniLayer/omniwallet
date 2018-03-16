@@ -18,7 +18,7 @@ from email.MIMEText import MIMEText
 from email.Utils import COMMASPACE, formatdate
 from email import Encoders
 from sqltools import *
-from recaptcha.client import captcha
+import requests
 import config 
 
 ACCOUNT_CREATION_DIFFICULTY = '0400'
@@ -85,18 +85,28 @@ def create():
   uuid = str(validate_uuid)
   session = ws.hashlib.sha256(config.SESSION_SECRET + uuid).hexdigest()
 
+  recaptcha_configured=False
   try:
-    recaptcha_challenge=request.form['recaptcha_challenge_field']
-    recaptcha_response=request.form['recaptcha_response_field']
     recaptcha_configured = config.RECAPTCHA_PRIVATE is not None
+    recaptcha_response=request.form['recaptcha_response_field']
   except:
-    recaptcha_configured=False
+    pass
+
   ## validate reCaptcha
   if recaptcha_configured: 
-    captcha_response = captcha.submit(recaptcha_challenge,recaptcha_response,config.RECAPTCHA_PRIVATE,request.remote_addr)
-
-    if not captcha_response.is_valid:
-      print 'reCaptcha not valid'
+    body={"secret":config.RECAPTCHA_PRIVATE, "response":recaptcha_response, "remoteip":request.remote_addr}
+    try:
+      r = requests.post('https://www.google.com/recaptcha/api/siteverify',body)
+      if r.status_code == 200:
+         resp=r.json()
+         #resp['challenge_ts'] timestamp check?
+         if not (resp['success'] and ('omniwallet' in resp['hostname'] or config.LOCALDEVBYPASSDB)):
+           print 'reCaptcha not valid'
+           return jsonify({"status": "ERROR", "error":"InvalidCaptcha"})
+      else:
+        raise "response error "+str(r.content)
+    except Exception as e:
+      print e
       return jsonify({"status": "ERROR", "error":"InvalidCaptcha"})
 
   email = request.form['email'] if 'email' in request.form else None
@@ -662,4 +672,30 @@ def email_wallet(user_email, wallet, uuid):
     smtp.sendmail(email_from, user_email, msg.as_string())
     smtp.close()
 
+
+def email_admin(mesg):
+  if mesg is not None:
+    user_email=config.ADMINEMAIL
+    msg = MIMEMultipart('alternative')
+    msg['From'] = email_from
+    msg['To'] = user_email
+    msg['Subject'] = "Omniwallet Alert"
+
+    text = (str(mesg))
+
+    html = ('<html><head></head>'
+            '<body><p>'
+            ''+str(mesg)+''
+            '</p></body></html>'  )
+
+    part1 = MIMEText(text, 'plain')
+    part2 = MIMEText(html, 'html')
+    msg.attach(part1)
+    msg.attach(part2)
+
+    smtp = smtplib.SMTP(config.SMTPDOMAIN, config.SMTPPORT)
+    if config.SMTPUSER is not None and config.SMTPPASS is not None:
+      smtp.login(config.SMTPUSER, config.SMTPPASS)
+    smtp.sendmail(email_from, user_email, msg.as_string())
+    smtp.close()
 
