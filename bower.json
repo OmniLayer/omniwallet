@@ -23,16 +23,17 @@
     "numeraljs": "https://github.com/Omniwallet/Numeral-js.git#1.5.3",
     "angular-numeraljs": "https://github.com/Omniwallet/angular-numeraljs.git#master",
     "ng-idle": "https://github.com/Omniwallet/ng-idle.git#0.3.5",
-    "angular-re-captcha": "~0.0.3",
     "angular-translate": "~2.4.2",
     "angular-nvd3": "~1.0.9",
     "angular-translate-loader-static-files": "~2.5.2",
     "angular-qr": "0.2.0",
     "bitcore-lib": "^0.14.0",
-    "bitcore-message": "^1.0.4"
+    "bitcore-message": "^1.0.4",
+    "angular-recaptcha": "4.1.3"
   },
   "resolutions": {
     "d3": "~3.4",
-    "angular-translate": "~2.5.2"
+    "angular-translate": "~2.5.2",
+    "angular": "~1.2.30"
   }
 }
