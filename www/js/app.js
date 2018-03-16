@@ -41,7 +41,6 @@ var app = angular.module('omniwallet', [
   'infinite-scroll',
   'ngNumeraljs',
   'ngIdle',
-  'reCAPTCHA',
   'pascalprecht.translate',
   'nvd3',
   'ja.qr',
@@ -50,7 +49,8 @@ var app = angular.module('omniwallet', [
   'omniDirectives',
   'omniFactories',
   'omniServices',
-  'omniControllers'
+  'omniControllers',
+  'vcRecaptcha'
 ], function($routeProvider, $locationProvider, $httpProvider) {
 
   if (!$httpProvider.defaults.headers.get)
@@ -212,17 +212,10 @@ var app = angular.module('omniwallet', [
   $locationProvider.html5Mode(true).hashPrefix('!');
 });
 
-app.config(function($idleProvider, $keepaliveProvider, reCAPTCHAProvider, idleDuration, idleWarningDuration, reCaptchaKey, $translateProvider, DefaultTranslation) {
+app.config(function($idleProvider, $keepaliveProvider, idleDuration, idleWarningDuration, $translateProvider, DefaultTranslation) {
   $idleProvider.idleDuration(idleDuration);
   $idleProvider.warningDuration(idleWarningDuration);
   // $keepaliveProvider.interval(2);
-  // required: please use your own key :)
-  reCAPTCHAProvider.setPublicKey(reCaptchaKey);
-
-  // optional: gets passed into the Recaptcha.create call
-  reCAPTCHAProvider.setOptions({
-      theme: 'clean'
-  });
 
   $translateProvider
     .translations('en', DefaultTranslation)

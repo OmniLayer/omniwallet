@@ -59,8 +59,7 @@ angular.module("omniServices")
 
                     if(form.captcha){
                       angular.extend(createData, {
-                        recaptcha_challenge_field:form.captcha.challenge,
-                        recaptcha_response_field:form.captcha.response
+                        recaptcha_response_field:form.captcha
                       });
                     }
 
