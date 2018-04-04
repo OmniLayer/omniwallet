@@ -52,7 +52,7 @@ def generate_tx(tx_type):
     elif tx_type == 22:
         expected_fields+=['tx_hash', 'amount']
     elif tx_type in [55,56]:
-        expected_fields+=['currency_identifier', 'number_properties']
+        expected_fields+=['currency_identifier', 'amount']
     elif tx_type == 25:
         expected_fields+=['propertyidforsale', 'amountforsale', 'propertiddesired', 'amountdesired']
     elif tx_type == 26:

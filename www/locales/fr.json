@@ -38,7 +38,9 @@
     "MFA": "Code MFA",
     "RESET": "Remise à zéro",
     "MY": "Moi",
-    "PUBKEY":"Clé publique"
+    "PUBKEY":"Clé publique",
+    "GRANT":"Subvention",
+    "REVOKE":"Révoquer"
   },
   "SETTINGS": {
     "TITLE": "Paramètres du compte",
@@ -430,7 +432,8 @@
       "CREATE": "Créer",
       "CROWDSALE": "Crowdsale",
       "MYASSETS": "Mes Assets",
-      "SMARTPROPERTY": "Bien Intelligent"
+      "SMARTPROPERTY": "Bien Intelligent",
+      "MANAGED":"Propriété gérée"
     },
     "HISTORY": {
       "ALLADDRESSES": "-- Toutes les adresses --",
@@ -444,6 +447,11 @@
       "MOREDETAILS": "Voir les détails de transaction",
       "BTCNOTE1": "Remarque: À ce moment, la page d'historique ne comprend que les transactions du Protocol Omni.",
       "BTCNOTE2": "Pour voir l'historique de la transaction Bitcoin, nous recommandons un explorateur Bitcoin comme : "
+    },
+    "MANAGE":{
+      "TITLE":"Gérer la propriété",
+      "CHOOSETYPE":"Choisissez une action gérée",
+      "REVOKEWARNING":"Avertissement: La révocation des jetons les détruira et est irréversible. Seul l'émetteur d'actifs pourra créer de nouveaux jetons"
     }
   },
   "ASSET": {

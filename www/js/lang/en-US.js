@@ -40,7 +40,9 @@ angular.module("omniConfig")
 		"MFA":"MFA Code",
 		"RESET":"Reset",
 		"MY":"My",
-		"PUBKEY":"Pubkey"
+		"PUBKEY":"Pubkey",
+		"GRANT":"Grant",
+		"REVOKE":"Revoke"
 	},
 	"SETTINGS":{
 		"TITLE":"Account Settings",
@@ -432,7 +434,8 @@ angular.module("omniConfig")
 			"CREATE":"Create",
 			"CROWDSALE":"Crowdsale",
 			"MYASSETS":"My Assets",
-			"SMARTPROPERTY":"Smart Property"
+			"SMARTPROPERTY":"Smart Property",
+			"MANAGED":"Managed Property"
 		},
 		"HISTORY":{
 			"ALLADDRESSES":"-- All Addresses --",
@@ -446,6 +449,11 @@ angular.module("omniConfig")
 			"MOREDETAILS":"See transaction details",
 			"BTCNOTE1":"Note: At this time the history page only includes Omni Protocol transactions.",
 			"BTCNOTE2":"To see Bitcoin Transaction history we recommend a Bitcoin Explorer like: "
+		},
+		"MANAGE":{
+			"TITLE":"Manage Property",
+			"CHOOSETYPE":"Choose Managed Action",
+			"REVOKEWARNING":"Warning: Revoking tokens will DESTROY THEM and is irreversible. Only Asset Issuer will be able to create new tokens"
 		}
 	},
 	"ASSET":{

@@ -13,33 +13,37 @@ angular.module("omniServices")
 				self.addresses = [];
 				self.assets = [];
 				self.loader = {
-				totalAddresses: wallet.addresses.length || 1,
-				totalAssets:1,
-				addresses:0,
-				assets:0,
-				loadedAddresses:false,
-				loadedAssets:false
-			}
-
-			wallet.addresses.forEach(function(raw){
-				self._addAddress(raw);
-			});
-
-			//Make sure we stay connected
-			var ensureWebsocketIsConnected = function() {
-				if(!BalanceSocket.connected) {
-					BalanceSocket.connect();
+					totalAddresses: wallet.addresses.length || 1,
+					totalAssets:1,
+					addresses:0,
+					assets:0,
+					loadedAddresses:false,
+					loadedAssets:false
 				}
-				self.ensureWebsocketIsConnectedTimeout = setTimeout(ensureWebsocketIsConnected,15000);
-			}
-			ensureWebsocketIsConnected();
+				self.managed = {
+					address: null,
+					assetid: null
+				}
 
-			appraiser.start();
+				wallet.addresses.forEach(function(raw){
+					self._addAddress(raw);
+				});
 
-			$rootScope.$on("address:loaded", function(address){
-				self.loader.addresses +=1;
-				check_load()
-			});
+				//Make sure we stay connected
+				var ensureWebsocketIsConnected = function() {
+					if(!BalanceSocket.connected) {
+						BalanceSocket.connect();
+					}
+					self.ensureWebsocketIsConnectedTimeout = setTimeout(ensureWebsocketIsConnected,15000);
+				}
+				ensureWebsocketIsConnected();
+
+				appraiser.start();
+
+				$rootScope.$on("address:loaded", function(address){
+					self.loader.addresses +=1;
+					check_load()
+				});
 
 				$rootScope.$on("asset:loaded", function(asset){
 					self.loader.assets +=1;
@@ -72,7 +76,7 @@ angular.module("omniServices")
 					if(self.loader.loadedAddresses && self.loader.loadedAssets)
 						self.loaded = true;
 				}
-		};
+			};
 
                 self.getSetting = function(setting){
                         return Account.getSetting(setting);
@@ -180,6 +184,30 @@ angular.module("omniServices")
 			return self.addresses.filter(function(address){
 				return address.hash == addressHash;
 			})[0];
+		}
+
+		self.getManagedAddress = function(){
+			if (self.managed.address === null) {
+				return null;
+			} else {
+				return self.getAddress(self.managed.address);
+			}
+		}
+
+		self.getManagedAsset = function(){
+			if (self.managed.assetid === null) {
+				return null;
+			} else {
+				return self.getAsset(self.managed.assetid);
+			}
+		}
+
+		self.setManagedAddress = function(addressHash){
+			self.managed.address=addressHash;
+		}
+
+		self.setManagedAsset = function(assetID){
+			self.managed.assetid=assetID;
 		}
 
 		self.transactions = function(showtesteco){

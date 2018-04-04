@@ -6,7 +6,7 @@
 </div>
 <div class="row table-row" ng-repeat="asset in assets">
 	<div class="visible-xs col-xs-5">{{'TABLES.ASSETS.ID' | translate}}</div>
-	<div class="col-xs-7 col-sm-3">{{asset.propertyid}}</div>
+	<div class="col-xs-7 col-sm-3">{{asset.propertyid}}<span ng-show="asset.type_int === 54"><a ng-click="setMangaged(asset)"> (Manage)</a></span></div>
 	<div class="visible-xs col-xs-5">{{'TABLES.ASSETS.NAME' | translate}}</div>
 	<div class="col-xs-7 col-sm-3" style="overflow:hidden"><a href="/assets/details/{{asset.propertyid}}">{{asset.name}}</a></div>
 	<div class="visible-xs col-xs-5">{{'TABLES.ASSETS.AMOUNT' | translate}}</div>
