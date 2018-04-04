@@ -107,6 +107,7 @@ angular.module("omniControllers")
 			var modalScope = {
 				title:"WALLET.SEND.CONFIRM",
 				token:$filter('truncate')($scope.selectedAsset.name,15,0),
+				propertyid:$scope.selectedAsset.id,
 				sendAmount:$scope.sendAmount,
 				symbol:$scope.selectedAsset.symbol,
 				sendValue:$scope.sendAmount * btcPrice,
