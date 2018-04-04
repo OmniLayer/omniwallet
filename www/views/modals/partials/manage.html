@@ -16,4 +16,7 @@
 <hr>
 <span class="send-fee">Transaction fees: {{fees}} bitcoins</span>
 <hr>
-
+<div ng-show="type_int === 56" class="alert alert-danger">
+  {{ 'WALLET.MANAGE.REVOKEWARNING' | translate}}
+</div>
+<hr>

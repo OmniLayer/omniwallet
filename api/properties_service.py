@@ -107,13 +107,17 @@ def listbyowner():
         abort(make_response('No field \'issuer_addresses\' in request, request failed', 400))
 
     
-    ROWS= dbSelect("select PropertyData from smartproperties where Protocol != 'Fiat' AND issuer= ANY(%s) ORDER BY PropertyName,PropertyID", (addresses,))
+    ROWS= dbSelect("select txj.txdata,sp.PropertyData from txjson txj, smartproperties sp  where txj.txdbserialnum=sp.createtxdbserialnum and sp.Protocol != 'Fiat' AND sp.issuer= ANY(%s) ORDER BY PropertyName,PropertyID", (addresses,))
 
-    data = [data[0] for data in ROWS]
+    ret=[]
+    for data in ROWS:
+      x=data[0].copy()
+      x.update(data[1])
+      ret.append(x)
 
     response = {
                 'status' : 'OK',
-                'properties' : data
+                'properties' : ret
                 }
 
     return jsonify(response)

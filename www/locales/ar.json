@@ -39,7 +39,9 @@
 		"MFA":"MFA Code",
 		"RESET":"Reset",
 		"MY":"My",
-		"PUBKEY":"Pubkey"
+		"PUBKEY":"Pubkey",
+		"GRANT":"Grant",
+		"REVOKE":"Revoke
 	},
 	"SETTINGS":{
 		"TITLE":"Account Settings",
@@ -432,7 +434,8 @@
 			"CREATE":"Create",
 			"CROWDSALE":"Crowdsale",
 			"MYASSETS":"My Assets",
-			"SMARTPROPERTY":"Smart Property"
+			"SMARTPROPERTY":"Smart Property",
+			"MANAGED":"Managed Property"
 		},
 		"HISTORY":{
 			"ALLADDRESSES":"-- All Addresses --",
@@ -446,6 +449,10 @@
 			"MOREDETAILS":"See transaction details",
 			"BTCNOTE1":"Note: At this time the history page only includes Omni Protocol transactions.",
 			"BTCNOTE2":"To see Bitcoin Transaction history we recommend a Bitcoin Explorer like: "
+		},
+		"MANAGE":{
+			"TITLE":"Manage Property",
+			"CHOOSETYPE":"Choose Managed Action"
 		}
 	},
 	"ASSET":{
