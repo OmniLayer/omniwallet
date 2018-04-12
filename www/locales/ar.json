@@ -452,7 +452,9 @@
 		},
 		"MANAGE":{
 			"TITLE":"Manage Property",
-			"CHOOSETYPE":"Choose Managed Action"
+			"CHOOSETYPE":"Choose Managed Action",
+			"REVOKEWARNING":"Warning: Revoking tokens will DESTROY THEM and is irreversible. Only Asset Issuer will be able to create new tokens",
+			"CHANGEWARNING":"Warning: You are transfering ownership and control of your property. This action CAN NOT BE UNDONE. Please double check the new address Carefully!"
 		}
 	},
 	"ASSET":{
