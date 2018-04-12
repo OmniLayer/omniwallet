@@ -202,12 +202,20 @@ angular.module("omniServices")
 			}
 		}
 
+		self.getManagedType = function(){
+			return self.managed.type_int;
+		}
+
 		self.setManagedAddress = function(addressHash){
 			self.managed.address=addressHash;
 		}
 
 		self.setManagedAsset = function(assetID){
 			self.managed.assetid=assetID;
+		}
+
+		self.setManagedType = function(type_int){
+			self.managed.type_int=type_int;
 		}
 
 		self.transactions = function(showtesteco){
