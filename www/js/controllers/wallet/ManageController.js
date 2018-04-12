@@ -33,11 +33,12 @@ angular.module("omniControllers")
 	$scope.minersFee = MIN_MINER_FEE;
 	$scope.protocolFee = PROTOCOL_FEE;
         $scope.feeType = MINER_SPEED;
-	$scope.type = "Grant";
-        $scope.type_int = 55;
+	$scope.type = "Change Issuer";
+        $scope.type_int = 70;
 
 	$scope.selectedAsset = $scope.wallet.getManagedAsset();
 	$scope.selectedAddress = $scope.wallet.getManagedAddress();
+	$scope.managedtype = $scope.wallet.getManagedType();
 
         checkSend();
 
@@ -49,16 +50,30 @@ angular.module("omniControllers")
                 $scope.updatingFee=true;
                 $scope.amountModified=false;
                 checkSend();
-
         }
 
 	$scope.setType = function(type){
 		if (type === 'Grant') {
 			$scope.type = "Grant";
 			$scope.type_int = 55;
-		} else {
+		}
+		if (type === 'Revoke') {
 			$scope.type = "Revoke";
 			$scope.type_int = 56;
+		}
+		if (type === 'ChangeIssuer') {
+			$scope.type = "Change Issuer";
+			$scope.type_int = 70;
+		}
+		checkDestAddr();
+	}
+
+	$scope.checkDestAddr = function(){
+		var regex = RegExp('^[13][a-km-zA-HJ-NP-Z1-9]{25,34}$')
+		if ($scope.type_int === 70 && ($scope.sendTo === undefined || !regex.test($scope.sendTo) )) {
+			$scope.needToAddr = true;
+		} else {
+			$scope.needToAddr = false;
 		}
 	}
 
@@ -69,12 +84,13 @@ angular.module("omniControllers")
 
       	$scope.sendTransaction = function(){
 			// TODO: Validations
+
 			var fee = $scope.minersFee;
 			var amount = $scope.sendAmount;
 			var ManageSend = new Transaction($scope.type_int,$scope.selectedAddress,fee,{
 			        transaction_version:0,
 				currency_identifier:$scope.selectedAsset.id,
-			        amount: +new Big(amount).valueOf(),
+			        amount: $scope.type_int === 70 ? +new Big(0).valueOf() : +new Big(amount).valueOf(),
 			        transaction_to: $scope.sendTo,
 			        donate: $scope.account.getSetting("donate"),
 				marker: $scope.marker || false
@@ -84,7 +100,7 @@ angular.module("omniControllers")
 			var displayFee = new Big(fee).plus(new Big(PROTOCOL_FEE)).valueOf();
 			
 			var modalScope = {
-				title: $scope.type_int === 55 ? "Confirm Grant" : "Confirm Revoke",
+				title: $scope.type_int === 55 ? "Confirm Grant" : ($scope.type_int === 70 ? "Confirm Transfer of Ownership/Control" : "Confirm Revoke"),
 				token:$filter('truncate')($scope.selectedAsset.name,15,0),
 				propertyid: $scope.selectedAsset.id,
 				type_int: $scope.type_int,
@@ -93,14 +109,14 @@ angular.module("omniControllers")
 				sendValue:$scope.sendAmount * btcPrice,
 				toAddress:$scope.sendTo,
 				fees:displayFee,
-				confirmText:"COMMON.BROADCAST",
+				confirmText:"Create Transaction",
 				successRedirect:"/wallet"
 			};
 
 
 			$scope.modalManager.openConfirmationModal({
 				dataTemplate: '/views/modals/partials/manage.html',
-				footerTemplate: undefined,
+				footerTemplate: '/views/modals/partials/confirmation_footer.html',
 				scope:  modalScope,
 				transaction: ManageSend
 			})
