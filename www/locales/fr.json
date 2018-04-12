@@ -451,7 +451,8 @@
     "MANAGE":{
       "TITLE":"Gérer la propriété",
       "CHOOSETYPE":"Choisissez une action gérée",
-      "REVOKEWARNING":"Avertissement: La révocation des jetons les détruira et est irréversible. Seul l'émetteur d'actifs pourra créer de nouveaux jetons"
+      "REVOKEWARNING":"Avertissement: La révocation des jetons les détruira et est irréversible. Seul l'émetteur d'actifs pourra créer de nouveaux jetons",
+      "CHANGEWARNING":"Attention: Vous transférez la propriété et le contrôle de votre propriété. Cette action ne peut pas être annulée. S'il vous plaît vérifier la nouvelle adresse avec soin!"
     }
   },
   "ASSET": {
