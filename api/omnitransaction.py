@@ -184,7 +184,7 @@ class OmniTransaction:
         if self.tx_type == 28:
             return getcancelalltradesPayload(self.rawdata['ecosystem'])['result']
         if self.tx_type == 70:
-            return getchangeissuerPayload(self.rawdata['currency_identifier'])
+            return getchangeissuerPayload(self.rawdata['currency_identifier'])['result']
       except Exception as e:
         if 'call' in e.message:
           msg=e.message.split("call: ")[1]
