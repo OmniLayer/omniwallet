@@ -28,7 +28,7 @@ exodus_address=mainnet_exodus_address
 def generate_tx(tx_type):
 
     #update this to support more transactions
-    supported_transactions = [50,51,54,55,56,0,20,22,25,26,27,28]
+    supported_transactions = [50,51,54,55,56,0,20,22,25,26,27,28,70]
 
     if tx_type not in supported_transactions:
         return jsonify({ 'status': 400, 'data': 'Unsupported transaction type '+str(tx_type) })
@@ -61,6 +61,8 @@ def generate_tx(tx_type):
         expected_fields+=['propertyidforsale', 'propertiddesired']
     elif tx_type == 28:
         expected_fields+=['ecosystem']
+    elif tx_type == 70:
+        expected_fields+=['currency_identifier', 'transaction_to']
 
     for field in expected_fields:
         if field not in request.form:

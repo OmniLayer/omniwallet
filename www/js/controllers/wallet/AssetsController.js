@@ -5,8 +5,9 @@ angular.module("omniControllers")
 			$scope.assets=result.data.properties;
 		});
 
-		$scope.setMangaged = function(asset){
+		$scope.setManaged = function(asset){
 			$scope.wallet.setManagedAsset(asset.propertyid);
+			$scope.wallet.setManagedType(asset.type_int);
 			$scope.wallet.setManagedAddress(asset.issuer);
 			$location.path('/wallet/manage');
 		}
