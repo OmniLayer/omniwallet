@@ -107,7 +107,7 @@ angular.module("omniConfig")
 			"TALKTITLE":"Knowledge Base/Support Center",
 			"TALKDESC":"This is a support knowledge base where you can review common topics, questions and answers.",
 			"EMAILTITLE":"Support Email",
-			"EMAILDESC":"Not sure how to do something or just need some assistance? Our support team can be reach directly at",
+			"EMAILDESC":"Not sure how to do something or just need some assistance? Our support team can be reached directly at",
 			"EMAILLINK":"the output of the developer console",
 			"CHATTITLE":"Live Chat",
 			"CHATDESC":"Chat with the developers, share your ideas or ask questions. Availability varies, but we should generally be around Mon-Fri 10-4 EST",
