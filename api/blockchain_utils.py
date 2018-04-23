@@ -11,7 +11,36 @@ try:
 except:
   expTime=600
 
+
 def bc_getutxo(address, ramount, page=1, retval=None, avail=0):
+  if retval==None:
+    retval=[]
+  try:
+    r = requests.get('https://api.btc.com/v3/address/'+address+'/unspent?pagesize=50&page='+str(page))
+    if r.status_code == 200:
+      response = r.json()['data']
+      unspents = response['list']
+      print "got unspent list (btc)", response
+      for tx in unspents:
+        txUsed=gettxout(tx['tx_hash'],tx['tx_output_n'])
+        isUsed = ('result' in txUsed and txUsed['result']==None)
+        #coinbaseHold = (tx['is_coinbase'] and tx['confirmations'] < 100)
+        coinbaseHold = False
+        if not isUsed and not coinbaseHold and txUsed['result']['confirmations'] > 0 and tx['multisig']==None:
+          avail += tx['value']
+          retval.append([ tx['tx_hash'], tx['tx_output_n'], tx['value'] ])
+          if avail >= ramount:
+            return {"avail": avail, "utxos": retval, "error": "none"}
+      if int(response['total_count'])-(int(response['pagesize'])*page ) > 0:
+        return bc_getutxo(address, ramount, page+1, retval, avail)
+      return {"avail": avail, "error": "Low balance error"}
+    else:
+      return bc_getutxo_blockcypher(address, ramount)
+  except:
+    return bc_getutxo_blockcypher(address, ramount)
+
+def bc_getutxo_blocktrail(address, ramount, page=1, retval=None, avail=0):
+  #deprecated and migrated to btc.com api
   if retval==None:
     retval=[]
   try:
