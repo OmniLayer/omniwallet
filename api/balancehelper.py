@@ -29,7 +29,7 @@ def get_balancedata(address):
                              atx.propertyid) s2
                         on s1.propertyid=s2.propertyid) f1
                      inner join smartproperties sp
-                     on f1.propertyid=sp.propertyid and (sp.protocol='Omni' or sp.protocol='Mastercoin' or sp.protocol='Bitcoin')
+                     on f1.propertyid=sp.propertyid and (sp.protocol='Omni' or sp.protocol='Bitcoin')
                      order by f1.propertyid""",(addr,addr))
 
     balance_data = { 'balance': [] }
@@ -136,7 +136,7 @@ def get_bulkbalancedata(addresses):
                              atx.propertyid) s2
                         on s1.propertyid=s2.propertyid) f1
                      inner join smartproperties sp
-                     on f1.propertyid=sp.propertyid and (sp.protocol='Omni' or sp.protocol='Mastercoin' or sp.protocol='Bitcoin')
+                     on f1.propertyid=sp.propertyid and (sp.protocol='Omni' or sp.protocol='Bitcoin')
                      order by f1.propertyid""",(addr,addr))
 
       balance_data = { 'balance': [] }
