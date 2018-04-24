@@ -16,7 +16,7 @@ def bc_getutxo(address, ramount, page=1, retval=None, avail=0):
   if retval==None:
     retval=[]
   try:
-    r = requests.get('https://api.btc.com/v3/address/'+address+'/unspent?pagesize=50&page='+str(page))
+    r = requests.get('https://chain.api.btc.com/v3/address/'+address+'/unspent?pagesize=50&page='+str(page))
     if r.status_code == 200:
       response = r.json()['data']
       unspents = response['list']
