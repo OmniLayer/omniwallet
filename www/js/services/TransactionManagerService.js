@@ -4,11 +4,24 @@ angular.module("omniServices")
 
             var self = this;
 
+            self.parseScript = function(script) {
+                var newScript = new Bitcoin.Script();
+                var s = script.split(" ");
+                for (var i = 0; i < s.length; i++) {
+                    if (Bitcoin.Opcode.map.hasOwnProperty(s[i])) {
+                        newScript.writeOp(Bitcoin.Opcode.map[s[i]]);
+                    } else {
+                        newScript.writeBytes(Bitcoin.Util.hexToBytes(s[i]));
+                    }
+                }
+                return newScript;
+            }
+
             self.prepareTransaction = function(unsignedTransactionHex, sourceScript) {
 
                 var bytes = Bitcoin.Util.hexToBytes(unsignedTransactionHex);
                 var transaction = Bitcoin.Transaction.deserialize(bytes);
-                var script = self.parseScript(sourceScript);
+                //var script = self.parseScript(sourceScript);
 
                 if (transaction.ins.length == 0) {
                     return {
@@ -18,7 +31,13 @@ angular.module("omniServices")
                     };
                 }
                 transaction.ins.forEach(function(input) {
-                    input.script = script;
+                    if (typeof(sourceScript) == typeof("string")) {
+                      var script = sourceScript;
+                    } else {
+                      var sl = input['outpoint']['hash'] + ":" + input['outpoint']['index'];
+                      var script = sourceScript[sl];
+                    }
+                    input.script = self.parseScript(script);
                 });
                 return transaction;
             }
@@ -124,16 +143,4 @@ angular.module("omniServices")
                 return deferred.promise;
             };
 
-            self.parseScript = function(script) {
-                var newScript = new Bitcoin.Script();
-                var s = script.split(" ");
-                for (var i = 0; i < s.length; i++) {
-                    if (Bitcoin.Opcode.map.hasOwnProperty(s[i])) {
-                        newScript.writeOp(Bitcoin.Opcode.map[s[i]]);
-                    } else {
-                        newScript.writeBytes(Bitcoin.Util.hexToBytes(s[i]));
-                    }
-                }
-                return newScript;
-            }
     }]);
