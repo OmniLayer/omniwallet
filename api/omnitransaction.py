@@ -97,8 +97,9 @@ class OmniTransaction:
         #print [ "Debugging...", dirty_txes,"miner fee sats: ", self.fee, "change: ",change,"total_amt: ", total_amount,"fee tot sat: ", fee_total_satoshi,"utxo ",  unspent_tx,"to ", self.rawdata['transaction_to'] ]
 
         #source script is needed to sign on the client credit grazcoin
-        hash160=bc_address_to_hash_160(self.rawdata['transaction_from']).encode('hex_codec')
-        prevout_script='OP_DUP OP_HASH160 ' + hash160 + ' OP_EQUALVERIFY OP_CHECKSIG'
+        #hash160=bc_address_to_hash_160(self.rawdata['transaction_from']).encode('hex_codec')
+        #prevout_script='OP_DUP OP_HASH160 ' + hash160 + ' OP_EQUALVERIFY OP_CHECKSIG'
+        prevout_script={}
 
         #reset tx to create it proper from scratch
         rawtx=None
@@ -107,12 +108,13 @@ class OmniTransaction:
             #retrieve raw transaction to spend it
             prev_tx = getrawtransaction(unspent[0])['result']
 
-            for output in prev_tx['vout']:
-                if 'reqSigs' in output['scriptPubKey'] and output['scriptPubKey']['reqSigs'] == 1 and output['scriptPubKey']['type'] != 'multisig':
-                    for address in output['scriptPubKey']['addresses']:
-                        if address == self.rawdata['transaction_from'] and int(output['n']) == int(unspent[1]):
-                            validnextinputs.append({ "txid": prev_tx['txid'], "vout": output['n'], "scriptPubKey" : output['scriptPubKey']['hex'], "value" : output['value']})
-                            break
+            output = prev_tx['vout'][int(unspent[1])]
+            if 'reqSigs' in output['scriptPubKey'] and output['scriptPubKey']['reqSigs'] == 1:
+                for address in output['scriptPubKey']['addresses']:
+                   if address == self.rawdata['transaction_from'] and int(output['n']) == int(unspent[1]):
+                        validnextinputs.append({ "txid": prev_tx['txid'], "vout": output['n'], "scriptPubKey" : output['scriptPubKey']['hex'], "value" : output['value']})
+                        prevout_script[str(prev_tx['txid'])+":"+str(output['n'])] = output['scriptPubKey']['asm']
+                        break
         # Add the inputs
         for input in validnextinputs:
             rawtx = createrawtx_input(input['txid'],input['vout'],rawtx)['result']
