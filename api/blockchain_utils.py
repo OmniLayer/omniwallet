@@ -22,11 +22,11 @@ def bc_getutxo(address, ramount, page=1, retval=None, avail=0):
       unspents = response['list']
       print "got unspent list (btc)", response
       for tx in unspents:
-        txUsed=gettxout(tx['tx_hash'],tx['tx_output_n'])
-        isUsed = ('result' in txUsed and txUsed['result']==None)
-        #coinbaseHold = (tx['is_coinbase'] and tx['confirmations'] < 100)
-        coinbaseHold = False
-        if not isUsed and not coinbaseHold and txUsed['result']['confirmations'] > 0:
+        txUsed=gettxout(tx['tx_hash'],tx['tx_output_n'])['result']
+        isUsed = txUsed==None
+        coinbaseHold = (txUsed['coinbase'] and txUsed['confirmations'] < 100)
+        multisigSkip = ("scriptPubKey" in txUsed and txUsed['scriptPubKey']['type'] == "multisig")
+        if not isUsed and not coinbaseHold and txUsed['confirmations'] > 0 and not multisigSkip:
           avail += tx['value']
           retval.append([ tx['tx_hash'], tx['tx_output_n'], tx['value'] ])
           if avail >= ramount:
