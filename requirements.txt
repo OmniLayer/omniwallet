@@ -2,7 +2,7 @@ ecdsa==0.10
 pycoin==0.25
 simplekv==0.8.4
 pycrypto==2.6.1
-requests==2.8.14
+requests==2.18.4
 pybitcointools==1.1
 bitcoin-python==0.3
 psycopg2==2.5.4
