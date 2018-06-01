@@ -11,22 +11,22 @@
     </div>
 </div>
 <div class="row">
-	<div class="col-xs-7 small" style="padding-top:10px;">{{'CROWDSALE.DETAILS.TOKENSBOUGHT' | translate}}</div>
-	<div class="col-xs-5">
+	<div class="col-xs-12 small" style="padding-top:10px;">{{'CROWDSALE.DETAILS.TOKENSBOUGHT' | translate}}</div>
+	<div class="col-xs-12">
 		<div class="tag text-center" ng-if="!property.divisible" ng-bind-html="property.tokensissued | bigjs: '0,0'"></div>
         <div class="tag text-center" ng-if="property.divisible" ng-bind-html="property.tokensissued | bigjs: '0,0.00000000'"></div>
     </div>
 </div>
 <div class="row">
-	<div class="col-xs-7 small" style="padding-top:10px;">{{'CROWDSALE.DETAILS.TOKENSISSUER' | translate}} ({{property.percenttoissuer}}%)</div>
-	<div class="col-xs-5">
+	<div class="col-xs-12 small" style="padding-top:10px;">{{'CROWDSALE.DETAILS.TOKENSISSUER' | translate}} ({{property.percenttoissuer}}%)</div>
+	<div class="col-xs-12">
 		<div class="tag text-center" ng-if="!property.divisible" ng-bind-html="(property.totaltokens * property.percenttoissuer / 100) | bigjs: '0,0'"></div>
         <div class="tag text-center" ng-if="property.divisible" ng-bind-html="(property.totaltokens * property.percenttoissuer / 100) | toWhole | bigjs: '0,0.00000000'"></div>
     </div>
 </div>
  <div class="row" ng-if="property.active" >
- 	<div class="col-xs-7 small" style="padding-top:10px;">{{'CROWDSALE.DETAILS.CURRENTBONUS' | translate}}</div>
-	<div class="col-xs-5">
+ 	<div class="col-xs-12 small" style="padding-top:10px;">{{'CROWDSALE.DETAILS.CURRENTBONUS' | translate}}</div>
+	<div class="col-xs-12">
 		<div class="tag text-center">+{{earlyBirdBonus}}%</div>
     </div>
 </div>
