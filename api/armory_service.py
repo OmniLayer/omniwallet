@@ -20,9 +20,9 @@ app.debug = True
 def generate_unsigned():
     unsigned_hex = request.form['unsigned_hex']
     pubkey = request.form['pubkey']
-    ripemd160 = hashlib.new('ripemd160')
-    ripemd160.update(hashlib.sha256(hex_to_binary(pubkey)).digest())
-    pubKeyHash = binary_to_hex(ripemd160.digest())
+    #ripemd160 = hashlib.new('ripemd160')
+    #ripemd160.update(hashlib.sha256(hex_to_binary(pubkey)).digest())
+    #pubKeyHash = binary_to_hex(ripemd160.digest())
     try:
         tnet_ = request.form['testnet']
     except KeyError, e:
