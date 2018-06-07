@@ -35,7 +35,7 @@
                 <span ng-if="propertyDesired.symbol != 'BTC'">
                   {{ 'WALLET.SEND.AMOUNT' | translate}}
                 </span>
-                ({{selectedAddress.getDisplayBalance(propertyDesired.id)}} {{propertyDesired.name | truncate:15}} <small class="text-muted" ng-show="propertyDesired.id > 2">({{propertyDesired.id}})</small> {{ 'COMMON.AVAILABLE' | translate}})
+                ({{ 'COMMON.AVAILABLE' | translate}}: {{selectedAddress.getDisplayBalance(propertyDesired.id)}} {{propertyDesired.name | truncate:15}} <small class="text-muted" ng-show="propertyDesired.id > 2">(#{{propertyDesired.id}})</small>)
               </label>
               <div class="input-group" ng-show="propertyDesired.symbol == 'BTC'">
                 <span class="input-group-addon no-padding">
