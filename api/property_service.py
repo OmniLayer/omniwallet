@@ -13,7 +13,8 @@ def getproperty(prop_id):
     except ValueError:
         abort(make_response('This endpoint only consumes valid input', 400))
 
-    ROWS=dbSelect("select * from txjson txj, transactions t, smartproperties sp where sp.createtxdbserialnum = txj.txdbserialnum "
+    ROWS=dbSelect("select txj.txdbserialnum,txj.protocol,txj.txdata,t.txhash,t.protocol,t.txdbserialnum,t.txtype,t.txversion,t.ecosystem,t.txrecvtime,t.txstate,t.txerrorcode,"
+                  "t.txblocknumber,t.txseqinblock,sp.* from txjson txj, transactions t, smartproperties sp where sp.createtxdbserialnum = txj.txdbserialnum "
                   "and sp.createtxdbserialnum = t.txdbserialnum and sp.propertyid=%s",[property_])
 
     #print property_, ROWS[0]
