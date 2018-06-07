@@ -56,8 +56,8 @@
                 <span>
                   {{ 'OMNIDEX.SALE.SELLINGAMOUNT' | translate}}
                 </span>
-                <span class="text-danger" ng-show="selectedAddress.getDisplayBalance(sellingAsset.id) < sellingAmount"><strong>({{selectedAddress.getDisplayBalance(sellingAsset.id)}} {{sellingAsset.name | truncate:14}} </strong><small class="text-muted text-danger">({{sellingAsset.id}})</small> {{ 'COMMON.AVAILABLE' | translate}})</span>
-                <span ng-hide="selectedAddress.getDisplayBalance(sellingAsset.id) < sellingAmount">({{selectedAddress.getDisplayBalance(sellingAsset.id)}} {{sellingAsset.name | truncate:14}} <small class="text-muted">({{sellingAsset.id}})</small> {{ 'COMMON.AVAILABLE' | translate}})</span>
+                <span class="text-danger" ng-show="selectedAddress.getDisplayBalance(sellingAsset.id) < sellingAmount"><strong>({{ 'COMMON.AVAILABLE' | translate}}: {{selectedAddress.getDisplayBalance(sellingAsset.id)}} {{sellingAsset.name | truncate:14}} </strong><small class="text-muted text-danger">(#{{sellingAsset.id}})</small>)</span>
+                <span ng-hide="selectedAddress.getDisplayBalance(sellingAsset.id) < sellingAmount">({{ 'COMMON.AVAILABLE' | translate}}: {{selectedAddress.getDisplayBalance(sellingAsset.id)}} {{sellingAsset.name | truncate:14}} <small class="text-muted">(#{{sellingAsset.id}})</small>)</span>
               </label>
               <input id="sellingamount" name="sellingamount" type="number" ng-model="sellingAmount"
                     class="form-control" value="sellingAmount"
