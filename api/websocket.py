@@ -95,9 +95,9 @@ def update_valuebook():
     while True:
       time.sleep(30)
       printmsg("updating valuebook")
-      vbook,max=getValueBook(pmaxid)
+      vbook,maxid=getValueBook(pmaxid)
       if len(vbook)>0:
-        pmaxid=max
+        pmaxid=maxid
         for v in vbook:
           name=v[0]
           p1=v[1]
