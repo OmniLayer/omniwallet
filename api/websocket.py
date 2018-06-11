@@ -91,11 +91,13 @@ def update_orderbook():
 def update_valuebook():
   global valuebook
   try:
+    pmaxid=0
     while True:
-      time.sleep(10)
+      time.sleep(30)
       printmsg("updating valuebook")
-      vbook=getValueBook()
+      vbook,maxid=getValueBook(pmaxid)
       if len(vbook)>0:
+        pmaxid=maxid
         for v in vbook:
           name=v[0]
           p1=v[1]
