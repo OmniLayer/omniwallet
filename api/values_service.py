@@ -5,8 +5,12 @@ import re
 app = Flask(__name__)
 app.debug = True
 
-def getValueBook():
-  ROWS=dbSelect("select sp.propertyname, rates.* from smartproperties sp join "
+def getValueBook(pmaxid=0):
+  book=[]
+  DBID=dbSelect("select max(id) from exchangerates")
+  ERMAX=int(DBID[0][0])
+  if ERMAX > pmaxid:
+   book=dbSelect("select sp.propertyname, rates.* from smartproperties sp join "
                   "(select er.* from exchangerates er join "
                     "(select distinct protocol1,propertyid1,protocol2,propertyid2, max(asof) asof from exchangerates "
                     "where propertyid2<2147483648 and propertyid2!=2 and rate1for2!=0 "
@@ -18,7 +22,7 @@ def getValueBook():
                 "on CASE WHEN rates.protocol1='Fiat' "
                   "THEN rates.propertyid1=sp.propertyid and sp.protocol='Fiat' "
                   "ELSE rates.propertyid2=sp.propertyid and (sp.protocol='Omni' or sp.protocol='Bitcoin') END")
-  return ROWS
+  return book,ERMAX
 
 @app.route('/<currency>')
 def getCurrentPrice(currency=None):
