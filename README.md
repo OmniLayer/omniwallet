@@ -43,7 +43,7 @@ Check out the [Omni Devops Project](https://github.com/OmniLayer/omni-devops)
 As Omniwallet is a growing/changing project the following is a work in progress and may not be 100% complete with current changes.
 
 
-####Database 
+#### Database 
 ------------------------------
 * First you need to setup and initialize a postgres database for everything to talk to. 
 * The database schema and initialization files are in the `database` subfolder of OmniEngine repo. 
@@ -52,7 +52,7 @@ As Omniwallet is a growing/changing project the following is a work in progress 
 * Lastly import the balances.csv file into the `addressbalances` table to prime the initial balance data that is not provided by OmniCore.
  * Note: there are 2 users used for general operation. 1 user is used by frontend to read stuff from db  (variable ":omniwww") and do minimal writing. The other is the user used by omniengine to keep things updated (variable ":omniengine"). Define those names/passwords as needed and save for later. 
 
-####Omnicore
+#### Omnicore
 -------------------------------
 (At the time of this writing the current version is OmniCore v0.3) 
 * Omnicore is the reference client for the Omni Protocol. When it comes to transaction validity, status or outcome, it is the law.
@@ -89,13 +89,13 @@ Once that is running let sync and get current with the blockchain. You can tail 
 
 Note: this process may take several days if you are starting from scratch. Alternatively if you happen to have a copy of the blockchain data from a Bitcoin-core 0.13 client you can copy it over and use it (future versions 0.14 may not work)
 
-####Caching System
+#### Caching System
 -------------------------------
 Machine 2 is designed to leverage a default install of redis-server for caching. 
 should be as simple as 'apt-get install redis-server'
 
 
-####OmniEngine
+#### OmniEngine
 -------------------------------
 The Omniwallet parsing engine that does the second half of backend work (taking transaction data from Omnicore and putting it in the database for Omniwallet to use)
 
@@ -108,7 +108,7 @@ Then use the requirements.txt file from the repo to install the additional depen
 NOTE: The OmniEngine processes CAN NOT and SHOULD NOT be started until Omnicore is 100% synced, current and up to date
 
 
-####Frontend
+#### Frontend
 -------------------------------
 Important Notes:
 * The frontend pulls all its information from the database and the redis cache. 
