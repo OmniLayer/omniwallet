@@ -146,7 +146,9 @@ class OmniTransaction:
         if self.tx_type == 22:
             txhash = self.rawdata['tx_hash']
             txhash = re.sub(r'\W+', '', txhash)
-            ROWS = dbSelect("select * from activeoffers ao, transactions t, txjson txj where t.txhash=%s "
+            ROWS = dbSelect("select ao.*,t.txhash,t.protocol,t.txdbserialnum,t.txtype,t.txversion,t.ecosystem,t.txrecvtime,t.txstate,t.txerrorcode,"
+                     "t.txblocknumber,t.txseqinblock,txj.txdbserialnum,txj.protocol,txj.txdata "
+                     "from activeoffers ao, transactions t, txjson txj where t.txhash=%s "
                      "and ao.createtxdbserialnum=t.txdbserialnum and ao.createtxdbserialnum=txj.txdbserialnum", [txhash] )
  
             # sanity check
