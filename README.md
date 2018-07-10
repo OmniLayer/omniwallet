@@ -183,6 +183,16 @@ rpcssl=0
 rpcconnect=<remote.ip.address>
 ```
 
+*Note*: You need to populate the $HOME/.omni/sql.conf with the database configuration information for the API user:
+```
+sqluser=
+sqlport=
+sqlconnect=
+sqldatabase=
+#sqlpassword=
+sqlpassword=
+```
+
 ## Running
 
 Start nginx by running the command for your distribution.
