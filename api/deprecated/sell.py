@@ -212,7 +212,8 @@ def prepare_sell_tx_for_signing(seller, amount, bitcoin_amount_desired, btc_min_
 
     tx=mktx(inputs_outputs)
     info('inputs_outputs are '+inputs_outputs)
-    info('parsed tx is '+str(get_json_tx(tx)))
+    info('tx is '+str(tx))
+    
 
     hash160=bc_address_to_hash_160(seller).encode('hex_codec')
     prevout_script='OP_DUP OP_HASH160 ' + hash160 + ' OP_EQUALVERIFY OP_CHECKSIG'
