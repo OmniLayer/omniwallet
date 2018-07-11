@@ -205,6 +205,7 @@ def prepare_send_tx_for_signing(from_address, to_address, marker_address, curren
         outs.append(to_address+':'+str(satoshi_amount))
         
     else:
+        #DEPRECATED - ALL OMNI TX Created by tx_generate_service - 
         # create multisig tx
         # simple send - multisig
         # dust to exodus
@@ -255,7 +256,7 @@ def prepare_send_tx_for_signing(from_address, to_address, marker_address, curren
     tx=pybitcointools.mktx(ins,outs)
     info('inputs_outputs are '+str(ins)+' '+str(outs))
     #info('inputs_outputs are '+inputs_outputs)
-    info('parsed tx is '+str(get_json_tx(tx)))
+    info('tx is '+str(tx))
 
     hash160=bc_address_to_hash_160(from_address).encode('hex_codec')
     prevout_script='OP_DUP OP_HASH160 ' + hash160 + ' OP_EQUALVERIFY OP_CHECKSIG'
