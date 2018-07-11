@@ -82,15 +82,15 @@
                 uwsgi_pass   127.0.0.1:$PORT;
         }
 
-        location /v1/exchange/sell/ {
-                set   $app   sell;
-                uwsgi_pass   127.0.0.1:$PORT;
-        }
+        #location /v1/exchange/sell/ {
+        #        set   $app   sell;
+        #        uwsgi_pass   127.0.0.1:$PORT;
+        #}
 
-        location /v1/exchange/accept/ {
-                set   $app   accept;
-                uwsgi_pass   127.0.0.1:$PORT;
-        }
+        #location /v1/exchange/accept/ {
+        #        set   $app   accept;
+        #        uwsgi_pass   127.0.0.1:$PORT;
+        #}
 
         location /v1/transaction/pushtx/ {
                 set   $app   pushtx;
