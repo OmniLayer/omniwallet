@@ -96,9 +96,6 @@ class OmniTransaction:
         #DEBUG 
         #print [ "Debugging...", dirty_txes,"miner fee sats: ", self.fee, "change: ",change,"total_amt: ", total_amount,"fee tot sat: ", fee_total_satoshi,"utxo ",  unspent_tx,"to ", self.rawdata['transaction_to'] ]
 
-        #source script is needed to sign on the client credit grazcoin
-        #hash160=bc_address_to_hash_160(self.rawdata['transaction_from']).encode('hex_codec')
-        #prevout_script='OP_DUP OP_HASH160 ' + hash160 + ' OP_EQUALVERIFY OP_CHECKSIG'
         prevout_script={}
 
         #reset tx to create it proper from scratch

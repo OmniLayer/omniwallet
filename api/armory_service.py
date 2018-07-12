@@ -4,17 +4,16 @@ from decimal import Decimal
 from flask import Flask, request, jsonify, abort, json, make_response
 #from msc_apps import *
 from rpcclient import *
-tools_dir = os.environ.get('TOOLSDIR')
-lib_path = os.path.abspath(tools_dir)
-sys.path.append(lib_path)
-data_dir_root = os.environ.get('DATADIR')
+#tools_dir = os.environ.get('TOOLSDIR')
+#lib_path = os.path.abspath(tools_dir)
+#sys.path.append(lib_path)
+#data_dir_root = os.environ.get('DATADIR')
 
 sys.path.append("/usr/lib/armory/")
 from armoryengine.ALL import *
 
 app = Flask(__name__)
 app.debug = True
-#conn = getRPCconn()
 
 @app.route('/getunsigned', methods=['POST'])
 def generate_unsigned():
