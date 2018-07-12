@@ -57,8 +57,8 @@ def pushtxnode(signed_tx):
     signed_tx = re.sub(r'\W+', '', signed_tx) #check alphanumeric
     #output=commands.getoutput('bitcoind sendrawtransaction ' +  str(signed_tx) )
     print "final signed", signed_tx
-    #output=sendrawtransaction(str(signed_tx))
-    output="Test output for error code handling: : {u'message': u'66: insufficient priority', u'code': -26}"
+    output=sendrawtransaction(str(signed_tx))
+    #output="Test output for error code handling: : {u'message': u'66: insufficient priority', u'code': -26}"
 
     print 'raw response',output,'\n'
 
