@@ -57,8 +57,8 @@ def pushtxnode(signed_tx):
     signed_tx = re.sub(r'\W+', '', signed_tx) #check alphanumeric
     #output=commands.getoutput('bitcoind sendrawtransaction ' +  str(signed_tx) )
     print "final signed", signed_tx
-    output=sendrawtransaction(str(signed_tx))
-    #output="Test output for error code handling: : {u'message': u'66: insufficient priority', u'code': -26}"
+    #output=sendrawtransaction(str(signed_tx))
+    output="Test output for error code handling: : {u'message': u'66: insufficient priority', u'code': -26}"
 
     print 'raw response',output,'\n'
 
@@ -88,28 +88,6 @@ def pushtxnode(signed_tx):
 
     print response
     return response
-
-#def pushtx(signed_tx):
-#    info(signed_tx)
-#
-#    f = tempfile.NamedTemporaryFile(mode='r+b',prefix='signedtx-', delete=False, dir='/var/lib/omniwallet/tmptx')
-#    f.write(signed_tx)
-#    f.close()
-#
-#    # validate tx first
-#    ret=validate_tx(f.name)
-#    if ret != None:
-#        return ret
-#    
-#    # broadcast
-#    ret=broadcast_tx(f.name)
-#    #ret=None
-#    if ret != None:
-#        return ret
-#    else:
-#        stats = StatsBackend()
-#        stats.increment("amount_of_transactions")
-#        return 'success'
 
 def pushtx_handler(environ, start_response):
     return general_handler(environ, start_response, pushtx_response)
