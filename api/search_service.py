@@ -20,6 +20,14 @@ def search():
       query = re.sub(r'\W+', '0', request.args.get('query') ) # strip and get query
   else:
       return jsonify({ 'status': 400, 'data': 'No query found in request' })
+
+
+  if query[:2] in ['0x','0X']:
+    return jsonify({ 'status': 400, 'data': 'Invalid search query prefix.' })
+
+  if len(query) < 3:
+    return jsonify({ 'status': 400, 'data': 'Search query to short.' })
+
   ROWS=dbSelect("select * from transactions t, txjson txj where t.txhash ~* \'" + str(query) + "\' and t.txdbserialnum=txj.txdbserialnum")
 
   response = []
