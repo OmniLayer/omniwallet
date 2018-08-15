@@ -5,7 +5,7 @@ angular.module("omniControllers")
 			$scope.markets = [];
 			$scope.noMarkets = true;
 			$scope.filterMarkets = true;
-			filteredMarkets = [35,95,96,97,103,119,136,144,145,146,154,156,192,321,323,328,330,331,334,341,343,344,347,348,364,368];
+			filteredMarkets = []
 			$scope.ecosystem = 1;
 			$scope.setEcosystem = function(ecosystem){
 				$scope.ecosystem = ecosystem;
@@ -18,16 +18,10 @@ angular.module("omniControllers")
 			}
 
 			$scope.loadDesignatingCurrencies = function(){
-				$http.post('/v1/omnidex/designatingcurrencies',{ecosystem:$scope.ecosystem}).then(
+				$http.post('/v1/omnidex/designatingcurrencies',{ecosystem:$scope.ecosystem, filter:$scope.filterMarkets}).then(
 					function success(response) {
-						if ($scope.filterMarkets) {
-							//filter designated currencies list
-							$scope.designatingcurrencies = response.data.currencies.filter(function (el) {
-								return filteredMarkets.indexOf(el.propertyid) < 0;
-							});
-						} else {
-							$scope.designatingcurrencies = response.data.currencies;
-						}
+						$scope.designatingcurrencies = response.data.currencies;
+						filteredMarkets=response.data.filter;
 						$scope.showMarkets(response.data.currencies[0])
 					}, 
 					function(error){
