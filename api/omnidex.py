@@ -71,10 +71,8 @@ def getDesignatingCurrencies():
 
     try:
       filter = request.form['filter'] in ['True','true',True]
-      print 'filtering'
     except:
       filter = True
-    print filter
 
     #designating_currencies = dbSelect("select distinct ao.propertyiddesired as propertyid, sp.propertyname from activeoffers ao "
     #                                  "inner join SmartProperties sp on ao.propertyiddesired = sp.propertyid and sp.ecosystem = %s "
@@ -96,13 +94,9 @@ def getDesignatingCurrencies():
     if filter:
       listfilter=dbSelect("select propertyid from smartproperties where (flags->>'scam')::boolean or (flags->>'duplicate')::boolean")
       dc=(x for x in designating_currencies if [x[0]] not in listfilter )
-      print 'did filter '
     else:
       listfilter=[]
       dc=designating_currencies
-      print 'not filtering'
-
-    print listfilter
 
     return jsonify({"status" : 200, "currencies": [
 	{
