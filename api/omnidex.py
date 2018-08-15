@@ -69,6 +69,11 @@ def getDesignatingCurrencies():
     except ValueError:
         abort(make_response('Field \'ecosystem\' invalid value, request failed', 400))
 
+    try:
+      filter = request.form['filter'] in ['True','true',True]
+    except:
+      filter = True
+
     #designating_currencies = dbSelect("select distinct ao.propertyiddesired as propertyid, sp.propertyname from activeoffers ao "
     #                                  "inner join SmartProperties sp on ao.propertyiddesired = sp.propertyid and sp.ecosystem = %s "
                                       #"where (ao.propertyidselling not in (1, 2, 31)) or (ao.propertyidselling = 1 and ao.propertyiddesired = 31) "
@@ -85,10 +90,19 @@ def getDesignatingCurrencies():
                                         "ELSE propertyidselling > 2147483650 or propertyidselling=2 END "
                                         " and supply >0)) "
                                       "order by propertyiddesired",(ecosystem,ecosystem))
+
+    if filter:
+      listfilter=dbSelect("select propertyid from smartproperties where (flags->>'scam')::boolean or (flags->>'duplicate')::boolean")
+      dc=(x for x in designating_currencies if [x[0]] not in listfilter )
+    else:
+      listfilter=[]
+      dc=designating_currencies
+
     return jsonify({"status" : 200, "currencies": [
 	{
 	 "propertyid":currency[0], "propertyname" : currency[1], "displayname" : str(currency[1])+" #"+str(currency[0])
-	} for currency in designating_currencies]})
+	} for currency in dc], 
+        "filter": [id for pid in listfilter for id in pid] })
 
 
 @app.route('/<int:denominator>')
