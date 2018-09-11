@@ -1,5 +1,5 @@
 import urlparse
-import os, sys, tempfile, json
+import os, sys, tempfile, json, re
 import glob,time
 #tools_dir = os.environ.get('TOOLSDIR')
 #lib_path = os.path.abspath(tools_dir)
