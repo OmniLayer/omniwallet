@@ -128,7 +128,8 @@ def getsell(txdbserialnum):
     return ROWS[0]
 
 def genQs(prefix, tbl_abbr, field, array):
-    qs = '(' + tbl_abbr + '.' + field + '=\'' + array[0] + '\' ' # table abbrev "." fieldname = address 
+    addr = re.sub(r'\W+', '', array[0]) #check alphanumeric
+    qs = '(' + tbl_abbr + '.' + field + '=\'' + addr + '\' ' # table abbrev "." fieldname = address 
     for entry in array[1:]:
       entry = re.sub(r'\W+', '', entry) #check alphanumeric
       qs += prefix + ' ' + tbl_abbr + '.' + field + '=\'' + entry +'\' '     # "and/or" table abbrev "." fieldname = next address
