@@ -34,7 +34,7 @@ def getproperty(prop_id):
     except TypeError:
       txJson=dbtxJson[-1]
 
-    ROWS = [ ROWS[0][3:] ]
+    ROWS = [ ROWS[0][3:-2] ]
 
     txData = ROWS[0][:-1]
     try:
