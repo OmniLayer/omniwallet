@@ -147,20 +147,9 @@ def bc_getbalance_blockcypher(address):
       balance = int(r.json()['balance'])
       return {"bal":balance , "error": None}
     else:
-      return bc_getbalance_blockr(address)
-  except:
-    return bc_getbalance_blockr(address)
-
-def bc_getbalance_blockr(address):
-  try:
-    r= requests.get('http://btc.blockr.io/api/v1/address/balance/'+address)
-    if r.status_code == 200:
-      balance = int(r.json()['data']['balance']*1e8)
-      return {"bal":balance , "error": None}
-    else:
       return {"bal": 0 , "error": "Couldn't get balance"}
   except:
-      return {"bal": 0 , "error": "Couldn't get balance"}
+    return {"bal": 0 , "error": "Couldn't get balance"}
 
 def bc_getbulkbalance(addresses):
   split=[]
@@ -205,18 +194,10 @@ def bc_getbulkbalance(addresses):
           retval={'bal':dict(data['bal'],**cbdata), 'fresh':split}
       except Exception as e:
         print e
-        try:
-          data=bc_getbulkbalance_blockr(split)
-          if data['error']:
-            raise Exception("issue getting blockr baldata",data)
-          else:
-            retval={'bal':dict(data['bal'],**cbdata), 'fresh':split}
-        except Exception as e:
-          print e
-          if len(cbdata) > 0:
-            retval={'bal':cbdata, 'fresh':None}
-          else:
-            retval={'bal':{}, 'fresh':None}
+        if len(cbdata) > 0:
+          retval={'bal':cbdata, 'fresh':None}
+        else:
+          retval={'bal':{}, 'fresh':None}
 
 
   rSetNotUpdateBTC(retval)
@@ -242,27 +223,6 @@ def bc_getbulkbalance_blockonomics(addresses):
       retval = {}
       for entry in balances:
         retval[entry['addr']] = int(entry['confirmed'])+int(entry['unconfirmed'])
-      return {"bal": retval, "error": None}
-    else:
-      return {"bal": None , "error": True}
-  except:
-    return {"bal": None , "error": True}
-
-def bc_getbulkbalance_blockr(addresses):
-  formatted=""
-  for address in addresses:
-    if formatted=="":
-      formatted=address
-    else:
-      formatted=formatted+","+address
-
-  try:
-    r= requests.get('http://btc.blockr.io/api/v1/address/balance/'+formatted)
-    if r.status_code == 200:
-      balances = r.json()['data']
-      retval = {}
-      for entry in balances:
-        retval[entry['address']] = int(entry['balance']*1e8)
       return {"bal": retval, "error": None}
     else:
       return {"bal": None , "error": True}
