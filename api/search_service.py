@@ -28,7 +28,7 @@ def search():
   if len(query) < 3:
     return jsonify({ 'status': 400, 'data': 'Search query to short.' })
 
-  ROWS=dbSelect("select * from transactions t, txjson txj where t.txhash ~* \'" + str(query) + "\' and t.txdbserialnum=txj.txdbserialnum")
+  ROWS=dbSelect("select * from transactions t, txjson txj where t.txhash ~* %s and t.txdbserialnum=txj.txdbserialnum",[str(query)])
 
   response = []
   if len(ROWS) > 0:

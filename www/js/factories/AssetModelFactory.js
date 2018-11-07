@@ -17,7 +17,7 @@ angular.module("omniFactories")
                 };
                 self.tradable = tradable;
 
-				        if(symbol.substring(0, 2) == "SP"){
+		if(symbol.substring(0, 2) == "SP"){
                 	self.id = symbol.substring(2);
                 } else {
                 	self.id = symbol == "BTC" ? 0 : symbol == "OMNI" ? 1 : symbol == "T-OMNI" ? 2 : null;
