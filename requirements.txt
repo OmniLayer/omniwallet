@@ -1,13 +1,13 @@
 ecdsa==0.10
 pycoin==0.25
 simplekv==0.8.4
-pycrypto==2.6.1
-requests==2.18.4
+pycryptodome==3.7.0
+requests==2.20.0
 pybitcointools==1.1
 bitcoin-python==0.3
 psycopg2==2.5.4
 recaptcha-client==1.0.6
-Flask==0.10.1
+Flask==0.12.4
 Flask-SocketIO==2.7.1
 Jinja2==2.7.2
 MarkupSafe==0.18
