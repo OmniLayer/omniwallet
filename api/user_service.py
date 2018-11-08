@@ -404,6 +404,8 @@ def failed_challenge(pow_challenge, nonce, difficulty):
 
 def encrypt_value(value):
   try:
+    if isinstance(value, unicode):
+      value=value.encode('latin-1')
     obj = AES.new(config.AESKEY, AES.MODE_CBC, config.AESIV)
     justify=int(((len(value)/16) + 1) * 16)
     message=value.rjust(justify)
