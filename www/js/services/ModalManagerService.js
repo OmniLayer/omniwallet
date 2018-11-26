@@ -326,7 +326,7 @@ angular.module("omniServices")
                     $scope.progressMessage = "";
                     $scope.progressColor = "";
                     $scope.exportInProgress=true;
-                    if (exportData.mfatoken.length==0) {
+                    if (exportData.mfatoken.length==0 || !Account.mfa) {
                       exportData.mfatoken="null";
                     }
                     Account.verify(Account.uuid, exportData.passphrase, exportData.mfatoken).then(function(result){
