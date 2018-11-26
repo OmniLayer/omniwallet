@@ -295,7 +295,11 @@ angular.module("omniConfig")
 		"EXPORT":{
 			"TITLE":"Export Wallet",
 			"NAME":"Backup Name",
-			"PASSPHRASE":"Enter Password"
+			"PASSPHRASE":"Enter Password",
+			"WARNING":"Security Warning",
+			"WARNMSG":"Your backup contains your the decrypted private keys for your wallet addresses.",
+                        "WARNMSG2":"ANYONE with access to this backup file can access your funds. Please store this file offline in a safe location.",
+			"WARNMSG3":"By clicking the following checkbox you confirm you have read this warning and understand there is nothing the Omniwallet team can do to protect your funds if your backup file is stolen"
 		},
 		"IDLE":{
 			"TITLE":"Do you want to continue your session?",

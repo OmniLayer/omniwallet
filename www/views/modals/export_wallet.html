@@ -12,7 +12,7 @@
     <div class="row" ng-hide="exportFinished">
       <div class="form-group col-xs-10 col-xs-push-1">
         <label for="inputName">{{ 'MODALS.EXPORT.NAME' | translate}}</label>
-        <input type="text" class="form-control" ng-model="exportData.backupName" id="inputName" required>
+        <input type="text" class="form-control" ng-model="exportData.backupName" id="inputName" required data-lpignore="true">
       </div>
     </div>
     <div class="row" ng-hide="exportFinished">
@@ -29,9 +29,20 @@
             {{ 'MODALS.LOGIN.MFACODE' | translate}}:
           </a>
         </label><br/>
-        <input type="text" class="form-control" placeholder="{{ 'COMMON.MFA' | translate}}" ng-disabled="exportInProgress" ng-model="exportData.mfatoken" id="inputMFA">
+        <input type="text" class="form-control" placeholder="{{ 'COMMON.MFA' | translate}}" ng-disabled="exportInProgress" ng-model="exportData.mfatoken" id="inputMFA" data-lpignore="true">
       </div>
     </div>
+
+   <div class="row" ng-hide="exportFinished">
+      <div class="form-group col-xs-10 col-xs-push-1 alert alert-danger">
+        <label for="inputWarn">{{ 'MODALS.EXPORT.WARNING' | translate}}</label><br />
+        {{ 'MODALS.EXPORT.WARNMSG' | translate}}<br /><br />
+        <strong>{{ 'MODALS.EXPORT.WARNMSG2' | translate}}</strong><br /><br />
+        {{ 'MODALS.EXPORT.WARNMSG3' | translate}}
+        <input type="checkbox" class="form-control" ng-model="exportData.warning" id="inputWarn" required>
+      </div>
+    </div>
+
     <div class="row" ng-show="exportFinished">
       <ul>
         <li ng-repeat="item in summary" style="color: {{item.color}};">{{item.message}}</li>
