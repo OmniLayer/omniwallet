@@ -292,7 +292,11 @@
     "EXPORT": {
       "TITLE": "Exporter Portefeuille",
       "NAME": "Nom Sauvegarde",
-      "PASSPHRASE": "Entrer Mot de passe"
+      "PASSPHRASE": "Entrer Mot de passe",
+      "WARNING":"Avertissement de sécurité",
+      "WARNMSG":"Votre sauvegarde contient vos clés privées déchiffrées pour vos adresses de portefeuille.",
+      "WARNMSG2":"Toute personne ayant accès à ce fichier de sauvegarde peut accéder à vos fonds. Veuillez stocker ce fichier hors ligne dans un endroit sûr.",
+      "WARNMSG3":"En cliquant sur la case à cocher suivante, vous confirmez que vous avez lu cet avertissement et compris que l'équipe d'Omniwallet ne peut rien faire pour protéger vos fonds en cas de vol de votre fichier de sauvegarde"
     },
     "IDLE": {
       "TITLE": "Voulez-vous continuer votre session ?",
