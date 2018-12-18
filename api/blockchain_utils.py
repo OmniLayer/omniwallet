@@ -133,7 +133,8 @@ def bc_getbalance_bitgo(address):
   try:
     r= requests.get('https://www.bitgo.com/api/v1/address/'+address)
     if r.status_code == 200:
-      balance = int(r.json()['confirmedBalance'])
+      #balance = int(r.json()['confirmedBalance'])
+      balance = int(r.json()['balance'])
       return {"bal":balance , "error": None}
     else:
       return bc_getbalance_blockcypher(address)
