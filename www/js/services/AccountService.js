@@ -281,7 +281,7 @@ angular.module("omniServices")
                 }
                 return self.saveSession().then(function(){
                     Wallet._updateAddress(address,privKey,pubKey);
-                    $rootScope.$broadcast('reloadView');
+                    $rootScope.$broadcast('reloadAddrView');
                 });
               }
             }
