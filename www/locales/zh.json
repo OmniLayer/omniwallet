@@ -41,7 +41,9 @@
 		"MY":"我的",
 		"PUBKEY":"公钥",
 		"GRANT":"格兰特",
-		"REVOKE":"撤消"
+		"REVOKE":"撤消",
+		"SPENDABLE":"可支配",
+		"WATCHONLY":"手表只有"
 	},
 	"SETTINGS":{
 		"TITLE":"Account Settings",
@@ -410,8 +412,10 @@
 			"TITLE":"我的钱包地址",
 			"VIEW":"浏览",
 			"OPTIONS":"添加钱包地址",
-			"WATCH":"Add Watch Only Address",
-			"OFFLINE":"添加离线地址"
+			"WATCH":"添加仅监视地址",
+			"OFFLINE":"添加离线地址",
+			"SPENDABLE":"您可以从这些地址创建交易",
+			"WATCHONLY":"导入地址私钥以启用支出"
 		},
 		"SEND":{
 			"TITLE":"发送",
@@ -420,9 +424,9 @@
 			"AMOUNT":"数量",
 			"TO":"接收地址",
 			"COST":"全部交易费用",
-			"PROTOCOL_COST": "Omni Protocol Transaction Cost",
-			"MODAL_TRANSACTION_COST":"Transaction Cost",
-			"MODAL_MINER": "Miner Fee",
+			"PROTOCOL_COST": "全方案协议交易成本",
+			"MODAL_TRANSACTION_COST":"交易成本",
+			"MODAL_MINER": "矿工费",
 			"FUNDS":"发送资产",
 			"TOKEN":"令牌",
 			"MODAL_AMOUNT":"数量",
@@ -431,7 +435,7 @@
 			"CONFIRM":"确认发送",
 			"AVAIL":"从可用地址",
 			"LOWFEE":"您的“发件人地址”没有足够的BTC完成此交易。请至少发送 {{ topupAmount }} BTC覆盖估计总交易成本。",
-			"UPDATE_FEE":"Re-estimate Transaction Cost"
+			"UPDATE_FEE":"重新估算交易成本"
 		},
 		"ASSETS":{
 			"ASSETS":"资产",
