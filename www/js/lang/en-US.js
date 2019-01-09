@@ -42,7 +42,9 @@ angular.module("omniConfig")
 		"MY":"My",
 		"PUBKEY":"Pubkey",
 		"GRANT":"Grant",
-		"REVOKE":"Revoke"
+		"REVOKE":"Revoke",
+		"SPENDABLE":"Spendable",
+		"WATCHONLY":"Watch-Only"
 	},
 	"SETTINGS":{
 		"TITLE":"Account Settings",
@@ -411,7 +413,9 @@ angular.module("omniConfig")
 			"VIEW":"View by",
 			"OPTIONS":"Add Address",
 			"WATCH":"Add Watch Only Address",
-			"OFFLINE":"Add Armory Offline Address"
+			"OFFLINE":"Add Armory Offline Address",
+			"SPENDABLE":"You can create transactions from these addresses",
+			"WATCHONLY":"Import address private key to enable spending"
 		},
 		"SEND":{
 			"TITLE":"Send",

@@ -1,5 +1,5 @@
 angular.module("omniServices")
-    .service("Account", ["$http", "$q", "Address","Wallet", function AccountService($http, $q, Address, Wallet) {
+    .service("Account", ["$http", "$q", "$rootScope", "Address","Wallet", function AccountService($http, $q, $rootScope, Address, Wallet) {
         var self = this;
         self.settings = {};
 
@@ -281,6 +281,7 @@ angular.module("omniServices")
                 }
                 return self.saveSession().then(function(){
                     Wallet._updateAddress(address,privKey,pubKey);
+                    $rootScope.$broadcast('reloadAddrView');
                 });
               }
             }
@@ -295,6 +296,7 @@ angular.module("omniServices")
             
             return self.saveSession().then(function(){
                 Wallet._addAddress(rawaddress);
+                $rootScope.$broadcast('reloadAddrView');
             });
         };
 
@@ -309,6 +311,7 @@ angular.module("omniServices")
                 var remove = self.wallet.addresses.splice(i, 1)[0];
                 return self.saveSession().then(function(){
                     Wallet._removeAddress(remove.address);
+                    $rootScope.$broadcast('reloadAddrView');
                 });
               }
         };

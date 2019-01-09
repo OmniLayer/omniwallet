@@ -30,14 +30,14 @@
 						</tr>
 					</thead>
 					<tbody>
-						<tr ng-repeat="address in asset.addresses()">
-							<td class="hide-xs"></td>
-							<td ng-show="address.pubkey != undefined">
-								<img ng-src="{{address.qr}}" ng-show="showqr"><a href ng-click="showqr = !showqr">{{address.hash}}</a> 
-								<a href="/about/faq" target="_new">
-									<span class="glyphicon glyphicon-off" tooltip="This is an Armory Offline address. (Click for more info)"></span>
-								</a>
-							</td>
+					  <tr ng-repeat="address in asset.addresses()">
+						<td class="hide-xs"></td>
+						<td ng-show="address.pubkey != undefined">
+							<img ng-src="{{address.qr}}" ng-show="showqr"><a href ng-click="showqr = !showqr">{{address.hash}}</a> 
+							<a href="/about/faq" target="_new">
+								<span class="glyphicon glyphicon-off" tooltip="This is an Armory Offline address. (Click for more info)"></span>
+							</a>
+						</td>
 				            <td ng-show="address.privkey != undefined">
 				            	<img ng-src="{{address.qr}}" ng-show="showqr"><a href ng-click="showqr = !showqr">{{address.hash}}</a> 
 				            	<a href="/about/faq" target="_new">
@@ -46,6 +46,10 @@
 				            </td>
 				            <td ng-hide="address.privkey != undefined || address.pubkey != undefined">
 				            	<img ng-src="{{address.qr}}" ng-show="showqr"><a href ng-click="showqr = !showqr">{{address.hash}}</a>
+				            	<a href="/about/faq" target="_new">
+				            		<span class="glyphicon glyphicon-warning-sign" tooltip="Watch-ONLY Address. Can NOT Spend (Click for more info)"></span>
+				            	</a>
+
 				            </td>
 				            <td ng-if="asset.divisible != undefined && !asset.divisible" class="currency number text-right" title="{{address.getDisplayBalance(asset.id)}}"> <span ng-bind-html="address.getDisplayBalance(asset.id) | bigjs: '0,0'"></span>
 						<span ng-show="address.getPendingNeg(asset.id)<0" tooltip="This balance reflects the total outbound amount of {{address.getPendingNeg(asset.id)*-1}} {{currency.name ? currency.name : currency.symbol | truncate:14}} in your pending transaction(s)">

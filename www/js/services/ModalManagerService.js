@@ -718,18 +718,19 @@ angular.module("omniServices")
             };
         
             $scope.ok = function(result) {
-              if (Bitcoin.Address.validate(result.address))
+              if (Bitcoin.Address.validate(result.address)) {
                 $modalInstance.close(result);
-              else
+              } else {
                 console.log('*** Invalid address: ' + result.address);
+              }
             };
         
             $scope.cancel = function() {
               $modalInstance.dismiss('cancel');
             };
             $scope.close = function() {
-                    $modalInstance.dismiss('close');
-                  };
+              $modalInstance.dismiss('close');
+            };
           };
           // Done Import Watch Only Form Code.
         
@@ -778,6 +779,7 @@ angular.module("omniServices")
                   };
           };
           // Done Import Private Key Form Code.
+
           // Begin Import Encrypted Key Form Code
           self.openImportEncryptedKeyForm = function() {
             var modalInstance = $modal.open({
