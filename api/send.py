@@ -29,9 +29,11 @@ def send_form_response(response_dict):
     if 'testnet' in response_dict and ( response_dict['testnet'][0] in ['true', 'True'] ):
         testnet =True
         magicbyte = 111
+        exodus_address='mpexoDuSkGGqvqrkrjiFng38QPkJQVFyqv'
     else:
         testnet = False
         magicbyte = 0
+        exodus_address='1EXoDusjGwvnjZUyKkxZ4UHEf77z6A5S4P'
 
     if response_dict.has_key( 'pubKey' ): #and is_pubkey_valid( response_dict['pubKey'][0]):
         pubkey = response_dict['pubKey'][0]
