@@ -11,7 +11,7 @@ angular.module("omniConfig")
     if(TESTNET)
       return "http://tbtc.blockr.io/tx/info/";
     else
-      return "https://www.blocktrail.com/BTC/tx/";
+      return "https://www.blockchain.com/btc/tx/";
   }])
   .factory("ADDRESS_EXPLORER_URL",["TESTNET", function AddressExplorerUrlFactory(TESTNET){
     if(TESTNET)
@@ -50,7 +50,7 @@ var app = angular.module('omniwallet', [
   'omniFactories',
   'omniServices',
   'omniControllers',
-  'vcRecaptcha'
+  'vcRecaptcha',
 ], function($routeProvider, $locationProvider, $httpProvider) {
 
   if (!$httpProvider.defaults.headers.get)
