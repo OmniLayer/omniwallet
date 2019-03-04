@@ -263,6 +263,7 @@ angular.module("omniConfig")
 		},
 		"IMPORT":{
 			"VALID":"Must be a valid Bitcoin address",
+			"VALIDPRIV":"Must be a valid Private Key",
 			"EXISTS":"Bitcoin address is already listed",
 			"SUBMIT":"Add Address",
 			"OFFLINE":{
