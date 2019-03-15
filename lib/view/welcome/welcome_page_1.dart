@@ -59,7 +59,10 @@ class WelcomePageOne extends StatelessWidget {
           child: Text(WalletLocalizations.of(context).common_btn_skip),
           textColor: Colors.grey,
           onPressed: () {
-            Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => MainPage()));
+            Navigator.of(context).pushAndRemoveUntil(
+              MaterialPageRoute(builder: (context) => MainPage()), 
+              (route) => route == null
+            );
           },
         ),
       ],

@@ -8,12 +8,12 @@ class WalletLocalizations{
   static Map<String, Map<String, String>> _localizedValues = {
 
     'zh': {
-      'main_index_title': 'LunarX_Omni钱包',
+      'main_index_title': 'LunarX Omniwallet',
       'backup_index_prompt_btn': '知道了',
       'backup_index_title': '备份钱包',
       'backup_index_laterbackup': '稍后备份',
       'backup_index_btn': '备份钱包助记词',
-      'backup_index_tips': '注意：请备份你的钱包账户，Omni Wallet 不会访问你的账户、不能恢复私钥、重置密码。你自己控制自己的钱包和资产安全。',
+      'backup_index_tips': '注意：请备份你的钱包账户，Omniwallet 不会访问你的账户、不能恢复私钥、重置密码。你自己控制自己的钱包和资产安全。',
       'backup_index_prompt_tips': '任何人得到你的助记词将能获得你的资产。\n请抄写在纸上妥善保管。',
       'backup_index_prompt_title': '不要截屏',
       'backup_words_title': '备份助记词',
@@ -63,22 +63,28 @@ class WalletLocalizations{
 
       'main_page_title' : '钱包',
       'common_btn_skip' : '跳过',
+
+      'marketPageAppBarTitle' : '行情',
+      'marketPageFav' : '自选',
+      'marketPageAll' : '全部',
+      'marketPagePrice' : '价格',
+      'marketPageChange' : '涨跌幅',
     },
 
     'en': {
-      'main_index_title': 'LunarX_Omni Wallet',
+      'main_index_title': 'LunarX Omniwallet',
       'backup_index_prompt_btn': 'I got it',
       'backup_index_title': 'Backup the wallet',
       'backup_index_laterbackup': 'Backup later',
       'backup_index_btn': 'Backup wallet mnemonic',
-      'backup_index_tips': 'Note: please back up your Wallet account, Omni Wallet does not access your account, cannot restore private key, reset password. You are in control of your own wallet and asset security.',
-      'backup_index_prompt_tips': 'Anyone who gets your mnemonic will get your assets. Please copy on the paper for safekeeping.',
-      'backup_index_prompt_title': "Don't screenshots",
+      'backup_index_tips': 'Note: please backup your Wallet account. Omniwallet does not access your account, cannot restore any private keys, or reset your password. You are in control of your own wallet and asset security.',
+      'backup_index_prompt_tips': 'Anyone who gets access to your mnemonic will have access to your assets. Please copy it onto paper and store securely for safekeeping.',
+      'backup_index_prompt_title': "Do Not Use Screenshots!",
       'backup_words_title': 'Back up your mnemonic',
       'backup_words_next': 'next',
-      'backup_words_content': "Please copy the mnemonic word carefully,\nwe will verify it in the next step.",
+      'backup_words_content': "Please copy the mnemonic words carefully,\nwe will verify them in the next step.",
       'backup_words_order_title': 'Confirm mnemonic words',
-      'backup_words_order_content': 'Please click mnemonic word in order to \nmake sure that you backup correctly',
+      'backup_words_order_content': 'Please click mnemonic words in order to \nmake sure that you backup correctly',
       'backup_words_order_finish': 'Finish',
 
       'welcomePageOneTitle' : 'Welcome to the Omni Platform!',
@@ -109,7 +115,7 @@ class WalletLocalizations{
           "your secret phrase, however, you will have no way to access your account.",
       'welcomePageTwoContentFive' : "You cannot change your secret phrase. If you "
           "accidentally sent it to someone or suspect that scammers have taken it over, "
-          "then create a new Omni wallet immediately and transfer your funds to it.",
+          "then create a new Omniwallet immediately and transfer your funds to it.",
       'welcomePageTwoButtonBack' : 'Go Back',
       'welcomePageTwoButtonNext' : 'Protect Yourself',
 
@@ -129,15 +135,28 @@ class WalletLocalizations{
       'welcomePageThreeButtonBack' : 'Go Back',
       'welcomePageThreeButtonNext' : 'I Understand',
 
-      'startPageAppBarTitle' : 'Omni Wallet',
+      'startPageAppBarTitle' : 'Omniwallet',
       'startPageButtonFirst' : '     Get Started     ',
       'startPageButtonSecond' : '   Restore wallet   ',
       'startPageLanguageBarTitle' : 'Language',
 
       'main_page_title' : 'Wallet',
       'common_btn_skip' : 'Skip',
+
+      'marketPageAppBarTitle' : 'Quotation',
+      'marketPageFav' : 'Favorites',
+      'marketPageAll' : 'All',
+      'marketPagePrice' : 'Price',
+      'marketPageChange' : 'Change',
     }
   };
+
+  // Market Page
+  get marketPageAppBarTitle => _localizedValues[locale.languageCode]['marketPageAppBarTitle'];
+  get marketPageFav => _localizedValues[locale.languageCode]['marketPageFav'];
+  get marketPageAll => _localizedValues[locale.languageCode]['marketPageAll'];
+  get marketPagePrice => _localizedValues[locale.languageCode]['marketPagePrice'];
+  get marketPageChange => _localizedValues[locale.languageCode]['marketPageChange'];
 
   // Start Page.
   get startPageAppBarTitle => _localizedValues[locale.languageCode]['startPageAppBarTitle'];

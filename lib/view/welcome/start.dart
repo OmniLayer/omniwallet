@@ -4,6 +4,7 @@ import 'package:wallet_app/l10n/WalletLocalizations.dart';
 
 import 'package:wallet_app/view/welcome/create_account.dart';
 import 'package:wallet_app/view/welcome/select_language.dart';
+import 'package:wallet_app/view_model/main_model.dart';
 import 'package:wallet_app/view_model/select_language_model.dart';
 
 class StartPage extends StatefulWidget {
@@ -86,7 +87,7 @@ class _StartPageState extends State<StartPage> {
   Widget _selectLanguage(BuildContext context) {
 
     // Set value by model.
-    final langModel = SelectLanguageModel().of(context);
+    final langModel = MainStateModel().of(context);
     String setLanguage = langModel.getSelectedLanguage;
 
     if (setLanguage == '') {

@@ -8,7 +8,7 @@ import 'package:wallet_app/l10n/WalletLocalizationsDelegate.dart';
 
 import 'package:wallet_app/view/welcome/start.dart';
 import 'package:wallet_app/view/welcome/welcome_page_1.dart';
-import 'package:wallet_app/view_model/select_language_model.dart';
+import 'package:wallet_app/view_model/main_model.dart';
 
 void main() => runApp(MyApp());
 
@@ -27,14 +27,14 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
 
   // Create the model.
-  SelectLanguageModel selectLanguageModel = SelectLanguageModel();
+  MainStateModel mainStateModel = MainStateModel();
 
   Locale locale;
 
   @override
   Widget build(BuildContext context) {
-    return ScopedModel<SelectLanguageModel>(
-      model: selectLanguageModel,
+    return ScopedModel<MainStateModel>(
+      model: mainStateModel,
       child: MaterialApp(
         localeResolutionCallback: (deviceLocale, supportedLocales) {
           if (this.locale == null) {

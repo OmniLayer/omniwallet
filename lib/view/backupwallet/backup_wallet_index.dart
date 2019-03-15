@@ -79,11 +79,13 @@ class BackupWalletIndex extends StatelessWidget {
         children: <Widget>[
           Container(
             margin: EdgeInsets.only(top: 30,left: 20,right: 20),
-            child: CachedNetworkImage(
-              placeholder: (context, url) => new CircularProgressIndicator(),
-              errorWidget: (context, url, error) => new Icon(Icons.error),
-              imageUrl: 'http://www.pptbz.com/pptpic/UploadFiles_6909/201203/2012031220134655.jpg',
-            ),
+            child:
+                Image.asset("assets/LunarX_Logo.jpg",scale: 0.5,),
+//            CachedNetworkImage(
+//              placeholder: (context, url) => new CircularProgressIndicator(),
+//              errorWidget: (context, url, error) => new Icon(Icons.error),
+//              imageUrl: '',
+//            ),
           ),
           Expanded(
               child: Align(
@@ -109,15 +111,6 @@ class BackupWalletIndex extends StatelessWidget {
               child: Text(WalletLocalizations.of(context).backup_index_btn),
                 onPressed: (){
                   this.onTouchBtn(context);
-                }
-            ),
-          ),
-          Container(
-            margin: EdgeInsets.only(bottom: 80),
-            child: RaisedButton(
-              child: Text('切换语言'),
-                onPressed: (){
-                  this.onTouchLang(context);
                 }
             ),
           ),

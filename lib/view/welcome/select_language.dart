@@ -4,6 +4,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:wallet_app/main.dart';
+import 'package:wallet_app/view_model/main_model.dart';
 import 'package:wallet_app/view_model/select_language_model.dart';
 
 class SelectLanguage extends StatefulWidget {
@@ -47,7 +48,7 @@ class _SelectLanguageState extends State<SelectLanguage> {
   @override
   Widget build(BuildContext context) {
     
-    final langModel = SelectLanguageModel().of(context);
+    final langModel = MainStateModel().of(context);
     String setLanguage = langModel.getSelectedLanguage;
     
     if (strClickItem != '') {

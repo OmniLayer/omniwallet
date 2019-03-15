@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:wallet_app/l10n/WalletLocalizations.dart';
+import 'package:wallet_app/view/main_view/home/main_page_content.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -7,6 +8,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+
   @override
   Widget build(BuildContext context) {
 
@@ -21,6 +23,7 @@ class _HomePageState extends State<HomePage> {
           }, child: Text('创建钱包'))
         ],
       ),
+      body: new BodyContentWidget(),
     );
   }
 
@@ -100,6 +103,6 @@ class _HomePageState extends State<HomePage> {
             );
         }
     );
-    debugPrint('创建钱包');
   }
 }
+
