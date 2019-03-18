@@ -41,7 +41,7 @@
 		"MY":"My",
 		"PUBKEY":"Pubkey",
 		"GRANT":"Grant",
-		"REVOKE":"Revoke,
+		"REVOKE":"Revoke",
 		"SPENDABLE":"Spendable",
 		"WATCHONLY":"Watch-Only"
 	},
