@@ -1,7 +1,11 @@
+/// Market quotatio main page.
+/// [author] Kevin Zhang
+/// [time] 2019-3-13
 
 import 'package:flutter/material.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:wallet_app/l10n/WalletLocalizations.dart';
+import 'market_detail.dart';
 
 class MarketPage extends StatefulWidget {
   @override
@@ -23,7 +27,7 @@ class _MarketPageState extends State<MarketPage> {
           children: <Widget>[
             _showExchange(),
             _showTitle(),
-            _assetsQuotation(),
+            _quotationList(),
 
           ], 
         ),
@@ -54,7 +58,7 @@ class _MarketPageState extends State<MarketPage> {
     );
   }
 
-  // Listview title.
+  // Quotation title.
   Widget _showTitle() {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -87,23 +91,41 @@ class _MarketPageState extends State<MarketPage> {
   }
 
   // 
-  Widget _assetsQuotation() {
+  Widget _quotationList() {
+    return Expanded(
+      child: ListView.builder(
+        itemCount: 10,
+        itemBuilder: (context, index) {
+          return _quotationItem();
+        },
+      ),
+    );
+  }
+
+  // 
+  Widget _quotationItem() {
     return InkWell(
       splashColor: Colors.blue[100],
       highlightColor: Colors.blue[100],
-
+      
       onTap: () {
         // Show detail page.
-        // Navigator.push(
-        //   context, 
-        //   MaterialPageRoute(
-        //     builder: (context) => SelectLanguage(),
-        //   ), 
-        // );
+        Navigator.push(
+          context, 
+          MaterialPageRoute(
+            builder: (context) => MarketDetail(),
+          ), 
+        );
       },
           
       child: Container(
         padding: EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+        decoration: BoxDecoration(
+          border: Border(
+            bottom: BorderSide(color: Theme.of(context).dividerColor)
+          ),
+        ),
+
         child: Row(
           children: <Widget>[
             Icon(Icons.attach_money),

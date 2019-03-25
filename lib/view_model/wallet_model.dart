@@ -14,6 +14,14 @@ class WalletModel extends Model{
     return _currWalletInfo;
   }
 
+  num _currWalletIndex=0;
+  set currWalletIndex(num value){
+    this._currWalletIndex = value;
+  }
+  num get currWalletIndex{
+    return _currWalletIndex;
+  }
+
   AccountInfo _currAccountInfo;
   set currAccountInfo(AccountInfo info){
     this._currAccountInfo = info;
@@ -21,6 +29,24 @@ class WalletModel extends Model{
   }
   AccountInfo get currAccountInfo{
     return _currAccountInfo;
+  }
+
+  num _currAccountIndex=0;
+  set currAccountIndex(num value){
+    this._currAccountIndex = value;
+  }
+  num get currAccountIndex{
+    return _currAccountIndex;
+  }
+
+
+  TradeInfo _currTradeInfo;
+  set currTradeInfo(TradeInfo info){
+    this._currTradeInfo = info;
+    notifyListeners();
+  }
+  TradeInfo get currTradeInfo{
+    return _currTradeInfo;
   }
 
   List<WalletInfo> get  walletInfoes {
@@ -40,12 +66,27 @@ class WalletModel extends Model{
         _walletInfoes.add(info);
       }
     }
-
     notifyListeners();
     return this._walletInfoes;
   }
 
-
-
-
+  List<TradeInfo> get tradeInfoes{
+    List<TradeInfo> infoes = [];
+    int count = 6;
+    for(int i=0;i<count;i++){
+      infoes.add(
+          TradeInfo(
+            amount: Random().nextDouble(),
+            note: "note${i}",
+            objAddress: "address",
+            tradeDate: DateTime.now(),
+            state: Random().nextInt(2),
+            confirmAmount: Random().nextInt(100),
+            txId: "txidtxidtxidtxidtxid${i}",
+            blockId: Random().nextInt(60000)
+          )
+      );
+    }
+    return infoes;
+  }
 }

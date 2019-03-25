@@ -1,6 +1,6 @@
-
 import 'package:flutter/material.dart';
 import 'package:wallet_app/model/wallet_info.dart';
+import 'package:wallet_app/view/main_view/home/wallet_detail_content.dart';
 import 'package:wallet_app/view_model/main_model.dart';
 
 class WalletDetail extends StatefulWidget {
@@ -16,6 +16,11 @@ class _WalletDetailState extends State<WalletDetail> {
   WalletInfo walletInfo;
   AccountInfo accountInfo;
 
+  @override void initState() {
+    super.initState();
+  }
+
+
   @override
   Widget build(BuildContext context) {
     stateModel = MainStateModel().of(context);
@@ -25,7 +30,7 @@ class _WalletDetailState extends State<WalletDetail> {
       appBar: AppBar(
         title: Text(walletInfo.name+" "+accountInfo.name),
       ),
-      body: Text(accountInfo.name),
+      body: WalletDetailContent(),
     );
   }
 }

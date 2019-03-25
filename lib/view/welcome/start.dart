@@ -5,7 +5,6 @@ import 'package:wallet_app/l10n/WalletLocalizations.dart';
 import 'package:wallet_app/view/welcome/create_account.dart';
 import 'package:wallet_app/view/welcome/select_language.dart';
 import 'package:wallet_app/view_model/main_model.dart';
-import 'package:wallet_app/view_model/select_language_model.dart';
 
 class StartPage extends StatefulWidget {
   @override

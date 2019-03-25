@@ -13,9 +13,6 @@ class BodyContentWidget extends StatefulWidget {
 
 class _BodyContentWidgetState extends State<BodyContentWidget> {
 
-  MainStateModel model = null;
-
-
   List<WalletInfo> walletInfoes;
   MainStateModel stateModel = null;
 
@@ -158,6 +155,8 @@ class _BodyContentWidgetState extends State<BodyContentWidget> {
     print('clickItem '+mainIndex.toString()+" "+ subIndex.toString());
     stateModel.currWalletInfo = stateModel.walletInfoes[mainIndex];
     stateModel.currAccountInfo = stateModel.currWalletInfo.accountInfoes[subIndex];
+    stateModel.currWalletIndex = mainIndex;
+    stateModel.currAccountIndex = subIndex;
     Navigator.of(context).push(MaterialPageRoute(builder: (BuildContext context)=>WalletDetail()));
   }
 }
