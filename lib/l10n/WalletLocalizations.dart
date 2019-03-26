@@ -56,7 +56,7 @@ class WalletLocalizations{
       'welcomePageThreeButtonBack' : '    返回    ',
       'welcomePageThreeButtonNext' : '    我了解    ',
 
-      'startPageAppBarTitle' : 'Omni 钱包',
+      'startPageAppBarTitle' : 'LunarX Omniwallet',
       'startPageButtonFirst' : '      开始使用      ',
       'startPageButtonSecond' : '      恢复钱包      ',
       'startPageLanguageBarTitle' : '语言',
@@ -69,6 +69,13 @@ class WalletLocalizations{
       'marketPageAll' : '全部',
       'marketPagePrice' : '价格',
       'marketPageChange' : '涨跌幅',
+
+      'myProfilePageMenu1' : '使用设置',
+      'myProfilePageMenu2' : '钱包地址本',
+      'myProfilePageMenu3' : '帮助与反馈',
+      'myProfilePageMenu4' : '服务条款',
+      'myProfilePageMenu5' : '备份钱包',
+      'myProfilePageMenu6' : '关于我们',
     },
 
     'en': {
@@ -135,7 +142,7 @@ class WalletLocalizations{
       'welcomePageThreeButtonBack' : 'Go Back',
       'welcomePageThreeButtonNext' : 'I Understand',
 
-      'startPageAppBarTitle' : 'Omniwallet',
+      'startPageAppBarTitle' : 'LunarX Omniwallet',
       'startPageButtonFirst' : '     Get Started     ',
       'startPageButtonSecond' : '   Restore wallet   ',
       'startPageLanguageBarTitle' : 'Language',
@@ -148,8 +155,23 @@ class WalletLocalizations{
       'marketPageAll' : 'All',
       'marketPagePrice' : 'Price',
       'marketPageChange' : 'Change',
+
+      'myProfilePageMenu1' : 'Settings',
+      'myProfilePageMenu2' : 'Address Book',
+      'myProfilePageMenu3' : 'Help and Feed back',
+      'myProfilePageMenu4' : 'Service Terms',
+      'myProfilePageMenu5' : 'Backup Wallet',
+      'myProfilePageMenu6' : 'About Us',
     }
   };
+
+  // My profile page
+  get myProfilePageMenu1 => _localizedValues[locale.languageCode]['myProfilePageMenu1'];
+  get myProfilePageMenu2 => _localizedValues[locale.languageCode]['myProfilePageMenu2'];
+  get myProfilePageMenu3 => _localizedValues[locale.languageCode]['myProfilePageMenu3'];
+  get myProfilePageMenu4 => _localizedValues[locale.languageCode]['myProfilePageMenu4'];
+  get myProfilePageMenu5 => _localizedValues[locale.languageCode]['myProfilePageMenu5'];
+  get myProfilePageMenu6 => _localizedValues[locale.languageCode]['myProfilePageMenu6'];
 
   // Market Page
   get marketPageAppBarTitle => _localizedValues[locale.languageCode]['marketPageAppBarTitle'];
