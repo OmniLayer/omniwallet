@@ -9,9 +9,9 @@ class _WebViewPageState extends State<WebViewPage> {
   @override
   Widget build(BuildContext context) {
     return WebviewScaffold(
-      url: "https://www.omnigroup.com/",
+      url: "http://www.omnilayer.org/",
       appBar: new AppBar(
-        title: new Text("omnigroup"),
+        title: new Text("Omni Layer"),
       ),
     );
   }

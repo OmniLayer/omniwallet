@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:wallet_app/model/wallet_info.dart';
+import 'package:wallet_app/view/main_view/home/send_confirm_page.dart';
 import 'package:wallet_app/view_model/main_model.dart';
 
 /**
@@ -15,6 +16,13 @@ class _WalletSendState extends State<WalletSend> {
   WalletInfo walletInfo;
   AccountInfo accountInfo;
   final key = new GlobalKey<ScaffoldState>();
+
+
+  GlobalKey<FormState> _formKey = new GlobalKey<FormState>();
+  String _toAddress;
+  num _amount;
+  num _fee;
+  String _note;
 
 
   var minerFee = 0.0001;
@@ -38,6 +46,7 @@ class _WalletSendState extends State<WalletSend> {
 
   @override
   Widget build(BuildContext context) {
+
     stateModel = MainStateModel().of(context);
     walletInfo = stateModel.currWalletInfo;
     accountInfo = stateModel.currAccountInfo;
@@ -50,9 +59,15 @@ class _WalletSendState extends State<WalletSend> {
 
   Widget makeRadioTiles() {
     List<Widget> list = new List<Widget>();
-    list.add(RadioListTile<int>(value: 0,title: Text('慢速    0.00001 btc'), groupValue: _feeGroup, onChanged: _setvalue2));
-    list.add(RadioListTile<int>(value: 1,title: Text('中速    0.00002 btc'), groupValue: _feeGroup, onChanged: _setvalue2));
-    list.add(RadioListTile<int>(value: 2,title: Text('快速    0.00003 btc'), groupValue: _feeGroup, onChanged: _setvalue2));
+
+    //-------------
+    // TODO: Miner fees will be modified based on 
+    // calculate dynamically in future development.
+    list.add(RadioListTile<int>(value: 0,title: Text('Slow    0.00001 btc'), groupValue: _feeGroup, onChanged: _setvalue2));
+    list.add(RadioListTile<int>(value: 1,title: Text('Middle  0.00002 btc'), groupValue: _feeGroup, onChanged: _setvalue2));
+    list.add(RadioListTile<int>(value: 2,title: Text('Fast    0.00003 btc'), groupValue: _feeGroup, onChanged: _setvalue2));
+    //-------------
+
     var row = Row(children: <Widget>[
         Padding(
           padding: const EdgeInsets.only(left: 20),
@@ -118,7 +133,15 @@ class _WalletSendState extends State<WalletSend> {
           ),
           Padding(
             padding: const EdgeInsets.only(top: 12),
-            child: TextField(
+            child: TextFormField(
+              validator: (val){
+                if(val==null||val.length==0){
+                  return "wrong address";
+                }
+              },
+              onSaved: (val){
+                this._toAddress = val;
+              },
               scrollPadding: EdgeInsets.only(top: 10),
                 decoration: InputDecoration(
                     contentPadding: EdgeInsets.only(left: 8,top: 20,bottom:10),
@@ -149,7 +172,21 @@ class _WalletSendState extends State<WalletSend> {
             ),
             Padding(
               padding: const EdgeInsets.only(top: 12),
-              child: TextField(
+              child: TextFormField(
+                validator: (val){
+                    if(val==null||val.length==0){
+                      return "wrong amount";
+                    }
+                    if(num.tryParse(val) is num){
+
+                    }else{
+                      return "wrong input";
+                    }
+                },
+                onSaved: (val){
+                  print(val);
+                  this._amount = num.parse(val);
+                },
                 keyboardType:TextInputType.number ,
                 scrollPadding: EdgeInsets.only(top: 0),
                 decoration: InputDecoration(
@@ -176,7 +213,10 @@ class _WalletSendState extends State<WalletSend> {
             Expanded(
               child: Padding(
                 padding: EdgeInsets.only(left: 20),
-                child: TextField(
+                child: TextFormField(
+                  onSaved: (val){
+                    this._note = val;
+                  },
                   decoration: InputDecoration(
                       contentPadding: EdgeInsets.only(left: 8,top: 20,bottom:10),
                       border: OutlineInputBorder(
@@ -206,22 +246,32 @@ class _WalletSendState extends State<WalletSend> {
               makeRadioTiles()
             ],
           );
+
     return SingleChildScrollView(
-      child: Column(
-        children: <Widget>[
-          line1,
-          line2,
-          line3,
-          line4,
-          Padding(
-            padding: const EdgeInsets.only(top: 20,bottom: 50),
-            child: RaisedButton(
-                onPressed: (){
-                },
-              child: Text('下一步'),
-            ),
-          )
-        ],
+      child: Form(
+        key: _formKey,
+        child: Column(
+          children: <Widget>[
+            line1,
+            line2,
+            line3,
+            line4,
+            Padding(
+              padding: const EdgeInsets.only(top: 20,bottom: 50),
+              child: RaisedButton(
+                  onPressed: (){
+                    var _form = _formKey.currentState;
+                    if (_form.validate()) {
+                      _form.save();
+                      stateModel.sendInfo = SendInfo(toAddress: this._toAddress,amount: this._amount,note: this._note,minerFee: this.minerFee);
+                      Navigator.of(context).pushNamed(SendConfirm.tag);
+                    }
+                  },
+                child: Text('下一步'),
+              ),
+            )
+          ],
+        ),
       ),
     );
   }
