@@ -1,20 +1,27 @@
 import 'package:flutter/material.dart';
-import 'package:wallet_app/model/wallet_info.dart';
+import 'package:wallet_app/l10n/WalletLocalizations.dart';
+import 'package:wallet_app/tools/app_data_setting.dart';
 import 'package:wallet_app/view/main_view/home/send_confirm_page.dart';
-import 'package:wallet_app/view_model/main_model.dart';
+import 'package:wallet_app/view/main_view/wallet_address_book.dart';
+import 'package:wallet_app/view/widgets/custom_expansion_tile.dart';
+import 'package:wallet_app/view_model/state_lib.dart';
 
 /**
  * 钱包转账
  */
 class WalletSend extends StatefulWidget {
+  static String tag = 'WalletSend';
   @override
   _WalletSendState createState() => _WalletSendState();
 }
 class _WalletSendState extends State<WalletSend> {
 
+  TextEditingController addressController ;
+
   MainStateModel stateModel = null;
   WalletInfo walletInfo;
   AccountInfo accountInfo;
+  UsualAddressInfo _usualAddressInfo;
   final key = new GlobalKey<ScaffoldState>();
 
 
@@ -24,150 +31,98 @@ class _WalletSendState extends State<WalletSend> {
   num _fee;
   String _note;
 
-
-  var minerFee = 0.0001;
-  var _feeGroup = 0;
-  void _setvalue2(int value) => setState(() {
-      if(value==0){
-        this.minerFee = 0.0001 ;
-      }
-      if(value==1){
-        this.minerFee = 0.0002 ;
-      }
-      if(value==2){
-        this.minerFee = 0.0003 ;
-      }
-      if(value==-1){
-        this.minerFee = 0.0004 ;
-      }
-
-      _feeGroup = value;
-  });
+  @override
+  void initState() {
+    super.initState();
+    addressController = TextEditingController();
+  }
 
   @override
   Widget build(BuildContext context) {
-
     stateModel = MainStateModel().of(context);
     walletInfo = stateModel.currWalletInfo;
     accountInfo = stateModel.currAccountInfo;
+    _usualAddressInfo = stateModel.currSelectedUsualAddress;
     return Scaffold(
         key: this.key,
-        appBar: AppBar(title: Text(accountInfo.name+"转账"),),
+        backgroundColor: Theme.of(context).canvasColor,
+        appBar: AppBar(title: Text(accountInfo.name + WalletLocalizations.of(context).wallet_detail_content_send),),
         body: this.body()
     );
   }
 
-  Widget makeRadioTiles() {
-    List<Widget> list = new List<Widget>();
-
-    //-------------
-    // TODO: Miner fees will be modified based on 
-    // calculate dynamically in future development.
-    list.add(RadioListTile<int>(value: 0,title: Text('Slow    0.00001 btc'), groupValue: _feeGroup, onChanged: _setvalue2));
-    list.add(RadioListTile<int>(value: 1,title: Text('Middle  0.00002 btc'), groupValue: _feeGroup, onChanged: _setvalue2));
-    list.add(RadioListTile<int>(value: 2,title: Text('Fast    0.00003 btc'), groupValue: _feeGroup, onChanged: _setvalue2));
-    //-------------
-
-    var row = Row(children: <Widget>[
-        Padding(
-          padding: const EdgeInsets.only(left: 20),
-          child: Text('自定义'),
-        ),
-        Expanded(
-          child: Padding(
-            padding: const EdgeInsets.only (left: 20,right: 20),
-            child: TextField(
-              keyboardType: TextInputType.number,
-              onChanged: (value){
-                if(value.length>0){
-                  setState(() {
-                    _feeGroup = -1;
-                    this.minerFee = double.parse(value);
-                  });
-                }
-                if(value.length==0){
-                  setState(() {
-                    _feeGroup = 0;
-                    this.minerFee = double.parse('0.0001');
-                  });
-                }
-              },
-              decoration: InputDecoration(
-                  contentPadding: EdgeInsets.only(left: 8, top: 10, bottom: 10),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(6.0),
-                  ),
-                  hintText: '选填',
-                  hintStyle: TextStyle(fontSize: 14)
-              ),
-            ),
-          ),
-        ),
-      ],
-    );
-    list.add(Container(child: row));
-    return Container(
-        margin: EdgeInsets.only(left: MediaQuery.of(context).size.width*0.42),
-        child: Column(
-          children: list,
-        )
-    );
-  }
-
-
   Widget body(){
-    var line1 = Padding(
-      padding: EdgeInsets.only(left: 30,top: 30,right: 30),
+    var line1 = Container(
+      margin: EdgeInsets.only(top: 12),
+      padding: EdgeInsets.symmetric(horizontal: 20,vertical: 16),
+      width: double.infinity,
+      color: AppCustomColor.themeBackgroudColor,
       child: Column(
         children: <Widget>[
           Row(
             mainAxisAlignment: MainAxisAlignment.start,
             mainAxisSize: MainAxisSize.max,
             children: <Widget>[
-              Text('转账地址',style: TextStyle(color: Colors.black,fontWeight: FontWeight.w500),),
+              Text(WalletLocalizations.of(context).wallet_send_page_to,style: TextStyle(color: AppCustomColor.themeFrontColor,fontWeight: FontWeight.w500),),
               Expanded(child: Container()),
-              InkWell(child: Text('常用地址'),onTap: (){
-
-              },)
+              InkWell(
+                  child: Icon(Icons.event_note,color: Colors.blue,),
+                onTap: (){
+                  Navigator.of(context).push(MaterialPageRoute(builder: (context){
+                      return AddressBook(parentPageId: 1,);
+                  }));
+                },
+              ),
             ],
           ),
           Padding(
-            padding: const EdgeInsets.only(top: 12),
+            padding: const EdgeInsets.only(top: 0),
             child: TextFormField(
+              controller: addressController,
               validator: (val){
+                if(_usualAddressInfo!=null){
+                  if(addressController.text.length==0){
+                    val =_usualAddressInfo.address;
+                  }
+                }
+                val = addressController.text;
                 if(val==null||val.length==0){
-                  return "wrong address";
+                  return WalletLocalizations.of(context).wallet_send_page_input_address_error;
                 }
               },
               onSaved: (val){
-                this._toAddress = val;
+                if(_usualAddressInfo!=null){
+                  if(addressController.text.length==0){
+                    addressController.text =_usualAddressInfo.address;
+                  }
+                }
+                this._toAddress = addressController.text;
               },
-              scrollPadding: EdgeInsets.only(top: 10),
-                decoration: InputDecoration(
-                    contentPadding: EdgeInsets.only(left: 8,top: 20,bottom:10),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(6.0),
-                    ),
-                    labelText:'请输入地址',
-                    labelStyle: TextStyle(fontSize: 14)
-                ),
+              decoration: InputDecoration(
+                  contentPadding: EdgeInsets.only(top: 6),
+                  border: InputBorder.none,
+                  hintText:WalletLocalizations.of(context).wallet_send_page_input_address_hint,
+              ),
             ),
           ),
         ],
-      )
-    );
+      ),
+    ) ;
 
-    var line2 = Padding(
-        padding: EdgeInsets.only(left: 30,top: 30,right: 30),
+    var line2 = Container(
+        margin: EdgeInsets.only(top: 12),
+        padding: EdgeInsets.symmetric(horizontal: 20,vertical: 16),
+        width: double.infinity,
+        color: AppCustomColor.themeBackgroudColor,
         child: Column(
           children: <Widget>[
             Row(
               mainAxisAlignment: MainAxisAlignment.start,
               mainAxisSize: MainAxisSize.max,
               children: <Widget>[
-                Text('转账数量',style: TextStyle(color: Colors.black,fontWeight: FontWeight.w500),),
+                Text(WalletLocalizations.of(context).wallet_send_page_title_amount,style: TextStyle(color: AppCustomColor.themeFrontColor,fontWeight: FontWeight.w500),),
                 Expanded(child: Container()),
-                Text('余额：${accountInfo.amount.toStringAsFixed(8)}')
+                Text(WalletLocalizations.of(context).wallet_send_page_title_balance+'：'+accountInfo.amount.toStringAsFixed(8),style: TextStyle(color: Colors.blue),)
               ],
             ),
             Padding(
@@ -175,12 +130,12 @@ class _WalletSendState extends State<WalletSend> {
               child: TextFormField(
                 validator: (val){
                     if(val==null||val.length==0){
-                      return "wrong amount";
+                      return WalletLocalizations.of(context).wallet_send_page_input_amount_error;
                     }
                     if(num.tryParse(val) is num){
 
                     }else{
-                      return "wrong input";
+                      return WalletLocalizations.of(context).wallet_send_page_input_amount_error;
                     }
                 },
                 onSaved: (val){
@@ -190,63 +145,56 @@ class _WalletSendState extends State<WalletSend> {
                 keyboardType:TextInputType.number ,
                 scrollPadding: EdgeInsets.only(top: 0),
                 decoration: InputDecoration(
-                    contentPadding: EdgeInsets.only(left: 8,top: 20,bottom:10),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(6.0),
-                    ),
-                    labelText:'请输入数量',
-                    labelStyle: TextStyle(fontSize: 14)
+                    contentPadding: EdgeInsets.only(top: 6),
+                    border: InputBorder.none,
+                    hintText:WalletLocalizations.of(context).wallet_send_page_input_amount,
                 ),
               ),
             ),
-          ],
-        )
-    );
-
-    var line3 = Padding(
-        padding: EdgeInsets.only(left: 30,top: 30,right: 30),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-
-          children: <Widget>[
-            Text('备注',style: TextStyle(color: Colors.black,fontWeight: FontWeight.w500),),
-            Expanded(
-              child: Padding(
-                padding: EdgeInsets.only(left: 20),
-                child: TextFormField(
-                  onSaved: (val){
-                    this._note = val;
-                  },
-                  decoration: InputDecoration(
-                      contentPadding: EdgeInsets.only(left: 8,top: 20,bottom:10),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(6.0),
+            Divider(height: 20,),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: <Widget>[
+                Text(WalletLocalizations.of(context).wallet_send_page_title_note,style: TextStyle(color: AppCustomColor.themeFrontColor,fontWeight: FontWeight.w500),),
+                Expanded(
+                  child: Padding(
+                    padding: EdgeInsets.only(left: 20),
+                    child: TextFormField(
+                      onSaved: (val){
+                        this._note = val;
+                      },
+                      decoration: InputDecoration(
+                        contentPadding: EdgeInsets.only(top: 0),
+                        border: InputBorder.none,
+                        hintText:WalletLocalizations.of(context).wallet_send_page_input_note,
                       ),
-                      labelText:'备注（选填）',
-                      labelStyle: TextStyle(fontSize: 14)
+                    ),
                   ),
-                ),
-              ),
+                )
+              ],
             )
           ],
         )
     );
-
-
-    var line4 = ExpansionTile(
+    var line4 = CustemExpansionTile(
+            backgroundColor: AppCustomColor.themeBackgroudColor,
             title: Row(
               mainAxisAlignment: MainAxisAlignment.start,
               children: <Widget>[
-                Text('矿工费用'),
+                Text(WalletLocalizations.of(context).wallet_send_page_title_minerFee),
                 Expanded(child: Container()),
                 Text(this.minerFee.toStringAsFixed(8))
             ],),
-
             children: <Widget>[
               makeRadioTiles()
             ],
           );
 
+    if(_usualAddressInfo!=null){
+        if(addressController.text.length==0){
+          addressController.text =_usualAddressInfo.address;
+        }
+    }
     return SingleChildScrollView(
       child: Form(
         key: _formKey,
@@ -254,25 +202,139 @@ class _WalletSendState extends State<WalletSend> {
           children: <Widget>[
             line1,
             line2,
-            line3,
-            line4,
-            Padding(
-              padding: const EdgeInsets.only(top: 20,bottom: 50),
-              child: RaisedButton(
-                  onPressed: (){
-                    var _form = _formKey.currentState;
-                    if (_form.validate()) {
-                      _form.save();
-                      stateModel.sendInfo = SendInfo(toAddress: this._toAddress,amount: this._amount,note: this._note,minerFee: this.minerFee);
-                      Navigator.of(context).pushNamed(SendConfirm.tag);
-                    }
-                  },
-                child: Text('下一步'),
+            Container(
+              margin: EdgeInsets.only(top: 12),
+              color: AppCustomColor.themeBackgroudColor,
+                child: line4
+            ),
+            Container(
+              margin: EdgeInsets.only(left: 20,right: 20,top: 30,bottom: 20),
+              child: Row(
+                children: <Widget>[
+                  Expanded(
+                    child: RaisedButton(
+                      color: AppCustomColor.btnConfirm,
+                      onPressed: (){
+                        var _form = _formKey.currentState;
+                        if (_form.validate()) {
+                          _form.save();
+                          stateModel.sendInfo = SendInfo(toAddress: this._toAddress,amount: this._amount,note: this._note,minerFee: this.minerFee);
+                          Navigator.of(context).pushNamed(SendConfirm.tag);
+                        }
+                      },
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 16),
+                        child: Text(WalletLocalizations.of(context).backup_words_next,style: TextStyle(color: Colors.white),),
+                      ),
+                    ),
+                  ),
+                ],
               ),
             )
           ],
         ),
       ),
+    );
+  }
+
+  var minerFee = 0.0001;
+  var _feeGroup = 0;
+  void _setvalue2(int value) => setState(() {
+    if(value==0){
+      this.minerFee = 0.0001 ;
+    }
+    if(value==1){
+      this.minerFee = 0.0002 ;
+    }
+    if(value==2){
+      this.minerFee = 0.0003 ;
+    }
+    if(value==-1){
+      this.minerFee = 0.0004 ;
+    }
+
+    _feeGroup = value;
+  });
+
+  Widget makeRadioTiles() {
+    List<Widget> list = new List<Widget>();
+    //-------------
+    // TODO: Miner fees will be modified based on
+    // calculate dynamically in future development.
+    list.add(RadioListTile<int>(
+        value: 0,
+        title: Row(children: <Widget>[
+          Expanded(child: Text('Slow',style: TextStyle(color: _feeGroup==0?Colors.blue:AppCustomColor.themeFrontColor),)),
+          Text('0.00001 btc',style: TextStyle(color: _feeGroup==0?Colors.blue:AppCustomColor.themeFrontColor),)
+        ],),
+        groupValue: _feeGroup,
+        onChanged: _setvalue2,
+      )
+    );
+    list.add(RadioListTile<int>(
+        value: 1,
+        title: Row(children: <Widget>[
+          Expanded(child: Text('Middle',style: TextStyle(color: _feeGroup==1?Colors.blue:AppCustomColor.themeFrontColor),)),
+          Text('0.00002 btc',style: TextStyle(color: _feeGroup==1?Colors.blue:AppCustomColor.themeFrontColor),)
+        ],),
+        groupValue: _feeGroup,
+        onChanged: _setvalue2,
+      )
+    );
+    list.add(RadioListTile<int>(
+        value: 2,
+        title: Row(children: <Widget>[
+          Expanded(child: Text('Fast',style: TextStyle(color: _feeGroup==2?Colors.blue:AppCustomColor.themeFrontColor),)),
+          Text('0.00003 btc',style: TextStyle(color: _feeGroup==2?Colors.blue:AppCustomColor.themeFrontColor),)
+        ],),
+        groupValue: _feeGroup,
+        onChanged: _setvalue2,
+      )
+    );
+
+    var row = Row(children: <Widget>[
+      Padding(
+        padding: const EdgeInsets.only(left: 20),
+        child: Text(WalletLocalizations.of(context).wallet_send_page_title_minerFee_input_title),
+      ),
+      Expanded(
+        child: Padding(
+          padding: const EdgeInsets.only (left: 20,right: 20),
+          child: TextField(
+            keyboardType: TextInputType.number,
+            onChanged: (value){
+              if(value.length>0){
+                setState(() {
+                  _feeGroup = -1;
+                  this.minerFee = double.parse(value);
+                });
+              }
+              if(value.length==0){
+                setState(() {
+                  _feeGroup = 0;
+                  this.minerFee = double.parse('0.0001');
+                });
+              }
+            },
+            decoration: InputDecoration(
+              contentPadding: EdgeInsets.only(top: 0),
+              border: InputBorder.none,
+              hintText: WalletLocalizations.of(context).wallet_send_page_input_note,
+            ),
+          ),
+        ),
+      ),
+    ],
+    );
+    list.add(Container(child: Padding(
+      padding: const EdgeInsets.symmetric(vertical: 16),
+      child: row,
+    )));
+    return Container(
+        margin: EdgeInsets.only(left: 20),
+        child: Column(
+          children: list,
+        )
     );
   }
 }

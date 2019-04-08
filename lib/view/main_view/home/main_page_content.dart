@@ -1,10 +1,12 @@
-
 import 'package:flutter/material.dart';
-import 'package:wallet_app/model/wallet_info.dart';
+import 'package:wallet_app/tools/app_data_setting.dart';
 import 'package:wallet_app/view/main_view/home/wallet_detail.dart';
-import 'package:wallet_app/view_model/main_model.dart';
+import 'package:wallet_app/view/widgets/custom_expansion_tile.dart';
+import 'package:wallet_app/view_model/state_lib.dart';
 
-
+/**
+ * asset list view
+ */
 class BodyContentWidget extends StatefulWidget {
   BodyContentWidget({Key key, }) : super(key: key);
   @override
@@ -20,37 +22,38 @@ class _BodyContentWidgetState extends State<BodyContentWidget> {
   Widget build(BuildContext context) {
     stateModel = MainStateModel().of(context);
     walletInfoes = stateModel.walletInfoes;
-    return Padding(
-      padding: const EdgeInsets.only(top: 8),
-      child: ListView.builder(
-        itemCount: walletInfoes.length,
-        itemBuilder: (BuildContext context, int index){
-          return Container(
-            margin: EdgeInsets.only(bottom: 10),
-            decoration: BoxDecoration(
-              border: Border.all(color: Colors.grey[300])
-            ),
-            child: ExpansionTile(
-              title: buildFirstLevelHeader(index),
-              children: buildItemes(context,index),
-            ),
-          );
-      }),
-    );
+    return ListView.builder(
+      itemCount: walletInfoes.length,
+      itemBuilder: (BuildContext context, int index){
+        return Container(
+          margin: EdgeInsets.only(top: 10),
+          decoration: BoxDecoration(
+            color: AppCustomColor.themeBackgroudColor,
+          ),
+          child: CustemExpansionTile(
+            title: buildFirstLevelHeader(index),
+            children: buildItemes(context,index),
+          ),
+        );
+    });
   }
 
   Widget buildFirstLevelHeader(int index) {
     WalletInfo dataInfo = walletInfoes[index];
     return Row(
       mainAxisAlignment: MainAxisAlignment.start,
-      crossAxisAlignment: CrossAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: <Widget>[
         Padding(
-          padding: const EdgeInsets.only(right: 8,top: 8),
-          child: Icon(
-            dataInfo.iconUrl??Icons.ac_unit,
-            size: 28,
-            color: Colors.blue,
+          padding: const EdgeInsets.only(right: 10,bottom: 20,top: 20),
+          child: CircleAvatar(
+            radius: 24,
+            backgroundColor: Colors.lightBlue[50],
+            child: Icon(
+              dataInfo.iconUrl??Icons.ac_unit,
+              size: 30,
+              color: Colors.blue,
+            ),
           ),
         ),
         Expanded(
@@ -61,26 +64,21 @@ class _BodyContentWidgetState extends State<BodyContentWidget> {
                 children: <Widget>[
                   Text(dataInfo.name),
                   Expanded(child: Container()),
-                  Text(dataInfo.note)
+                  Text(
+                    '\$'+dataInfo.totalLegalTender.toStringAsFixed(2),
+                    style: TextStyle(
+                      fontSize: 24,
+                    ),
+                  )
               ],),
               SizedBox(height: 10,),
               Text(
                 dataInfo.address,
                 maxLines: 1,
                 style: TextStyle(
-
+                  color: Colors.grey
                 ),
               ),
-              SizedBox(height: 10,),
-              Align(
-                alignment: Alignment(1.3, 0),
-                child: Text(
-                   '\$'+dataInfo.totalLegalTender.toStringAsFixed(2),
-                  style: TextStyle(
-                    fontSize: 24,
-                  ),
-                ),
-              ) ,
             ],
           ),
         ),
@@ -89,28 +87,15 @@ class _BodyContentWidgetState extends State<BodyContentWidget> {
   }
   List<Widget> buildItemes(BuildContext context, int index) {
     WalletInfo dataInfo = walletInfoes[index];
-
     List<Widget> list = List();
-    list.add(Container(height: 1,color: Colors.red,));
-    list.add(
-        Align(
-          alignment: Alignment(-1, 0),
-          child: Padding(
-            padding: const EdgeInsets.only(left: 60,top: 10,bottom: 10),
-            child: Text(
-              dataInfo.name+"-资产",
-              style: TextStyle(fontSize: 16),
-            ),
-          ),
-        )
-    );
+    list.add(Container(height: 1,color: Colors.grey[100],));
     for (int i = 0; i < dataInfo.accountInfoes.length; i++) {
       AccountInfo accountInfo = dataInfo.accountInfoes[i];
       list.add(
         Container(
-          margin: EdgeInsets.only(left: 60,bottom: 8),
+          margin: EdgeInsets.only(left: 16,bottom: 12,top: 12),
           decoration: BoxDecoration(
-            border: Border.all(color: Colors.grey)
+            border: Border(bottom: BorderSide(color: Colors.grey[100]))
           ),
           child: InkWell(
             onTap: (){ this.onClickItem(index,i);},
@@ -118,7 +103,7 @@ class _BodyContentWidgetState extends State<BodyContentWidget> {
               margin: EdgeInsets.all(6),
               child: Row(
                 children: <Widget>[
-                  Icon(accountInfo.iconUrl??Icons.add,size: 40,),
+                  CircleAvatar(backgroundColor: Colors.lightBlue[50], child: Icon(accountInfo.iconUrl??Icons.add,size: 30,color: Colors.green,)),
                   Container(
                     margin: EdgeInsets.only(left: 16),
                       child: Text('${accountInfo.name}',style: TextStyle(fontSize: 18),)
@@ -131,11 +116,19 @@ class _BodyContentWidgetState extends State<BodyContentWidget> {
                       children: <Widget>[
                         Padding(
                           padding: const EdgeInsets.only(bottom: 6),
-                          child: Text('${accountInfo.amount.toStringAsFixed(8)}',textAlign: TextAlign.right,style: TextStyle(fontSize: 18),),
+                          child: Text(
+                            '${accountInfo.amount.toStringAsFixed(8)}',
+                            textAlign: TextAlign.right,
+                            style: TextStyle(fontSize: 18),
+                          ),
                         ),
                         Padding(
                           padding: const EdgeInsets.only(bottom: 6),
-                          child: Text('\$'+accountInfo.legalTender.toStringAsFixed(2),textAlign: TextAlign.right,),
+                          child: Text(
+                            '\$'+accountInfo.legalTender.toStringAsFixed(2),
+                            textAlign: TextAlign.right,
+                            style: TextStyle(fontSize: 18,color: Colors.grey),
+                          ),
                         ),
                       ],
                     ),
@@ -147,7 +140,7 @@ class _BodyContentWidgetState extends State<BodyContentWidget> {
         )
       );
     }
-    list.add(SizedBox(height: 30,));
+    list.add(SizedBox(height: 20,));
     return list;
   }
   //点击item

@@ -1,13 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:wallet_app/l10n/WalletLocalizations.dart';
-
-
-class WordInfo{
-  String content;
-  bool visible;
-  WordInfo({@required this.content,this.visible=false});
-}
-
+import 'package:wallet_app/model/backup_wallet.dart';
+import 'package:wallet_app/tools/app_data_setting.dart';
+import 'package:wallet_app/view/main_view/main_page.dart';
+import 'package:wallet_app/view_model/state_lib.dart';
 
 class BackupWalletWordsOrder extends StatefulWidget {
   @override
@@ -15,106 +11,192 @@ class BackupWalletWordsOrder extends StatefulWidget {
 }
 
 class _BackupWalletWordsOrderState extends State<BackupWalletWordsOrder> {
+  List<WordInfo> words=null;
+  MainStateModel stateModel = null;
 
-  List<WordInfo> words=[
-    WordInfo(content: 'word' ),WordInfo(content: 'word' ),WordInfo(content: 'word' ),WordInfo(content: 'word' ),
-    WordInfo(content: 'word' ),WordInfo(content: 'word' ),WordInfo(content: 'word' ),WordInfo(content: 'word' ),
-    WordInfo(content: 'word' ),WordInfo(content: 'word' ),WordInfo(content: 'word' ),WordInfo(content: 'word' ),
-    WordInfo(content: 'word' ),WordInfo(content: 'word' ),WordInfo(content: 'word' ),WordInfo(content: 'word' )
-  ];
-
-  Widget wordBulid(BuildContext context){
-    return GridView.builder(
-      physics: new NeverScrollableScrollPhysics(),
-      padding: const EdgeInsets.only(left:20,right: 20,top: 24),
-      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 8,
-        mainAxisSpacing: 12.0,
-        crossAxisSpacing: 4.0,
-        childAspectRatio: 2
+  @override
+  Widget build(BuildContext context) {
+    stateModel = MainStateModel().of(context) ;
+    if(words==null){
+      words = stateModel.randomSortMnemonicPhrases;
+    }
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(WalletLocalizations.of(context).backup_words_order_title),
       ),
-      itemCount: 16,
-      itemBuilder: (BuildContext context, int index) {
-        return GestureDetector(
-          child: Offstage(
-              offstage: words[index].visible,
-              child: Text(words[index].content)
-          ),
-          onTap: (){
-              print(index);
-              setState(() {
-                words[index].visible=true;
-                this.resultWords.add(words[index].content);
-              });
-          },
-        );
-      },
+      backgroundColor: AppCustomColor.themeBackgroudColor,
+      body: Builder(builder: (BuildContext context) { return pageCentent(context);}),
     );
   }
 
-
-  List<String> resultWords=[];
+  List<WordInfo> resultWords=[];
   List<Widget> resultWordBulid(){
     List<Widget> results= [];
     for(var item in this.resultWords){
       results.add(
-          Chip(label: Text(item))
+          InkWell(
+            onTap: (){
+              setState(() {
+                resultWords.remove(item);
+                item.visible=true;
+                checkFinish();
+              });
+            },
+            child: Container(
+              decoration: BoxDecoration(
+                  border: Border.all(color: Colors.grey),
+                borderRadius: BorderRadius.circular(5)
+              ),
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text(item.content,style: TextStyle(color: AppCustomColor.themeBackgroudColor),),
+              )
+            ),
+          )
       );
     }
     return results;
   }
-  Widget pageCentent(BuildContext context){
 
+
+  Function checkFinish(){
+    checkResult();
+    if(showErrorTips==false&&this.resultWords.length==this.words.length){
+      return (){
+        Navigator.of(context).pushAndRemoveUntil(
+            MaterialPageRoute(builder: (context) => MainPage()),
+                (route) => route == null
+        );
+      };
+    }
+    return null;
+  }
+
+  bool showErrorTips = false;
+  void checkResult(){
+    showErrorTips =false;
+    for(var i=0;i<this.resultWords.length;i++){
+      var node = this.resultWords[i];
+      if(node.seqNum!=i){
+        showErrorTips = true;
+        break;
+      }
+    }
+  }
+
+  Widget pageCentent(BuildContext context){
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
-          Expanded(child: Container(),flex: 3,),
-          Text(WalletLocalizations.of(context).backup_words_order_content),
-          Expanded(child: Container(),flex: 1),
           Container(
+              margin: EdgeInsets.only(left: 20,right: 20,top: 30,bottom: 40),
+              child: Text(WalletLocalizations.of(context).backup_words_order_content,style: TextStyle(fontSize: 15,color: Colors.grey),)
+          ),
+          AnimatedOpacity(
+            duration: Duration(milliseconds: 0),
+            opacity: showErrorTips?1:0,
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Text(WalletLocalizations.of(context).backup_words_order_error,style: TextStyle(color: Colors.red),),
+            ),
+          ),
+          Container(
+            margin: EdgeInsets.only(bottom: 40),
             decoration: BoxDecoration(
-              color: Color(0xECE0E0FF),
+              color: Color(0xFFF8F8F8),
               borderRadius: BorderRadius.circular(5)
             ),
-            width: MediaQuery.of(context).size.width*0.9,
-            height: 90,
-            child:wordBulid(context),
+            width: MediaQuery.of(context).size.width,
+            height: 150,
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Wrap(
+                    alignment: WrapAlignment.center,
+                    spacing: 6,
+                    runSpacing: 6,
+                    children: resultWordBulid()),
+              )
           ),
-          Expanded(child: Container(),flex: 1),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 10,vertical: 10),
-            child: Align(
-              alignment: Alignment(-1, -1),
-              child: Wrap(
-                spacing: 4,
-                runSpacing: 4,
-                children: resultWordBulid()),
-            ),
-          ),
-          Expanded(child: Container(),flex: 1,),
-          RaisedButton(
-            onPressed: (){
 
-            },
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 40,vertical: 10),
-              child: Text(WalletLocalizations.of(context).backup_words_order_finish,style: TextStyle(fontSize: 16),),
+
+          createWords(),
+          Expanded(child: Container()),
+          Padding(
+            padding: const EdgeInsets.only(bottom: 20,left: 20,right: 20),
+            child: Row(
+              children: <Widget>[
+                Expanded(
+                  child: RaisedButton(
+                    color: AppCustomColor.btnConfirm,
+                    onPressed: checkFinish(),
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 16),
+                      child: Text(WalletLocalizations.of(context).backup_words_order_finish,style: TextStyle(color: Colors.white),),
+                    ),
+                  ),
+                ),
+              ],
             ),
           ),
-          Expanded(child: Container(),flex: 3,),
         ],
       ),
     );
   }
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(WalletLocalizations.of(context).backup_words_order_title),
-//        leading: Icon(Icons.arrow_back_ios),
+
+  Widget createWords(){
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 30),
+      child: Wrap(
+        alignment: WrapAlignment.center,
+        spacing: 5,
+        runSpacing: 5,
+        children: wrapChildren(),
       ),
-      body: pageCentent(context),
     );
+  }
+
+  Function onClickSelctableWord(int index){
+    if(this.words[index].visible){
+      return (){
+        setState(() {
+          this.words[index].visible=false;
+          this.resultWords.add(this.words[index]);
+          checkFinish();
+        });
+      };
+    }else{
+      return null;
+    }
+  }
+
+  List<Widget> wrapChildren(){
+    List<Widget> list = [];
+    for(int i=0;i<this.words.length;i++){
+      list.add(
+          InkWell(
+            onTap: onClickSelctableWord(i),
+            child: Container(
+                decoration: BoxDecoration(
+                    border: Border.all(color: this.words[i].visible?Colors.grey:Colors.grey[200]),
+                    borderRadius: BorderRadius.circular(4)
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: AnimatedOpacity(
+                    duration: Duration(milliseconds: 0),
+                    opacity: this.words[i].visible?1:0,
+                    child: Text(
+                      '${this.words[i].content}',
+                      style: TextStyle(color: AppCustomColor.themeFrontColor),
+                    ),
+                  ),
+                )
+            ),
+          )
+      );
+    }
+    print(list.length);
+    return list;
   }
 }

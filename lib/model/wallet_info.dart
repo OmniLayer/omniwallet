@@ -51,7 +51,7 @@ class TradeInfo extends BaseInfo{
   num state;
   //交易时间
   DateTime tradeDate;
-  //被尊
+  //备注
   String note;
   //Block层数
   num blockId;
@@ -68,5 +68,26 @@ class TradeInfo extends BaseInfo{
     this.blockId,
     this.tradeType
   });
-
 }
+class SendInfo{
+  String toAddress='';
+  num amount=0;
+  String note='';
+  num minerFee=0;
+
+  SendInfo({
+      this.toAddress,
+      this.amount,
+      this.note,
+      this.minerFee
+  });
+}
+/**
+ * 用户常用地址
+ */
+class UsualAddressInfo extends BaseInfo{
+  String address;
+  String note;
+  UsualAddressInfo({String name, this.address,this.note}):super(name:name);
+}
+

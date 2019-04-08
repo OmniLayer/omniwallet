@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:wallet_app/l10n/WalletLocalizations.dart';
 import 'package:wallet_app/model/wallet_info.dart';
+import 'package:wallet_app/tools/app_data_setting.dart';
 import 'package:wallet_app/view/main_view/home/send_page.dart';
 import 'package:wallet_app/view/main_view/home/trade_info_detail.dart';
 import 'package:wallet_app/view/main_view/home/receive_page.dart';
@@ -11,15 +13,21 @@ class WalletDetailContent extends StatefulWidget {
   _WalletDetailContentState createState() => _WalletDetailContentState();
 }
 
-class _WalletDetailContentState extends State<WalletDetailContent> {
+class _WalletDetailContentState extends State<WalletDetailContent> with SingleTickerProviderStateMixin{
 
   MainStateModel stateModel = null;
   WalletInfo walletInfo;
   AccountInfo accountInfo;
   List<TradeInfo> tradeInfoes ;
 
+  TabController mController;
+
   @override void initState() {
     super.initState();
+    mController = TabController(
+      length: 4,
+      vsync: this,
+    );
   }
 
   @override
@@ -30,69 +38,53 @@ class _WalletDetailContentState extends State<WalletDetailContent> {
     accountInfo = stateModel.currAccountInfo;
 
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         buildHeader(),
-        buildBodyHeader(),
+        Padding(
+          padding: const EdgeInsets.only(top: 20,bottom: 10),
+          child: TabBar(
+              controller: mController,
+              labelColor: Colors.blue,
+              labelPadding: EdgeInsets.only(bottom: 4),
+              indicatorSize: TabBarIndicatorSize.label,
+              unselectedLabelColor: Colors.grey,
+              tabs: [
+                Text('All'),
+                Text('Out'),
+                Text('In'),
+                Text('Failed'),
+              ]),
+        ),
         Expanded(
-          child: ListView.builder(
-              itemCount:tradeInfoes.length,
-              itemBuilder: (BuildContext context, int index){
-                return detailTile(context,index);
-              }),
+          child: TabBarView(
+            controller: mController,
+            children: <Widget>[
+              ListView.builder(
+                  itemCount:tradeInfoes.length,
+                  itemBuilder: (BuildContext context, int index){
+                    return detailTile(context,index);
+                  }),
+              ListView.builder(
+                  itemCount:tradeInfoes.length,
+                  itemBuilder: (BuildContext context, int index){
+                    return detailTile(context,index);
+                  }),
+              ListView.builder(
+                  itemCount:tradeInfoes.length,
+                  itemBuilder: (BuildContext context, int index){
+                    return detailTile(context,index);
+                  }),
+              ListView.builder(
+                  itemCount:tradeInfoes.length,
+                  itemBuilder: (BuildContext context, int index){
+                    return detailTile(context,index);
+                  }),
+            ],
+          ),
         ),
         buildFooter()
       ],
-    );
-  }
-
-  Widget buildBodyHeader() {
-    return Container(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          Container(
-              margin: EdgeInsets.only(left: 40,bottom: 8,top: 10),
-              child: Text('交易记录')
-          ),
-          Container(
-            margin: EdgeInsets.only(left: 40),
-            height: 1,
-            color: Colors.grey,
-          ),
-          Container(
-            margin: EdgeInsets.only(top: 10,bottom: 15),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: <Widget>[
-                CustomButtonForCategory(
-                  name: '全部',
-                  callback: (){
-                    print("click1");
-                  },
-                ),
-                CustomButtonForCategory(
-                  name: '转出',
-                  callback: (){
-                    print("click2");
-                  },
-                ),
-                CustomButtonForCategory(
-                  name: '转入',
-                  callback: (){
-                    print("click3");
-                  },
-                ),
-                CustomButtonForCategory(
-                  name: '失败',
-                  callback: (){
-                    print("click4");
-                  },
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
     );
   }
 
@@ -106,56 +98,84 @@ class _WalletDetailContentState extends State<WalletDetailContent> {
         }));
       },
       child: Container(
-        padding: EdgeInsets.symmetric(horizontal: 10,vertical: 6),
-        decoration: BoxDecoration(
-          border: Border(bottom: BorderSide(color: Theme.of(context).dividerColor))
-        ),
+        padding: EdgeInsets.symmetric(horizontal: 10,vertical: 16),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: CircleAvatar(child: Icon(Icons.arrow_upward),backgroundColor:Colors.green[100]),
+            ),
             Expanded(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  Text('转出 ${tradeInfo.amount.toStringAsFixed(8)}'),
-                  Text('到        ${tradeInfo.objAddress}'),
+                  Row(
+                    children: <Widget>[
+                      Text('${accountInfo.name} '+('${tradeInfo.amount>0?'In':'Out'}'),style: TextStyle(fontSize: 18,fontWeight: FontWeight.w400),),
+                      Container(
+                          margin: EdgeInsets.only(left: 10),
+                          decoration: BoxDecoration(
+                            color: Colors.grey[200],
+                            borderRadius: BorderRadius.circular(10)
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 4,horizontal: 8),
+                            child: Text(
+                              tradeInfo.state==0?
+                                  WalletLocalizations.of(context).wallet_trade_info_detail_finish_state1
+                                : WalletLocalizations.of(context).wallet_trade_info_detail_finish_state2,
+                              style: TextStyle(color:Colors.grey[500]),),
+                          )
+                      )
+                    ],
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                  ),
                   Padding(
-                    padding: const EdgeInsets.only(top: 4),
-                    child: Text('完成${index}'),
-                  )
+                    padding: const EdgeInsets.only(top: 12),
+                    child: Text('${tradeInfo.objAddress}',style: TextStyle(color: Colors.grey,fontWeight: FontWeight.bold)),
+                  ),
               ],),
             ),
-            Icon(Icons.arrow_upward),
-            Padding(
-              padding: const EdgeInsets.only(top: 4),
-              child: Text(DateFormat('yyyy-MM-dd kk:mm').format(tradeInfo.tradeDate)),
-            )
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: <Widget>
+              [
+                Text((tradeInfo.amount>0?'+':'-')+'${tradeInfo.amount.toStringAsFixed(8)}',style: TextStyle( fontSize:16,color:tradeInfo.amount>0?Colors.green:Colors.red,fontWeight: FontWeight.bold),),
+                Padding(
+                  padding: const EdgeInsets.only(top: 12),
+                  child: Text(DateFormat('yyyy.MM.dd').format(tradeInfo.tradeDate)),
+                )
+            ],),
           ],
         ),
       ),
     );
   }
 
-  //头部 112
+  //头部
   Container buildHeader() {
     return Container(
-        padding: EdgeInsets.only(top: 30,bottom: 20),
+        height: 160,
+        width: MediaQuery.of(context).size.width,
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
             Padding(
-              padding: const EdgeInsets.all(8.0),
+              padding: const EdgeInsets.only(top: 30),
               child: Text(
                   accountInfo.amount.toStringAsFixed(8),
-                  style: TextStyle(fontSize: 20,fontWeight: FontWeight.w600),
+                  style: TextStyle(fontSize: 30,color: Colors.white,fontWeight: FontWeight.w600),
               ),
             ),
             Padding(
-              padding: const EdgeInsets.only(top:0),
+              padding: const EdgeInsets.only(top: 12),
               child: Text(
                   "=\$ "+accountInfo.legalTender.toStringAsFixed(2),
-                  style: TextStyle(fontSize: 16),
+                  style: TextStyle(fontSize: 20,color: Colors.white54),
               ),
             ),
           ],
@@ -165,51 +185,38 @@ class _WalletDetailContentState extends State<WalletDetailContent> {
 
   Widget buildFooter() {
     return Container(
-        margin: EdgeInsets.only(top: 15,bottom: 20),
+        margin: EdgeInsets.only(top: 2,bottom: 6,left: 10,right: 10),
         child:Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: <Widget>[
-            RaisedButton(
-              onPressed: (){
+            Expanded(
+              child: RaisedButton(
+                onPressed: (){
+                  Navigator.of(context).push(MaterialPageRoute(builder: (BuildContext context){
+                    return WalletSend();
+                  }));
+                },
+                child: Text(WalletLocalizations.of(context).wallet_detail_content_send ,style: TextStyle(fontSize: 18,color: Colors.blue),),
+                color: AppCustomColor.btnCancel,
+                padding: EdgeInsets.symmetric(vertical:12),
+              ),
+            ),
+            SizedBox(width: 30,),
+            Expanded(
+              child: RaisedButton(
+                onPressed: (){
+
                   Navigator.of(context).push(MaterialPageRoute(builder: (BuildContext context){
                     return ReceivePage();
                   }));
-              },
-              child: Text('收款'),
-              padding: EdgeInsets.symmetric(horizontal: 60,vertical:6),
-            ),
-            RaisedButton(
-              onPressed: (){
-                Navigator.of(context).push(MaterialPageRoute(builder: (BuildContext context){
-                  return WalletSend();
-                }));
-              },
-              child: Text('转账'),
-              padding: EdgeInsets.symmetric(horizontal: 60,vertical:6)
+                },
+                child: Text(WalletLocalizations.of(context).wallet_detail_content_receive ,style: TextStyle(fontSize: 18, color: Colors.white)),
+                padding: EdgeInsets.symmetric(vertical:12),
+                color: AppCustomColor.btnConfirm,
+              ),
             ),
           ],
         ),
       );
-  }
-}
-//交易记录的那四个按钮模板
-class CustomButtonForCategory extends StatelessWidget {
-  final String name;
-  final Function callback;
-  const CustomButtonForCategory({ Key key,@required this.name,this.callback}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return InkWell(
-      onTap: ()=>this.callback(),
-      child: Container(
-          padding: EdgeInsets.symmetric(vertical: 4,horizontal: 12),
-          decoration: BoxDecoration(
-            border:Border.all(color: Colors.black54),
-            borderRadius: BorderRadius.all(Radius.circular(6))
-          ),
-          child: Text(this.name)
-      ),
-    );
   }
 }
