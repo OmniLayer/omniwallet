@@ -17,8 +17,7 @@ class _MarketPageState extends State<MarketPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        automaticallyImplyLeading: false,
-        leading: null,
+        centerTitle: true,
         title: Text(WalletLocalizations.of(context).marketPageAppBarTitle),
       ),
 

@@ -89,4 +89,18 @@ class WalletModel extends Model{
     }
     return infoes;
   }
+
+  /**
+   * 转账信息
+   */
+  SendInfo _sendInfo = null ;
+  set sendInfo(SendInfo info){
+    this._sendInfo = info;
+  }
+  SendInfo get sendInfo{
+    if(this._sendInfo==null){
+      this._sendInfo = SendInfo();
+    }
+    return _sendInfo;
+  }
 }

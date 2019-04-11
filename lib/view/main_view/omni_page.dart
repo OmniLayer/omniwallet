@@ -12,7 +12,9 @@ class _OmniPageState extends State<OmniPage> {
       appBar: AppBar(
         automaticallyImplyLeading: false,
         leading: null,
-        title: Center(child: Text('omniDe')),
+        centerTitle: true,
+//        title: Center(child: Text('omniDe')),
+        title: Text('omniDe'),
       ),
     );
   }

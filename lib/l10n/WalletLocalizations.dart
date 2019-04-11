@@ -13,14 +13,17 @@ class WalletLocalizations{
       'backup_index_title': '备份钱包',
       'backup_index_laterbackup': '稍后备份',
       'backup_index_btn': '备份钱包助记词',
+      'backup_index_tips_title': '请立即备份您的钱包!',
       'backup_index_tips': '注意：请备份你的钱包账户，Omniwallet 不会访问你的账户、不能恢复私钥、重置密码。你自己控制自己的钱包和资产安全。',
       'backup_index_prompt_tips': '任何人得到你的助记词将能获得你的资产。\n请抄写在纸上妥善保管。',
       'backup_index_prompt_title': '不要截屏',
       'backup_words_title': '备份助记词',
-      'backup_words_next': '下一步',
+      'backup_words_next': '继续',
       'backup_words_content': '请仔细抄写下方助记词，我们将在\n下一步验证。',
+      'backup_words_warn': "不要和他人分享你的助记词，保护好他们",
       'backup_words_order_title': '确认助记词',
       'backup_words_order_content': '请按顺序点击助记词，以确认您\n正确备份。',
+      'backup_words_order_error': '顺序错误，重试一次！',
       'backup_words_order_finish': '完成',
 
       'welcomePageOneTitle' : '欢迎加入 Omni 平台！',
@@ -29,7 +32,7 @@ class WalletLocalizations{
           "如您愿意继续使用我们的平台，您同意接受与您SEED损失相关的所有风险。如果您丢失了SEED，"
           "您同意并承认 Omni 平台不会对此造成的负面后果承担责任。",
       'welcomePageOneButton' : '您需要知道的关于您的SEED信息',
-      
+
       'welcomePageTwoTitle' : '您需要知道关于您的SEED的信息',
       'welcomePageTwoContentOne' : "注册您的账户时，您要保存您的密码（SEED）并使用密码来保护您的账户。"
           "用普通的中央服务器上，您特别注意密码, 而且您可以通过电子邮件更改和重置密码。然而，Omni 与众不同 — "
@@ -59,10 +62,12 @@ class WalletLocalizations{
       'startPageAppBarTitle' : 'LunarX Omniwallet',
       'startPageButtonFirst' : '      开始使用      ',
       'startPageButtonSecond' : '      恢复钱包      ',
-      'startPageLanguageBarTitle' : '语言',
+      'startPageLanguageBarTitle' : '多语言',
 
       'main_page_title' : '钱包',
       'common_btn_skip' : '跳过',
+      'common_btn_copy' : '复制',
+      'common_btn_save': '保存',
 
       'marketPageAppBarTitle' : '行情',
       'marketPageFav' : '自选',
@@ -70,28 +75,112 @@ class WalletLocalizations{
       'marketPagePrice' : '价格',
       'marketPageChange' : '涨跌幅',
 
-      'myProfilePageMenu1' : '使用设置',
+      'myProfilePageMenu1' : '设置',
       'myProfilePageMenu2' : '钱包地址本',
-      'myProfilePageMenu3' : '帮助与反馈',
+      'myProfilePageMenu3' : '帮助和反馈',
       'myProfilePageMenu4' : '服务条款',
       'myProfilePageMenu5' : '备份钱包',
-      'myProfilePageMenu6' : '关于我们',
+      'myProfilePageMenu6' : '关于',
+
+      'settingsPageTitle' : '设置',
+      'settingsPageItem_1_Title' : '多语言',
+      'settingsPageItem_2_Title' : '货币',
+      'settingsPageItem_3_Title' : '主题颜色',
+
+      'helpPageTitle' : '帮助',
+      'helpPageItemTitle' : '常见问题',
+      'helpPageFeedback' : '提交反馈',
+
+      'feedbackPageTitle' : '提交反馈',
+      'feedbackPageInputTitleTooltip' : '标题',
+      'feedbackPageContentTooltip' : '内容',
+      'feedbackPageEmailTooltip' : '电子邮件',
+      'feedbackPageUploadPicTitle' : '上传图片',
+      'feedbackPageSubmitButton' : '提交',
+
+      "createNewAddress_title":"创建新的地址",
+      "createNewAddress_hint1":"地址名称",
+      "createNewAddress_Add":"添加",
+      "createNewAddress_Cancel":"取消",
+      "createNewAddress_WrongAddress":"请输入地址名称",
+      "address_book_title":"地址簿",
+
+      'serviceTermsPageAppBarTitle' : '服务条款',
+
+      'aboutPageAppBarTitle' : '关于',
+      'aboutPageAppName' : 'Omni 钱包',
+      'aboutPageItem_1' : '版本日志',
+      'aboutPageItem_2' : '官方网站',
+      'aboutPageItem_3' : '推特',
+      'aboutPageItem_4' : '微信',
+      'aboutPageItem_5' : '电报群',
+      'aboutPageButton' : '版本更新',
+
+      'userInfoPageAppBarTitle' : '用户信息',
+      'userInfoPageItem_1_Title' : '头像',
+      'userInfoPageItem_2_Title' : '用户名',
+      'userInfoPageButton' : '删除当前钱包',
+
+      'buttom_tab1_name' : '钱包',
+      'buttom_tab2_name' : '市场',
+      'buttom_tab3_name' : 'DEX',
+      'buttom_tab4_name' : '我的',
+
+      'wallet_detail_content_send' : '转账',
+      'wallet_detail_content_receive' : '收款',
+      'wallet_receive_page_copy' : '复制',
+      'wallet_receive_page_share' : '分享',
+      'wallet_receive_page_tips_copy' : '复制成功',
+      'wallet_receive_page_tips_share' : '分享成功',
+      'wallet_send_page_to' : '转到',
+      'wallet_send_page_input_address_hint' : '请输入地址',
+      'wallet_send_page_input_address_error' : '地址为空',
+      'wallet_send_page_title_amount' : '数量',
+      'wallet_send_page_title_balance' : '余额',
+      'wallet_send_page_input_amount' : '请输入数量',
+      'wallet_send_page_input_amount_error' : '数量不对',
+      'wallet_send_page_title_note' : '备注',
+      'wallet_send_page_input_note' : '选填',
+      'wallet_send_page_title_minerFee' : '矿工费用',
+      'wallet_send_page_title_minerFee_input_title' : '自定义',
+
+      'wallet_trade_info_detail_title' : '交易记录详情',
+      'wallet_trade_info_detail_title2' : '转账',
+      'wallet_trade_info_detail_finish_state1' : '确认中',
+      'wallet_trade_info_detail_finish_state2' : '已完成',
+
+      'languagePageAppBarTitle' : '多语言',
+      'languagePageSaveButton' : '保存',
+      
+      'createAccountPageAppBarTitle' : '创建新账号',
+      'createAccountPageTooltip_1' : '账号名',
+      'createAccountPageTooltip_2' : '密码',
+      'createAccountPageTooltip_3' : '重复密码',
+      'createAccountPageTooltip_4' : '最少8个字符',
+      'createAccountPageButton' : '创建',
+
+      'imagePickerBottomSheet_1' : '从手机相册选择',
+      'imagePickerBottomSheet_2' : '拍照',
     },
 
     'en': {
       'main_index_title': 'LunarX Omniwallet',
       'backup_index_prompt_btn': 'I got it',
-      'backup_index_title': 'Backup the wallet',
-      'backup_index_laterbackup': 'Backup later',
-      'backup_index_btn': 'Backup wallet mnemonic',
-      'backup_index_tips': 'Note: please backup your Wallet account. Omniwallet does not access your account, cannot restore any private keys, or reset your password. You are in control of your own wallet and asset security.',
+      'backup_index_title': 'Back Up Wallet',
+      'backup_index_laterbackup': 'Later',
+      'backup_index_btn': 'Back Up Mnemonic Phrase',
+      'backup_index_tips_title': 'Back up your wallet now!',
+      'backup_index_tips': 'Notice: please back up your wallet, Omni will never visit your account, can not restore your private key or reset your password. You will manage your wallet on your own, and make sure the safety of your asset.',
       'backup_index_prompt_tips': 'Anyone who gets access to your mnemonic will have access to your assets. Please copy it onto paper and store securely for safekeeping.',
       'backup_index_prompt_title': "Do Not Use Screenshots!",
-      'backup_words_title': 'Back up your mnemonic',
-      'backup_words_next': 'next',
-      'backup_words_content': "Please copy the mnemonic words carefully,\nwe will verify them in the next step.",
+      'backup_words_title': 'Back Up Mnemonic Phrase',
+      'backup_words_next': 'Next',
+      'backup_words_content': "Write down or copy these words in the right order and save them somewhere safe.",
+      'backup_words_warn': "Never share recovery phrase with anyone,store it securely!",
+
       'backup_words_order_title': 'Confirm mnemonic words',
-      'backup_words_order_content': 'Please click mnemonic words in order to \nmake sure that you backup correctly',
+      'backup_words_order_content': 'Click the following 12-word phrase in exact sequence, to make sure you have a correct backup.',
+      'backup_words_order_error': 'Invalid order.Try again!',
       'backup_words_order_finish': 'Finish',
 
       'welcomePageOneTitle' : 'Welcome to the Omni Platform!',
@@ -147,8 +236,10 @@ class WalletLocalizations{
       'startPageButtonSecond' : '   Restore wallet   ',
       'startPageLanguageBarTitle' : 'Language',
 
-      'main_page_title' : 'Wallet',
+      'main_page_title' : 'My Wallet',
       'common_btn_skip' : 'Skip',
+      'common_btn_copy' : 'Copy',
+      'common_btn_save' : 'Save',
 
       'marketPageAppBarTitle' : 'Quotation',
       'marketPageFav' : 'Favorites',
@@ -158,12 +249,164 @@ class WalletLocalizations{
 
       'myProfilePageMenu1' : 'Settings',
       'myProfilePageMenu2' : 'Address Book',
-      'myProfilePageMenu3' : 'Help and Feed back',
+      'myProfilePageMenu3' : 'Help and Feedback',
       'myProfilePageMenu4' : 'Service Terms',
-      'myProfilePageMenu5' : 'Backup Wallet',
-      'myProfilePageMenu6' : 'About Us',
+      'myProfilePageMenu5' : 'Back Up Wallet',
+      'myProfilePageMenu6' : 'About',
+
+      'settingsPageTitle' : 'Settings',
+      'settingsPageItem_1_Title' : 'Language',
+      'settingsPageItem_2_Title' : 'Currency',
+      'settingsPageItem_3_Title' : 'Theme',
+
+      'helpPageTitle' : 'Help',
+      'helpPageItemTitle' : 'FAQ',
+      'helpPageFeedback' : 'Feedback',
+
+      'feedbackPageTitle' : 'Submit Feedback',
+      'feedbackPageInputTitleTooltip' : 'Title',
+      'feedbackPageContentTooltip' : 'Content',
+      'feedbackPageEmailTooltip' : 'E-mail',
+      'feedbackPageUploadPicTitle' : 'Upload Picture',
+      'feedbackPageSubmitButton' : 'Submit',
+
+      "createNewAddress_title":"Create New Address",
+      "createNewAddress_hint1":"Address Name",
+      "createNewAddress_Add":"Add",
+      "createNewAddress_Cancel":"Cancel",
+      "createNewAddress_WrongAddress":"Please input address name",
+      "address_book_title":"Address Book",
+
+      'serviceTermsPageAppBarTitle' : 'Service Terms',
+
+      'aboutPageAppBarTitle' : 'About',
+      'aboutPageAppName' : 'Omni Wallet',
+      'aboutPageItem_1' : 'Version History',
+      'aboutPageItem_2' : 'Website',
+      'aboutPageItem_3' : 'Twitter',
+      'aboutPageItem_4' : 'Wechat',
+      'aboutPageItem_5' : 'Telegram',
+      'aboutPageButton' : 'Version Update',
+
+      'userInfoPageAppBarTitle' : 'User Information',
+      'userInfoPageItem_1_Title' : 'Avatar',
+      'userInfoPageItem_2_Title' : 'User Name',
+      'userInfoPageButton' : 'Delete Current Wallet',
+
+      'buttom_tab1_name' : 'Wallet',
+      'buttom_tab2_name' : 'Market',
+      'buttom_tab3_name' : 'DEX',
+      'buttom_tab4_name' : 'Me',
+
+      'wallet_detail_content_send' : 'Send',
+      'wallet_detail_content_receive' : 'Receive',
+      'wallet_receive_page_copy' : 'Copy',
+      'wallet_receive_page_share' : 'Share',
+      'wallet_receive_page_tips_copy' : 'copy success',
+      'wallet_receive_page_tips_share' : 'share success',
+
+      'wallet_send_page_to' : 'To',
+      'wallet_send_page_input_address_hint' : 'please input address',
+      'wallet_send_page_input_address_error' : 'empty address',
+
+      'wallet_send_page_title_amount' : 'Amount',
+      'wallet_send_page_title_balance' : 'Balance',
+      'wallet_send_page_input_amount' : 'please input amount',
+      'wallet_send_page_input_amount_error' : 'wrong amount',
+      'wallet_send_page_title_note' : 'Memo',
+      'wallet_send_page_input_note' : 'Optional',
+      'wallet_send_page_title_minerFee' : 'Miner Fee',
+      'wallet_send_page_title_minerFee_input_title' : 'Custom',
+
+      'wallet_trade_info_detail_title' : 'Transaction Details',
+      'wallet_trade_info_detail_title2' : 'Sent',
+      'wallet_trade_info_detail_finish_state1' : 'Confirming',
+      'wallet_trade_info_detail_finish_state2' : 'Finish',
+
+      'languagePageAppBarTitle' : 'Language',
+      'languagePageSaveButton' : 'Save',
+
+      'createAccountPageAppBarTitle' : 'Create New Account',
+      'createAccountPageTooltip_1' : 'Account name',
+      'createAccountPageTooltip_2' : 'Password',
+      'createAccountPageTooltip_3' : 'Confirm password',
+      'createAccountPageTooltip_4' : 'must be at least 8 characters',
+      'createAccountPageButton' : 'Create',
+
+      'imagePickerBottomSheet_1' : 'Choose from Album',
+      'imagePickerBottomSheet_2' : 'Take Photo',
     }
   };
+
+  // create account Page
+  get createAccountPageAppBarTitle => _localizedValues[locale.languageCode]['createAccountPageAppBarTitle'];
+  get createAccountPageTooltip_1 => _localizedValues[locale.languageCode]['createAccountPageTooltip_1'];
+  get createAccountPageTooltip_2 => _localizedValues[locale.languageCode]['createAccountPageTooltip_2'];
+  get createAccountPageTooltip_3 => _localizedValues[locale.languageCode]['createAccountPageTooltip_3'];
+  get createAccountPageTooltip_4 => _localizedValues[locale.languageCode]['createAccountPageTooltip_4'];
+  get createAccountPageButton => _localizedValues[locale.languageCode]['createAccountPageButton'];
+
+  // Select Language Page
+  get languagePageAppBarTitle => _localizedValues[locale.languageCode]['languagePageAppBarTitle'];
+  get languagePageSaveButton => _localizedValues[locale.languageCode]['languagePageSaveButton'];
+
+  get wallet_trade_info_detail_title => _localizedValues[locale.languageCode]['wallet_trade_info_detail_title'];
+  get wallet_trade_info_detail_title2 => _localizedValues[locale.languageCode]['wallet_trade_info_detail_title2'];
+  get wallet_trade_info_detail_finish_state1 => _localizedValues[locale.languageCode]['wallet_trade_info_detail_finish_state1'];
+  get wallet_trade_info_detail_finish_state2 => _localizedValues[locale.languageCode]['wallet_trade_info_detail_finish_state2'];
+
+  get buttom_tab1_name => _localizedValues[locale.languageCode]['buttom_tab1_name'];
+  get buttom_tab2_name => _localizedValues[locale.languageCode]['buttom_tab2_name'];
+  get buttom_tab3_name => _localizedValues[locale.languageCode]['buttom_tab3_name'];
+  get buttom_tab4_name => _localizedValues[locale.languageCode]['buttom_tab4_name'];
+
+  // User Information page
+  get userInfoPageAppBarTitle => _localizedValues[locale.languageCode]['userInfoPageAppBarTitle'];
+  get userInfoPageItem_1_Title => _localizedValues[locale.languageCode]['userInfoPageItem_1_Title'];
+  get userInfoPageItem_2_Title => _localizedValues[locale.languageCode]['userInfoPageItem_2_Title'];
+  get userInfoPageButton => _localizedValues[locale.languageCode]['userInfoPageButton'];
+
+  // Service Terms page
+  get serviceTermsPageAppBarTitle => _localizedValues[locale.languageCode]['serviceTermsPageAppBarTitle'];
+
+  // About page
+  get aboutPageAppBarTitle => _localizedValues[locale.languageCode]['aboutPageAppBarTitle'];
+  get aboutPageAppName => _localizedValues[locale.languageCode]['aboutPageAppName'];
+  get aboutPageItem_1 => _localizedValues[locale.languageCode]['aboutPageItem_1'];
+  get aboutPageItem_2 => _localizedValues[locale.languageCode]['aboutPageItem_2'];
+  get aboutPageItem_3 => _localizedValues[locale.languageCode]['aboutPageItem_3'];
+  get aboutPageItem_4 => _localizedValues[locale.languageCode]['aboutPageItem_4'];
+  get aboutPageItem_5 => _localizedValues[locale.languageCode]['aboutPageItem_5'];
+  get aboutPageButton => _localizedValues[locale.languageCode]['aboutPageButton'];
+
+  //wallet page createNewAddress dialog
+  get createNewAddress_title => _localizedValues[locale.languageCode]['createNewAddress_title'];
+  get createNewAddress_hint1 => _localizedValues[locale.languageCode]['createNewAddress_hint1'];
+  get createNewAddress_Add => _localizedValues[locale.languageCode]['createNewAddress_Add'];
+  get createNewAddress_Cancel => _localizedValues[locale.languageCode]['createNewAddress_Cancel'];
+  get createNewAddress_WrongAddress => _localizedValues[locale.languageCode]['createNewAddress_WrongAddress'];
+  get address_book_title => _localizedValues[locale.languageCode]['address_book_title'];
+
+  // Submit Feedback page
+  get feedbackPageTitle => _localizedValues[locale.languageCode]['feedbackPageTitle'];
+  get feedbackPageInputTitleTooltip => _localizedValues[locale.languageCode]['feedbackPageInputTitleTooltip'];
+  get feedbackPageContentTooltip => _localizedValues[locale.languageCode]['feedbackPageContentTooltip'];
+  get feedbackPageEmailTooltip => _localizedValues[locale.languageCode]['feedbackPageEmailTooltip'];
+  get feedbackPageUploadPicTitle => _localizedValues[locale.languageCode]['feedbackPageUploadPicTitle'];
+  get feedbackPageSubmitButton => _localizedValues[locale.languageCode]['feedbackPageSubmitButton'];
+  get imagePickerBottomSheet_1 => _localizedValues[locale.languageCode]['imagePickerBottomSheet_1'];
+  get imagePickerBottomSheet_2 => _localizedValues[locale.languageCode]['imagePickerBottomSheet_2'];
+  
+  // Help and Feedback page
+  get helpPageTitle => _localizedValues[locale.languageCode]['helpPageTitle'];
+  get helpPageItemTitle => _localizedValues[locale.languageCode]['helpPageItemTitle'];
+  get helpPageFeedback => _localizedValues[locale.languageCode]['helpPageFeedback'];
+
+  // Setting page
+  get settingsPageTitle => _localizedValues[locale.languageCode]['settingsPageTitle'];
+  get settingsPageItem_1_Title => _localizedValues[locale.languageCode]['settingsPageItem_1_Title'];
+  get settingsPageItem_2_Title => _localizedValues[locale.languageCode]['settingsPageItem_2_Title'];
+  get settingsPageItem_3_Title => _localizedValues[locale.languageCode]['settingsPageItem_3_Title'];
 
   // My profile page
   get myProfilePageMenu1 => _localizedValues[locale.languageCode]['myProfilePageMenu1'];
@@ -217,6 +460,7 @@ class WalletLocalizations{
 
   get backup_index_title => _localizedValues[locale.languageCode]['backup_index_title'];
   get backup_index_laterbackup => _localizedValues[locale.languageCode]['backup_index_laterbackup'];
+  get backup_index_tips_title => _localizedValues[locale.languageCode]['backup_index_tips_title'];
   get backup_index_tips => _localizedValues[locale.languageCode]['backup_index_tips'];
   get backup_index_btn => _localizedValues[locale.languageCode]['backup_index_btn'];
   get backup_index_prompt_title => _localizedValues[locale.languageCode]['backup_index_prompt_title'];
@@ -226,15 +470,37 @@ class WalletLocalizations{
   get backup_words_title => _localizedValues[locale.languageCode]['backup_words_title'];
   get backup_words_content => _localizedValues[locale.languageCode]['backup_words_content'];
   get backup_words_next => _localizedValues[locale.languageCode]['backup_words_next'];
+  get backup_words_warn => _localizedValues[locale.languageCode]['backup_words_warn'];
 
   get backup_words_order_title => _localizedValues[locale.languageCode]['backup_words_order_title'];
   get backup_words_order_content => _localizedValues[locale.languageCode]['backup_words_order_content'];
+  get backup_words_order_error => _localizedValues[locale.languageCode]['backup_words_order_error'];
   get backup_words_order_finish => _localizedValues[locale.languageCode]['backup_words_order_finish'];
 
   String get main_page_title => _localizedValues[locale.languageCode]['main_page_title'];
 
   String get common_btn_skip => _localizedValues[locale.languageCode]['common_btn_skip'];
+  String get common_btn_copy => _localizedValues[locale.languageCode]['common_btn_copy'];
+  String get common_btn_save => _localizedValues[locale.languageCode]['common_btn_save'];
 
+
+  String get wallet_detail_content_send => _localizedValues[locale.languageCode]['wallet_detail_content_send'];
+  String get wallet_detail_content_receive => _localizedValues[locale.languageCode]['wallet_detail_content_receive'];
+  String get wallet_receive_page_copy => _localizedValues[locale.languageCode]['wallet_receive_page_copy'];
+  String get wallet_receive_page_share => _localizedValues[locale.languageCode]['wallet_receive_page_share'];
+  String get wallet_receive_page_tips_copy => _localizedValues[locale.languageCode]['wallet_receive_page_tips_copy'];
+  String get wallet_receive_page_tips_share => _localizedValues[locale.languageCode]['wallet_receive_page_tips_share'];
+  String get wallet_send_page_to => _localizedValues[locale.languageCode]['wallet_send_page_to'];
+  String get wallet_send_page_input_address_hint => _localizedValues[locale.languageCode]['wallet_send_page_input_address_hint'];
+  String get wallet_send_page_input_address_error => _localizedValues[locale.languageCode]['wallet_send_page_input_address_error'];
+  String get wallet_send_page_title_amount => _localizedValues[locale.languageCode]['wallet_send_page_title_amount'];
+  String get wallet_send_page_title_balance => _localizedValues[locale.languageCode]['wallet_send_page_title_balance'];
+  String get wallet_send_page_input_amount => _localizedValues[locale.languageCode]['wallet_send_page_input_amount'];
+  String get wallet_send_page_input_amount_error => _localizedValues[locale.languageCode]['wallet_send_page_input_amount_error'];
+  String get wallet_send_page_title_note => _localizedValues[locale.languageCode]['wallet_send_page_title_note'];
+  String get wallet_send_page_input_note => _localizedValues[locale.languageCode]['wallet_send_page_input_note'];
+  String get wallet_send_page_title_minerFee => _localizedValues[locale.languageCode]['wallet_send_page_title_minerFee'];
+  String get wallet_send_page_title_minerFee_input_title => _localizedValues[locale.languageCode]['wallet_send_page_title_minerFee_input_title'];
 
   static WalletLocalizations of (BuildContext context){
     return Localizations.of(context, WalletLocalizations);
