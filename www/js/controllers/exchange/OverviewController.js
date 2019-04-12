@@ -18,7 +18,7 @@ angular.module("omniControllers")
     $scope.loading = true;
     $scope.orderbook = [];
     var transaction_data = [];
-    var coin = currency || $scope.activeCurrencyPair[1].propertyid == 1 ? 'OMNI' : 'T-OMNI';
+    var coin = currency || $scope.activeCurrencyPair[1].propertyid == 1 ? 'OMN' : 'TOMN';
     var postData = {
       type: 'TIME',
       currencyType: coin,
