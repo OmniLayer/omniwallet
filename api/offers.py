@@ -60,7 +60,7 @@ def mapSchema(row):
       'action': -1, #don't have this data
       'block': str(row[-5]),
       'currencyId': str(rawdata['propertyid']),
-      'currency_str': 'Omni' if str(rawdata['propertyid']) == '1' else 'Test Omni',
+      'currency_str': 'Omni Token' if str(rawdata['propertyid']) == '1' else 'Test Omni Token',
       'formatted_amount': str(rawdata['amount']),
       'formatted_amount_available': '%.8f' % ( Decimal(row[1]) / Decimal(1e8) ),
       'formatted_bitcoin_amount_desired': '%.8f' % ( Decimal(row[2]) / Decimal(1e8) ),
@@ -89,7 +89,7 @@ def mapSchema(row):
       'block': str(row[-5]),
       'status': 'valid' if row[5] == 'unpaid' or row[5] == 'paid-partial' else 'closed',
       'currencyId': str(rawdata['propertyid']),
-      'currency_str': 'Omni' if str(rawdata['propertyid']) == '1' else 'Test Omni',
+      'currency_str': 'Omni Token' if str(rawdata['propertyid']) == '1' else 'Test Omni Token',
       'formatted_amount': '%.8f' % remaining,
       'sell_offer_txid': selljson['txid'],
       #'formatted_amount_available': str( row[1] / Decimal(1e8) ),

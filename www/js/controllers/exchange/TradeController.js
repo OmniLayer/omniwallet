@@ -61,7 +61,7 @@ angular.module("omniControllers")
 
 		  PropertyManager.getProperty(1).then(function(result){
 		  	var omni = result.data;
-		  	omni.symbol  = "OMNI";
+		  	omni.symbol  = "OMN";
 			if ($scope.account.loggedIn) {
 			  	$scope.currPairs.splice(0,0,{0:$scope.wallet.getAsset(0),1:omni,active:true});
 			} else {
@@ -72,7 +72,7 @@ angular.module("omniControllers")
 		  if ( !$scope.account.loggedIn || $scope.account.getSetting("showtesteco") === 'true'){
 		    PropertyManager.getProperty(2).then(function(result){
 		    	var tomni = result.data;
-		  		tomni.symbol  = "T-OMNI";
+		  		tomni.symbol  = "TOMN";
 				if ($scope.account.loggedIn) {
 				  	$scope.currPairs.splice(1,0,{0:$scope.wallet.getAsset(0),1:tomni});
 				} else {

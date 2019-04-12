@@ -77,7 +77,7 @@
 		"ERROR":"Sorry, the code you entered is incorrect. Please double check and try again.",
 		"SUBMIT":"One moment while we verify and process your request, this should take less than a minute.",
 		"GENERROR1":"There was a problem generating a new secret. Please wait a moment and try again.",
-		"GENERROR2":"If this error continues to happen please notify the Omni team.",
+		"GENERROR2":"If this error continues to happen please notify the Omniwallet team.",
 		"IMPORT":"To setup your account to require an MFA device scan the QR code below or manually enter the secret listed below into your MFA Device/Software (Google Authenticator, Authy, etc..)",
 		"SEC1":"Your Token Secret is",
 		"SEC2":"Store this safely and securely because",
@@ -119,7 +119,7 @@
 			"FOUNDATION":{
 				"TITLE":"Omni Foundation",
 				"FIRST":"In September 2013, the Mastercoin Foundation was formed to temporarily manage the funds in the Exodus Address and the distribution of the development MSC. The board of the Mastercoin Foundation has declared its intention to minimize its temporary central role by transitioning the decision making to Mastercoin owners through proof of stake voting.",
-				"SECOND": "In January 2016 the Mastercoin Foundation was rebranded to the Omni Foundation and the primary tokens of the project, MSC, where renamed to OMNI. The Foundation advocates for the use of the Omni Protocol and tries to build a community of people who develop it. All budget items, board minutes, Dev OMNI vesting schedule, and bounties are public record and available to anyone on the ",
+				"SECOND": "In January 2016 the Mastercoin Foundation was rebranded to the Omni Foundation and the primary tokens of the project, MSC, where renamed to Omni Tokens (OMN). The Foundation advocates for the use of the Omni Protocol and tries to build a community of people who develop it. All budget items, board minutes, Dev OMN vesting schedule, and bounties are public record and available to anyone on the ",
 				"LINK": "Foundation's Website"
 			},
 			"PROTOCOL":{
@@ -131,7 +131,7 @@
 			},
 			"TOKEN":{
 				"TITLE":"Omnis",
-				"FIRST" : "Omnis (symbol OMNI) are digital tokens that are necessary for the use of some features of the Omni Protocol. The total number of Omnis in existence is 619,478.6 and no more OMNI will ever be created. Additionally, Omnis can not be mined into existence. The 619,478.6 OMNI were generated as a result of a public fundraiser in the style of Kickstarter.com."
+				"FIRST" : "Omni Tokens (symbol OMN) are digital tokens that are necessary for the use of some features of the Omni Protocol. The total number of OMNs in existence is 619,478.6 and no more OMN will ever be created. Additionally, OMNs can not be mined into existence. The 619,478.6 OMN were generated as a result of a public fundraiser in the style of Kickstarter.com."
 			},
 			"INFO":"Information from the ",
 			"EDUCATION":"Omni Protocol Education"
@@ -154,9 +154,9 @@
 			},
 			"MULTICURRENCY" : {
 				"TITLE" : "Multi-currency support",
-				"BUILT" : "Omniwallet comes with a pre-built support for Bitcoin, Omni and Test Omni",
+				"BUILT" : "Omniwallet comes with a pre-built support for Bitcoin, Omni Token and Test Omni Token",
 				"SUPPORT" : "Native support for Smart Property and User-Generated Currencies",
-				"ALT" : "Alt-coin support  - Omniwallet has plans to support coins that go outside of the usual Omni ecosystem, such as Litecoin, Peercoin and more"
+				"ALT" : ""
 			},
 			"STATUS" :{
 				"TITLE" : "Current Status",
@@ -196,7 +196,7 @@
 		"OFFERS":"Offers",
 		"SETTINGS":"Account Settings",
 		"TRADE":"Trade",
-		"DEX1":"BTC/OMNI",
+		"DEX1":"BTC/OMN",
 		"TRANSACTIONS":"Transactions",
 		"WALLET":"My Wallet",
 		"OMNIDEX":"OmniDex"
@@ -272,18 +272,18 @@
 				"OFFLINE":"Offline"
 			},
 			"WATCH":{
-				"TITLE":"Import a Watch Only BTC/OMNI Address",
+				"TITLE":"Import a Watch Only BTC/Omni Layer Address",
 				"ADDRESS":"Enter Address",
 				"DESC":"Watch Only"
 			},
 			"ENCRYPTED":{
-				"TITLE":"Import an Encrypted BTC/OMNI Private Key",
+				"TITLE":"Import an Encrypted BTC/Omni Layer Private Key",
 				"KEY":"Enter Encrypted Key (Send/Receive)",
 				"KEYHOLDER":"enter your encrypted private key",
 				"PASSHOLDER":"enter your passphrase"
 			},
 			"PRIVATE":{
-				"TITLE":"Import a BTC/OMNI Private Key",
+				"TITLE":"Import a BTC/Omni Layer Private Key",
 				"ENTER":"Enter",
 				"KEY":"Private Key",
 				"ENABLE":"Enable Sending",
@@ -292,7 +292,7 @@
 			"WALLET":{
 				"TITLE":"Import a Wallet Backup",
 				"UPLOAD":"Upload backup file",
-				"INVALID":"Must be a valid Omnicore backup file"
+				"INVALID":"Must be a valid Omniwallet backup file"
 			}
 		},
 		"EXPORT":{
