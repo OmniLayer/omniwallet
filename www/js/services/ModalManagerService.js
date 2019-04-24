@@ -456,6 +456,7 @@ angular.module("omniServices")
                         if(address.privkey){
                           var eckey = new Bitcoin.ECKey(address.privkey);
                           addr = eckey.getBitcoinAddress().toString();
+                          address.address = addr;
                         }
                         
                         if(Bitcoin.Address.validate(addr)){
