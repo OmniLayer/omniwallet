@@ -14,7 +14,6 @@ angular.module("omniConfig")
 		"ADDRESSES":"Addresses",
 		"ASSETS":"Assets",
 		"ASSET":"Asset",
-		"OVERVIEW":"Overview",
    		"SEND":"Send",
    		"VALUE":"Value",
 		"CREATEWALLET":"Create Wallet",
