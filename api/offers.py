@@ -31,7 +31,7 @@ def offers_response(response_dict):
 
 def filterOffersByTime( currency_type , time_seconds):
     #filter by currency
-    currency = ('1' if (currency_type == 'OMNI' or currency_type == 'MSC') else '2')
+    currency = ('1' if (currency_type in ['OMNI','OMN','MSC'] ) else '2')
 
     atleast_now = int( str( int(time.time() - time_seconds) ) + '000' )
 
