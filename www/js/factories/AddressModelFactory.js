@@ -72,7 +72,7 @@ angular.module("omniFactories")
 						if (!check) {
 							console.log("ALERT! Private key/Address check MISMATCH. Expected",hash,"but received",addr,"Downgrading to watch-only");
 						}
-					} else if (pubkey and pubkey.length > 65) {
+					} else if (pubkey && pubkey.length > 65) {
 						var bitcore = require('bitcore-lib');
 						var pub = bitcore.PublicKey(pubkey);
 						var addr = pub.toAddress().toString();
