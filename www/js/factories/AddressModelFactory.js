@@ -11,6 +11,7 @@ angular.module("omniFactories")
 					self.hash = hash;
 					self.privkey = privkey;
 					self.pubkey = pubkey;
+					self.keyCheck = self.checkKeys();
 					self.balance = [];
 					self.assets = [];
 					self.qr = "https://chart.googleapis.com/chart?chs=150x150&cht=qr&chl="+hash+"&choe=UTF-8";
@@ -58,6 +59,29 @@ angular.module("omniFactories")
 							$rootScope.$broadcast("address:loaded", {hash:hash});
 						}
 					}
+				}
+				self.checkKeys = function(){
+					hash=self.hash;
+					pubkey=self.pubkey;
+					privkey=self.privkey;
+					check=false;
+					if (privkey && privkey.length == 58) {
+						var ecKey = Bitcoin.ECKey.decodeEncryptedFormat(privkey, hash);
+						var addr = ecKey.getBitcoinAddress().toString();
+						check = (addr == hash);
+						if (!check) {
+							console.log("ALERT! Private key/Address check MISMATCH. Expected",hash,"but received",addr,"Downgrading to watch-only");
+						}
+					} else if (pubkey and pubkey.length > 65) {
+						var bitcore = require('bitcore-lib');
+						var pub = bitcore.PublicKey(pubkey);
+						var addr = pub.toAddress().toString();
+						check = (addr == hash);
+						if (!check) {
+							console.log("ALERT! Armory Public key/Address check MISMATCH. Expected",hash,"but received",addr,"Downgrading to watch-only");
+						}
+					}
+					return check
 				}
 
 				self.transactions = function(showtesteco){

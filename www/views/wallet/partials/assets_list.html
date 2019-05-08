@@ -32,19 +32,19 @@
 					<tbody>
 					  <tr ng-repeat="address in asset.addresses()">
 						<td class="hide-xs"></td>
-						<td ng-show="address.pubkey != undefined">
+						<td ng-show="address.pubkey != undefined && address.keyCheck">
 							<img ng-src="{{address.qr}}" ng-show="showqr"><a href ng-click="showqr = !showqr">{{address.hash}}</a> 
 							<a href="/about/faq" target="_new">
 								<span class="glyphicon glyphicon-off" tooltip="This is an Armory Offline address. (Click for more info)"></span>
 							</a>
 						</td>
-				            <td ng-show="address.privkey != undefined">
+				            <td ng-show="address.privkey != undefined && address.keyCheck">
 				            	<img ng-src="{{address.qr}}" ng-show="showqr"><a href ng-click="showqr = !showqr">{{address.hash}}</a> 
 				            	<a href="/about/faq" target="_new">
 				            		<span class="glyphicon glyphicon-lock" tooltip="Your Wallet has the Private key for this address. (Click for more info)"></span>
 				            	</a>
 				            </td>
-				            <td ng-hide="address.privkey != undefined || address.pubkey != undefined">
+				            <td ng-hide="address.keyCheck">
 				            	<img ng-src="{{address.qr}}" ng-show="showqr"><a href ng-click="showqr = !showqr">{{address.hash}}</a>
 				            	<a href="/about/faq" target="_new">
 				            		<span class="glyphicon glyphicon-warning-sign" tooltip="Watch-ONLY Address. Can NOT Spend (Click for more info)"></span>
