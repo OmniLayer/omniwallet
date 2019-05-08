@@ -1,4 +1,4 @@
-<div class="container-fluid asset-table" ng-repeat="address in wallet.addresses" ng-if="address.privkey == undefined && address.pubkey == undefined">
+<div class="container-fluid asset-table" ng-repeat="address in wallet.addresses" ng-if="!address.keyCheck">
     <div class="row">
         <div class="col-xs-11">
             <div class="col-xs-12 col-sm-6">

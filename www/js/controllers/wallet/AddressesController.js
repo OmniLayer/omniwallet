@@ -13,10 +13,9 @@ angular.module("omniControllers")
     $scope.watchonly = false;
 
     $scope.wallet.addresses.forEach(function(addr){
-      if (addr.privkey != undefined || addr.pubkey != undefined) {
+      if (addr.keyCheck) {
         $scope.spendable = true;
-      }
-      if(addr.privkey == undefined && addr.pubkey == undefined) {
+      } else {
         $scope.watchonly = true;
       }
     });
