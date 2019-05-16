@@ -1,6 +1,10 @@
+import 'dart:async';
+
+import 'package:bitcoin_flutter/bitcoin_flutter.dart';
+import 'package:flutter/material.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:wallet_app/model/wallet_info.dart';
-import 'dart:math';
+import 'package:wallet_app/view_model/state_lib.dart';
 
 class WalletModel extends Model{
 
@@ -14,14 +18,6 @@ class WalletModel extends Model{
     return _currWalletInfo;
   }
 
-  num _currWalletIndex=0;
-  set currWalletIndex(num value){
-    this._currWalletIndex = value;
-  }
-  num get currWalletIndex{
-    return _currWalletIndex;
-  }
-
   AccountInfo _currAccountInfo;
   set currAccountInfo(AccountInfo info){
     this._currAccountInfo = info;
@@ -29,14 +25,6 @@ class WalletModel extends Model{
   }
   AccountInfo get currAccountInfo{
     return _currAccountInfo;
-  }
-
-  num _currAccountIndex=0;
-  set currAccountIndex(num value){
-    this._currAccountIndex = value;
-  }
-  num get currAccountIndex{
-    return _currAccountIndex;
   }
 
 
@@ -49,45 +37,172 @@ class WalletModel extends Model{
     return _currTradeInfo;
   }
 
-  List<WalletInfo> get  walletInfoes {
-    if(this._walletInfoes==null){
-      this._walletInfoes = [];
-      int walletCount = 1+Random().nextInt(10);
-      for(int i=0;i<walletCount;i++){
-        List<AccountInfo> accountInfo = [];
-        int accountCount = 1+Random().nextInt(10);
-        num totalMoney = 0;
-        for(int j=0;j<accountCount;j++){
-          num money = Random().nextDouble();
-          accountInfo.add(AccountInfo(name: '币种${j+1}',amount:Random().nextDouble(),legalTender:money ));
-          totalMoney+=money;
+  setWalletInfoes(List<WalletInfo> info,{bool rightNow = false}){
+    if(rightNow){
+      this._walletInfoes = info;
+    }else{
+      if(info==null&&_loadLastTime!=null){
+        var now = DateTime.now();
+        var duration = now.difference(_loadLastTime);
+        if(duration.inSeconds>15){
+          this._walletInfoes = null;
         }
-        WalletInfo info = WalletInfo(name: '钱包${i+1}',address: "address${i+1}",totalLegalTender: totalMoney,note: "note${i+1}",accountInfoes: accountInfo);
-        _walletInfoes.add(info);
+      }else{
+        this._walletInfoes = info;
       }
     }
-    notifyListeners();
+  }
+
+  DateTime _loadLastTime  = null;
+  List<WalletInfo> getWalletInfoes(BuildContext context) {
+    if(this._walletInfoes==null){
+      this._walletInfoes = [];
+      Future future = NetConfig.get(context,NetConfig.addressList);
+      future.then((data){
+        if(data!=null){
+
+          _loadLastTime = DateTime.now();
+
+          double btcRate = GlobalInfo.usdRateInfo.btcs[0];
+          if(GlobalInfo.currencyUnit==KeyConfig.usd){
+            btcRate = GlobalInfo.usdRateInfo.btcs[0];
+          }else{
+            btcRate = GlobalInfo.usdRateInfo.btcs[1];
+          }
+          this._walletInfoes = [];
+          List list = data['data'] ;
+          for(int i=0;i<list.length;i++){
+            var node = list[i];
+            List assets = node['assets'];
+            num totalMoney = 0;
+            List<AccountInfo> accountInfo = [];
+            for(int j=0;j<assets.length;j++){
+              var asset = assets[j];
+              double amount = double.parse(asset['balance'].toString());
+
+              double money = amount* btcRate;
+              var  propertyId = asset['propertyid'];
+              if(propertyId>0){
+                money = 0;
+              }
+              accountInfo.add(AccountInfo(
+                  name: asset['name'],
+                  amount:amount,
+                  iconUrl: _configAssetLogoUrl(propertyId),
+                  legalTender:money,
+                  jsonData: asset,
+                  visible: asset['visible'],
+                  propertyId: propertyId
+              ));
+              totalMoney+=money;
+            }
+            totalMoney = totalMoney;
+            WalletInfo info = WalletInfo(
+                name: node['addressName'],
+                address:node['address'],
+                addressIndex: node['addressIndex'],
+                visible: node['visible'],
+                totalLegalTender: totalMoney,
+                note: '',
+                accountInfoes: accountInfo);
+            _walletInfoes.add(info);
+          }
+          if(_walletInfoes.length==0){
+            int addressIndex = 0;
+            String defaultName = 'name0';
+            HDWallet wallet = MnemonicPhrase.getInstance().createAddress(GlobalInfo.userInfo.mnemonic,index: addressIndex);
+            WalletInfo info = WalletInfo(
+                name: defaultName,
+                address: wallet.address,
+                addressIndex: addressIndex,
+                visible: true,
+                totalLegalTender: 0,
+                note: '',
+                accountInfoes: []
+            );
+            Future result = NetConfig.post(context,NetConfig.createAddress, {'address':wallet.address,'addressName':defaultName,'addressIndex':addressIndex.toString()});
+            result.then((data){
+              this.addWalletInfo(info);
+            });
+              notifyListeners();
+          }else{
+            notifyListeners();
+          }
+        }
+      });
+    }
     return this._walletInfoes;
   }
 
-  List<TradeInfo> get tradeInfoes{
-    List<TradeInfo> infoes = [];
-    int count = 6;
-    for(int i=0;i<count;i++){
-      infoes.add(
-          TradeInfo(
-            amount: Random().nextDouble(),
-            note: "note${i}",
-            objAddress: "address",
-            tradeDate: DateTime.now(),
-            state: Random().nextInt(2),
-            confirmAmount: Random().nextInt(100),
-            txId: "txidtxidtxidtxidtxid${i}",
-            blockId: Random().nextInt(60000)
-          )
-      );
+  addWalletInfo(WalletInfo info) {
+    List<AccountInfo> accountInfo = [];
+
+    for(int i=0;i<GlobalInfo.defaultAssetInfoes.length;i++){
+      var info = GlobalInfo.defaultAssetInfoes[i];
+      accountInfo.add(AccountInfo(
+          name: info.name,
+          amount:0,
+          iconUrl: _configAssetLogoUrl(info.assetId),
+          legalTender:0,
+          visible: true,
+          propertyId: info.assetId
+      ));
     }
-    return infoes;
+    info.accountInfoes = accountInfo;
+    _walletInfoes.insert(0,info);
+    notifyListeners();
+  }
+
+  List<TradeInfo> tradeInfoes = null;
+  List<TradeInfo> getTradeInfoes(BuildContext context, String address,{int propertyId=0}){
+    print('getTradeInfoes1111');
+    if(tradeInfoes==null){
+      String url  = NetConfig.getTransactionsByAddress+'?address='+address;
+      if(propertyId>0){
+        url  = NetConfig.getOmniTransactionsByAddress+'?address='+address+'&assetId='+propertyId.toString();
+      }
+      Future future = NetConfig.get(context,url);
+      future.then((data){
+        if(data!=null){
+          tradeInfoes = [];
+          List dataList = data['list'];
+          for(int i=0;i<dataList.length;i++){
+            var currData = dataList[i];
+            bool isSend = currData['isSend'];
+            double txValue = 0;
+            if(propertyId==0){
+               txValue = currData['txValue'];
+            }else{
+                txValue = double.parse(currData['txValue']);
+             }
+
+            int time = currData['time']*1000;
+            int confirmAmount = currData['confirmAmount'];
+            if(isSend){
+              txValue = 0-txValue;
+            }
+            tradeInfoes.add(
+                TradeInfo(
+                    amount: txValue,
+                    note: '',
+                    tradeType: isSend,
+                    objAddress: currData['targetAddress'],
+                    tradeDate:DateTime.fromMillisecondsSinceEpoch(time),
+                    state: confirmAmount>0?1:0,
+                    confirmAmount: confirmAmount,
+                    txId: currData['txId'],
+                    blockId: currData['blockHeight']
+                )
+            );
+          }
+          notifyListeners();
+          return tradeInfoes;
+        }
+      });
+    }
+
+//    if(tradeInfoes==null) tradeInfoes=[];
+    return tradeInfoes;
   }
 
   /**
@@ -102,5 +217,21 @@ class WalletModel extends Model{
       this._sendInfo = SendInfo();
     }
     return _sendInfo;
+  }
+
+
+  String _configAssetLogoUrl(int assetId){
+    switch(assetId){
+      case 0:
+        return 'coin_logo_BTC';
+      case 1:
+        return 'coin_logo_OMN';
+      case 31:
+        return 'coin_logo_USDT';
+      case 361:
+        return 'coin_logo_LUNARX';
+      default:
+        return 'coin_logo_OMN';
+    }
   }
 }

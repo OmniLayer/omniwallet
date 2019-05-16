@@ -19,25 +19,35 @@ class AppCustomColor{
    */
   static Color themeFrontColor =  Colors.black;
 
+
+  static Color navBgColor =  Color(0xFF191E32);
+
   /**
    * 主题背景颜色
    */
   static Color themeBackgroudColor =  Colors.white;
 
-  /**
-   * About Page Banner Area Backgroud Color
-   */
+  /// About Page Banner Area Backgroud Color
   static Color aboutPageBannerBGColor =  Colors.blue[50];
 
+  /// font color - grey
+  static Color fontGreyColor =  Colors.grey[600];
+
+  /// Set theme colors
   static setColors(Brightness brightness){
     AppCustomColor.themeFrontColor =
-      brightness == Brightness.dark ? Colors.white : Colors.black;
+    brightness == Brightness.dark ? Colors.white : Color(0xFF1F253B);
 
     AppCustomColor.themeBackgroudColor =
-      brightness == Brightness.dark ? Colors.black : Colors.white;
+    brightness == Brightness.dark ? Colors.black : Colors.white;
 
     AppCustomColor.aboutPageBannerBGColor =
-      brightness == Brightness.dark ? Colors.black45 : Colors.blue[50];
+    brightness == Brightness.dark ? Colors.black45 : Colors.blue[50];
+
+    AppCustomColor.navBgColor =
+    brightness == Brightness.dark ? Color(0xFF191E32) : Colors.white;
   }
 
+  /// 
+  static String fontFamily = 'OpenSansCondensed';
 }

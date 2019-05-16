@@ -1,12 +1,16 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:wallet_app/l10n/WalletLocalizations.dart';
 import 'package:wallet_app/model/wallet_info.dart';
+import 'package:wallet_app/tools/Tools.dart';
 import 'package:wallet_app/tools/app_data_setting.dart';
+import 'package:wallet_app/view/main_view/home/receive_page.dart';
 import 'package:wallet_app/view/main_view/home/send_page.dart';
 import 'package:wallet_app/view/main_view/home/trade_info_detail.dart';
-import 'package:wallet_app/view/main_view/home/receive_page.dart';
+import 'package:wallet_app/view/widgets/custom_raise_button_widget.dart';
 import 'package:wallet_app/view_model/main_model.dart';
+import 'package:wallet_app/view_model/state_lib.dart';
 
 class WalletDetailContent extends StatefulWidget {
   @override
@@ -19,76 +23,107 @@ class _WalletDetailContentState extends State<WalletDetailContent> with SingleTi
   WalletInfo walletInfo;
   AccountInfo accountInfo;
   List<TradeInfo> tradeInfoes ;
+  List<TradeInfo> tradeInfoes1=[] ;
+  List<TradeInfo> tradeInfoes2=[] ;
+  List<TradeInfo> tradeInfoes3 =[];
 
   TabController mController;
 
   @override void initState() {
     super.initState();
     mController = TabController(
-      length: 4,
+      length: 3,
       vsync: this,
     );
   }
 
-  @override
-  Widget build(BuildContext context) {
-    stateModel = MainStateModel().of(context);
-    tradeInfoes = stateModel.tradeInfoes;
-    walletInfo = stateModel.currWalletInfo;
-    accountInfo = stateModel.currAccountInfo;
-
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: <Widget>[
-        buildHeader(),
-        Padding(
-          padding: const EdgeInsets.only(top: 20,bottom: 10),
-          child: TabBar(
-              controller: mController,
-              labelColor: Colors.blue,
-              labelPadding: EdgeInsets.only(bottom: 4),
-              indicatorSize: TabBarIndicatorSize.label,
-              unselectedLabelColor: Colors.grey,
-              tabs: [
-                Text('All'),
-                Text('Out'),
-                Text('In'),
-                Text('Failed'),
-              ]),
-        ),
-        Expanded(
-          child: TabBarView(
-            controller: mController,
-            children: <Widget>[
-              ListView.builder(
-                  itemCount:tradeInfoes.length,
-                  itemBuilder: (BuildContext context, int index){
-                    return detailTile(context,index);
-                  }),
-              ListView.builder(
-                  itemCount:tradeInfoes.length,
-                  itemBuilder: (BuildContext context, int index){
-                    return detailTile(context,index);
-                  }),
-              ListView.builder(
-                  itemCount:tradeInfoes.length,
-                  itemBuilder: (BuildContext context, int index){
-                    return detailTile(context,index);
-                  }),
-              ListView.builder(
-                  itemCount:tradeInfoes.length,
-                  itemBuilder: (BuildContext context, int index){
-                    return detailTile(context,index);
-                  }),
-            ],
-          ),
-        ),
-        buildFooter()
-      ],
-    );
+  initData(){
+    tradeInfoes1 = [];
+    tradeInfoes2 = [];
+    tradeInfoes3 = [];
+    for(int i=0;i<this.tradeInfoes.length;i++){
+      TradeInfo info = tradeInfoes[i];
+      bool isSend = info.tradeType;
+      if(isSend){
+        tradeInfoes1.add(info);
+      }else{
+        tradeInfoes2.add(info);
+      }
+    }
   }
 
-  Widget detailTile(BuildContext context, int index){
+  @override
+  Widget build(BuildContext context) {
+    print("detail content");
+    if(stateModel==null){
+      stateModel = MainStateModel().of(context);
+      walletInfo = stateModel.currWalletInfo;
+      accountInfo = stateModel.currAccountInfo;
+      stateModel.tradeInfoes = null;
+    }
+    return ScopedModelDescendant<MainStateModel>(
+        builder: (context, child, model) {
+          tradeInfoes = model.getTradeInfoes(context,walletInfo.address,propertyId: accountInfo.propertyId);
+
+          print('$tradeInfoes');
+          if(tradeInfoes==null){
+            return Center(child:CircularProgressIndicator());
+          }
+          initData();
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              buildHeader(),
+              Padding(
+                padding: const EdgeInsets.only(top: 20,bottom: 10),
+                child: TabBar(
+                    controller: mController,
+                    labelColor: Colors.blue,
+                    labelPadding: EdgeInsets.only(bottom: 3),
+                    indicatorSize: TabBarIndicatorSize.label,
+                    unselectedLabelColor: Colors.grey,
+                    tabs: [
+                      Text('All'),
+                      Text('Out'),
+                      Text('In'),
+//                      Text('Failed'),
+                    ]),
+              ),
+              Expanded(
+                child: TabBarView(
+                  controller: mController,
+                  children: <Widget>[
+                    ListView.builder(
+                        itemCount:tradeInfoes.length,
+                        itemBuilder: (BuildContext context, int index){
+                          return detailTile(context,index,tradeInfoes);
+                        }),
+                    ListView.builder(
+                        itemCount:tradeInfoes1.length,
+                        itemBuilder: (BuildContext context, int index){
+                          print(tradeInfoes1);
+                          return detailTile(context,index,tradeInfoes1);
+                        }),
+                    ListView.builder(
+                        itemCount:tradeInfoes2.length,
+                        itemBuilder: (BuildContext context, int index){
+                          return detailTile(context,index,tradeInfoes2);
+                        }),
+//                    ListView.builder(
+//                        itemCount:tradeInfoes3.length,
+//                        itemBuilder: (BuildContext context, int index){
+//                          return detailTile(context,index,tradeInfoes3);
+//                        }),
+                  ],
+                ),
+              ),
+              buildFooter()
+            ],
+          );
+        });
+  }
+
+  Widget detailTile(BuildContext context, int index,List<TradeInfo> tradeInfoes){
     TradeInfo tradeInfo = tradeInfoes[index];
     return InkWell(
       onTap: (){
@@ -104,30 +139,41 @@ class _WalletDetailContentState extends State<WalletDetailContent> with SingleTi
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
             Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: CircleAvatar(child: Icon(Icons.arrow_upward),backgroundColor:Colors.green[100]),
+              padding: const EdgeInsets.only(right: 12,left: 10),
+              child: Image.asset(Tools.imagePath(tradeInfo.tradeType?'icon_out':'icon_in'),width: 25,height: 25,),
             ),
             Expanded(
+              flex: 3,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   Row(
                     children: <Widget>[
-                      Text('${accountInfo.name} '+('${tradeInfo.amount>0?'In':'Out'}'),style: TextStyle(fontSize: 18,fontWeight: FontWeight.w400),),
+                      AutoSizeText(
+                        '${accountInfo.name} '+('${tradeInfo.amount>0?'In':'Out'}'),
+                        style: TextStyle(fontSize: 18,fontWeight: FontWeight.w400),
+                        minFontSize: 12,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
                       Container(
                           margin: EdgeInsets.only(left: 10),
                           decoration: BoxDecoration(
-                            color: Colors.grey[200],
+                            color: AppCustomColor.aboutPageBannerBGColor,
                             borderRadius: BorderRadius.circular(10)
                           ),
                           child: Padding(
                             padding: const EdgeInsets.symmetric(vertical: 4,horizontal: 8),
-                            child: Text(
+                            child: AutoSizeText(
                               tradeInfo.state==0?
                                   WalletLocalizations.of(context).wallet_trade_info_detail_finish_state1
                                 : WalletLocalizations.of(context).wallet_trade_info_detail_finish_state2,
-                              style: TextStyle(color:Colors.grey[500]),),
+                              style: TextStyle(color:AppCustomColor.themeFrontColor,fontSize: 12),
+                              minFontSize: 9,
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                            ),
                           )
                       )
                     ],
@@ -135,20 +181,41 @@ class _WalletDetailContentState extends State<WalletDetailContent> with SingleTi
                   ),
                   Padding(
                     padding: const EdgeInsets.only(top: 12),
-                    child: Text('${tradeInfo.objAddress}',style: TextStyle(color: Colors.grey,fontWeight: FontWeight.bold)),
+                    child: AutoSizeText(
+                        '${tradeInfo.objAddress.replaceRange(6, tradeInfo.objAddress.length-6, '...')}',
+                        style: TextStyle(color: Colors.grey,fontWeight: FontWeight.bold),
+                        maxLines: 1,
+                        minFontSize: 9,
+                        overflow: TextOverflow.ellipsis,
+                    ),
                   ),
               ],),
             ),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: <Widget>
-              [
-                Text((tradeInfo.amount>0?'+':'-')+'${tradeInfo.amount.toStringAsFixed(8)}',style: TextStyle( fontSize:16,color:tradeInfo.amount>0?Colors.green:Colors.red,fontWeight: FontWeight.bold),),
-                Padding(
-                  padding: const EdgeInsets.only(top: 12),
-                  child: Text(DateFormat('yyyy.MM.dd').format(tradeInfo.tradeDate)),
-                )
-            ],),
+            SizedBox(width: 10,),
+            Expanded(
+              flex: 1,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: <Widget>
+                [
+                  AutoSizeText(
+                    tradeInfo.amount.toString(),
+                    style: TextStyle( fontSize:16,color:tradeInfo.amount>0?Colors.green:Colors.red,fontWeight: FontWeight.bold),
+                    minFontSize: 12,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 12),
+                    child: AutoSizeText(
+                        DateFormat('yyyy.MM.dd').format(tradeInfo.tradeDate),
+                        minFontSize: 9,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                    ),
+                  )
+              ],),
+            ),
           ],
         ),
       ),
@@ -167,14 +234,14 @@ class _WalletDetailContentState extends State<WalletDetailContent> with SingleTi
             Padding(
               padding: const EdgeInsets.only(top: 30),
               child: Text(
-                  accountInfo.amount.toStringAsFixed(8),
+                  accountInfo.amount.toString(),
                   style: TextStyle(fontSize: 30,color: Colors.white,fontWeight: FontWeight.w600),
               ),
             ),
             Padding(
               padding: const EdgeInsets.only(top: 12),
               child: Text(
-                  "=\$ "+accountInfo.legalTender.toStringAsFixed(2),
+                  "≈"+ Tools.getCurrMoneyFlag() +accountInfo.legalTender.toStringAsFixed(2),
                   style: TextStyle(fontSize: 20,color: Colors.white54),
               ),
             ),
@@ -182,39 +249,38 @@ class _WalletDetailContentState extends State<WalletDetailContent> with SingleTi
         ),
       );
   }
-
   Widget buildFooter() {
     return Container(
-        margin: EdgeInsets.only(top: 2,bottom: 6,left: 10,right: 10),
+        margin: EdgeInsets.only(top: 10,bottom: 10,left: 30,right: 30),
         child:Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: <Widget>[
-            Expanded(
-              child: RaisedButton(
-                onPressed: (){
-                  Navigator.of(context).push(MaterialPageRoute(builder: (BuildContext context){
-                    return WalletSend();
-                  }));
-                },
-                child: Text(WalletLocalizations.of(context).wallet_detail_content_send ,style: TextStyle(fontSize: 18,color: Colors.blue),),
-                color: AppCustomColor.btnCancel,
-                padding: EdgeInsets.symmetric(vertical:12),
-              ),
+            CustomRaiseButton(
+              context: context,
+              callback: (){
+                Navigator.of(context).push(MaterialPageRoute(builder: (BuildContext context){
+                  return WalletSend();
+                }));
+              },
+              title: WalletLocalizations.of(context).wallet_detail_content_send,
+              titleColor: AppCustomColor.themeBackgroudColor,
+              titleSize: 18.0,
+//              leftIconName: 'icon_send',
+              color: AppCustomColor.btnConfirm,
             ),
-            SizedBox(width: 30,),
-            Expanded(
-              child: RaisedButton(
-                onPressed: (){
-
-                  Navigator.of(context).push(MaterialPageRoute(builder: (BuildContext context){
-                    return ReceivePage();
-                  }));
-                },
-                child: Text(WalletLocalizations.of(context).wallet_detail_content_receive ,style: TextStyle(fontSize: 18, color: Colors.white)),
-                padding: EdgeInsets.symmetric(vertical:12),
-                color: AppCustomColor.btnConfirm,
-              ),
-            ),
+//            SizedBox(width: 30,),
+//            CustomRaiseButton(
+//              context: context,
+//              callback: (){
+//                Navigator.of(context).push(MaterialPageRoute(builder: (BuildContext context){
+//                  return ReceivePage();
+//                }));
+//              },
+//              title: WalletLocalizations.of(context).wallet_detail_content_receive,
+//              titleColor: Colors.white,
+//              leftIconName: 'icon_receive',
+//              color: AppCustomColor.btnConfirm,
+//            ),
           ],
         ),
       );

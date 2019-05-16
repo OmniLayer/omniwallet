@@ -1,23 +1,22 @@
-/// Switch language display of app page.
+/// Switch theme.
 /// [author] Kevin Zhang
-/// [time] 2019-3-5
+/// [time] 2019-5-7
 
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:wallet_app/l10n/WalletLocalizations.dart';
 import 'package:wallet_app/main.dart';
-import 'package:wallet_app/tools/Tools.dart';
 import 'package:wallet_app/tools/app_data_setting.dart';
 import 'package:wallet_app/view_model/main_model.dart';
 import 'package:wallet_app/view_model/state_lib.dart';
 
-class SelectLanguage extends StatefulWidget {
-  static String tag = "SelectLanguage";
+class SelectTheme extends StatefulWidget {
+  static String tag = "SelectTheme";
   @override
-  _SelectLanguageState createState() => _SelectLanguageState();
+  _SelectThemeState createState() => _SelectThemeState();
 }
 
-class _SelectLanguageState extends State<SelectLanguage> {
+class _SelectThemeState extends State<SelectTheme> {
   
   String strClickItem = '';
   
@@ -28,7 +27,7 @@ class _SelectLanguageState extends State<SelectLanguage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(WalletLocalizations.of(context).languagePageAppBarTitle),
+        title: Text(WalletLocalizations.of(context).themePageAppBarTitle),
         actions: <Widget>[
           FlatButton(  // save button
             child: Text(WalletLocalizations.of(context).languagePageSaveButton),
@@ -42,7 +41,7 @@ class _SelectLanguageState extends State<SelectLanguage> {
 
       body: SafeArea(
         child: ListView(
-          children: _languageList(model),
+          children: _themeList(model),
         ),
       )
     );
@@ -52,20 +51,16 @@ class _SelectLanguageState extends State<SelectLanguage> {
   void _actionSaveButton(MainStateModel model, BuildContext context) {
     print('strClickItem = $strClickItem');
     if (strClickItem != '') {
-      model.setSelectedLanguage(strClickItem);
+      model.setTheme(strClickItem);
     
-      // change app language.
-      Locale locale;
-      if (strClickItem == KeyConfig.languageEn) {
-        locale = Locale('en',"US");
+      // change theme.
+      if (strClickItem == KeyConfig.light) {
+        MyApp.setThemeColor(context, Brightness.light);
       } else {
-        locale = Locale('zh',"CH");
+        MyApp.setThemeColor(context, Brightness.dark);
       }
-    
-      MyApp.setLocale(context, locale);
-    
       // save selected value to local storage
-      _saveSelectedLanguage(strClickItem);
+      _saveTheme(strClickItem);
     }
                  
     Navigator.pop(context);
@@ -73,11 +68,11 @@ class _SelectLanguageState extends State<SelectLanguage> {
 
   /// Build list data.
   /// [item] is list tile content.
-  /// [setLanguage] is currently selected language.
-  Widget _oneItem(BuildContext context, String item, String setLanguage) {
+  /// [setTheme] is currently selected theme.
+  Widget _oneItem(BuildContext context, String item, String setTheme) {
 
     bool isSelected;
-    if (item == setLanguage) {
+    if (item == setTheme) {
       isSelected = true;
     } else {
       isSelected = false;
@@ -86,13 +81,8 @@ class _SelectLanguageState extends State<SelectLanguage> {
     return Ink(
       color: AppCustomColor.themeBackgroudColor,
       child: ListTile(
-        leading: _iconLanguage(item),
-        title: Text(
-          item,
-          // style: TextStyle(
-          //   fontSize: 14,
-          // ),
-        ),
+        // leading: _iconLanguage(item),
+        title: Text(item),
         trailing: Icon(
           isSelected ? Icons.check : null,
           color: Colors.blue,
@@ -106,24 +96,23 @@ class _SelectLanguageState extends State<SelectLanguage> {
     );
   }
 
-  // Build language list
-  List<Widget> _languageList(MainStateModel model) {
+  // Build theme list
+  List<Widget> _themeList(MainStateModel model) {
     
-    String setLanguage = model.getSelectedLanguage;
+    String setTheme = model.getTheme;
     
     // List content.
     List<Widget> _list = List();
     List<String> items = <String> [
-      KeyConfig.languageEn, KeyConfig.languageCn,
+      KeyConfig.light, KeyConfig.dark,
     ];
 
     if (strClickItem != '') {
-      setLanguage = strClickItem;
+      setTheme = strClickItem;
     }
 
-    // _list.clear();
     for (int i = 0; i < items.length; i++) {
-      _list.add(_oneItem(context, items[i], setLanguage));
+      _list.add(_oneItem(context, items[i], setTheme));
       _list.add(Divider(height: 0, indent: 15));
     }
 
@@ -131,17 +120,17 @@ class _SelectLanguageState extends State<SelectLanguage> {
   }
 
   //
-  void _saveSelectedLanguage(String value) async{
+  void _saveTheme(String value) async{
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setString(KeyConfig.set_language, value);
+    prefs.setString(KeyConfig.set_theme, value);
   }
 
   //
-  Widget _iconLanguage(String item) {
-    if (item == 'English') {
-      return Image.asset(Tools.imagePath('icon_english'), width: 24, height: 24);
-    } else {
-      return Image.asset(Tools.imagePath('icon_chinese'), width: 24, height: 24);
-    }
-  }
+  // Widget _iconLanguage(String item) {
+  //   if (item == 'English') {
+  //     return Image.asset(Tools.imagePath('icon_english'), width: 24, height: 24);
+  //   } else {
+  //     return Image.asset(Tools.imagePath('icon_chinese'), width: 24, height: 24);
+  //   }
+  // }
 }

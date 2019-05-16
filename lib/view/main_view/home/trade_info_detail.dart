@@ -1,11 +1,10 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:intl/intl.dart';
 import 'package:wallet_app/l10n/WalletLocalizations.dart';
 import 'package:wallet_app/model/wallet_info.dart';
 import 'package:wallet_app/tools/app_data_setting.dart';
-import 'package:wallet_app/view/main_view/home/omni_website.dart';
-import 'package:wallet_app/view/main_view/home/send_confirm_page.dart';
 import 'package:wallet_app/view_model/main_model.dart';
 
 class TradeInfoDetail extends StatelessWidget {
@@ -51,7 +50,7 @@ class TradeInfoDetail extends StatelessWidget {
                   ),
                 ),
                 Text(
-                  '${tradeInfo.amount.toStringAsFixed(8)}',
+                  '${tradeInfo.amount.toString()}',
                   style: TextStyle(
                     fontSize: 24,
                     fontWeight: FontWeight.bold
@@ -71,6 +70,7 @@ class TradeInfoDetail extends StatelessWidget {
                 ),
               ],
             );
+
     return SingleChildScrollView(
       child: Container(
         margin: EdgeInsets.only(top: 20,left: 20,right: 20),
@@ -81,25 +81,33 @@ class TradeInfoDetail extends StatelessWidget {
                   margin: EdgeInsets.only(bottom: 40),
                   width: double.infinity, child: line1
               ),
-              line("To",tradeInfo.objAddress),
-              line("Memo",tradeInfo.note),
-              line("Date",DateFormat('yyyy.MM.dd hh:mm').format(tradeInfo.tradeDate)),
-              line("交易Id",tradeInfo.txId),
-              line("确认Block",tradeInfo.blockId.toString()),
-              line("确认数量",tradeInfo.confirmAmount.toString()),
-              Center(
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 20),
-                  child: RaisedButton(
-                    onPressed: (){
-                      Navigator.of(context).push(MaterialPageRoute(builder: (BuildContext context){
-                        return WebViewPage();
-                      }));
-                    },
-                    child: Text('浏览Omni网站'),
-                  ),
-                ),
-              )
+              line(tradeInfo.tradeType?
+                  WalletLocalizations.of(context).wallet_trade_info_detail_item_To:
+                  WalletLocalizations.of(context).wallet_trade_info_detail_item_From
+                  ,
+                  tradeInfo.objAddress),
+              line(WalletLocalizations.of(context).wallet_trade_info_detail_item_Memo,tradeInfo.note),
+              line(WalletLocalizations.of(context).wallet_trade_info_detail_item_Date,DateFormat('yyyy.MM.dd HH:mm').format(tradeInfo.tradeDate)),
+              Padding(
+                padding: const EdgeInsets.only(bottom: 18),
+                child: Divider(height: 1,),
+              ),
+              line(WalletLocalizations.of(context).wallet_trade_info_detail_item_txid,tradeInfo.txId),
+              line(WalletLocalizations.of(context).wallet_trade_info_detail_item_confirmIndex,tradeInfo.blockId!=null?tradeInfo.blockId.toString():''),
+              line(WalletLocalizations.of(context).wallet_trade_info_detail_item_confirmCount,tradeInfo.confirmAmount.toString()),
+//              Center(
+//                child: Padding(
+//                  padding: const EdgeInsets.symmetric(vertical: 20),
+//                  child: RaisedButton(
+//                    onPressed: (){
+//                      Navigator.of(context).push(MaterialPageRoute(builder: (BuildContext context){
+//                        return WebViewPage();
+//                      }));
+//                    },
+//                    child: Text('浏览Omni网站'),
+//                  ),
+//                ),
+//              )
           ],
         ),
       ),
@@ -110,13 +118,26 @@ class TradeInfoDetail extends StatelessWidget {
       padding: const EdgeInsets.only(bottom: 20),
       child: Row(
               children: <Widget>[
-                Expanded(
-                  child: Text(
-                    title,
-                    style: textStyleTitle,
-                  ),
+                AutoSizeText(
+                  title,
+                  style: textStyleTitle,
+                  minFontSize: 9,
+                  maxLines: 1,
+                  overflow: TextOverflow.fade,
                 ),
-                Text(content,style: textStyleBody,)
+
+                SizedBox(width: 20),
+
+                Expanded(
+                  child: AutoSizeText(
+                    content,
+                    style: textStyleBody,
+                    textAlign: TextAlign.right,
+                    minFontSize: 9,
+                    maxLines: 1,
+                    overflow: TextOverflow.fade,
+                  )
+                )
               ],
             ),
     );

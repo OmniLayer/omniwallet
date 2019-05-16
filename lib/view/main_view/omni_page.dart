@@ -13,8 +13,13 @@ class _OmniPageState extends State<OmniPage> {
         automaticallyImplyLeading: false,
         leading: null,
         centerTitle: true,
-//        title: Center(child: Text('omniDe')),
-        title: Text('omniDe'),
+        title: Text('Flash Payment and OTC'),
+      ),
+
+      body: SafeArea(
+        child: Center(
+          child: Text('Coming Soon ...'),
+        ),
       ),
     );
   }

@@ -88,7 +88,7 @@ class _HelpState extends State<Help> {
       child: ListTile(
         title: Text(item),
         trailing: Icon(Icons.keyboard_arrow_right),
-        onTap: () { 
+        onTap: () {
           // TODO: show next page.
           print('menu list');
           // Navigator.of(context).pushNamed('routeName');
