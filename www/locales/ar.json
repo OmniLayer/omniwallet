@@ -228,7 +228,9 @@
 			"INVALID1":"Sorry, we could not validate your credentials. Please check them and try again",
 			"INVALID2":"If you continue to have difficulties, check out our ",
 			"MFACODE":"I'm using Multi Factor Authentication",
-			"MFATOOLTIP":"Don't have an MFA device setup yet? Login and add one to your account under 'Account Settings'"
+			"MFATOOLTIP":"Don't have an MFA device setup yet? Login and add one to your account under 'Account Settings'",
+			"UUIDEMAIL":"Please login with your Wallet ID, not your Email.",
+			"UUIDEMAIL2":"For more info please see this article on the "
 		}, 
 		"CONFIRM":{
 			"OFFLINE":"Your transaction was generated successfully, now save the text above and sign it on your Armory offline computer. Come back with the signed text to broadcast it.",
