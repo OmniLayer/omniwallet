@@ -42,12 +42,16 @@ function Login($injector, $scope, $http, $location, $modalInstance, $q, Account,
   $scope.loginInvalid = true;
 
   $scope.checkLogin=function() {
+    $scope.uuidnotice = false;
     valid=true;
     if ( !Account.verifyUUID($scope.login.uuid) || $scope.login.password.length < 1 ) {
       valid=false;
     }
     if ($scope.login.mfachecked && $scope.login.mfatoken.length<6) {
       valid=false;
+    }
+    if ($scope.login.uuid.includes('@') || $scope.login.uuid.includes('.')) {
+      $scope.uuidnotice = true;
     }
     $scope.loginInvalid = !valid;
   }

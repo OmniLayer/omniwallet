@@ -227,7 +227,9 @@
       "INVALID1": "Désolé, nous ne pouvons pas valider vos informations d'identification. Vérifiez-les et réessayez",
       "INVALID2": "Si vous continuez à avoir des difficultés, consultez notre ",
       "MFACODE": "J'utilise l'identification à deux facteurs (MFA)",
-      "MFATOOLTIP": "Vous ne disposez pas encore d'une configuration de périphérique MFA? Connectez-vous et ajoutez-en un à votre compte sous 'Paramètres du compte'"
+      "MFATOOLTIP": "Vous ne disposez pas encore d'une configuration de périphérique MFA? Connectez-vous et ajoutez-en un à votre compte sous 'Paramètres du compte'",
+      "UUIDEMAIL":"Veuillez vous connecter avec votre identifiant de portefeuille, pas votre email.",
+      "UUIDEMAIL2":"Pour plus d'informations, consultez cet article sur "
     },
     "CONFIRM": {
       "OFFLINE": "Votre transaction a été générée avec succès, maintenant enregistrez le texte ci-dessus et signez-le sur votre ordinateur Armory hors-ligne. Revenez avec le texte signé pour le diffuser.",
