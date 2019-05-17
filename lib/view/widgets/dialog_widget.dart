@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:wallet_app/l10n/WalletLocalizations.dart';
 import 'package:wallet_app/tools/app_data_setting.dart';
+import 'package:wallet_app/view/widgets/custom_raise_button_widget.dart';
 
 /**
  * 创建新的钱包地址 钱包页面的右上角的点击事件
@@ -37,15 +38,6 @@ class _CreateNewAddressDialogState extends State<CreateNewAddressDialog> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-//                                Padding(
-//                                  padding:
-//                                      const EdgeInsets.only(bottom: 0, top: 8),
-//                                  child: Icon(
-//                                    Icons.fiber_new,
-//                                    size: 30,
-//                                    color: Colors.white,
-//                                  ),
-//                                ),
             Container(
                 width: double.infinity,
                 child: Center(
@@ -80,42 +72,32 @@ class _CreateNewAddressDialogState extends State<CreateNewAddressDialog> {
                           );
     var footer = Padding(
                             padding: const EdgeInsets.only(
-                                left: 20, right: 20, top: 36),
+                                left: 20, right: 20, top: 6,bottom: 14),
                             child: Row(
                               children: <Widget>[
-                                Expanded(
-                                  flex: 3,
-                                  child: RaisedButton(
-                                    onPressed: () {
-                                      Navigator.pop(context);
-                                    },
-                                    child: Text(
-                                        WalletLocalizations.of(context).createNewAddress_Cancel,
-                                      style: TextStyle(color: Color(0xFF6B93F9)),
-                                    ),
-                                    color: AppCustomColor.btnCancel,
-                                    padding: EdgeInsets.symmetric(
-                                         vertical: 14),
-                                  ),
+                                CustomRaiseButton( // Next button.
+                                  context: context,
+                                  title: WalletLocalizations.of(context).createNewAddress_Cancel,
+                                  titleColor: Colors.blue,
+                                  color: AppCustomColor.btnCancel,
+                                  callback: () {
+                                    Navigator.of(context).pop();
+                                  },
                                 ),
-                                Expanded(flex: 1, child: Container()),
-                                Expanded(
-                                  flex: 3,
-                                  child: RaisedButton(
-                                    onPressed: () {
-                                      var _form = _formKey.currentState;
-                                      if(_form.validate()){
-                                        _form.save();
-                                        widget.callback(_addressName);
-                                        Navigator.pop(context);
-                                      }
-                                    },
-                                    child: Text(WalletLocalizations.of(context).createNewAddress_Add,
-                                        style: TextStyle(color: Colors.white)),
-                                    color: AppCustomColor.btnConfirm,
-                                    padding: EdgeInsets.symmetric(
-                                        vertical: 14),
-                                  ),
+                                SizedBox(width: 20,),
+                                CustomRaiseButton( // Next button.
+                                  context: context,
+                                  title: WalletLocalizations.of(context).createNewAddress_Add,
+                                  titleColor: Colors.white,
+                                  color: AppCustomColor.btnConfirm,
+                                  callback: () {
+                                    var _form = _formKey.currentState;
+                                    if(_form.validate()){
+                                      _form.save();
+                                      widget.callback(_addressName);
+                                      Navigator.pop(context);
+                                    }
+                                  },
                                 ),
                               ],
                             ),
@@ -128,12 +110,13 @@ class _CreateNewAddressDialogState extends State<CreateNewAddressDialog> {
             type: MaterialType.transparency,
             child: GestureDetector(
               onTap: () {
+
               },
               child: Align(
-                alignment: Alignment(0, -0.05),
+                alignment: Alignment(0, -0.5),
                 child: SizedBox(
                   width: MediaQuery.of(context).size.width * 0.9,
-                  height: MediaQuery.of(context).size.height * 0.37,
+                  height: MediaQuery.of(context).size.height * 0.33,
                   child: Container(
                     decoration: BoxDecoration(
                         border: Border.all(color: Colors.grey),
@@ -144,6 +127,7 @@ class _CreateNewAddressDialogState extends State<CreateNewAddressDialog> {
                       child: Column(
                         children: <Widget>[
                           header,
+                          Expanded(child: Container()),
                           body,
                           Padding(
                             padding: const EdgeInsets.only(
@@ -152,6 +136,7 @@ class _CreateNewAddressDialogState extends State<CreateNewAddressDialog> {
                               height: 1,
                             ),
                           ),
+                          Expanded(child: Container()),
                           footer
                         ],
                       ),

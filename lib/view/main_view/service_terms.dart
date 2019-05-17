@@ -12,17 +12,20 @@ class ServiceTerms extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(WalletLocalizations.of(context).serviceTermsPageAppBarTitle),
-        elevation: 0,
-      ),
-
-      body: SafeArea(
-        child: Container(
-          padding: EdgeInsets.symmetric(horizontal: 30.0, vertical: 30.0),
-          // child: _childColumn(context),
+        appBar: AppBar(
+          title: Text(WalletLocalizations.of(context).serviceTermsPageAppBarTitle),
+          elevation: 0,
         ),
-      )
+
+        body: SafeArea(
+          child: Center(
+            child: Text('Coming Soon ...'),
+          ),
+          // child: Container(
+          //   padding: EdgeInsets.symmetric(horizontal: 30.0, vertical: 30.0),
+          //   // child: _childColumn(context),
+          // ),
+        )
     );
   }
 }

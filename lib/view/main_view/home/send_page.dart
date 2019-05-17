@@ -4,6 +4,7 @@ import 'package:wallet_app/tools/app_data_setting.dart';
 import 'package:wallet_app/view/main_view/home/send_confirm_page.dart';
 import 'package:wallet_app/view/main_view/wallet_address_book.dart';
 import 'package:wallet_app/view/widgets/custom_expansion_tile.dart';
+import 'package:wallet_app/view/widgets/custom_raise_button_widget.dart';
 import 'package:wallet_app/view_model/state_lib.dart';
 
 /**
@@ -24,7 +25,6 @@ class _WalletSendState extends State<WalletSend> {
   UsualAddressInfo _usualAddressInfo;
   final key = new GlobalKey<ScaffoldState>();
 
-
   GlobalKey<FormState> _formKey = new GlobalKey<FormState>();
   String _toAddress;
   num _amount;
@@ -39,16 +39,24 @@ class _WalletSendState extends State<WalletSend> {
 
   @override
   Widget build(BuildContext context) {
-    stateModel = MainStateModel().of(context);
-    walletInfo = stateModel.currWalletInfo;
-    accountInfo = stateModel.currAccountInfo;
+    if(stateModel==null){
+      stateModel = MainStateModel().of(context);
+      walletInfo = stateModel.currWalletInfo;
+      accountInfo = stateModel.currAccountInfo;
+      stateModel.currSelectedUsualAddressIndex  = -1;
+    }
+
     _usualAddressInfo = stateModel.currSelectedUsualAddress;
-    return Scaffold(
-        key: this.key,
-        backgroundColor: Theme.of(context).canvasColor,
-        appBar: AppBar(title: Text(accountInfo.name + WalletLocalizations.of(context).wallet_detail_content_send),),
-        body: this.body()
-    );
+
+    return ScopedModelDescendant<MainStateModel>(
+        builder: (context, child, model) {
+          return Scaffold(
+              key: this.key,
+              backgroundColor: Theme.of(context).canvasColor,
+              appBar: AppBar(title: Text(accountInfo.name +' '+ WalletLocalizations.of(context).wallet_detail_content_send),),
+              body: this.body()
+          );
+    });
   }
 
   Widget body(){
@@ -122,7 +130,7 @@ class _WalletSendState extends State<WalletSend> {
               children: <Widget>[
                 Text(WalletLocalizations.of(context).wallet_send_page_title_amount,style: TextStyle(color: AppCustomColor.themeFrontColor,fontWeight: FontWeight.w500),),
                 Expanded(child: Container()),
-                Text(WalletLocalizations.of(context).wallet_send_page_title_balance+'：'+accountInfo.amount.toStringAsFixed(8),style: TextStyle(color: Colors.blue),)
+                Text(WalletLocalizations.of(context).wallet_send_page_title_balance+'：'+accountInfo.amount.toString(),style: TextStyle(color: Colors.blue),)
               ],
             ),
             Padding(
@@ -132,17 +140,19 @@ class _WalletSendState extends State<WalletSend> {
                     if(val==null||val.length==0){
                       return WalletLocalizations.of(context).wallet_send_page_input_amount_error;
                     }
-                    if(num.tryParse(val) is num){
+                    if(double.tryParse(val) is num){
 
                     }else{
                       return WalletLocalizations.of(context).wallet_send_page_input_amount_error;
                     }
+                    if(double.parse(val)>=accountInfo.amount){
+                      return WalletLocalizations.of(context).wallet_send_page_input_amount_error;
+                    }
                 },
                 onSaved: (val){
-                  print(val);
-                  this._amount = num.parse(val);
+                  this._amount = double.parse(val);
                 },
-                keyboardType:TextInputType.number ,
+                keyboardType:TextInputType.numberWithOptions(decimal: true) ,
                 scrollPadding: EdgeInsets.only(top: 0),
                 decoration: InputDecoration(
                     contentPadding: EdgeInsets.only(top: 6),
@@ -183,7 +193,7 @@ class _WalletSendState extends State<WalletSend> {
               children: <Widget>[
                 Text(WalletLocalizations.of(context).wallet_send_page_title_minerFee),
                 Expanded(child: Container()),
-                Text(this.minerFee.toStringAsFixed(8))
+                Text(this.minerFee.toString())
             ],),
             children: <Widget>[
               makeRadioTiles()
@@ -191,10 +201,9 @@ class _WalletSendState extends State<WalletSend> {
           );
 
     if(_usualAddressInfo!=null){
-        if(addressController.text.length==0){
-          addressController.text =_usualAddressInfo.address;
-        }
+      addressController.text =_usualAddressInfo.address;
     }
+
     return SingleChildScrollView(
       child: Form(
         key: _formKey,
@@ -211,22 +220,19 @@ class _WalletSendState extends State<WalletSend> {
               margin: EdgeInsets.only(left: 20,right: 20,top: 30,bottom: 20),
               child: Row(
                 children: <Widget>[
-                  Expanded(
-                    child: RaisedButton(
-                      color: AppCustomColor.btnConfirm,
-                      onPressed: (){
-                        var _form = _formKey.currentState;
-                        if (_form.validate()) {
-                          _form.save();
-                          stateModel.sendInfo = SendInfo(toAddress: this._toAddress,amount: this._amount,note: this._note,minerFee: this.minerFee);
-                          Navigator.of(context).pushNamed(SendConfirm.tag);
-                        }
-                      },
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 16),
-                        child: Text(WalletLocalizations.of(context).backup_words_next,style: TextStyle(color: Colors.white),),
-                      ),
-                    ),
+                  CustomRaiseButton(
+                    context: context,
+                    callback: (){
+                      var _form = _formKey.currentState;
+                      if (_form.validate()) {
+                        _form.save();
+                        stateModel.sendInfo = SendInfo(toAddress: this._toAddress,amount: this._amount,note: this._note,minerFee: this.minerFee);
+                        Navigator.of(context).pushNamed(SendConfirm.tag);
+                      }
+                    },
+                    title: WalletLocalizations.of(context).backup_words_next,
+                    titleColor: Colors.white,
+                    color: AppCustomColor.btnConfirm,
                   ),
                 ],
               ),
@@ -237,20 +243,20 @@ class _WalletSendState extends State<WalletSend> {
     );
   }
 
-  var minerFee = 0.0001;
+  var minerFee = 0.00001;
   var _feeGroup = 0;
   void _setvalue2(int value) => setState(() {
     if(value==0){
-      this.minerFee = 0.0001 ;
+      this.minerFee = 0.00001 ;
     }
     if(value==1){
-      this.minerFee = 0.0002 ;
+      this.minerFee = 0.00002 ;
     }
     if(value==2){
-      this.minerFee = 0.0003 ;
+      this.minerFee = 0.00003 ;
     }
     if(value==-1){
-      this.minerFee = 0.0004 ;
+      this.minerFee = 0.00004 ;
     }
 
     _feeGroup = value;
@@ -295,13 +301,13 @@ class _WalletSendState extends State<WalletSend> {
     var row = Row(children: <Widget>[
       Padding(
         padding: const EdgeInsets.only(left: 20),
-        child: Text(WalletLocalizations.of(context).wallet_send_page_title_minerFee_input_title),
+        child: Text(WalletLocalizations.of(context).wallet_send_page_title_minerFee),
       ),
       Expanded(
         child: Padding(
           padding: const EdgeInsets.only (left: 20,right: 20),
           child: TextField(
-            keyboardType: TextInputType.number,
+            keyboardType: TextInputType.numberWithOptions(decimal: true),
             onChanged: (value){
               if(value.length>0){
                 setState(() {

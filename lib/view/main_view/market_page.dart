@@ -1,10 +1,11 @@
+import 'package:auto_size_text/auto_size_text.dart';
 /// Market quotatio main page.
 /// [author] Kevin Zhang
 /// [time] 2019-3-13
 
 import 'package:flutter/material.dart';
-import 'package:auto_size_text/auto_size_text.dart';
 import 'package:wallet_app/l10n/WalletLocalizations.dart';
+
 import 'market_detail.dart';
 
 class MarketPage extends StatefulWidget {
@@ -22,14 +23,19 @@ class _MarketPageState extends State<MarketPage> {
       ),
 
       body: SafeArea(
+        child: Center(
+          child: Text('Coming Soon ...'),
+        ),
+
+        /*
         child: Column(
           children: <Widget>[
             _showExchange(),
             _showTitle(),
             _quotationList(),
-
           ], 
         ),
+        */
       ),
     );
   }
@@ -106,22 +112,22 @@ class _MarketPageState extends State<MarketPage> {
     return InkWell(
       splashColor: Colors.blue[100],
       highlightColor: Colors.blue[100],
-      
+
       onTap: () {
         // Show detail page.
         Navigator.push(
-          context, 
+          context,
           MaterialPageRoute(
             builder: (context) => MarketDetail(),
-          ), 
+          ),
         );
       },
-          
+
       child: Container(
         padding: EdgeInsets.symmetric(horizontal: 20, vertical: 15),
         decoration: BoxDecoration(
           border: Border(
-            bottom: BorderSide(color: Theme.of(context).dividerColor)
+              bottom: BorderSide(color: Theme.of(context).dividerColor)
           ),
         ),
 
@@ -130,44 +136,59 @@ class _MarketPageState extends State<MarketPage> {
             Icon(Icons.attach_money),
             SizedBox(width: 20),
 
-            Column( // Trade pair and exchange
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  children: <Widget>[
-                    Text( // Trade pair first part
-                      'LX',
-                      style: TextStyle(
-                        fontFamily: 'Arial',
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
+            Expanded(
+              child: Column( // Trade pair and exchange
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: <Widget>[
+                      Expanded(
+                        child: AutoSizeText( // Trade pair first part
+                          'LX',
+                          style: TextStyle(
+                            fontFamily: 'Arial',
+                            fontSize: 15,
+                            fontWeight: FontWeight.bold,
+                          ),
+                          minFontSize: 10,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
                       ),
-                    ),
 
-                    Text( // Trade pair second part
-                      ' / USDT',
-                      style: TextStyle(
-                        fontFamily: 'Arial',
-                        fontSize: 13,
+                      Expanded(
+                        child: AutoSizeText( // Trade pair second part
+                          '/USDT',
+                          style: TextStyle(
+                            fontFamily: 'Arial',
+                            fontSize: 13,
+                          ),
+                          minFontSize: 10,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
                       ),
-                    ),
-                  ],
-                ),
-                
-                SizedBox(height: 10),
+                    ],
+                  ),
 
-                Text( // exchange name
-                  'Binance',
-                  style: TextStyle(color: Colors.grey),
-                ),
-              ],
+                  SizedBox(height: 10),
+
+                  AutoSizeText( // exchange name
+                    'Binance',
+                    style: TextStyle(color: Colors.grey),
+                    minFontSize: 10,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ],
+              ),
             ),
 
             SizedBox(width: 20),
 
             Expanded(
-              child: Column( 
+              child: Column(
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: <Widget>[
                   AutoSizeText( // Assets amount
@@ -181,9 +202,12 @@ class _MarketPageState extends State<MarketPage> {
                     overflow: TextOverflow.ellipsis,
                   ),
                   SizedBox(height: 10),
-                  Text( // Assets value
+                  AutoSizeText( // Assets value
                     '\$ 0.12',
                     style: TextStyle(color: Colors.grey),
+                    minFontSize: 10,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
                   ),
                 ],
               ),
@@ -198,7 +222,7 @@ class _MarketPageState extends State<MarketPage> {
                 color: Colors.green,
                 borderRadius: BorderRadius.all(Radius.circular(5)),
               ),
-              
+
               child: AutoSizeText(
                 '+8.12%',
                 style: TextStyle(color: Colors.white),

@@ -1,12 +1,25 @@
+///  Welcome Page-1 
+/// [author] Kevin Zhang
+/// [time] 2019-3-1
+
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:wallet_app/l10n/WalletLocalizations.dart';
+import 'package:wallet_app/tools/Tools.dart';
+import 'package:wallet_app/tools/app_data_setting.dart';
 import 'package:wallet_app/view/main_view/main_page.dart';
 import 'package:wallet_app/view/welcome/welcome_page_2.dart';
+import 'package:wallet_app/view_model/state_lib.dart';
 
 class WelcomePageOne extends StatelessWidget {
+  /**
+   *  curr mode debug  or product
+   */
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: AppCustomColor.themeBackgroudColor,
+      
       appBar: PreferredSize(
         child: AppBar(
           backgroundColor: Colors.transparent,
@@ -32,6 +45,7 @@ class WelcomePageOne extends StatelessWidget {
         // Title
         Text(
           WalletLocalizations.of(context).welcomePageOneTitle,
+          textAlign: TextAlign.center,
           style: TextStyle(
             fontSize: 20.0,
             fontWeight: FontWeight.bold,
@@ -40,24 +54,37 @@ class WelcomePageOne extends StatelessWidget {
 
         // Image for welcome.
         SizedBox(height: 30),
-        Image.asset('assets/logo-png.png', width: 120, height: 120),
+        // Image.asset('assets/image_welcome@2x.png', width: 120, height: 120),
+        Image.asset(Tools.imagePath('image_welcome')),
 
         // Introduction content.
         SizedBox(height: 30),
         Text(
           WalletLocalizations.of(context).welcomePageOneContent,
-          textAlign: TextAlign.left,
-          // style: TextStyle(color: Colors.grey[700]),
+          // textAlign: TextAlign.left,
+          style: TextStyle(
+            // fontFamily: AppCustomColor.fontFamily,
+            // fontSize: 16,
+            // fontWeight: FontWeight.bold,
+            color: AppCustomColor.fontGreyColor,
+            height: 1.3,
+          ),
         ),
 
-        // Next button.
         SizedBox(height: 30),
-        RaisedButton(
-          child: Text(WalletLocalizations.of(context).welcomePageOneButton),
-          color: Colors.blue,
-          textColor: Colors.white,
-          onPressed: () {
-            // Show the welcome page two.
+        RaisedButton( // Next button.
+          elevation: 0,
+          highlightElevation: 0,
+          color: AppCustomColor.btnConfirm,
+          padding: EdgeInsets.symmetric(vertical: 12),
+          child: AutoSizeText(
+            WalletLocalizations.of(context).welcomePageOneButton,
+            minFontSize: 9,
+            maxLines: 1,
+            style: TextStyle(color: Colors.white),
+          ),
+
+          onPressed: (){
             Navigator.push(
               context,
               MaterialPageRoute(
@@ -67,17 +94,47 @@ class WelcomePageOne extends StatelessWidget {
           },
         ),
 
-        FlatButton(
-          child: Text(WalletLocalizations.of(context).common_btn_skip),
-          textColor: Colors.grey,
-          onPressed: () {
-            Navigator.of(context).pushAndRemoveUntil(
-              MaterialPageRoute(builder: (context) => MainPage()), 
-              (route) => route == null
+        /* 
+        CustomRaiseButton( // Next button.
+          context: context,
+          hasRow: false,
+          title: WalletLocalizations.of(context).welcomePageOneButton,
+          titleColor: Colors.white,
+          color: AppCustomColor.btnConfirm,
+          callback: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => WelcomePageTwo()
+              )
             );
           },
-        ),
+        ), */
+
+        /// TEMP CODE
+//        AnimatedOpacity(
+//          duration: Duration(milliseconds: 1000),
+//          opacity:Tools.getCurrRunningMode()?0:1,
+//          child: FlatButton(
+//            child: Text(WalletLocalizations.of(context).common_btn_skip),
+//            textColor: Colors.grey,
+//            onPressed: this.onClickSkip(context),
+//          ),
+//        ),
       ],
     );
   }
+
+  Function onClickSkip(BuildContext context){
+    if(Tools.getCurrRunningMode()==false){
+        return () {
+        Navigator.of(context).pushAndRemoveUntil(
+            MaterialPageRoute(builder: (context) => MainPage()),
+                (route) => route == null
+        );
+      };
+    }
+    return null;
+  }
+
 }

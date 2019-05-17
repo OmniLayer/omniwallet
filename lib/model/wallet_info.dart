@@ -1,4 +1,6 @@
 
+import 'package:meta/meta.dart';
+
 class WalletInfo extends BaseInfo{
 
   String note;
@@ -7,15 +9,23 @@ class WalletInfo extends BaseInfo{
   String iconUrl;
   //钱包帐号地址
   String address;
+
+  int addressIndex;
   //总体价值法币金额
   double totalLegalTender;
+
+  /// wallet address whether visible, default is visible.
+  bool visible = true;
 
   List<AccountInfo> accountInfoes;
 
   WalletInfo({
     String name,
+    @required this.address,
+    @required this.addressIndex,
     this.note,
-    this.iconUrl,this.address,this.totalLegalTender=0,this.accountInfoes
+    this.visible,
+    this.iconUrl,this.totalLegalTender=0,this.accountInfoes
   }):super(name:name);
 
 }
@@ -34,7 +44,15 @@ class AccountInfo extends BaseInfo{
   double amount;
   //法币
   double legalTender;
-  AccountInfo({String name, this.iconUrl,this.amount,this.legalTender}):super(name:name);
+  //服务器传递过来的信息
+  Map jsonData;
+
+  int propertyId;
+
+  /// Asset 是否可见
+  bool visible;
+
+  AccountInfo({String name, this.iconUrl,this.amount,this.legalTender,this.jsonData,this.propertyId,this.visible}):super(name:name);
 }
 
 
@@ -42,7 +60,7 @@ class TradeInfo extends BaseInfo{
   //交易额度
   num amount;
   //交易类型，转出 转入
-  num tradeType;
+  bool tradeType;
   //交易的目标地址
   String objAddress;
   //交易id
@@ -86,8 +104,9 @@ class SendInfo{
  * 用户常用地址
  */
 class UsualAddressInfo extends BaseInfo{
+  int id;
   String address;
   String note;
-  UsualAddressInfo({String name, this.address,this.note}):super(name:name);
+  UsualAddressInfo({this.id, String name, this.address,this.note}):super(name:name);
 }
 

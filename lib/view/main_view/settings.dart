@@ -5,6 +5,8 @@
 import 'package:flutter/material.dart';
 import 'package:wallet_app/l10n/WalletLocalizations.dart';
 import 'package:wallet_app/tools/app_data_setting.dart';
+import 'package:wallet_app/view/welcome/select_language.dart';
+import 'package:wallet_app/view_model/state_lib.dart';
 
 class Settings extends StatefulWidget {
   static String tag = "Settings";
@@ -14,8 +16,21 @@ class Settings extends StatefulWidget {
 }
 
 class _SettingsState extends State<Settings> {
+
+  // String _selectLanguage;
+  // String _currencyUnit;
+  // String _colorTheme;
+
   @override
   Widget build(BuildContext context) {
+
+    // Set value by model.
+    // final model = MainStateModel().of(context);
+    // _selectLanguage = model.getSelectedLanguage;
+    // _currencyUnit   = model.getCurrencyUnit;
+    // _colorTheme     = model.getTheme;
+    // print('==> _currencyUnit = $_currencyUnit');
+
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
@@ -40,25 +55,32 @@ class _SettingsState extends State<Settings> {
     // list tile
     List<Widget> _list = List();
 
-    // item content
-    List<String> items = <String> [
+    // titles
+    List<String> titles = <String> [
       WalletLocalizations.of(context).settingsPageItem_1_Title,
       WalletLocalizations.of(context).settingsPageItem_2_Title,
       WalletLocalizations.of(context).settingsPageItem_3_Title,
     ];
 
     // item content
+    // List<String> values = <String> [
+    //   _selectLanguage, _currencyUnit, _colorTheme
+    // ];
     List<String> values = <String> [
-      'English', 'CNY', 'Light'
+      GlobalInfo.currLanguage,
+      GlobalInfo.currencyUnit,
+      GlobalInfo.colorTheme
     ];
 
     // Page routes
     List<String> routes = <String> [
-      '','',''
+      SelectLanguage.tag,
+      SelectCurrency.tag,
+      SelectTheme.tag
     ];
 
-    for (int i = 0; i < items.length; i++) {
-      _list.add(_menuItem(items[i], values[i], routes[i]));
+    for (int i = 0; i < titles.length; i++) {
+      _list.add(_oneItem(titles[i], values[i], routes[i]));
       _list.add(Divider(height: 0, indent: 15));
     }
 
@@ -66,7 +88,7 @@ class _SettingsState extends State<Settings> {
   }
 
   //
-  Widget _menuItem(String strTitle, String strValue, String route) {
+  Widget _oneItem(String strTitle, String strValue, String route) {
     return Ink(
       color: AppCustomColor.themeBackgroudColor,
       child: ListTile(
@@ -85,7 +107,7 @@ class _SettingsState extends State<Settings> {
           ],
         ),
 
-        onTap: () {Navigator.of(context).pushNamed(route);},
+        onTap: () { Navigator.of(context).pushNamed(route); },
       ),
     );
   }
