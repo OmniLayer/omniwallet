@@ -99,9 +99,9 @@ class _SplashState extends State<Splash> {
   _checkVersion() async {
 
     // Invoke api.
-    var data = await NetConfig.get(context,NetConfig.getNewestVersion,timeOut: 5,);
+    var data = await NetConfig.get(context,NetConfig.getNewestVersion,timeOut: 5);
 
-    if(data!=null&&(data==408||data==600)){
+    if(data!=null&&(data==408||data==600||data==404)){
       refreshOpacity = 1;
       setState(() {});
       return;
@@ -184,12 +184,18 @@ class _SplashState extends State<Splash> {
   /// Upgrade to newer version
   void _upgradeNewerVersion(data) async {
 
+    String path =  data['path'];
     // APK install file download url for Android.
-    var url = NetConfig.imageHost + data['path'];
+    var url = path;
+    if((path.startsWith('http')||path.startsWith('wwww'))==false){
+      url = NetConfig.imageHost + data['path'];
+    }
 
     // Go to App Store for iOS.
     if (Platform.isIOS) {
-      url = 'https://www.baidu.com/'; // temp code
+//      url = 'https://www.baidu.com/'; // temp code
+      Tools.showToast('Please go to TestFlight App for update version testing.',toastLength: Toast.LENGTH_LONG);
+      return;
     }
 
     if (await canLaunch(url)) {
@@ -236,24 +242,27 @@ class _SplashState extends State<Splash> {
     });
   }
 
+  void userNotExistGoToWelcome(SharedPreferences share){
+    share.clear();
+    GlobalInfo.clear();
+    print('==> user is not exist');
+    // show welcome page
+    Navigator.of(context).pushAndRemoveUntil(
+      MaterialPageRoute(builder: (context) => WelcomePageOne()),
+          (route) => route == null,
+    );
+  }
   // 
   void _getUserInfo(SharedPreferences share) {
     Future data = NetConfig.get(
         context, NetConfig.getUserInfo,
-        errorCallback: () {
-          share.clear();
-          GlobalInfo.clear();
-          print('==> user is not exist');
-          // show welcome page
-          Navigator.of(context).pushAndRemoveUntil(
-            MaterialPageRoute(builder: (context) => WelcomePageOne()),
-                (route) => route == null,
-          );
+        errorCallback: (msg) {
+          this.userNotExistGoToWelcome(share);
         }
     );
     // Tools.loadingAnimation(context);
     data.then((data) {
-      if (data != null) {
+      if (NetConfig.checkData(data)) {
         // print('==> --. DATA | ${DateTime.now()}');
         String user_mnemonic = share.get(KeyConfig.user_mnemonic);
         var words = user_mnemonic.split(' ');

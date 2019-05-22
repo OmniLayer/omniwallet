@@ -41,7 +41,7 @@ class UserInfo{
 
     Future future = NetConfig.get(context,NetConfig.btcAndUsdtExchangeRate);
     future.then((data){
-      if(data!=null){
+      if(NetConfig.checkData(data)){
         AssetToUSDRateInfo info = AssetToUSDRateInfo();
         info.btcs[0] = data[0]['rate'];
         info.btcs[1] = data[1]['rate'];
@@ -50,7 +50,7 @@ class UserInfo{
     });
     Future futureAsset = NetConfig.get(context,NetConfig.getDefautAssetList);
     futureAsset.then((data){
-      if(data!=null){
+      if(NetConfig.checkData(data)){
         List list = data;
         GlobalInfo.defaultAssetInfoes.clear();
         for(int i=0;i<list.length;i++){

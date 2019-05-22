@@ -140,7 +140,7 @@ class SendConfirm extends StatelessWidget {
       });
       future.then((data){
         print(data);
-        if(data!=null){
+        if(NetConfig.checkData(data)){
           Navigator.of(context).pop();
           Navigator.of(context).pop();
         }
@@ -157,7 +157,7 @@ class SendConfirm extends StatelessWidget {
             'minerFee':_sendInfo.minerFee.toString(),
       });
       future.then((data){
-        if(data!=null){
+        if(NetConfig.checkData(data)){
           Navigator.of(context).pop();
           Navigator.of(context).pop();
         }

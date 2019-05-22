@@ -255,11 +255,11 @@ class _AddressManageState extends State<AddressManage> {
         'addressName': _nameController.text.trim(),
       });
 
-      response.then((val) {
-        if (val != null) {
+      response.then((data) {
+        if (NetConfig.checkData(data)) {
           setState(() {
             widget.data.name = _nameController.text.trim(); // change locally data.
-            Navigator.of(context).pop(); // Pop loading
+            // Navigator.of(context).pop(); // Pop loading
             Navigator.of(context).pop(); // Pop dialog
           });
         }
@@ -336,8 +336,8 @@ class _AddressManageState extends State<AddressManage> {
               'visible': _isAddressDisplay.toString(),
             });
 
-            response.then((val) {
-              if (val != null) {
+            response.then((data) {
+              if (NetConfig.checkData(data)) {
                 widget.data.visible = _isAddressDisplay;
                 setState(() {});
               }
