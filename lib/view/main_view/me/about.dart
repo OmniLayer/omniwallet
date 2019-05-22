@@ -63,7 +63,7 @@ class _AboutState extends State<About> {
               ),
               SizedBox(height: 10),
               Text(
-                'v1.0.0 Beta 4',
+                'v1.0.0 Beta',
                 style: TextStyle(
                   color: Colors.grey,
                 ),
@@ -174,7 +174,7 @@ class _AboutState extends State<About> {
       }
     );
 
-    if (data != null) {
+    if (NetConfig.checkData(data)) {
       // If has a newer version, then show dialog.
       if (data['code'] > GlobalInfo.currVersionCode) {
         _hasNewerVersion(data);
@@ -256,11 +256,18 @@ class _AboutState extends State<About> {
   void _upgradeNewerVersion(data) async {
 
     // APK install file download url for Android.
-    var url = NetConfig.imageHost + data['path'];
+    String path =  data['path'];
+    // APK install file download url for Android.
+    var url = path;
+    if((path.startsWith('http')||path.startsWith('wwww'))==false){
+      url = NetConfig.imageHost + data['path'];
+    }
 
     // Go to App Store for iOS.
     if (Platform.isIOS) {
-      url = 'https://www.baidu.com/'; // temp code
+//      url = 'https://www.baidu.com/'; // temp code
+      Tools.showToast('Please go to TestFlight App for update version testing.',toastLength: Toast.LENGTH_LONG);
+      return;
     }
 
     if (await canLaunch(url)) {

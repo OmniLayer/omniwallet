@@ -29,10 +29,15 @@ class _BodyContentWidgetState extends State<BodyContentWidget> with SingleTicker
     _refreshController = RefreshController();
   }
 
-  void _onRefresh(){
+  void _onRefresh({int type = 0}){
+    if(type==1){
+      walletInfoes=null;
+      setState(() {
+      });
+    }
     stateModel.setWalletInfoes(null,rightNow: true);
     walletInfoes = stateModel.getWalletInfoes(context);
-    if(walletInfoes!=null){
+    if(type==0){
       _refreshController.refreshCompleted();
     }
   }
@@ -52,6 +57,19 @@ class _BodyContentWidgetState extends State<BodyContentWidget> with SingleTicker
     return ScopedModelDescendant<MainStateModel>(
         builder: (context, child, model) {
           walletInfoes = model.getWalletInfoes(context);
+          print(walletInfoes);
+          if(walletInfoes==null){
+            return Center(child:CircularProgressIndicator());
+          }
+          if(walletInfoes.length==0){
+            return Center(child:GestureDetector(
+                onTap: (){
+                  this._onRefresh(type: 1);
+                },
+                child: Text('empty address list, refresh'))
+            );
+          }
+
           _walletInfoes=[];
           for(var node in walletInfoes){
             if(node.visible){
@@ -59,9 +77,7 @@ class _BodyContentWidgetState extends State<BodyContentWidget> with SingleTicker
             }
           }
 
-          if(walletInfoes.length==0){
-            return Center(child:CircularProgressIndicator());
-          }
+
 
           return SmartRefresher(
             enablePullDown: true,

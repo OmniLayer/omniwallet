@@ -1,7 +1,9 @@
+import 'dart:convert';
 import 'dart:isolate';
 import 'dart:typed_data';
 
 import 'package:bip39/bip39.dart' as bip39;
+import 'package:crypto/crypto.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:wallet_app/model/user_info.dart';
 import 'package:wallet_app/tools/Tools.dart';
@@ -13,10 +15,11 @@ class  GlobalInfo{
 
   static Uint8List bip39Seed;
 
+//  static String dataEncodeString= md5.convert(Utf8Encoder().convert('P@ssw)2d!UPRETSCLIENT')).toString();
   static String dataEncodeString= 'P@ssw)2d!UPRETSCLIENT';
 
   ///当前版本号
-  static int currVersionCode = 3;
+  static int currVersionCode = 4;
 
   static AssetToUSDRateInfo usdRateInfo = AssetToUSDRateInfo();
 

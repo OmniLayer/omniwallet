@@ -165,7 +165,7 @@ class _HomePageState extends State<HomePage> {
     canTouchAdd =false;
     Future future = NetConfig.get(context,NetConfig.getNewestAddressIndex);
     future.then((data){
-      if(data!=null){
+      if(NetConfig.checkData(data)){
         int addressIndex = data;
         this.createAddressAgain(addressName, ++addressIndex);
       }
@@ -187,7 +187,7 @@ class _HomePageState extends State<HomePage> {
         });
 
     result.then((data){
-      if(data!=null){
+      if(NetConfig.checkData(data)){
         stateModel.addWalletInfo(info);
       }
     });

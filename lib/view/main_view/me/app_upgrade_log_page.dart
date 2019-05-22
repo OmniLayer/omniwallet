@@ -26,7 +26,7 @@ class _AppUpgradeLogPageState extends State<AppUpgradeLogPage> {
     super.initState();
     Future future = NetConfig.get(context, NetConfig.appVersionList);
     future.then((data){
-      if(data!=null){
+      if(NetConfig.checkData(data)){
         this.infoes.clear();
         List list = data['data'];
         for(int i=0;i<list.length;i++){

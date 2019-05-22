@@ -16,8 +16,8 @@ class NetConfig{
 //  static String apiHost='http://192.168.0.103:8080/api/';
 //  static String apiHost='http://172.21.100.248:8080/api/';
 
-//  static String apiHost='http://62.234.169.68:8080/walletClient/api/';
-  static String apiHost='http://62.234.169.68:8080/walletClientTest/api/';
+static String apiHost='http://62.234.169.68:8080/walletClient/api/';
+  //  static String apiHost='http://62.234.169.68:8080/walletClientTest/api/';
   static String imageHost='http://62.234.169.68:8080';
 
   /// 创建新用户
@@ -111,6 +111,13 @@ class NetConfig{
     return _sendData(context,"get", url,null,errorCallback: errorCallback,timeOut: timeOut);
   }
 
+  static bool checkData(data){
+    if(data!=null&&(data!=408&&data!=600&&data!=404)){
+      return true;
+    }
+    return false;
+  }
+
   static _sendData(BuildContext context,String reqType, String url,Map<String, String> data,{Function errorCallback=null,int timeOut=30}) async{
 
     Map<String, String> header = new Map();
@@ -138,7 +145,10 @@ class NetConfig{
         response =  await http.post(url,headers: header, body: data).timeout(Duration(seconds: timeOut));
       }
     } on TimeoutException{
-      print('TimeoutException');
+      Tools.showToast('timeout, check your network');
+      if(errorCallback!=null){
+        errorCallback();
+      }
       return 408;
     } on Exception {
       Tools.showToast('check your network');
@@ -182,7 +192,7 @@ class NetConfig{
           );
         }
       });
-      Tools.showToast('user not exist',toastLength: Toast.LENGTH_LONG);
+      Tools.showToast('user logout, please login',toastLength: Toast.LENGTH_LONG);
 
     } else{
       Tools.showToast('server is sleep, please wait');
@@ -190,6 +200,10 @@ class NetConfig{
     if(errorCallback!=null&&isError){
       errorCallback(msg);
     }
+    if(response.statusCode==404){
+      return response.statusCode;
+    }
+    return null;
   }
 
   static uploadImageFunc(File imageFile,{@required Function callback,Function errorCallback}) async{
