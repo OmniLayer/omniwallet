@@ -181,7 +181,11 @@ class WalletModel extends Model{
                 txValue = double.parse(currData['txValue']);
              }
 
-            int time = currData['time']*1000;
+            int time = 0;
+            if (currData['time'] != null) {
+              time = currData['time'] * 1000;
+            }
+
             int confirmAmount = currData['confirmAmount'];
             if(isSend){
               txValue = 0-txValue;
@@ -192,7 +196,7 @@ class WalletModel extends Model{
                     note: '',
                     tradeType: isSend,
                     objAddress: currData['targetAddress'],
-                    tradeDate:DateTime.fromMillisecondsSinceEpoch(time),
+                    tradeDate:time==0?null:DateTime.fromMillisecondsSinceEpoch(time),
                     state: confirmAmount>0?1:0,
                     confirmAmount: confirmAmount,
                     txId: currData['txId'],
@@ -230,6 +234,12 @@ class WalletModel extends Model{
 
 
   String _configAssetLogoUrl(int assetId){
+    for(int i=0;i<GlobalInfo.defaultAssetInfoes.length;i++){
+      var node = GlobalInfo.defaultAssetInfoes[i];
+      if(node.assetId==assetId&&node.url!=null&&node.url.isNotEmpty){
+        return node.url;
+      }
+    }
     switch(assetId){
       case 0:
         return 'coin_logo_BTC';

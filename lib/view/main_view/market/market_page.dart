@@ -9,7 +9,6 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:wallet_app/l10n/WalletLocalizations.dart';
 
-import 'package:wallet_app/view/main_view/market/market_detail.dart';
 import 'package:wallet_app/view_model/state_lib.dart';
 
 class MarketPage extends StatefulWidget {
@@ -22,8 +21,10 @@ class _MarketPageState extends State<MarketPage> with SingleTickerProviderStateM
   List dataList = null;
   Map<int,Object> dataMap = Map();
   List<String> exchanges=[
-    'Binance',
     'Bitfinex',
+    'Binance',
+    'Huobipro',
+    'Okex',
   ];
   RefreshController _refreshController;
   TabController _tabController;
@@ -52,7 +53,7 @@ class _MarketPageState extends State<MarketPage> with SingleTickerProviderStateM
     return list;
   }
 
-  _loadDataFromServer(int currTabIndex) async{
+  _loadDataFromServer(int currTabIndex,{Function callback =null}) async{
     print(this.dataMap.containsKey(currTabIndex));
     if(this.dataMap.containsKey(currTabIndex)){
        this.dataList = this.dataMap[currTabIndex];
@@ -73,6 +74,9 @@ class _MarketPageState extends State<MarketPage> with SingleTickerProviderStateM
         if(this.dataMap.containsKey(currTabIndex)==false){
           this.dataMap[currTabIndex] = this.dataList;
         }
+        if(callback!=null){
+          callback();
+        }
       }on Exception{
         this.dataList =[];
       }
@@ -85,8 +89,12 @@ class _MarketPageState extends State<MarketPage> with SingleTickerProviderStateM
   void _onRefresh(){
     this.dataMap.remove(this._tabController.index);
     this.dataList = null;
-    this._loadDataFromServer(this._tabController.index);
-    _refreshController.refreshCompleted();
+    setState(() {
+
+    });
+    this._loadDataFromServer(this._tabController.index,callback: (){
+      _refreshController.refreshCompleted();
+    });
   }
 
   @override
@@ -140,7 +148,7 @@ class _MarketPageState extends State<MarketPage> with SingleTickerProviderStateM
       list.add(SmartRefresher(
         enablePullDown: true,
         enablePullUp: false,
-        header: WaterDropHeader(),
+        header: ClassicHeader(),
         controller: _refreshController,
         onRefresh: _onRefresh,
         child: ListView.builder(

@@ -191,6 +191,10 @@ class _AddressBookState extends State<AddressBook> {
       return Center(child:CircularProgressIndicator());
     }else
     {
+      if(this._usualAddressList.length==0){
+        return Center(child:Text('empty address book'));
+      }
+
       return ListView.builder(
           itemCount: _usualAddressList.length,
           itemBuilder: (BuildContext context, int index){

@@ -17,7 +17,7 @@ class NetConfig{
 //  static String apiHost='http://172.21.100.248:8080/api/';
 
 static String apiHost='http://62.234.169.68:8080/walletClient/api/';
-  //  static String apiHost='http://62.234.169.68:8080/walletClientTest/api/';
+//    static String apiHost='http://62.234.169.68:8080/walletClientTest/api/';
   static String imageHost='http://62.234.169.68:8080';
 
   /// 创建新用户

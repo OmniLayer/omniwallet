@@ -141,9 +141,9 @@ class _CreateAccountState extends State<CreateAccount> {
         _nickNameHasFocus = false;
       } else {
         _nickNameHasFocus = true;
-        if (_nickNameController.text.trim().length > 12) {
-          _nickNameController.text = _nickNameController.text.substring(0, 12);
-        }
+        // if (_nickNameController.text.trim().length > 12) {
+        //   _nickNameController.text = _nickNameController.text.substring(0, 12);
+        // }
       }
     }
 
@@ -153,9 +153,9 @@ class _CreateAccountState extends State<CreateAccount> {
         _pinCodeHasFocus = false;
       } else {
         _pinCodeHasFocus = true;
-        if (_pinCodeController.text.trim().length > 6) {
-          _pinCodeController.text = _pinCodeController.text.substring(0, 6);
-        }
+        // if (_pinCodeController.text.trim().length > 6) {
+        //   _pinCodeController.text = _pinCodeController.text.substring(0, 6);
+        // }
       }
     }
 
@@ -165,9 +165,9 @@ class _CreateAccountState extends State<CreateAccount> {
         _repeatPinCodeHasFocus = false;
       } else {
         _repeatPinCodeHasFocus = true;
-        if (_repeatPinCodeController.text.trim().length > 6) {
-          _repeatPinCodeController.text = _repeatPinCodeController.text.substring(0, 6);
-        }
+        // if (_repeatPinCodeController.text.trim().length > 6) {
+        //   _repeatPinCodeController.text = _repeatPinCodeController.text.substring(0, 6);
+        // }
       }
     }
 
@@ -276,7 +276,7 @@ class _CreateAccountState extends State<CreateAccount> {
         focusNode:   _node,
         obscureText: _textField == 1 ? false : true,
         keyboardType: _textField == 1 ? null : TextInputType.number,
-        // maxLength: _textField == 1 ? 18 : 6,
+        maxLength: _textField == 1 ? 12 : 6,
         decoration: _inputDecoration(_iconName, _hintText, 
           _hasFocus, _helperText, _controller),
         validator: (val) => _validate(val, _textField),
@@ -370,28 +370,36 @@ class _CreateAccountState extends State<CreateAccount> {
     );
   }
 
+  // Avoid multi-click.
   bool canCreate = true;
-  /// form submit
+
+  /// Do form submit.
   void _onSubmit() {
-    if(this.canCreate==false) return ;
+
+    if (this.canCreate == false) return; // Avoid multi-click.
+
     final form = _formKey.currentState;
+
     if (form.validate()) {
-      // form.save();
-      this.canCreate =false;
-      /// 1) create [Mnemonic Phrase] and save it to locally (Clear text)
+      // Avoid multi-click.
+      this.canCreate = false;
+
+      // 1. Create Mnemonic Phrase.
       String _mnemonic =  MnemonicPhrase.getInstance().createPhrases();
       print('==> [Mnemonic Phrase] ==> $_mnemonic');
 
-      /// 2) Encrypt the [Mnemonic Phrase] with the MD5 algorithm and
-      /// save it locally and remotely as User ID. 
-      /// (User ID is used to associate user data)
+      // 2. Encrypt the Mnemonic Phrase with the MD5 algorithm and
+      // save it locally and remotely as User ID. 
+      // (User ID is used to associate user data)
       String _mnemonic_md5 =  Tools.convertMD5Str(_mnemonic);
 
-      /// 3) Encrypt the [PIN code] with the MD5 algorithm and save it locally
+      // 3. Encrypt the PIN code with the MD5 algorithm.
       String _pinCode_md5 = Tools.convertMD5Str(_pinCodeController.text);
 
+      // Show loading animation.
       Tools.loadingAnimation(context);
-      /// 4) [Nick name] (Clear text) and [Mnemonic Phrase] (MD5) save to remote.
+
+      // 4. Nick name (Clear text) , Mnemonic Phrase (MD5) and Pin Code (MD5) save to remotely.
       Future data = NetConfig.post(context,
         NetConfig.createUser,
         {
@@ -412,8 +420,12 @@ class _CreateAccountState extends State<CreateAccount> {
           GlobalInfo.userInfo.pinCode  = _pinCode_md5;
           GlobalInfo.userInfo.nickname = _nickNameController.text;
           GlobalInfo.userInfo.loginToken = data['token'];
-          Tools.saveStringKeyValue(KeyConfig.user_login_token, GlobalInfo.userInfo.loginToken);
 
+          // Save data to locally.
+          // Login Token
+          // Mnemonic Phrase (AES Encrypt and MD5)
+          // Pin code (MD5)
+          Tools.saveStringKeyValue(KeyConfig.user_login_token, GlobalInfo.userInfo.loginToken);
           Tools.saveStringKeyValue(KeyConfig.user_mnemonic, Tools.encryptAes(_mnemonic));
           Tools.saveStringKeyValue(KeyConfig.user_mnemonic_md5, _mnemonic_md5);
           Tools.saveStringKeyValue(KeyConfig.user_pinCode_md5, _pinCode_md5);
