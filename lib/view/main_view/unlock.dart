@@ -64,6 +64,8 @@ class _UnlockState extends State<Unlock> {
     super.dispose();
   }
 
+
+
   
   @override
   Widget build(BuildContext context) {
@@ -140,6 +142,7 @@ class _UnlockState extends State<Unlock> {
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 70),
         child: TextFormField(
+          enableInteractiveSelection: false,  // disable copy / paste text .
           controller:  _pinCodeController,
           focusNode:   _nodePin,
           autofocus: true,

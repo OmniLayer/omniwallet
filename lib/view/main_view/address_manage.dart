@@ -112,17 +112,24 @@ class _AddressManageState extends State<AddressManage> {
 
   ///
   Widget _bodyTitle() {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-      child: AutoSizeText(
-        widget.data.address,
-        overflow: TextOverflow.ellipsis,
-        textAlign: TextAlign.center,
-        minFontSize: 9,
-        maxLines: 1,
-        style: TextStyle(
-          color: Colors.blue,
-          fontSize: 16,
+    return InkWell(
+      onTap: () {
+        Tools.copyToClipboard(widget.data.address);
+        Tools.showToast(WalletLocalizations.of(context).wallet_receive_page_tips_copy);
+      },
+
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+        child: AutoSizeText(
+          widget.data.address,
+          overflow: TextOverflow.ellipsis,
+          textAlign: TextAlign.center,
+          minFontSize: 9,
+          maxLines: 1,
+          style: TextStyle(
+            color: Colors.blue,
+            fontSize: 16,
+          ),
         ),
       ),
     );
@@ -280,6 +287,12 @@ class _AddressManageState extends State<AddressManage> {
           } else {
             _hasClearIcon = true;
           }
+
+          // name max length = 10
+          // if (_nameController.text.trim().length > 10) {
+          //   _nameController.text = _nameController.text.substring(0, 10);
+          // }
+
           setState(() { });
         },
         
@@ -288,6 +301,7 @@ class _AddressManageState extends State<AddressManage> {
           child: TextFormField(
             controller:  _nameController,
             focusNode:   _nodeText,
+            maxLength: 10,
             // autofocus: true,
             validator: (val) => _validate(val),
             decoration: InputDecoration(

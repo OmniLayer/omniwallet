@@ -89,22 +89,22 @@ class BackupWalletIndex extends StatelessWidget  {
   List<Widget> _getActions(BuildContext context){
     List<Widget> list = [];
     if (this.param == null ) {
-      list.add(
-          CustomRaiseButton( // later button.
-            context: context,
-            flex: 1,
-            title: WalletLocalizations.of(context).backup_index_laterbackup,
-            titleColor: Colors.blue,
-            color: AppCustomColor.btnCancel,
-            callback: () {
-              Navigator.of(context).pushNamedAndRemoveUntil(
-                MainPage.tag,
-                (route) => route == null,
-              );
-            },
-        )
-      );
-      list.add(SizedBox(width: 15));
+//      list.add(
+//          CustomRaiseButton( // later button.
+//            context: context,
+//            flex: 1,
+//            title: WalletLocalizations.of(context).backup_index_laterbackup,
+//            titleColor: Colors.blue,
+//            color: AppCustomColor.btnCancel,
+//            callback: () {
+//              Navigator.of(context).pushNamedAndRemoveUntil(
+//                MainPage.tag,
+//                (route) => route == null,
+//              );
+//            },
+//        )
+//      );
+//      list.add(SizedBox(width: 15));
     }
     list.add(
         CustomRaiseButton(

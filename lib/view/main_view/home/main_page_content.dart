@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:wallet_app/tools/app_data_setting.dart';
@@ -77,12 +79,10 @@ class _BodyContentWidgetState extends State<BodyContentWidget> with SingleTicker
             }
           }
 
-
-
           return SmartRefresher(
             enablePullDown: true,
             enablePullUp: false,
-            header: WaterDropHeader(),
+            header: ClassicHeader(),
             controller: _refreshController,
             onRefresh: _onRefresh,
             child: ListView.builder(
@@ -211,7 +211,10 @@ class _BodyContentWidgetState extends State<BodyContentWidget> with SingleTicker
               margin: EdgeInsets.all(6),
               child: Row(
                 children: <Widget>[
+                  accountInfo.iconUrl.contains('image/wallet')?
+                  Tools.networkImage(accountInfo.iconUrl,defaultImage: Tools.imagePath('coin_logo_OMN'),width: 25,height: 25):
                   Image.asset(Tools.imagePath(accountInfo.iconUrl),width: 25,height: 25,),
+
                   Container(
                     margin: EdgeInsets.only(left: 16),
                       child: AutoSizeText('${accountInfo.name}',style: TextStyle(fontSize: 15),minFontSize: 12,)

@@ -4,6 +4,7 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:bip39/bip39.dart' as bip39;
 import 'package:flutter/material.dart';
 import 'package:keyboard_actions/keyboard_actions.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:wallet_app/view/main_view/main_page.dart';
 import 'package:wallet_app/view/widgets/custom_raise_button_widget.dart';
 import 'package:wallet_app/view_model/state_lib.dart';
@@ -34,6 +35,7 @@ class _RestoreAccountState extends State<RestoreAccount> {
     controller1 = TextEditingController();
     controller2 = TextEditingController();
   }
+
 
   @override
   void dispose() {
@@ -292,6 +294,10 @@ class _RestoreAccountState extends State<RestoreAccount> {
 
               Tools.saveStringKeyValue(KeyConfig.user_mnemonic_md5, userId);
 
+              Future<SharedPreferences> prefs = SharedPreferences.getInstance();
+              prefs.then((share){
+                share.setBool(KeyConfig.is_backup, true);
+              });
 
               GlobalInfo.bip39Seed = null;
               GlobalInfo.userInfo.init(context,(){

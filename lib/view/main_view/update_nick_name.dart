@@ -105,6 +105,12 @@ class _UpdateNickNameState extends State<UpdateNickName> {
         } else {
           _hasClearIcon = true;
         }
+
+        // nick name max length = 12
+        // if (_nickNameController.text.trim().length > 12) {
+        //   _nickNameController.text = _nickNameController.text.substring(0, 12);
+        // }
+
         setState(() { });
       },
       
@@ -113,6 +119,7 @@ class _UpdateNickNameState extends State<UpdateNickName> {
         child: TextFormField(
           controller:  _nickNameController,
           focusNode:   _nodeNickName,
+          maxLength: 12,
           autofocus: true,
           validator: (val) => _validate(val),
           decoration: InputDecoration(

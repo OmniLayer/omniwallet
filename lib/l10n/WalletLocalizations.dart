@@ -151,7 +151,7 @@ class WalletLocalizations{
 
       'buttom_tab1_name' : '钱包',
       'buttom_tab2_name' : '市场',
-      'buttom_tab3_name' : 'Flash Pay',
+      'buttom_tab3_name' : '闪付',
       'buttom_tab4_name' : '我的',
 
       'wallet_detail_content_send' : '转账',
