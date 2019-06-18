@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+
+    <!-- prod文件路径 -->
+    <property name="PRO_FILE_PATH" value="/opt/tomcat/logs/walletAdmin" />
+
+	<include resource="org/springframework/boot/logging/logback/base.xml" />
+	<appender name="rollingAppender"
+		class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<file>${PRO_FILE_PATH}/applicationWalletAdmin.log</file>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<fileNamePattern>${PRO_FILE_PATH}//applicationWalletAdmin-%d{yyyy-MM-dd}.log</fileNamePattern>
+			<maxHistory>60</maxHistory>
+		</rollingPolicy>
+		<encoder><!-- 必须指定，否则不会往文件输出内容 -->
+			<pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{5} - %msg%n</pattern>
+		</encoder>
+		<append>true</append>
+		<prudent>false</prudent>
+	</appender>
+	<logger name="com.lx.server.dao" level="ALL">
+		<appender-ref ref="rollingAppender" />
+	</logger>
+	<logger name="com.lx.server.admin.controller" level="ALL">
+		<appender-ref ref="rollingAppender" />
+	</logger>
+	<logger name="com.lx.server.service.impl" level="ALL">
+		<appender-ref ref="rollingAppender" />
+	</logger>
+	
+
+</configuration>

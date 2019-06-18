@@ -1,0 +1,227 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--
+【btc的交易记录】对象关系映射 配置
+ @author AutoCode 309444359@qq.com
+ @date 2019-05-10 10:12:11
+ -->
+<!-- namespace必须指向Dao接口 -->
+<mapper namespace="com.lx.server.dao.BtcTransactionDao">
+
+	<resultMap id="btcTransactionResultMap" type="com.lx.server.pojo.BtcTransaction">
+		<id property="id" column="id" />
+				<result property="fromAddress" column="from_address" />
+				<result property="toAddress" column="to_address" />
+				<result property="amount" column="amount" />
+				<result property="fee" column="fee" />
+				<result property="blockHeight" column="block_height" />
+				<result property="blockTime" column="block_time" />
+				<result property="blockIndex" column="block_index" />
+				<result property="blockHash" column="block_hash" />
+				<result property="createTime" column="create_time" />
+	</resultMap>
+	<resultMap id="mapResultMap"  type="java.util.HashMap" extends="btcTransactionResultMap"></resultMap>
+	<resultMap id="pageResultMap"  type="java.util.HashMap" extends="btcTransactionResultMap"></resultMap>
+
+
+	<insert id="insert" parameterType="com.lx.server.pojo.BtcTransaction" useGeneratedKeys="true" keyProperty="id" >
+	   insert into t_btc_transaction (
+	    <include refid="columns" />
+	   )values (
+	     #{id},
+	     #{fromAddress},
+	     #{toAddress},
+	     #{amount},
+	     #{fee},
+	     #{blockHeight},
+	     #{blockTime},
+	     #{blockIndex},
+	     #{blockHash},
+	     #{createTime}
+	   )
+	</insert>
+
+	<update id="update" parameterType="com.lx.server.pojo.BtcTransaction">
+		update t_btc_transaction
+		<set>
+		<if test="fromAddress != null">
+			from_address=#{fromAddress},
+		</if>
+		<if test="toAddress != null">
+			to_address=#{toAddress},
+		</if>
+		<if test="amount != null">
+			amount=#{amount},
+		</if>
+		<if test="fee != null">
+			fee=#{fee},
+		</if>
+		<if test="blockHeight != null">
+			block_height=#{blockHeight},
+		</if>
+		<if test="blockTime != null">
+			block_time=#{blockTime},
+		</if>
+		<if test="blockIndex != null">
+			block_index=#{blockIndex},
+		</if>
+		<if test="blockHash != null">
+			block_hash=#{blockHash},
+		</if>
+		<if test="createTime != null">
+			create_time=#{createTime},
+		</if>
+		</set>
+		<where>
+			1=1
+			<if test="id != null">
+				and id=#{id}
+			</if>
+			<if test="n_fromAddress != null">
+				and from_address=#{n_fromAddress}
+			</if>
+			<if test="n_toAddress != null">
+				and to_address=#{n_toAddress}
+			</if>
+			<if test="n_amount != null">
+				and amount=#{n_amount}
+			</if>
+			<if test="n_fee != null">
+				and fee=#{n_fee}
+			</if>
+			<if test="n_blockHeight != null">
+				and block_height=#{n_blockHeight}
+			</if>
+			<if test="n_blockTime != null">
+				and block_time=#{n_blockTime}
+			</if>
+			<if test="n_blockIndex != null">
+				and block_index=#{n_blockIndex}
+			</if>
+			<if test="n_blockHash != null">
+				and block_hash=#{n_blockHash}
+			</if>
+			<if test="n_createTime != null">
+				and create_time=#{n_createTime}
+			</if>
+		</where>
+	</update>
+
+	<delete id="delete" parameterType="map">
+	   delete from
+	     t_btc_transaction
+	   	where 
+	    id=#{id}
+	</delete>
+
+	<select id="selectObject" parameterType="map" resultMap="btcTransactionResultMap">
+	   select
+	<include refid="columns" />
+	   from t_btc_transaction
+	   where
+	    id=#{id}
+	</select>
+
+	<select id="selectObjectList" parameterType="map" resultMap="btcTransactionResultMap">
+	   select
+	<include refid="columns" />
+	   from t_btc_transaction
+	   <where>
+	 <include refid="normalCondition"/>
+	   </where>
+	</select>
+
+	<select id="selectMap" parameterType="map" resultMap="mapResultMap">
+	   select
+	<include refid="columns" />
+	   from t_btc_transaction
+	   where
+	    id=#{id}
+	</select>
+
+	<select id="selectMapList" parameterType="map" resultMap="mapResultMap">
+	   select
+	<include refid="columns" />
+	   from t_btc_transaction
+	   <where>
+	   <include refid="normalCondition"/>
+	   </where>
+	</select>
+
+	<select id="page" parameterType="map" resultMap="pageResultMap">
+	   select
+	<include refid="columns" />
+	<include refid="pageCondition" />
+	limit #{offset},#{rows}
+	</select>
+
+	<select id="pageBean" parameterType="map" resultMap="btcTransactionResultMap">
+	   select
+	<include refid="columns" />
+	<include refid="pageCondition" />
+	limit #{offset},#{rows}
+	</select>
+	
+	<select id="pageCount" parameterType="map" resultType="int">
+	   select count(1)
+	   <include refid="pageCondition" />
+	</select>
+
+	<sql id="pageCondition">
+	   from t_btc_transaction
+	   <where>
+			<include refid="normalCondition"/>
+	   </where>
+	</sql>
+
+	<sql id="normalCondition">
+		1=1
+		<if test="id != null">
+			and id=#{id}
+		</if>
+		<if test="fromAddress != null">
+			and from_address=#{fromAddress}
+		</if>
+		<if test="toAddress != null">
+			and to_address=#{toAddress}
+		</if>
+		<if test="amount != null">
+			and amount=#{amount}
+		</if>
+		<if test="fee != null">
+			and fee=#{fee}
+		</if>
+		<if test="blockHeight != null">
+			and block_height=#{blockHeight}
+		</if>
+		<if test="blockTime != null">
+			and block_time=#{blockTime}
+		</if>
+		<if test="blockIndex != null">
+			and block_index=#{blockIndex}
+		</if>
+		<if test="blockHash != null">
+			and block_hash=#{blockHash}
+		</if>
+		<if test="createTime != null">
+			and create_time=#{createTime}
+		</if>
+		<if test="keyword != null">
+			and (name LIKE CONCAT("%", #{keyword}, "%") )
+		</if>
+		order by  id  desc 
+	</sql>
+	<sql id="columns">
+			id,
+			from_address,
+			to_address,
+			amount,
+			fee,
+			block_height,
+			block_time,
+			block_index,
+			block_hash,
+			create_time
+	</sql>
+</mapper>

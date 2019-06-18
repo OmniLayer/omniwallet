@@ -1,0 +1,227 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--
+【用户表】对象关系映射 配置
+ @author AutoCode 309444359@qq.com
+ @date 2019-04-26 17:42:20
+ -->
+<!-- namespace必须指向Dao接口 -->
+<mapper namespace="com.lx.server.dao.UserAdminDao">
+
+	<resultMap id="userAdminResultMap" type="com.lx.server.pojo.UserAdmin">
+		<id property="id" column="id" />
+				<result property="username" column="username" />
+				<result property="password" column="password" />
+				<result property="nickname" column="nickname" />
+				<result property="faceUrl" column="face_url" />
+				<result property="lastLoginTime" column="last_login_time" />
+				<result property="isEnable" column="is_enable" />
+				<result property="isDelete" column="is_delete" />
+				<result property="createTime" column="create_time" />
+				<result property="lastPasswordResetDate" column="last_password_reset_date" />
+	</resultMap>
+	<resultMap id="mapResultMap"  type="java.util.HashMap" extends="userAdminResultMap"></resultMap>
+	<resultMap id="pageResultMap"  type="java.util.HashMap" extends="userAdminResultMap"></resultMap>
+
+
+	<insert id="insert" parameterType="com.lx.server.pojo.UserAdmin" useGeneratedKeys="true" keyProperty="id" >
+	   insert into t_user_admin (
+	    <include refid="columns" />
+	   )values (
+	     #{id},
+	     #{username},
+	     #{password},
+	     #{nickname},
+	     #{faceUrl},
+	     #{lastLoginTime},
+	     #{isEnable},
+	     #{isDelete},
+	     #{createTime},
+	     #{lastPasswordResetDate}
+	   )
+	</insert>
+
+	<update id="update" parameterType="com.lx.server.pojo.UserAdmin">
+		update t_user_admin
+		<set>
+		<if test="username != null">
+			username=#{username},
+		</if>
+		<if test="password != null">
+			password=#{password},
+		</if>
+		<if test="nickname != null">
+			nickname=#{nickname},
+		</if>
+		<if test="faceUrl != null">
+			face_url=#{faceUrl},
+		</if>
+		<if test="lastLoginTime != null">
+			last_login_time=#{lastLoginTime},
+		</if>
+		<if test="isEnable != null">
+			is_enable=#{isEnable},
+		</if>
+		<if test="isDelete != null">
+			is_delete=#{isDelete},
+		</if>
+		<if test="createTime != null">
+			create_time=#{createTime},
+		</if>
+		<if test="lastPasswordResetDate != null">
+			last_password_reset_date=#{lastPasswordResetDate},
+		</if>
+		</set>
+		<where>
+			1=1
+			<if test="id != null">
+				and id=#{id}
+			</if>
+			<if test="n_username != null">
+				and username=#{n_username}
+			</if>
+			<if test="n_password != null">
+				and password=#{n_password}
+			</if>
+			<if test="n_nickname != null">
+				and nickname=#{n_nickname}
+			</if>
+			<if test="n_faceUrl != null">
+				and face_url=#{n_faceUrl}
+			</if>
+			<if test="n_lastLoginTime != null">
+				and last_login_time=#{n_lastLoginTime}
+			</if>
+			<if test="n_isEnable != null">
+				and is_enable=#{n_isEnable}
+			</if>
+			<if test="n_isDelete != null">
+				and is_delete=#{n_isDelete}
+			</if>
+			<if test="n_createTime != null">
+				and create_time=#{n_createTime}
+			</if>
+			<if test="n_lastPasswordResetDate != null">
+				and last_password_reset_date=#{n_lastPasswordResetDate}
+			</if>
+		</where>
+	</update>
+
+	<delete id="delete" parameterType="map">
+	   delete from
+	     t_user_admin
+	   	where 
+	    id=#{id}
+	</delete>
+
+	<select id="selectObject" parameterType="map" resultMap="userAdminResultMap">
+	   select
+	<include refid="columns" />
+	   from t_user_admin
+	   where
+	    id=#{id}
+	</select>
+
+	<select id="selectObjectList" parameterType="map" resultMap="userAdminResultMap">
+	   select
+	<include refid="columns" />
+	   from t_user_admin
+	   <where>
+	 <include refid="normalCondition"/>
+	   </where>
+	</select>
+
+	<select id="selectMap" parameterType="map" resultMap="mapResultMap">
+	   select
+	<include refid="columns" />
+	   from t_user_admin
+	   where
+	    id=#{id}
+	</select>
+
+	<select id="selectMapList" parameterType="map" resultMap="mapResultMap">
+	   select
+	<include refid="columns" />
+	   from t_user_admin
+	   <where>
+	   <include refid="normalCondition"/>
+	   </where>
+	</select>
+
+	<select id="page" parameterType="map" resultMap="pageResultMap">
+	   select
+	<include refid="columns" />
+	<include refid="pageCondition" />
+	limit #{offset},#{rows}
+	</select>
+
+	<select id="pageBean" parameterType="map" resultMap="userAdminResultMap">
+	   select
+	<include refid="columns" />
+	<include refid="pageCondition" />
+	limit #{offset},#{rows}
+	</select>
+	
+	<select id="pageCount" parameterType="map" resultType="int">
+	   select count(1)
+	   <include refid="pageCondition" />
+	</select>
+
+	<sql id="pageCondition">
+	   from t_user_admin
+	   <where>
+			<include refid="normalCondition"/>
+	   </where>
+	</sql>
+
+	<sql id="normalCondition">
+		1=1
+		<if test="id != null">
+			and id=#{id}
+		</if>
+		<if test="username != null">
+			and username=#{username}
+		</if>
+		<if test="password != null">
+			and password=#{password}
+		</if>
+		<if test="nickname != null">
+			and nickname=#{nickname}
+		</if>
+		<if test="faceUrl != null">
+			and face_url=#{faceUrl}
+		</if>
+		<if test="lastLoginTime != null">
+			and last_login_time=#{lastLoginTime}
+		</if>
+		<if test="isEnable != null">
+			and is_enable=#{isEnable}
+		</if>
+		<if test="isDelete != null">
+			and is_delete=#{isDelete}
+		</if>
+		<if test="createTime != null">
+			and create_time=#{createTime}
+		</if>
+		<if test="lastPasswordResetDate != null">
+			and last_password_reset_date=#{lastPasswordResetDate}
+		</if>
+		<if test="keyword != null">
+			and (name LIKE CONCAT("%", #{keyword}, "%") )
+		</if>
+		order by  id  desc 
+	</sql>
+	<sql id="columns">
+			id,
+			username,
+			password,
+			nickname,
+			face_url,
+			last_login_time,
+			is_enable,
+			is_delete,
+			create_time,
+			last_password_reset_date
+	</sql>
+</mapper>

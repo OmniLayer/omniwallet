@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--
+【用户的转账常用地址】对象关系映射 配置
+ @author AutoCode 309444359@qq.com
+ @date 2019-04-22 09:12:07
+ -->
+<!-- namespace必须指向Dao接口 -->
+<mapper namespace="com.lx.server.dao.UserTransferAddressDao">
+
+	<resultMap id="userTransferAddressResultMap" type="com.lx.server.pojo.UserTransferAddress">
+		<id property="id" column="id" />
+				<result property="userId" column="user_id" />
+				<result property="nickname" column="nickname" />
+				<result property="address" column="address" />
+				<result property="note" column="note" />
+				<result property="createTime" column="create_time" />
+	</resultMap>
+	<resultMap id="mapResultMap"  type="java.util.HashMap" extends="userTransferAddressResultMap"></resultMap>
+	<resultMap id="pageResultMap"  type="java.util.HashMap" extends="userTransferAddressResultMap"></resultMap>
+
+
+	<insert id="insert" parameterType="com.lx.server.pojo.UserTransferAddress" useGeneratedKeys="true" keyProperty="id" >
+	   insert into t_user_transfer_address (
+	    <include refid="columns" />
+	   )values (
+	     #{id},
+	     #{userId},
+	     #{nickname},
+	     #{address},
+	     #{note},
+	     #{createTime}
+	   )
+	</insert>
+
+	<update id="update" parameterType="com.lx.server.pojo.UserTransferAddress">
+		update t_user_transfer_address
+		<set>
+		<if test="userId != null">
+			user_id=#{userId},
+		</if>
+		<if test="nickname != null">
+			nickname=#{nickname},
+		</if>
+		<if test="address != null">
+			address=#{address},
+		</if>
+		<if test="note != null">
+			note=#{note},
+		</if>
+		<if test="createTime != null">
+			create_time=#{createTime},
+		</if>
+		</set>
+		<where>
+			1=1
+			<if test="id != null">
+				and id=#{id}
+			</if>
+			<if test="n_userId != null">
+				and user_id=#{n_userId}
+			</if>
+			<if test="n_nickname != null">
+				and nickname=#{n_nickname}
+			</if>
+			<if test="n_address != null">
+				and address=#{n_address}
+			</if>
+			<if test="n_note != null">
+				and note=#{n_note}
+			</if>
+			<if test="n_createTime != null">
+				and create_time=#{n_createTime}
+			</if>
+		</where>
+	</update>
+
+	<delete id="delete" parameterType="map">
+	   delete from
+	     t_user_transfer_address
+	   	where 
+	    id=#{id}
+	</delete>
+
+	<select id="selectObject" parameterType="map" resultMap="userTransferAddressResultMap">
+	   select
+	<include refid="columns" />
+	   from t_user_transfer_address
+	   where
+	    id=#{id}
+	</select>
+
+	<select id="selectObjectList" parameterType="map" resultMap="userTransferAddressResultMap">
+	   select
+	<include refid="columns" />
+	   from t_user_transfer_address
+	   <where>
+	 <include refid="normalCondition"/>
+	   </where>
+	</select>
+
+	<select id="selectMap" parameterType="map" resultMap="mapResultMap">
+	   select
+	<include refid="columns" />
+	   from t_user_transfer_address
+	   where
+	    id=#{id}
+	</select>
+
+	<select id="selectMapList" parameterType="map" resultMap="mapResultMap">
+	   select
+	<include refid="columns" />
+	   from t_user_transfer_address
+	   <where>
+	   <include refid="normalCondition"/>
+	   </where>
+	</select>
+
+	<select id="page" parameterType="map" resultMap="pageResultMap">
+	   select
+	<include refid="columns" />
+	<include refid="pageCondition" />
+	limit #{offset},#{rows}
+	</select>
+
+	<select id="pageBean" parameterType="map" resultMap="userTransferAddressResultMap">
+	   select
+	<include refid="columns" />
+	<include refid="pageCondition" />
+	limit #{offset},#{rows}
+	</select>
+	
+	<select id="pageCount" parameterType="map" resultType="int">
+	   select count(1)
+	   <include refid="pageCondition" />
+	</select>
+
+	<sql id="pageCondition">
+	   from t_user_transfer_address
+	   <where>
+			<include refid="normalCondition"/>
+	   </where>
+	</sql>
+
+	<sql id="normalCondition">
+		1=1
+		<if test="id != null">
+			and id=#{id}
+		</if>
+		<if test="userId != null">
+			and user_id=#{userId}
+		</if>
+		<if test="nickname != null">
+			and nickname=#{nickname}
+		</if>
+		<if test="address != null">
+			and address=#{address}
+		</if>
+		<if test="note != null">
+			and note=#{note}
+		</if>
+		<if test="createTime != null">
+			and create_time=#{createTime}
+		</if>
+		<if test="keyword != null">
+			and (name LIKE CONCAT("%", #{keyword}, "%") )
+		</if>
+		order by  id  desc 
+	</sql>
+	<sql id="columns">
+			id,
+			user_id,
+			nickname,
+			address,
+			note,
+			create_time
+	</sql>
+</mapper>

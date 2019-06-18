@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--
+【平台支持的资产类型】对象关系映射 配置
+ @author AutoCode 309444359@qq.com
+ @date 2019-06-14 10:53:55
+ -->
+<!-- namespace必须指向Dao接口 -->
+<mapper namespace="com.lx.server.dao.FpConfigPropertyDao">
+
+	<resultMap id="fpConfigPropertyResultMap" type="com.lx.server.pojo.FpConfigProperty">
+		<id property="id" column="id" />
+				<result property="name" column="name" />
+				<result property="propertyId" column="property_id" />
+				<result property="desc" column="desc" />
+				<result property="createTime" column="create_time" />
+				<result property="createBy" column="create_by" />
+	</resultMap>
+	<resultMap id="mapResultMap"  type="java.util.HashMap" extends="fpConfigPropertyResultMap"></resultMap>
+	<resultMap id="pageResultMap"  type="java.util.HashMap" extends="fpConfigPropertyResultMap"></resultMap>
+
+
+	<insert id="insert" parameterType="com.lx.server.pojo.FpConfigProperty" useGeneratedKeys="true" keyProperty="id" >
+	   insert into t_fp_config_property (
+	    <include refid="columns" />
+	   )values (
+	     #{id},
+	     #{name},
+	     #{propertyId},
+	     #{desc},
+	     #{createTime},
+	     #{createBy}
+	   )
+	</insert>
+
+	<update id="update" parameterType="com.lx.server.pojo.FpConfigProperty">
+		update t_fp_config_property
+		<set>
+		<if test="name != null">
+			name=#{name},
+		</if>
+		<if test="propertyId != null">
+			property_id=#{propertyId},
+		</if>
+		<if test="desc != null">
+			desc=#{desc},
+		</if>
+		<if test="createTime != null">
+			create_time=#{createTime},
+		</if>
+		<if test="createBy != null">
+			create_by=#{createBy},
+		</if>
+		</set>
+		<where>
+			1=1
+			<if test="id != null">
+				and id=#{id}
+			</if>
+			<if test="n_name != null">
+				and name=#{n_name}
+			</if>
+			<if test="n_propertyId != null">
+				and property_id=#{n_propertyId}
+			</if>
+			<if test="n_desc != null">
+				and desc=#{n_desc}
+			</if>
+			<if test="n_createTime != null">
+				and create_time=#{n_createTime}
+			</if>
+			<if test="n_createBy != null">
+				and create_by=#{n_createBy}
+			</if>
+		</where>
+	</update>
+
+	<delete id="delete" parameterType="map">
+	   delete from
+	     t_fp_config_property
+	   	where 
+	    id=#{id}
+	</delete>
+
+	<select id="selectObject" parameterType="map" resultMap="fpConfigPropertyResultMap">
+	   select
+	<include refid="columns" />
+	   from t_fp_config_property
+	   where
+	    id=#{id}
+	</select>
+
+	<select id="selectObjectList" parameterType="map" resultMap="fpConfigPropertyResultMap">
+	   select
+	<include refid="columns" />
+	   from t_fp_config_property
+	   <where>
+	 <include refid="normalCondition"/>
+	   </where>
+	</select>
+
+	<select id="selectMap" parameterType="map" resultMap="mapResultMap">
+	   select
+	<include refid="columns" />
+	   from t_fp_config_property
+	   where
+	    id=#{id}
+	</select>
+
+	<select id="selectMapList" parameterType="map" resultMap="mapResultMap">
+	   select
+	<include refid="columns" />
+	   from t_fp_config_property
+	   <where>
+	   <include refid="normalCondition"/>
+	   </where>
+	</select>
+
+	<select id="page" parameterType="map" resultMap="pageResultMap">
+	   select
+	<include refid="columns" />
+	<include refid="pageCondition" />
+	limit #{offset},#{rows}
+	</select>
+
+	<select id="pageBean" parameterType="map" resultMap="fpConfigPropertyResultMap">
+	   select
+	<include refid="columns" />
+	<include refid="pageCondition" />
+	limit #{offset},#{rows}
+	</select>
+	
+	<select id="pageCount" parameterType="map" resultType="int">
+	   select count(1)
+	   <include refid="pageCondition" />
+	</select>
+
+	<sql id="pageCondition">
+	   from t_fp_config_property
+	   <where>
+			<include refid="normalCondition"/>
+	   </where>
+	</sql>
+
+	<sql id="normalCondition">
+		1=1
+		<if test="id != null">
+			and id=#{id}
+		</if>
+		<if test="name != null">
+			and name=#{name}
+		</if>
+		<if test="propertyId != null">
+			and property_id=#{propertyId}
+		</if>
+		<if test="desc != null">
+			and desc=#{desc}
+		</if>
+		<if test="createTime != null">
+			and create_time=#{createTime}
+		</if>
+		<if test="createBy != null">
+			and create_by=#{createBy}
+		</if>
+		<if test="keyword != null">
+			and (name LIKE CONCAT("%", #{keyword}, "%") )
+		</if>
+		order by  id  desc 
+	</sql>
+	<sql id="columns">
+			id,
+			name,
+			property_id,
+			desc,
+			create_time,
+			create_by
+	</sql>
+</mapper>

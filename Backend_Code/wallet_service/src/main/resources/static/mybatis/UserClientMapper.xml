@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--
+【钱包客户端用户】对象关系映射 配置
+ @author AutoCode 309444359@qq.com
+ @date 2019-04-13 23:59:45
+ -->
+<!-- namespace必须指向Dao接口 -->
+<mapper namespace="com.lx.server.dao.UserClientDao">
+
+	<resultMap id="userClientResultMap" type="com.lx.server.pojo.UserClient">
+		<id property="id" column="id" />
+				<result property="nickname" column="nickname" />
+				<result property="password" column="password" />
+				<result property="faceUrl" column="face_url" />
+				<result property="googleAuthCode" column="google_auth_code" />
+				<result property="googleAuthEnable" column="google_auth_enable" />
+				<result property="createTime" column="create_time" />
+				<result property="lastLoginTime" column="last_login_time" />
+	</resultMap>
+	<resultMap id="mapResultMap"  type="java.util.HashMap" extends="userClientResultMap"></resultMap>
+	<resultMap id="pageResultMap"  type="java.util.HashMap" extends="userClientResultMap"></resultMap>
+
+
+	<insert id="insert" parameterType="com.lx.server.pojo.UserClient" useGeneratedKeys="true" keyProperty="id" >
+	   insert into t_user_client (
+	    <include refid="columns" />
+	   )values (
+	     #{id},
+	     #{nickname},
+	     #{password},
+	     #{faceUrl},
+	     #{googleAuthCode},
+	     #{googleAuthEnable},
+	     #{createTime},
+	     #{lastLoginTime}
+	   )
+	</insert>
+
+	<update id="update" parameterType="com.lx.server.pojo.UserClient">
+		update t_user_client
+		<set>
+		<if test="nickname != null">
+			nickname=#{nickname},
+		</if>
+		<if test="password != null">
+			password=#{password},
+		</if>
+		<if test="faceUrl != null">
+			face_url=#{faceUrl},
+		</if>
+		<if test="googleAuthCode != null">
+			google_auth_code=#{googleAuthCode},
+		</if>
+		<if test="googleAuthEnable != null">
+			google_auth_enable=#{googleAuthEnable},
+		</if>
+		<if test="createTime != null">
+			create_time=#{createTime},
+		</if>
+		<if test="lastLoginTime != null">
+			last_login_time=#{lastLoginTime},
+		</if>
+		</set>
+		<where>
+			1=1
+			<if test="id != null">
+				and id=#{id}
+			</if>
+			<if test="n_nickname != null">
+				and nickname=#{n_nickname}
+			</if>
+			<if test="n_password != null">
+				and password=#{n_password}
+			</if>
+			<if test="n_faceUrl != null">
+				and face_url=#{n_faceUrl}
+			</if>
+			<if test="n_googleAuthCode != null">
+				and google_auth_code=#{n_googleAuthCode}
+			</if>
+			<if test="n_googleAuthEnable != null">
+				and google_auth_enable=#{n_googleAuthEnable}
+			</if>
+			<if test="n_createTime != null">
+				and create_time=#{n_createTime}
+			</if>
+			<if test="n_lastLoginTime != null">
+				and last_login_time=#{n_lastLoginTime}
+			</if>
+		</where>
+	</update>
+
+	<delete id="delete" parameterType="map">
+	   delete from
+	     t_user_client
+	   	where 
+	    id=#{id}
+	</delete>
+
+	<select id="selectObject" parameterType="map" resultMap="userClientResultMap">
+	   select
+	<include refid="columns" />
+	   from t_user_client
+	   where
+	    id=#{id}
+	</select>
+
+	<select id="selectObjectList" parameterType="map" resultMap="userClientResultMap">
+	   select
+	<include refid="columns" />
+	   from t_user_client
+	   <where>
+	 <include refid="normalCondition"/>
+	   </where>
+	</select>
+
+	<select id="selectMap" parameterType="map" resultMap="mapResultMap">
+	   select
+	<include refid="columns" />
+	   from t_user_client
+	   where
+	    id=#{id}
+	</select>
+
+	<select id="selectMapList" parameterType="map" resultMap="mapResultMap">
+	   select
+	<include refid="columns" />
+	   from t_user_client
+	   <where>
+	   <include refid="normalCondition"/>
+	   </where>
+	</select>
+
+	<select id="page" parameterType="map" resultMap="pageResultMap">
+	   select
+	<include refid="columns" />
+	<include refid="pageCondition" />
+	limit #{offset},#{rows}
+	</select>
+
+	<select id="pageBean" parameterType="map" resultMap="userClientResultMap">
+	   select
+	<include refid="columns" />
+	<include refid="pageCondition" />
+	limit #{offset},#{rows}
+	</select>
+	
+	<select id="pageCount" parameterType="map" resultType="int">
+	   select count(1)
+	   <include refid="pageCondition" />
+	</select>
+
+	<sql id="pageCondition">
+	   from t_user_client
+	   <where>
+			<include refid="normalCondition"/>
+	   </where>
+	</sql>
+
+	<sql id="normalCondition">
+		1=1
+		<if test="id != null">
+			and id=#{id}
+		</if>
+		<if test="nickname != null">
+			and nickname=#{nickname}
+		</if>
+		<if test="password != null">
+			and nickname=#{password}
+		</if>
+		<if test="faceUrl != null">
+			and face_url=#{faceUrl}
+		</if>
+		<if test="googleAuthCode != null">
+			and google_auth_code=#{googleAuthCode}
+		</if>
+		<if test="googleAuthEnable != null">
+			and google_auth_enable=#{googleAuthEnable}
+		</if>
+		<if test="createTime != null">
+			and create_time=#{createTime}
+		</if>
+		<if test="lastLoginTime != null">
+			and last_login_time=#{lastLoginTime}
+		</if>
+		<if test="keyword != null">
+			and (name LIKE CONCAT("%", #{keyword}, "%") )
+		</if>
+		order by  id  desc 
+	</sql>
+	<sql id="columns">
+			id,
+			nickname,
+			password,
+			face_url,
+			google_auth_code,
+			google_auth_enable,
+			create_time,
+			last_login_time
+	</sql>
+</mapper>

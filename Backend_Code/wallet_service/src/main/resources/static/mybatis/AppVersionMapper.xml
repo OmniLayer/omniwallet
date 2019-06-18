@@ -1,0 +1,227 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--
+【App版本号管理】对象关系映射 配置
+ @author AutoCode 309444359@qq.com
+ @date 2019-05-15 11:27:21
+ -->
+<!-- namespace必须指向Dao接口 -->
+<mapper namespace="com.lx.server.dao.AppVersionDao">
+
+	<resultMap id="appVersionResultMap" type="com.lx.server.pojo.AppVersion">
+		<id property="id" column="id" />
+				<result property="platform" column="platform" />
+				<result property="name" column="name" />
+				<result property="code" column="code" />
+				<result property="isForce" column="is_force" />
+				<result property="path" column="path" />
+				<result property="note" column="note" />
+				<result property="noteEn" column="note_en" />
+				<result property="createTime" column="create_time" />
+				<result property="createBy" column="create_by" />
+	</resultMap>
+	<resultMap id="mapResultMap"  type="java.util.HashMap" extends="appVersionResultMap"></resultMap>
+	<resultMap id="pageResultMap"  type="java.util.HashMap" extends="appVersionResultMap"></resultMap>
+
+
+	<insert id="insert" parameterType="com.lx.server.pojo.AppVersion" useGeneratedKeys="true" keyProperty="id" >
+	   insert into t_app_version (
+	    <include refid="columns" />
+	   )values (
+	     #{id},
+	     #{platform},
+	     #{name},
+	     #{code},
+	     #{isForce},
+	     #{path},
+	     #{note},
+	     #{noteEn},
+	     #{createTime},
+	     #{createBy}
+	   )
+	</insert>
+
+	<update id="update" parameterType="com.lx.server.pojo.AppVersion">
+		update t_app_version
+		<set>
+		<if test="platform != null">
+			platform=#{platform},
+		</if>
+		<if test="name != null">
+			name=#{name},
+		</if>
+		<if test="code != null">
+			code=#{code},
+		</if>
+		<if test="isForce != null">
+			is_force=#{isForce},
+		</if>
+		<if test="path != null">
+			path=#{path},
+		</if>
+		<if test="note != null">
+			note=#{note},
+		</if>
+		<if test="noteEn != null">
+			note_en=#{noteEn},
+		</if>
+		<if test="createTime != null">
+			create_time=#{createTime},
+		</if>
+		<if test="createBy != null">
+			create_by=#{createBy},
+		</if>
+		</set>
+		<where>
+			1=1
+			<if test="id != null">
+				and id=#{id}
+			</if>
+			<if test="n_platform != null">
+				and platform=#{n_platform}
+			</if>
+			<if test="n_name != null">
+				and name=#{n_name}
+			</if>
+			<if test="n_code != null">
+				and code=#{n_code}
+			</if>
+			<if test="n_isForce != null">
+				and is_force=#{n_isForce}
+			</if>
+			<if test="n_path != null">
+				and path=#{n_path}
+			</if>
+			<if test="n_note != null">
+				and note=#{n_note}
+			</if>
+			<if test="n_noteEn != null">
+				and note_en=#{n_noteEn}
+			</if>
+			<if test="n_createTime != null">
+				and create_time=#{n_createTime}
+			</if>
+			<if test="n_createBy != null">
+				and create_by=#{n_createBy}
+			</if>
+		</where>
+	</update>
+
+	<delete id="delete" parameterType="map">
+	   delete from
+	     t_app_version
+	   	where 
+	    id=#{id}
+	</delete>
+
+	<select id="selectObject" parameterType="map" resultMap="appVersionResultMap">
+	   select
+	<include refid="columns" />
+	   from t_app_version
+	   where
+	    id=#{id}
+	</select>
+
+	<select id="selectObjectList" parameterType="map" resultMap="appVersionResultMap">
+	   select
+	<include refid="columns" />
+	   from t_app_version
+	   <where>
+	 <include refid="normalCondition"/>
+	   </where>
+	</select>
+
+	<select id="selectMap" parameterType="map" resultMap="mapResultMap">
+	   select
+	<include refid="columns" />
+	   from t_app_version
+	   where
+	    id=#{id}
+	</select>
+
+	<select id="selectMapList" parameterType="map" resultMap="mapResultMap">
+	   select
+	<include refid="columns" />
+	   from t_app_version
+	   <where>
+	   <include refid="normalCondition"/>
+	   </where>
+	</select>
+
+	<select id="page" parameterType="map" resultMap="pageResultMap">
+	   select
+	<include refid="columns" />
+	<include refid="pageCondition" />
+	limit #{offset},#{rows}
+	</select>
+
+	<select id="pageBean" parameterType="map" resultMap="appVersionResultMap">
+	   select
+	<include refid="columns" />
+	<include refid="pageCondition" />
+	limit #{offset},#{rows}
+	</select>
+	
+	<select id="pageCount" parameterType="map" resultType="int">
+	   select count(1)
+	   <include refid="pageCondition" />
+	</select>
+
+	<sql id="pageCondition">
+	   from t_app_version
+	   <where>
+			<include refid="normalCondition"/>
+	   </where>
+	</sql>
+
+	<sql id="normalCondition">
+		1=1
+		<if test="id != null">
+			and id=#{id}
+		</if>
+		<if test="platform != null">
+			and platform=#{platform}
+		</if>
+		<if test="name != null">
+			and name=#{name}
+		</if>
+		<if test="code != null">
+			and code=#{code}
+		</if>
+		<if test="isForce != null">
+			and is_force=#{isForce}
+		</if>
+		<if test="path != null">
+			and path=#{path}
+		</if>
+		<if test="note != null">
+			and note=#{note}
+		</if>
+		<if test="noteEn != null">
+			and note_en=#{noteEn}
+		</if>
+		<if test="createTime != null">
+			and create_time=#{createTime}
+		</if>
+		<if test="createBy != null">
+			and create_by=#{createBy}
+		</if>
+		<if test="keyword != null">
+			and (name LIKE CONCAT("%", #{keyword}, "%") )
+		</if>
+		order by  id  desc 
+	</sql>
+	<sql id="columns">
+			id,
+			platform,
+			name,
+			code,
+			is_force,
+			path,
+			note,
+			note_en,
+			create_time,
+			create_by
+	</sql>
+</mapper>

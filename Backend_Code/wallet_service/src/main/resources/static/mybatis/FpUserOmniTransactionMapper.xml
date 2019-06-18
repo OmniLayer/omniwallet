@@ -1,0 +1,239 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--
+【快速支付的用户的交易记录】对象关系映射 配置
+ @author AutoCode 309444359@qq.com
+ @date 2019-06-14 10:53:57
+ -->
+<!-- namespace必须指向Dao接口 -->
+<mapper namespace="com.lx.server.dao.FpUserOmniTransactionDao">
+
+	<resultMap id="fpUserOmniTransactionResultMap" type="com.lx.server.pojo.FpUserOmniTransaction">
+		<id property="id" column="id" />
+				<result property="propertyId" column="property_id" />
+				<result property="fromAddress" column="from_address" />
+				<result property="toAddress" column="to_address" />
+				<result property="txType" column="tx_type" />
+				<result property="amount" column="amount" />
+				<result property="txid" column="txid" />
+				<result property="confirmations" column="confirmations" />
+				<result property="isEnable" column="is_enable" />
+				<result property="createTime" column="create_time" />
+				<result property="createBy" column="create_by" />
+	</resultMap>
+	<resultMap id="mapResultMap"  type="java.util.HashMap" extends="fpUserOmniTransactionResultMap"></resultMap>
+	<resultMap id="pageResultMap"  type="java.util.HashMap" extends="fpUserOmniTransactionResultMap"></resultMap>
+
+
+	<insert id="insert" parameterType="com.lx.server.pojo.FpUserOmniTransaction" useGeneratedKeys="true" keyProperty="id" >
+	   insert into t_fp_user_omni_transaction (
+	    <include refid="columns" />
+	   )values (
+	     #{id},
+	     #{propertyId},
+	     #{fromAddress},
+	     #{toAddress},
+	     #{txType},
+	     #{amount},
+	     #{txid},
+	     #{confirmations},
+	     #{isEnable},
+	     #{createTime},
+	     #{createBy}
+	   )
+	</insert>
+
+	<update id="update" parameterType="com.lx.server.pojo.FpUserOmniTransaction">
+		update t_fp_user_omni_transaction
+		<set>
+		<if test="propertyId != null">
+			property_id=#{propertyId},
+		</if>
+		<if test="fromAddress != null">
+			from_address=#{fromAddress},
+		</if>
+		<if test="toAddress != null">
+			to_address=#{toAddress},
+		</if>
+		<if test="txType != null">
+			tx_type=#{txType},
+		</if>
+		<if test="amount != null">
+			amount=#{amount},
+		</if>
+		<if test="txid != null">
+			txid=#{txid},
+		</if>
+		<if test="confirmations != null">
+			confirmations=#{confirmations},
+		</if>
+		<if test="isEnable != null">
+			is_enable=#{isEnable},
+		</if>
+		<if test="createTime != null">
+			create_time=#{createTime},
+		</if>
+		<if test="createBy != null">
+			create_by=#{createBy},
+		</if>
+		</set>
+		<where>
+			1=1
+			<if test="id != null">
+				and id=#{id}
+			</if>
+			<if test="n_propertyId != null">
+				and property_id=#{n_propertyId}
+			</if>
+			<if test="n_fromAddress != null">
+				and from_address=#{n_fromAddress}
+			</if>
+			<if test="n_toAddress != null">
+				and to_address=#{n_toAddress}
+			</if>
+			<if test="n_txType != null">
+				and tx_type=#{n_txType}
+			</if>
+			<if test="n_amount != null">
+				and amount=#{n_amount}
+			</if>
+			<if test="n_txid != null">
+				and txid=#{n_txid}
+			</if>
+			<if test="n_confirmations != null">
+				and confirmations=#{n_confirmations}
+			</if>
+			<if test="n_isEnable != null">
+				and is_enable=#{n_isEnable}
+			</if>
+			<if test="n_createTime != null">
+				and create_time=#{n_createTime}
+			</if>
+			<if test="n_createBy != null">
+				and create_by=#{n_createBy}
+			</if>
+		</where>
+	</update>
+
+	<delete id="delete" parameterType="map">
+	   delete from
+	     t_fp_user_omni_transaction
+	   	where 
+	    id=#{id}
+	</delete>
+
+	<select id="selectObject" parameterType="map" resultMap="fpUserOmniTransactionResultMap">
+	   select
+	<include refid="columns" />
+	   from t_fp_user_omni_transaction
+	   where
+	    id=#{id}
+	</select>
+
+	<select id="selectObjectList" parameterType="map" resultMap="fpUserOmniTransactionResultMap">
+	   select
+	<include refid="columns" />
+	   from t_fp_user_omni_transaction
+	   <where>
+	 <include refid="normalCondition"/>
+	   </where>
+	</select>
+
+	<select id="selectMap" parameterType="map" resultMap="mapResultMap">
+	   select
+	<include refid="columns" />
+	   from t_fp_user_omni_transaction
+	   where
+	    id=#{id}
+	</select>
+
+	<select id="selectMapList" parameterType="map" resultMap="mapResultMap">
+	   select
+	<include refid="columns" />
+	   from t_fp_user_omni_transaction
+	   <where>
+	   <include refid="normalCondition"/>
+	   </where>
+	</select>
+
+	<select id="page" parameterType="map" resultMap="pageResultMap">
+	   select
+	<include refid="columns" />
+	<include refid="pageCondition" />
+	limit #{offset},#{rows}
+	</select>
+
+	<select id="pageBean" parameterType="map" resultMap="fpUserOmniTransactionResultMap">
+	   select
+	<include refid="columns" />
+	<include refid="pageCondition" />
+	limit #{offset},#{rows}
+	</select>
+	
+	<select id="pageCount" parameterType="map" resultType="int">
+	   select count(1)
+	   <include refid="pageCondition" />
+	</select>
+
+	<sql id="pageCondition">
+	   from t_fp_user_omni_transaction
+	   <where>
+			<include refid="normalCondition"/>
+	   </where>
+	</sql>
+
+	<sql id="normalCondition">
+		1=1
+		<if test="id != null">
+			and id=#{id}
+		</if>
+		<if test="propertyId != null">
+			and property_id=#{propertyId}
+		</if>
+		<if test="fromAddress != null">
+			and from_address=#{fromAddress}
+		</if>
+		<if test="toAddress != null">
+			and to_address=#{toAddress}
+		</if>
+		<if test="txType != null">
+			and tx_type=#{txType}
+		</if>
+		<if test="amount != null">
+			and amount=#{amount}
+		</if>
+		<if test="txid != null">
+			and txid=#{txid}
+		</if>
+		<if test="confirmations != null">
+			and confirmations=#{confirmations}
+		</if>
+		<if test="isEnable != null">
+			and is_enable=#{isEnable}
+		</if>
+		<if test="createTime != null">
+			and create_time=#{createTime}
+		</if>
+		<if test="createBy != null">
+			and create_by=#{createBy}
+		</if>
+		<if test="keyword != null">
+			and (name LIKE CONCAT("%", #{keyword}, "%") )
+		</if>
+		order by  id  desc 
+	</sql>
+	<sql id="columns">
+			id,
+			property_id,
+			from_address,
+			to_address,
+			tx_type,
+			amount,
+			txid,
+			confirmations,
+			is_enable,
+			create_time,
+			create_by
+	</sql>
+</mapper>

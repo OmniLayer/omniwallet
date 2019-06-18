@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--
+【flashPay 快速支付的用户】对象关系映射 配置
+ @author AutoCode 309444359@qq.com
+ @date 2019-06-14 10:53:56
+ -->
+<!-- namespace必须指向Dao接口 -->
+<mapper namespace="com.lx.server.dao.FpUserDao">
+
+	<resultMap id="fpUserResultMap" type="com.lx.server.pojo.FpUser">
+		<id property="id" column="id" />
+				<result property="userId" column="user_id" />
+				<result property="hpyerUsername" column="hpyer_username" />
+				<result property="createTime" column="create_time" />
+	</resultMap>
+	<resultMap id="mapResultMap"  type="java.util.HashMap" extends="fpUserResultMap"></resultMap>
+	<resultMap id="pageResultMap"  type="java.util.HashMap" extends="fpUserResultMap"></resultMap>
+
+
+	<insert id="insert" parameterType="com.lx.server.pojo.FpUser" useGeneratedKeys="true" keyProperty="id" >
+	   insert into t_fp_user (
+	    <include refid="columns" />
+	   )values (
+	     #{id},
+	     #{userId},
+	     #{hpyerUsername},
+	     #{createTime}
+	   )
+	</insert>
+
+	<update id="update" parameterType="com.lx.server.pojo.FpUser">
+		update t_fp_user
+		<set>
+		<if test="userId != null">
+			user_id=#{userId},
+		</if>
+		<if test="hpyerUsername != null">
+			hpyer_username=#{hpyerUsername},
+		</if>
+		<if test="createTime != null">
+			create_time=#{createTime},
+		</if>
+		</set>
+		<where>
+			1=1
+			<if test="id != null">
+				and id=#{id}
+			</if>
+			<if test="n_userId != null">
+				and user_id=#{n_userId}
+			</if>
+			<if test="n_hpyerUsername != null">
+				and hpyer_username=#{n_hpyerUsername}
+			</if>
+			<if test="n_createTime != null">
+				and create_time=#{n_createTime}
+			</if>
+		</where>
+	</update>
+
+	<delete id="delete" parameterType="map">
+	   delete from
+	     t_fp_user
+	   	where 
+	    id=#{id}
+	</delete>
+
+	<select id="selectObject" parameterType="map" resultMap="fpUserResultMap">
+	   select
+	<include refid="columns" />
+	   from t_fp_user
+	   where
+	    id=#{id}
+	</select>
+
+	<select id="selectObjectList" parameterType="map" resultMap="fpUserResultMap">
+	   select
+	<include refid="columns" />
+	   from t_fp_user
+	   <where>
+	 <include refid="normalCondition"/>
+	   </where>
+	</select>
+
+	<select id="selectMap" parameterType="map" resultMap="mapResultMap">
+	   select
+	<include refid="columns" />
+	   from t_fp_user
+	   where
+	    id=#{id}
+	</select>
+
+	<select id="selectMapList" parameterType="map" resultMap="mapResultMap">
+	   select
+	<include refid="columns" />
+	   from t_fp_user
+	   <where>
+	   <include refid="normalCondition"/>
+	   </where>
+	</select>
+
+	<select id="page" parameterType="map" resultMap="pageResultMap">
+	   select
+	<include refid="columns" />
+	<include refid="pageCondition" />
+	limit #{offset},#{rows}
+	</select>
+
+	<select id="pageBean" parameterType="map" resultMap="fpUserResultMap">
+	   select
+	<include refid="columns" />
+	<include refid="pageCondition" />
+	limit #{offset},#{rows}
+	</select>
+	
+	<select id="pageCount" parameterType="map" resultType="int">
+	   select count(1)
+	   <include refid="pageCondition" />
+	</select>
+
+	<sql id="pageCondition">
+	   from t_fp_user
+	   <where>
+			<include refid="normalCondition"/>
+	   </where>
+	</sql>
+
+	<sql id="normalCondition">
+		1=1
+		<if test="id != null">
+			and id=#{id}
+		</if>
+		<if test="userId != null">
+			and user_id=#{userId}
+		</if>
+		<if test="hpyerUsername != null">
+			and hpyer_username=#{hpyerUsername}
+		</if>
+		<if test="createTime != null">
+			and create_time=#{createTime}
+		</if>
+		<if test="keyword != null">
+			and (name LIKE CONCAT("%", #{keyword}, "%") )
+		</if>
+		order by  id  desc 
+	</sql>
+	<sql id="columns">
+			id,
+			user_id,
+			hpyer_username,
+			create_time
+	</sql>
+</mapper>
