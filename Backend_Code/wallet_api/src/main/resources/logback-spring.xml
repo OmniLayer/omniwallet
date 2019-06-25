@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+
+	<!-- test文件路径 -->
+    <property name="TEST_FILE_PATH" value="./logs"/>
+    <!-- prod文件路径 -->
+    <property name="PRO_FILE_PATH" value="/opt/tomcat/logs" />
+
+	<include resource="org/springframework/boot/logging/logback/base.xml" />
+	<appender name="rollingAppender"
+		class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<file>${PRO_FILE_PATH}/applicationWalletApi.log</file>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<fileNamePattern>${PRO_FILE_PATH}//applicationWalletApi-%d{yyyy-MM-dd}.log</fileNamePattern>
+			<maxHistory>60</maxHistory>
+		</rollingPolicy>
+		<encoder>
+			<pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{5} - %msg%n</pattern>
+		</encoder>
+		<append>true</append>
+		<prudent>false</prudent>
+	</appender> 
+	
+	<logger name="com.lx.server.dao" level="ALL">
+		<appender-ref ref="rollingAppender" />
+	</logger>
+	<logger name="com.lx.server.admin.controller" level="ALL">
+		<appender-ref ref="rollingAppender" />
+	</logger>
+	<logger name="com.lx.server.walletapi.controller" level="ALL">
+		<appender-ref ref="rollingAppender" />
+	</logger>
+	<logger name="com.lx.server.service.impl" level="ALL">
+		<appender-ref ref="rollingAppender" />
+	</logger>
+	<logger name="com.lx.server.kafka" level="ALL">
+		<appender-ref ref="rollingAppender" />
+	</logger>
+	<logger name="com.lx.server.walletapi.config" level="ALL">
+		<appender-ref ref="rollingAppender" />
+	</logger>
+	
+
+</configuration>

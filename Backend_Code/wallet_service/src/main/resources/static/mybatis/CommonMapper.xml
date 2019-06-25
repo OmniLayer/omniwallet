@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--
+	自定义mapper，公用mapper
+ -->
+<!-- namespace必须指向Dao接口 -->
+<mapper namespace="com.lx.server.dao.CommonDao">
+	
+	<select id="getNewestAddressIndex" parameterType="map" resultType="int">
+		SELECT
+			address_index
+		FROM
+			t_wallet_address
+		WHERE
+			user_id = #{userId}
+		ORDER BY
+			create_time DESC
+		LIMIT 0, 1
+	</select>
+	
+	<select id="getConfigParamValueByKey" parameterType="map" resultType="int">
+		SELECT
+			param_value value
+		FROM
+			t_fp_config_base_parameter
+		WHERE
+			type_name = #{typeName}
+		LIMIT 0, 1
+	</select>
+	
+</mapper>

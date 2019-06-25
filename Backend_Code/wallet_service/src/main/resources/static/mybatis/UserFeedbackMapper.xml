@@ -1,0 +1,242 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--
+【用户反馈】对象关系映射 配置
+ @author AutoCode 309444359@qq.com
+ @date 2019-05-14 10:11:44
+ -->
+<!-- namespace必须指向Dao接口 -->
+<mapper namespace="com.lx.server.dao.UserFeedbackDao">
+
+	<resultMap id="userFeedbackResultMap" type="com.lx.server.pojo.UserFeedback">
+		<id property="id" column="id" />
+				<result property="userId" column="user_id" />
+				<result property="title" column="title" />
+				<result property="content" column="content" />
+				<result property="imageUrls" column="image_urls" />
+				<result property="email" column="email" />
+				<result property="createTime" column="create_time" />
+				<result property="dealBy" column="deal_by" />
+				<result property="dealResult" column="deal_result" />
+				<result property="dealTime" column="deal_time" />
+				<result property="state" column="state" />
+	</resultMap>
+	<resultMap id="mapResultMap"  type="java.util.HashMap" extends="userFeedbackResultMap"></resultMap>
+	<resultMap id="pageResultMap"  type="java.util.HashMap" extends="userFeedbackResultMap"></resultMap>
+
+
+	<insert id="insert" parameterType="com.lx.server.pojo.UserFeedback" useGeneratedKeys="true" keyProperty="id" >
+	   insert into t_user_feedback (
+	    <include refid="columns" />
+	   )values (
+	     #{id},
+	     #{userId},
+	     #{title},
+	     #{content},
+	     #{imageUrls},
+	     #{email},
+	     #{createTime},
+	     #{dealBy},
+	     #{dealResult},
+	     #{dealTime},
+	     #{state}
+	   )
+	</insert>
+
+	<update id="update" parameterType="com.lx.server.pojo.UserFeedback">
+		update t_user_feedback
+		<set>
+		<if test="userId != null">
+			user_id=#{userId},
+		</if>
+		<if test="title != null">
+			title=#{title},
+		</if>
+		<if test="content != null">
+			content=#{content},
+		</if>
+		<if test="imageUrls != null">
+			image_urls=#{imageUrls},
+		</if>
+		<if test="email != null">
+			email=#{email},
+		</if>
+		<if test="createTime != null">
+			create_time=#{createTime},
+		</if>
+		<if test="dealBy != null">
+			deal_by=#{dealBy},
+		</if>
+		<if test="dealResult != null">
+			deal_result=#{dealResult},
+		</if>
+		<if test="dealTime != null">
+			deal_time=#{dealTime},
+		</if>
+		<if test="state != null">
+			state=#{state},
+		</if>
+		</set>
+		<where>
+			1=1
+			<if test="id != null">
+				and id=#{id}
+			</if>
+			<if test="n_userId != null">
+				and user_id=#{n_userId}
+			</if>
+			<if test="n_title != null">
+				and title=#{n_title}
+			</if>
+			<if test="n_content != null">
+				and content=#{n_content}
+			</if>
+			<if test="n_imageUrls != null">
+				and image_urls=#{n_imageUrls}
+			</if>
+			<if test="n_email != null">
+				and email=#{n_email}
+			</if>
+			<if test="n_createTime != null">
+				and create_time=#{n_createTime}
+			</if>
+			<if test="n_dealBy != null">
+				and deal_by=#{n_dealBy}
+			</if>
+			<if test="n_dealResult != null">
+				and deal_result=#{n_dealResult}
+			</if>
+			<if test="n_dealTime != null">
+				and deal_time=#{n_dealTime}
+			</if>
+			<if test="n_state != null">
+				and state=#{n_state}
+			</if>
+		</where>
+	</update>
+
+	<delete id="delete" parameterType="map">
+	   delete from
+	     t_user_feedback
+	   	where 
+	    id=#{id}
+	</delete>
+
+	<select id="selectObject" parameterType="map" resultMap="userFeedbackResultMap">
+	   select
+	<include refid="columns" />
+	   from t_user_feedback
+	   where
+	    id=#{id}
+	</select>
+
+	<select id="selectObjectList" parameterType="map" resultMap="userFeedbackResultMap">
+	   select
+	<include refid="columns" />
+	   from t_user_feedback
+	   <where>
+	 <include refid="normalCondition"/>
+	   </where>
+	</select>
+
+	<select id="selectMap" parameterType="map" resultMap="mapResultMap">
+	   select
+	<include refid="columns" />
+	   from t_user_feedback
+	   where
+	    id=#{id}
+	</select>
+
+	<select id="selectMapList" parameterType="map" resultMap="mapResultMap">
+	   select
+	<include refid="columns" />
+	   from t_user_feedback
+	   <where>
+	   <include refid="normalCondition"/>
+	   </where>
+	</select>
+
+	<select id="page" parameterType="map" resultMap="pageResultMap">
+	   select
+	<include refid="columns" />
+	<include refid="pageCondition" />
+	limit #{offset},#{rows}
+	</select>
+
+	<select id="pageBean" parameterType="map" resultMap="userFeedbackResultMap">
+	   select
+	<include refid="columns" />
+	<include refid="pageCondition" />
+	limit #{offset},#{rows}
+	</select>
+	
+	<select id="pageCount" parameterType="map" resultType="int">
+	   select count(1)
+	   <include refid="pageCondition" />
+	</select>
+
+	<sql id="pageCondition">
+	   from t_user_feedback
+	   <where>
+			<include refid="normalCondition"/>
+	   </where>
+	</sql>
+
+	<sql id="normalCondition">
+		1=1
+		<if test="id != null">
+			and id=#{id}
+		</if>
+		<if test="userId != null">
+			and user_id=#{userId}
+		</if>
+		<if test="title != null">
+			and title=#{title}
+		</if>
+		<if test="content != null">
+			and content=#{content}
+		</if>
+		<if test="imageUrls != null">
+			and image_urls=#{imageUrls}
+		</if>
+		<if test="email != null">
+			and email=#{email}
+		</if>
+		<if test="createTime != null">
+			and create_time=#{createTime}
+		</if>
+		<if test="dealBy != null">
+			and deal_by=#{dealBy}
+		</if>
+		<if test="dealResult != null">
+			and deal_result=#{dealResult}
+		</if>
+		<if test="dealTime != null">
+			and deal_time=#{dealTime}
+		</if>
+		<if test="state != null">
+			and state=#{state}
+		</if>
+		<if test="keyword != null">
+			and (title LIKE CONCAT("%", #{keyword}, "%") 
+			or content LIKE CONCAT("%", #{keyword}, "%")
+			or email LIKE CONCAT("%", #{keyword}, "%")
+			 )
+		</if>
+		order by  id  desc 
+	</sql>
+	<sql id="columns">
+			id,
+			user_id,
+			title,
+			content,
+			image_urls,
+			email,
+			create_time,
+			deal_by,
+			deal_result,
+			deal_time,
+			state
+	</sql>
+</mapper>

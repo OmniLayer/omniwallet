@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--
+【用户登录日志】对象关系映射 配置
+ @author AutoCode 309444359@qq.com
+ @date 2019-04-13 23:59:46
+ -->
+<!-- namespace必须指向Dao接口 -->
+<mapper namespace="com.lx.server.dao.UserLoginLogDao">
+
+	<resultMap id="userLoginLogResultMap" type="com.lx.server.pojo.UserLoginLog">
+		<id property="id" column="id" />
+				<result property="typeTable" column="type_table" />
+				<result property="typeId" column="type_id" />
+				<result property="loginTime" column="login_time" />
+				<result property="loginEndType" column="login_end_type" />
+				<result property="loginIp" column="login_ip" />
+	</resultMap>
+	<resultMap id="mapResultMap"  type="java.util.HashMap" extends="userLoginLogResultMap"></resultMap>
+	<resultMap id="pageResultMap"  type="java.util.HashMap" extends="userLoginLogResultMap"></resultMap>
+
+
+	<insert id="insert" parameterType="com.lx.server.pojo.UserLoginLog" useGeneratedKeys="true" keyProperty="id" >
+	   insert into t_user_login_log (
+	    <include refid="columns" />
+	   )values (
+	     #{id},
+	     #{typeTable},
+	     #{typeId},
+	     #{loginTime},
+	     #{loginEndType},
+	     #{loginIp}
+	   )
+	</insert>
+
+	<update id="update" parameterType="com.lx.server.pojo.UserLoginLog">
+		update t_user_login_log
+		<set>
+		<if test="typeTable != null">
+			type_table=#{typeTable},
+		</if>
+		<if test="typeId != null">
+			type_id=#{typeId},
+		</if>
+		<if test="loginTime != null">
+			login_time=#{loginTime},
+		</if>
+		<if test="loginEndType != null">
+			login_end_type=#{loginEndType},
+		</if>
+		<if test="loginIp != null">
+			login_ip=#{loginIp},
+		</if>
+		</set>
+		<where>
+			1=1
+			<if test="id != null">
+				and id=#{id}
+			</if>
+			<if test="n_typeTable != null">
+				and type_table=#{n_typeTable}
+			</if>
+			<if test="n_typeId != null">
+				and type_id=#{n_typeId}
+			</if>
+			<if test="n_loginTime != null">
+				and login_time=#{n_loginTime}
+			</if>
+			<if test="n_loginEndType != null">
+				and login_end_type=#{n_loginEndType}
+			</if>
+			<if test="n_loginIp != null">
+				and login_ip=#{n_loginIp}
+			</if>
+		</where>
+	</update>
+
+	<delete id="delete" parameterType="map">
+	   delete from
+	     t_user_login_log
+	   	where 
+	    id=#{id}
+	</delete>
+
+	<select id="selectObject" parameterType="map" resultMap="userLoginLogResultMap">
+	   select
+	<include refid="columns" />
+	   from t_user_login_log
+	   where
+	    id=#{id}
+	</select>
+
+	<select id="selectObjectList" parameterType="map" resultMap="userLoginLogResultMap">
+	   select
+	<include refid="columns" />
+	   from t_user_login_log
+	   <where>
+	 <include refid="normalCondition"/>
+	   </where>
+	</select>
+
+	<select id="selectMap" parameterType="map" resultMap="mapResultMap">
+	   select
+	<include refid="columns" />
+	   from t_user_login_log
+	   where
+	    id=#{id}
+	</select>
+
+	<select id="selectMapList" parameterType="map" resultMap="mapResultMap">
+	   select
+	<include refid="columns" />
+	   from t_user_login_log
+	   <where>
+	   <include refid="normalCondition"/>
+	   </where>
+	</select>
+
+	<select id="page" parameterType="map" resultMap="pageResultMap">
+	   select
+	<include refid="columns" />
+	<include refid="pageCondition" />
+	limit #{offset},#{rows}
+	</select>
+
+	<select id="pageBean" parameterType="map" resultMap="userLoginLogResultMap">
+	   select
+	<include refid="columns" />
+	<include refid="pageCondition" />
+	limit #{offset},#{rows}
+	</select>
+	
+	<select id="pageCount" parameterType="map" resultType="int">
+	   select count(1)
+	   <include refid="pageCondition" />
+	</select>
+
+	<sql id="pageCondition">
+	   from t_user_login_log
+	   <where>
+			<include refid="normalCondition"/>
+	   </where>
+	</sql>
+
+	<sql id="normalCondition">
+		1=1
+		<if test="id != null">
+			and id=#{id}
+		</if>
+		<if test="typeTable != null">
+			and type_table=#{typeTable}
+		</if>
+		<if test="typeId != null">
+			and type_id=#{typeId}
+		</if>
+		<if test="loginTime != null">
+			and login_time=#{loginTime}
+		</if>
+		<if test="loginEndType != null">
+			and login_end_type=#{loginEndType}
+		</if>
+		<if test="loginIp != null">
+			and login_ip=#{loginIp}
+		</if>
+		<if test="keyword != null">
+			and (name LIKE CONCAT("%", #{keyword}, "%") )
+		</if>
+		order by  id  desc 
+	</sql>
+	<sql id="columns">
+			id,
+			type_table,
+			type_id,
+			login_time,
+			login_end_type,
+			login_ip
+	</sql>
+</mapper>

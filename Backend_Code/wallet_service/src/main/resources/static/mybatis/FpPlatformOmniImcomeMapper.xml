@@ -1,0 +1,239 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--
+【快速支付的平台公链的收入】对象关系映射 配置
+ @author AutoCode 309444359@qq.com
+ @date 2019-06-14 10:53:55
+ -->
+<!-- namespace必须指向Dao接口 -->
+<mapper namespace="com.lx.server.dao.FpPlatformOmniImcomeDao">
+
+	<resultMap id="fpPlatformOmniImcomeResultMap" type="com.lx.server.pojo.FpPlatformOmniImcome">
+		<id property="id" column="id" />
+				<result property="propertyId" column="property_id" />
+				<result property="fromAddress" column="from_address" />
+				<result property="platformAddress" column="platform_address" />
+				<result property="amount" column="amount" />
+				<result property="txid" column="txid" />
+				<result property="confirmations" column="confirmations" />
+				<result property="createTime" column="create_time" />
+				<result property="isMinted" column="is_minted" />
+				<result property="mintTime" column="mint_time" />
+				<result property="mintTxid" column="mint_txid" />
+	</resultMap>
+	<resultMap id="mapResultMap"  type="java.util.HashMap" extends="fpPlatformOmniImcomeResultMap"></resultMap>
+	<resultMap id="pageResultMap"  type="java.util.HashMap" extends="fpPlatformOmniImcomeResultMap"></resultMap>
+
+
+	<insert id="insert" parameterType="com.lx.server.pojo.FpPlatformOmniImcome" useGeneratedKeys="true" keyProperty="id" >
+	   insert into t_fp_platform_omni_imcome (
+	    <include refid="columns" />
+	   )values (
+	     #{id},
+	     #{propertyId},
+	     #{fromAddress},
+	     #{platformAddress},
+	     #{amount},
+	     #{txid},
+	     #{confirmations},
+	     #{createTime},
+	     #{isMinted},
+	     #{mintTime},
+	     #{mintTxid}
+	   )
+	</insert>
+
+	<update id="update" parameterType="com.lx.server.pojo.FpPlatformOmniImcome">
+		update t_fp_platform_omni_imcome
+		<set>
+		<if test="propertyId != null">
+			property_id=#{propertyId},
+		</if>
+		<if test="fromAddress != null">
+			from_address=#{fromAddress},
+		</if>
+		<if test="platformAddress != null">
+			platform_address=#{platformAddress},
+		</if>
+		<if test="amount != null">
+			amount=#{amount},
+		</if>
+		<if test="txid != null">
+			txid=#{txid},
+		</if>
+		<if test="confirmations != null">
+			confirmations=#{confirmations},
+		</if>
+		<if test="createTime != null">
+			create_time=#{createTime},
+		</if>
+		<if test="isMinted != null">
+			is_minted=#{isMinted},
+		</if>
+		<if test="mintTime != null">
+			mint_time=#{mintTime},
+		</if>
+		<if test="mintTxid != null">
+			mint_txid=#{mintTxid},
+		</if>
+		</set>
+		<where>
+			1=1
+			<if test="id != null">
+				and id=#{id}
+			</if>
+			<if test="n_propertyId != null">
+				and property_id=#{n_propertyId}
+			</if>
+			<if test="n_fromAddress != null">
+				and from_address=#{n_fromAddress}
+			</if>
+			<if test="n_platformAddress != null">
+				and platform_address=#{n_platformAddress}
+			</if>
+			<if test="n_amount != null">
+				and amount=#{n_amount}
+			</if>
+			<if test="n_txid != null">
+				and txid=#{n_txid}
+			</if>
+			<if test="n_confirmations != null">
+				and confirmations=#{n_confirmations}
+			</if>
+			<if test="n_createTime != null">
+				and create_time=#{n_createTime}
+			</if>
+			<if test="n_isMinted != null">
+				and is_minted=#{n_isMinted}
+			</if>
+			<if test="n_mintTime != null">
+				and mint_time=#{n_mintTime}
+			</if>
+			<if test="n_mintTxid != null">
+				and mint_txid=#{n_mintTxid}
+			</if>
+		</where>
+	</update>
+
+	<delete id="delete" parameterType="map">
+	   delete from
+	     t_fp_platform_omni_imcome
+	   	where 
+	    id=#{id}
+	</delete>
+
+	<select id="selectObject" parameterType="map" resultMap="fpPlatformOmniImcomeResultMap">
+	   select
+	<include refid="columns" />
+	   from t_fp_platform_omni_imcome
+	   where
+	    id=#{id}
+	</select>
+
+	<select id="selectObjectList" parameterType="map" resultMap="fpPlatformOmniImcomeResultMap">
+	   select
+	<include refid="columns" />
+	   from t_fp_platform_omni_imcome
+	   <where>
+	 <include refid="normalCondition"/>
+	   </where>
+	</select>
+
+	<select id="selectMap" parameterType="map" resultMap="mapResultMap">
+	   select
+	<include refid="columns" />
+	   from t_fp_platform_omni_imcome
+	   where
+	    id=#{id}
+	</select>
+
+	<select id="selectMapList" parameterType="map" resultMap="mapResultMap">
+	   select
+	<include refid="columns" />
+	   from t_fp_platform_omni_imcome
+	   <where>
+	   <include refid="normalCondition"/>
+	   </where>
+	</select>
+
+	<select id="page" parameterType="map" resultMap="pageResultMap">
+	   select
+	<include refid="columns" />
+	<include refid="pageCondition" />
+	limit #{offset},#{rows}
+	</select>
+
+	<select id="pageBean" parameterType="map" resultMap="fpPlatformOmniImcomeResultMap">
+	   select
+	<include refid="columns" />
+	<include refid="pageCondition" />
+	limit #{offset},#{rows}
+	</select>
+	
+	<select id="pageCount" parameterType="map" resultType="int">
+	   select count(1)
+	   <include refid="pageCondition" />
+	</select>
+
+	<sql id="pageCondition">
+	   from t_fp_platform_omni_imcome
+	   <where>
+			<include refid="normalCondition"/>
+	   </where>
+	</sql>
+
+	<sql id="normalCondition">
+		1=1
+		<if test="id != null">
+			and id=#{id}
+		</if>
+		<if test="propertyId != null">
+			and property_id=#{propertyId}
+		</if>
+		<if test="fromAddress != null">
+			and from_address=#{fromAddress}
+		</if>
+		<if test="platformAddress != null">
+			and platform_address=#{platformAddress}
+		</if>
+		<if test="amount != null">
+			and amount=#{amount}
+		</if>
+		<if test="txid != null">
+			and txid=#{txid}
+		</if>
+		<if test="confirmations != null">
+			and confirmations=#{confirmations}
+		</if>
+		<if test="createTime != null">
+			and create_time=#{createTime}
+		</if>
+		<if test="isMinted != null">
+			and is_minted=#{isMinted}
+		</if>
+		<if test="mintTime != null">
+			and mint_time=#{mintTime}
+		</if>
+		<if test="mintTxid != null">
+			and mint_txid=#{mintTxid}
+		</if>
+		<if test="keyword != null">
+			and (name LIKE CONCAT("%", #{keyword}, "%") )
+		</if>
+		order by  id  desc 
+	</sql>
+	<sql id="columns">
+			id,
+			property_id,
+			from_address,
+			platform_address,
+			amount,
+			txid,
+			confirmations,
+			create_time,
+			is_minted,
+			mint_time,
+			mint_txid
+	</sql>
+</mapper>

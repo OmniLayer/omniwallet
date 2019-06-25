@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--
+【btc交易记录更新日志】对象关系映射 配置
+ @author AutoCode 309444359@qq.com
+ @date 2019-05-10 10:08:45
+ -->
+<!-- namespace必须指向Dao接口 -->
+<mapper namespace="com.lx.server.dao.BtcTransactionUpdateLogDao">
+
+	<resultMap id="btcTransactionUpdateLogResultMap" type="com.lx.server.pojo.BtcTransactionUpdateLog">
+		<id property="id" column="id" />
+				<result property="fromIndex" column="from_index" />
+				<result property="toIndex" column="to_index" />
+				<result property="createTime" column="create_time" />
+	</resultMap>
+	<resultMap id="mapResultMap"  type="java.util.HashMap" extends="btcTransactionUpdateLogResultMap"></resultMap>
+	<resultMap id="pageResultMap"  type="java.util.HashMap" extends="btcTransactionUpdateLogResultMap"></resultMap>
+
+
+	<insert id="insert" parameterType="com.lx.server.pojo.BtcTransactionUpdateLog" useGeneratedKeys="true" keyProperty="id" >
+	   insert into t_btc_transaction_update_log (
+	    <include refid="columns" />
+	   )values (
+	     #{id},
+	     #{fromIndex},
+	     #{toIndex},
+	     #{createTime}
+	   )
+	</insert>
+
+	<update id="update" parameterType="com.lx.server.pojo.BtcTransactionUpdateLog">
+		update t_btc_transaction_update_log
+		<set>
+		<if test="fromIndex != null">
+			from_index=#{fromIndex},
+		</if>
+		<if test="toIndex != null">
+			to_index=#{toIndex},
+		</if>
+		<if test="createTime != null">
+			create_time=#{createTime},
+		</if>
+		</set>
+		<where>
+			1=1
+			<if test="id != null">
+				and id=#{id}
+			</if>
+			<if test="n_fromIndex != null">
+				and from_index=#{n_fromIndex}
+			</if>
+			<if test="n_toIndex != null">
+				and to_index=#{n_toIndex}
+			</if>
+			<if test="n_createTime != null">
+				and create_time=#{n_createTime}
+			</if>
+		</where>
+	</update>
+
+	<delete id="delete" parameterType="map">
+	   delete from
+	     t_btc_transaction_update_log
+	   	where 
+	    id=#{id}
+	</delete>
+
+	<select id="selectObject" parameterType="map" resultMap="btcTransactionUpdateLogResultMap">
+	   select
+	<include refid="columns" />
+	   from t_btc_transaction_update_log
+	   where
+	    id=#{id}
+	</select>
+
+	<select id="selectObjectList" parameterType="map" resultMap="btcTransactionUpdateLogResultMap">
+	   select
+	<include refid="columns" />
+	   from t_btc_transaction_update_log
+	   <where>
+	 <include refid="normalCondition"/>
+	   </where>
+	</select>
+
+	<select id="selectMap" parameterType="map" resultMap="mapResultMap">
+	   select
+	<include refid="columns" />
+	   from t_btc_transaction_update_log
+	   where
+	    id=#{id}
+	</select>
+
+	<select id="selectMapList" parameterType="map" resultMap="mapResultMap">
+	   select
+	<include refid="columns" />
+	   from t_btc_transaction_update_log
+	   <where>
+	   <include refid="normalCondition"/>
+	   </where>
+	</select>
+
+	<select id="page" parameterType="map" resultMap="pageResultMap">
+	   select
+	<include refid="columns" />
+	<include refid="pageCondition" />
+	limit #{offset},#{rows}
+	</select>
+
+	<select id="pageBean" parameterType="map" resultMap="btcTransactionUpdateLogResultMap">
+	   select
+	<include refid="columns" />
+	<include refid="pageCondition" />
+	limit #{offset},#{rows}
+	</select>
+	
+	<select id="pageCount" parameterType="map" resultType="int">
+	   select count(1)
+	   <include refid="pageCondition" />
+	</select>
+
+	<sql id="pageCondition">
+	   from t_btc_transaction_update_log
+	   <where>
+			<include refid="normalCondition"/>
+	   </where>
+	</sql>
+
+	<sql id="normalCondition">
+		1=1
+		<if test="id != null">
+			and id=#{id}
+		</if>
+		<if test="fromIndex != null">
+			and from_index=#{fromIndex}
+		</if>
+		<if test="toIndex != null">
+			and to_index=#{toIndex}
+		</if>
+		<if test="createTime != null">
+			and create_time=#{createTime}
+		</if>
+		<if test="keyword != null">
+			and (name LIKE CONCAT("%", #{keyword}, "%") )
+		</if>
+		order by  id  desc 
+	</sql>
+	<sql id="columns">
+			id,
+			from_index,
+			to_index,
+			create_time
+	</sql>
+</mapper>
