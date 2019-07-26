@@ -55,7 +55,7 @@
               </label>
               <div class="input-group">
                 <span class="input-group-addon" ng-hide="selectedAsset.symbol == 'BTC'"></span>
-                <span class="input-group-addon no-padding" ng-show="selectedAsset.symbol == 'BTC'">
+                <span class="input-group-addon no-padding" ng-show="selectedAsset.symbol == 'BTC' && false">
                   <div class="send-toggle">
                     <div class="btn-sendbyvalue">
                       <span></span>
@@ -72,7 +72,7 @@
             </div> 
             <div class="col-sm-6">
               <label class="text-justify" >{{ 'WALLET.SEND.TO' | translate}}</label>
-              <input name="reciever" type="text" ng-model="sendTo" class="form-control" required>
+              <input name="reciever" type="text" ng-model="sendTo" class="form-control" ng-change="checkAddress()" required>
             </div>
           </div>
         </div>
@@ -83,9 +83,12 @@
           {{ 'WALLET.SEND.AVAIL' | translate}}: {{selectedAddress.getDisplayBalance(0)}} BTC 
         </p>
         <button type="button" class="btn btn-main pull-right" ng-disabled="updatingFee" ng-click="updateFee()" ng-show="selectedAsset.symbol == 'BTC' && ((amountModified || updatingFee))">{{ 'WALLET.SEND.UPDATE_FEE' | translate}}</button>
-        <button type="submit" class="btn btn-main pull-right" ng-disabled="!cansend || !sendForm.$valid" ng-hide="selectedAsset.symbol == 'BTC' && ((amountModified || updatingFee))">{{ 'COMMON.NEXT' | translate}}</button>
+        <button type="submit" class="btn btn-main pull-right" ng-disabled="!cansend || invalidaddr || !sendForm.$valid" ng-hide="selectedAsset.symbol == 'BTC' && ((amountModified || updatingFee))">{{ 'COMMON.NEXT' | translate}}</button>
         <div ng-hide="cansend">
           <span style="color:red"> {{ 'WALLET.SEND.LOWFEE' | translate:'{topupAmount:topupAmount}' }}</span>
+        </div>
+        <div ng-show="invalidaddr">
+          <span style="color:red"> {{ 'WALLET.SEND.INVALIDADDRESS' | translate}}</span>
         </div>
       </form>
     </div>    

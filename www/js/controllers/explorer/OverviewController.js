@@ -41,7 +41,7 @@ angular.module("omniControllers")
       }
 
       $scope.doSearch = function() {
-        if( $scope.searchQueryText == undefined || $scope.searchQueryText == '' || $scope.searchQueryText.length < 4 )
+        if( $scope.searchQueryText == undefined || $scope.searchQueryText == '' || $scope.searchQueryText.length < 64 )
           return -1;
         var file = '/v1/search/';
         $http.get('/v1/search/?query=' + $scope.searchQueryText, {}).success(function(successData, status, headers, config) {
