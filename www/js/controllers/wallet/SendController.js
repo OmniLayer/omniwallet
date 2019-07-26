@@ -55,10 +55,11 @@ angular.module("omniControllers")
 
       	$scope.showtesteco = $scope.account.getSetting('showtesteco');
       	$scope.userCurrency = $scope.account.getSetting("usercurrency");
+        var bitcore = require('bitcore-lib');
 
         $scope.checkAddress = function(){
                 $scope.invalidaddr=false;
-                if ( $scope.sendTo.length > 1 && !['1','3'].includes($scope.sendTo[0]) ) {
+                if ( $scope.sendTo != undefined && !bitcore.Address.isValid($scope.sendTo) ) {
                   $scope.invalidaddr=true;
                 }
         }
