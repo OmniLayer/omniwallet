@@ -505,7 +505,7 @@ def read_wallet(uuid):
     with open(filename, 'r') as f:
       return f.read()
   else:
-    ROWS=dbSelect("select walletblob from wallets where walletid=%s",[uuid])
+    ROWS=dbSelect("select walletblob,walletstate from wallets where walletid=%s",[uuid])
     #check if the wallet is in the database and if not insert it 
     if len(ROWS)==0:
       filename = data_dir_root + '/wallets/' + uuid + '.json'
@@ -514,7 +514,10 @@ def read_wallet(uuid):
       write_wallet(uuid,blob)
       return blob
     else:
-      return ROWS[0][0]
+      if ROWS[0][1] == 'Active':
+        return ROWS[0][0]
+      else:
+        return None
 
 def update_login(uuid):
    dbExecute("update wallets set lastlogin=DEFAULT where walletid=%s",[uuid])
