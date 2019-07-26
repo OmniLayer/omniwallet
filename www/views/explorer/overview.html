@@ -17,8 +17,8 @@
   </div>
   <div class="row">
     <p class="col-xs-12 alert alert-danger text-center" ng-if="searchForm.searchEntry.$error.pattern">{{'EXPLORER.OVERVIEW.ALPHANUMERIC' | translate}}</p>
-    <p class="col-xs-12 alert alert-danger text-center" ng-if="searchQueryText.length > 3 && noResults">{{'EXPLORER.OVERVIEW.NORESULTS' | translate}}</p>
-    <p class="col-xs-12 alert alert-warning text-center" ng-show="searchQueryText.length > 0 && searchQueryText.length < 4" >{{'EXPLORER.OVERVIEW.SHORTQUERY.LEAD' | translate}} {{ 4-searchQueryText.length }} {{'EXPLORER.OVERVIEW.SHORTQUERY.TRAIL' | translate}}</p>
+    <p class="col-xs-12 alert alert-danger text-center" ng-if="searchQueryText.length > 63 && noResults">{{'EXPLORER.OVERVIEW.NORESULTS' | translate}}</p>
+    <p class="col-xs-12 alert alert-warning text-center" ng-show="searchQueryText.length > 0 && searchQueryText.length < 64" >{{'EXPLORER.OVERVIEW.SHORTQUERY.LEAD' | translate}} {{ 4-searchQueryText.length }} {{'EXPLORER.OVERVIEW.SHORTQUERY.TRAIL' | translate}}</p>
   </div>
   <div class="om-table">
     <div class="row table-header hidden-xs">
