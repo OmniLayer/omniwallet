@@ -25,10 +25,11 @@ def search():
   if query[:2] in ['0x','0X']:
     return jsonify({ 'status': 400, 'data': 'Invalid search query prefix.' })
 
-  if len(query) < 3:
+  if len(query) != 64:
     return jsonify({ 'status': 400, 'data': 'Search query to short.' })
 
-  ROWS=dbSelect("select * from transactions t, txjson txj where t.txhash ~* %s and t.txdbserialnum=txj.txdbserialnum",[str(query)])
+  #ROWS=dbSelect("select * from transactions t, txjson txj where t.txhash ~* %s and t.txdbserialnum=txj.txdbserialnum",[str(query)])
+  ROWS=dbSelect("select * from transactions t, txjson txj where t.txhash=%s and t.txdbserialnum=txj.txdbserialnum",[str(query)])
 
   response = []
   if len(ROWS) > 0:
