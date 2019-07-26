@@ -437,7 +437,8 @@
 			"CONFIRM":"确认发送",
 			"AVAIL":"从可用地址",
 			"LOWFEE":"您的“发件人地址”没有足够的BTC完成此交易。请至少发送 {{ topupAmount }} BTC覆盖估计总交易成本。",
-			"UPDATE_FEE":"重新估算交易成本"
+			"UPDATE_FEE":"重新估算交易成本",
+			"INVALIDADDRESS":"请输入支持您正在发送的Omni Protocol令牌的有效比特币地址"
 		},
 		"ASSETS":{
 			"ASSETS":"资产",

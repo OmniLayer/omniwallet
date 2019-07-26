@@ -437,7 +437,8 @@ angular.module("omniConfig")
 			"CONFIRM":"Confirm Send",
 			"AVAIL":"From address available",
 			"LOWFEE":"Your 'From Address' does not have enough BTC to complete this transaction. Please send at least {{ topupAmount }} BTC to cover the estimated Total transaction cost.",
-			"UPDATE_FEE":"Re-estimate Transaction Cost"
+			"UPDATE_FEE":"Re-estimate Transaction Cost",
+			"INVALIDADDRESS":"Please enter a valid Bitcoin address that supports the Omni Protocol token you are sending"
 		},
 		"ASSETS":{
 			"ASSETS":"Assets",

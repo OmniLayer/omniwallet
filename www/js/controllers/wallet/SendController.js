@@ -48,6 +48,7 @@ angular.module("omniControllers")
 
 	$scope.selectedAsset = $scope.wallet.getAsset(1) || $scope.wallet.getAsset(0);
 	$scope.selectedAddress = $scope.selectedAsset.tradableAddresses[0];
+        $scope.invalidaddr=false;
 
         checkSend();
 
@@ -55,11 +56,17 @@ angular.module("omniControllers")
       	$scope.showtesteco = $scope.account.getSetting('showtesteco');
       	$scope.userCurrency = $scope.account.getSetting("usercurrency");
 
+        $scope.checkAddress = function(){
+                $scope.invalidaddr=false;
+                if ( $scope.sendTo.length > 1 && !['1','3'].includes($scope.sendTo[0]) ) {
+                  $scope.invalidaddr=true;
+                }
+        }
+
         $scope.updateFee = function(){
                 $scope.updatingFee=true;
                 $scope.amountModified=false;
                 checkSend();
-
         }
 
       	$scope.setAsset = function(asset){

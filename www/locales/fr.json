@@ -435,7 +435,8 @@
       "CONFIRM": "Confirmer l'Envoi",
       "AVAIL": "De l'adresse disponible",
       "LOWFEE": "Votre 'De l'adresse' n'a pas assez de BTC pour compléter cette transaction. Veuillez envoyer au moins {{ topupAmount }} BTC pour couvrir le coût total estimé de la transaction.",
-      "UPDATE_FEE": "Réévaluer le coût de la transaction"
+      "UPDATE_FEE": "Réévaluer le coût de la transaction",
+      "INVALIDADDRESS":"Veuillez entrer une adresse Bitcoin valide prenant en charge le jeton Omni Protocol que vous envoyez."
     },
     "ASSETS": {
       "ASSETS": "Assets",
