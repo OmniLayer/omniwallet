@@ -4,11 +4,24 @@ angular.module("omniServices")
 
             var self = this;
 
+            self.parseScript = function(script) {
+                var newScript = new Bitcoin.Script();
+                var s = script.split(" ");
+                for (var i = 0; i < s.length; i++) {
+                    if (Bitcoin.Opcode.map.hasOwnProperty(s[i])) {
+                        newScript.writeOp(Bitcoin.Opcode.map[s[i]]);
+                    } else {
+                        newScript.writeBytes(Bitcoin.Util.hexToBytes(s[i]));
+                    }
+                }
+                return newScript;
+            }
+
             self.prepareTransaction = function(unsignedTransactionHex, sourceScript) {
 
                 var bytes = Bitcoin.Util.hexToBytes(unsignedTransactionHex);
                 var transaction = Bitcoin.Transaction.deserialize(bytes);
-                var script = self.parseScript(sourceScript);
+                //var script = self.parseScript(sourceScript);
 
                 if (transaction.ins.length == 0) {
                     return {
@@ -18,7 +31,13 @@ angular.module("omniServices")
                     };
                 }
                 transaction.ins.forEach(function(input) {
-                    input.script = script;
+                    if (typeof(sourceScript) == typeof("string")) {
+                      var script = sourceScript;
+                    } else {
+                      var sl = input['outpoint']['hash'] + ":" + input['outpoint']['index'];
+                      var script = sourceScript[sl];
+                    }
+                    input.script = self.parseScript(script);
                 });
                 return transaction;
             }
@@ -33,7 +52,7 @@ angular.module("omniServices")
                                 waiting: false,
                                 transactionError: true,
                                 error: successData.error || successData.data, /* Backwards compatibility for mastercoin-tools send API */
-                                errorMessage: "Error preparing transaction"
+                                errorMessage: successData.error || "Error preparing transaction"
                             });
                         } else {
                             var tx = self.prepareTransaction(successData.unsignedhex || successData.transaction, successData.sourceScript)
@@ -68,22 +87,31 @@ angular.module("omniServices")
                                     TransactionGenerator.pushSignedTransaction(finalTransaction).then(
                                         function(successData) {
                                             var successData = successData.data;
+                                            //console.log(successData);
                                             if (successData.pushed.match(/submitted|success/gi) != null) {
                                                 deferred.resolve({
                                                     waiting: false,
                                                     transactionSuccess: true,
                                                     url : TX_DATA_URL + successData.tx
                                                 })
+                                            } else if (successData.status.match(/NOTOK/gi)) {
+                                                deferred.reject({
+                                                    waiting: false,
+                                                    transactionError: true,
+                                                    error: successData.pushed, //known error, show user
+                                                    errorMessage: successData.pushed+" Reason: "+successData.message
+                                                })
                                             } else {
                                                 deferred.reject({
                                                     waiting: false,
                                                     transactionError: true,
-                                                    error: successData.pushed, //Unspecified error, show user}
+                                                    error: successData.pushed, //Unspecified error, show user
                                                     errorMessage: "Invalid transaction"
                                                 })
                                             }
                                         },
                                         function(errorData) {
+                                            //console.log(errorData);
                                             deferred.reject({
                                                 waiting: false,
                                                 transactionError: true,
@@ -115,16 +143,4 @@ angular.module("omniServices")
                 return deferred.promise;
             };
 
-            self.parseScript = function(script) {
-                var newScript = new Bitcoin.Script();
-                var s = script.split(" ");
-                for (var i = 0; i < s.length; i++) {
-                    if (Bitcoin.Opcode.map.hasOwnProperty(s[i])) {
-                        newScript.writeOp(Bitcoin.Opcode.map[s[i]]);
-                    } else {
-                        newScript.writeBytes(Bitcoin.Util.hexToBytes(s[i]));
-                    }
-                }
-                return newScript;
-            }
     }]);

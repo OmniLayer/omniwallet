@@ -2,7 +2,7 @@ angular.module('omniwallet')
   .filter('cryptocurrency', [function() {
       return function(item) {
         return formatCurrencyInFundamentalUnit(item.balance, item.symbol);
-      }
+      };
     }
   ])
   .filter('truncate', [function () {
@@ -19,8 +19,27 @@ angular.module('omniwallet')
         else {
             return String(text).substring(0, length-end.length) + end;
         }
-      }
-   }]);
+      };
+   }])
+   .filter('crowdsaleDeadline', [function() {
+      return function(seconds) {
+        var deadline = new Date(seconds *1000);
+        var deadlineUTC = new Date(deadline.getTime() + deadline.getTimezoneOffset() * 60000);
+        return deadlineUTC.toLocaleString();
+      };
+    }
+  ]).filter('crowdsaleStatus', [function() {
+      return function(active) {
+        return active ? "Active" : "Finished";
+      };
+    }
+  ]).filter('assetIssuedType', [function() {
+      return function(fixedissuance) {
+        return fixedissuance ? "Property" : "Crowdsale";
+      };
+    }
+  ]);
+
 var conversionFactor = {
   'mtos': 0.00001000, //millibit to satoshi
   'utos': 0.00000100, //microbit to satoshi
@@ -31,8 +50,8 @@ var conversionFactor = {
   'stom': 100000, //satoshi to millibit
   //These are original values and are not consistent
   'BTC': 100000,
-  'MSC': 100000000,
-  'TMSC': 100000000,
+  'OMNI': 100000000,
+  'T-OMNI': 100000000,
 
   'mtow': 1000,
   'wtom': 0.001,

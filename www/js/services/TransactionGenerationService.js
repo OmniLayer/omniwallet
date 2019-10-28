@@ -1,5 +1,5 @@
 angular.module('omniServices')
-  .service('TransactionGenerator',['$http',function TransactionGeneratorService($http){
+  .service('TransactionGenerator',['$http',"TESTNET","SATOSHI_UNIT",function TransactionGeneratorService($http, TESTNET, SATOSHI_UNIT){
     var self = this;
       self.pushSignedTransaction = function(signedTransaction) {
         var url = '/v1/transaction/pushtx/';
@@ -13,13 +13,15 @@ angular.module('omniServices')
       self.getUnsignedTransaction = function(type, data){
         if (type == 0 && data.currency_identifier == 0){ // BTC send
           data = {
-            'from_address':data.pubkey, 'to_address':data.transaction_to, 'amount':data.amount_to_transfer, 'currency':'BTC', 'fee':data.fee,'marker': (data.marker || false)
+            'from_address':data.pubkey,
+            'to_address':data.transaction_to,
+            'amount':new Big(data.amount_to_transfer).times(SATOSHI_UNIT).valueOf(),
+            'currency':'BTC',
+            'fee':data.fee,
+            'marker': (data.marker || false),
+            'testnet': (TESTNET || false)
           };
           var url = '/v1/transaction/send/';
-        } else if (type == 20) { // sell tx
-          var url = '/v1/exchange/sell/';
-        }else if (type==22){ // accept tx
-          var url = '/v1/exchange/accept/';
         }else{ // SP and simple send tx
           var url = '/v1/transaction/getunsigned/'+type;
         } 

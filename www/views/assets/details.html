@@ -1,0 +1,61 @@
+<div ng-controller="AssetsDetailsController">
+  <div id="asset-details" ng-show="participation.action=='details'">
+    <div class="row">
+    	<div class="pane" ng-class="{'col-sm-9':property.iscrowdsale,'col-sm-12':!property.iscrowdsale}">
+        <div class="row"> 
+          <div class="col-xs-12">
+            <h2 class="om-title">{{property.name | truncate:20}} <span class="label label-asset-id" >(#{{propertyId}})</span></h2>
+          </div>
+        </div>
+        <div class="row" style="margin-bottom: 30px;">
+          <div class="col-xs-12">
+            <p style="word-wrap:break-word;">
+              {{property.data}}
+            </p>
+          </div>
+        </div>
+        <div class="row" style="margin-bottom: 20px;">
+          <div class="col-xs-12">
+            <p>
+              {{'ASSET.DETAILS.URL' | translate}}: <a target="_blank" style="word-wrap:break-word;" href="{{property.url}}">{{property.url}}</a>
+            </p>
+          </div>
+        </div>
+        <div class="row" style="margin-bottom: 20px;">
+          <div class="col-xs-12">
+            <p>
+              {{'ASSET.FORM.ISSUER' | translate}}: <a href="{{explorerUrl}}{{property.issuer}}" target="_blank">{{property.issuer}}</a>
+            </p>
+          </div>
+       </div>
+       <div ng-show="property.iscrowdsale" class="row" style="margin-bottom: 30px;">
+          <div class="col-xs-12">
+            <p>
+              {{'ASSET.CROWDSALE.ACCEPTEDCURRENCY' | translate}}: <span>{{acceptedCurrency.name | truncate:20}} ({{acceptedCurrency.id}}) / Rate ({{property.tokensperunit}})</span>
+            </p>
+          </div>
+        </div>
+    	  <div class="row" style="margin-bottom: 30px;">
+    	  	<div class="col-xs-12">
+              <p>
+    		      {{'ASSET.DETAILS.SHARE' | translate}}:
+    		      <span style="position:absolute;"> 
+    		        <a href="https://www.linkedin.com/shareArticle?mini=true&url={{shareUrl}}&title=Checkout%20this%20Crowdsale!&summary=&source=" target="_new">
+    		        	<i class="icon-linkedin"></i> 
+    		        </a> 
+    		        <a href="https://www.facebook.com/sharer/sharer.php?u={{shareUrl}}" target="_new"><i class="icon-facebook"></i> </a> 
+    		        <a href="https://twitter.com/home?status={{shareUrl}}" target="_new"><i class="icon-twitter"></i></a>
+    		        <a href="https://plus.google.com/share?url={{shareUrl}}" target="_new"><i class="icon-google"></i> </a>
+    		      </span>
+    	      </p>
+            </div>
+    	  </div>
+    	  <div class="row" ng-include="'/views/assets/partials/history.html'">
+    	  </div>
+    	</div>
+    	<div ng-show="property.iscrowdsale" class="col-xs-3 crowdsale-details pane" ng-include="'/views/assets/partials/crowdsale_details.html'">
+    	  
+    	</div>
+    </div>
+  </div>
+</div>

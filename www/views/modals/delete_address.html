@@ -1,0 +1,30 @@
+<div class="modal-header">
+    <h3>{{'MODALS.DELETE.TITLE' | translate}}: <br /> {{address}}</h3>
+</div>
+
+<div class="modal-body" ng-show={{lastaddress}}>
+    <p>{{'MODALS.DELETE.LAST' | translate}}</p>
+</div>
+
+<div class="modal-body" ng-hide={{lastaddress}}>
+	<h3 class="text-center">{{'MODALS.DELETE.SURE' | translate}}</h3>
+        <span ng-show={{private}}>
+	<p>
+		{{'MODALS.DELETE.DESCRIPTION.LEAD' | translate}}
+		<b>{{'MODALS.DELETE.DESCRIPTION.BOLD' | translate}}</b> {{'MODALS.DELETE.DESCRIPTION.TRAIL' | translate}}
+	</p>
+	<h4 class="text-danger">{{'MODALS.DELETE.BACKUP.LEAD' | translate}} <a href="/about/faq" target=_new>{{'MODALS.DELETE.BACKUP.LINK' | translate}}</a> {{'MODALS.DELETE.BACKUP.TRAIL' | translate}}</h4>
+	</span>
+	<span ng-hide={{private}}>
+        <p>            
+                {{'MODALS.DELETE.WATCH' | translate}}
+        </p>
+	</span>
+</div>
+<div class="modal-footer" ng-hide={{lastaddress}}>
+    <button class="btn btn-primary" ng-click="ok()">{{'MODALS.DELETE.CONFIRM' | translate}}</button>
+    <button class="btn btn-warning" ng-click="cancel()">{{'COMMON.CANCEL' | translate}}</button>
+</div>
+<div class="modal-footer" ng-show={{lastaddress}}>
+    <button class="btn btn-warning" ng-click="close()">{{'COMMON.CLOSE' | translate}}</button>
+</div>

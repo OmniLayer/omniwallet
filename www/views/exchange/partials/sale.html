@@ -1,0 +1,93 @@
+<div ng-controller="ExchangeSaleController">
+  <div class="row om-row">
+    <div class="col-xs-12">
+      <div class="text-left om-title">{{ 'EXCHANGE.SALE.TITLE' | translate}}</div>
+      <!-- <div ng-show="showErrors" class="alert alert-danger"> <strong> {{error}} </strong>  -->
+    </div>
+  </div> 
+  <div class="row">
+    <div class="col-sm-12">  
+      <form name="saleForm" ng-submit="confirm()">
+        <div class="panel panel-form">
+          <div class="panel-body">
+            <div class="col-sm-6">
+              <label for="chooseCoin" >{{ 'EXCHANGE.SALE.CHOOSECOIN' | translate}}</label>
+              <div class="btn-group send-asset-dropdown">
+                <span class="form-control">
+                  {{selectedAsset.name | truncate:15}} <small class="text-muted" ng-show="selectedAsset.id > 2">({{selectedAsset.id}})</small>
+                </span>
+              </div>
+            </div> 
+            <div class="col-sm-6">
+              <label class="text-justify" >{{ 'EXCHANGE.SALE.FROM' | translate}}</label>
+              <div class="btn-group send-address-dropdown">
+                <button class="btn btn-clear dropdown-toggle" type="button" id="chooseAddress" data-toggle="dropdown" aria-expanded="true">
+                  {{selectedAddress.hash}} 
+                  <span class="caret pull-right"></span>
+                </button>
+                <ul class="dropdown-menu" role="menu" aria-labelledby="chooseAddress">
+                  <li role="presentation" ng-repeat="address in selectedAsset.tradableAddresses">
+                    <a role="menuitem" tabindex="-1" href="#" ng-click="setAddress(address)">{{address.hash}} </a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>  
+        <div class="panel panel-form">
+          <div class="panel-body">
+            <div class="col-sm-6">
+              <div class="form-group">
+                <label>{{ 'EXCHANGE.SALE.QUANTITY' | translate}} ({{selectedAddress.getDisplayBalance(selectedAsset.id)}} {{selectedAsset.name | truncate:15}} {{ 'COMMON.AVAILABLE' | translate}}):</label>
+                <input name="amount" type="number" ng-model="saleAmount" class="form-control"
+                  step="0.00000001" min="0.00005754" max="{{selectedAddress.getDisplayBalance(selectedAsset.id)}}" required>
+              </div>
+            </div>
+            <div class="col-sm-6">
+              <div class="form-group">
+                <label> {{ 'EXCHANGE.SALE.TOTAL' | translate}} {{ saleAmount || 0 }} {{selectedAsset.name}}): 
+                  <a href=""
+                    tooltip="{{ 'EXCHANGE.SALE.TOTALTOOLTIP' | translate}} {{ saleAmount || 0 }} {{selectedAsset.name | truncate:15}}"
+                    tooltip-append-to-body="true"
+                    tooltip-placement="top" > <strong>(?)</strong>
+                  </a>
+	              </label>
+                <input name="ppc" type="number" step="0.00000001" ng-model="salePrice" class="form-control"
+                  placeholder="0.10000000" min="0.00005750" required>
+                <p class="help-block"> 
+                  {{ 'EXCHANGE.SALE.PRICE' | translate}}: {{  (saleAmount && salePrice) ? (( salePrice || 0) / ( saleAmount || 0) | number:8) : 0  }}
+                  BTC</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-sm-6">
+            <div class="form-group">
+              <label>
+                {{ 'EXCHANGE.SALE.TIME' | translate}}: 
+                <a href=""
+                  tooltip="{{ 'EXCHANGE.SALE.TIMETOOLTIP' | translate}}"
+                  tooltip-append-to-body="true"
+                  tooltip-placement="top" > <strong>(?)</strong>
+                </a>
+              </label>
+              <input name="blocks" type="number" step="1" ng-model="saleBlocks" class="form-control" placeholder="100 blocks" min="20" required>
+            </div>
+          </div>
+          <div class="col-sm-6">
+            <div class="form-group">
+              <label> {{ 'EXCHANGE.SALE.BUYERFEE' | translate}} ( {{selectedAsset.name | truncate:15}} ): </label>
+              <input name="buyerfee" type="number" step="0.0001" ng-model="buyersFee" class="form-control" 
+              placeholder="0.0002 suggested minimum" min="0.0001" required>
+            </div>
+          </div>
+        </div>
+        <p>
+          {{ 'WALLET.SEND.COST' | translate}}: {{minersFee.plus(protocolFee).valueOf()}} BTC <button type="button" class="btn btn-xs" ng-click="editTransactionCost()"><span class="glyphicon glyphicon-pencil small"></span></button>
+        </p>  
+        <button type="submit" class="btn btn-main pull-right">{{ 'COMMON.NEXT' | translate}}</button>
+      </form>
+    </div>
+  </div>
+</div>

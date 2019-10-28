@@ -1,0 +1,12 @@
+<div class="form-group col-sm-6">
+    <label for="issuer"> {{'ASSET.FORM.ISSUER' | translate}}</label>
+    <select name="issuer" class="form-control" ng-model="issuerData.selectedAddress"
+    ng-options="address as address.hash for address in wallet.getAsset(0).tradableAddresses"
+    ng-init="issuerData.selectedAddress = wallet.getAsset(0).tradableAddresses[0]" required>
+    </select>
+</div>
+<div class="form-group col-sm-6">
+    <label for=""> {{'COMMON.FEES' | translate}} <small class="text-muted">({{issuerData.selectedAddress.getDisplayBalance(0)}} BTC {{ 'COMMON.AVAILABLE' | translate}})</small></label>
+    <input name="fees" type="number" ng-model="issuerData.minerFees" class="form-control"
+    placeholder="0.002" step="0.0001" min="0.0001" required>
+</div>

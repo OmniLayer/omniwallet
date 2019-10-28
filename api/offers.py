@@ -1,5 +1,5 @@
 import urlparse
-import os, sys, tempfile, json
+import os, sys, tempfile, json, re
 import glob,time
 #tools_dir = os.environ.get('TOOLSDIR')
 #lib_path = os.path.abspath(tools_dir)
@@ -31,12 +31,14 @@ def offers_response(response_dict):
 
 def filterOffersByTime( currency_type , time_seconds):
     #filter by currency
-    currency = ('1' if currency_type == 'MSC' else '2')
+    currency = ('1' if (currency_type in ['OMNI','OMN','MSC'] ) else '2')
 
     atleast_now = int( str( int(time.time() - time_seconds) ) + '000' )
 
-    ROWS=dbSelect("select * from activeoffers ao, transactions t, txjson tj where ao.propertyidselling=%s and "
-                  "ao.createtxdbserialnum=t.txdbserialnum and ao.createtxdbserialnum=tj.txdbserialnum", [currency])
+    ROWS=dbSelect("select ao.*,t.txhash,t.protocol,t.txdbserialnum,t.txtype,t.txversion,t.ecosystem,t.txrecvtime,t.txstate,t.txerrorcode,"
+                  "t.txblocknumber,t.txseqinblock,txj.txdbserialnum,txj.protocol,txj.txdata "
+                  "from activeoffers ao, transactions t, txjson txj where ao.propertyidselling=%s and ao.propertyiddesired='0' and "
+                  "ao.createtxdbserialnum=t.txdbserialnum and ao.createtxdbserialnum=txj.txdbserialnum", [currency])
 
     response = [ mapSchema(row) for row in ROWS if int(mapSchema(row)['tx_time']) > atleast_now ]
 
@@ -58,7 +60,7 @@ def mapSchema(row):
       'action': -1, #don't have this data
       'block': str(row[-5]),
       'currencyId': str(rawdata['propertyid']),
-      'currency_str': 'Mastercoin' if str(rawdata['propertyid']) == '1' else 'Test Mastercoin',
+      'currency_str': 'Omni Token' if str(rawdata['propertyid']) == '1' else 'Test Omni Token',
       'formatted_amount': str(rawdata['amount']),
       'formatted_amount_available': '%.8f' % ( Decimal(row[1]) / Decimal(1e8) ),
       'formatted_bitcoin_amount_desired': '%.8f' % ( Decimal(row[2]) / Decimal(1e8) ),
@@ -87,7 +89,7 @@ def mapSchema(row):
       'block': str(row[-5]),
       'status': 'valid' if row[5] == 'unpaid' or row[5] == 'paid-partial' else 'closed',
       'currencyId': str(rawdata['propertyid']),
-      'currency_str': 'Mastercoin' if str(rawdata['propertyid']) == '1' else 'Test Mastercoin',
+      'currency_str': 'Omni Token' if str(rawdata['propertyid']) == '1' else 'Test Omni Token',
       'formatted_amount': '%.8f' % remaining,
       'sell_offer_txid': selljson['txid'],
       #'formatted_amount_available': str( row[1] / Decimal(1e8) ),
@@ -118,13 +120,16 @@ def getcolor(c):
 
 def getsell(txdbserialnum):
 
-    ROWS=dbSelect("select * from activeoffers ao, transactions t, txjson txj where ao.createtxdbserialnum=%s "
+    ROWS=dbSelect("select ao.*,t.txhash,t.protocol,t.txdbserialnum,t.txtype,t.txversion,t.ecosystem,t.txrecvtime,t.txstate,t.txerrorcode,"
+                  "t.txblocknumber,t.txseqinblock,txj.txdbserialnum,txj.protocol,txj.txdata "
+                  "from activeoffers ao, transactions t, txjson txj where ao.createtxdbserialnum=%s "
                   "and t.txdbserialnum=%s  and txj.txdbserialnum=%s ",(txdbserialnum,txdbserialnum,txdbserialnum))
     
     return ROWS[0]
 
 def genQs(prefix, tbl_abbr, field, array):
-    qs = '(' + tbl_abbr + '.' + field + '=\'' + array[0] + '\' ' # table abbrev "." fieldname = address 
+    addr = re.sub(r'\W+', '', array[0]) #check alphanumeric
+    qs = '(' + tbl_abbr + '.' + field + '=\'' + addr + '\' ' # table abbrev "." fieldname = address 
     for entry in array[1:]:
       entry = re.sub(r'\W+', '', entry) #check alphanumeric
       qs += prefix + ' ' + tbl_abbr + '.' + field + '=\'' + entry +'\' '     # "and/or" table abbrev "." fieldname = next address
@@ -137,8 +142,10 @@ def filterOffers(addresses):
     #Query all active offers
     qs = genQs('or', 'ao', 'seller', addresses)
 
-    ROWS=dbSelect("select * from activeoffers ao, transactions t, txjson txj where " + qs + \
-                  " and offerstate='active' and ao.createtxdbserialnum=t.txdbserialnum "
+    ROWS=dbSelect("select ao.*,t.txhash,t.protocol,t.txdbserialnum,t.txtype,t.txversion,t.ecosystem,t.txrecvtime,t.txstate,t.txerrorcode,"
+                  "t.txblocknumber,t.txseqinblock,txj.txdbserialnum,txj.protocol,txj.txdata "
+                  "from activeoffers ao, transactions t, txjson txj where " + qs + \
+                  " and offerstate='active' and ao.propertyiddesired='0' and ao.createtxdbserialnum=t.txdbserialnum "
                   "and ao.createtxdbserialnum=txj.txdbserialnum")
 
     #print query
@@ -150,7 +157,7 @@ def filterOffers(addresses):
         jsondata=row[-1]
 
       address = jsondata['sendingaddress']
-      currency = 'MSC' if jsondata['propertyid'] == 1 else 'TMSC'
+      currency = 'OMNI' if jsondata['propertyid'] == 1 else 'T-OMNI'
 
       if address not in offers: offers[ address ] = {}
       if 'offer_tx' not in offers[ address ]: offers[ address ]['offer_tx'] = {}
@@ -161,7 +168,9 @@ def filterOffers(addresses):
     #Query all active accepts
     qs = genQs('or', 'oa', 'buyer', addresses)
 
-    ROWS=dbSelect("select * from offeraccepts oa, transactions t, txjson txj where " + qs + \
+    ROWS=dbSelect("select oa.*,t.txhash,t.protocol,t.txdbserialnum,t.txtype,t.txversion,t.ecosystem,t.txrecvtime,t.txstate,t.txerrorcode,"
+                  "t.txblocknumber,t.txseqinblock,txj.txdbserialnum,txj.protocol,txj.txdata "
+                  "from offeraccepts oa, transactions t, txjson txj where " + qs + \
                   " and expiredstate='f' and oa.linkedtxdbserialnum=t.txdbserialnum "
                   "and oa.linkedtxdbserialnum=txj.txdbserialnum")
 
@@ -173,7 +182,7 @@ def filterOffers(addresses):
       except TypeError:
         jsondata=row[-1]
       address = jsondata['referenceaddress']
-      currency = 'MSC' if jsondata['propertyid'] == 1 else 'TMSC'
+      currency = 'OMNI' if jsondata['propertyid'] == 1 else 'T-OMNI'
 
       if address not in offers: offers[ address ] = {}
       if 'accept_tx' not in offers[ address ]: offers[ address ]['accept_tx'] = {}

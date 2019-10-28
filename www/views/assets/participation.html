@@ -1,0 +1,91 @@
+<div ng-controller="CrowdsaleParticipationController" ng-if="wallet.loaded">
+  <div class="row om-row">
+    <div class="col-xs-12">
+      <div class="text-left om-title">{{ 'CROWDSALE.PARTICIPATION.TITLE' | translate}}</div>
+      <!-- <div ng-show="showErrors" class="alert alert-danger"> <strong> {{error}} </strong>  -->
+    </div>
+  </div> 
+  <div class="row">
+    <div class="col-sm-12">  
+      <form name="sendForm" ng-submit="confirmParticipation()">
+        <div class="panel panel-form">
+          <div class="panel-body">
+            <div class="col-sm-6">
+              <label for="chooseCoin" >{{ 'CROWDSALE.PARTICIPATION.DESIREDCOIN' | translate}}</label>
+              <div name="chooseCoin" class="form-control">
+                {{propertyDesired.name | truncate:15}} <small ng-show="propertyDesired.id > 2">({{propertyDesired.id}})</small>
+              </div>
+            </div> 
+            <div class="col-sm-6">
+              <label>{{ 'WALLET.SEND.TO' | translate}}</label>
+              <div class="form-control">
+                {{property.issuer}}
+              </div>
+            </div>
+          </div>
+        </div>  
+        <div class="panel panel-form">
+          <div class="panel-body">
+            <div class="col-sm-6">
+              <label>
+                <span>{{ 'COMMON.SEND' | translate}} </span>
+                <span ng-if="accepted.symbol == 'BTC'">
+                  {{sendByValue ? userCurrency : 'BTC'}}
+                </span>
+                <span ng-if="propertyDesired.symbol != 'BTC'">
+                  {{ 'WALLET.SEND.AMOUNT' | translate}}
+                </span>
+                ({{ 'COMMON.AVAILABLE' | translate}}: {{selectedAddress.getDisplayBalance(propertyDesired.id)}} {{propertyDesired.name | truncate:15}} <small class="text-muted" ng-show="propertyDesired.id > 2">(#{{propertyDesired.id}})</small>)
+              </label>
+              <div class="input-group" ng-show="propertyDesired.symbol == 'BTC'">
+                <span class="input-group-addon no-padding">
+                  <div class="send-toggle">
+                    <div class="btn-sendbyvalue">
+                      <span></span>
+                      <input type="checkbox" name="sendByValue" ng-init="sendByValue = false" ng-model="sendByValue" ng-change="convertAmount()">
+                      <span></span>
+                    </div>
+                  </div>
+                </span>
+                <input id="amount" name="amount" type="number" ng-model="sendAmount" class="form-control" value="sendAmount"
+                    placeholder="{{propertyDesired.divisible ? '1.00000000' : '1'}}" step="{{propertyDesired.divisible ? 0.00000001 : 1}}" 
+                    min="{{propertyDesired.divisible ? 0.00000001 : 1}}" ng-change="calculateAmount()" required>
+                <div class="hint">({{sendByValue ? ((sendAmount || 0) / propertyDesired.price).toFixed(4) : ((sendAmount || 0) * propertyDesired.price).toFixed(2)}} {{sendByValue ? userCurrency : 'BTC'}})</div>
+              </div>
+              <input ng-show="propertyDesired.symbol != 'BTC'" id="amount" name="amount" type="number" ng-model="sendAmount" 
+                    class="form-control" value="sendAmount" ng-change="calculateAmount()"
+                    placeholder="{{propertyDesired.divisible ? '1.00000000' : '1'}}" step="{{propertyDesired.divisible ? 0.00000001 : 1}}" 
+                    min="{{propertyDesired.divisible ? 0.00000001 : 1}}" max="{{selectedAddress.getDisplayBalance(propertyDesired.id)}}" required>
+            </div> 
+            <div class="col-sm-6">
+              <label class="text-justify" >{{ 'WALLET.SEND.FROM' | translate}}</label>
+              <div class="btn-group send-address-dropdown">
+                <button class="btn btn-clear dropdown-toggle" type="button" id="chooseAddress" data-toggle="dropdown" aria-expanded="true">
+                  {{selectedAddress.hash}} 
+                  <span class="caret pull-right"></span>
+                </button>
+                <ul class="dropdown-menu" role="menu" aria-labelledby="chooseAddress">
+                  <li role="presentation" ng-repeat="address in propertyDesired.tradableAddresses">
+                    <a role="menuitem" tabindex="-1" href="#" ng-click="setAddress(address)">{{address.hash}} </a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="form-group col-sm-6">
+          <label for=""> {{'COMMON.FEES' | translate}} <small class="text-muted">({{selectedAddress.getDisplayBalance(0)}} BTC {{ 'COMMON.AVAILABLE' | translate}})</small></label>
+          <input name="fees" type="number" ng-model="minerFees" class="form-control"
+          placeholder="0.0001" step="0.0001" min="0.0001" required>
+        </div>
+        <p class="col-xs-12 help-block">{{'CROWDSALE.PARTICIPATION.ESTIMATE_LEAD' | translate}}  {{estimatedAmount}} {{property.name | truncate:10}}  {{'CROWDSALE.PARTICIPATION.ESTIMATE_TRAIL' | translate}}</p>
+        <div class="form-group col-sm-11 text-right">
+          <a href="/assets/details/{{property.propertyid}}" class="btn btn-tertiary">{{ 'COMMON.CANCEL' | translate}}</a>
+        </div>
+        <div class="form-group col-sm-1 text-right">
+          <button type="submit" class="btn btn-main pull-right">{{ 'COMMON.NEXT' | translate}}</button>
+        </div>
+      </form>
+    </div>    
+  </div>
+</div>

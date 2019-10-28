@@ -2,32 +2,33 @@ import urlparse
 import os, sys, re, random,pybitcointools, bitcoinrpc, math, hashlib
 from decimal import Decimal
 from flask import Flask, request, jsonify, abort, json, make_response
-from msc_apps import *
-tools_dir = os.environ.get('TOOLSDIR')
-lib_path = os.path.abspath(tools_dir)
-sys.path.append(lib_path)
-data_dir_root = os.environ.get('DATADIR')
+#from msc_apps import *
+from rpcclient import *
+#tools_dir = os.environ.get('TOOLSDIR')
+#lib_path = os.path.abspath(tools_dir)
+#sys.path.append(lib_path)
+#data_dir_root = os.environ.get('DATADIR')
 
-sys.path.append("/usr/lib/armory/")
+#sys.path.append("/usr/lib/armory/")
+sys.path.append("/usr/local/lib/armory/")
 from armoryengine.ALL import *
 
 app = Flask(__name__)
 app.debug = True
-conn = getRPCconn()
 
 @app.route('/getunsigned', methods=['POST'])
 def generate_unsigned():
     unsigned_hex = request.form['unsigned_hex']
     pubkey = request.form['pubkey']
-    ripemd160 = hashlib.new('ripemd160')
-    ripemd160.update(hashlib.sha256(hex_to_binary(pubkey)).digest())
-    pubKeyHash = binary_to_hex(ripemd160.digest())
+    #ripemd160 = hashlib.new('ripemd160')
+    #ripemd160.update(hashlib.sha256(hex_to_binary(pubkey)).digest())
+    #pubKeyHash = binary_to_hex(ripemd160.digest())
     try:
         tnet_ = request.form['testnet']
     except KeyError, e:
         tnet_ = 0
     #Translate raw txn
-    decoded_tx = conn.decoderawtransaction(unsigned_hex)
+    decoded_tx = decoderawtransaction(unsigned_hex)['result']
     #spending_txid= decoded_tx['vin'][0]['txid']
     #spending_tx_raw = conn.getrawtransaction(spending_txid, False)
     #spending_tx_decoded = conn.decoderawtransaction(spending_tx_raw)
@@ -44,13 +45,15 @@ def generate_unsigned():
     i_k = []
     for intx in decoded_tx['vin']:
       spending_txid= intx['txid']
-      spending_tx_raw = conn.getrawtransaction(spending_txid, False)
-      spending_tx_decoded = conn.decoderawtransaction(spending_tx_raw)
-      i_vout = -1
-      for each in spending_tx_decoded['vout']:
-        print each['scriptPubKey']['asm'].split(' ')[2], pubKeyHash
-        if each['scriptPubKey']['asm'].split(' ')[2] == pubKeyHash:
-          i_vout = each['n']
+      i_vout = intx['vout']
+      spending_tx_raw = getrawtransaction(spending_txid)['result']['hex']
+      #spending_tx_decoded = decoderawtransaction(spending_tx_raw)['result']
+      #i_vout = -1
+      #for each in spending_tx_decoded['vout']:
+      #  info=each['scriptPubKey']['asm'].split(' ')
+      #  print "\nArmoryService: Searching for pubKey:", pubKeyHash, "| ASM Info:",info
+      #  if len(info) > 3 and info[0] != "OP_RETURN" and info[2] == pubKeyHash:
+      #    i_vout = each['n']
 
       i_k.append ({'contribid': '',
                       'contriblabel': '',
@@ -72,7 +75,7 @@ def generate_unsigned():
                        'magicbytes': tnet,
                        'p2shscript': '',
                        'txoutscript': o['scriptPubKey']['hex'],
-                       'txoutvalue': int( o['value'] * Decimal(1e8) ),
+                       'txoutvalue': int( Decimal(o['value']) * Decimal(1e8) ),
                        'version': 1,
                        'wltlocator': ''}) 
 
@@ -87,7 +90,7 @@ def generate_unsigned():
     
     unsigned_tx_ascii= UnsignedTransaction().fromJSONMap(json_nosig, True).serializeAscii()
 
-    print("\n\nOutput is:\n%s" % unsigned_tx_ascii)  
+    print("\n\nArmoryService: Output is:\n%s" % unsigned_tx_ascii)  
     return jsonify({'armoryUnsigned':unsigned_tx_ascii})  
 
 @app.route('/getrawtransaction', methods=['POST'])
@@ -95,7 +98,7 @@ def get_raw():
   """Converts a signed tx from armory's offline format to a raw hex tx that bitcoind can broadcast/use"""
   
   signed_tx_ascii = request.form['signed_hex']
-  print("REQUEST(convert_signed_tx_to_raw_hex) -- signed_tx_ascii:\n'%s'\n" % (signed_tx_ascii,))
+  print("\nArmoryService: REQUEST(convert_signed_tx_to_raw_hex) -- signed_tx_ascii:\n'%s'\n" % (signed_tx_ascii,))
 
   try:
       utx = UnsignedTransaction()

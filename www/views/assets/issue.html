@@ -1,0 +1,42 @@
+<div ng-controller="AssetsIssuanceController">
+  <div class="row">
+     <div class="col-xs-11 col-sm-3 col-md-4 col-lg-4 text-left om-title">{{ 'ASSET.ISSUANCE.TITLE' | translate}}</div>
+     <div class="col-xs-1 col-sm-9 col-md-8 col-lg-8" ng-include="'/views/assets/partials/form_ecosystem.html'">                                
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-xs-12">
+      <form name="issuanceForm">
+        <div class="container-fluid" ng-include="'/views/assets/partials/form_details.html'">
+        </div>
+        <div class="container-fluid">
+          <div class="row">
+            <div class="col-xs-12">
+              <h3 class="om-subtitle">{{'ASSET.ISSUANCE.SUBTITLE' | translate}}</h3>
+              <hr>
+            </div>
+          </div>
+          <div class="row">
+            <div class="form-group col-sm-6">
+                <label for="amount"> {{'ASSET.ISSUANCE.AMOUNT' | translate}} <small class="text-muted">({{'ASSET.ISSUANCE.AMOUNT_HINT' | translate}})</small></label>
+                <input name="amount" type="number" step="1" ng-model="numberProperties" step="{{tokenStep}}" min="{{tokenMin}}" max="{{tokenMax}}" class="form-control" required>
+            </div>
+          </div>
+          <div class="row" ng-include="'/views/assets/partials/form_addressfee.html'">
+          </div>
+          <div class="row">
+            <div class="col-xs-12 text-right">
+              <a class="btn btn-tertiary" href="/wallet/assets">{{'COMMON.CANCEL' | translate }}</a>
+              <input class="btn btn-main" type="submit" value="{{'COMMON.NEXT' | translate }}" ng-click="confirm()">
+            </div>
+          </div>
+        </div>
+      </form>
+      <div class="row">
+        <div ng-show="showErrors" class="alert alert-danger">
+          <strong> {{error}} </strong>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

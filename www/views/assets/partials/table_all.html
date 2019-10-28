@@ -1,0 +1,17 @@
+<div class="row table-header hidden-xs">
+	<div class="col-sm-3">{{'TABLES.ASSETS.ID' | translate}}</div>
+	<div class="col-sm-3">{{'TABLES.ASSETS.NAME' | translate}}</div>
+	<div class="col-sm-3">{{'TABLES.ASSETS.AMOUNT' | translate}}</div>
+	<div class="col-sm-3">{{'TABLES.ASSETS.URL' | translate}}</div>
+</div>
+<div class="row table-row" ng-repeat="asset in assets">
+	<div class="visible-xs col-xs-5">{{'TABLES.ASSETS.ID' | translate}}</div>
+	<div class="col-xs-7 col-sm-3" ng-show="manage">{{asset.propertyid}}<a ng-click="setManaged(asset)"> (Manage)</a></div>
+	<div class="col-xs-7 col-sm-3" ng-hide="manage">{{asset.propertyid}}</div>
+	<div class="visible-xs col-xs-5">{{'TABLES.ASSETS.NAME' | translate}}</div>
+	<div class="col-xs-7 col-sm-3" style="overflow:hidden"><a href="/assets/details/{{asset.propertyid}}">{{asset.name}}</a></div>
+	<div class="visible-xs col-xs-5">{{'TABLES.ASSETS.AMOUNT' | translate}}</div>
+	<div class="col-xs-7 col-sm-3">{{asset.totaltokens}}</div>
+	<div class="visible-xs col-xs-5">{{'TABLES.ASSETS.URL' | translate}}</div>
+	<div class="col-xs-7 col-sm-3" style="overflow:hidden"><a href="/assets/details/{{asset.propertyid}}" target="_blank">{{asset.url}}</a></div>
+</div>

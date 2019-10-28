@@ -1,0 +1,53 @@
+<form name="createForm" novalidate role="form" ng-init="setFormScope(this)" class="form-horizontal">
+  <div class="modal-body">
+    <div class="row">
+      <div class="col-md-10 col-md-push-1 alert alert-danger alert-dismissable">
+       <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+       <strong>{{ 'MODALS.CREATE.WARNING.TITLE' | translate }}</strong><br />
+             {{ 'MODALS.CREATE.WARNING.MESSAGE' | translate }} <br />
+      </div>
+    </div>
+    <div class="row">
+      <div class="form-group col-md-10 col-md-push-1">
+        <label class="control-label" for="inputPassword">{{ 'COMMON.PASSWORD' | translate}}</label>
+        <div class="controls">
+          <input name="password" type="password" ng-model="create.password" class="form-control" id="inputPassword" ng-minlength="8" required match="create.repeatPassword" auto-focus="true">
+          <span style="color:red" ng-show="createForm.password.$error.required && createForm.password.$dirty">{{ 'MODALS.CREATE.REQUIRED' | translate }}</span>
+          <span style="color:red" ng-show="createForm.password.$dirty && createForm.password.$error.minlength">{{ 'MODALS.CREATE.MESSAGES.PASSWORDLENGTH' | translate }}</span>
+          <span style="color:red" ng-show="createForm.password.$dirty && ((create.password | passwordPercent).replace('%', '') < 70)"><br/>{{ 'MODALS.CREATE.MESSAGES.PASSWORDSTRENGTH' | translate }} <br/>  &nbsp;&nbsp; {{ 'MODALS.CREATE.MESSAGES.STRENGTHTIP' | translate }}</span>
+          <div id="pass-strength" >
+            {{ 'MODALS.CREATE.STRENGTH' | translate }}: {{ create.password | passwordPercent }}
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="form-group col-md-10 col-md-push-1">
+        <label class="control-label" for="inputRepeatPassword">{{ 'MODALS.CREATE.REPEAT' | translate }}</label>
+        <div class="controls">
+          <input name="repeatPassword" type="password" ng-model="create.repeatPassword" class="form-control" id="inputRepeatPassword" required match="create.password">
+          <span style="color:red" ng-show="createForm.repeatPassword.$error.required && createForm.repeatPassword.$dirty">{{ 'MODALS.CREATE.REQUIRED' | translate }}</span>
+          <span style="color:red" ng-show="create.password != create.repeatPassword">{{ 'MODALS.CREATE.MESSAGES.PASSWORDMATCH' | translate }}</span>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="form-group col-md-10 col-md-push-1">
+        <label class="control-label" for="inputEmail">{{ 'MODALS.CREATE.EMAIL' | translate }}<a href=""
+                popover="{{ 'MODALS.CREATE.MESSAGES.EMAIL' | translate }}"
+                popover-trigger="mouseenter"
+                popover-placement="top"> <strong>(?)</strong>
+                </a></label>
+        <div class="controls">
+          <input name="email" type="email" ng-model="create.email" class="form-control" id="inputEmail" required placeholder="{{ 'MODALS.CREATE.EMAILHOLDER' | translate }}">
+          <span style="color:red" ng-show="createForm.email.$error.email">{{ 'MODALS.CREATE.MESSAGES.EMAILVALID' | translate }}</span>
+        </div>
+      </div>
+    </div>
+   <div class="row">
+    <div class ="col-xs-11 col-md-pull-1">
+      <div vc-recaptcha key="'{{sitekey}}'" ng-model="create.captcha" class="captcha-centered"></div><br>
+   </div>
+
+  </div>
+</form>

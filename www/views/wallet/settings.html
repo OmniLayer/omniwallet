@@ -1,0 +1,129 @@
+<div ng-controller="AccountSettingsController">
+  <div class="row">
+    <div class="text-left om-title" >{{'SETTINGS.TITLE' | translate}}</div>
+  </div>
+  <form name="myForm" class="form-horizontal">
+
+    <div class="form-group">
+      <label class="col-xs-3 control-label">{{'SETTINGS.ID' | translate}}</label>
+      <div class="col-xs-4"><p class="form-control-static">{{uuid}}</p></div>
+    </div>
+
+    <div class="form-group">
+      <label class="col-xs-3 control-label">{{'SETTINGS.PASSWORD' | translate}}</label>
+      <div class="col-xs-6"><a href="" ng-click="changePassword()"><p class="form-control-static">{{'SETTINGS.PASSWORDCHANGE' | translate}}</p></a></div>
+    </div>
+
+    <div class="form-group">
+      <label class="col-xs-3 control-label">
+        <a href=""
+          tooltip="{{'SETTINGS.MFATOOLTIP' | translate}}"
+          tooltip-append-to-body="true" tooltip-placement="top">{{'SETTINGS.MFA' | translate}}</a>
+      </label>
+      <div class="col-xs-6" ng-hide="allowmfa"><p class="form-control-static">{{'SETTINGS.MFAEMAILREQ' | translate}}</p></a></div>
+      <div class="col-xs-6" ng-show="allowmfa"><a href="" ng-click="setupMFA()"><p class="form-control-static">{{mfa ? 'SETTINGS.MFAE' : 'SETTINGS.MFAD' | translate}}</p></a></div>
+    </div>
+
+    <div class="form-group">
+      <label class="col-xs-3 control-label">
+        <a href=""
+          tooltip="{{'MFA.ASQTOOLTIP' | translate}}"
+          tooltip-append-to-body="true" tooltip-placement="top"> <strong>{{'MFA.ASQ' | translate}}</strong></a>
+      </label>
+      <div class="col-xs-5">
+        <input class="form-control" type="{{asqtype}}" ng-model="asq" ng-readonly="true" placeholder="{{'MFA.ASQPLACEHOLDER' | translate}}">
+      </div>
+      <button type="button" class="btn btn-secondary" ng-model="showASQ" ng-click="hideShowQuestion()" >{{'SETTINGS.SHOWHIDEASQ' | translate}}</button>
+    </div> 
+
+    <div class="form-group">
+      <label class="col-xs-3 control-label">
+        <a href=""
+          tooltip="{{'SETTINGS.EMAILTOOLTIP' | translate}}"
+          tooltip-append-to-body="true" tooltip-placement="top"> <strong>{{'SETTINGS.EMAIL' | translate}}</strong></a>
+      </label>
+      <div class="col-xs-4">
+        <input class="form-control" type="email" ng-model="email" ng-change="resetMSGS()">
+        <div collapse="!myForm.$error.email"><p class="alert-danger" align="center">{{'SETTINGS.EMAILALERT' | translate}}</p></div>
+      </div>
+      <button type="button" class="btn btn-secondary" ng-hide="email==emailonfile" ng-model="resetEmail" ng-click="email=emailonfile" >{{'COMMON.RESET' | translate}}</button>
+    </div> 
+
+    <div class="form-group">
+      <label class="col-xs-3 control-label">
+          <a href=""
+          tooltip="{{'SETTINGS.CURRENCYTOOLTIP' | translate}}"
+          tooltip-append-to-body="true" tooltip-placement="top"> <strong>{{'SETTINGS.CURRENCY' | translate}}</strong></a>
+      </label>
+      <div class="col-xs-4"><select class="form-control" data-ng-options="o.value as label(o.label,o.value) for o in currencylist" data-ng-model="selectedCurrency" ng-change="resetMSGS()"></select></div>
+    </div>
+
+    <div class="form-group">
+      <label class="col-xs-3 control-label">
+          <a href=""
+          tooltip="{{'SETTINGS.TESTECOTOOLTIP' | translate}}"
+          tooltip-append-to-body="true" tooltip-placement="top"> <strong>{{'SETTINGS.TESTECO' | translate}}</strong></a>
+        </label>
+        <div class="col-xs-4">
+          <p class="form-control-static">
+            <input type="radio" ng-change="resetMSGS()" ng-model="showtesteco" value="true" />{{'COMMON.YES' | translate}}
+            <input type="radio" ng-change="resetMSGS()" ng-model="showtesteco" value="false" />{{'COMMON.NO' | translate}} ({{'COMMON.DEFAULT' | translate}})
+          </p>
+        </div>
+    </div>
+<!--
+    <div class="form-group">
+      <label class="col-xs-3 control-label">
+          <a href=""
+          tooltip="MasterProtocol Transactions are encoded into bitcoin multisig outputs which have the smallest amount of BTC needed associated with them. 
+          Normally your sending address is the redeamer. Enabling this option will instead allows the developers to be the redeamers."
+          tooltip-append-to-body="true" tooltip-placement="top"> <strong>Support the Developers:</strong></a>
+      </label>
+      <div class="col-xs-4">
+        <p class="form-control-static">
+          <input type="radio" ng-model="donate" value="true" />{{'COMMON.YES' | translate}}
+          <input type="radio" ng-model="donate" value="false" />{{'COMMON.NO' | translate}}
+        </p>
+      </div>
+    </div>
+-->
+    <div class="form-group">
+      <label class="col-xs-3 control-label">
+        <a href=""
+          tooltip="{{'SETTINGS.FILTERDEXTOOLTIP' | translate}}"
+          tooltip-append-to-body="true" tooltip-placement="top"> <strong>{{'SETTINGS.FILTERDEX' | translate}}</strong></a>
+      </label>
+      <div class="col-xs-4">
+        <p class="form-control-static">
+          <input type="radio" ng-change="resetMSGS()" ng-model="filterdexdust" value="true" />{{'COMMON.YES' | translate}} ({{'COMMON.DEFAULT' | translate}})
+          <input type="radio" ng-change="resetMSGS()" ng-model="filterdexdust" value="false" />{{'COMMON.NO' | translate}}
+        </p>
+      </div>
+    </div>
+
+    <button type="button" class="btn btn-main" ng-model="singleModel" ng-click="save()" ng-disabled="(myForm.$error.email) || (mfa && email.length==0) || !unsaved">{{'SETTINGS.SAVE' | translate}}</button>
+  </form>
+  <br> 
+  <div collapse="!saved">
+    <div class="col-xs-8 alert alert-success alert-dismissable">
+     <button type="button" class="close" aria-hidden="true" ng-click="saved=!saved">&times;</button>
+     <strong>{{'COMMON.SUCCESS' | translate}}:</strong> {{'SETTINGS.SAVEDTRUE' | translate}} <br />
+    </div>
+  </div>
+  <div collapse="!error">
+    <div class="col-xs-8 alert alert-danger alert-dismissable">
+     <button type="button" class="close" aria-hidden="true" ng-click="error=!error">&times;</button>
+     <strong>{{'COMMON.ERROR' | translate}}:</strong> {{'SETTINGS.SAVEDFALSE1' | translate}} <br />
+             {{'SETTINGS.SAVEDFALSE2' | translate}}<br />
+    </div> 
+  </div>
+
+  <div collapse="!mfaemail && !(mfa && email.length==0)">
+    <div class="col-xs-8 alert alert-danger alert-dismissable">
+     <button type="button" class="close" aria-hidden="true" ng-click="email=emailonfile">&times;</button>
+     <strong>{{'SETTINGS.MFAEMAIL' | translate}}</strong>
+    </div> 
+  </div>
+
+<br><br>
+</div>

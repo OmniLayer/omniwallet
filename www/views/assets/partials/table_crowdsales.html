@@ -1,0 +1,29 @@
+<div class="row table-header hidden-xs">
+	<div class="col-sm-3">{{'ASSET.HISTORY.FIXEDISSUANCE.FALSE' | translate}}</div>
+	<div class="col-sm-3">{{'ASSET.CROWDSALE.ACCEPTEDCURRENCY' | translate}}</div>
+	<div class="col-sm-2">{{'CROWDSALE.DETAILS.TIME' | translate}}</div>
+	<div class="col-sm-2">{{'TABLES.CROWDSALE.BOUGHT' | translate}}</div>
+	<div class="col-sm-2">{{'TABLES.CROWDSALE.CREATED' | translate}}</div>
+</div>
+<div class="row table-row" ng-repeat="crowdsale in crowdsales">
+	<div class="visible-xs col-xs-5">{{'ASSET.HISTORY.FIXEDISSUANCE.FALSE' | translate}}</div>
+	<div class="col-xs-7 col-sm-3" style="overflow:hidden;">
+		<a href="/assets/details/{{crowdsale.propertyid}}">{{crowdsale.name}}</a>
+	</div>
+	<div class="visible-xs col-xs-5">{{'ASSET.CROWDSALE.ACCEPTEDCURRENCY' | translate}}</div>
+	<div class="col-xs-7 col-sm-3">
+		{{crowdsale.propertydesiredName}} ({{crowdsale.propertyiddesired}}) / {{'ASSET.CROWDSALE.RATE' | translate}} ({{crowdsale.tokensperunit}})
+	</div>
+	<div class="visible-xs col-xs-5">{{'CROWDSALE.DETAILS.TIME' | translate}}</div>
+	<div class="col-xs-7 col-sm-2">
+		<div id="timerWrapper-{{crowdsale.propertyid }}"></div>
+	</div>
+	<div class="visible-xs col-xs-5">{{'TABLES.CROWDSALE.BOUGHT' | translate}}</div>
+	<div class="col-xs-7 col-sm-2">
+		{{crowdsale.tokensissued}}
+	</div>
+	<div class="visible-xs col-xs-5">{{'TABLES.CROWDSALE.CREATED' | translate}}</div>
+	<div class="col-xs-7 col-sm-2">
+		{{crowdsale.totaltokens}}
+	</div>
+</div>

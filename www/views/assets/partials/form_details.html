@@ -1,0 +1,44 @@
+<div class="row">
+  <div class="col-sm-12">
+    <h3 class="om-subtitle">{{'ASSET.FORM.DETAILS.SUBTITLE' | translate}}</h3>
+    <hr>
+  </div>
+</div>
+<div class="row">
+  <div class="form-group col-sm-6">
+      <label for="name"> {{ 'COMMON.NAME' | translate }} <small class="text-muted">({{ 'ASSET.FORM.DETAILS.NAME_HINT' | translate }})</small></label>
+      <input name="name" type="text" ng-model="propertyDetails.propertyName" class="form-control" maxlength="255" ng-maxlength="255" required>
+  </div>
+  <div class="form-group col-sm-6">
+      <label for="type"> {{ 'ASSET.FORM.DETAILS.DIVISIBLE' | translate }}</label>
+      <select name="type" class="form-control" ng-model="propertyDetails.propertyType" ng-change="typeChanged()" required>
+        <option value="2"> {{ 'COMMON.YES' | translate }} </option>
+        <option value="1"> {{ 'COMMON.NO' | translate }} </option>
+      </select>
+  </div>
+</div>
+<div class="row">
+  <div class="form-group col-sm-6">
+    <label for="category">{{ 'ASSET.FORM.DETAILS.CATEGORY' | translate }}</label>
+    <combobox name="category" model-value="propertyDetails.propertyCategory" placeholder="{{ 'COMMON.SELECT' | translate }}" 
+    option-list="categories" value-selected="loadSubcategories(category)"></combobox>
+  </div>  
+  <div class="form-group col-sm-6" ng-show="propertyDetails.propertyCategory != ''">
+    <label for="subcategory">{{ 'ASSET.FORM.DETAILS.SUBCATEGORY' | translate }}</label>
+    <combobox name="subcategory" model-value="propertyDetails.propertySubcategory" placeholder="{{ 'COMMON.SELECT' | translate }}" 
+    option-list="subcategories"></combobox>
+  </div>
+</div>
+<div class="row">
+  <div class="form-group col-sm-6">
+      <label for="url"> {{ 'ASSET.FORM.DETAILS.URL' | translate }} <small class="text-muted">({{ 'ASSET.FORM.DETAILS.URL_HINT' | translate }})</small></label>
+      <input name="url" type="url" ng-model="propertyDetails.propertyUrl" class="form-control" placeholder="ex: http://my.property.url" maxlength="255" ng-maxlength="255" >
+  </div>
+</div>
+<div class="row">
+  <div class="form-group col-sm-12">
+    <label for="description">{{ 'ASSET.FORM.DETAILS.DESCRIPTION' | translate }}</label>
+    <textarea name="description" class="form-control" ng-model="propertyDetails.propertyData" maxlength="255" ng-maxlength="255" rows="3"></textarea>
+    <div style="position: absolute;right: 20px;bottom: 0px;color: #ccc;">{{255 - propertyDetails.propertyData.length}} {{'ASSET.FORM.DETAILS.DESCRIPTION_HINT' | translate}}</div>
+  </div>
+</div>

@@ -1,0 +1,774 @@
+{
+  "COMMON": {
+    "ACTIONS": "Actions",
+    "ADDRESS": "Adresse",
+    "AVAILABLE": "disponible",
+    "SENDABLE": "expédiable",
+    "BALANCE": "Solde",
+    "BITCOIN": "Bitcoin",
+    "BROADCAST": "Émettre une transaction",
+    "SIGNMSG": "Signer un message",
+    "REMOVEADDRESS": "Supprimer de portefeuille",
+    "ADDRESSES": "Adresses",
+    "ASSETS": "Assets",
+    "ASSET": "Asset",
+    "OVERVIEW":"Vue d'ensemble",
+    "SEND": "Envoyé",
+    "VALUE": "Valeur",
+    "CREATEWALLET": "Créer un portefeuille",
+    "LOGIN": "S'identifier",
+    "LOADING": "Chargement",
+    "BACK": "Retour",
+    "NAME": "Nom",
+    "SELECT": "Sélectionner",
+    "SERVERERROR": "Erreur du serveur, essayez plus tard",
+    "YES": "Oui",
+    "NO": "Non",
+    "CANCEL": "Annuler",
+    "CLOSE": "Fermer",
+    "NEXT": "Suivant",
+    "DONE": "Terminé",
+    "ACTIVECROWDSALES": "Ventes participatives actives",
+    "HISTORY": "Historique",
+    "FEES": "Frais de minage (BTC)",
+    "PASSWORD": "Mot de passe",
+    "DEFAULT": "Défaut",
+    "SUCCESS": "Succès",
+    "ERROR": "Erreur",
+    "MFA": "Code MFA",
+    "RESET": "Remise à zéro",
+    "MY": "Moi",
+    "PUBKEY":"Clé publique",
+    "GRANT":"Subvention",
+    "REVOKE":"Révoquer",
+    "SPENDABLE":"Dépensable",
+    "WATCHONLY":"Montre seulement"
+  },
+  "SETTINGS": {
+    "TITLE": "Paramètres du compte",
+    "ID": "Id portefeuille",
+    "PASSWORD": "Mot de passe portefeuille",
+    "PASSWORDCHANGE": "Cliquez ici pour changer votre mot de passe du portefeuille",
+    "MFATOOLTIP": "Ajouter/Supprimer un périphérique compatible MFA (Google Authenticator, Authy, ...) pour protéger les connexions de votre compte",
+    "MFA": "MFA :",
+    "MFAE": "Cliquez ici pour désactiver votre périphérique d'identification à deux facteurs (MFA)",
+    "MFAD": "Cliquez ici pour configurer/activer un périphérique d'identification à deux facteurs (MFA)",
+    "EMAILTOOLTIP": "Votre e-mail peut être utilisé pour récupérer votre Id de portefeuille si vous le l'égarez et éventuellement pour les notifications concernant l'activité de votre portefeuille.",
+    "EMAIL": "Email de portefeuille :",
+    "EMAILALERT": "Entrez un email valide",
+    "CURRENCYTOOLTIP": "Choisissez la devise préférée avec laquelle vous souhaitez afficher toutes les informations sur le solde de votre portefeuille.",
+    "CURRENCY": "Devise du portefeuille :",
+    "TESTECOTOOLTIP": "Il existe deux types d'écosystèmes dans le Masterprotocol, Production et Test. L'activation de cette option affichera les deux à la fois dans votre portefeuille. Remarque : La désactivation de cette option ne vous empêchera pas de recevoir les tokens de l'écosystème de test. L'affichage de votre portefeuille sera seulement filtré.",
+    "TESTECO": "Afficher l'écosystème de test :",
+    "FILTERDEXTOOLTIP": "Certaines offres d'échanges décentralisées ne peuvent plus être complétées car le coût d'achat des tokens restants est inférieur au montant minimal autorisé par le réseau Bitcoin. Cette option les filtre de la liste d'affichage.",
+    "FILTERDEX": "Filtrer les offres d'échanges décentralisées trop petites",
+    "SAVE": "Enregistrer les préférences",
+    "SAVEDTRUE": "Votre portefeuille a été mis à jour.",
+    "SAVEDFALSE1": "Un problème est survenu lors de la mise à jour de votre portefeuille.",
+    "SAVEDFALSE2": "Veuillez vous déconnecter, fermer votre navigateur, attendez une minute puis connectez-vous et réessayez.",
+    "MFAEMAIL": "Vous disposez actuellement d'un périphérique MFA actif. Pour des raisons de sécurité, vous ne pouvez pas supprimer votre courrier électronique actuellement.",
+    "MFAEMAILREQ": "Pour des raisons de sécurité et de récupération, vous ne pouvez pas configurer un périphérique MFA tant que vous n'ajoutez pas un courrier électronique valide à votre compte.",
+    "SHOWHIDEASQ": "Afficher/masquer la question de sécurité"
+  },
+  "MFA": {
+    "TITLE1": "Configuration MFA",
+    "TITLE2": "Désactiver MFA",
+    "ERROR": "Désolé, le code que vous avez entré est incorrect. Veuillez le vérifier et réessayer.",
+    "SUBMIT": "Nous vérifions votre demande, cela devrait prendre moins d'une minute.",
+    "GENERROR1": "Il y a eu un problème pendant la génération d'un nouveau secret. Attendez un instant et réessayez.",
+    "GENERROR2": "Si cette erreur continue à se produire, veuillez en informer l'équipe Omniwallet.",
+    "IMPORT": "Pour configurer votre compte qui exige un périphérique MFA, scannez le QR code ou saisissez manuellement le secret répertorié ci-dessous avec votre appareil/logiciel MFA (Google Authenticator, Authy, etc.)",
+    "SEC1": "Votre Token Secret est",
+    "SEC2": "Conservez-le de manière sécurisée car",
+    "SEC3": "Toute personne avec ce secret pourra reproduire vos codes d'autorisation MFA.",
+    "SEC4": "Entrez le code actuel affiché sur votre appareil MFA pour valider et compléter l'installation.",
+    "DIS1": "Vous disposez actuellement d'une configuration de périphérique MFA sur votre compte.",
+    "DIS2": "Tapez DISABLE et entrez votre code MFA actuel pour désactiver.",
+    "ASQ": "Question personnelle de sécurité :",
+    "ASQTOOLTIP": "Dans le cas où vous perdrez votre appareil de MFA, l'équipe de support d'Omniwallet peut utiliser cette Question/Réponse de sécurité pour vérifier que vous êtes le propriétaire du portefeuille et vous aider à supprimer les exigences MFA",
+    "ASQPLACEHOLDER": "Configurez votre Question de Sécurité Personnelle dans la configuration MFA",
+    "ASA": "Question Personnelle de Sécurité, Réponse :",
+    "ASATOOLTIP": "Entrez une réponse à la question de sécurité."
+  },
+  "HOMEPAGE": {
+    "ADDRESSEXAMPLE": "(e.g. 1EXoDusjGwvnjZUyKkxZ4UHEf77z6A5S4P)",
+    "BALANCECHECK": "Vérification du solde",
+    "CHECKBALANCE": "Vérification du solde",
+    "ENTERVALIDADDRESS": "Entrez une adresse Bitcoin valide ",
+    "WELCOME": "Bienvenue sur Omniwallet"
+  },
+  "ABOUT": {
+    "CONTACT": {
+      "WE": "Nous sommes un groupe de développeurs qui travaillent constamment à améliorer Omniwallet.",
+      "QUESTIONS": "Si vous avez des questions, des problèmes ou simplement souhaitez fournir un avis général, n'hésitez pas à nous contacter à l'adresse suivante :",
+      "GITHUBTITLE": "Github (Rapport d'erreur)",
+      "GITHUBDESC": "Quelque chose ne fonctionne pas correctement dans le portefeuille? Consultez nos 'Questions ouvertes', Si vous ne voyez pas votre sujet spécifique, ouvrez un nouveau numéro pour nous le faire savoir. (Veuillez inclure autant de détails que possible, y compris ",
+      "GITHUBLINK": "la sortie de la console de développement",
+      "TALKTITLE": "Base de connaissances / Centre de support",
+      "TALKDESC": "Il s'agit d'une base de connaissances de soutien où vous pouvez examiner des sujets, des questions et des réponses communes.",
+      "EMAILTITLE": "Email de support",
+      "EMAILDESC": "Vous ne savez pas comment faire quelque chose ou juste besoin d'aide? Notre équipe de support peut être contactée directement à",
+      "EMAILLINK": "la sortie de la console de développement",
+      "CHATTITLE": "Chat",
+      "CHATDESC": "Le chat avec les développeurs, partagez vos idées ou posez des questions. Les disponibilités varient, mais nous devrions généralement être autour du lundi au vendredi 10-4 EST",
+      "TITLE": "Contactez nous"
+    },
+    "OMNI": {
+      "TITLE": "À propos d'Omni",
+      "FOUNDATION": {
+        "TITLE": "Fondation Omni",
+        "FIRST": "En septembre 2013, la Fondation Mastercoin a été formée pour gérer temporairement les fonds de l'adresse Exodus et la distribution du développement MSC. Le conseil d'administration de la Fondation Mastercoin a déclaré son intention de minimiser temporairement son rôle central en faisant passer les décisions aux propriétaires de Mastercoin par preuve de participation (PoS).",
+        "SECOND": "En janvier 2016, la Fondation Mastercoin a été renommée en Omni Foundation et les tokens principaux du projet, MSC, renommés en Omni Token (OMN). La Fondation préconise l'utilisation du Protocole Omni et tente de construire une communauté de personnes qui la développent. Tous les éléments budgétaires, les procès-verbaux du conseil d'administration, le calendrier des acquisitions des Dev OMN et les primes sont des documents publics et sont disponibles pour tous sur le ",
+        "LINK": "Site Web de la Fondation"
+      },
+      "PROTOCOL": {
+        "TITLE": "Protocole Omni",
+        "PARAGRAPH": "Le protocole Omni est un protocole de communication qui utilise la blockchain Bitcoin pour permettre des fonctionnalités telles que les contrats intelligents (smarts contrats), les devises utilisateur et les échanges décentralisés entre pairs. Une analogie commune qui est utilisée pour décrire la relation entre le protocole Omni et Bitcoin est celle de HTTP vers TCP / IP: HTTP, comme le protocole Omni, est la couche d'application vers le transport et la couche Internet plus fondamentaux de TCP / IP, comme le Bitcoin. Pour plus d'informations et de détails détaillés, consultez le ",
+        "LINK": "Spec",
+        "ONGITHUB": "sur github"
+      },
+      "TOKEN": {
+        "TITLE": "Omnis",
+        "FIRST": "Omni Tokens (symbole OMN) sont des jetons numériques (Tokens) nécessaires à l'utilisation de certaines fonctionnalités du protocole Omni. Le nombre total OMNs en circulation est 619 478,6 et aucun OMN ne sera jamais créé. De plus, OMNs ne peut pas être miné. Les 619 478,6 OMN ont été générés à la suite d'une collecte de fonds publique dans le style de Kickstarter.com."
+      },
+      "INFO": "Informations provenant de ",
+      "EDUCATION": "Omni Protocol Education"
+    },
+    "OMNIWALLET": {
+      "TITLE": "À propos d'Omniwallet",
+      "AIM": "Omniwallet est un nouveau type de portefeuille Web qui vise à combiner la sécurité, facilité d'utilisation et support multi-devises.",
+      "SECURITY": {
+        "TITLE": "Meilleur niveau de sécurité",
+        "KEYS": "Les clés privées ne sont jamais envoyées au serveur sauf sous une forme chiffrée",
+        "OPEN": "Tout est open source depuis le début !",
+        "REPLICATE": "Vous pouvez déployer Omniwallet sur votre propre serveur et héberger votre propre instance, ou utiliser l'un des fournisseurs de services qui vous l'accueillera - votre argent, votre choix"
+      },
+      "USABILITY": {
+        "TITLE": "Facilité d'utilisation",
+        "ONLINE": "Pas de logiciel à télécharger ou à installer, pas de blockchain à synchroniser et vérifier - ça marche, en un clin d'oeil",
+        "PLANNED": "Disposition soigneusement planifiée, avec des opérations communes soulignées",
+        "INTUITIVE": "Interface utilisateur belle et intuitive",
+        "SPECIAL": "Un soin particulier est pris pour alléger les contraintes opérationnelles afin de prévenir les erreurs et assurer une expérience sans douleur pour l'utilisateur"
+      },
+      "MULTICURRENCY": {
+        "TITLE": "Support multi-devises",
+        "BUILT": "Omniwallet est livré avec un support pré-construit pour Bitcoin, Omni Token et Test Omni Token",
+        "SUPPORT": "Support natif pour les biens intelligents et les monnaies générées par l'utilisateur",
+        "ALT": "Support de monnaies alternatives (altcoin) - Omniwallet a l'intention de soutenir les monnaies qui sortent de l'écosystème Omni habituel, tel que le Litecoin, Peercoin et plus"
+      },
+      "STATUS": {
+        "TITLE": "Statut actuel",
+        "SPEED": "Omniwallet est en développement. Notre vision et notre objectif sont bien définis, et nous travaillons fort pour développer la fonctionnalité et améliorer continuellement les fonctionnalités.",
+        "INVOLVEMENT": "Nous souhaitons vous impliquer dans l'effort de développement! Alors, allez-y et :",
+        "SUGGESTIONS": "Jouez avec lui et donnez-nous des suggestions",
+        "BUGS": "Signaler des bugs sur github",
+        "CODE": "Codez et envoyez des demandes de tirage qui corrigent certains de ces problèmes",
+        "CONTRIBUTIONS": "Les contributions sont éligibles pour",
+        "BOUNTIES": "les primes que nous avons en place",
+        "SUBMIT": "alors assurez-vous de soumettre sur le forum toute contribution que vous apportez sur le fil de primes (bounty).",
+        "BETA": "Code bêta :",
+        "MEAN": "Qu'est-ce que ça veut dire ? Nous nous efforçons de vous assurer que les fonctionnalités disponibles fonctionnent comme prévu, cependant",
+        "CAUTION": "vous devriez toujours faire preuve de prudence",
+        "VALUE": "lorsque vous travaillez avec n'importe quelle valeur substantielle."
+      }
+    },
+    "FAQ": {
+      "TITLE": "Questions fréquemment posées"
+    }
+  },
+  "NAVIGATION": {
+    "ABOUT": "À propos",
+    "ABOUTOMNIWALLET": "À propos d'Omniwallet",
+    "ABOUTOMNI": "À propos d'Omni",
+    "ACCOUNT": "Mon compte",
+    "ADDRESSES": "Mes adresses",
+    "ASSETS": "Mes Assets",
+    "CREATE": "Créer un portefeuille",
+    "CONTACT": "Contactez nous",
+    "EXCHANGE": "Échange",
+    "EXPLORER": "Explorer",
+    "EXPLOREASSETS": "Assets",
+    "FAQ": "FAQ",
+    "LOGIN": "S'identifier",
+    "LOGOUT": "Se déconnecter",
+    "OFFERS": "Offres",
+    "SETTINGS": "Paramètres du compte",
+    "TRADE": "Échanger",
+    "DEX1": "BTC/OMN",
+    "TRANSACTIONS": "Transactions",
+    "WALLET": "Mon portefeuille",
+    "OMNIDEX": "OmniDex"
+  },
+  "MODALS": {
+    "CREATE": {
+      "MESSAGES": {
+        "UUID": "Cet UUID est déjà utilisé",
+        "CAPTCHA": "Captcha invalide, essayez à nouveau.",
+        "VALIDATING": "Nous validons vos données et créons votre compte",
+        "PASSWORDLENGTH": "Le mot de passe doit comporter au moins 8 caractères",
+        "PASSWORDSTRENGTH": "La force du mot de passe doit être d'au moins 70%",
+        "STRENGTHTIP": "(Essayez d'avoir au moins 2: Majuscules / Minuscules / Chiffres / Symboles)",
+        "PASSWORDMATCH": "Les deux mots-de-passe ne sont pas identiques !",
+        "EMAIL": "Nous vous enverrons un email de bienvenue contenant votre lien de connexion unique.",
+        "EMAILVALID": "Merci d'entrer une adresse email valide"
+      },
+      "WARNING": {
+        "TITLE": "N'oubliez pas votre mot de passe !",
+        "MESSAGE": "AVERTISSEMENT: Les mots de passe oubliés sont NON RÉCUPÉRABLES et peuvent entraîner une PERTE de TOUTES vos  monnaies !"
+      },
+      "REQUIRED": "Obligatoire",
+      "STRENGTH": "Force",
+      "REPEAT": "Répéter le mot de passe",
+      "EMAIL": "Email",
+      "EMAILHOLDER": "Entrez une adresse email"
+    },
+    "LOGIN": {
+      "ID": "ID portefeuille",
+      "INVALID1": "Désolé, nous ne pouvons pas valider vos informations d'identification. Vérifiez-les et réessayez",
+      "INVALID2": "Si vous continuez à avoir des difficultés, consultez notre ",
+      "MFACODE": "J'utilise l'identification à deux facteurs (MFA)",
+      "MFATOOLTIP": "Vous ne disposez pas encore d'une configuration de périphérique MFA? Connectez-vous et ajoutez-en un à votre compte sous 'Paramètres du compte'",
+      "UUIDEMAIL":"Veuillez vous connecter avec votre identifiant de portefeuille, pas votre email.",
+      "UUIDEMAIL2":"Pour plus d'informations, consultez cet article sur "
+    },
+    "CONFIRM": {
+      "OFFLINE": "Votre transaction a été générée avec succès, maintenant enregistrez le texte ci-dessus et signez-le sur votre ordinateur Armory hors-ligne. Revenez avec le texte signé pour le diffuser.",
+      "BROADCAST": "Diffuser",
+      "CHECK": "vérifiez votre transaction",
+      "HERE": "ici",
+      "FROM": "de",
+      "SIGN": "Vous devrez signer cette transaction hors ligne et revenir pour la diffuser et terminer l'opération."
+    },
+    "SEND": {
+      "ERROR": "Les fonds n'ont pas pu être envoyés",
+      "GOBACK": "Retournez et modifiez le montant",
+      "CHANGED": "La valeur de BTC a changé, vérifiez les détails et choisissez ce que vous souhaitez faire"
+    },
+    "BROADCAST": {
+      "TITLE": "Diffusé Transaction Signée",
+      "INSTRUCTIONS": "Copiez la transaction signée dans la zone de texte ci-dessous pour la diffuser",
+      "ADDRESS": "Adresse de diffusion",
+      "SIGNED": "Transaction Armory Signée",
+      "SUCCESS": "Transaction diffusée avec succès",
+      "FAIL": "Transaction en échec de diffusion"
+    },
+    "SIGNMSG": {
+      "TITLE": "Signer Message",
+      "INSTRUCTIONS": "Entrez votre message ci-dessous et cliquez sur signer, pour le signer avec l'adresse de signature",
+      "ADDRESS": "Adresse de Signature",
+      "SIGNED": "Message Signé",
+      "SUCCESS": "Message signé avec succès",
+      "FAIL": "Impossible de signer le message"
+    },
+    "IMPORT": {
+      "VALID": "Doit être une adresse Bitcoin valide",
+      "EXISTS": "L'adresse Bitcoin est déjà répertoriée",
+      "SUBMIT": "Ajoutez Adresse",
+      "OFFLINE": {
+        "TITLE": "Importer l'adresse Armory hors-ligne",
+        "KEY": "Entrez la clé publique",
+        "OFFLINE": "Hors-ligne"
+      },
+      "WATCH": {
+        "TITLE": "Importer une adresse BTC / Omni Layer lecture seule",
+        "ADDRESS": "Entrer Adresse",
+        "DESC": "Lecture seule"
+      },
+      "ENCRYPTED": {
+        "TITLE": "Importer une clé privée chiffrée BTC / Omni Layer",
+        "KEY": "Entrez la clé chiffrée (Envoyer / Recevoir)",
+        "KEYHOLDER": "Entrez votre clé privée chiffrée",
+        "PASSHOLDER": "Entrez votre phrase secrète"
+      },
+      "PRIVATE": {
+        "TITLE": "Importer une clé privée BTC / Omni Layer",
+        "ENTER": "Entrer",
+        "KEY": "Clé privée",
+        "ENABLE": "Activer Envoi",
+        "KEYHOLDER": "entrez votre clé privée, les formats : hex, b64, WIF, WIF compressé"
+      },
+      "WALLET": {
+        "TITLE": "Importer une sauvegarde du portefeuille",
+        "UPLOAD": "Télécharger le fichier de sauvegarde",
+        "INVALID": "Doit être un fichier de sauvegarde Omniwallet valide"
+      }
+    },
+    "EXPORT": {
+      "TITLE": "Exporter Portefeuille",
+      "NAME": "Nom Sauvegarde",
+      "PASSPHRASE": "Entrer Mot de passe",
+      "WARNING":"Avertissement de sécurité",
+      "WARNMSG":"Votre sauvegarde contient vos clés privées déchiffrées pour vos adresses de portefeuille.",
+      "WARNMSG2":"Toute personne ayant accès à ce fichier de sauvegarde peut accéder à vos fonds. Veuillez stocker ce fichier hors ligne dans un endroit sûr.",
+      "WARNMSG3":"En cliquant sur la case à cocher suivante, vous confirmez que vous avez lu cet avertissement et compris que l'équipe d'Omniwallet ne peut rien faire pour protéger vos fonds en cas de vol de votre fichier de sauvegarde"
+    },
+    "IDLE": {
+      "TITLE": "Voulez-vous continuer votre session ?",
+      "BODY": "Pour des raisons de sécurité, votre session expirera dans {{ idleEndTimeFormatted }} à moins que vous ne continuiez.",
+      "FOOTER": "Continuer la Session"
+    },
+    "DELETE": {
+      "TITLE": "Retirer de votre portefeuille",
+      "SURE": "Êtes-vous sûr ?",
+      "DESCRIPTION": {
+        "LEAD": "En supprimant cette adresse de votre portefeuille, vous ne détruirez aucun fonds, mais si c'est le seul endroit où votre clé privée est stockée, vous ",
+        "BOLD": "perdrez définitivement",
+        "TRAIL": "la possibilité de les déplacer ou de les encaisser !"
+      },
+      "BACKUP": {
+        "LEAD": "Soyez VRAIMENT certain que vos clés sont ",
+        "LINK": "sauvegardées",
+        "TRAIL": "et que vous voulez faire cela !"
+      },
+      "WATCH": "Retirer cette adresse de lecture seule de votre portefeuille n'affecte que les soldes affichés. Tous les fonds sur cette adresse continueront à y rester et vous pouvez l'ajouter à tout moment si vous souhaitez les suivre à nouveau.",
+      "CONFIRM": "Oui, Supprimer l'Adresse",
+      "LAST":"Ceci est la dernière adresse de votre portefeuille et ne peut pas être supprimé."
+    }
+  },
+  "TRANSACTION": {
+    "TYPE": {
+      "0": "Envoi Simple",
+      "3": "Envoyer Aux Propriétaires",
+      "20": "Offre de Vente",
+      "21": "DEx Phase 2",
+      "22": "Offre Accepter",
+      "-22": "Offre d'achat",
+      "50": "Créer un Bien Fixe",
+      "51": "Créer une Crowdsale",
+      "-51": "Participation Crowdsale",
+      "52": "Promouvoir un Bien",
+      "53": "Terminer une Crowdsale manuellement",
+      "54": "Créer un Bien géré",
+      "55": "Accorder les Tokens du Bien",
+      "56": "Révoquer les Tokens du Bien",
+      "70": "Changer l'émetteur du Bien sur l'enregistrement",
+      "-1": "Transaction Inconnue"
+    },
+    "DETAILS": {
+      "0": {
+        "SENDER": "Vous avez envoyé {{amount | toWhole:divisible }} {{coin | truncate:15}}",
+        "RECIPIENT": "Vous avez reçu {{amount | toWhole:divisible }} {{coin | truncate:15}}"
+      },
+      "3": {
+        "PAYER": "Vous avez envoyé {{amount | toWhole:divisible }} {{coin | truncate:15}}",
+        "PAYEE": "Vous avez payé {{amount | toWhole:divisible }} {{coin | truncate:15}}",
+        "FEEPAYER": "Vous avez payé {{amount | toWhole:divisible }} {{coin | truncate:15}} de frais"
+      },
+      "20": {
+        "SELLER": "Vous mettez {{amount | toWhole:divisible }} {{coin | truncate:15}} en vente"
+      },
+      "22": {
+        "BUYER": "Vous avez réservé {{amount | toWhole:divisible }} {{coin | truncate:15}}",
+        "SELLER": "{{amount | toWhole:divisible }} {{coin | truncate:15}} réservé par l'acheteur"
+      },
+      "-22": {
+        "BUYER": "Vous avez acheté {{amount | toWhole:divisible }} {{coin | truncate:15}}",
+        "SELLER": "vous avez vendu {{amount | toWhole:divisible }} {{coin | truncate:15}}"
+      },
+      "50": {
+        "ISSUER": "Vous avez créé {{coin | truncate:15}} avec un montant de {{amount | toWhole:divisible }}"
+      },
+      "51": {
+        "ISSUER": "Vous avez démarré {{coin | truncate:15}} Crowdsale"
+      },
+      "-51": {
+        "ISSUER": "Vous avez {{amount | toWhole:divisible }} {{coin | truncate:15}}",
+        "PARTICIPANT": "Vous avez {{amount | toWhole:divisible }} {{coin | truncate:15}}",
+        "SENDER": "Vous avez participé avec {{amount | toWhole:divisible }} {{coin | truncate:15}}",
+        "RECIPIENT": "Vous avez reçu {{amount | toWhole:divisible }} {{coin | truncate:15}}"
+      },
+      "54": {
+        "ISSUER": "Vous avez créé {{coin | truncate:15}} bien gérée"
+      },
+      "55": {
+        "ISSUER": "Vous avez accordé {{amount | toWhole:divisible }} {{coin | truncate:15}}",
+        "RECIPIENT": "Vous avez été accordé {{amount | toWhole:divisible }} {{coin | truncate:15}}"
+      },
+      "56": {
+        "ISSUER": "Vous avez révoqué {{coin | truncate:15}}"
+      },
+      "70": {
+        "ISSUER": "{{coin | truncate:15}} propriété transférée"
+      },
+      "-1": {
+        "SENDER": "Transaction OmiProtocol, type inconnu"
+      }
+    }
+  },
+  "WALLET": {
+    "OVERVIEW": {
+      "BACKUP": "Sauvegarde",
+      "ESTIMATED": "Valeur totale estimée",
+      "IMPORT": "Importer",
+      "TITLE": "Aperçu",
+      "OPTIONS": "Options de Portefeuille",
+      "OPTIONSTOGGLE": "Options de Basculement",
+      "PORTFOLIO": "Portfolio Composition par valeur",
+      "WALLETID": "ID du portefeuille"
+    },
+    "ADDRESSES": {
+      "CREATE": "Créer une nouvelle adresse",
+      "IMPORT": "Importer l'Adresse avec la Clé Privée",
+      "TITLE": "Mes adresses",
+      "VIEW": "Vu par",
+      "OPTIONS": "Ajoutez l'Adresse",
+      "WATCH": "Ajoutez l'Adresse en Lecture Seule",
+      "OFFLINE": "Ajouter une adresse Armory hors-ligne",
+      "SPENDABLE":"Vous pouvez créer des transactions à partir de ces adresses",
+      "WATCHONLY":"Importer la clé privée d'adresse pour activer les dépenses"
+    },
+    "SEND": {
+      "TITLE": "Envoyer",
+      "CHOOSECOIN": "Choisissez une monnaie",
+      "FROM": "De l'adresse",
+      "AMOUNT": "montant",
+      "TO": "vers cette adresse",
+      "COST": "Coût total de la transaction",
+      "PROTOCOL_COST": "Coût de transaction du protocole Omni",
+      "MODAL_TRANSACTION_COST": "Coût de transaction",
+      "MODAL_MINER": "Frais de minage",
+      "FUNDS": "Envoyez les fonds",
+      "TOKEN": "Token",
+      "MODAL_AMOUNT": "Montant",
+      "MODAL_FROM": "De",
+      "MODAL_TO": "Vers",
+      "CONFIRM": "Confirmer l'Envoi",
+      "AVAIL": "De l'adresse disponible",
+      "LOWFEE": "Votre 'De l'adresse' n'a pas assez de BTC pour compléter cette transaction. Veuillez envoyer au moins {{ topupAmount }} BTC pour couvrir le coût total estimé de la transaction.",
+      "UPDATE_FEE": "Réévaluer le coût de la transaction",
+      "INVALIDADDRESS":"Veuillez entrer une adresse Bitcoin valide prenant en charge le jeton Omni Protocol que vous envoyez."
+    },
+    "ASSETS": {
+      "ASSETS": "Assets",
+      "CREATE": "Créer",
+      "CROWDSALE": "Crowdsale",
+      "MYASSETS": "Mes Assets",
+      "SMARTPROPERTY": "Bien Intelligent",
+      "MANAGED":"Propriété gérée"
+    },
+    "HISTORY": {
+      "ALLADDRESSES": "-- Toutes les adresses --",
+      "FILTERLABEL": "Historique Protocole Omni pour",
+      "TITLE": "Historique",
+      "CURRENCY": "Monnaie",
+      "TYPE": "Type",
+      "AMOUNT": "Montant",
+      "TXTIME": "Temps de transaction",
+      "TXDETAILS": "Détails de transaction",
+      "MOREDETAILS": "Voir les détails de transaction",
+      "BTCNOTE1": "Remarque: À ce moment, la page d'historique ne comprend que les transactions du Protocol Omni.",
+      "BTCNOTE2": "Pour voir l'historique de la transaction Bitcoin, nous recommandons un explorateur Bitcoin comme : "
+    },
+    "MANAGE":{
+      "TITLE":"Gérer la propriété",
+      "CHOOSETYPE":"Choisissez une action gérée",
+      "REVOKEWARNING":"Avertissement: La révocation des jetons les détruira et est irréversible. Seul l'émetteur d'actifs pourra créer de nouveaux jetons",
+      "CHANGEWARNING":"Attention: Vous transférez la propriété et le contrôle de votre propriété. Cette action ne peut pas être annulée. S'il vous plaît vérifier la nouvelle adresse avec soin!"
+    }
+  },
+  "ASSET": {
+    "ISSUANCE": {
+      "TITLE": "Créer un Bien Intelligent",
+      "SUBTITLE": "Détails de l'émission",
+      "AMOUNT": "Nombre de Tokens",
+      "AMOUNT_HINT": "Entrez le montant désiré",
+      "TYPE": "Type d’émission",
+      "FIXED": "Fixé",
+      "MANAGED": "Géré",
+      "CREATE": "Créer un Bien",
+      "MODALTITLE": "Confirmer la Création du Bien"
+    },
+    "FORM": {
+      "ISSUER": "Adresse d'émission",
+      "DETAILS": {
+        "SUBTITLE": "Détails du Bien intelligent",
+        "DIVISIBLE": "Divisible",
+        "CATEGORY": "Catégorie",
+        "SUBCATEGORY": "Sous-catégorie",
+        "URL": "URL du Bien",
+        "URL_HINT": "Entrez une URL pour plus d'informations sur le Bien Intelligent",
+        "DESCRIPTION": "Description du Bien Intelligent",
+        "DESCRIPTION_HINT": "caractères restants",
+        "NAME_HINT": "ex. Bobcoin"
+      }
+    },
+    "CROWDSALE": {
+      "TITLE": "Démarrez une Crowdsale",
+      "SUBTITLE": "Détails de la Crowdsale",
+      "DEADLINE": "Date limite",
+      "FORISSUER": "Pourcentage de l'émetteur",
+      "FORISSUER_TOOLTIP": "Pourcentage supplémentaire créé et crédité à l'adresse d'émission en fonction du montant créé et crédité pour chaque investissement. Ex: Avec le pourcentage de l'émetteur = 10, un investissement qui crédite 100 tokens à un investissement crédite également 10 tokens à l'émetteur.",
+      "UTC": "UTC",
+      "EARLYBONUS": "Pourcentage de bonus hebdomadaire des primo-accédants",
+      "EARLYBONUS_TOOLTIP": "Le pourcentage de bonus créé et crédité à chaque investisseur pour chaque semaine (7 jours) avant la date limite (calculé à la seconde). Ex : Avec un pourcentage de bonus hebdomadaire des primo-accédants = 10, un participant qui investit 14 jours avant la date limite recevra environ 20% de bonus. Un investisseur investissant avec 10 jours restant recevra environ 14% de bonus.",
+      "EARLYESTIMATE": "Bonus estimé des primo-accédants",
+      "EARLYESTIMATE_TOOLTIP": "L'estimation basée sur la création de crowdsale déjà confirmée dans la blockchain depuis les 30 dernières minutes.",
+      "PER": "pour",
+      "INVESTED": "investi",
+      "ADDCURRENCY": "+ Ajouter une monnaie d'investissement",
+      "TOKENRATE": "# de tokens",
+      "RATES": "Taux",
+      "RATE": "Le taux",
+      "START": "Commencez Crowdsale",
+      "MODALTITLE": "Confirmer la création de la Crowdsale",
+      "ACCEPTEDCURRENCY": "Monnaie acceptée",
+      "INITIALEB": "Bonus pour les primo-accédants"
+    },
+    "MODAL_DESCRIPTION": "Description",
+    "HISTORY": {
+      "TRANSACTIONS": "transactions",
+      "LOADING": "Chargement des transactions",
+      "FIXEDISSUANCE": {
+        "TRUE": "Bien",
+        "FALSE": "Crowdsale"
+      },
+      "TITLE": "Historique de l'asset",
+      "TRANSACTION": {
+        "CLOSED": "Crowdsale a été fermée par de nouveaux investissements",
+        "CREATE": "a été créé",
+        "CONFIRMATIONS": "Confirmations",
+        "GRANT": "Accordé {{amount}} tokens à {{to}}"
+      }
+    },
+    "DETAILS": {
+      "URL": "Pour plus de détails, visitez",
+      "SHARE": "Partagez cette page"
+    }
+  },
+  "TIMER": {
+    "YEAR": "année",
+    "MONTH": "mois",
+    "DAY": "jour",
+    "HOUR": "heure",
+    "MINUTE": "minute",
+    "SECOND": "seconde"
+  },
+  "TIMEAGO": {
+    "NOW": "Maintenant",
+    "MINUTE": "minutes",
+    "HOUR": "heures",
+    "DAY": "jours",
+    "WEEK": "semaines",
+    "MONTH": "mois",
+    "YEAR": "années"
+  },
+  "CROWDSALE": {
+    "DETAILS": {
+      "YOUR": "Votre",
+      "ACTIVE": {
+        "TRUE": "Crowdsale active",
+        "FALSE": "Crowdsale Terminé"
+      },
+      "TIME": "Temps jusqu'à la clôture",
+      "TOKENSBOUGHT": "Tokens déjà achetés par les participants",
+      "TOKENSISSUER": "Tokens créés pour l'émetteur",
+      "CURRENTBONUS": "Bonus actuel pour primo-accédants",
+      "GETTOKENS": "Obtenez des tokens !",
+      "PARTICIPATE": "Participer",
+      "NOTOKENS": "Vous n'avez pas le token accepté par cette Crowdsale",
+      "LOGIN": "Vous devez vous connecter ou créer un portefeuille pour participer"
+    },
+    "PARTICIPATION": {
+      "TITLE": "Participer à la Crowdsale {{property.name | truncate:15}}",
+      "DESIREDCOIN": "Token à envoyer",
+      "MODAL_ESTIMATE": "Quantité estimée de tokens",
+      "ESTIMATE_LEAD": "Vous allez recevoir",
+      "ESTIMATE_TRAIL": "si vous participez avec ce niveau."
+    },
+    "REMAINING": {
+      "DAYS": "Jour",
+      "HOURS": "H",
+      "MINUTES": "Min"
+    },
+    "PARTICIPATE": {
+      "TITLE": "Confirmer la participation",
+      "CONFIRM": "Participer"
+    }
+  },
+  "ECOSYSTEM": {
+    "LABEL": "Écosystème",
+    "PRODUCTION": "Production",
+    "TEST": "Test"
+  },
+  "EXPLORER": {
+    "OVERVIEW": {
+      "TITLE": "Dernières transactions",
+      "SHORTQUERY": {
+        "LEAD": "Vous avez besoin d'au moins",
+        "TRAIL": "caractère(s) de plus pour la recherche."
+      },
+      "NORESULTS": "Aucune transaction trouvée pour votre requête.",
+      "ALPHANUMERIC": "Vous ne pouvez pas utiliser de caractères spéciaux pour la recherche.",
+      "PLACEHOLDER": "Rechercher une partie d'une transaction ou un hash de transaction complet"
+    },
+    "INSPECTOR": {
+      "TITLE": "Inspecteur des transactions",
+      "FIELD": "Champ Nom",
+      "DETAILS": "Détails"
+    }
+  },
+  "TABLES": {
+    "TRANSACTIONS": {
+      "TX": "Transaction",
+      "DETAILS": "Détails",
+      "AMOUNT": "Montant",
+      "BLOCK": "Bloc",
+      "BLOCKTIME": "Heure du bloc (UTC)"
+    },
+    "ASSETS": {
+      "ID": "ID du Bien",
+      "NAME": "Nom du Bien",
+      "AMOUNT": "Montant total",
+      "URL": "Url"
+    },
+    "CROWDSALE": {
+      "BOUGHT": "Tokens achetés",
+      "CREATED": "Tokens créés"
+    },
+    "OFFERS": {
+      "HASH": "Hash de transaction",
+      "PRICE": "Prix par token",
+      "AMOUNT": "Montant",
+      "TOTAL": "Total",
+      "CANCEL": "Annuler",
+      "BUY": "Acheter",
+      "SIDE": "de côté",
+      "STATUS": "Statut"
+    }
+  },
+  "EXCHANGE": {
+    "TRADE": {
+      "TITLE": "Trader",
+      "SELL": "Vendre",
+      "NOCOINS": {
+        "LEAD": "Désolé, vous n'avez aucun",
+        "TRAIL": "disponible à vendre"
+      },
+      "NOORDERS": "Aucune offre/enchère trouvée pour cette plage de temps",
+      "ACTIVE": "Offres actives",
+      "TIMEFRAME": "Plage de temps",
+      "TOTAL": "Transactions Totales",
+      "TXHASH": "Hash de transaction",
+      "PRICE": "Prix",
+      "AMOUNT": "Montant restant",
+      "COST": "Coût",
+      "FEE": "Frais",
+      "PAYMENT": "Fenêtre de paiement (blocs)",
+      "ENDED": "L'utilisateur final",
+      "SOLD": "Rupture de stock  !",
+      "BUYERFEE": "Frais d'achat",
+      "ACCEPT": "Accepter l'offre",
+      "YOURS": "Votre offre/achat"
+    },
+    "SALE": {
+      "TITLE": "Offre de vente",
+      "CHOOSECOIN": "Monnaie choisie",
+      "FROM": "De l'adresse",
+      "QUANTITY": "Quantité de vente",
+      "TOTAL": "Total Bitcoin souhaité (# BTC pour",
+      "TOTALTOOLTIP": "Entrez le nombre total de bitcoins que vous souhaitez recevoir si vous vendez tout",
+      "PRICE": "Prix par pièce",
+      "TIME": "Temps accordé à l'acheteur pour payer",
+      "TIMETOOLTIP": "Temps en bloc qu'a l'acheteur a pour finaliser son achat (1 bloc environ 10 minutes)",
+      "BUYERFEE": "frais de l'acheteur",
+      "MODALTITLE": "Confirmer la vente",
+      "CURRENCY": "Vente",
+      "MODAL_FROM": "De",
+      "MODAL_AMOUNT": "Montant",
+      "BLOCKS": "Plage de temps de paiement",
+      "BUYERSFEE": "Frais de l'acheteur",
+      "CONFIRM": "Confirmer la vente"
+    },
+    "BUY": {
+      "TITLE": "Accepter l'offre",
+      "NOFUNDS": "Pas de fonds sur les adresses avec des clés privées pour compléter la demande !",
+      "SENDSOME": "Envoyer des fonds à une adresse sur le",
+      "ORADD": "page ou ajoutez une adresse avec des fonds.",
+      "ADDRESS": "Adresse d'achat",
+      "OFFERTOOLTIP": "Ouvrir dans une nouvelle fenêtre / onglet",
+      "OFFER": "Offre de vente (ID / hash)",
+      "SELLER": "Adresse du vendeur",
+      "FEE": "Frais de vente",
+      "TIMEFRAME": "Plage de temps de paiement",
+      "TIMEFRAMETOOLTIP": "Si votre offre de réservation est acceptée et validée, vous devrez compléter le paiement dans cette plage de temps.",
+      "TIMEFRAMEDESCRIPTIONLEAD": " Blocs. (Environ ",
+      "TIMEFRAMEDESCRIPTIONTRAIL": "heures basées en moyenne sur 10min/block)",
+      "AMOUNT": "Montant à accepter",
+      "AMOUNTPLACEHOLDER": "Par example : {{ sendPlaceholderValue }} (Max {{ global['buyOffer'].formatted_amount_available }})",
+      "AMOUNTAVAILABLE": "Disponible pour accepter : {{ global['buyOffer'].formatted_amount_available }} {{ displayedAbbreviation }}",
+      "AMOUNTAVAILABLEBTC": "Solde d'adresse actuelle",
+      "COST": "Coût approx",
+      "COSTTOOLTIP": "Si votre offre de réservation est acceptée et validée, vous devrez payer ce montant pour compléter la transaction.",
+      "MODALTITLE": "Confirmez l'offre d'achat",
+      "CONFIRM": "Accepter l'offre",
+      "CURRENCY": "Achat",
+      "BLOCKS": "Blocs"
+    },
+    "MYOFFERS": {
+      "TITLE": "Mes offres",
+      "BUYTITLE": "Offres d'achat actif",
+      "SELLTITLE": "Offres de vente active",
+      "PURCHASE": "Acheter monnaie",
+      "EXPIRED": "Offre expirée",
+      "CANCEL": "Annuler l'offre",
+      "PAYMENT": "Envoyer le paiement",
+      "COINTYPE": "Envoyer type de monnaie",
+      "COINMESSAGE": "Pour compléter une offre en cours, vous devez effectuer des achats en Bitcoin.",
+      "FROM": "Envoyer de l'adresse",
+      "TO": "Envoyer des fonds à",
+      "AMOUNT": "Montant à envoyer (en",
+      "REMAINING": "Blocs restants",
+      "REMAININGTOOLTIP": "Votre paiement doit être reçu dans de nombreux blocs pour terminer avec succès",
+      "BLOCKS": "blocs",
+      "CANCELTITLE": "Confirmer l'Annulation de la Vente",
+      "CANCELCONFIRM": "Annuler la Vente",
+      "CANCELMESSAGE": "Vous êtes sur le point d'annuler cette vente. Si cela est correct, appuyez sur Annuler la Vente ci-dessous. "
+    }
+  },
+  "OMNIDEX": {
+    "MARKETS": {
+      "TITLE": "Marchés",
+      "NEW": "Démarrer le marché",
+      "SYMBOL": "PropertyID",
+      "NAME": "Nom du Bien",
+      "PRICE": "Prix actuel",
+      "VOLUME": "Volume sur 24h",
+      "SUPPLY": "Total distribué",
+      "CAP": "Capitalisation",
+      "CHANGE": "Changement depuis le dernier échange",
+      "LASTPRICE": "Dernier prix d'échange",
+      "NOMARKETS": "Il n'existe actuellement aucun marché ouvert",
+      "DENOMINATOR": "Choisissez la dénomination de la monnaie"
+    },
+    "ORDERBOOK": {
+      "TITLE": "{{ currency }} Échange",
+      "BUY": "Acheter",
+      "SELL": "Vendre",
+      "BALANCE": "Votre solde",
+      "TOTALCOST": "Mon coût total",
+      "TOTALDESIRED": "Total souhaité",
+      "UNITPRICE": "Prix Par",
+      "AMOUNT": "Montant",
+      "NOCOINS": "Vous n'avez aucun {{propertyName}} disponible",
+      "ACTIVEOFFERS": "Vos offres",
+      "NOACTIVEOFFERS": "Vous n'avez aucune offre active",
+      "EMPTY": "Aucune offre",
+      "AMOUNTTOOLTIP": "La somme du montant {{ type }} pour toutes les commandes à ce prix",
+      "TOTALTOOLTIP": "La somme totale du montant total {{ type }} dans toutes les commandes à ce prix ou mieux",
+      "ID": "ID de l'offre"
+    },
+    "SALE": {
+      "TITLE": "Ouvrir un nouveau marché",
+      "CHOOSECOINSELLING": "Choisissez une monnaie à vendre",
+      "SELLINGAMOUNT": "Quantité à vendre",
+      "CHOOSECOINDESIRED": "Choisissez une monnaie désirée",
+      "DESIREDAMOUNT": "Quantité souhaitée"
+    },
+    "ORDERS": {
+      "TYPETT": "Indique de quel côté du carnet de commande l'ordre s'applique. Remarque : Lors de la conversion de la devise du marché, les informations de commande sont automatiquement retournées et affichées sur la paire inversée.",
+      "AMOUNTT": "Le montant restant dans votre commande à acheter (Ordres d'achat) ou Vendu (Ordres de vente).",
+      "PRICETT": "Le prix unitaire effectif (EUP) est habituellement le prix unitaire original. L'EUP peut augmenter (pour les demandes) et réduire (pour les offres) dans certains cas en raison de l'arrondi des fractions des unités transférables.",
+      "TOTALTT": "Montant total restant dans votre commande à acheter (Ordres de vente) ou vendu (Ordres d'achat)."
+    }
+  }
+}

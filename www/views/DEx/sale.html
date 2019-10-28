@@ -1,0 +1,118 @@
+<div ng-controller="DExSaleController">
+  <h4>
+    <a href="/dex/overview"> <strong> &lt; {{ 'COMMON.BACK' | translate}}  </strong> </a>
+  </h4>
+  <div class="row om-row">
+    <div class="col-xs-12">
+      <div class="text-left om-title">{{ 'OMNIDEX.SALE.TITLE' | translate}}</div>
+    </div>
+  </div> 
+  <div class="row" ng-hide="selectedAddress!=undefined">
+    <div class="col-sm-12">
+      {{ 'EXCHANGE.BUY.NOFUNDS' | translate}}
+      <br />
+      {{ 'EXCHANGE.BUY.SENDSOME' | translate}} <a class="" href="/wallet/addresses"> {{ 'NAVIGATION.ADDRESSES' | translate }} </a> {{ 'EXCHANGE.BUY.ORADD' | translate}}
+    </div>
+  </div>
+  <div class="row" ng-show="selectedAddress!=undefined">
+    <div class="col-xs-12">
+      <form name="dexSaleForm" ng-submit="validateDexSaleForm()">
+        <div class="panel panel-form">
+          <div class="panel-body">
+            <div class="col-sm-6">
+              <label class="text-justify" >{{ 'WALLET.SEND.FROM' | translate}}</label>
+              <div class="btn-group send-address-dropdown">
+                <button class="btn btn-clear dropdown-toggle" type="button" id="chooseAddress" data-toggle="dropdown" aria-expanded="true">
+                  {{selectedAddress.hash}} 
+                  <span class="caret pull-right"></span>
+                </button>
+                <ul class="dropdown-menu" role="menu" aria-labelledby="chooseAddress">
+                  <li role="presentation" ng-repeat="address in wallet.omniTradableAddresses()">
+                    <a role="menuitem" tabindex="-1" href="#" ng-click="setAddress(address)">{{address.hash}} </a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="panel panel-form">
+          <div class="panel-body">
+            <div class="col-sm-6">
+              <label for="chooseCoin" >{{ 'OMNIDEX.SALE.CHOOSECOINSELLING' | translate}}</label>
+              <div class="btn-group send-asset-dropdown">
+                <button class="btn btn-clear dropdown-toggle" type="button" id="chooseCoin" data-toggle="dropdown" aria-expanded="false">
+                  {{sellingAsset.name | truncate:14}}  <small class="text-muted">({{sellingAsset.id}})</small>
+                  <span class="caret pull-right"></span>
+                </button>
+                <ul class="dropdown-menu" role="menu" aria-labelledby="chooseCoin">
+                  <li role="presentation" ng-repeat="asset in selectedAddress.assets" ng-if="asset.id != 0 && asset.tradable && ((asset.id < 2147483648 && asset.id != 2) || showtesteco === 'true')">
+                    <a role="menuitem" tabindex="-1" href="#" ng-click="setAsset(asset)">{{asset.name | truncate:14}} <small class="text-muted">({{asset.id}})</small></a>
+                  </li>
+                </ul>
+              </div>
+            </div>                 
+            <div class="col-sm-6">
+              <label for="chooseCoin" >
+                <span>
+                  {{ 'OMNIDEX.SALE.SELLINGAMOUNT' | translate}}
+                </span>
+                <span class="text-danger" ng-show="selectedAddress.getDisplayBalance(sellingAsset.id) < sellingAmount"><strong>({{ 'COMMON.AVAILABLE' | translate}}: {{selectedAddress.getDisplayBalance(sellingAsset.id)}} {{sellingAsset.name | truncate:14}} </strong><small class="text-muted text-danger">(#{{sellingAsset.id}})</small>)</span>
+                <span ng-hide="selectedAddress.getDisplayBalance(sellingAsset.id) < sellingAmount">({{ 'COMMON.AVAILABLE' | translate}}: {{selectedAddress.getDisplayBalance(sellingAsset.id)}} {{sellingAsset.name | truncate:14}} <small class="text-muted">(#{{sellingAsset.id}})</small>)</span>
+              </label>
+              <input id="sellingamount" name="sellingamount" type="number" ng-model="sellingAmount"
+                    class="form-control" value="sellingAmount"
+                    placeholder="{{sellingAsset.divisible ? '1.00000000' : '1'}}" step="{{sellingAsset.divisible ? 0.00000001 : 1}}" 
+                    min="{{sellingAsset.divisible ? 0.00000001 : 1}}" required>
+            </div> 
+          </div>
+        </div>
+        <div class="panel panel-form">
+          <div class="panel-body">
+            <div class="col-sm-6">
+              <label for="chooseCoin" >{{ 'OMNIDEX.SALE.CHOOSECOINDESIRED' | translate}}</label>
+              <div class="btn-group send-asset-dropdown">
+                <button class="btn btn-clear dropdown-toggle" type="button" id="chooseCoin" data-toggle="dropdown" aria-expanded="false">
+                  {{desiredAsset.name | truncate:14}} <small class="text-muted">({{desiredAsset.propertyid}})</small>
+                  <span class="caret pull-right"></span>
+                </button>
+                <ul class="dropdown-menu" role="menu" aria-labelledby="chooseCoin">
+                  <li role="presentation" ng-repeat="asset in availableTokens">
+                    <a role="menuitem" tabindex="-1" href="#" ng-click="setDesiredAsset(asset)">{{asset.name | truncate:14}} <small class="text-muted">({{asset.propertyid.toString()}})</small></a>
+                  </li>
+                </ul>
+              </div>
+            </div> 
+            <div class="col-sm-6">
+              <label for="chooseCoin" >
+                <span>
+                  {{ 'OMNIDEX.SALE.DESIREDAMOUNT' | translate}}
+                </span>
+              </label>
+              <input id="desiredamount" name="desiredamount" type="number" ng-model="desiredAmount"
+                    class="form-control" value="desiredAmount"
+                    placeholder="{{desiredAsset.divisible ? '1.00000000' : '1'}}" step="{{desiredAsset.divisible ? 0.00000001 : 1}}" 
+                    min="{{desiredAsset.divisible ? 0.00000001 : 1}}" required>
+            </div>    
+          </div>
+        </div>
+        <div class="row">
+	  <div class="col-xs-8">
+            {{ 'WALLET.SEND.COST' | translate}}: {{minersFee.valueOf()}} BTC <button type="button" class="btn btn-xs" ng-click="editTransactionCost()"><span class="glyphicon glyphicon-pencil small"></span></button>
+	  </div>
+        </div>
+        <div class="col-xs-8 text-danger" ng-show="minersFee.valueOf() > selectedAddress.getDisplayBalance(0)">
+          <strong>{{ 'WALLET.SEND.AVAIL' | translate}}: {{selectedAddress.getDisplayBalance(0)}} BTC</strong>
+        </div>
+        <div class="col-xs-8" ng-hide="minersFee.valueOf() > selectedAddress.getDisplayBalance(0)">
+          {{ 'WALLET.SEND.AVAIL' | translate}}: {{selectedAddress.getDisplayBalance(0)}} BTC
+        </div>
+
+        <button type="submit" class="btn btn-main pull-right" ng-disabled="!dexSaleForm.$valid || minersFee.valueOf() > selectedAddress.getDisplayBalance(0) || selectedAddress.getDisplayBalance(sellingAsset.id) < sellingAmount" >{{ 'COMMON.NEXT' | translate}}</button>
+      </form>
+      <div class="row">
+        <div ng-show="showErrors" class="alert alert-danger">
+          <strong> {{error}} </strong>
+        </div>
+      </div>
+    </div>
+  </div>

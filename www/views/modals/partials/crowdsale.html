@@ -1,0 +1,25 @@
+<div ng-include="'/views/modals/partials/asset_details.html'"></div>
+<div>
+  <div class="modal-row">
+    <div class="description-title-xlarge">{{'ASSET.CROWDSALE.INITIALEB' | translate}}:</div>
+    <div class="description-text">{{earlyBirdBonus}}%</div>
+  </div>
+  <div class="modal-row">
+    <div class="description-title-xlarge">{{'ASSET.CROWDSALE.FORISSUER' | translate}}:</div>
+    <div class="description-text">{{percentageForIssuer}}%</div>
+  </div>
+  <div class="modal-row">
+    <div class="description-title-xlarge">{{'ASSET.CROWDSALE.DEADLINE' | translate}}:</div>
+    <div class="description-text">{{deadline}}</div>
+  </div>
+  <div class="modal-row">
+    <div class="description-title-xlarge">{{'ASSET.FORM.ISSUER' | translate}}:</div>
+    <div class="description-text"><a href="{{explorerUrl}}{{fromAddress}}" target="_blank">{{fromAddress}}</a></div>
+  </div>
+  <div class="modal-row">
+    <div class="description-title-xlarge">{{'ASSET.CROWDSALE.ACCEPTEDCURRENCY' | translate}}:</div>
+    <div class="description-text"> 
+      {{selectedCurrency.name | truncate:15}}<small class="text-muted" ng-show="selectedCurrency.propertyid > 2">({{selectedCurrency.propertyid}})</small> / {{'ASSET.CROWDSALE.RATE' | translate}}({{numberOfTokens}})
+    </div>
+  </div>
+</div>

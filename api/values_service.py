@@ -1,9 +1,28 @@
-from flask import Flask, abort, json
+from flask import Flask, abort, json, jsonify, Response
 from sqltools import *
 import re
 
 app = Flask(__name__)
 app.debug = True
+
+def getValueBook(pmaxid=0):
+  book=[]
+  DBID=dbSelect("select max(id) from exchangerates")
+  ERMAX=int(DBID[0][0])
+  if ERMAX > pmaxid:
+   book=dbSelect("select sp.propertyname, rates.* from smartproperties sp join "
+                  "(select er.* from exchangerates er join "
+                    "(select distinct protocol1,propertyid1,protocol2,propertyid2, max(asof) asof from exchangerates "
+                    "where propertyid2<2147483648 and propertyid2!=2 and rate1for2!=0 "
+                    "group by protocol1,propertyid1,protocol2,propertyid2 "
+                    "order by propertyid2,propertyid1) vlist "
+                  "on er.protocol1=vlist.protocol1 and er.propertyid1=vlist.propertyid1 "
+                  "and er.protocol2=vlist.protocol2 and er.propertyid2=vlist.propertyid2 "
+                  "and er.asof=vlist.asof) rates "
+                "on CASE WHEN rates.protocol1='Fiat' "
+                  "THEN rates.propertyid1=sp.propertyid and sp.protocol='Fiat' "
+                  "ELSE rates.propertyid2=sp.propertyid and (sp.protocol='Omni' or sp.protocol='Bitcoin') END")
+  return book,ERMAX
 
 @app.route('/<currency>')
 def getCurrentPrice(currency=None):
@@ -19,7 +38,7 @@ def getCurrentPrice(currency=None):
   if input[:2].upper() == "SP":
     protocol1='Bitcoin'
     pid1=getPropertyid('BTC', protocol1)
-    protocol2='Mastercoin'
+    protocol2 = 'Omni'
     #strip off the SP and grab just the numbers
     pid2=input[2:]
 
@@ -39,22 +58,22 @@ def getCurrentPrice(currency=None):
     protocol2='Bitcoin'
     pid2=getPropertyid('BTC', protocol2)
 
-  elif input == 'MSC':
+  elif input == 'OMNI':
     protocol1='Bitcoin'
     pid1=getPropertyid('BTC', protocol1)
-    protocol2='Mastercoin'
+    protocol2='Omni'
     #strip off the SP and grab just the numbers
     pid2=1
 
-  elif input == 'TMSC':
+  elif input == 'T-OMNI':
     protocol1='Bitcoin'
     pid1=getPropertyid('BTC', protocol1)
-    protocol2='Mastercoin'
+    protocol2='Omni'
     #strip off the SP and grab just the numbers
     pid2=2
 
   else:
-    return json.dumps([0])
+    return jsonify({ 'price': 0, 'symbol': input })
 
 
   ROWS=dbSelect("select rate1for2 from exchangerates where protocol1=%s and propertyid1=%s and "
@@ -63,21 +82,21 @@ def getCurrentPrice(currency=None):
 
   if len(ROWS)==0:
     #no returnable value, dump 0
-    response = [{ 'price': 0,
+    response = { 'price': 0,
                  'symbol': input
-               }]
+               }
   else:
     if currency==None:
-      response = [{ 'price': ROWS[0][0],
+      response = { 'price': ROWS[0][0],
                    'symbol': input
-                 }]
+                 }
     else:
-      response = [{ 'price': ROWS[0][0],
+      response = { 'price': ROWS[0][0],
                    'symbol': base,
                    'currency': currency
-                 }]
+                 }
 
-  json_response = json.dumps(response)
+  json_response = jsonify(response)
   return json_response
 
 
@@ -97,7 +116,7 @@ def currencylist():
   for x in ROWS:
    retval.append({'value':x[0],'label':x[1]})
 
-  return json.dumps(retval)    
+  return Response(json.dumps(retval), mimetype="application/json")
 
 #TODO COnversion
 @app.route('/history/<currency>')
@@ -114,7 +133,7 @@ def history(currency=None):
   if input[:2].upper() == "SP":
     protocol1='Bitcoin'
     pid1=getPropertyid('BTC', protocol1)
-    protocol2='Mastercoin'
+    protocol2='Omni'
     #strip off the SP and grab just the numbers
     pid2=input[2:]
 
@@ -134,22 +153,22 @@ def history(currency=None):
     protocol2='Bitcoin'
     pid2=getPropertyid('BTC', protocol2)
 
-  elif input == 'MSC':
+  elif input == 'OMNI':
     protocol1='Bitcoin'
     pid1=getPropertyid('BTC', protocol1)
-    protocol2='Mastercoin'
+    protocol2='Omni'
     #strip off the SP and grab just the numbers
-    pid2=getPropertyid('MSC', protocol2)
+    pid2=getPropertyid('OMNI', protocol2)
 
-  elif input == 'TMSC':
+  elif input == 'T-OMNI':
     protocol1='Bitcoin'
     pid1=getPropertyid('BTC', protocol1)
-    protocol2='Mastercoin'
+    protocol2='Omni'
     #strip off the SP and grab just the numbers
-    pid2=getPropertyid('TMSC', protocol2)
+    pid2=getPropertyid('T-OMNI', protocol2)
 
   else:
-    return json.dumps([0])
+    return jsonify([0])
 
 
   ROWS=dbSelect("select rate1for2, extract(epoch from asof) from exchangerates where protocol1=%s and propertyid1=%s and "
@@ -180,6 +199,4 @@ def history(currency=None):
                }
       response.append(item)
 
-  json_response = json.dumps(response)
-  return json_response
-
+  return Response(json.dumps(response), mimetype="application/json")

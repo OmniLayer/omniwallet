@@ -1,0 +1,77 @@
+<div ng-controller="DExOverviewController">
+    <div class="row om-row">
+      <div class="col-xs-3 col-sm-3 col-md-4 col-lg-4 text-left om-title">
+          {{ 'OMNIDEX.MARKETS.TITLE' | translate }}
+          <span class="h5 pull-right"><a href="https://github.com/OmniLayer/omniwallet/wiki/Using-the-OmniDex" target="_blank">Getting Started Guide</a></span>
+      </div>
+      <div class="col-xs-2 col-sm-2 col-md-3 col-lg-3"><button type="button" ng-show="true" class="btn btn-info" title="Show All Markets!" ng-click="showAll()">
+        {{filterMarkets ? "Show All Markets" : "Filter Markets"}}</button>
+      </div>
+      <div class="col-xs-7 col-sm-7 col-md-5 col-lg-5 text-right" ng-include="'/views/assets/partials/form_ecosystem.html'"></div>
+    </div>
+
+
+    <div class="alert alert-warning alert-dismissable">
+       <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+       <strong>Please Read:</strong>
+       <a href="https://github.com/OmniLayer/omniwallet/wiki/Understanding-Property-Names-and-IDs-on-the-OmniDex" target="_blank">
+       Understanding Property Names and IDs on the OmniDex.</a>
+    </div>
+
+    <div class="alert alert-danger" ng-hide="filterMarkets">
+       <strong>All Markets Enabled:</strong>By default we filter/hide market pairs / properties that meet any of the following criteria<br>
+       -Have been replaced by request of issuer<br/>
+       -Have names that are <strong>fraudulent,deceptive,or intentionally impersonating</strong> other popular properties <br>
+       <br/>
+       By enabling all markets you are choosing to see these pairs. If you place a trade which matches against one of those pairs there is 
+       nothing that can be done to reverse/undo it later. <strong>Please proceed with Caution</strong>
+    </div>
+
+
+    <div ng-init="loadDesignatingCurrencies()">
+      <div class="form-group col-sm-12">
+        <label for="base">Market Currency</label>
+        <combobox name="base" model-value="designatingCurrency.displayname" option-list="designatingcurrencies" value-selected="showMarkets(base)"></combobox>
+      </div>
+
+        <div class="row">
+          <div class="col-xs-12 om-table markets-table">
+            <div class="row table-header hidden-xs">
+              <div class="col-sm-1"></div>
+              <div class="col-sm-2">{{ 'OMNIDEX.MARKETS.SYMBOL' | translate}}</div>
+              <div class="col-sm-3 text-left">{{ 'OMNIDEX.MARKETS.NAME' | translate}}</div>
+              <div class="col-sm-2 text-left">{{ 'OMNIDEX.MARKETS.PRICE' | translate}}</div>
+              <div class="col-sm-2 text-left">{{ 'OMNIDEX.MARKETS.LASTPRICE' | translate}}</div>
+              <div class="col-sm-2 text-left">{{ 'OMNIDEX.MARKETS.SUPPLY' | translate}}</div>
+            </div>
+            <div class="row table-row text-center" ng-show="!loading && noMarkets">
+              <h3>{{ 'OMNIDEX.MARKETS.NOMARKETS' | translate }}</h3>
+            </div>
+            <div ng-repeat="market in markets" class="row table-row check-element animate-hide text-center">
+              <div class="visible-xs col-xs-7"></div>
+              <div class="col-xs-1 col-sm-1 col-md-1 col-lg-1">
+                <button type="button" title="Invert Pair" class="btn btn-info btn-xs"
+                    ng-show="orderbook.tradingPair.selling.propertyid==market.propertyid"
+                    ng-click="invert(orderbook.tradingPair.selling.propertyid,orderbook.tradingPair.desired.propertyid);">
+                  <span  class="glyphicon glyphicon-refresh" aria-hidden="true"></span>
+                </button>
+              </div>
+              <div class="visible-xs col-xs-7">{{ 'OMNIDEX.MARKETS.SYMBOL' | translate}}</div>
+              <div class="col-xs-5 col-sm-2">
+                <a href="https://www.omniwallet.org/assets/details/{{market.propertyid}}" target="_blank">#{{market.propertyid}}</a>
+              </div>
+              <div class="visible-xs col-xs-7">{{ 'OMNIDEX.MARKETS.NAME' | translate}}</div>
+              <div class="col-xs-5 col-sm-3 text-left">
+                <a data-toggle="tooltip" title={{market.propertyname}} ng-click="$parent.$parent.loadOrderbook($parent.designatingCurrency.propertyid,market.propertyid)">{{market.propertyname}}</a>
+              </div>
+              <div class="visible-xs col-xs-7">{{ 'OMNIDEX.MARKETS.PRICE' | translate}}</div>
+              <div class="col-xs-5 col-sm-2 number" title="{{market.price}}" ng-bind-html="market.price | bigjs: '0,0.00000000'"></div>
+              <div class="visible-xs col-xs-7">{{ 'OMNIDEX.MARKETS.LASTPRICE' | translate}}</div>
+              <div class="col-xs-5 col-sm-2 number" title="{{market.lastprice}}" ng-bind-html="market.lastprice | bigjs: '0,0.00000000'"></div>
+              <div class="visible-xs col-xs-7">{{ 'OMNIDEX.MARKETS.SUPPLY' | translate}}</div>
+              <div class="col-xs-5 col-sm-2 number" title="{{market.supply}}" ng-bind-html="market.supply | bigjs: '0,0.00000000'"></div>
+            </div>
+          </div>
+        </div>
+    </div>
+</div>

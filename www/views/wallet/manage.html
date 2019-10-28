@@ -1,0 +1,82 @@
+<div ng-controller="WalletManageController" ng-if="wallet.loaded">
+  <div class="row om-row">
+    <div class="col-xs-12">
+      <div class="text-left om-title">{{ 'WALLET.MANAGE.TITLE' | translate}} </div>
+	<span color="#333333a8"><strong>{{selectedAsset.name | truncate:14}} (ID: {{selectedAsset.id}})</strong></span>
+      <!-- <div ng-show="showErrors" class="alert alert-danger"> <strong> {{error}} </strong>  -->
+    </div>
+  </div> 
+  <div class="row">
+    <div class="col-sm-12">  
+      <form name="sendForm" ng-submit="sendTransaction()">
+        <div class="panel panel-form">
+          <div class="panel-body">
+            <div class="col-sm-6">
+              <label for="chooseType" >{{ 'WALLET.MANAGE.CHOOSETYPE' | translate}}</label>
+              <div class="btn-group send-asset-dropdown">
+                <button class="btn btn-clear dropdown-toggle" type="button" id="chooseType" data-toggle="dropdown" aria-expanded="false">
+                  {{type}}
+                  <span class="caret pull-right"></span>
+                </button>
+                <ul class="dropdown-menu" role="menu" aria-labelledby="choosetype">
+                  <li role="presentation">
+                    <a role="menuitem" tabindex="-1" href="#" ng-click="setType('ChangeIssuer')">Change Issuer</a>
+                  </li>
+                  <li role="presentation" ng-show="managedtype === 54">
+                    <a role="menuitem" tabindex="-1" href="#" ng-click="setType('Grant')">Grant</a>
+                  </li>
+                  <li role="presentation" ng-show="managedtype === 54">
+                    <a role="menuitem" tabindex="-1" href="#" ng-click="setType('Revoke')">Revoke</a>
+                  </li>
+                </ul>
+              </div>
+            </div> 
+            <div class="col-sm-6">
+              <label class="text-justify" >{{ 'WALLET.SEND.FROM' | translate}}</label>
+              <div class="btn-group send-address-dropdown">
+                <button class="btn btn-clear" type="button" id="chooseAddress" aria-expanded="true">
+                  {{selectedAddress.hash}} 
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>  
+        <div class="panel panel-form">
+          <div class="panel-body">
+            <div class="col-sm-6" ng-hide="type_int === 70">
+              <label for="amount" >
+                <span ng-show="type_int === 55">{{ 'COMMON.GRANT' | translate}} </span>
+                <span ng-show="type_int === 56">{{ 'COMMON.REVOKE' | translate}} </span>
+                <span>
+		  <span color="#337ab7">{{selectedAsset.name | truncate:14}} (ID: {{selectedAsset.id}}) </span>
+                  <small class="text-muted" ng-show="type_int === 56">({{selectedAddress.getDisplayBalance(selectedAsset.id)}} {{ 'COMMON.AVAILABLE' | translate}})</small> 
+		</span>
+              </label>
+              <div class="input-group">
+                <span class="input-group-addon"></span>
+                <input id="amount" name="amount" type="number" ng-model="sendAmount" class="form-control" value="sendAmount" ng-change="amountModified=true;"
+                    placeholder="{{selectedAsset.divisible ? '1.00000000' : '1'}}" step="{{selectedAsset.divisible ? 0.00000001 : 1}}" 
+                    min="{{selectedAsset.divisible ? 0.00000001 : 1}}" max="{{ type_int === 55 ? (selectedAsset.divisible ? 92233720368.54775807 - parseFloat(asset.totaltokens) : 9223372036854775807 - parseFloat(asset.totaltokens)) : selectedAddress.getDisplayBalance(selectedAsset.id) }}">
+                <div class="hint">({{((sendAmount || 0) * selectedAsset.price).toFixed(2)}} {{userCurrency}})</div>
+              </div>
+            </div> 
+            <div class="col-sm-6" ng-hide="type_int === 56">
+              <label class="text-justify" >{{ 'WALLET.SEND.TO' | translate}}</label>
+              <input name="reciever" type="text" ng-model="sendTo" class="form-control" ng-change="checkDestAddr()" placeholder="{{ type_int === 55 ? '(Optional) Leave blank to Grant to self/sending address' : 'Address to transfer Control and Ownership of Property to.'}}">
+            </div>
+          </div>
+        </div>
+        <p>
+          {{ 'WALLET.SEND.COST' | translate}}: {{minersFee.plus(protocolFee).valueOf()}} BTC <button type="button" class="btn btn-xs" ng-click="editTransactionCost()"><span class="glyphicon glyphicon-pencil small"></span></button>
+        </p>
+        <p>
+          {{ 'WALLET.SEND.AVAIL' | translate}}: {{selectedAddress.getDisplayBalance(0)}} BTC 
+        </p>
+        <button type="submit" class="btn btn-main pull-right" ng-disabled="!cansend || needToAddr || !sendForm.$valid || sendForm.$pristine">{{ 'COMMON.NEXT' | translate}}</button>
+        <div ng-hide="cansend">
+          <span style="color:red"> {{ 'WALLET.SEND.LOWFEE' | translate:'{topupAmount:topupAmount}' }}</span>
+        </div>
+      </form>
+    </div>    
+  </div>
+</div>

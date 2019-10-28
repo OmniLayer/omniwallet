@@ -1,0 +1,23 @@
+<div ng-controller="ExchangeOverviewController" ng-init="getData(timeAll, 'OMNI')" class="row">
+  	<div class="col-sm-9 text-left om-title">{{ 'EXCHANGE.TRADE.TITLE' | translate}}</div>
+
+	<div class="col-sm-3 text-right">
+	  <button class="btn btn-main" ng-click="setView('saleOffer')" ng-disabled="!hasCoins"> {{ 'EXCHANGE.TRADE.SELL' | translate }} {{ activeCurrencyPair[1].name }} </button>
+	</div>
+	<div class="col-xs-12">
+	  <div ng-show="showNoCoinAlert" class="alert alert-danger alert-dismissible missing-dex-alert" role="alert">
+	    {{ 'EXCHANGE.TRADE.NOCOINS.LEAD' | translate}} {{ activeCurrencyPair[1].name }} {{'EXCHANGE.TRADE.NOCOINS.TRAIL' | translate}} 
+	    <button type="button" class="close" ng-click="hideNoCoinAlert();"><span aria-hidden="true">&times;</span><span class="sr-only">{{ 'COMMON_CLOSE' | translate}}</span></button>
+	  </div>
+	</div>
+
+	<tabset>
+	  <tab ng-repeat="currencyPair in currPairs" heading="{{currencyPair[0].symbol}} / {{currencyPair[1].symbol}}" active="currencyPair.active" select="setActiveCurrencyPair(currencyPair) && getData(selectedTimeframe, currencyPair.symbol)" >
+	    <div class="row" ng-show="onTradeView">
+	      <div class="col-xs-12 om-subtitle"> {{ activeCurrencyPair[0].name }} / {{ activeCurrencyPair[1].name }} </div> 
+	    </div>
+	    <div ng-include="'/views/exchange/partials/dex.html'">
+	    </div>
+	  </tab>
+	</tabset>
+</div>
