@@ -73,7 +73,11 @@ def bc_getutxo_blockcypher(address, ramount):
     r = requests.get('https://api.blockcypher.com/v1/btc/main/addrs/'+address+'?unspentOnly=true')
 
     if r.status_code == 200:
-      unspents = r.json()['txrefs']
+      try:
+        unspents = r.json()['txrefs']
+      except Exception as e:
+        print "no txrefs in bcypher json response"
+        unspents = []
       print "got unspent list (bcypher)", unspents
 
       retval = []
@@ -134,8 +138,10 @@ def bc_getbalance_bitgo(address):
     r= requests.get('https://www.bitgo.com/api/v1/address/'+address)
     if r.status_code == 200:
       #balance = int(r.json()['confirmedBalance'])
-      balance = int(r.json()['balance'])
-      return {"bal":balance , "error": None}
+      rt = r.json()
+      balance = int(rt['spendableBalance'])
+      pending = int(rt['unconfirmedReceives'])
+      return {"bal":balance, "pending": pending, "error": None}
     else:
       return bc_getbalance_blockcypher(address)
   except:
