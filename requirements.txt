@@ -1,4 +1,4 @@
-ecdsa==0.10
+ecdsa==0.13.3
 pycoin==0.25
 simplekv==0.8.4
 pycryptodome==3.7.0
