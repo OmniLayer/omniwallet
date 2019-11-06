@@ -7,6 +7,7 @@ from threading import Thread
 from flask import Flask, render_template, session, request
 #from flask.ext.socketio import SocketIO, emit, join_room, leave_room
 from flask_socketio import SocketIO, emit, join_room, leave_room
+from engineio.payload import Payload
 from msc_apps import *
 from balancehelper import *
 from omnidex import getOrderbook
@@ -17,7 +18,14 @@ import config
 app = Flask(__name__)
 app.debug = True
 app.config['SECRET_KEY'] = config.WEBSOCKET_SECRET
-socketio = SocketIO(app)
+Payload.max_decode_packets = 250
+try:
+  if len(config.WEBSOCKET_CORS) > 0:
+    socketio = SocketIO(app,cors_allowed_origins=config.WEBSOCKET_CORS)
+  else:
+    socketio = SocketIO(app)
+except:
+  socketio = SocketIO(app)
 
 #threads
 watchdog = None
