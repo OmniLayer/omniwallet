@@ -671,6 +671,7 @@
       "TIME": "Temps accordé à l'acheteur pour payer",
       "TIMETOOLTIP": "Temps en bloc qu'a l'acheteur a pour finaliser son achat (1 bloc environ 10 minutes)",
       "BUYERFEE": "frais de l'acheteur",
+      "BUYERFEETOOLTIP":"L'acheteur doit payer / dépenser des frais miniers minimum en BTC lors de l'envoi d'une transaction de paiement",
       "MODALTITLE": "Confirmer la vente",
       "CURRENCY": "Vente",
       "MODAL_FROM": "De",

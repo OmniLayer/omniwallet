@@ -673,6 +673,7 @@
 			"TIME":"Time given to buyer to pay",
 			"TIMETOOLTIP":"Time in blocks the buyer has to complete his purchase (1 block approx. 10 minutes)",
 			"BUYERFEE":"Buyer's fee",
+			"BUYERFEETOOLTIP":"最低矿工费买方在发送付款交易时必须在BTC中付款/消费",
 			"MODALTITLE": "Confirm Sale",
 			"CURRENCY": "Selling",
 			"MODAL_FROM":"From",

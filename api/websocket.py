@@ -5,7 +5,8 @@ import time, datetime
 import json, re
 from threading import Thread
 from flask import Flask, render_template, session, request
-from flask.ext.socketio import SocketIO, emit, join_room, leave_room
+#from flask.ext.socketio import SocketIO, emit, join_room, leave_room
+from flask_socketio import SocketIO, emit, join_room, leave_room
 from msc_apps import *
 from balancehelper import *
 from omnidex import getOrderbook
