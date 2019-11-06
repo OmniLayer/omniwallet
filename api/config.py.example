@@ -37,4 +37,6 @@ REDIS_DB=0
 REDIS_ADDRSPACE=""
 #How long, in seconds, to cache BTC balance info for new addresses, Default 10min (600)
 BTCBAL_CACHE=600
+#Full Domain(s) (Comma separated) to allow in websocket for cors, example: "https://www.omniwallet.org"
+WEBSOCKET_CORS=""
 
