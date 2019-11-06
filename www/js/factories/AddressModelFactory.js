@@ -14,7 +14,8 @@ angular.module("omniFactories")
 					self.keyCheck = self.checkKeys();
 					self.balance = [];
 					self.assets = [];
-					self.qr = "https://chart.googleapis.com/chart?chs=150x150&cht=qr&chl="+hash+"&choe=UTF-8";
+					//self.qr = "https://chart.googleapis.com/chart?chs=150x150&cht=qr&chl="+hash+"&choe=UTF-8";
+					self.qr = "https://api.qrserver.com/v1/create-qr-code/?size=150x150&charset-source=UTF-8&ecc=Q&data=bitcoin:"+hash;
 					
 					//AddressManager.getTransactions(hash).then(function(result){
 					//	var data = result.data;
