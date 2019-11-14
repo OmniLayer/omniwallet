@@ -4,7 +4,7 @@
 <div class="modal-row">
   <div class="description-title">{{ 'WALLET.SEND.MODAL_MINER' | translate}}:</div>
   <div class="col-sm-4">
-    <input type="number" class="form-control" step="0.00000001" min="0.0001" ng-model="minersFee" ng-change="setMinersFee(minersFee)" ng-disabled="predefined">
+    <input type="number" class="form-control" step="0.00000001" min="0.000001" ng-model="minersFee" ng-change="setMinersFee(minersFee)" ng-disabled="predefined">
   </div>
 </div>
 <div class="modal-row">
@@ -34,3 +34,9 @@
 <div class="modal-row">
   <div class="description-title-xlarge">{{ 'WALLET.SEND.COST' | translate}}:</div><div class="description-text">{{ isBTC ? minersFee.valueOf() : protocolFee.plus(minersFee).valueOf() }}</div>
 </div>
+
+<div class="col-xs-12 alert alert-warning" ng-show="minersFee < normalFee">
+ <strong>******</strong>  <br />
+ {{ 'WALLET.SEND.FEE_WARNING' | translate}}
+</div>
+

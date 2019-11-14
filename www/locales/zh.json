@@ -427,6 +427,7 @@
 			"TO":"接收地址",
 			"COST":"全部交易费用",
 			"PROTOCOL_COST": "全方案协议交易成本",
+			"FEE_WARNING": "注意：您输入的费用少于建议的费用。 请注意，低廉的费用可能会导致交易确认延迟",
 			"MODAL_TRANSACTION_COST":"交易成本",
 			"MODAL_MINER": "矿工费",
 			"FUNDS":"发送资产",

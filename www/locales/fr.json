@@ -425,6 +425,7 @@
       "TO": "vers cette adresse",
       "COST": "Coût total de la transaction",
       "PROTOCOL_COST": "Coût de transaction du protocole Omni",
+      "FEE_WARNING": "Remarque: vous avez entré des frais inférieurs à ceux recommandés. Faites attention car des frais peu élevés peuvent entraîner des retards dans la confirmation de la transaction.",
       "MODAL_TRANSACTION_COST": "Coût de transaction",
       "MODAL_MINER": "Frais de minage",
       "FUNDS": "Envoyez les fonds",

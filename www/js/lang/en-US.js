@@ -428,6 +428,7 @@ angular.module("omniConfig")
 			"COST":"Total transaction cost",
 			"PROTOCOL_COST": "Omni Protocol Transaction Cost",
 			"MODAL_TRANSACTION_COST":"Transaction Cost",
+			"FEE_WARNING": "Note: You have entered a fee less than recommended. Please take care as a low fee can cause transaction confirmation delays",
 			"MODAL_MINER": "Miner Fee",
 			"FUNDS":"Send Funds",
 			"TOKEN":"Token",
