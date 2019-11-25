@@ -51,11 +51,12 @@ do
       else
         echo "Starting uwsgi daemon..."
         cd $APPDIR/api
-        if [[ "$OSTYPE" == "darwin"* ]]; then
-          uwsgi -s 127.0.0.1:1088 -p 8 -M --vhost --enable-threads --log-x-forwarded-for --logto $DATADIR/apps.log &
-        else
-          uwsgi -s 127.0.0.1:1088 -p 8 -M --vhost --enable-threads --log-x-forwarded-for --plugin $PYTHONBIN --logto $DATADIR/apps.log &
-        fi
+        #if [[ "$OSTYPE" == "darwin"* ]]; then
+        #  uwsgi -s 127.0.0.1:1088 -p 8 -M --vhost --enable-threads --log-x-forwarded-for --logto $DATADIR/apps.log &
+        #else
+        #  uwsgi -s 127.0.0.1:1088 -p 8 -M --vhost --enable-threads --log-x-forwarded-for --plugin $PYTHONBIN --logto $DATADIR/apps.log --offload-threads 1 &
+        #fi
+        uwsgi -s 127.0.0.1:1088 -p 8 -M --vhost --enable-threads --log-x-forwarded-for --logto $DATADIR/apps.log --offload-threads 1 &
         SERVER_PID=$!
         echo $SERVER_PID > /tmp/omniapp.pid
         #get snapshot of directory files
