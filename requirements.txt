@@ -18,3 +18,4 @@ itsdangerous==0.24
 ujson==1.33
 pyotp==2.2.1
 redis==2.10.5
+uWSGI==2.0.18
