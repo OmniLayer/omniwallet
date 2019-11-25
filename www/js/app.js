@@ -55,9 +55,9 @@ var app = angular.module('omniwallet', [
 
   if (!$httpProvider.defaults.headers.get)
         $httpProvider.defaults.headers.get = {};    
-  $httpProvider.defaults.headers.get['Cache-Control'] = 'no-cache, no-store, must-revalidate'; 
-  $httpProvider.defaults.headers.get['Pragma'] = 'no-cache'; 
-  $httpProvider.defaults.headers.get['Expires'] = '0'; 
+  //$httpProvider.defaults.headers.get['Cache-Control'] = 'no-cache, no-store, must-revalidate'; 
+  //$httpProvider.defaults.headers.get['Pragma'] = 'no-cache'; 
+  //$httpProvider.defaults.headers.get['Expires'] = '0'; 
   $httpProvider.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded;charset=utf-8';
   $httpProvider.defaults.transformRequest = [TransformRequest];
 
@@ -223,10 +223,11 @@ app.config(function($idleProvider, $keepaliveProvider, idleDuration, idleWarning
       prefix: '/locales/',
       suffix: '.json'
     })
-    .registerAvailableLanguageKeys(['en', 'zh','ar'], {
+    .registerAvailableLanguageKeys(['en', 'zh','ar','fr'], {
       'en_us': 'en',
       'en_uk': 'en',
-      'zh_cn': 'zh'
+      'zh_cn': 'zh',
+      'fr_fr': 'fr'
     })
     .fallbackLanguage('en')
     .determinePreferredLanguage();
