@@ -12,7 +12,37 @@ except:
   expTime=600
 
 
-def bc_getutxo(address, ramount, page=1, retval=None, avail=0):
+def bc_getutxo(address, ramount):
+  try:
+    r = requests.get('https://blockchain.info/unspent?active='+address)
+    if r.status_code == 200:
+      avail=0
+      retval=[]
+      response = r.json()
+      unspents = response['unspent_outputs']
+      print "got unspent list (blockchain)", response
+      for tx in sorted(unspents, key = lambda i: i['value'],reverse=True):
+        txUsed=gettxout(tx['tx_hash_big_endian'],tx['tx_output_n'])['result']
+        isUsed = txUsed==None
+        if not isUsed:
+          coinbaseHold = (txUsed['coinbase'] and txUsed['confirmations'] < 100)
+          multisigSkip = ("scriptPubKey" in txUsed and txUsed['scriptPubKey']['type'] == "multisig")
+          if not coinbaseHold and txUsed['confirmations'] > 0 and not multisigSkip:
+            avail += tx['value']
+            retval.append([ tx['tx_hash_big_endian'], tx['tx_output_n'], tx['value'] ])
+            if avail >= ramount:
+              return {"avail": avail, "utxos": retval, "error": "none"}
+      if ('notice' in response and 'Ignoring' in response['notice']):
+        return bc_getutxo_btccom(address, ramount)
+      else:
+        return {"avail": avail, "error": "Low balance error"}
+    else:
+      return bc_getutxo_btccom(address, ramount)
+  except:
+    return bc_getutxo_btccom(address, ramount)
+
+
+def bc_getutxo_btccom(address, ramount, page=1, retval=None, avail=0):
   if retval==None:
     retval=[]
   try:
