@@ -40,3 +40,5 @@ BTCBAL_CACHE=600
 #Full Domain(s) (Comma separated) to allow in websocket for cors, example: "https://www.omniwallet.org"
 WEBSOCKET_CORS=""
 
+#1 for Testnet, 0 for Mainnet
+TESTNET=0
