@@ -13,7 +13,7 @@ except:
 
 try:
   TESTNET = config.TESTNET
-else:
+except:
   TESTNET = False
 
 if TESTNET:
