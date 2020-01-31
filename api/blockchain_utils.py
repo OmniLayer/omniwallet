@@ -207,7 +207,7 @@ def bc_getbulkbalance(addresses):
     else:
       retval={'bal':{}, 'fresh':None}
   else:
-   if TESTNET:
+    if TESTNET:
       try:
         data=bc_getbulkbalance_btccom(split)
         if data['error']:
