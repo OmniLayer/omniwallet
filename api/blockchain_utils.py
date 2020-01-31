@@ -2,19 +2,41 @@ import simplejson
 import requests
 import decimal
 import json, re
-from config import BTAPIKEY
 from rpcclient import gettxout
 from cacher import *
+import config
 
 try:
   expTime=config.BTCBAL_CACHE
 except:
   expTime=600
 
+try:
+  TESTNET = config.TESTNET
+else:
+  TESTNET = False
+
+if TESTNET:
+  # neither blockchain.info nor blockonomics support testnet
+  BLOCKCHAININFO_API_URL = "https://blockchain.info"
+  BLOCKONOMICS_API_URL = "https://www.blockonomics.co/api"
+
+  BLOCKTRAIL_API_URL = "https://api.blocktrail.com/v1/tbtc"
+  BLOCKCYPHER_API_URL = "https://api.blockcypher.com/v1/btc/test3"
+  BITGO_API_URL = "https://test.bitgo.com/api/v1"
+  BTCCOM_API_URL = "https://chain.api.btc.com/v3"
+else:
+  BLOCKCHAININFO_API_URL = "https://blockchain.info"
+  BLOCKTRAIL_API_URL = "https://api.blocktrail.com/v1/btc"
+  BLOCKCYPHER_API_URL = "https://api.blockcypher.com/v1/btc/main"
+  BITGO_API_URL = "https://www.bitgo.com/api/v1"
+  BTCCOM_API_URL = "https://tchain.api.btc.com/v3"
+  BLOCKONOMICS_API_URL = "https://www.blockonomics.co/api"
+
 
 def bc_getutxo(address, ramount):
   try:
-    r = requests.get('https://blockchain.info/unspent?active='+address)
+    r = requests.get(BLOCKCHAININFO_API_URL + '/unspent?active='+address)
     if r.status_code == 200:
       avail=0
       retval=[]
@@ -46,7 +68,7 @@ def bc_getutxo_btccom(address, ramount, page=1, retval=None, avail=0):
   if retval==None:
     retval=[]
   try:
-    r = requests.get('https://chain.api.btc.com/v3/address/'+address+'/unspent?pagesize=50&page='+str(page))
+    r = requests.get(BTCCOM_API_URL + '/address/'+address+'/unspent?pagesize=50&page='+str(page), timeout=2)
     if r.status_code == 200:
       response = r.json()['data']
       unspents = response['list']
@@ -69,39 +91,9 @@ def bc_getutxo_btccom(address, ramount, page=1, retval=None, avail=0):
   except:
     return bc_getutxo_blockcypher(address, ramount)
 
-def bc_getutxo_blocktrail(address, ramount, page=1, retval=None, avail=0):
-  #deprecated and migrated to btc.com api
-  if retval==None:
-    retval=[]
-  try:
-    r = requests.get('https://api.blocktrail.com/v1/btc/address/'+address+'/unspent-outputs?api_key='+str(BTAPIKEY)+'&limit=200&sort_dir=desc&page='+str(page))
-    if r.status_code == 200:
-      response = r.json()
-      unspents = response['data']
-      print "got unspent list (btrail)", response
-      for tx in unspents:
-        txUsed=gettxout(tx['hash'],tx['index'])
-        isUsed = ('result' in txUsed and txUsed['result']==None)
-        coinbaseHold = (tx['is_coinbase'] and tx['confirmations'] < 100)
-        if not isUsed and not coinbaseHold and txUsed['result']['confirmations'] > 0 and tx['multisig']==None:
-          avail += tx['value']
-          retval.append([ tx['hash'], tx['index'], tx['value'] ])
-          if avail >= ramount:
-            return {"avail": avail, "utxos": retval, "error": "none"}
-      if int(response['total'])-(int(response['per_page'])*page ) > 0:
-        return bc_getutxo(address, ramount, page+1, retval, avail)
-      return {"avail": avail, "error": "Low balance error"}
-    else:
-      #return {"error": "Connection error", "code": r.status_code}
-      return bc_getutxo_blockcypher(address, ramount)
-  except:
-    return bc_getutxo_blockcypher(address, ramount)
-
-
 def bc_getutxo_blockcypher(address, ramount):
   try:
-    r = requests.get('https://api.blockcypher.com/v1/btc/main/addrs/'+address+'?unspentOnly=true')
-
+    r = requests.get(BLOCKCYPHER_API_URL + '/addrs/'+address+'?unspentOnly=true', timeout=2)
     if r.status_code == 200:
       try:
         unspents = r.json()['txrefs']
@@ -141,7 +133,7 @@ def bc_getutxo_blockcypher(address, ramount):
 
 def bc_getpubkey(address):
   try:
-    r = requests.get('https://blockchain.info/q/pubkeyaddr/'+address)
+    r = requests.get(BLOCKCHAININFO_API_URL + '/q/pubkeyaddr/'+address)
 
     if r.status_code == 200:
       return str(r.text)
@@ -165,7 +157,7 @@ def bc_getbalance(address):
 
 def bc_getbalance_bitgo(address):
   try:
-    r= requests.get('https://www.bitgo.com/api/v1/address/'+address)
+    r= requests.get(BITGO_API_URL + '/address/'+address, timeout=2)
     if r.status_code == 200:
       #balance = int(r.json()['confirmedBalance'])
       rt = r.json()
@@ -179,7 +171,7 @@ def bc_getbalance_bitgo(address):
 
 def bc_getbalance_blockcypher(address):
   try:
-    r= requests.get('https://api.blockcypher.com/v1/btc/main/addrs/'+address+'/balance')
+    r= requests.get(BLOCKCYPHER_API_URL + '/addrs/'+address+'/balance', timeout=2)
     if r.status_code == 200:
       balance = int(r.json()['balance'])
       return {"bal":balance , "error": None}
@@ -215,18 +207,11 @@ def bc_getbulkbalance(addresses):
     else:
       retval={'bal':{}, 'fresh':None}
   else:
-    try:
-      data=bc_getbulkbalance_blockonomics(split)
-      if data['error']:
-        raise Exception("issue getting blockonomics baldata",data)
-      else:
-        retval={'bal':dict(data['bal'],**cbdata), 'fresh':split}
-    except Exception as e:
-      print e
+   if TESTNET:
       try:
-        data=bc_getbulkbalance_blockchain(split)
+        data=bc_getbulkbalance_btccom(split)
         if data['error']:
-          raise Exception("issue getting blockchain baldata",data)
+          raise Exception("issue getting btccom baldata","data",data,"split",split)
         else:
           retval={'bal':dict(data['bal'],**cbdata), 'fresh':split}
       except Exception as e:
@@ -235,7 +220,27 @@ def bc_getbulkbalance(addresses):
           retval={'bal':cbdata, 'fresh':None}
         else:
           retval={'bal':{}, 'fresh':None}
-
+    else:
+      try:
+        data=bc_getbulkbalance_blockonomics(split)
+        if data['error']:
+          raise Exception("issue getting blockonomics baldata",data)
+        else:
+          retval={'bal':dict(data['bal'],**cbdata), 'fresh':split}
+      except Exception as e:
+        print e
+        try:
+          data=bc_getbulkbalance_blockchain(split)
+          if data['error']:
+            raise Exception("issue getting blockchain baldata",data)
+          else:
+            retval={'bal':dict(data['bal'],**cbdata), 'fresh':split}
+        except Exception as e:
+          print e
+          if len(cbdata) > 0:
+            retval={'bal':cbdata, 'fresh':None}
+          else:
+            retval={'bal':{}, 'fresh':None}
 
   rSetNotUpdateBTC(retval)
   if len(recurse)>0:
@@ -254,7 +259,7 @@ def bc_getbulkbalance_blockonomics(addresses):
       formatted=formatted+" "+address
 
   try:
-    r = requests.post('https://www.blockonomics.co/api/balance',json.dumps({"addr":formatted}))
+    r = requests.post(BLOCKONOMICS_API_URL + '/balance',json.dumps({"addr":formatted}))
     if r.status_code == 200:
       balances = r.json()['response']
       retval = {}
@@ -274,7 +279,7 @@ def bc_getbulkbalance_blockchain(addresses):
     else:
       formatted=formatted+"|"+address
   try:
-    r= requests.get('https://blockchain.info/balance?active='+formatted)
+    r= requests.get(BLOCKCHAININFO_API_URL + '/balance?active='+formatted)
     if r.status_code == 200:
       balances = r.json()
       retval = {}
@@ -284,4 +289,25 @@ def bc_getbulkbalance_blockchain(addresses):
     else:
       return {"bal": None , "error": True}
   except:
+    return {"bal": None , "error": True}
+
+def bc_getbulkbalance_btccom(addresses):
+  formatted=""
+  for address in addresses:
+    if formatted=="":
+      formatted=address
+    else:
+      formatted=formatted+","+address
+  try:
+    r = requests.get(BTCCOM_API_URL + '/address/'+formatted, timeout=2)
+    if r.status_code == 200:
+      balances = r.json()
+      retval = {}
+      for entry in balances["data"]:
+        retval[entry["address"]] = int(entry['balance'])
+      return {"bal": retval, "error": None}
+    else:
+      return {"bal": None , "error": True}
+  except Exception as e:
+    print_debug(("error getting btccom bulk",e),4)
     return {"bal": None , "error": True}
