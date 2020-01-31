@@ -415,7 +415,7 @@
       "WATCH": "Ajoutez l'Adresse en Lecture Seule",
       "OFFLINE": "Ajouter une adresse Armory hors-ligne",
       "SPENDABLE":"Vous pouvez créer des transactions à partir de ces adresses",
-      "WATCHONLY":"Importer la clé privée d'adresse pour activer les dépenses"
+      "WATCHONLY":"Suivez le solde d'une adresse dans un autre portefeuille. NE PEUT PAS être activé / déverrouillé en envoyant des fonds n'importe où. Pour activer les dépenses, vous devez importer la clé privée."
     },
     "SEND": {
       "TITLE": "Envoyer",

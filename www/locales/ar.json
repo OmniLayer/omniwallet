@@ -417,7 +417,7 @@
 			"WATCH":"Add Watch Only Address",
 			"OFFLINE":"Add Armory Offline Address",
 			"SPENDABLE":"You can create transactions from these addresses",
-			"WATCHONLY":"Import address private key to enable spending"
+			"WATCHONLY":"Track the balance of an address in another wallet. Can NOT BE Acitvate/Unlocked by sending funds anywhere. To enable spending you need to import the private key."
 		},
 		"SEND":{
 			"TITLE":"Send",
