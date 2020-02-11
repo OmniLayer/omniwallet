@@ -9,13 +9,13 @@ angular.module("omniConfig")
   }])
   .factory("TX_DATA_URL",["TESTNET", function TxDataUrlFactory(TESTNET){
     if(TESTNET)
-      return "http://tbtc.blockr.io/tx/info/";
+      return "https://live.blockcypher.com/btc-testnet/tx/";
     else
       return "https://www.blockchain.com/btc/tx/";
   }])
   .factory("ADDRESS_EXPLORER_URL",["TESTNET", function AddressExplorerUrlFactory(TESTNET){
     if(TESTNET)
-      return "http://tbtc.blockr.io/address/info/";
+      return "https://live.blockcypher.com/btc-testnet/address/";
     else
       return "https://omniexplorer.info/lookupadd.aspx?address=";
   }])
