@@ -78,6 +78,14 @@ angular.module("omniServices")
                         invalidCaptcha : true,
                         validating : false
                       });
+                    } else if(result.data.error == "InvalidEmail"){
+                      self.validating=false;
+                      Recaptcha.reload();
+                      create.reject({
+                        invalidEmail : true,
+                        validating : false,
+                        msg : result.data.msg
+                      });
                     } else {
                       self.validating = false;
                       self.settings.firstLogin = true;

@@ -204,6 +204,7 @@
       "MESSAGES": {
         "UUID": "Cet UUID est déjà utilisé",
         "CAPTCHA": "Captcha invalide, essayez à nouveau.",
+        "EMAILERROR": "E-mail invalide réessayer:",
         "VALIDATING": "Nous validons vos données et créons votre compte",
         "PASSWORDLENGTH": "Le mot de passe doit comporter au moins 8 caractères",
         "PASSWORDSTRENGTH": "La force du mot de passe doit être d'au moins 70%",

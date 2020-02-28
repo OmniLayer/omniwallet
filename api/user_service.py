@@ -18,6 +18,7 @@ from email.MIMEText import MIMEText
 from email.Utils import COMMASPACE, formatdate
 from email import Encoders
 from sqltools import *
+from email_validator import validate_email, EmailNotValidError
 import requests
 import config 
 
@@ -113,6 +114,18 @@ def create():
   nonce = request.form['nonce']
   public_key = request.form['public_key'].encode('UTF-8')
   wallet = request.form['wallet']
+  
+  try:
+    v = validate_email(email) # validate and get info
+    email = v["email"] # replace with normalized form
+  except EmailNotValidError as e:
+    # email is not valid, exception message is human-readable
+    print(str(e))
+    return jsonify({"status": "ERROR", "error":"InvalidEmail", "msg":str(e) })
+  except AttributeError as e:
+    #Email can not be blank
+    print(str(e))
+    return jsonify({"status": "ERROR", "error":"InvalidEmail", "msg":"Email can not be blank"})
 
   if config.LOCALDEVBYPASSDB:
     session_pow_challenge = session + "_pow_challenge"
@@ -544,9 +557,12 @@ def welcome_email(user_email, wallet, uuid):
     msg = MIMEMultipart('alternative')
     msg['From'] = email_from
     msg['To'] = user_email
-    msg['Subject'] = "Welcome to Omniwallet"
+    msg['Subject'] = "Account Created: Welcome to Omniwallet"
 
     text = ('Welcome To Omniwallet!\n'
+            '\n'
+            'You are receiving this email because your address was entered during the signup process.\n'
+            'If you did not signup for this account please contact our support department using the information at the bottom of this email.\n'
             '\n'
             'Thank you for creating a new wallet and choosing to join the exciting world of cryptocurrency.\n'
             'While we know you are eager to get started, this email contains important information about your new Omniwallet.\n'
@@ -573,13 +589,17 @@ def welcome_email(user_email, wallet, uuid):
             'Store your backup file in a secure place. Anyone with access to this file has access to your funds.'
             '\n'
             'Thank you for taking the time to read this introduction. \n'
-            'This as well as many more questions/answers are available on our FAQ Page: https://'+str(email_domain)+'/about/faq \n'
+            'This as well as many more questions/answers are available on our Knowledge Base: http://support.omniwallet.org \n'
             'If you have any questions please feel free to reach out to us using the information on our Contact Us page: https://'+str(email_domain)+'/about/contact \n'
             '\n'
             'Sincerely, \n The Omniwallet Team' )
 
     html = ('<html><head></head><body style="background-color:rgba(234, 235, 236, 0.43);">'
             '<img src="https://'+str(email_domain)+'/assets/img/logo.png"><h1><font color="#034F92">Welcome To Omniwallet!</font></h1>'
+            '<p>'
+            'You are receiving this email because your address was entered during the signup process.<br>'
+            'If you did not signup for this account please contact our support department using the information at the bottom of this email.<br>'
+            '</p>'
             '<p>'
             'Thank you for creating a new wallet and choosing to join the exciting world of cryptocurrency.<br>'
             'While we know you are eager to get started, this email contains important information about your new Omniwallet.<br>'
@@ -608,7 +628,7 @@ def welcome_email(user_email, wallet, uuid):
             '<strong>Store your backup file in a secure place. Anyone with access to this file has access to your funds.</strong>'
             '</p><p>'
             'Thank you for taking the time to read this introduction. <br>'
-            'This as well as many more questions/answers are available on our <a href="https://'+str(email_domain)+'/about/faq">FAQ</a> page.<br>'
+            'This as well as many more questions/answers are available on our <a href="http://support.omniwallet.org">Knowledge Base</a><br>'
             'If you have any questions please feel free to reach out to us using the information on our <a href="https://'+str(email_domain)+'/about/contact">Contact Us</a> page.<br>'
             '</p><p>'
             'Sincerely, <br><i> The Omniwallet Team</i>'
@@ -620,6 +640,9 @@ def welcome_email(user_email, wallet, uuid):
     msg.attach(part2)
     if config.WELCOMECID is not None:
       msg.add_header('X-Mailgun-Tag',config.WELCOMECID)
+    if config.AWSCID is not None:
+      msg.add_header('X-SES-CONFIGURATION-SET',config.AWSCID)
+
     
     #wfile = MIMEBase('application', 'octet-stream')
     #wfile.set_payload(wallet)
