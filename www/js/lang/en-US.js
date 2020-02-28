@@ -205,6 +205,7 @@ angular.module("omniConfig")
 			"MESSAGES" : {
 				"UUID":"This UUID is already in use",
 				"CAPTCHA":"Invalid Captcha try again.",
+				"EMAILERROR":"Invalid Email try again:",
 				"VALIDATING":"We are validating your data and creating your account",
 				"PASSWORDLENGTH":"Password must be at least 8 characters long",
 				"PASSWORDSTRENGTH":"Password strength must be at least 70%",
