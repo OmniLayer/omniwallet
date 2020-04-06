@@ -57,9 +57,10 @@ angular.module("omniServices")
                         wallet: encryptedWallet
                       };
 
-                    if(form.captcha){
+                    var captcha_response = hcaptcha.getResponse();
+                    if(captcha_response){
                       angular.extend(createData, {
-                        captcha_response_field:form.h-captcha-response
+                        captcha_response_field:captcha_response
                       });
                     }
 
