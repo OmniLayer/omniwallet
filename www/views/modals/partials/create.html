@@ -1,10 +1,11 @@
 <form name="createForm" novalidate role="form" ng-init="setFormScope(this)" class="form-horizontal">
+
   <div class="modal-body">
     <div class="row">
       <div class="col-md-10 col-md-push-1 alert alert-danger alert-dismissable">
-       <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-       <strong>{{ 'MODALS.CREATE.WARNING.TITLE' | translate }}</strong><br />
-             {{ 'MODALS.CREATE.WARNING.MESSAGE' | translate }} <br />
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+        <strong>{{ 'MODALS.CREATE.WARNING.TITLE' | translate }}</strong><br />
+                {{ 'MODALS.CREATE.WARNING.MESSAGE' | translate }} <br />
       </div>
     </div>
     <div class="row">
@@ -44,10 +45,10 @@
         </div>
       </div>
     </div>
-   <div class="row">
-    <div class ="col-xs-11 col-md-pull-1">
-      <div vc-recaptcha key="'{{sitekey}}'" ng-model="create.captcha" class="captcha-centered"></div><br>
-   </div>
-
+    <div class="row">
+      <div class="col-xs-11 col-md-push-1">
+        <div class="h-captcha" data-sitekey="{{sitekey}}"></div>
+      </div>
+    </div>
   </div>
 </form>

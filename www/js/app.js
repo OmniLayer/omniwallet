@@ -50,7 +50,6 @@ var app = angular.module('omniwallet', [
   'omniFactories',
   'omniServices',
   'omniControllers',
-  'vcRecaptcha',
 ], function($routeProvider, $locationProvider, $httpProvider) {
 
   if (!$httpProvider.defaults.headers.get)

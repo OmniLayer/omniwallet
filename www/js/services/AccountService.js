@@ -59,7 +59,7 @@ angular.module("omniServices")
 
                     if(form.captcha){
                       angular.extend(createData, {
-                        recaptcha_response_field:form.captcha
+                        captcha_response_field:form.h-captcha-response
                       });
                     }
 
@@ -73,14 +73,13 @@ angular.module("omniServices")
                     if(result.data.error == "InvalidCaptcha"){
                       
                       self.validating=false;
-                      Recaptcha.reload();
+                      hcaptcha.reset();
                       create.reject({
                         invalidCaptcha : true,
                         validating : false
                       });
                     } else if(result.data.error == "InvalidEmail"){
-                      self.validating=false;
-                      Recaptcha.reload();
+                      hcaptcha.reset();
                       create.reject({
                         invalidEmail : true,
                         validating : false,
@@ -98,6 +97,7 @@ angular.module("omniServices")
                     }
                   }, function(result) {
                     self.validating = false;
+                    hcaptcha.reset();
                     create.reject({
                         serverError : true
                     });
