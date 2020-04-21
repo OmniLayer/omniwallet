@@ -53,6 +53,11 @@ angular.module("omniControllers")
         }
 
 	$scope.setType = function(type){
+		if (type === 'CloseCrowdsale') {
+			$scope.type = "Close Crowdsale";
+			$scope.type_int = 53;
+                        $scope.sendForm.$pristine = false;
+		}
 		if (type === 'Grant') {
 			$scope.type = "Grant";
 			$scope.type_int = 55;
@@ -65,7 +70,7 @@ angular.module("omniControllers")
 			$scope.type = "Change Issuer";
 			$scope.type_int = 70;
 		}
-		checkDestAddr();
+		$scope.checkDestAddr();
 	}
 
 	$scope.checkDestAddr = function(){
@@ -90,7 +95,7 @@ angular.module("omniControllers")
 			var ManageSend = new Transaction($scope.type_int,$scope.selectedAddress,fee,{
 			        transaction_version:0,
 				currency_identifier:$scope.selectedAsset.id,
-			        amount: $scope.type_int === 70 ? +new Big(0).valueOf() : +new Big(amount).valueOf(),
+			        amount: [53,70].includes($scope.type_int) ? +new Big(0).valueOf() : +new Big(amount).valueOf(),
 			        transaction_to: $scope.sendTo,
 			        donate: $scope.account.getSetting("donate"),
 				marker: $scope.marker || false
@@ -100,7 +105,7 @@ angular.module("omniControllers")
 			var displayFee = new Big(fee).plus(new Big(PROTOCOL_FEE)).valueOf();
 			
 			var modalScope = {
-				title: $scope.type_int === 55 ? "Confirm Grant" : ($scope.type_int === 70 ? "Confirm Transfer of Ownership/Control" : "Confirm Revoke"),
+				title: $scope.type_int === 55 ? "Confirm Grant" : ($scope.type_int === 70 ? "Confirm Transfer of Ownership/Control" : ($scope.type_int === 53 ? "Confirm Crowdsale Closure" :"Confirm Revoke")),
 				token:$filter('truncate')($scope.selectedAsset.name,15,0),
 				propertyid: $scope.selectedAsset.id,
 				type_int: $scope.type_int,

@@ -12,6 +12,7 @@ angular.module("omniServices")
                 self.settings = wallet.settings;
                 self.addresses = [];
                 self.assets = [];
+                self.assetIDs = [];
                 self.loader = {
                     totalAddresses: wallet.addresses.length || 1,
                     totalAssets:1,
@@ -124,8 +125,7 @@ angular.module("omniServices")
                             if(balanceItem.symbol!="BTC"){
                                 self.loader.totalAssets += 1;
                             }
-                            asset = new Asset(balanceItem.symbol,balanceItem.value, tradable, address)
-                            self.assets.push(asset);
+                            asset = self.addAsset(balanceItem.symbol,balanceItem.value, tradable, address, balanceItem.propertyid);
                             update=true;
                         }
                         if(address.assets.indexOf(asset) == -1){
@@ -174,6 +174,13 @@ angular.module("omniServices")
                     value+=address.getDisplayBalance(asset.id) * price;
                 });
                 return value;
+            }
+
+            self.addAsset = function(symbol, balance, tradable, address, propertyid) {
+              asset = new Asset(symbol, balance, tradable, address)
+              self.assets.push(asset);
+              self.assetIDs.push(propertyid);
+              return asset
             }
 
             self.getAsset = function(assetId){
