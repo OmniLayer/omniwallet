@@ -15,7 +15,7 @@
 	"devDependencies": {
 		"connect": "2.x.x",
 		"express": ">=3.11.0",
-		"qs": "~> 1.0.0"
+		"qs": "~> 6.9.3"
 	},
     "scripts": {
             "install": "grunt"
