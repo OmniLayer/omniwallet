@@ -42,7 +42,9 @@
 		"GRANT":"Grant",
 		"REVOKE":"Revoke",
 		"SPENDABLE":"Spendable",
-		"WATCHONLY":"Watch-Only"
+		"WATCHONLY":"Watch-Only",
+		"RESERVED":"Reserved",
+		"REMAINING":"Remaining"
 	},
 	"SETTINGS":{
 		"TITLE":"Account Settings",
@@ -118,7 +120,7 @@
 			"FOUNDATION":{
 				"TITLE":"Omni Foundation",
 				"FIRST":"In September 2013, the Mastercoin Foundation was formed to temporarily manage the funds in the Exodus Address and the distribution of the development MSC. The board of the Mastercoin Foundation has declared its intention to minimize its temporary central role by transitioning the decision making to Mastercoin owners through proof of stake voting.",
-				"SECOND": "In January 2016 the Mastercoin Foundation was rebranded to the Omni Foundation and the primary tokens of the project, MSC, where renamed to Omni Tokens (OMN). The Foundation advocates for the use of the Omni Protocol and tries to build a community of people who develop it. All budget items, board minutes, Dev OMN vesting schedule, and bounties are public record and available to anyone on the ",
+				"SECOND": "In January 2016 the Mastercoin Foundation was rebranded to the Omni Foundation and the primary tokens of the project, MSC, where renamed to Omni Tokens (OMNI). The Foundation advocates for the use of the Omni Protocol and tries to build a community of people who develop it. All budget items, board minutes, Dev OMNI vesting schedule, and bounties are public record and available to anyone on the ",
 				"LINK": "Foundation's Website"
 			},
 			"PROTOCOL":{
@@ -130,7 +132,7 @@
 			},
 			"TOKEN":{
 				"TITLE":"Omnis",
-				"FIRST" : "Omni Tokens (symbol OMN) are digital tokens that are necessary for the use of some features of the Omni Protocol. The total number of OMNs in existence is 619,478.6 and no more OMN will ever be created. Additionally, OMNs can not be mined into existence. The 619,478.6 OMN were generated as a result of a public fundraiser in the style of Kickstarter.com."
+				"FIRST" : "Omni Tokens (symbol OMNI) are digital tokens that are necessary for the use of some features of the Omni Protocol. The total number of OMNIs in existence is 619,478.6 and no more OMNI will ever be created. Additionally, OMNIs can not be mined into existence. The 619,478.6 OMNI were generated as a result of a public fundraiser in the style of Kickstarter.com."
 			},
 			"INFO":"Information from the ",
 			"EDUCATION":"Omni Protocol Education"
@@ -195,7 +197,7 @@
 		"OFFERS":"Offers",
 		"SETTINGS":"Account Settings",
 		"TRADE":"Trade",
-		"DEX1":"BTC/OMN",
+		"DEX1":"BTC Market",
 		"TRANSACTIONS":"Transactions",
 		"WALLET":"My Wallet",
 		"OMNIDEX":"OmniDex"
@@ -643,7 +645,7 @@
 	"EXCHANGE":{
 		"TRADE":{
 			"TITLE":"Trade",
-			"SELL":"Sell",
+			"SELL":"New Sell Offer",
 			"NOCOINS":{
 				"LEAD":"Sorry, you don't have any",
 				"TRAIL": "available to sell"
@@ -652,11 +654,12 @@
 			"ACTIVE": "Active Offers",
 			"TIMEFRAME" :"Time frame",
 			"TOTAL": "Total Transactions",
-			"TXHASH":"Transaction hash",
-			"PRICE":"Price",
-			"AMOUNT":"Amount Remaining",
-			"COST":"Cost",
-			"FEE":"Fee",
+			"PRICE":"BTC Per Token",
+			"AMOUNT":"Available",
+			"COST":"Buy All Cost (BTC)",
+			"FEE":"Minimum Miner Fee to Accept",
+			"FEESHORT":"Fee",
+			"FEEDESC":"The 'Minimum Miners Fee' required for an accept transaction to be valid",
 			"PAYMENT":"Payment Window (Blocks)",
 			"ENDED":"User Ended",
 			"SOLD":"Sold out!",
@@ -667,7 +670,7 @@
 		"SALE":{
 			"TITLE":"Sell Offer",
 			"CHOOSECOIN":"Selected coin",
-			"FROM":"From address",
+			"FROM":"From Address",
 			"QUANTITY":"Sell Quantity",
 			"TOTAL":"Total Bitcoin desired ( # BTC for",
 			"TOTALTOOLTIP":"Enter the total # of bitcoins you would want to receive if you sold all",
@@ -682,7 +685,8 @@
 			"MODAL_AMOUNT": "Amount",
 			"BLOCKS":"Payment Timeframe",
 			"BUYERSFEE":"Buyer's Fee",
-			"CONFIRM":"Confirm Sale"
+			"CONFIRM":"Confirm Sale",
+			"REMAININGDESC":"The Amount remaining for sale that is available to be accepted by new offers."
 		},
 		"BUY":{
 			"TITLE":"Accept Offer",
@@ -692,7 +696,7 @@
 			"ADDRESS":"Buying Address",
 			"OFFERTOOLTIP":"Opens in new Window/Tab",
 			"OFFER":"Sale Offer (ID / hash)",
-			"SELLER":"Seller's address",
+			"SELLER":"Seller's Address",
 			"FEE":"Sale fee",
 			"TIMEFRAME":"Payment Timeframe",
 			"TIMEFRAMETOOLTIP":"If your reservation offer is accepted and validated you will have to complete the payment within this time frame.",
@@ -719,6 +723,8 @@
 			"PAYMENT":"Send payment",
 			"COINTYPE":"Send type of coin",
 			"COINMESSAGE":"To complete a pending offer, you must make purchases in Bitcoin.",
+			"SELLER":"Seller's",
+			"SELLING":"Selling",
 			"FROM":"Send from address",
 			"TO":"Send funds to",
 			"AMOUNT":"Amount to send (in",

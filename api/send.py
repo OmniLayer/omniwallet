@@ -156,7 +156,7 @@ def prepare_send_tx_for_signing(from_address, to_address, marker_address, curren
         raise Exception({ "status": "NOT OK", "error": "Could not get list of unspent txs. Response Code: " + str(dirty_txes['code']) })
 
     if (dirty_txes['error'][:3]=='Low'):
-        raise Exception({ "status": "NOT OK", "error": "Not enough funds, for " + str(from_address) + ". Needed: " + str(fee_total_satoshi) + " but Have: " + str(dirty_txes['avail'])  })
+        raise Exception({ "status": "NOT OK", "error": "Not enough funds, for " + str(from_address) + ". Needed: " + str(fee_total_satoshi/Decimal(1e8)) + " but Have: " + str(dirty_txes['avail']/Decimal(1e8))  })
 
     inputs_total_value = dirty_txes['avail']
     inputs = dirty_txes['utxos']

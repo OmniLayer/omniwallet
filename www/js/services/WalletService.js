@@ -12,6 +12,7 @@ angular.module("omniServices")
                 self.settings = wallet.settings;
                 self.addresses = [];
                 self.assets = [];
+                self.assetIDs = [];
                 self.loader = {
                     totalAddresses: wallet.addresses.length || 1,
                     totalAssets:1,
@@ -100,7 +101,9 @@ angular.module("omniServices")
                 });
 
                 BalanceSocket.on("address:"+address.hash, function(data){
-                    processBalanceSocket(data.balance);
+                    if (data != null) {
+                      processBalanceSocket(data.balance);
+                    }
                 });
 
                 var processBalanceSocket = function(serverBalance) {
@@ -109,7 +112,14 @@ angular.module("omniServices")
                         var asset = null;
 			var pkey = address.keyCheck;
                         var tradable = pkey && (balanceItem.value > 0 || balanceItem.id == 0);
-                        for (var j = 0; j < self.assets.length; j++) {
+
+                        if (typeof self.assets === "undefined") {
+                          assetLength=0;
+                        } else {
+                          assetLength = self.assets.length;
+                        }
+
+                        for (var j = 0; j < assetLength; j++) {
                             var currencyItem = self.assets[j];
                             if (currencyItem.symbol == balanceItem.symbol) {
                                 asset = currencyItem;
@@ -124,8 +134,7 @@ angular.module("omniServices")
                             if(balanceItem.symbol!="BTC"){
                                 self.loader.totalAssets += 1;
                             }
-                            asset = new Asset(balanceItem.symbol,balanceItem.value, tradable, address)
-                            self.assets.push(asset);
+                            asset = self.addAsset(balanceItem.symbol,balanceItem.value, tradable, address, balanceItem.propertyid);
                             update=true;
                         }
                         if(address.assets.indexOf(asset) == -1){
@@ -176,10 +185,23 @@ angular.module("omniServices")
                 return value;
             }
 
-            self.getAsset = function(assetId){
-                return self.assets.filter(function(asset){
+            self.addAsset = function(symbol, balance, tradable, address, propertyid) {
+              asset = new Asset(symbol, balance, tradable, address)
+              self.assets.push(asset);
+              self.assetIDs.push(propertyid);
+              return asset
+            }
+
+            self.getAsset = function(assetId,filter=false){
+                if (filter){
+                  return self.assets.filter(function(asset){
+                    return asset.id != assetId;
+                  })[0];
+                } else {
+                  return self.assets.filter(function(asset){
                     return asset.id == assetId;
-                })[0];
+                  })[0];
+                }
             }
 
             self.getAddress = function(addressHash){

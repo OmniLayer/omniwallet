@@ -42,7 +42,7 @@
       <div class="col-xs-7 col-sm-1" class="number" ng-show="offer.side == 'bid'" title="{{ 'OMNIDEX.ORDERBOOK.BUY' | translate}}">{{ 'OMNIDEX.ORDERBOOK.BUY' | translate}}</div>
       <div class="col-xs-7 col-sm-1" class="number" ng-hide="offer.side == 'bid'" title="{{ 'OMNIDEX.ORDERBOOK.SELL' | translate}}">{{ 'OMNIDEX.ORDERBOOK.SELL' | translate}}</div>
 
-      <div class="visible-xs col-xs-5">{{ 'TABLES.OFFERS.AMOUNT' | translate }}</div>
+      <div class="visible-xs col-xs-5">{{ 'OMNIDEX.ORDERBOOK.AMOUNT' | translate }}</div>
       <div class="col-xs-7 col-sm-3" ng-show="offer.side == 'bid'" title="{{offer.desired_amount}} {{orderbook.tradingPair.selling.name}}"><span class="number" ng-bind-html="offer.desired_amount | bigjs: '0,0.00000000'"></span> {{orderbook.tradingPair.selling.name | truncate:12}}</div>
       <div class="col-xs-7 col-sm-3" ng-hide="offer.side == 'bid'" title="{{offer.available_amount}} {{orderbook.tradingPair.selling.name}}"><span class="number" ng-bind-html="offer.available_amount | bigjs: '0,0.00000000'"></span> {{orderbook.tradingPair.selling.name | truncate:12}}</div>
 

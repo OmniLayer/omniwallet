@@ -86,23 +86,23 @@ def create():
   uuid = str(validate_uuid)
   session = ws.hashlib.sha256(config.SESSION_SECRET + uuid).hexdigest()
 
-  recaptcha_configured=False
+  captcha_configured=False
   try:
-    recaptcha_configured = config.RECAPTCHA_PRIVATE is not None
-    recaptcha_response=request.form['recaptcha_response_field']
+    captcha_configured = config.CAPTCHA_PRIVATE is not None
+    captcha_response = request.form['captcha_response_field']
   except:
     pass
 
   ## validate reCaptcha
-  if recaptcha_configured: 
-    body={"secret":config.RECAPTCHA_PRIVATE, "response":recaptcha_response, "remoteip":request.remote_addr}
+  if captcha_configured:
+    body={"secret":config.CAPTCHA_PRIVATE, "response":captcha_response}
     try:
-      r = requests.post('https://www.google.com/recaptcha/api/siteverify',body)
+      r = requests.post('https://hcaptcha.com/siteverify',body)
       if r.status_code == 200:
          resp=r.json()
          #resp['challenge_ts'] timestamp check?
          if not (resp['success'] and ('omniwallet' in resp['hostname'] or config.LOCALDEVBYPASSDB)):
-           print 'reCaptcha not valid'
+           print 'Captcha not valid'
            return jsonify({"status": "ERROR", "error":"InvalidCaptcha"})
       else:
         raise "response error "+str(r.content)

@@ -30,9 +30,27 @@ angular.module("omniServices")
               
               self.modalInstance = $modal.open({
                 templateUrl: '/views/modals/base.html',
-                controller: function CreateWalletController($scope, $location, $modalInstance, $idle, reCaptchaKey, Account, AddressManager) {
+                controller: function CreateWalletController($scope, $location, $modalInstance, $idle, CaptchaKey, Account, AddressManager) {
                   $scope.dismiss = $modalInstance.dismiss;
-                  $scope.sitekey = reCaptchaKey;
+                  $scope.sitekey = CaptchaKey;
+                  $scope.captchaComplete = false;
+
+                  $scope.showCaptcha = function(){
+                    var widgetID = hcaptcha.render('captcha-1', {
+                        'sitekey': CaptchaKey,
+                        'callback': "captchaCompleted",
+                        'expired-callback': "captchaExpired"
+                    });
+                  }
+
+                  window.captchaCompleted = function(){
+                    $scope.captchaComplete = true;
+                    $scope.serverError = $scope.invalidCaptcha =false;
+                  };
+
+                  window.captchaExpired = function(){
+                    $scope.captchaComplete = false;
+                  };
 
                   $scope.createWallet = function(create) {
                     $scope.validating=true;
@@ -51,6 +69,7 @@ angular.module("omniServices")
 
                   $scope.setFormScope = function(form){
                     $scope.createForm = form;
+                    $scope.showCaptcha();
                   }
 
                   $scope.close = function() {

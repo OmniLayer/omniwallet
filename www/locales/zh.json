@@ -42,7 +42,9 @@
 		"GRANT":"格兰特",
 		"REVOKE":"撤消",
 		"SPENDABLE":"可支配",
-		"WATCHONLY":"手表只有"
+		"WATCHONLY":"手表只有",
+		"RESERVED":"已预留",
+		"REMAINING":"剩余的"
 	},
 	"SETTINGS":{
 		"TITLE":"Account Settings",
@@ -118,7 +120,7 @@
 			"FOUNDATION":{
 				"TITLE":"Omni Foundation",
 				"FIRST":"In September 2013, the Mastercoin Foundation was formed to temporarily manage the funds in the Exodus Address and the distribution of the development MSC. The board of the Mastercoin Foundation has declared its intention to minimize its temporary central role by transitioning the decision making to Mastercoin owners through proof of stake voting.",
-				"SECOND": "In January 2016 the Mastercoin Foundation was rebranded to the Omni Foundation and the primary tokens of the project, MSC, where renamed to Omni Token (OMN). The Foundation advocates for the use of the Omni Protocol and tries to build a community of people who develop it. All budget items, board minutes, Dev OMN vesting schedule, and bounties are public record and available to anyone on the ",
+				"SECOND": "In January 2016 the Mastercoin Foundation was rebranded to the Omni Foundation and the primary tokens of the project, MSC, where renamed to Omni Token (OMNI). The Foundation advocates for the use of the Omni Protocol and tries to build a community of people who develop it. All budget items, board minutes, Dev OMNI vesting schedule, and bounties are public record and available to anyone on the ",
 				"LINK": "Foundation's Website"
 			},
 			"PROTOCOL":{
@@ -130,7 +132,7 @@
 			},
 			"TOKEN":{
 				"TITLE":"Omnis",
-				"FIRST" : "Omni Tokens (symbol OMN) are digital tokens that are necessary for the use of some features of the Omni Protocol. The total number of OMNs in existence is 619,478.6 and no more OMNs will ever be created. Additionally, OMNs can not be mined into existence. The 619,478.6 OMN were generated as a result of a public fundraiser in the style of Kickstarter.com."
+				"FIRST" : "Omni Tokens (symbol OMNI) are digital tokens that are necessary for the use of some features of the Omni Protocol. The total number of OMNIs in existence is 619,478.6 and no more OMNIs will ever be created. Additionally, OMNIs can not be mined into existence. The 619,478.6 OMNI were generated as a result of a public fundraiser in the style of Kickstarter.com."
 			},
 			"INFO":"Information from the ",
 			"EDUCATION":"Master Protocol Education"
@@ -195,7 +197,7 @@
 		"OFFERS":"我的报价",
 		"SETTINGS":"账户设置",
 		"TRADE":"交易",
-		"DEX1":"BTC/OMN",
+		"DEX1":"BTC Market",
 		"TRANSACTIONS":"交易",
 		"WALLET":"我的钱包",
 		"OMNIDEX":"OmniDex"
@@ -630,44 +632,45 @@
 			"CREATED":"已被创建的令牌"
 		},
 		"OFFERS":{
-			"HASH":"Transaction hash",
-			"PRICE":"Price per Token",
-			"AMOUNT":"Amount",
-			"TOTAL":"Total",
-			"CANCEL":"Cancel",
-			"BUY":"Buy",
-			"SIDE": "Side",
-			"STATUS": "Status"
+			"HASH":"交易哈希",
+			"PRICE":"每个令牌的价格",
+			"AMOUNT":"量",
+			"TOTAL":"总",
+			"CANCEL":"取消",
+			"BUY":"购买",
+			"SIDE": "侧",
+			"STATUS": "状态"
 		}
 	},
 	"EXCHANGE":{
 		"TRADE":{
-			"TITLE":"Trade",
-			"SELL":"Sell",
+			"TITLE":"贸易方式",
+			"SELL":"新卖出价",
 			"NOCOINS":{
-				"LEAD":"Sorry, you don't have any",
-				"TRAIL": "available to sell"
+				"LEAD":"抱歉，您没有任何",
+				"TRAIL": "可出售"
 			},
-			"NOORDERS":"No offers/bids found for this timeframe",
-			"ACTIVE": "Active Offers",
-			"TIMEFRAME" :"Time frame",
-			"TOTAL": "Total Transactions",
-			"TXHASH":"Transaction hash",
-			"PRICE":"Price",
-			"AMOUNT":"Amount Remaining",
-			"COST":"Cost",
-			"FEE":"Fee",
-			"PAYMENT":"Payment Window (Blocks)",
-			"ENDED":"User Ended",
-			"SOLD":"Sold out!",
-			"BUYERFEE":"Buyer Fee",
-			"ACCEPT": "Accept Offer",
-			"YOURS":"Your offer/purchase"
+			"NOORDERS":"在此时间范围内找不到要约/出价",
+			"ACTIVE": "主动报价",
+			"TIMEFRAME" :"大体时间",
+			"TOTAL": "总交易",
+			"PRICE":"每个令牌BTC",
+			"AMOUNT":"可用的",
+			"COST":"购买所有费用(BTC)",
+			"FEE":"接受的最低矿工费",
+			"FEESHORT":"费用",
+			"FEEDESC":"接受交易有效所需的最低矿工费",
+			"PAYMENT":"付款窗口(块)",
+			"ENDED":"用户已结束",
+			"SOLD":"卖光了!",
+			"BUYERFEE":"买家费用",
+			"ACCEPT": "接受报价",
+			"YOURS":"您的报价/购买"
 		},
 		"SALE":{
 			"TITLE":"Sell Offer",
 			"CHOOSECOIN":"Selected coin",
-			"FROM":"From address",
+			"FROM":"From Address",
 			"QUANTITY":"Sell Quantity",
 			"TOTAL":"Total Bitcoin desired ( # BTC for",
 			"TOTALTOOLTIP":"Enter the total # of bitcoins you would want to receive if you sold all",
@@ -682,7 +685,8 @@
 			"MODAL_AMOUNT": "Amount",
 			"BLOCKS":"Payment Timeframe",
 			"BUYERSFEE":"Buyer's Fee",
-			"CONFIRM":"Confirm Sale"
+			"CONFIRM":"Confirm Sale",
+			"REMAININGDESC":"新报价可以接受的剩余待售金额."
 		},
 		"BUY":{
 			"TITLE":"Accept Offer",
@@ -692,7 +696,7 @@
 			"ADDRESS":"Buying Address",
 			"OFFERTOOLTIP":"Opens in new Window/Tab",
 			"OFFER":"Sale Offer (ID / hash)",
-			"SELLER":"Seller's address",
+			"SELLER":"Seller's Address",
 			"FEE":"Sale fee",
 			"TIMEFRAME":"Payment Timeframe",
 			"TIMEFRAMETOOLTIP":"If your reservation offer is accepted and validated you will have to complete the payment within this time frame.",
@@ -719,6 +723,8 @@
 			"PAYMENT":"Send payment",
 			"COINTYPE":"Send type of coin",
 			"COINMESSAGE":"To complete a pending offer, you must make purchases in Bitcoin.",
+			"SELLER":"卖方的",
+			"SELLING":"销售中",
 			"FROM":"Send from address",
 			"TO":"Send funds to",
 			"AMOUNT":"Amount to send (in",

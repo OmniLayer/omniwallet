@@ -50,7 +50,6 @@ var app = angular.module('omniwallet', [
   'omniFactories',
   'omniServices',
   'omniControllers',
-  'vcRecaptcha',
 ], function($routeProvider, $locationProvider, $httpProvider) {
 
   if (!$httpProvider.defaults.headers.get)
@@ -235,7 +234,7 @@ app.config(function($idleProvider, $keepaliveProvider, idleDuration, idleWarning
 })
 .run(function(Account, $location, TESTNET, BalanceSocket) {
   //Whitelist pages
-  whitelisted = ['login', 'about', 'status', 'explorer', 'details', 'dex'];
+  whitelisted = ['login', 'about', 'status', 'explorer', 'details', 'dex', 'exchange/trade'];
 
   if (!Account.loggedIn) {
     for (var i = 0; i < whitelisted.length; i++) {

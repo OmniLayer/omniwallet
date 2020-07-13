@@ -63,7 +63,7 @@ def getDesignatingCurrencies():
         if value not in valid_values:
             abort(make_response('Field \'ecosystem\' invalid value, request failed', 400))
         
-        ecosystem = "Production" if value == 1 else "Test" 
+        ecosystem = "Production" if value == 1 else "Test"
     except KeyError:
         abort(make_response('No field \'ecosystem\' in request, request failed', 400))
     except ValueError:
@@ -73,6 +73,44 @@ def getDesignatingCurrencies():
       filter = request.form['filter'] in ['True','true',True]
     except:
       filter = True
+
+    try:
+      if 'version' in request.form and request.form['version'] in ['1',1]:
+        ret=getDesignatingCurrenciesOmniExchange(ecosystem,filter)
+      else:
+        ret=getDesignatingCurrenciesOmniDex(ecosystem,filter)
+    except Exception as e:
+      print e
+      ret=getDesignatingCurrenciesOmniDex(ecosystem,filter)
+
+    return jsonify(ret)
+
+def getDesignatingCurrenciesOmniExchange(ecosystem,filter):
+    print "getDesignatingCurrenciesOmniExchange",ecosystem,filter
+
+    designating_currencies = dbSelect("select sp.propertyid, sp.propertyname, sp.propertytype from smartproperties sp where sp.protocol='Omni' and "
+                                      "sp.propertyid in (select distinct(propertyidselling) from activeoffers where offerstate='active' and propertyiddesired=0 and "
+                                      "CASE WHEN %s='Production' THEN "
+                                      "propertyidselling > 0 and propertyidselling < 2147483648 and propertyidselling !=2 "
+                                      "ELSE propertyidselling > 2147483650 or propertyidselling=2 END)",[ecosystem])
+
+    designating_currencies.sort(key = lambda x: x[0])
+
+    if filter:
+      listfilter=dbSelect("select propertyid from smartproperties where (flags->>'scam')::boolean or (flags->>'duplicate')::boolean order by propertyid")
+      dc=(x for x in designating_currencies if [x[0]] not in listfilter )
+    else:
+      listfilter=[]
+      dc=designating_currencies
+
+    return {"status" : 200, "currencies": [
+	{
+	 "propertyid":currency[0], "propertyname" : currency[1], "propertytype" : currency[2], "displayname" : str(currency[1])+" #"+str(currency[0])
+	} for currency in dc],
+        "filter": [id for pid in listfilter for id in pid] }
+
+def getDesignatingCurrenciesOmniDex(ecosystem,filter):
+    print "getDesignatingCurrenciesOmniDex",ecosystem,filter
 
     #designating_currencies = dbSelect("select distinct ao.propertyiddesired as propertyid, sp.propertyname from activeoffers ao "
     #                                  "inner join SmartProperties sp on ao.propertyiddesired = sp.propertyid and sp.ecosystem = %s "
@@ -98,11 +136,11 @@ def getDesignatingCurrencies():
       listfilter=[]
       dc=designating_currencies
 
-    return jsonify({"status" : 200, "currencies": [
+    return {"status" : 200, "currencies": [
 	{
 	 "propertyid":currency[0], "propertyname" : currency[1], "displayname" : str(currency[1])+" #"+str(currency[0])
 	} for currency in dc], 
-        "filter": [id for pid in listfilter for id in pid] })
+        "filter": [id for pid in listfilter for id in pid] }
 
 
 @app.route('/<int:denominator>')

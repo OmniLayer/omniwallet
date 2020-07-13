@@ -7,6 +7,9 @@ angular.module("omniControllers")
 		});
 
 		$scope.setManaged = function(asset){
+                        if (!$scope.wallet.assetIDs.includes(asset.propertyid)) {
+                          $scope.wallet.addAsset("SP"+asset.propertyid, 0, false, asset.issuer, asset.propertyid)
+                        }
 			$scope.wallet.setManagedAsset(asset.propertyid);
 			$scope.wallet.setManagedType(asset.type_int);
 			$scope.wallet.setManagedAddress(asset.issuer);

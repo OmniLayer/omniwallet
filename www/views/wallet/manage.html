@@ -22,6 +22,9 @@
                   <li role="presentation">
                     <a role="menuitem" tabindex="-1" href="#" ng-click="setType('ChangeIssuer')">Change Issuer</a>
                   </li>
+                  <li role="presentation" ng-show="managedtype === 51">
+                    <a role="menuitem" tabindex="-1" href="#" ng-click="setType('CloseCrowdsale')">Close Crowdsale</a>
+                  </li>
                   <li role="presentation" ng-show="managedtype === 54">
                     <a role="menuitem" tabindex="-1" href="#" ng-click="setType('Grant')">Grant</a>
                   </li>
@@ -43,7 +46,7 @@
         </div>  
         <div class="panel panel-form">
           <div class="panel-body">
-            <div class="col-sm-6" ng-hide="type_int === 70">
+            <div class="col-sm-6" ng-hide="type_int === 53 || type_int === 70">
               <label for="amount" >
                 <span ng-show="type_int === 55">{{ 'COMMON.GRANT' | translate}} </span>
                 <span ng-show="type_int === 56">{{ 'COMMON.REVOKE' | translate}} </span>
@@ -60,7 +63,7 @@
                 <div class="hint">({{((sendAmount || 0) * selectedAsset.price).toFixed(2)}} {{userCurrency}})</div>
               </div>
             </div> 
-            <div class="col-sm-6" ng-hide="type_int === 56">
+            <div class="col-sm-6" ng-hide="type_int === 53 || type_int === 56">
               <label class="text-justify" >{{ 'WALLET.SEND.TO' | translate}}</label>
               <input name="reciever" type="text" ng-model="sendTo" class="form-control" ng-change="checkDestAddr()" placeholder="{{ type_int === 55 ? '(Optional) Leave blank to Grant to self/sending address' : 'Address to transfer Control and Ownership of Property to.'}}">
             </div>

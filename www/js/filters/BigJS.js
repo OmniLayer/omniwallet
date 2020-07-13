@@ -4,7 +4,7 @@ angular.module('omniFilters')
         return function (input, format, noZerosTrimming) {
             var dropFraction = false;
 
-            if (input == null || format == null) 
+            if (input == null || format == null || typeof input === "undefined" || typeof format === "undefined")
                 return input;
             if (format === '') 
                 return '';
