@@ -101,7 +101,9 @@ angular.module("omniServices")
                 });
 
                 BalanceSocket.on("address:"+address.hash, function(data){
-                    processBalanceSocket(data.balance);
+                    if (data != null) {
+                      processBalanceSocket(data.balance);
+                    }
                 });
 
                 var processBalanceSocket = function(serverBalance) {
@@ -110,7 +112,14 @@ angular.module("omniServices")
                         var asset = null;
 			var pkey = address.keyCheck;
                         var tradable = pkey && (balanceItem.value > 0 || balanceItem.id == 0);
-                        for (var j = 0; j < self.assets.length; j++) {
+
+                        if (typeof self.assets === "undefined") {
+                          assetLength=0;
+                        } else {
+                          assetLength = self.assets.length;
+                        }
+
+                        for (var j = 0; j < assetLength; j++) {
                             var currencyItem = self.assets[j];
                             if (currencyItem.symbol == balanceItem.symbol) {
                                 asset = currencyItem;
@@ -183,10 +192,16 @@ angular.module("omniServices")
               return asset
             }
 
-            self.getAsset = function(assetId){
-                return self.assets.filter(function(asset){
+            self.getAsset = function(assetId,filter=false){
+                if (filter){
+                  return self.assets.filter(function(asset){
+                    return asset.id != assetId;
+                  })[0];
+                } else {
+                  return self.assets.filter(function(asset){
                     return asset.id == assetId;
-                })[0];
+                  })[0];
+                }
             }
 
             self.getAddress = function(addressHash){

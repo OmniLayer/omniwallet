@@ -42,7 +42,8 @@ angular.module("omniControllers")
       };
 
       $scope.$on("address:loaded",function(evt,args){
-        var requests = [];
+       var requests = [];
+       if ($scope.checkAddress != null) {
         var coins = $scope.checkAddress.balance;
         cursym = "USD";
         coins.forEach(function(coin) {
@@ -77,6 +78,7 @@ angular.module("omniControllers")
           });
           $scope.pricesLoaded = true;
         });
+       }
       })
      };
     }])

@@ -42,7 +42,9 @@
     "GRANT":"Subvention",
     "REVOKE":"Révoquer",
     "SPENDABLE":"Dépensable",
-    "WATCHONLY":"Montre seulement"
+    "WATCHONLY":"Montre seulement",
+    "RESERVED":"Réservé",
+    "REMAINING":"Restant"
   },
   "SETTINGS": {
     "TITLE": "Paramètres du compte",
@@ -118,7 +120,7 @@
       "FOUNDATION": {
         "TITLE": "Fondation Omni",
         "FIRST": "En septembre 2013, la Fondation Mastercoin a été formée pour gérer temporairement les fonds de l'adresse Exodus et la distribution du développement MSC. Le conseil d'administration de la Fondation Mastercoin a déclaré son intention de minimiser temporairement son rôle central en faisant passer les décisions aux propriétaires de Mastercoin par preuve de participation (PoS).",
-        "SECOND": "En janvier 2016, la Fondation Mastercoin a été renommée en Omni Foundation et les tokens principaux du projet, MSC, renommés en Omni Token (OMN). La Fondation préconise l'utilisation du Protocole Omni et tente de construire une communauté de personnes qui la développent. Tous les éléments budgétaires, les procès-verbaux du conseil d'administration, le calendrier des acquisitions des Dev OMN et les primes sont des documents publics et sont disponibles pour tous sur le ",
+        "SECOND": "En janvier 2016, la Fondation Mastercoin a été renommée en Omni Foundation et les tokens principaux du projet, MSC, renommés en Omni Token (OMNI). La Fondation préconise l'utilisation du Protocole Omni et tente de construire une communauté de personnes qui la développent. Tous les éléments budgétaires, les procès-verbaux du conseil d'administration, le calendrier des acquisitions des Dev OMNI et les primes sont des documents publics et sont disponibles pour tous sur le ",
         "LINK": "Site Web de la Fondation"
       },
       "PROTOCOL": {
@@ -129,7 +131,7 @@
       },
       "TOKEN": {
         "TITLE": "Omnis",
-        "FIRST": "Omni Tokens (symbole OMN) sont des jetons numériques (Tokens) nécessaires à l'utilisation de certaines fonctionnalités du protocole Omni. Le nombre total OMNs en circulation est 619 478,6 et aucun OMN ne sera jamais créé. De plus, OMNs ne peut pas être miné. Les 619 478,6 OMN ont été générés à la suite d'une collecte de fonds publique dans le style de Kickstarter.com."
+        "FIRST": "Omni Tokens (symbole OMNI) sont des jetons numériques (Tokens) nécessaires à l'utilisation de certaines fonctionnalités du protocole Omni. Le nombre total OMNIs en circulation est 619 478,6 et aucun OMNI ne sera jamais créé. De plus, OMNIs ne peut pas être miné. Les 619 478,6 OMNI ont été générés à la suite d'une collecte de fonds publique dans le style de Kickstarter.com."
       },
       "INFO": "Informations provenant de ",
       "EDUCATION": "Omni Protocol Education"
@@ -194,7 +196,7 @@
     "OFFERS": "Offres",
     "SETTINGS": "Paramètres du compte",
     "TRADE": "Échanger",
-    "DEX1": "BTC/OMN",
+    "DEX1": "BTC Marché",
     "TRANSACTIONS": "Transactions",
     "WALLET": "Mon portefeuille",
     "OMNIDEX": "OmniDex"
@@ -641,7 +643,7 @@
   "EXCHANGE": {
     "TRADE": {
       "TITLE": "Trader",
-      "SELL": "Vendre",
+      "SELL": "Nouvelle offre de vente",
       "NOCOINS": {
         "LEAD": "Désolé, vous n'avez aucun",
         "TRAIL": "disponible à vendre"
@@ -650,11 +652,12 @@
       "ACTIVE": "Offres actives",
       "TIMEFRAME": "Plage de temps",
       "TOTAL": "Transactions Totales",
-      "TXHASH": "Hash de transaction",
-      "PRICE": "Prix",
-      "AMOUNT": "Montant restant",
-      "COST": "Coût",
-      "FEE": "Frais",
+      "PRICE": "BTC par jeton",
+      "AMOUNT": "Disponible",
+      "COST": "Acheter tous les coûts (BTC)",
+      "FEE": "Frais de mineur minimum à accepter",
+      "FEESHORT":"Frais",
+      "FEEDESC":"Le 'Frais minimum pour les mineurs' requis pour qu'une transaction d'acceptation soit valide"
       "PAYMENT": "Fenêtre de paiement (blocs)",
       "ENDED": "L'utilisateur final",
       "SOLD": "Rupture de stock  !",
@@ -680,7 +683,8 @@
       "MODAL_AMOUNT": "Montant",
       "BLOCKS": "Plage de temps de paiement",
       "BUYERSFEE": "Frais de l'acheteur",
-      "CONFIRM": "Confirmer la vente"
+      "CONFIRM": "Confirmer la vente",
+      "REMAININGDESC":"Le montant restant à vendre qui peut être accepté par de nouvelles offres."
     },
     "BUY": {
       "TITLE": "Accepter l'offre",
@@ -717,6 +721,8 @@
       "PAYMENT": "Envoyer le paiement",
       "COINTYPE": "Envoyer type de monnaie",
       "COINMESSAGE": "Pour compléter une offre en cours, vous devez effectuer des achats en Bitcoin.",
+      "SELLER":"Les vendeurs",
+      "SELLING":"Vente",
       "FROM": "Envoyer de l'adresse",
       "TO": "Envoyer des fonds à",
       "AMOUNT": "Montant à envoyer (en",

@@ -27,7 +27,7 @@
                   <span class="caret pull-right"></span>
                 </button>
                 <ul class="dropdown-menu" role="menu" aria-labelledby="chooseAddress">
-                  <li role="presentation" ng-repeat="address in wallet.getAsset(0).tradableAddresses">
+                  <li role="presentation" ng-repeat="address in buying_addresses">
                     <a role="menuitem" tabindex="-1" href="#" ng-click="setAddress(address)">{{address.hash}} </a>
                   </li>
                 </ul>
@@ -62,7 +62,10 @@
         <div class="row">
           <div class="col-sm-6">
             <div class="form-group">
-              <label> {{ 'EXCHANGE.BUY.FEE' | translate }}: </label>
+              <label> {{ 'EXCHANGE.TRADE.FEE' | translate }}: <a href=""
+                tooltip="{{ 'EXCHANGE.TRADE.FEEDESC' | translate }}"
+                tooltip-append-to-body="true"
+                tooltip-placement="top"> <strong>(?)</strong> </a> </label>
               <span class="form-control">
                 {{ global['buyOffer'].formatted_fee_required }} BTC
               </span>
@@ -110,7 +113,10 @@
         <p>
           {{ 'WALLET.SEND.COST' | translate}}: {{ minersFee.plus(protocolFee).valueOf()}} BTC <button type="button" class="btn btn-xs" ng-click="editTransactionCost()"><span class="glyphicon glyphicon-pencil small"></span></button>
         </p>
-        <button type="submit" class="btn btn-main pull-right">{{ 'COMMON.NEXT' | translate}}</button>
+        <button type="submit" ng-disabled="!cansend || !buyForm.$valid" class="btn btn-main pull-right">{{ 'COMMON.NEXT' | translate}}</button>
+        <div ng-hide="cansend">
+          <span style="color:red"> {{ 'WALLET.SEND.LOWFEE' | translate:'{topupAmount:topupAmount}' }}</span>
+        </div>
       </form>  
     </div>
   </div>

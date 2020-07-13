@@ -57,7 +57,8 @@ angular.module('omniServices').service('appraiser', ['$rootScope', '$http', '$q'
         } else {
           symbol=coin.symbol;
         }
-        requests.push(
+        if (parseInt(coin.id) < 2147483650 && parseInt(coin.id) != 2) {
+         requests.push(
           $http.get('/v1/values/' + symbol + '.json').then(function(response) {
             var currency = response.data;
             if (currency.symbol == 'BTC') {
@@ -72,8 +73,9 @@ angular.module('omniServices').service('appraiser', ['$rootScope', '$http', '$q'
           }, function(error) {
             console.log(error);
           })
-        );
-      });
+         );
+        }
+       });
       $q.all(requests).then(function(responses) {
         if (changed.length>0)
           $rootScope.$broadcast('APPRAISER_VALUE_CHANGED',changed)
@@ -86,30 +88,34 @@ angular.module('omniServices').service('appraiser', ['$rootScope', '$http', '$q'
     self.updateValue = function(callback, symbol) {      
       if (symbol === 'BTC') {
         usercur=symbol+cursym;
+        id = 0;
       } else {
-        usercur=symbol
+        usercur=symbol;
+        id = parseInt(symbol.substring(2));
       }
-      if (symbol === 'BTC' || self.conversions.BTC) {
-        $http.get('/v1/values/' + usercur + '.json').then(function(response) {
-          var currency = response.data;
-          if (currency.symbol == 'BTC') {
-            // Store these things internally as the value of a satoshi.
-            self.conversions.BTC = currency.price / 100000000;
-          } else if (currency.symbol) {
-            self.conversions[currency.symbol] = currency.price;
-          }
-          callback();
-        }, function(error) {
-          console.log(error);
+      if (id < 2147483650 && id != 2) {
+        if (symbol === 'BTC' || self.conversions.BTC) {
+          $http.get('/v1/values/' + usercur + '.json').then(function(response) {
+            var currency = response.data;
+            if (currency.symbol == 'BTC') {
+              // Store these things internally as the value of a satoshi.
+              self.conversions.BTC = currency.price / 100000000;
+            } else if (currency.symbol) {
+              self.conversions[currency.symbol] = currency.price;
+            }
+            callback();
+          }, function(error) {
+            console.log(error);
 
-          self.conversions[symbol] = 0;
-          callback();
-        });
-      }
-      else {
-	self.updateValue(function() {
-          self.updateValue(callback, symbol);
-	}, 'BTC');
+            self.conversions[symbol] = 0;
+            callback();
+          });
+        }
+        else {
+	  self.updateValue(function() {
+            self.updateValue(callback, symbol);
+	  }, 'BTC');
+        }
       }
     };
 

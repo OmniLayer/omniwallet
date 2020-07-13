@@ -26,7 +26,7 @@ angular.module("omniControllers")
             saleAmount: $scope.saleAmount,
             buyersFee: $scope.buyersFee,
             selectedCoin: $scope.selectedAsset,
-            salePricePerCoin: $scope.salePrice / $scope.saleAmount,
+            salePricePerCoin: ($scope.salePrice / $scope.saleAmount).toFixed(8),
             saleBlocks : $scope.saleBlocks,
             fees : $scope.minersFee,
             totalCost : exchangeSale.totalCost,
@@ -38,8 +38,21 @@ angular.module("omniControllers")
         })
       }
 
-      $scope.selectedAddress= $scope.hasCoins ? $scope.selectedAsset.tradableAddresses[0] : undefined;
+      $scope.selectedAsset = $scope.wallet.getAsset(0,true);
+      $scope.selectedAddress = $scope.selectedAsset.tradableAddresses[0];
       $scope.feeType = MINER_SPEED;
+
+      $scope.setAsset = function(asset){
+                $scope.selectedAsset = asset;
+                $scope.selectedAddress = $scope.selectedAsset.tradableAddresses[0];
+                $scope.updatingFee = false;
+                $scope.amountModified=false;
+                $scope.saleAmount=null;
+                $scope.salePrice=null;
+      }
+
+
+      $scope.showtesteco = $scope.account.getSetting('showtesteco');
       $scope.setAddress = function(address){
             $scope.selectedAddress = address;
             $scope.selectedAddress.estimateFee().then(function(result){
@@ -50,6 +63,7 @@ angular.module("omniControllers")
                 }
             });
       }
+
       $scope.setAddress($scope.selectedAddress);
 
     }])

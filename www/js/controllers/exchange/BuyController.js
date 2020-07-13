@@ -1,49 +1,71 @@
 angular.module("omniControllers")
   .controller("ExchangeBuyController",["$scope", "$http", "Transaction", "ADDRESS_EXPLORER_URL", "SATOSHI_UNIT","MINER_SPEED",
     function ExchangeBuyController($scope, $http, Transaction, ADDRESS_EXPLORER_URL, SATOSHI_UNIT,MINER_SPEED) {
+
       $scope.editTransactionCost = function(){
-        $scope.modalManager.openTransactionCostModal($scope, function(){return;});
+        $scope.modalManager.openTransactionCostModal($scope, function(){ checkSend();});
       }
-      $scope.selectedAddress= $scope.hasBitcoins ? $scope.wallet.getAsset(0).tradableAddresses[0] : undefined;
+
+      if ($scope.account.loggedIn) {
+        $scope.hasBitcoins = $scope.wallet.getAsset(0).tradable;
+      } else {
+        $scope.hasBitcoins = false;
+      }
+
+      selling_address = $scope.global['buyOffer'].from_address;
+      $scope.buying_addresses = $scope.wallet.getAsset(0).tradableAddresses.filter(function(item) {
+        var address = item.hash
+        return (address != selling_address);
+      });
+
+
+      $scope.selectedAddress= $scope.hasBitcoins ? $scope.buying_addresses[0] : undefined;
       $scope.feeType = MINER_SPEED;
+
       $scope.setAddress = function(address){
-            $scope.selectedAddress = address;
-            if (address!=undefined) {
-              $scope.selectedAddress.estimateFee().then(function(result){
-                $scope.feeData=result;
-                if($scope.feeType != 'custom'){
-                    $scope.minersFee = new Big(result.class_c[$scope.feeType]);
-                    $scope.topupAmount = new Big(result.topup_c[$scope.feeType]);
-                }
-              });
-            }
+        $scope.selectedAddress = address;
+        checkSend();
       }
+
       $scope.setAddress($scope.selectedAddress);
+
+      function checkSend() {
+                if($scope.selectedAddress != undefined){
+                  avail = parseFloat($scope.selectedAddress.getDisplayBalance(0));
+                  //console.log(avail);
+
+                  $scope.selectedAddress.estimateFee().then(function(result){
+                    $scope.feeData=result;
+                    if($scope.feeType != 'custom'){
+                      $scope.minersFee = new Big(result.class_c[$scope.feeType]);
+                      $scope.topupAmount = new Big(result.topup_c[$scope.feeType]);
+                    }
+                  });
+
+                  if ( avail >= parseFloat($scope.minersFee) + parseFloat($scope.protocolFee) ) {
+                    $scope.cansend = true;
+                  } else {
+                    $scope.cansend = false;
+                  }
+                  //console.log($scope.cansend);
+                } else {
+                    $scope.cansend = false;
+                }
+      }
+
+
       var transaction = $scope.global['buyOffer'];
       $scope.buySaleID = transaction.tx_hash;
       $http.get('/v1/transaction/tx/' + transaction.tx_hash + '.json').success(function(data) {
         var tx = data[0];
         $scope.selectedCoin=tx.currency_str;
-        $scope.bitcoinAddresses = $scope.hasBitcoins ? $scope.wallet.getAsset(0).tradableAddresses : [];
-        if(parseInt(tx.currencyId) <3) {
-          $scope.divisible = true;
+        $scope.displayedAbbreviation = tx.currency_str;
+        $scope.divisible = tx.divisible;
+        if($scope.divisible){
           $scope.sendPlaceholderValue = '1.00000000';
           $scope.sendPlaceholderStep = $scope.sendPlaceholderMin = '0.00000001';
-          $scope.displayedAbbreviation = tx.currency_str;
-        } else {
-          $http.get("/v1/property/"+tx.currencyId.replace(new RegExp("^0+"), "") +".json", function(data) {
-            var property = data[0];
-            if(property.propertyType == "0001"){
-              $scope.divisible =false;
-              $scope.sendPlaceholderValue = $scope.sendPlaceholderStep = $scope.sendPlaceholderMin = '1';
-            } else  {
-              $scope.divisible = true;
-              $scope.sendPlaceholderValue = '1.00000000';
-              $scope.sendPlaceholderStep = $scope.sendPlaceholderMin = '0.00000001';
-            }
-              
-            $scope.displayedAbbreviation = property.propertyName + " #" + property.currencyId;
-          });
+        } else  {
+          $scope.sendPlaceholderValue = $scope.sendPlaceholderStep = $scope.sendPlaceholderMin = '1';
         }
       });
       // [ Buy Form Helpers ]
