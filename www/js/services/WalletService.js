@@ -195,7 +195,7 @@ angular.module("omniServices")
             self.getAsset = function(assetId,filter=false){
                 if (filter){
                   return self.assets.filter(function(asset){
-                    return asset.id != assetId;
+                    return (asset.id != assetId && asset.tradableAddresses.length>0);
                   })[0];
                 } else {
                   return self.assets.filter(function(asset){
