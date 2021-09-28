@@ -11,30 +11,7 @@
         <span id="helpBlock" class="help-block help-text">{{ 'HOMEPAGE.ENTERVALIDADDRESS' | translate }}<small class="sm-help-text">{{ 'HOMEPAGE.ADDRESSEXAMPLE' | translate }}</small></span>
         <input type="text" class="form-control input-lg input-group input-white" name="AddressInput" id="AddressInput" ng-model="balanceAddress" ng-change="checkAddress=false">
       </div>
-      <button type="submit" ng-click="checkBalance();" ng-disabled="validate(balanceAddress) == false" class="btn btn-main pull-right">{{ 'HOMEPAGE.CHECKBALANCE' | translate }}</button>
+      <a ng-href="{{balanceURL}}" target="_blank" ng-click="checkBalance();" class="btn btn-main pull-right">{{ 'HOMEPAGE.CHECKBALANCE' | translate }}</a>
     </form>
-  </div>
-  <div class="om-title text-center" ng-show="checkAddress && !pricesLoaded">
-    {{ 'COMMON.LOADING' | translate}}...
-  </div>
-  <div ng-show="checkAddress && checkAddress.loaded && pricesLoaded">
-    <div class="asset-table">
-      <div ng-repeat="currency in checkAddress.balance">
-        <div class="row">
-          <div class="container-fluid input-dark">
-            <div class="asset-item col-xs-6 text-left">
-              <span>{{(currency.name ? currency.name : currency.symbol | truncate:15) + " ("+currency.id+")"}}</span>
-            </div>
-            <div class="asset-item col-xs-4 text-right number">
-              <span ng-if="!currency.divisible" class="currency" class="number" title="{{checkAddress.getDisplayBalance(currency.id)}}" ng-bind-html="checkAddress.getDisplayBalance(currency.id) | bigjs: '0,0'"></span>
-              <span ng-if="currency.divisible && currency.symbol != 'BTC'" class="currency" class="number" title="{{checkAddress.getDisplayBalance(currency.id)}}" ng-bind-html="checkAddress.getDisplayBalance(currency.id) | bigjs: '0,0.00000000'"></span>
-              <span ng-if="currency.symbol == 'BTC'" class="currency" title="{{checkAddress.getDisplayBalance(currency.id)}}"><span ng-bind-html="checkAddress.getDisplayBalance(currency.id) | bigjs: '0,0.00000000'"></span> {{currency.symbol}}</span>
-            </div>
-            <div class="asset-item col-xs-2 text-right number" title="{{currency.balance | currency}}" ng-bind-html="currency.balance | numeraljs: '$0,0.00':true">
-            </div>
-          </div>
-        </div> 
-      </div>
-    </div> 
   </div>
 </div>
