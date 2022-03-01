@@ -1,6 +1,18 @@
 <div class="row">
+  <div class="col-xs-11 alert alert-warning" style="margin-left: 25px">
+    <strong><center>Reminder</center><br />
+    If you did not create the wallet you are logging into, you do not own it or any funds within.</strong>
+    Do not accept a Wallet/Wallet ID from anyone else as <strong>payment</strong> for anything.
+    Always create your own wallet and have funds sent to an address you created and control. <br><br>
+    <strong>Never Share Your Password with anyone.</strong> Once someone has access to your wallet they can
+    download a backup/export of any private keys associated with your wallet addresses. Once a private key is compromised
+    any funds on those addresses can never be secured again regardless of password changes or 2fa setup.
+  </div>
+</div>
+
+<div class="row">
   <div class="form-group col-xs-12">
-    <label for="inputUUID">{{ 'MODALS.LOGIN.ID' | translate}}</label>
+    <label for="inputUUID"><a href="https://github.com/OmniLayer/omniwallet/wiki/Wallet-ID" target="_new">{{ 'MODALS.LOGIN.ID' | translate}}</a></label>
     <input type="text" class="form-control" ng-change="checkLogin()" ng-disabled="loginInProgress || login.disable" ng-model="login.uuid" id="inputUUID" value="{{ uuid }}">
   </div>
 </div>

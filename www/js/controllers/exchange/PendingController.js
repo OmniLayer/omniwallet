@@ -1,6 +1,7 @@
 angular.module("omniControllers")
 	.controller("ExchangePendingController",["$scope", "$http", "hashExplorer", "ADDRESS_EXPLORER_URL", "Transaction", "SATOSHI_UNIT", "MIN_MINER_FEE", "OMNI_PROTOCOL_COST", "MINER_SPEED", "$filter",
 		function ExchangePendingController($scope, $http, hashExplorer, ADDRESS_EXPLORER_URL, Transaction, SATOSHI_UNIT, MIN_MINER_FEE, OMNI_PROTOCOL_COST, MINER_SPEED, $filter) {
+
 		  function checkSend(sendAmount) {
 			if($scope.selectedAddress != undefined){
 				avail = parseFloat($scope.selectedAddress.getDisplayBalance(0));
@@ -26,6 +27,8 @@ angular.module("omniControllers")
 
 		  $scope.protocolFee = new Big(OMNI_PROTOCOL_COST);
 		  $scope.feeType = MINER_SPEED;
+                  $scope.buysFiltered = true;
+                  $scope.sellsFiltered = true;
 
 		  $scope.editTransactionCost = function(){
 			$scope.omniAnnounce = false;
@@ -33,12 +36,47 @@ angular.module("omniControllers")
 			checkSend($scope.sendAmount);
 		  }
 
+                  $scope.toggleBuys = function(){
+                    $scope.buysFiltered = !$scope.buysFiltered;
+                    filterBuys();
+                  }
+
+                  $scope.toggleSells = function(){
+                    $scope.sellsFiltered = !$scope.sellsFiltered;
+                    filterSells();
+                  }
+
+                  filterBuys = function(){
+		      $scope.filtered_buys = $scope.orderbook.filter(function(item) {
+		        var orderType = item.tx_type_str.toLowerCase()
+		        var orderStatus = item.status ? item.status.toLowerCase() : undefined;
+                        var expired = item.payment_expired;
+		        //DEBUG console.log(item.tx_type_str, item.status, orderStatus)
+                        return $scope.buysFiltered ?
+		          (orderType == 'sell accept') && (orderStatus != 'expired') && (orderStatus != 'closed') && !expired:
+		          (orderType == 'sell accept')
+		      });
+                  }
+
+                  filterSells = function(){
+		      $scope.filtered_sells = $scope.orderbook.filter(function(item) {
+		        var orderType = item.tx_type_str.toLowerCase()
+		        var orderStatus = item.color.match(/(bgc-done|expired|invalid)/gi) || []
+		        //DEBUG console.log(orderStatus, item.color)
+                        return $scope.sellsFiltered ?
+		          //(orderType == 'sell offer') && (orderStatus.length == 0) :
+		          (orderType == 'sell offer') && (item.status == 'active') :
+		          orderType == 'sell offer'
+		      });
+
+                  }
+
 		  $scope.setHashExplorer = hashExplorer.setHash.bind(hashExplorer)
 		  //$scope.selectedAddress = $scope.wallet.addresses[ $scope.wallet.addresses.length-1 ].address;
 		  $scope.currencyUnit = 'stom'
 		  $scope.pendingThinking = true
 		  $scope.hasAddressesWithPrivkey = $scope.wallet.addresses.filter(function(address){
-		    return (address.privkey && address.privkey.length == 58) || (address.pubkey && address.pubkey.length > 65);
+		    return (address.keyCheck);
 		  }).map(function(e){
 		          return e.hash;
 		        });
@@ -70,12 +108,13 @@ angular.module("omniControllers")
 		    var transaction_data = []
 		    var postData = {
 		      type: 'ADDRESS',
-		      currencyType: 'BOTH',
+		      currencyType: 'ALL',
 		      address: JSON.stringify($scope.hasAddressesWithPrivkey),
-		      offerType: 'BOTH'
+		      //offerType: 'BOTH',
+                      onlyActive: false
 		    };
 		    $http.post('/v1/exchange/offers', postData).success(function(offerSuccess) {
-		      console.log(offerSuccess, ' ofsec');
+		      //console.log(offerSuccess, ' ofsec');
 
 		      //capture data
 		      var nestedData = offerSuccess.data,
@@ -131,23 +170,11 @@ angular.module("omniControllers")
 		      //DEBUG console.log(filtered_transaction_data, 'tettst')
 		      //DEBUG console.log('filtered tx data, pending offers',filtered_transaction_data)
 
-		      $scope.filtered_buys = filtered_transaction_data.filter(function(item) {
-		        var orderType = item.tx_type_str.toLowerCase()
-		        var orderStatus = item.status ? item.status.toLowerCase() : undefined;
-		        //DEBUG console.log(item.tx_type_str, item.status, orderStatus)
-		        return (orderType == 'sell accept') && (orderStatus != 'expired') && (orderStatus != 'closed')
-		      });
-
-		      $scope.filtered_sells = filtered_transaction_data.filter(function(item) {
-		        var orderType = item.tx_type_str.toLowerCase()
-		        var orderStatus = item.color.match(/(bgc-done|expired|invalid)/gi) || []
-		        //DEBUG console.log(orderStatus, item.color)
-		        return (orderType == 'sell offer') && (orderStatus.length == 0)
-		      });
-
 		      angular.forEach(filtered_transaction_data, function(transaction, index) {
 		        //DEBUG console.log(new Date(Number(transaction.tx_time)))
 		        filtered_transaction_data[index].tx_hash_concat = transaction.tx_hash.substring(0, 22) + '...';
+		        filtered_transaction_data[index].from_address_concat = transaction.from_address.substring(0, 7) + '...' + transaction.from_address.substring(transaction.from_address.length-7);
+		        filtered_transaction_data[index].to_address_concat = transaction.to_address.substring(0, 7) + '...' + transaction.to_address.substring(transaction.to_address.length-7);
 		      });
 
 		      transaction_data = filtered_transaction_data;
@@ -155,6 +182,10 @@ angular.module("omniControllers")
 		      $scope.orderbook = transaction_data.length != 0 ? transaction_data : [{
 		            tx_hash: 'No offers/bids found for this timeframe'
 		          }];
+
+                      //filter orderbook for my offers display
+                      filterBuys();
+                      filterSells();
 
 		      //store around for filtering
 		      $scope.orderBookStorage = JSON.stringify($scope.orderbook);

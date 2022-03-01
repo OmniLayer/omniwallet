@@ -11,12 +11,19 @@ def insertpending(txhex):
     return
 
   if 'BTC' in rawtx:
-    #handle btc pending amounts
-    insertbtc(rawtx)
+    try:
+      #handle btc pending amounts
+      insertbtc(rawtx)
+    except Exception,e:
+      print "error inserting btc", e, "\n Could notinsert rawtx", rawtx
 
-  if 'MP' in rawtx and 'Not a Master Protocol transaction' not in rawtx['MP']: #('amount' in rawtx['MP'] and decimal.Decimal(rawtx['MP']['amount'])>0) or 'unitprice' in rawtx['MP']:
-    #only run if we have a non zero positive amount to process, otherwise exit
-    insertomni(rawtx)
+  error_strings = ["No Omni Layer Protocol transaction","Error in omni_decodetransaction"]
+  if 'MP' in rawtx and not any(x in rawtx['MP'] for x in error_strings):
+    try:
+      insertomni(rawtx)
+    except Exception,e:
+      print "error inserting omni", e, "\n Could notinsert rawtx", rawtx
+
 
 def insertbtc(rawtx):
   try:

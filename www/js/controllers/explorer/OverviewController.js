@@ -17,31 +17,20 @@ angular.module("omniControllers")
 
       $scope.getData = function getData() {
         var currency = $scope.currency;
-
-        //$http.get('/v1/transaction/values.json', {}). success(function(data) {
-        //  for (var i = 0; i < data.length; i++) {
-        //    if (currency == data[i].currency) {
-        //      var file = '/v1/transaction/general/' + currency + '_0001.json';
-
-        //      $http.get(file, {}).success(function(data, status, headers, config) {
-              $http.get('/v1/transaction/general/', {}).success(function(data, status, headers, config) {
-
-                angular.forEach(data, function(transaction, index) {
-
-                  data[index].utc_time = new Date(+transaction.tx_time).toUTCString().replace('GMT','');
-                  //DEBUG console.log(new Date(Number(transaction.tx_time)))
-                  data[index].tx_hash_concat = transaction.tx_hash.substring(0, 22) + '...'
-                });
-
-                $scope.transactions = data;
-              });
-         //   }
-         // }
-        //});
+        $http.get('/v1/transaction/general/', {}).success(function(data, status, headers, config) {
+          angular.forEach(data, function(transaction, index) {
+            data[index].utc_time = new Date(+transaction.tx_time).toUTCString().replace('GMT','');
+            //DEBUG console.log(new Date(Number(transaction.tx_time)))
+            data[index].tx_hash_concat = transaction.tx_hash.substring(0, 22) + '...';
+            data[index].from_address_concat = transaction.from_address.substring(0, 7) + '...' + transaction.from_address.substring(transaction.from_address.length-7);
+            data[index].to_address_concat = transaction.to_address.substring(0, 7) + '...' + transaction.to_address.substring(transaction.to_address.length-7);
+          });
+          $scope.transactions = data;
+        });
       }
 
       $scope.doSearch = function() {
-        if( $scope.searchQueryText == undefined || $scope.searchQueryText == '' || $scope.searchQueryText.length < 4 )
+        if( $scope.searchQueryText == undefined || $scope.searchQueryText == '' || $scope.searchQueryText.length < 64 )
           return -1;
         var file = '/v1/search/';
         $http.get('/v1/search/?query=' + $scope.searchQueryText, {}).success(function(successData, status, headers, config) {

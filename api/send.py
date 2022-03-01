@@ -29,9 +29,11 @@ def send_form_response(response_dict):
     if 'testnet' in response_dict and ( response_dict['testnet'][0] in ['true', 'True'] ):
         testnet =True
         magicbyte = 111
+        exodus_address='mpexoDuSkGGqvqrkrjiFng38QPkJQVFyqv'
     else:
         testnet = False
         magicbyte = 0
+        exodus_address='1EXoDusjGwvnjZUyKkxZ4UHEf77z6A5S4P'
 
     if response_dict.has_key( 'pubKey' ): #and is_pubkey_valid( response_dict['pubKey'][0]):
         pubkey = response_dict['pubKey'][0]
@@ -154,7 +156,7 @@ def prepare_send_tx_for_signing(from_address, to_address, marker_address, curren
         raise Exception({ "status": "NOT OK", "error": "Could not get list of unspent txs. Response Code: " + str(dirty_txes['code']) })
 
     if (dirty_txes['error'][:3]=='Low'):
-        raise Exception({ "status": "NOT OK", "error": "Not enough funds, for " + str(from_address) + ". Needed: " + str(fee_total_satoshi) + " but Have: " + str(dirty_txes['avail'])  })
+        raise Exception({ "status": "NOT OK", "error": "Not enough funds, for " + str(from_address) + ". Needed: " + str(fee_total_satoshi/Decimal(1e8)) + " but Have: " + str(dirty_txes['avail']/Decimal(1e8))  })
 
     inputs_total_value = dirty_txes['avail']
     inputs = dirty_txes['utxos']

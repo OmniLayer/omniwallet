@@ -9,7 +9,8 @@ from rpcclient import *
 #sys.path.append(lib_path)
 #data_dir_root = os.environ.get('DATADIR')
 
-sys.path.append("/usr/lib/armory/")
+#sys.path.append("/usr/lib/armory/")
+sys.path.append("/usr/local/lib/armory/")
 from armoryengine.ALL import *
 
 app = Flask(__name__)

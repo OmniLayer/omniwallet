@@ -86,7 +86,7 @@ class OmniTransaction:
             return { "status": "NOT OK", "error": "Couldn't get list of unspent tx's. Response Code: " + str(dirty_txes['code'])  }
 
         if (dirty_txes['error'][:3]=='Low'):
-            return { "status": "NOT OK", "error": "Not enough funds, try again. Needed: " + str(fee_total) + " but Have: " + str(dirty_txes['avail'] / Decimal(1e8))  }
+            return { "status": "NOT OK", "error": "Not enough funds, try again. Needed: " + str(fee_total_satoshi / Decimal(1e8)) + " but Have: " + str(dirty_txes['avail'] / Decimal(1e8))  }
 
         total_amount = dirty_txes['avail']
         unspent_tx = dirty_txes['utxos']
@@ -130,6 +130,9 @@ class OmniTransaction:
         # Add the change
         rawtx = createrawtx_change(rawtx, validnextinputs, self.rawdata['transaction_from'], float(self.fee))['result']
 
+        #backwards compatibility
+        rawtx = "01"+rawtx[2:]
+
         return { 'status':200, 'unsignedhex': rawtx , 'sourceScript': prevout_script }
       except Exception as e:
         return { 'status':503, 'error': e.message }
@@ -170,6 +173,8 @@ class OmniTransaction:
             return getissuancefixedPayload(self.rawdata['ecosystem'],self.rawdata['property_type'],self.rawdata['previous_property_id'],self.rawdata['property_category'],self.rawdata['property_subcategory'],self.rawdata['property_name'],self.rawdata['property_url'],self.rawdata['property_data'],self.rawdata['number_properties'])['result']
         if self.tx_type == 51:
             return getissuancecrowdsalePayload(self.rawdata['ecosystem'],self.rawdata['property_type'],self.rawdata['previous_property_id'],self.rawdata['property_category'],self.rawdata['property_subcategory'],self.rawdata['property_name'],self.rawdata['property_url'],self.rawdata['property_data'],self.rawdata['currency_identifier_desired'],self.rawdata['number_properties'], self.rawdata['deadline'], self.rawdata['earlybird_bonus'], self.rawdata['percentage_for_issuer'])['result']
+        if self.tx_type == 53:
+            return getclosecrowdsalePayload(self.rawdata['currency_identifier'])['result']
         if self.tx_type == 54:
             return getissuancemanagedPayload(self.rawdata['ecosystem'],self.rawdata['property_type'],self.rawdata['previous_property_id'],self.rawdata['property_category'],self.rawdata['property_subcategory'],self.rawdata['property_name'],self.rawdata['property_url'],self.rawdata['property_data'])['result']
         if self.tx_type == 55:

@@ -1,5 +1,5 @@
 angular.module("omniServices")
-    .service("Account", ["$http", "$q", "Address","Wallet", function AccountService($http, $q, Address, Wallet) {
+    .service("Account", ["$http", "$q", "$rootScope", "Address","Wallet", function AccountService($http, $q, $rootScope, Address, Wallet) {
         var self = this;
         self.settings = {};
 
@@ -57,9 +57,10 @@ angular.module("omniServices")
                         wallet: encryptedWallet
                       };
 
-                    if(form.captcha){
+                    var captcha_response = hcaptcha.getResponse();
+                    if(captcha_response){
                       angular.extend(createData, {
-                        recaptcha_response_field:form.captcha
+                        captcha_response_field:captcha_response
                       });
                     }
 
@@ -73,10 +74,17 @@ angular.module("omniServices")
                     if(result.data.error == "InvalidCaptcha"){
                       
                       self.validating=false;
-                      Recaptcha.reload();
+                      hcaptcha.reset();
                       create.reject({
                         invalidCaptcha : true,
                         validating : false
+                      });
+                    } else if(result.data.error == "InvalidEmail"){
+                      hcaptcha.reset();
+                      create.reject({
+                        invalidEmail : true,
+                        validating : false,
+                        msg : result.data.msg
                       });
                     } else {
                       self.validating = false;
@@ -90,6 +98,7 @@ angular.module("omniServices")
                     }
                   }, function(result) {
                     self.validating = false;
+                    hcaptcha.reset();
                     create.reject({
                         serverError : true
                     });
@@ -281,6 +290,7 @@ angular.module("omniServices")
                 }
                 return self.saveSession().then(function(){
                     Wallet._updateAddress(address,privKey,pubKey);
+                    $rootScope.$broadcast('reloadAddrView');
                 });
               }
             }
@@ -295,6 +305,7 @@ angular.module("omniServices")
             
             return self.saveSession().then(function(){
                 Wallet._addAddress(rawaddress);
+                $rootScope.$broadcast('reloadAddrView');
             });
         };
 
@@ -309,6 +320,7 @@ angular.module("omniServices")
                 var remove = self.wallet.addresses.splice(i, 1)[0];
                 return self.saveSession().then(function(){
                     Wallet._removeAddress(remove.address);
+                    $rootScope.$broadcast('reloadAddrView');
                 });
               }
         };

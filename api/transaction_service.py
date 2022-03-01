@@ -30,7 +30,9 @@ def estimatefees(addr):
       fees={"unit": "Satoshi/kB", "faster": 275000, "fast": 245000, "normal": 215000}
 
     #initial miner fee estimate
-    mfee=25000
+    #mfee=25000
+    #use normal fee and an estimated tx of 2 inputs, 2 outputs and opreturn ~ 415 bytes to estimate fee
+    mfee=fees['fast']*415/1000
 
     #class B tx: output base cost
     cbb=4410
@@ -45,15 +47,17 @@ def estimatefees(addr):
 
     balance=bc_getbalance(address)
     if 'bal' in balance and balance['bal']>0:
-      unspent=bc_getutxo(addr,amount)
+      unspent=bc_getutxo(address,amount)
       if 'utxos' in unspent:
         ins=len(unspent['utxos'])
         if unspent['avail'] == amount:
           outs=1
+        if int(ins*150*fees['fast']/1000) > unspent['avail']:
+          ins+=1
 
     #ins + outs + header + opreturn
-    size=ins*180 + outs*34 + 10 + 80
-    tsize=math.ceil((size+180)*1.05)
+    size=ins*150 + outs*34 + 10 + 80
+    tsize=math.ceil((size+150)*1.05)
 
     faster = '%.8f' % ( Decimal(int((size * fees['faster'])/1000)) / Decimal(1e8) )
     fast = '%.8f' % ( Decimal(int((size * fees['fast'])/1000)) / Decimal(1e8) )
@@ -67,6 +71,7 @@ def estimatefees(addr):
          "class_c":{"faster": faster, "fast": fast, "normal": normal, "estimates":{"size":size, "ins":ins, "outs":outs} },
          "topup_c":{"faster": tfaster, "fast": tfast, "normal": tnormal, "estimates":{"size":tsize, "ins":ins+1, "outs":outs} }
         }
+    print ret
     return jsonify(ret)
 
 @app.route('/fees')
@@ -213,7 +218,7 @@ def gettransaction(hash_id):
 
     if txType not in [-22,21,25,26,27,28]: #Dex purchases don't have these fields
       ret['currencyId'] = txJson['propertyid']
-      ret['currency_str'] = 'Omni' if txJson['propertyid'] == 1 else 'Test Omni' if txJson['propertyid'] == 2 else "Smart Property"
+      ret['currency_str'] = getName(txJson['propertyid'])
       ret['invalid'] = not txValid
       ret['amount'] = str(txJson['amount'])
       ret['formatted_amount'] = txJson['amount']
@@ -336,6 +341,19 @@ def gettransaction(hash_id):
         ret['issuertokens'] = txJson['issuertokens']
 
     return json.dumps([ ret ] , sort_keys=True, indent=4) #only send back mapped schema
+
+def getName(propertyid):
+  if int(propertyid) == 1:
+    name = 'Omni Token #1'
+  elif int(propertyid) == 2:
+   name = 'Test Omni Token #2'
+  else:
+    try:
+      ROWS=dbSelect("select propertyname from smartproperties where protocol='Omni' and propertyid=%s",[int(propertyid)])
+      name = ROWS[0][0]+" #"+str(propertyid)
+    except:
+      name = "#"+str(propertyid)
+  return name
 
 @app.route('/general/<page_id>')
 def getmostrecent(page_id):

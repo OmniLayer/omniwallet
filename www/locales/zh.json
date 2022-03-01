@@ -13,7 +13,6 @@
 		"ADDRESSES":"地址",
 		"ASSETS":"资产",
 		"ASSET":"资产",
-		"OVERVIEW":"概观",
    		"SEND":"发送",
    		"VALUE":"价值",
 		"CREATEWALLET":"创建钱包",
@@ -41,7 +40,11 @@
 		"MY":"我的",
 		"PUBKEY":"公钥",
 		"GRANT":"格兰特",
-		"REVOKE":"撤消"
+		"REVOKE":"撤消",
+		"SPENDABLE":"可支配",
+		"WATCHONLY":"手表只有",
+		"RESERVED":"已预留",
+		"REMAINING":"剩余的"
 	},
 	"SETTINGS":{
 		"TITLE":"Account Settings",
@@ -75,7 +78,7 @@
 		"ERROR":"Sorry, the code you entered is incorrect. Please double check and try again.",
 		"SUBMIT":"One moment while we verify and process your request, this should take less than a minute.",
 		"GENERROR1":"There was a problem generating a new secret. Please wait a moment and try again.",
-		"GENERROR2":"If this error continues to happen please notify the Omni team.",
+		"GENERROR2":"If this error continues to happen please notify the Omniwallet team.",
 		"IMPORT":"To setup your account to require an MFA device scan the QR code below or manually enter the secret listed below into your MFA Device/Software (Google Authenticator, Authy, etc..)",
 		"SEC1":"Your Token Secret is",
 		"SEC2":"Store this safely and securely because",
@@ -117,7 +120,7 @@
 			"FOUNDATION":{
 				"TITLE":"Omni Foundation",
 				"FIRST":"In September 2013, the Mastercoin Foundation was formed to temporarily manage the funds in the Exodus Address and the distribution of the development MSC. The board of the Mastercoin Foundation has declared its intention to minimize its temporary central role by transitioning the decision making to Mastercoin owners through proof of stake voting.",
-				"SECOND": "In January 2016 the Mastercoin Foundation was rebranded to the Omni Foundation and the primary tokens of the project, MSC, where renamed to OMNI. The Foundation advocates for the use of the Omni Protocol and tries to build a community of people who develop it. All budget items, board minutes, Dev OMNI vesting schedule, and bounties are public record and available to anyone on the ",
+				"SECOND": "In January 2016 the Mastercoin Foundation was rebranded to the Omni Foundation and the primary tokens of the project, MSC, where renamed to Omni Token (OMNI). The Foundation advocates for the use of the Omni Protocol and tries to build a community of people who develop it. All budget items, board minutes, Dev OMNI vesting schedule, and bounties are public record and available to anyone on the ",
 				"LINK": "Foundation's Website"
 			},
 			"PROTOCOL":{
@@ -129,7 +132,7 @@
 			},
 			"TOKEN":{
 				"TITLE":"Omnis",
-				"FIRST" : "Omnis (symbol OMNI) are digital tokens that are necessary for the use of some features of the Omni Protocol. The total number of Omnis in existence is 619,478.6 and no more MSC will ever be created. Additionally, Omnis can not be mined into existence. The 619,478.6 OMNI were generated as a result of a public fundraiser in the style of Kickstarter.com."
+				"FIRST" : "Omni Tokens (symbol OMNI) are digital tokens that are necessary for the use of some features of the Omni Protocol. The total number of OMNIs in existence is 619,478.6 and no more OMNIs will ever be created. Additionally, OMNIs can not be mined into existence. The 619,478.6 OMNI were generated as a result of a public fundraiser in the style of Kickstarter.com."
 			},
 			"INFO":"Information from the ",
 			"EDUCATION":"Master Protocol Education"
@@ -152,9 +155,9 @@
 			},
 			"MULTICURRENCY" : {
 				"TITLE" : "Multi-currency support",
-				"BUILT" : "Omniwallet comes with a pre-built support for Bitcoin, Omni and Test Omni",
+				"BUILT" : "Omniwallet comes with a pre-built support for Bitcoin, Omni Token and Test Omni Token",
 				"SUPPORT" : "Native support for Smart Property and User-Generated Currencies",
-				"ALT" : "Alt-coin support  - Omniwallet has plans to support coins that go outside of the usual Omni ecosystem, such as Litecoin, Peercoin and more"
+				"ALT" : ""
 			},
 			"STATUS" :{
 				"TITLE" : "Current Status",
@@ -194,7 +197,7 @@
 		"OFFERS":"我的报价",
 		"SETTINGS":"账户设置",
 		"TRADE":"交易",
-		"DEX1":"BTC/OMNI",
+		"DEX1":"BTC Market",
 		"TRANSACTIONS":"交易",
 		"WALLET":"我的钱包",
 		"OMNIDEX":"OmniDex"
@@ -204,6 +207,7 @@
 			"MESSAGES" : {
 				"UUID":"This UUID is already in use",
 				"CAPTCHA":"Invalid Captcha try again.",
+				"EMAILERROR":"无效的电子邮件再试一次:",
 				"VALIDATING":"We are validating your data and creating your account",
 				"PASSWORDLENGTH":"Password must be at least 8 characters long",
 				"PASSWORDSTRENGTH":"Password strength must be at least 70%",
@@ -227,7 +231,9 @@
 			"INVALID1":"Sorry, we could not validate your credentials. Please check them and try again",
 			"INVALID2":"If you continue to have difficulties, check out our ",
 			"MFACODE":"I'm using Multi Factor Authentication",
-			"MFATOOLTIP":"Don't have an MFA device setup yet? Login and add one to your account under 'Account Settings'"
+			"MFATOOLTIP":"Don't have an MFA device setup yet? Login and add one to your account under 'Account Settings'",
+			"UUIDEMAIL":"Please login with your Wallet ID, not your Email.",
+			"UUIDEMAIL2":"For more info please see this article on the "
 		}, 
 		"CONFIRM":{
 			"OFFLINE":"Your transaction was generated successfully, now save the text above and sign it on your Armory offline computer. Come back with the signed text to broadcast it.",
@@ -261,6 +267,7 @@
 		},
 		"IMPORT":{
 			"VALID":"Must be a valid Bitcoin address",
+			"VALIDPRIV":"Must be a valid Private Key",
 			"EXISTS":"Bitcoin address is already listed",
 			"SUBMIT":"Add Address",
 			"OFFLINE":{
@@ -269,18 +276,18 @@
 				"OFFLINE":"Offline"
 			},
 			"WATCH":{
-				"TITLE":"Import a Watch Only BTC/OMNI Address",
+				"TITLE":"Import a Watch Only BTC/Omni Layer Address",
 				"ADDRESS":"Enter Address",
 				"DESC":"Watch Only"
 			},
 			"ENCRYPTED":{
-				"TITLE":"Import an Encrypted BTC/OMNI Private Key",
+				"TITLE":"Import an Encrypted BTC/Omni Layer Private Key",
 				"KEY":"Enter Encrypted Key (Send/Receive)",
 				"KEYHOLDER":"enter your encrypted private key",
 				"PASSHOLDER":"enter your passphrase"
 			},
 			"PRIVATE":{
-				"TITLE":"Import a BTC/OMNI Private Key",
+				"TITLE":"Import a BTC/Omni Layer Private Key",
 				"ENTER":"Enter",
 				"KEY":"Private Key",
 				"ENABLE":"Enable Sending",
@@ -289,7 +296,7 @@
 			"WALLET":{
 				"TITLE":"Import a Wallet Backup",
 				"UPLOAD":"Upload backup file",
-				"INVALID":"Must be a valid Omnicore backup file"
+				"INVALID":"Must be a valid Omniwallet backup file"
 			}
 		},
 		"EXPORT":{
@@ -410,8 +417,10 @@
 			"TITLE":"我的钱包地址",
 			"VIEW":"浏览",
 			"OPTIONS":"添加钱包地址",
-			"WATCH":"Add Watch Only Address",
-			"OFFLINE":"添加离线地址"
+			"WATCH":"添加仅监视地址",
+			"OFFLINE":"添加离线地址",
+			"SPENDABLE":"您可以从这些地址创建交易",
+			"WATCHONLY":"跟踪另一个钱包中的地址余额。 不能通过在任何地方汇款来激活/解锁。 要启用支出，您需要导入私钥."
 		},
 		"SEND":{
 			"TITLE":"发送",
@@ -420,9 +429,10 @@
 			"AMOUNT":"数量",
 			"TO":"接收地址",
 			"COST":"全部交易费用",
-			"PROTOCOL_COST": "Omni Protocol Transaction Cost",
-			"MODAL_TRANSACTION_COST":"Transaction Cost",
-			"MODAL_MINER": "Miner Fee",
+			"PROTOCOL_COST": "全方案协议交易成本",
+			"FEE_WARNING": "注意：您输入的费用少于建议的费用。 请注意，低廉的费用可能会导致交易确认延迟",
+			"MODAL_TRANSACTION_COST":"交易成本",
+			"MODAL_MINER": "矿工费",
 			"FUNDS":"发送资产",
 			"TOKEN":"令牌",
 			"MODAL_AMOUNT":"数量",
@@ -431,7 +441,8 @@
 			"CONFIRM":"确认发送",
 			"AVAIL":"从可用地址",
 			"LOWFEE":"您的“发件人地址”没有足够的BTC完成此交易。请至少发送 {{ topupAmount }} BTC覆盖估计总交易成本。",
-			"UPDATE_FEE":"Re-estimate Transaction Cost"
+			"UPDATE_FEE":"重新估算交易成本",
+			"INVALIDADDRESS":"请输入支持您正在发送的Omni Protocol令牌的有效比特币地址"
 		},
 		"ASSETS":{
 			"ASSETS":"资产",
@@ -621,44 +632,45 @@
 			"CREATED":"已被创建的令牌"
 		},
 		"OFFERS":{
-			"HASH":"Transaction hash",
-			"PRICE":"Price per Token",
-			"AMOUNT":"Amount",
-			"TOTAL":"Total",
-			"CANCEL":"Cancel",
-			"BUY":"Buy",
-			"SIDE": "Side",
-			"STATUS": "Status"
+			"HASH":"交易哈希",
+			"PRICE":"每个令牌的价格",
+			"AMOUNT":"量",
+			"TOTAL":"总",
+			"CANCEL":"取消",
+			"BUY":"购买",
+			"SIDE": "侧",
+			"STATUS": "状态"
 		}
 	},
 	"EXCHANGE":{
 		"TRADE":{
-			"TITLE":"Trade",
-			"SELL":"Sell",
+			"TITLE":"贸易方式",
+			"SELL":"新卖出价",
 			"NOCOINS":{
-				"LEAD":"Sorry, you don't have any",
-				"TRAIL": "available to sell"
+				"LEAD":"抱歉，您没有任何",
+				"TRAIL": "可出售"
 			},
-			"NOORDERS":"No offers/bids found for this timeframe",
-			"ACTIVE": "Active Offers",
-			"TIMEFRAME" :"Time frame",
-			"TOTAL": "Total Transactions",
-			"TXHASH":"Transaction hash",
-			"PRICE":"Price",
-			"AMOUNT":"Amount Remaining",
-			"COST":"Cost",
-			"FEE":"Fee",
-			"PAYMENT":"Payment Window (Blocks)",
-			"ENDED":"User Ended",
-			"SOLD":"Sold out!",
-			"BUYERFEE":"Buyer Fee",
-			"ACCEPT": "Accept Offer",
-			"YOURS":"Your offer/purchase"
+			"NOORDERS":"在此时间范围内找不到要约/出价",
+			"ACTIVE": "主动报价",
+			"TIMEFRAME" :"大体时间",
+			"TOTAL": "总交易",
+			"PRICE":"每个令牌BTC",
+			"AMOUNT":"可用的",
+			"COST":"购买所有费用(BTC)",
+			"FEE":"接受的最低矿工费",
+			"FEESHORT":"费用",
+			"FEEDESC":"接受交易有效所需的最低矿工费",
+			"PAYMENT":"付款窗口(块)",
+			"ENDED":"用户已结束",
+			"SOLD":"卖光了!",
+			"BUYERFEE":"买家费用",
+			"ACCEPT": "接受报价",
+			"YOURS":"您的报价/购买"
 		},
 		"SALE":{
 			"TITLE":"Sell Offer",
 			"CHOOSECOIN":"Selected coin",
-			"FROM":"From address",
+			"FROM":"From Address",
 			"QUANTITY":"Sell Quantity",
 			"TOTAL":"Total Bitcoin desired ( # BTC for",
 			"TOTALTOOLTIP":"Enter the total # of bitcoins you would want to receive if you sold all",
@@ -666,13 +678,15 @@
 			"TIME":"Time given to buyer to pay",
 			"TIMETOOLTIP":"Time in blocks the buyer has to complete his purchase (1 block approx. 10 minutes)",
 			"BUYERFEE":"Buyer's fee",
+			"BUYERFEETOOLTIP":"最低矿工费买方在发送付款交易时必须在BTC中付款/消费",
 			"MODALTITLE": "Confirm Sale",
 			"CURRENCY": "Selling",
 			"MODAL_FROM":"From",
 			"MODAL_AMOUNT": "Amount",
 			"BLOCKS":"Payment Timeframe",
 			"BUYERSFEE":"Buyer's Fee",
-			"CONFIRM":"Confirm Sale"
+			"CONFIRM":"Confirm Sale",
+			"REMAININGDESC":"新报价可以接受的剩余待售金额."
 		},
 		"BUY":{
 			"TITLE":"Accept Offer",
@@ -682,7 +696,7 @@
 			"ADDRESS":"Buying Address",
 			"OFFERTOOLTIP":"Opens in new Window/Tab",
 			"OFFER":"Sale Offer (ID / hash)",
-			"SELLER":"Seller's address",
+			"SELLER":"Seller's Address",
 			"FEE":"Sale fee",
 			"TIMEFRAME":"Payment Timeframe",
 			"TIMEFRAMETOOLTIP":"If your reservation offer is accepted and validated you will have to complete the payment within this time frame.",
@@ -709,6 +723,8 @@
 			"PAYMENT":"Send payment",
 			"COINTYPE":"Send type of coin",
 			"COINMESSAGE":"To complete a pending offer, you must make purchases in Bitcoin.",
+			"SELLER":"卖方的",
+			"SELLING":"销售中",
 			"FROM":"Send from address",
 			"TO":"Send funds to",
 			"AMOUNT":"Amount to send (in",

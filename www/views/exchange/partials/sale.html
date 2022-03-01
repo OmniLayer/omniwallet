@@ -13,9 +13,17 @@
             <div class="col-sm-6">
               <label for="chooseCoin" >{{ 'EXCHANGE.SALE.CHOOSECOIN' | translate}}</label>
               <div class="btn-group send-asset-dropdown">
-                <span class="form-control">
-                  {{selectedAsset.name | truncate:15}} <small class="text-muted" ng-show="selectedAsset.id > 2">({{selectedAsset.id}})</small>
-                </span>
+
+               <button class="btn btn-clear dropdown-toggle" type="button" id="chooseCoin" data-toggle="dropdown" aria-expanded="false">
+                  {{selectedAsset.name | truncate:14}} <small class="text-muted" ng-show="selectedAsset.id > 0">(#{{selectedAsset.id}})</small>
+                  <span class="caret pull-right"></span>
+                </button>
+                <ul class="dropdown-menu" role="menu" aria-labelledby="chooseCoin">
+                  <li role="presentation" ng-repeat="asset in wallet.assets" ng-if="asset.tradable && asset.id > 0 && ((asset.id < 2147483648 && asset.id != 2) || showtesteco === 'true')">
+                    <a role="menuitem" tabindex="-1" href="#" ng-click="setAsset(asset)">{{asset.name | truncate:14}} <small class="text-muted" ng-show="asset.id > 0">({{asset.id}})</small></a>
+                  </li>
+                </ul>
+
               </div>
             </div> 
             <div class="col-sm-6">
@@ -72,14 +80,21 @@
                   tooltip-placement="top" > <strong>(?)</strong>
                 </a>
               </label>
-              <input name="blocks" type="number" step="1" ng-model="saleBlocks" class="form-control" placeholder="100 blocks" min="20" required>
+              <input name="blocks" type="number" step="1" ng-model="saleBlocks" class="form-control" placeholder="100" min="35" required>
             </div>
           </div>
           <div class="col-sm-6">
             <div class="form-group">
-              <label> {{ 'EXCHANGE.SALE.BUYERFEE' | translate}} ( {{selectedAsset.name | truncate:15}} ): </label>
+              <label>
+                {{ 'EXCHANGE.SALE.BUYERFEE' | translate}} ( BTC ):
+                <a href=""
+                  tooltip="{{ 'EXCHANGE.SALE.BUYERFEETOOLTIP' | translate}}"
+                  tooltip-append-to-body="true"
+                  tooltip-placement="top" > <strong>(?)</strong>
+                </a>
+              </label>
               <input name="buyerfee" type="number" step="0.0001" ng-model="buyersFee" class="form-control" 
-              placeholder="0.0002 suggested minimum" min="0.0001" required>
+              placeholder="0.00002 suggested minimum" min="0.00001" required>
             </div>
           </div>
         </div>

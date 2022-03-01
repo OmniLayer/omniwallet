@@ -7,62 +7,98 @@
     
     <tabset ng-hide="orderbook.length == 0">
       <tab heading="{{ 'EXCHANGE.MYOFFERS.BUYTITLE' | translate }}">
+        <div class="col-sm-10" style="float:right"><button type="button" ng-show="true" class="btn btn-info" title="Show All" ng-click="toggleBuys()">
+          {{buysFiltered ? "Show Inactive" : "Hide Inactive"}}</button>
+        </div>
         <h3 class="om-subtitle"> {{ 'EXCHANGE.MYOFFERS.BUYTITLE' | translate }} </h3>
+
         <div class="om-table">
           <div class="row table-header hidden-xs">
-                <div class="col-sm-3">{{ 'TABLES.OFFERS.HASH' | translate }}</div>
-                <div class="col-sm-3">{{ 'TABLES.OFFERS.PRICE' | translate }}</div>
-                <div class="col-sm-2">{{ 'TABLES.OFFERS.AMOUNT' | translate }}</div>
+                <div class="col-sm-1">{{ 'OMNIDEX.MARKETS.SYMBOL' | translate }}</div>
+                <div class="col-sm-2">My {{ 'COMMON.ADDRESS' | translate }}</div>
+                <div class="col-sm-2">{{ 'EXCHANGE.MYOFFERS.SELLER' | translate }} {{ 'COMMON.ADDRESS' | translate }}</div>
+                <div class="col-sm-2">{{ 'TABLES.OFFERS.PRICE' | translate }}</div>
+                <div class="col-sm-2">{{ 'TABLES.OFFERS.AMOUNT' | translate }} {{ 'COMMON.RESERVED' | translate }}</div>
                 <div class="col-sm-2">{{ 'TABLES.OFFERS.TOTAL' | translate }}</div>
-                <div class="col-sm-2">{{ 'TABLES.OFFERS.BUY' | translate }}</div>
+                <div class="col-sm-1">{{ 'TABLES.OFFERS.BUY' | translate }}</div>
           </div>
           <div class="row table-row" ng-repeat="transaction in filtered_buys">
-            <div class="visible-xs col-xs-5">{{ 'TABLES.OFFERS.HASH' | translate }}</div>
-            <div class="col-xs-7 col-sm-3" ng-click="setHashExplorer(transaction)"> <a href="/explorer/inspector?view={{transaction.tx_hash}}">{{transaction.tx_hash_concat}}</a></div>
+            <div class="visible-xs col-xs-5">{{ 'OMNIDEX.MARKETS.SYMBOL' | translate }}</div>
+            <div class="col-xs-7 col-sm-1" class="number">{{transaction.propertyid}}</div>
+
+            <div class="visible-xs col-xs-5">My {{ 'COMMON.ADDRESS' | translate }}</div>
+            <div class="col-xs-7 col-sm-2" tooltip="{{transaction.from_address}}" tooltip-append-to-body="true" tooltip-placement="top">{{transaction.from_address_concat}}</div>
+
+            <div class="visible-xs col-xs-5">{{ 'EXCHANGE.MYOFFERS.SELLER' | translate }} {{ 'COMMON.ADDRESS' | translate }}</div>
+            <div class="col-xs-7 col-sm-2"><a href="https://www.omniexplorer.info/tx/{{transaction.tx_hash}}" target="_blank" tooltip="{{transaction.to_address}}" tooltip-append-to-body="true" tooltip-placement="top">{{transaction.to_address_concat}}</a></div>
 
             <div class="visible-xs col-xs-5">{{ 'TABLES.OFFERS.PRICE' | translate }}</div>
-            <div class="col-xs-7 col-sm-3" ng-if="transaction.formatted_price_per_coin" class="number" title="{{transaction.formatted_price_per_coin}}" ng-bind-html="transaction.formatted_price_per_coin | bigjs: '0,0.00000000'"></div> 
+            <div class="col-xs-7 col-sm-2" ng-if="transaction.formatted_price_per_coin" class="number" title="{{transaction.formatted_price_per_coin}}" ng-bind-html="transaction.formatted_price_per_coin | bigjs: '0,0.00000000'"></div>
 
-            <div class="visible-xs col-xs-5">{{ 'TABLES.OFFERS.AMOUNT' | translate }}</div>
+            <div class="visible-xs col-xs-5">{{ 'TABLES.OFFERS.AMOUNT' | translate }} {{ 'COMMON.RESERVED' | translate }}</div>
             <div class="col-xs-7 col-sm-2" ng-if="transaction.formatted_amount" class="number" title="{{transaction.formatted_amount}}" ng-bind-html="transaction.formatted_amount | bigjs: '0,0.00000000'"></div> 
 
             <div class="visible-xs col-xs-5">{{ 'TABLES.OFFERS.TOTAL' | translate }}</div>
             <div class="col-xs-7 col-sm-2" ng-if="transaction.bitcoin_required" class="number" title="{{transaction.bitcoin_required}}" ng-bind-html="transaction.bitcoin_required | bigjs: '0,0.00000000'"></div>
 
             <div class="visible-xs col-xs-5">{{ 'TABLES.OFFERS.BUY' | translate }}</div> 
-            <div class="col-xs-7 col-sm-2" ng-show="(transaction.tx_hash.length == 64 && transaction.payment_expired == false)">
-              <button class="btn btn-main btn-sm" ng-click="purchaseCoin(transaction)" type="submit">{{ 'EXCHANGE.MYOFFERS.PURCHASE' | translate }}</button>
+            <div class="col-xs-7 col-sm-1" ng-show="(transaction.tx_hash.length == 64 && transaction.payment_expired == false && transaction.status == 'valid' )">
+              <button class="btn btn-main btn-sm pull-right" ng-click="purchaseCoin(transaction)" type="submit">{{ 'EXCHANGE.MYOFFERS.PURCHASE' | translate }}</button>
             </div>
-            <div class="col-xs-7 col-sm-2" ng-show="(transaction.payment_expired == true)"> {{ 'EXCHANGE.MYOFFERS.EXPIRED' | translate }}
-            </div>
+            <div class="col-xs-7 col-sm-1" ng-show="(transaction.payment_expired == true && transaction.status == 'valid')"> {{ 'EXCHANGE.MYOFFERS.EXPIRED' | translate }}</div>
+            <div class="col-xs-7 col-sm-1" ng-show="(transaction.status == 'closed')"> {{ 'EXCHANGE.MYOFFERS.PAYMENT' | translate }} {{ 'COMMON.DONE' | translate }}</div>
           </div>
         </div>
       </tab>
+
       <tab heading="{{ 'EXCHANGE.MYOFFERS.SELLTITLE' | translate }}">
+        <div class="col-sm-10" style="float:right">
+          <button type="button" ng-show="true" class="btn btn-info" title="Show All" ng-click="toggleSells()">{{sellsFiltered ? "Show Inactive" : "Show Inactive"}}</button>
+        </div>
         <h3 class="om-subtitle"> {{ 'EXCHANGE.MYOFFERS.SELLTITLE' | translate }} </h3>
+
         <div class="om-table">
           <div class="row table-header hidden-xs">
-                <div class="col-sm-3">{{ 'TABLES.OFFERS.HASH' | translate }}</div>
-                <div class="col-sm-3">{{ 'TABLES.OFFERS.PRICE' | translate }}</div>
-                <div class="col-sm-2">{{ 'TABLES.OFFERS.AMOUNT' | translate }}</div>
-                <div class="col-sm-2">{{ 'TABLES.OFFERS.TOTAL' | translate }}</div>
-                <div class="col-sm-2">{{ 'TABLES.OFFERS.CANCEL' | translate }}</div>
+                <div class="col-sm-1">{{ 'OMNIDEX.MARKETS.SYMBOL' | translate }}</div>
+                <div class="col-sm-2">{{ 'EXCHANGE.MYOFFERS.SELLING' | translate }} {{ 'COMMON.ADDRESS' | translate }}</div>
+                <div class="col-sm-2">{{ 'TABLES.OFFERS.PRICE' | translate }}</div>
+                <div class="col-sm-2">{{ 'TABLES.OFFERS.AMOUNT' | translate }} {{ 'EXCHANGE.MYOFFERS.SELLING' | translate }}</div>
+                <div class="col-sm-2">{{ 'TABLES.OFFERS.AMOUNT' | translate }} {{ 'COMMON.REMAINING' | translate }}
+                  <a href=""
+                    tooltip="{{ 'EXCHANGE.SALE.REMAININGDESC' | translate}}"
+                    tooltip-append-to-body="true"
+                    tooltip-placement="top" > <strong>(?)</strong>
+                  </a>
+                </div>
+                <div class="col-sm-1"></div>
           </div>
           <div class="row table-row" ng-repeat="transaction in filtered_sells">
-            <div class="visible-xs col-xs-5">{{ 'TABLES.OFFERS.HASH' | translate }}</div>
-            <div class="col-xs-7 col-sm-3" ng-click="setHashExplorer(transaction)"> <a href="/explorer/inspector?view={{transaction.tx_hash}}">{{transaction.tx_hash_concat}}</a></div>
+            <div class="visible-xs col-xs-5">{{ 'OMNIDEX.MARKETS.SYMBOL' | translate }}</div>
+            <div class="col-xs-7 col-sm-1" class="number">{{transaction.propertyid}}</div>
+
+            <div class="visible-xs col-xs-5">{{ 'EXCHANGE.MYOFFERS.SELLING' | translate }} {{ 'COMMON.ADDRESS' | translate }}</div>
+            <div class="col-xs-7 col-sm-2"> <a href="https://www.omniexplorer.info/tx/{{transaction.tx_hash}}" target="_blank" tooltip="{{transaction.from_address}}" tooltip-append-to-body="true" tooltip-placement="top">{{transaction.from_address_concat}}</a></div>
 
             <div class="visible-xs col-xs-5">{{ 'TABLES.OFFERS.PRICE' | translate }}</div>
-            <div class="col-xs-7 col-sm-3" class="number" title="{{transaction.formatted_price_per_coin}}" ng-bind-html="transaction.formatted_price_per_coin | bigjs: '0,0.00000000'"></div> 
+            <div class="col-xs-7 col-sm-2" class="number" title="{{transaction.formatted_price_per_coin}}" ng-bind-html="transaction.formatted_price_per_coin | bigjs: '0,0.00000000'"></div> 
 
-            <div class="visible-xs col-xs-5">{{ 'TABLES.OFFERS.AMOUNT' | translate }}</div>
+            <div class="visible-xs col-xs-5">{{ 'TABLES.OFFERS.AMOUNT' | translate }} {{ 'EXCHANGE.MYOFFERS.SELLING' | translate }}</div>
             <div class="col-xs-7 col-sm-2" class="number" title="{{transaction.formatted_amount}}" ng-bind-html="transaction.formatted_amount | bigjs: '0,0.00000000'"></div> 
 
-            <div class="visible-xs col-xs-5">{{ 'TABLES.OFFERS.TOTAL' | translate }}</div>
-            <div class="col-xs-7 col-sm-2" class="number" title="{{transaction.bitcoin_required}}" ng-bind-html="transaction.bitcoin_required | bigjs: '0,0.00000000'"></div> 
+            <div class="visible-xs col-xs-5">{{ 'TABLES.OFFERS.AMOUNT' | translate }} {{ 'COMMON.REMAINING' | translate }}
+              <a href=""
+                tooltip="{{ 'EXCHANGE.SALE.REMAININGDESC' | translate}}"
+                tooltip-append-to-body="true"
+                tooltip-placement="top" > <strong>(?)</strong>
+              </a>
+            </div>
+            <div class="col-xs-7 col-sm-2" class="number" title="{{transaction.formatted_amount_available}}" ng-bind-html="transaction.formatted_amount_available | bigjs: '0,0.00000000'"></div> 
 
             <div class="visible-xs col-xs-5">{{ 'TABLES.OFFERS.CANCEL' | translate }}</div>
-            <div class="col-xs-7 col-sm-2"><button class="btn btn-secondary btn-sm" ng-click="confirmCancel(transaction)" type="submit">{{ 'EXCHANGE.MYOFFERS.CANCEL' | translate }}</button></div>
+            <div class="col-xs-7 col-sm-1">
+              <button class="btn btn-secondary btn-sm" ng-show="transaction.status == 'active'" ng-click="confirmCancel(transaction)" type="submit">{{ 'EXCHANGE.MYOFFERS.CANCEL' | translate }}</button>
+              <span ng-hide="transaction.status == 'active'">{{transaction.status}}</span>
+            </div>
           </div>
         </div>
       </tab>
@@ -107,7 +143,9 @@
               </span>
             </div>
             <div class="col-sm-6">
-              <label> {{ 'EXCHANGE.MYOFFERS.AMOUNT' | translate }} {{selectedCoin.symbol}}): </label>
+              <label> {{ 'EXCHANGE.MYOFFERS.AMOUNT' | translate }} {{selectedCoin.symbol}}):
+                ({{ 'COMMON.AVAILABLE' | translate}}: {{selectedAddress.getDisplayBalance(selectedAsset.id)}} {{selectedAsset.name | truncate:14}})
+              </label>
                 <span class="form-control">
                   {{sendAmount}}
                 </span>
@@ -117,7 +155,7 @@
         <div class="row">
           <div class="col-sm-12">
             <h4>{{ 'EXCHANGE.MYOFFERS.REMAINING' | translate }}</h4>
-            <span ng-class="{'text-primary' : remainingBlocks > 4, 'text-warning': remainingBlocks == 4, 'text-danger': remainingBlocks < 4}" tooltip="{{ 'EXCHANGE.MYOFFERS.REMAININGTOOLTIP' | translate }}">{{remainingBlocks}} {{ 'EXCHANGE.MYOFFERS.BLOCKS' | translate }}</span>
+            <span ng-class="{'text-primary' : remainingBlocks > 4, 'text-warning': remainingBlocks == 4, 'text-danger': remainingBlocks < 4}" tooltip="{{ 'EXCHANGE.MYOFFERS.REMAININGTOOLTIP' | translate }}" tooltip-append-to-body="true" tooltip-placement="top">{{remainingBlocks}} {{ 'EXCHANGE.MYOFFERS.BLOCKS' | translate }}</span>
           </div>
         </div>
         <p>

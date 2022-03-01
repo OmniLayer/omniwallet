@@ -9,13 +9,13 @@ angular.module("omniConfig")
   }])
   .factory("TX_DATA_URL",["TESTNET", function TxDataUrlFactory(TESTNET){
     if(TESTNET)
-      return "http://tbtc.blockr.io/tx/info/";
+      return "https://live.blockcypher.com/btc-testnet/tx/";
     else
-      return "https://www.blocktrail.com/BTC/tx/";
+      return "https://www.blockchain.com/btc/tx/";
   }])
   .factory("ADDRESS_EXPLORER_URL",["TESTNET", function AddressExplorerUrlFactory(TESTNET){
     if(TESTNET)
-      return "http://tbtc.blockr.io/address/info/";
+      return "https://live.blockcypher.com/btc-testnet/address/";
     else
       return "https://omniexplorer.info/lookupadd.aspx?address=";
   }])
@@ -50,14 +50,13 @@ var app = angular.module('omniwallet', [
   'omniFactories',
   'omniServices',
   'omniControllers',
-  'vcRecaptcha'
 ], function($routeProvider, $locationProvider, $httpProvider) {
 
   if (!$httpProvider.defaults.headers.get)
         $httpProvider.defaults.headers.get = {};    
-  $httpProvider.defaults.headers.get['Cache-Control'] = 'no-cache, no-store, must-revalidate'; 
-  $httpProvider.defaults.headers.get['Pragma'] = 'no-cache'; 
-  $httpProvider.defaults.headers.get['Expires'] = '0'; 
+  //$httpProvider.defaults.headers.get['Cache-Control'] = 'no-cache, no-store, must-revalidate'; 
+  //$httpProvider.defaults.headers.get['Pragma'] = 'no-cache'; 
+  //$httpProvider.defaults.headers.get['Expires'] = '0'; 
   $httpProvider.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded;charset=utf-8';
   $httpProvider.defaults.transformRequest = [TransformRequest];
 
@@ -223,10 +222,11 @@ app.config(function($idleProvider, $keepaliveProvider, idleDuration, idleWarning
       prefix: '/locales/',
       suffix: '.json'
     })
-    .registerAvailableLanguageKeys(['en', 'zh','ar'], {
+    .registerAvailableLanguageKeys(['en', 'zh','ar','fr'], {
       'en_us': 'en',
       'en_uk': 'en',
-      'zh_cn': 'zh'
+      'zh_cn': 'zh',
+      'fr_fr': 'fr'
     })
     .fallbackLanguage('en')
     .determinePreferredLanguage();
@@ -234,7 +234,7 @@ app.config(function($idleProvider, $keepaliveProvider, idleDuration, idleWarning
 })
 .run(function(Account, $location, TESTNET, BalanceSocket) {
   //Whitelist pages
-  whitelisted = ['login', 'about', 'status', 'explorer', 'details', 'dex'];
+  whitelisted = ['login', 'about', 'status', 'explorer', 'details', 'dex', 'exchange/trade'];
 
   if (!Account.loggedIn) {
     for (var i = 0; i < whitelisted.length; i++) {

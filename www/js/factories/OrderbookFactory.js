@@ -78,7 +78,7 @@ angular.module("omniFactories")
 				if (Account.loggedIn) {
 					// TODO:  list only addresses with balance > 0
 					self.addresses = Wallet.addresses.filter(function(address){
-						return ((address.privkey && address.privkey.length == 58) || address.pubkey)
+						return (address.keyCheck)
 					});
 					self.buyAddresses = self.addresses.filter(function(address){
 						return address.getBalance(self.desired.propertyid).gt(0);

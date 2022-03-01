@@ -29,7 +29,7 @@ angular.module("omniDirectives")
 	      };
 	      
 	      $scope.$watch(function(){ return $scope.optionList; },function(options){
-	        $scope.filteredList = options.length > 0 ? options : ["No results"];
+	        $scope.filteredList = ( options != undefined && options.length > 0) ? options : ["No results"];
 	      });
 	      
 	      

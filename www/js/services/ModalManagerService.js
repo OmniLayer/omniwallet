@@ -30,9 +30,27 @@ angular.module("omniServices")
               
               self.modalInstance = $modal.open({
                 templateUrl: '/views/modals/base.html',
-                controller: function CreateWalletController($scope, $location, $modalInstance, $idle, reCaptchaKey, Account, AddressManager) {
+                controller: function CreateWalletController($scope, $location, $modalInstance, $idle, CaptchaKey, Account, AddressManager) {
                   $scope.dismiss = $modalInstance.dismiss;
-                  $scope.sitekey = reCaptchaKey;
+                  $scope.sitekey = CaptchaKey;
+                  $scope.captchaComplete = false;
+
+                  $scope.showCaptcha = function(){
+                    var widgetID = hcaptcha.render('captcha-1', {
+                        'sitekey': CaptchaKey,
+                        'callback': "captchaCompleted",
+                        'expired-callback': "captchaExpired"
+                    });
+                  }
+
+                  window.captchaCompleted = function(){
+                    $scope.captchaComplete = true;
+                    $scope.serverError = $scope.invalidCaptcha =false;
+                  };
+
+                  window.captchaExpired = function(){
+                    $scope.captchaComplete = false;
+                  };
 
                   $scope.createWallet = function(create) {
                     $scope.validating=true;
@@ -51,6 +69,7 @@ angular.module("omniServices")
 
                   $scope.setFormScope = function(form){
                     $scope.createForm = form;
+                    $scope.showCaptcha();
                   }
 
                   $scope.close = function() {
@@ -208,7 +227,7 @@ angular.module("omniServices")
                                 if (successData.pushed.match(/submitted|success/gi) != null) {
                                   $modalScope.waiting = false;
                                   $modalScope.transactionSuccess = true;
-                                  $modalScope.url = 'https://www.blocktrail.com/BTC/address/' + from + '/transactions';
+                                  $modalScope.url = 'https://www.omniexplorer.info/address/' + from;
                                 } else if (successData.status.match(/NOTOK/gi)) {
                                   $modalScope.waiting = false;
                                   $modalScope.transactionError = true;
@@ -456,6 +475,7 @@ angular.module("omniServices")
                         if(address.privkey){
                           var eckey = new Bitcoin.ECKey(address.privkey);
                           addr = eckey.getBitcoinAddress().toString();
+                          address.address = addr;
                         }
                         
                         if(Bitcoin.Address.validate(addr)){
@@ -718,18 +738,19 @@ angular.module("omniServices")
             };
         
             $scope.ok = function(result) {
-              if (Bitcoin.Address.validate(result.address))
+              if (Bitcoin.Address.validate(result.address)) {
                 $modalInstance.close(result);
-              else
+              } else {
                 console.log('*** Invalid address: ' + result.address);
+              }
             };
         
             $scope.cancel = function() {
               $modalInstance.dismiss('cancel');
             };
             $scope.close = function() {
-                    $modalInstance.dismiss('close');
-                  };
+              $modalInstance.dismiss('close');
+            };
           };
           // Done Import Watch Only Form Code.
         
@@ -778,6 +799,7 @@ angular.module("omniServices")
                   };
           };
           // Done Import Private Key Form Code.
+
           // Begin Import Encrypted Key Form Code
           self.openImportEncryptedKeyForm = function() {
             var modalInstance = $modal.open({

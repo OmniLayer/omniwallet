@@ -4,7 +4,7 @@
 angular.module("omniConfig", [])
   .constant("idleDuration", 30 * 60) // 30 minutes
   .constant("idleWarningDuration", 2 * 60) // 2 minutes
-  .constant("reCaptchaKey", "----KEY----")
+  .constant("CaptchaKey", "----KEY--------")
   .value("SATOSHI_UNIT", new Big(100000000)) //Backend data needs satoshi, use this conversion ratio
   .value("MIN_MINER_FEE", new Big(0.00025000))
   .value("MINER_SPEED", 'fast')  //Synamic Fee Calculation, valid options are 'normal','fast','faster'

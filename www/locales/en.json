@@ -13,7 +13,6 @@
 		"ADDRESSES":"Addresses",
 		"ASSETS":"Assets",
 		"ASSET":"Asset",
-		"OVERVIEW":"Overview",
    		"SEND":"Send",
    		"VALUE":"Value",
 		"CREATEWALLET":"Create Wallet",
@@ -41,7 +40,11 @@
 		"MY":"My",
 		"PUBKEY":"Pubkey",
 		"GRANT":"Grant",
-		"REVOKE":"Revoke"
+		"REVOKE":"Revoke",
+		"SPENDABLE":"Spendable",
+		"WATCHONLY":"Watch-Only",
+		"RESERVED":"Reserved",
+		"REMAINING":"Remaining"
 	},
 	"SETTINGS":{
 		"TITLE":"Account Settings",
@@ -75,7 +78,7 @@
 		"ERROR":"Sorry, the code you entered is incorrect. Please double check and try again.",
 		"SUBMIT":"One moment while we verify and process your request, this should take less than a minute.",
 		"GENERROR1":"There was a problem generating a new secret. Please wait a moment and try again.",
-		"GENERROR2":"If this error continues to happen please notify the Omni team.",
+		"GENERROR2":"If this error continues to happen please notify the Omniwallet team.",
 		"IMPORT":"To setup your account to require an MFA device scan the QR code below or manually enter the secret listed below into your MFA Device/Software (Google Authenticator, Authy, etc..)",
 		"SEC1":"Your Token Secret is",
 		"SEC2":"Store this safely and securely because",
@@ -117,7 +120,7 @@
 			"FOUNDATION":{
 				"TITLE":"Omni Foundation",
 				"FIRST":"In September 2013, the Mastercoin Foundation was formed to temporarily manage the funds in the Exodus Address and the distribution of the development MSC. The board of the Mastercoin Foundation has declared its intention to minimize its temporary central role by transitioning the decision making to Mastercoin owners through proof of stake voting.",
-				"SECOND": "In January 2016 the Mastercoin Foundation was rebranded to the Omni Foundation and the primary tokens of the project, MSC, where renamed to OMNI. The Foundation advocates for the use of the Omni Protocol and tries to build a community of people who develop it. All budget items, board minutes, Dev OMNI vesting schedule, and bounties are public record and available to anyone on the ",
+				"SECOND": "In January 2016 the Mastercoin Foundation was rebranded to the Omni Foundation and the primary tokens of the project, MSC, where renamed to Omni Tokens (OMNI). The Foundation advocates for the use of the Omni Protocol and tries to build a community of people who develop it. All budget items, board minutes, Dev OMNI vesting schedule, and bounties are public record and available to anyone on the ",
 				"LINK": "Foundation's Website"
 			},
 			"PROTOCOL":{
@@ -129,7 +132,7 @@
 			},
 			"TOKEN":{
 				"TITLE":"Omnis",
-				"FIRST" : "Omnis (symbol OMNI) are digital tokens that are necessary for the use of some features of the Omni Protocol. The total number of Omnis in existence is 619,478.6 and no more OMNI will ever be created. Additionally, Omnis can not be mined into existence. The 619,478.6 OMNI were generated as a result of a public fundraiser in the style of Kickstarter.com."
+				"FIRST" : "Omni Tokens (symbol OMNI) are digital tokens that are necessary for the use of some features of the Omni Protocol. The total number of OMNIs in existence is 619,478.6 and no more OMNI will ever be created. Additionally, OMNIs can not be mined into existence. The 619,478.6 OMNI were generated as a result of a public fundraiser in the style of Kickstarter.com."
 			},
 			"INFO":"Information from the ",
 			"EDUCATION":"Omni Protocol Education"
@@ -152,9 +155,9 @@
 			},
 			"MULTICURRENCY" : {
 				"TITLE" : "Multi-currency support",
-				"BUILT" : "Omniwallet comes with a pre-built support for Bitcoin, Omni and Test Omni",
+				"BUILT" : "Omniwallet comes with a pre-built support for Bitcoin, Omni Token and Test Omni Token",
 				"SUPPORT" : "Native support for Smart Property and User-Generated Currencies",
-				"ALT" : "Alt-coin support  - Omniwallet has plans to support coins that go outside of the usual Omni ecosystem, such as Litecoin, Peercoin and more"
+				"ALT" : ""
 			},
 			"STATUS" :{
 				"TITLE" : "Current Status",
@@ -194,7 +197,7 @@
 		"OFFERS":"Offers",
 		"SETTINGS":"Account Settings",
 		"TRADE":"Trade",
-		"DEX1":"BTC/OMNI",
+		"DEX1":"BTC Market",
 		"TRANSACTIONS":"Transactions",
 		"WALLET":"My Wallet",
 		"OMNIDEX":"OmniDex"
@@ -204,6 +207,7 @@
 			"MESSAGES" : {
 				"UUID":"This UUID is already in use",
 				"CAPTCHA":"Invalid Captcha try again.",
+				"EMAILERROR":"Invalid Email try again:",
 				"VALIDATING":"We are validating your data and creating your account",
 				"PASSWORDLENGTH":"Password must be at least 8 characters long",
 				"PASSWORDSTRENGTH":"Password strength must be at least 70%",
@@ -227,7 +231,9 @@
 			"INVALID1":"Sorry, we could not validate your credentials. Please check them and try again",
 			"INVALID2":"If you continue to have difficulties, check out our ",
 			"MFACODE":"I'm using Multi Factor Authentication",
-			"MFATOOLTIP":"Don't have an MFA device setup yet? Login and add one to your account under 'Account Settings'"
+			"MFATOOLTIP":"Don't have an MFA device setup yet? Login and add one to your account under 'Account Settings'",
+			"UUIDEMAIL":"Please login with your Wallet ID, not your Email.",
+			"UUIDEMAIL2":"For more info please see this article on the "
 		}, 
 		"CONFIRM":{
 			"OFFLINE":"Your transaction was generated successfully, now save the text above and sign it on your Armory offline computer. Come back with the signed text to broadcast it.",
@@ -261,6 +267,7 @@
 		},
 		"IMPORT":{
 			"VALID":"Must be a valid Bitcoin address",
+			"VALIDPRIV":"Must be a valid Private Key",
 			"EXISTS":"Bitcoin address is already listed",
 			"SUBMIT":"Add Address",
 			"OFFLINE":{
@@ -269,18 +276,18 @@
 				"OFFLINE":"Offline"
 			},
 			"WATCH":{
-				"TITLE":"Import a Watch Only BTC/OMNI Address",
+				"TITLE":"Import a Watch Only BTC/Omni Layer Address",
 				"ADDRESS":"Enter Address",
 				"DESC":"Watch Only"
 			},
 			"ENCRYPTED":{
-				"TITLE":"Import an Encrypted BTC/OMNI Private Key",
+				"TITLE":"Import an Encrypted BTC/Omni Layer Private Key",
 				"KEY":"Enter Encrypted Key (Send/Receive)",
 				"KEYHOLDER":"enter your encrypted private key",
 				"PASSHOLDER":"enter your passphrase"
 			},
 			"PRIVATE":{
-				"TITLE":"Import a BTC/OMNI Private Key",
+				"TITLE":"Import a BTC/Omni Layer Private Key",
 				"ENTER":"Enter",
 				"KEY":"Private Key",
 				"ENABLE":"Enable Sending",
@@ -289,7 +296,7 @@
 			"WALLET":{
 				"TITLE":"Import a Wallet Backup",
 				"UPLOAD":"Upload backup file",
-				"INVALID":"Must be a valid Omnicore backup file"
+				"INVALID":"Must be a valid Omniwallet backup file"
 			}
 		},
 		"EXPORT":{
@@ -411,7 +418,9 @@
 			"VIEW":"View by",
 			"OPTIONS":"Add Address",
 			"WATCH":"Add Watch Only Address",
-			"OFFLINE":"Add Armory Offline Address"
+			"OFFLINE":"Add Armory Offline Address",
+			"SPENDABLE":"You can create transactions from these addresses",
+			"WATCHONLY":"Track the balance of an address in another wallet. Can NOT BE Activated/Unlocked by sending funds anywhere. To enable spending you need to import the private key."
 		},
 		"SEND":{
 			"TITLE":"Send",
@@ -421,6 +430,7 @@
 			"TO":"To address",
 			"COST":"Total transaction cost",
 			"PROTOCOL_COST": "Omni Protocol Transaction Cost",
+			"FEE_WARNING": "Note: You have entered a fee less than recommended. Please take care as a low fee can cause transaction confirmation delays",
 			"MODAL_TRANSACTION_COST":"Transaction Cost",
 			"MODAL_MINER": "Miner Fee",
 			"FUNDS":"Send Funds",
@@ -431,7 +441,8 @@
 			"CONFIRM":"Confirm Send",
 			"AVAIL":"From address available",
 			"LOWFEE":"Your 'From Address' does not have enough BTC to complete this transaction. Please send at least {{ topupAmount }} BTC to cover the estimated Total transaction cost.",
-			"UPDATE_FEE":"Re-estimate Transaction Cost"
+			"UPDATE_FEE":"Re-estimate Transaction Cost",
+			"INVALIDADDRESS":"Please enter a valid Bitcoin address that supports the Omni Protocol token you are sending"
 		},
 		"ASSETS":{
 			"ASSETS":"Assets",
@@ -634,7 +645,7 @@
 	"EXCHANGE":{
 		"TRADE":{
 			"TITLE":"Trade",
-			"SELL":"Sell",
+			"SELL":"New Sell Offer",
 			"NOCOINS":{
 				"LEAD":"Sorry, you don't have any",
 				"TRAIL": "available to sell"
@@ -643,11 +654,12 @@
 			"ACTIVE": "Active Offers",
 			"TIMEFRAME" :"Time frame",
 			"TOTAL": "Total Transactions",
-			"TXHASH":"Transaction hash",
-			"PRICE":"Price",
-			"AMOUNT":"Amount Remaining",
-			"COST":"Cost",
-			"FEE":"Fee",
+			"PRICE":"BTC Per Token",
+			"AMOUNT":"Available",
+			"COST":"Buy All Cost (BTC)",
+			"FEE":"Minimum Miner Fee to Accept",
+			"FEESHORT":"Fee",
+			"FEEDESC":"The 'Minimum Miners Fee' required for an accept transaction to be valid",
 			"PAYMENT":"Payment Window (Blocks)",
 			"ENDED":"User Ended",
 			"SOLD":"Sold out!",
@@ -658,7 +670,7 @@
 		"SALE":{
 			"TITLE":"Sell Offer",
 			"CHOOSECOIN":"Selected coin",
-			"FROM":"From address",
+			"FROM":"From Address",
 			"QUANTITY":"Sell Quantity",
 			"TOTAL":"Total Bitcoin desired ( # BTC for",
 			"TOTALTOOLTIP":"Enter the total # of bitcoins you would want to receive if you sold all",
@@ -666,13 +678,15 @@
 			"TIME":"Time given to buyer to pay",
 			"TIMETOOLTIP":"Time in blocks the buyer has to complete his purchase (1 block approx. 10 minutes)",
 			"BUYERFEE":"Buyer's fee",
+			"BUYERFEETOOLTIP":"Minimum miner fee buyer must pay/spend in BTC when sending payment transaction",
 			"MODALTITLE": "Confirm Sale",
 			"CURRENCY": "Selling",
 			"MODAL_FROM":"From",
 			"MODAL_AMOUNT": "Amount",
 			"BLOCKS":"Payment Timeframe",
 			"BUYERSFEE":"Buyer's Fee",
-			"CONFIRM":"Confirm Sale"
+			"CONFIRM":"Confirm Sale",
+			"REMAININGDESC":"The Amount remaining for sale that is available to be accepted by new offers."
 		},
 		"BUY":{
 			"TITLE":"Accept Offer",
@@ -682,7 +696,7 @@
 			"ADDRESS":"Buying Address",
 			"OFFERTOOLTIP":"Opens in new Window/Tab",
 			"OFFER":"Sale Offer (ID / hash)",
-			"SELLER":"Seller's address",
+			"SELLER":"Seller's Address",
 			"FEE":"Sale fee",
 			"TIMEFRAME":"Payment Timeframe",
 			"TIMEFRAMETOOLTIP":"If your reservation offer is accepted and validated you will have to complete the payment within this time frame.",
@@ -709,6 +723,8 @@
 			"PAYMENT":"Send payment",
 			"COINTYPE":"Send type of coin",
 			"COINMESSAGE":"To complete a pending offer, you must make purchases in Bitcoin.",
+			"SELLER":"Seller's",
+			"SELLING":"Selling",
 			"FROM":"Send from address",
 			"TO":"Send funds to",
 			"AMOUNT":"Amount to send (in",

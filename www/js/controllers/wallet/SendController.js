@@ -48,18 +48,26 @@ angular.module("omniControllers")
 
 	$scope.selectedAsset = $scope.wallet.getAsset(1) || $scope.wallet.getAsset(0);
 	$scope.selectedAddress = $scope.selectedAsset.tradableAddresses[0];
+        $scope.invalidaddr=false;
 
         checkSend();
 
 
       	$scope.showtesteco = $scope.account.getSetting('showtesteco');
       	$scope.userCurrency = $scope.account.getSetting("usercurrency");
+        var bitcore = require('bitcore-lib');
+
+        $scope.checkAddress = function(){
+                $scope.invalidaddr=false;
+                if ( $scope.sendTo != undefined && !bitcore.Address.isValid($scope.sendTo) ) {
+                  $scope.invalidaddr=true;
+                }
+        }
 
         $scope.updateFee = function(){
                 $scope.updatingFee=true;
                 $scope.amountModified=false;
                 checkSend();
-
         }
 
       	$scope.setAsset = function(asset){

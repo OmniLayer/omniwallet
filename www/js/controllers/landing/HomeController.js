@@ -9,7 +9,7 @@ angular.module("omniControllers")
       $templateCache.removeAll();
 
       $scope.conversions = {};
-      $scope.balanceAddress = ""; 
+      $scope.balanceAddress = "";
       $scope.checkAddress = null;
       $scope.total = 0;
       $scope.validate = function(address) {
@@ -17,8 +17,9 @@ angular.module("omniControllers")
         return Bitcoin.Address.validate(address);
       };
       $scope.checkBalance = function() {
-        $scope.pricesLoaded = false;
-        $scope.checkAddress = new Address($scope.balanceAddress);
+        //$scope.pricesLoaded = false;
+        //$scope.checkAddress = new Address($scope.balanceAddress);
+        $scope.balanceURL = "https://www.omniexplorer.info/address/"+$scope.balanceAddress
       };
       $scope.openBalanceCheckModal = function(){
         //call modal manager service to display the balance check modal
@@ -30,7 +31,7 @@ angular.module("omniControllers")
             return $scope.conversions.BTC * amount;
           else
             return 0;
-        } else {        
+        } else {
           if ($scope.conversions.hasOwnProperty(symbol)) {
             if (divisible)
               return $scope.getValue($scope.conversions[symbol] * amount, 'BTC', true);
@@ -42,7 +43,8 @@ angular.module("omniControllers")
       };
 
       $scope.$on("address:loaded",function(evt,args){
-        var requests = [];
+       var requests = [];
+       if ($scope.checkAddress != null) {
         var coins = $scope.checkAddress.balance;
         cursym = "USD";
         coins.forEach(function(coin) {
@@ -77,6 +79,7 @@ angular.module("omniControllers")
           });
           $scope.pricesLoaded = true;
         });
+       }
       })
      };
     }])

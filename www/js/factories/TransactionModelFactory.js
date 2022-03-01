@@ -6,11 +6,11 @@ angular.module("omniFactories")
 			self.configure = function(type,address,fee,data){
 				self.type = type;
 
-				if(address.privkey){
+				if(address.privkey && address.keyCheck){
 					self.privKey = new Bitcoin.ECKey.decodeEncryptedFormat(address.privkey, address.hash); // Using address as temporary password
 					self.pubKey = self.privKey.getPubKeyHex();
 					self.offline = false;
-				}else if(address.pubkey){
+				}else if(address.pubkey && address.keyCheck){
 					self.pubKey = address.pubkey.toUpperCase();
 					self.offline = true;
 				}else
