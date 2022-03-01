@@ -657,7 +657,7 @@
       "COST": "Acheter tous les coûts (BTC)",
       "FEE": "Frais de mineur minimum à accepter",
       "FEESHORT":"Frais",
-      "FEEDESC":"Le 'Frais minimum pour les mineurs' requis pour qu'une transaction d'acceptation soit valide"
+      "FEEDESC":"Le 'Frais minimum pour les mineurs' requis pour qu'une transaction d'acceptation soit valide",
       "PAYMENT": "Fenêtre de paiement (blocs)",
       "ENDED": "L'utilisateur final",
       "SOLD": "Rupture de stock  !",
