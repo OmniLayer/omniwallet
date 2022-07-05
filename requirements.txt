@@ -16,7 +16,7 @@ gevent==1.0
 gevent-websocket==0.9.2
 greenlet==0.4.2
 itsdangerous==0.24
-ujson==1.33
+ujson==5.4.0
 pyotp==2.2.1
 redis==2.10.5
 uWSGI==2.0.18
