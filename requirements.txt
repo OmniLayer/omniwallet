@@ -18,5 +18,5 @@ greenlet==0.4.2
 itsdangerous==0.24
 ujson==1.33
 pyotp==2.2.1
-redis==2.10.5
+redis==4.4.4
 uWSGI==2.0.18
