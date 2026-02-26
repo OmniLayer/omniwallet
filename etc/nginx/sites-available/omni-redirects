@@ -1,3 +1,5 @@
+	set $MY_ROOT $document_root;
+
         #Re-route nested routed through index
         location / {
             try_files $uri $uri/ /index.html =404;
@@ -5,6 +7,11 @@
 
         location ~ "^/wallet/$" {
             return 301 /wallet/overview;
+        }
+
+        location /template/ {
+            #proxy_pass http://127.0.0.1/bower_components/angular-ui-bootstrap/template/;
+	    alias $MY_ROOT/bower_components/angular-ui-bootstrap/template/;
         }
 
         #Limit Perl Access per phil's recommendation
@@ -28,9 +35,9 @@
             proxy_set_header Connection "Upgrade";
         }
 
-        location ~ "^/v1/transaction/values.json$" {
-                alias /var/lib/omniwallet/www/values.json;
-        }
+        #location ~ "^/v1/transaction/values.json$" {
+        #        alias /var/lib/omniwallet/www/values.json;
+        #}
 
         location ~ "^/v1/system/stats.json$" {
                 #alias /var/lib/omniwallet/www/stats.json;
@@ -39,7 +46,8 @@
         }
 
         location ~ "^/v1/system/status.html$" {
-                alias /var/lib/omniwallet/www/status.html;
+                #alias /var/lib/omniwallet/www/status.html;
+                rewrite ^ /status;
         }
 
         location ~ "^/v1/system/revision.json$" {
@@ -47,9 +55,9 @@
                  rewrite ^ /v1/system/revision;
         }
 
-        location ~ "^/v1/exchange/offers/(.*)$" {
-                alias /var/lib/omniwallet/www/offers/$1;
-        }
+        #location ~ "^/v1/exchange/offers/(.*)$" {
+        #        alias /var/lib/omniwallet/www/offers/$1;
+        #}
 
         include uwsgi_params;
         uwsgi_param SCRIPT_NAME   $app;
@@ -57,6 +65,12 @@
         uwsgi_param UWSGI_CALLABLE   "${app}_handler";
 
         set $PORT 1088;
+        location /v2/address/addr/ {
+                add_header Access-Control-Allow-Origin *;
+                set   $app   get_balance_v2;
+                uwsgi_pass   127.0.0.1:$PORT;
+        }
+
         location /v1/address/addr/ {
                 add_header Access-Control-Allow-Origin *;
                 set   $app   get_balance;
@@ -68,15 +82,15 @@
                 uwsgi_pass   127.0.0.1:$PORT;
         }
 
-        location /v1/exchange/sell/ {
-                set   $app   sell;
-                uwsgi_pass   127.0.0.1:$PORT;
-        }
+        #location /v1/exchange/sell/ {
+        #        set   $app   sell;
+        #        uwsgi_pass   127.0.0.1:$PORT;
+        #}
 
-        location /v1/exchange/accept/ {
-                set   $app   accept;
-                uwsgi_pass   127.0.0.1:$PORT;
-        }
+        #location /v1/exchange/accept/ {
+        #        set   $app   accept;
+        #        uwsgi_pass   127.0.0.1:$PORT;
+        #}
 
         location /v1/transaction/pushtx/ {
                 set   $app   pushtx;
@@ -216,6 +230,17 @@
                 include uwsgi_params;
                 uwsgi_param SCRIPT_NAME /v1/decode;
                 uwsgi_param UWSGI_MODULE decode;
+                uwsgi_param UWSGI_CALLABLE app;
+                uwsgi_modifier1 30;
+                uwsgi_pass 127.0.0.1:$PORT;
+        }
+
+        location = /v1/omnidex { rewrite ^ /v1/omnidex; }
+        location /v1/omnidex { try_files $uri @flask_omnidex; }
+        location @flask_omnidex {
+                include uwsgi_params;
+                uwsgi_param SCRIPT_NAME /v1/omnidex;
+                uwsgi_param UWSGI_MODULE omnidex;
                 uwsgi_param UWSGI_CALLABLE app;
                 uwsgi_modifier1 30;
                 uwsgi_pass 127.0.0.1:$PORT;

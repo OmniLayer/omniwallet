@@ -1,0 +1,13 @@
+<div class="dropdown" style="position:relative">
+  <input type="text" ng-model="modelValue" ng-change="filter()" ng-focus="open()" ng-blur="close()" class="form-control" placeholder="{{placeholder}}"/>
+  <div style="position: absolute;top: 0;right: 0px;">
+    <button class="btn btn-link" type="button" ng-click="open()" ng-blur="close()">
+      <span class="caret"></span>
+    </button>
+  </div>
+  <ul class="dropdown-menu" role="menu">
+    <li role="presentation" ng-repeat="option in filteredList"><a role="menuitem" tabindex="-1" href="#" ng-click="optionSelected(option)">
+      {{option.displayname ? option.displayname : option}}</a>
+    </li>
+  </ul>
+</div>

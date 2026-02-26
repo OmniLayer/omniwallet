@@ -1,0 +1,51 @@
+<div ng-controller="WalletOverviewController" ng-if="wallet.loaded" ng-init="total=0">
+  <div class="row om-row">
+    <div class="col-xs-12 col-sm-3 col-md-4 col-lg-4">
+      <div class="text-left om-title">{{ 'WALLET.OVERVIEW.TITLE' | translate}}</div>
+    </div>
+    <div class="hidden-xs col-sm-9 col-md-8 col-lg-8">
+      <div class="input-group btn-group pull-right wallet-options">
+        <span class="input-group-addon"><strong>{{ 'WALLET.OVERVIEW.WALLETID' | translate}}:</strong> {{account.uuid}}</span>
+        <button type="button" class="hidden-xs btn btn-tertiary dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+          {{ 'WALLET.OVERVIEW.OPTIONS' | translate}} <span class="glyphicon glyphicon-chevron-down"></span>
+        </button>
+        <button type="button" class="collapse dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+          <span class="sr-only">{{ 'WALLET.OVERVIEW.OPTIONSTOGGLE' | translate }}</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <ul class="dropdown-menu dropdown-menu-right" role="menu">
+          <li><a href="#" ng-click="modalManager.openBackupWalletModal()">{{ 'WALLET.OVERVIEW.BACKUP' | translate}}</a></li>
+          <li><a href="#" ng-click="modalManager.openImportWalletModal()">{{ 'WALLET.OVERVIEW.IMPORT' | translate}}</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-xs-12 col-sm-8 col-md-8 col-lg-8" ng-include="'/views/wallet/partials/assets_list.html'">
+    </div>
+    <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
+      <div class="row om-row hidden-xs">
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+          <div class="label-primary col-xs-7 col-sm-7 col-md-7 col-lg-7">{{ 'WALLET.OVERVIEW.ESTIMATED' | translate }} </div>
+          <div class="label-secondary col-xs-5 col-sm-5 col-md-5 col-lg-5"><span ng-bind-html="total | numeraljs: '$0,0.00':true"></span><span class="currency">({{CSYM}})</div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+          <div class="panel panel-default">
+            <div class="panel-heading">
+              {{ 'WALLET.OVERVIEW.PORTFOLIO' | translate }} 
+            </div>
+            <nvd3 data="chartData" 
+                options="chartConfig" 
+                class="panel-body">
+            </nvd3>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+ </div>

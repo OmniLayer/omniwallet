@@ -1,0 +1,44 @@
+<div class="row">
+    <div class="text-center">
+      <h3 class="crowdsale-title">
+      	<span ng-show="isOwner">{{'CROWDSALE.DETAILS.YOUR' | translate}} </span>
+      	{{'CROWDSALE.DETAILS.ACTIVE.' + property.active.toString().toUpperCase() | translate}}
+      </h3>
+      <p ng-show="property.active">
+        {{'CROWDSALE.DETAILS.TIME' | translate}}:
+        <div id="timerWrapper"></div>
+      </p>
+    </div>
+</div>
+<div class="row">
+	<div class="col-xs-12 small" style="padding-top:10px;">{{'CROWDSALE.DETAILS.TOKENSBOUGHT' | translate}}</div>
+	<div class="col-xs-12">
+		<div class="tag text-center" ng-if="!property.divisible" ng-bind-html="property.tokensissued | bigjs: '0,0'"></div>
+        <div class="tag text-center" ng-if="property.divisible" ng-bind-html="property.tokensissued | bigjs: '0,0.00000000'"></div>
+    </div>
+</div>
+<div class="row">
+	<div class="col-xs-12 small" style="padding-top:10px;">{{'CROWDSALE.DETAILS.TOKENSISSUER' | translate}} ({{property.percenttoissuer}}%)</div>
+	<div class="col-xs-12">
+		<div class="tag text-center" ng-if="!property.divisible" ng-bind-html="(property.totaltokens * property.percenttoissuer / 100) | bigjs: '0,0'"></div>
+        <div class="tag text-center" ng-if="property.divisible" ng-bind-html="(property.totaltokens * property.percenttoissuer / 100) | toWhole | bigjs: '0,0.00000000'"></div>
+    </div>
+</div>
+ <div class="row" ng-if="property.active" >
+ 	<div class="col-xs-12 small" style="padding-top:10px;">{{'CROWDSALE.DETAILS.CURRENTBONUS' | translate}}</div>
+	<div class="col-xs-12">
+		<div class="tag text-center">+{{earlyBirdBonus}}%</div>
+    </div>
+</div>
+<div class="row text-center" ng-if="property.active">
+	<div class="col-xs-12">
+		{{'CROWDSALE.DETAILS.GETTOKENS' | translate}}
+	</div>
+	<a href="/crowdsale/participation/{{property.propertyid}}" ng-disabled="(!canParticipate || !account.loggedIn)" class="btn btn-main btn-lg">{{'CROWDSALE.DETAILS.PARTICIPATE' | translate}}</a>	
+  <div class="col-xs-12" ng-hide="!account.loggedIn || canParticipate">
+    {{'CROWDSALE.DETAILS.NOTOKENS' | translate}}
+  </div>
+  <div class="col-xs-12" ng-hide="account.loggedIn">
+    {{'CROWDSALE.DETAILS.LOGIN' | translate}}
+  </div>
+</div>

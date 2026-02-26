@@ -1,0 +1,26 @@
+<div class="modal-row">
+    <div class="description-title-large">{{ 'COMMON.NAME' | translate}}:</div>
+    <div class="description-text">{{propertyName}}</div>
+</div>
+   
+<div class="modal-row">
+    <div class="description-title-large">{{ 'ASSET.FORM.DETAILS.CATEGORY' | translate }}:</div>
+    <div class="description-text">{{propertyCategory  ||  "&nbsp;"}}</div>
+</div>
+
+<div class="modal-row">
+    <div class="description-title-large">{{ 'ASSET.FORM.DETAILS.SUBCATEGORY' | translate }}:</div>
+    <div class="description-text">{{propertySubcategory  ||  "&nbsp;"}}</div>
+</div>
+
+<div class="modal-row">
+    <div class="description-title-large">{{ 'ASSET.FORM.DETAILS.URL' | translate }}:</div>
+    <div class="description-text"><a href="{{propertyUrl}}" target="_blank">{{propertyUrl  ||  "&nbsp;"}}</a></div>
+</div>
+
+<div class="modal-row">
+    <div class="description-title-large" style="vertical-align: top;">{{ 'ASSET.MODAL_DESCRIPTION' | translate }}:</div>
+    <div class="description-text">
+        {{propertyData  ||  "&nbsp;"}}
+    </div>
+</div>

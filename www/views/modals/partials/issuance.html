@@ -1,0 +1,13 @@
+<div ng-include="'/views/modals/partials/asset_details.html'"></div>
+<div>
+    <div class="modal-row">
+        <div class="description-title-xlarge">{{'ASSET.ISSUANCE.AMOUNT' | translate}}:</div>
+        <div class="description-text">
+            {{numberProperties}} <span ng-show="divisible" class="description-extra">({{ 'ASSET.FORM.DETAILS.DIVISIBLE' | translate }})</span>
+        </div>
+    </div>
+   <div class="modal-row">
+    <div class="description-title-xlarge">{{'ASSET.FORM.ISSUER' | translate}}:</div>
+    <div class="description-text"><a href="{{explorerUrl}}{{fromAddress}}" target="_blank">{{fromAddress}}</a></div>
+  </div>
+</div>

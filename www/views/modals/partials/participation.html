@@ -1,0 +1,19 @@
+<div class="modal-row">
+  <div class="description-title">{{ 'WALLET.SEND.TOKEN' | translate}}:</div><div class="description-text">{{token}}</div>
+</div>
+
+<div class="modal-row">
+  <div class="description-title">{{ 'WALLET.SEND.MODAL_AMOUNT' | translate}}:</div><div class="description-text">{{sendAmount}} <span ng-show="symbol=='BTC'">(<span title="{{sendValue}}" ng-bind-html="sendValue | numeraljs: '$0,0.00':true"></span>)</span></div>
+</div>
+
+<div class="modal-row">
+  <div class="description-title">{{ 'WALLET.SEND.MODAL_FROM' | translate}}:</div><div class="description-text">{{fromAddress}}</div>
+</div>
+
+<div class="modal-row">
+  <div class="description-title">{{ 'WALLET.SEND.MODAL_TO' | translate}}:</div><div class="description-text">{{toAddress}}</div>
+</div>
+
+<div class="modal-row">
+  <div class="description-title-xxlarge">{{ 'CROWDSALE.PARTICIPATION.MODAL_ESTIMATE' | translate}}:</div><div class="description-text">{{sendAmount * tokensperunit  + (earlybird * (sendAmount * tokensperunit) / 100)}} {{tokenRecieved}}</div>
+</div>

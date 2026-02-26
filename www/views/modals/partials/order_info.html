@@ -1,0 +1,19 @@
+<div class="row">
+  <div ng-repeat="offer in orders.offers">
+    <dl class="dl-horizontal">
+      <dt>Tx Time:</dt>
+       <dd>{{offer.rawdata.time}}</dd>
+      <dt>Sender:</dt>
+       <dd>{{offer.rawdata.seller}}</dd>
+      <dt>Transaction ID/Hash:</dt>
+       <dd style="overflow: auto;margin-right: 100px;">{{offer.rawdata.txhash}}</dd>
+      <dt>View on Explorer:</dt>
+       <dd>
+         <a href="http://omniexplorer.info/lookuptx.aspx?txid={{offer.rawdata.txhash}}" target="_blank">OmniExplorer</a> 
+         <!-- <a href="/explorer/inspector?view={{offer.rawdata.txhash}}" target="_blank">OmniWallet</a> | -->
+         <!-- <a href="https://www.blocktrail.com/BTC/tx/{{offer.rawdata.txhash}}" target="_blank">Blocktrail</a> -->
+       </dd>
+    </dl>
+  </div>
+</div>
+

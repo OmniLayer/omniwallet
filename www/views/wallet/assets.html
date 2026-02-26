@@ -1,0 +1,20 @@
+<div class="main-container" ng-controller="WalletAssetsController">
+  <div class="row my-assets">
+    <div class="col-xs-2 om-title">{{ 'WALLET.ASSETS.MYASSETS' | translate }}</div>
+    <div class="col-xs-offset-9 col-xs-1 pull-right btn-group">
+      <button type="button" class="hidden-xs btn btn-main dropdown-toggle" data-toggle="dropdown" id="MyAssets-dropdown" aria-expanded="false">{{ 'WALLET.ASSETS.CREATE' | translate }} <span class="caret"></span></button>
+      <button type="button" class="visible-xs btn dropdown-toggle" data-toggle="dropdown" id="MyAssets-dropdown" aria-expanded="false">
+       <span class="glyphicon glyphicon-option-vertical"></span>
+      </button>
+      <ul class="dropdown-menu assets-dropdown" role="menu" aria-labelledby="MyAssets-dropdown">
+        <li role="presentation"><a role="menuitem" tabindex="-1" href="/assets/issue">{{ 'WALLET.ASSETS.SMARTPROPERTY' | translate }}</a></li>
+        <li class="divider"></li>
+        <li role="presentation"><a role="menuitem" tabindex="-1" href="/assets/crowdsale">{{ 'WALLET.ASSETS.CROWDSALE' | translate }}</a></li>
+        <li class="divider"></li>
+        <li role="presentation"><a role="menuitem" tabindex="-1" href="/assets/managed">{{ 'WALLET.ASSETS.MANAGED' | translate }}</a></li>
+      </ul>
+    </div>
+  </div>
+  <div ng-include="'/views/assets/partials/table_all.html'">
+  </div>
+</div>

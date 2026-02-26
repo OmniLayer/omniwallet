@@ -1,0 +1,84 @@
+<div class="modal-header">
+  <button type="button" class="close"  ng-click="dismiss('close')"><span aria-hidden="true">&times;</span><span class="sr-only">{{'COMMON.CLOSE' | translate}}</span></button>
+  <h3 ng-hide={{mfa}}>{{'MFA.TITLE1' | translate}}</h3>
+  <h3 ng-show={{mfa}}>{{'MFA.TITLE2' | translate}}</h3>
+</div>
+
+
+<div class="row" ng-show={{getsecretError}}>
+  <div class="col-md-9 col-md-push-1 alert alert-error">
+    {{'MFA.GENERROR1' | translate}} </br>
+    {{'MFA.GENERROR2' | translate}} 
+  </div>
+</div>
+
+<div class="row" ng-hide={{mfa}}>
+  <div class="col-md-9 col-md-push-1 alert alert-error" ng-hide={{getsecretError}}>
+     {{'MFA.IMPORT' | translate}}<br /><br />
+    <qr text="prov"></qr><br/><br/>
+     {{'MFA.SEC1' | translate}} <strong>{{secret}}</strong>. <br/>
+     {{'MFA.SEC2' | translate}} <strong>{{'MFA.SEC3' | translate}}</strong><br/><br/>
+     {{'MFA.SEC4' | translate}}
+  </div>
+</div>
+
+<form name="mfaForm" role="form" novalidate class="form-horizontal" ng-submit="setupMFA(mfadisable,mfatoken,asq,asa)">
+  <div class="modal-body">
+
+    <div class="row" ng-show={{mfa}}>
+      <div class="form-group col-md-10 col-md-push-1">
+        <label class="control-label" for="inputDISABLE">{{'MFA.DIS1' | translate}}<br />{{'MFA.DIS2' | translate}}</label>
+        <div class="controls">
+          <input name="mfadisable" type="text" ng-model="mfadisable" class="form-control" id="inputDISABLE" required>
+        </div>
+      </div>
+    </div>
+
+    <div class="row" ng-show={{!mfa}}>
+      <div class="form-group col-md-10 col-md-push-1">
+        <label class="control-label" for="inputQUESTION">
+          <a href=""
+          tooltip="{{'MFA.ASQTOOLTIP' | translate}}"
+          tooltip-append-to-body="true" tooltip-placement="top">{{'MFA.ASQ' | translate}}</a>
+        </label>
+        <div class="controls">
+          <input name="asq" type="text" ng-model="asq" class="form-control" id="inputASQ" required maxlength="64">
+        </div>
+      </div>
+    </div>
+
+    <div class="row" ng-show={{!mfa}}>
+      <div class="form-group col-md-10 col-md-push-1">
+        <label class="control-label" for="inputASA">
+          <a href=""
+          tooltip="{{'MFA.ASATOOLTIP' | translate}}"
+          tooltip-append-to-body="true" tooltip-placement="top">{{'MFA.ASA' | translate}}</a>
+        </label>
+        <div class="controls">
+          <input name="asa" type="text" ng-model="asa" class="form-control" id="inputASA" required maxlength="32">
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="form-group col-md-10 col-md-push-1">
+        <label class="control-label" for="inputMFA">{{'COMMON.MFA' | translate}}</label>
+        <div class="controls">
+          <input name="mfa" type="text" ng-disabled="mfa && mfadisable!='DISABLE'" ng-model="mfatoken" class="form-control" id="inputMFA" required auto-focus="true">
+        </div>
+      </div>
+    </div>
+
+  </div>
+  <div class="modal-footer">
+    <div class="control-group">
+      <div class="controls">
+        <img ng-show="validating" src="/assets/img/spinner.gif" alt="loading">
+        <button type="button" class="btn btn-warning" ng-disabled="validating" ng-click="dismiss('close')">Cancel</button>
+        <button type="submit" class="btn" ng-disabled="validating || mfaForm.$invalid || (mfa && mfadisable!='DISABLE')">Submit</button>
+      </div>
+    </div>
+    <div style="color:red" ng-show="serverError">{{'MFA.ERROR' | translate}}</div>
+    <div style="color:green" ng-show="validating">{{'MFA.SUBMIT' | translate}}</div>
+  </div>
+</form>

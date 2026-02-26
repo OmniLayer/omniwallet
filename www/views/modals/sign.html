@@ -1,0 +1,39 @@
+<div class="modal-header">
+  <div class="text-left modal-title col-md-11">{{ 'MODALS.SIGNMSG.TITLE' | translate}}</div>
+  <div class="text-right"><button ng-disabled="wating" class="btn modal-cancel-btn" ng-click="close()"></button></div>
+</div>
+<form novalidate class="form-horizontal">
+  <div class="modal-body">
+    <p>
+      {{ 'MODALS.SIGNMSG.INSTRUCTIONS' | translate}}
+    </p>
+    <h5>{{ 'MODALS.SIGNMSG.ADDRESS' | translate}}: <strong>{{signAddress}}</strong></h5>
+    <div class="control-group">
+      <label class="control-label" for="signedtx">{{ 'MODALS.SIGNMSG.SIGNED' | translate}}</label>
+      <div class="controls">
+        <textarea rows="8" class="form-control input-sm" ng-model="message.signedHex" id="signedmsg"></textarea>
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <div class="row" ng-hide="messageSuccess">
+      <button ng-disabled="clicked" class="btn btn-main" ng-click="ok(message.signedHex)">{{ 'COMMON.SIGNMSG' | translate}}</button>
+      <button ng-disabled="wating" class="btn btn-tertiary" ng-click="cancel()">{{ 'COMMON.CANCEL' | translate}}</button>
+      <img class="" src="/assets/img/spinner.gif" ng-show="waiting">
+    </div>
+    <div>
+      <div ng-show="messageSuccess">
+        <h4 class="pull-left" style="color:green"> {{ 'MODALS.SIGNMSG.SUCCESS' | translate}} </h4>
+        <textarea rows="8" class="form-control input-sm" ng-readonly=true >{{signature}}</textarea>
+        </ br>
+        <a href="/wallet/overview">
+          <button class="btn btn-success" ng-click="close()">{{ 'COMMON.CLOSE' | translate}}</button>
+        </a>
+      </div>
+      <div ng-show="messageError">
+        <h4 class="col-xs-12" style="color:red;"> {{ 'MODALS.SIGNMSG.FAIL' | translate}}: 
+         {{error}} </h4>
+      </div>
+    </div>
+  </div>
+</form>

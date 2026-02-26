@@ -1,0 +1,19 @@
+<div ng-controller="WalletAddressesController">
+  <div class="row om-row" ng-if"spendable">
+    <div class="col-sm-6">
+     <h3>{{ 'COMMON.SPENDABLE' | translate }}</h3>
+     <span>{{ 'WALLET.ADDRESSES.SPENDABLE' | translate }}</span>
+    </div>
+    <div class="col-xs-12" ng-include="templates['spendable']">
+    </div>
+  </div>
+  <div class="row om-row" ng-if="watchonly">
+    <div class="col-sm-6">
+     <h3>{{ 'COMMON.WATCHONLY' | translate }}</h3>
+     <span>{{ 'WALLET.ADDRESSES.WATCHONLY' | translate }}</span>
+    </div>
+    <div class="col-xs-12" ng-include="templates['watch_only']">
+    </div>
+  </div>
+</div>
+

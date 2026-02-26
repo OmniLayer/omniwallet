@@ -1,0 +1,37 @@
+<div ng-controller="ConfirmSendFooterController">
+  <div class="row" ng-hide="transactionSuccess || btcValueChanged || readyToSign">
+      <button ng-disabled="clicked" class="btn btn-main" ng-click="ok()">
+         {{ 'WALLET.SEND.FUNDS' | translate }}
+      </button>
+      <img class="" src="/assets/img/spinner.gif" ng-show="waiting">
+  </div>
+  <div class="row text-left" ng-show="btcValueChanged">
+      <p class="description-text">{{ 'WALLET.SEND.CHANGED' | translate }}:</p>
+      <br>
+      <center>
+      <button class="btn btn-secondary" ng-click="sendByAmount()" style="font-size: 15px; margin-left: 0px;" tooltip="Value: {{newValue}}">{{ 'WALLET.SEND.TITLE' | translate }} {{newBtcAmount}} BTC</button>
+      <button class="btn btn-secondary" ng-click="sendByValue()" style="font-size: 15px;" tooltip="{{newBtcAmount}} BTC">{{ 'WALLET.SEND.TITLE' | translate }} <span title="{{newValue}}" ng-bind-html="newValue | numeraljs: '$0,0.00':true"></span></button>
+      <br><br>
+      <button class="btn btn-tertiary" ng-click="cancel()" style="font-size: 15px;">{{ 'MODALS.SEND.GOBACK' | translate }}.</button>
+      </center>
+  </div>
+  <div class="row">
+    <div ng-show="readyToSign">
+      <h4 class="pull-left" style="color:green;">{{ 'MODALS.CONFIRM.OFFLINE' | translate }}
+        </h4>
+      <button ng-click="openBroadcastTransactionForm(fromAddress)" class="btn btn-secondary"  ng-if="signOffline">{{ 'MODALS.CONFIRM.BROADCAST' | translate }}</button>
+      <button ng-click="saveUnsigned(unsignedTransaction)" class="btn btn-main" ng-hide="saved">Save</button>
+      <a href="/wallet/overview">
+        <button ng-click="close()" class="btn" ng-class="{'btn-tertiary':unsaved,'btn-main':saved}">{{ 'COMMON.CLOSE' | translate }}</button>
+      </a>
+    </div>
+    <div ng-show="transactionSuccess">
+      <h4 class="pull-left" style="color:green"> {{ 'MODALS.CONFIRM.CHECK' | translate }} <a target="_blank" href="{{url}}">{{ 'MODALS.CONFIRM.HERE' | translate }}.</a></h4>
+      <a href="/wallet/overview"><button class="btn btn-main" ng-click="close()">{{ 'COMMON.CLOSE' | translate }}</button></a>
+    </div>
+    <div ng-show="transactionError">
+      <h4 class="col-xs-12" style="color:red;"> {{ 'MODALS.SEND.ERROR' | translate }}: 
+       {{error}} </h4>
+    </div>
+  </div>
+</div>

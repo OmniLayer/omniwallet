@@ -1,8 +1,8 @@
 <div class="modal-header">
-  <div class="text-left col-xs-10 modal-title">{{title}}</div><div class="text-right"><button ng-disabled="wating" class="btn btn-xs modal-cancel-btn" ng-click="close()">close | <span class="glyphicon glyphicon-remove"></span></button></div>
+  <div class="text-left modal-title col-md-11">{{title | translate}}</div><div class="text-right"><button ng-disabled="wating" class="btn modal-cancel-btn" ng-click="close()"></button></div>
 </div>
 <div class="modal-body" ng-include="bodyTemplate">
 </div>
-<div class="modal-footer footer-div" ng-include="footerTemplate">
+<div class="modal-footer" ng-include="footerTemplate">
     
 </div>

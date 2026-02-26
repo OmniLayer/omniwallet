@@ -1,0 +1,49 @@
+<div ng-controller="DExOrderbookController" init="showCharts=false;">
+<!-- 
+  <div class="row om-row">
+    <div class="col-xs-3 col-sm-3 col-md-4 col-lg-4 text-left om-title">
+      {{ 'OMNIDEX.ORDERBOOK.TITLE' | translate:{currency: orderbook.tradingPair.selling.name} }}
+    </div>
+  </div> 
+-->
+  <div class="row">
+    <div class="col-xs-10" ng-show="showCharts">
+      <div class="panel panel-default">
+        <div class="panel-body" ng-if="orderbook && orderbook.chartData">
+          <nvd3 data="orderbook.chartData" 
+                options="orderbook.chartConfig" 
+                class="with-3d-shadow with-transitions">
+          </nvd3>
+        </div>
+      </div>
+    </div>
+    <div class="col-xs-10" ng-hide="showCharts">
+      <div class="panel panel-default">
+        <div class="panel-body" ng-include="'/views/DEx/markets.html'">
+        </div>
+      </div>
+    </div>
+    <div class="col-xs-2">
+      <div class="panel panel-default">
+        <div class="panel-body">
+          <div class="om-row" ng-show="isLoggedIn">
+            <a class="btn btn-main" href="/dex/sale"> {{ 'OMNIDEX.MARKETS.NEW' | translate }} </a>
+          </div>
+          <div class="om-row">
+            <button type="button" ng-show="false" class="btn btn-info disabled" title="Coming Soon!" ng-click="showCharts=!showCharts;">Show {{showCharts ? "Markets" : "Chart"}}</button>
+            <button type="button" ng-show="true" class="btn btn-info disabled" title="Coming Soon!" ng-click="">Show {{showCharts ? "Markets" : "Chart"}}</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row om-row" ng-include="'/views/DEx/orderbook_orders.html'" ng-show="isLoggedIn">
+    
+  </div>
+  <div class="row" ng-include="'/views/DEx/orderbook_form.html'" ng-show="isLoggedIn">
+    
+  </div>
+  <div class="row" ng-include="'/views/DEx/orderbook_book.html'">
+    
+  </div>
+</div>

@@ -1,0 +1,33 @@
+<h2 class="om-subtitle">{{ 'ASSET.HISTORY.TITLE' | translate}} <small class="text-muted">({{history.total}} {{'ASSET.HISTORY.TRANSACTIONS' | translate}})</small></h2>
+<div class="scroll">
+  <div class="scroll-body asset-history" infinite-scroll='loadHistory()' infinite-scroll-disabled='history.loading || history.loaded' infinite-scroll-distance='10'>
+    <div class="row" ng-repeat="transaction in history.transactions">
+      <div class="col-xs-12" ng-if="transaction.isParticipation" ng-include="'/views/assets/partials/history_participation.html'">
+        
+      </div>
+      <div class="col-xs-12" ng-if="transaction.isCreate" ng-include="'/views/assets/partials/history_creation.html'">
+        
+      </div>
+      <div class="col-xs-12" ng-if="transaction.isClose" ng-include="'/views/assets/partials/history_close.html'">
+        
+      </div>
+      <div class="col-xs-12" ng-if="transaction.isGrant" ng-include="'/views/assets/partials/history_grant.html'">
+        
+      </div>
+      <div class="col-xs-12" ng-if="!transaction.isClose && !transaction.isCreate && !transaction.isParticipation && !transaction.isGrant">
+        <div class="col-sm-3" ng-include="'/views/assets/partials/history_time.html'">
+  
+        </div>
+          <div class="col-xs-9">
+            <h5>{{transaction.type}}</h5>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="panel panel-default" ng-show='history.loading'>
+      <div class="panel-body text-center">
+        <img src="/assets/img/loading.gif"/>{{'ASSET.HISTORY.LOADING' | translate}}
+      </div>
+    </div>
+  </div>
+</div>
