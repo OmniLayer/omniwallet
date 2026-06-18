@@ -1,4 +1,3 @@
-import urlparse
 import os, sys
 #tools_dir = os.environ.get('TOOLSDIR')
 #lib_path = os.path.abspath(tools_dir)
@@ -13,13 +12,13 @@ max_currency_value=21000000
 dust_limit=5757
 
 def send_form_response(response_dict):
-    print "send form response dict"
-    print response_dict
+    print("send form response dict")
+    print(response_dict)
 
     expected_fields=['from_address', 'to_address', 'amount', 'currency', 'fee']
     # if marker is True, send dust to marker (for payments of sells)
     for field in expected_fields:
-        if not response_dict.has_key(field):
+        if field not in response_dict:
             info('No field '+field+' in response dict '+str(response_dict))
             return (None, 'No field '+field+' in response dict '+str(response_dict))
         if len(response_dict[field]) != 1:
@@ -35,7 +34,7 @@ def send_form_response(response_dict):
         magicbyte = 0
         exodus_address='1EXoDusjGwvnjZUyKkxZ4UHEf77z6A5S4P'
 
-    if response_dict.has_key( 'pubKey' ): #and is_pubkey_valid( response_dict['pubKey'][0]):
+    if 'pubKey' in response_dict: #and is_pubkey_valid( response_dict['pubKey'][0]):
         pubkey = response_dict['pubKey'][0]
         response_status='OK'
     else:
@@ -107,17 +106,17 @@ def send_form_response(response_dict):
           tx_to_sign_dict['sourceScript']=response_status
 
       response='{"status":"'+response_status+'", "transaction":"'+tx_to_sign_dict['transaction']+'", "sourceScript":"'+tx_to_sign_dict['sourceScript']+'"}'
-      print "Sending unsigned tx to user for signing", response
+      print("Sending unsigned tx to user for signing", response)
       return (response, None)
     except Exception as e:
-      print "error creating unsigned tx", e
+      print("error creating unsigned tx", e)
       return (None, str(e))
 
 
 # simple send and bitcoin send (with or without marker)
 def prepare_send_tx_for_signing(from_address, to_address, marker_address, currency_id, amount, btc_fee=500000, magicbyte=0):
-    print '*** send.py tx for signing: from_address, to_address, marker_address, currency_id, amount, btc_fee, magicbyte'
-    print from_address, to_address, marker_address, currency_id, amount, btc_fee, magicbyte
+    print('*** send.py tx for signing: from_address, to_address, marker_address, currency_id, amount, btc_fee, magicbyte')
+    print(from_address, to_address, marker_address, currency_id, amount, btc_fee, magicbyte)
 
     # consider a more general func that covers also sell offer and sell accept
 
