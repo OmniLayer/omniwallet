@@ -1,4 +1,3 @@
-import urlparse
 import os, sys, re
 import math
 from flask import Flask, request, Response, jsonify, abort, json, make_response
@@ -25,8 +24,8 @@ def estimatefees(addr):
     try:
       fees=getfeesRaw()
     except Exception as e:
-      print "Fee lookup failed, falling back"
-      print e
+      print("Fee lookup failed, falling back")
+      print(e)
       fees={"unit": "Satoshi/kB", "faster": 275000, "fast": 245000, "normal": 215000}
 
     #initial miner fee estimate
@@ -71,7 +70,7 @@ def estimatefees(addr):
          "class_c":{"faster": faster, "fast": fast, "normal": normal, "estimates":{"size":size, "ins":ins, "outs":outs} },
          "topup_c":{"faster": tfaster, "fast": tfast, "normal": tnormal, "estimates":{"size":tsize, "ins":ins+1, "outs":outs} }
         }
-    print ret
+    print(ret)
     return jsonify(ret)
 
 @app.route('/fees')
@@ -81,7 +80,7 @@ def getfees():
 def getfeesRaw():
     fee={}
     ROWS=dbSelect("select value from settings where key='feeEstimates'")
-    print ROWS
+    print(ROWS)
     if len(ROWS) > 0:
       fee=json.loads(ROWS[0][0])
 
